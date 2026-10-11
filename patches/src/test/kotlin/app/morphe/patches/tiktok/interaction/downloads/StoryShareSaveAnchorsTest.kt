@@ -6,6 +6,7 @@ package app.morphe.patches.tiktok.interaction.downloads
 
 import app.morphe.Fixtures
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patches.tiktok.interaction.sharesheet.SHARE_BUILDER_ACTIONS
 import app.morphe.patches.tiktok.interaction.sharesheet.ShareSnapshotFingerprint
@@ -28,6 +29,7 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
 import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -172,6 +174,20 @@ class StoryShareSaveAnchorsTest {
                     )
                 }
                 assertEquals("$version, $filters filters: ", fields, filtered.snapshotActionFields(found.snapshot))
+            }
+
+            // A load into the register between the read and the store puts another list there, so
+            // the store after it isn't the builder's row and no field is taken from it.
+            val reloaded = MutableMethod(found.snapshotConstructor)
+            reloaded.implementation!!.instructions.withIndex().toList().asReversed().forEach { (index, instruction) ->
+                if (instruction.opcode != Opcode.IGET_OBJECT) return@forEach
+                val field = instruction.getReference<FieldReference>() ?: return@forEach
+                if (field.definingClass != builder || field.name != SHARE_BUILDER_ACTIONS) return@forEach
+                val register = (instruction as TwoRegisterInstruction).registerA
+                reloaded.addInstructions(index + 1, "const/16 v$register, 0x0")
+            }
+            assertThrows("$version: a reloaded register still named the actions row", PatchException::class.java) {
+                reloaded.snapshotActionFields(found.snapshot)
             }
         }
     }

@@ -10,6 +10,7 @@ import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patches.tiktok.interaction.sharesheet.SHARE_BUILDER_ACTIONS
 import app.morphe.patches.tiktok.interaction.sharesheet.ShareSnapshotFingerprint
+import app.morphe.patches.tiktok.misc.popups.writes
 import app.morphe.patches.tiktok.shared.guardAtEntry
 import app.morphe.patches.tiktok.shared.requireLocals
 import app.morphe.util.addInstructions
@@ -20,10 +21,14 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
+import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OffsetInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
@@ -130,9 +135,16 @@ internal fun Method.snapshotActionFields(snapshot: ClassDef): SnapshotActionFiel
             return@forEachIndexed
         }
         val register = (instruction as TwoRegisterInstruction).registerA
-        // Not past a branch or a return: a store there might not follow this read.
-        val reach = code.subList(index + 1, minOf(code.size, index + 1 + STORE_REACH))
-            .takeWhile { it !is OffsetInstruction && it.opcode.canContinue() }
+        // Not past a branch or a return: a store there might not follow this read. Nor past a
+        // load into the register, since a store after that stores another list. A cast, and a
+        // filter handing back the row it was given (Share sheet tools'), are the writes let through.
+        val window = code.subList(index + 1, minOf(code.size, index + 1 + STORE_REACH))
+        val reach = window.indices.takeWhile { at ->
+            val next = window[at]
+            next !is OffsetInstruction && next.opcode.canContinue() && (!next.writes(register) ||
+                next.opcode == Opcode.CHECK_CAST ||
+                next.opcode == Opcode.MOVE_RESULT_OBJECT && at > 0 && window[at - 1].passes(register))
+        }.map { window[it] }
         val store = reach.firstOrNull { next ->
             next.opcode == Opcode.IPUT_OBJECT && (next as TwoRegisterInstruction).registerA == register &&
                 ((next as ReferenceInstruction).reference as? FieldReference)
@@ -144,6 +156,17 @@ internal fun Method.snapshotActionFields(snapshot: ClassDef): SnapshotActionFiel
         "$SHARE_SAVE: the share sheet snapshot stores its builder's actions in ${stores.size} fields $stores",
     )
     return SnapshotActionFields(sharePackage.name, actions)
+}
+
+/** Whether this is a call that takes [register] as one of its arguments. */
+private fun Instruction.passes(register: Int): Boolean {
+    if ((this as? ReferenceInstruction)?.reference !is MethodReference) return false
+    return when (this) {
+        is RegisterRangeInstruction -> register in startRegister until startRegister + registerCount
+        is FiveRegisterInstruction ->
+            register in listOf(registerC, registerD, registerE, registerF, registerG).take(registerCount)
+        else -> false
+    }
 }
 
 /**
