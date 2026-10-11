@@ -2,6 +2,8 @@
 
 * **TikTok:** Com Manter as legendas com a tela limpa ativado, a legenda na tela limpa agora fica onde o TikTok a mostrava antes de os controles sumirem, em vez de descer até a borda inferior (#141). Enquanto nenhuma legenda tiver aparecido, ela fica no lugar antigo.
 
+* **TikTok:** Com Mostrar a LIVE sob a barra de status ligado, a faixa sob o relógio volta a ter a mesma sombra do resto do topo da sala. Nos celulares em que o TikTok reserva uma faixa preta para a barra, ela aparecia mais clara que a transmissão abaixo (#137).
+
 ## 0.71.0 (2026-10-11)
 
 * **TikTok:** Com Toque duplo em uma das ações do Hushfeed e Long-press controls no patch, um segundo toque em que o dedo fica um pouco demais não abre mais junto o menu de toque longo do TikTok, então o painel de compartilhar não aparece mais por cima dos comentários. (#63)

@@ -8,6 +8,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With Keep captions in Clear display on, the caption in Clear display now sits where TikTok showed it before the controls went away, instead of dropping to the bottom edge (#141). Before any caption has shown, it keeps the old spot.
 
+* **TikTok:** With Show a LIVE under the status bar on, the strip under the clock is shaded like the rest of the room's top again. On phones where TikTok keeps a black strip for the bar, it showed lighter than the stream below it (#137).
+
 ## 0.71.0 (2026-10-11)
 
 * **TikTok:** With Double tap set to one of Hushfeed's actions and Long-press controls patched in, a second tap your finger stays on a moment too long no longer brings up TikTok's long press menu as well, so the share panel stops opening on top of the comments. (#63)
