@@ -1199,8 +1199,10 @@ public final class SettingsUi {
     /**
      * Whether the dialog this row opened on this screen is still showing. A second tap can land
      * on the row before the first tap's dialog takes input, and it opened another one on top.
+     * Public, because ReleaseNotesTest loads ReleaseNotes in a class loader of its own, which
+     * package access doesn't reach.
      */
-    static boolean dialogOpen(String key, Context context) {
+    public static boolean dialogOpen(String key, Context context) {
         java.lang.ref.WeakReference<Dialog> open = OPEN_DIALOGS.get(key);
         java.lang.ref.WeakReference<Context> on = OPENED_ON.get(key);
         Dialog dialog = open == null ? null : open.get();
@@ -1208,7 +1210,7 @@ public final class SettingsUi {
     }
 
     /** Remembers the dialog a row opened on this screen, for {@link #dialogOpen}. */
-    static void dialogOpened(String key, Context context, Dialog dialog) {
+    public static void dialogOpened(String key, Context context, Dialog dialog) {
         OPEN_DIALOGS.put(key, new java.lang.ref.WeakReference<>(dialog));
         OPENED_ON.put(key, new java.lang.ref.WeakReference<>(context));
     }
