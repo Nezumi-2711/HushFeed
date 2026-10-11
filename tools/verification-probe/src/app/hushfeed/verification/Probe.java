@@ -1094,15 +1094,25 @@ public final class Probe extends Instrumentation {
                         float y = Float.parseFloat(required(intent, "y"));
                         String gapText = intent.getStringExtra("gap");
                         long gap = gapText == null ? 90L : Long.parseLong(gapText);
+                        // How long the second touch stays down, for #63: a finger that rests on
+                        // the second tap also reaches the long press timers.
+                        String holdText = intent.getStringExtra("hold");
+                        long hold = holdText == null ? 30L : Long.parseLong(holdText);
                         android.app.Activity activity = (android.app.Activity) loader.loadClass(UTILS)
                                 .getMethod("getActivity").invoke(null);
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.view.View decor = activity.getWindow().getDecorView();
                         tap(decor, x, y);
-                        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                            tap(decor, x, y);
-                            Log.i(TAG, "ok doubletap at " + x + "," + y + " gap=" + gap + "ms on "
-                                    + activity.getClass().getSimpleName());
+                        android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
+                        main.postDelayed(() -> {
+                            long down = android.os.SystemClock.uptimeMillis();
+                            touch(decor, down, down, android.view.MotionEvent.ACTION_DOWN, x, y);
+                            main.postDelayed(() -> {
+                                touch(decor, down, android.os.SystemClock.uptimeMillis(),
+                                        android.view.MotionEvent.ACTION_UP, x, y);
+                                Log.i(TAG, "ok doubletap at " + x + "," + y + " gap=" + gap + "ms hold="
+                                        + hold + "ms on " + activity.getClass().getSimpleName());
+                            }, hold);
                         }, gap);
                         break;
                     }
@@ -2104,6 +2114,15 @@ public final class Probe extends Instrumentation {
             } finally {
                 press.recycle();
                 release.recycle();
+            }
+        }
+
+        private static void touch(android.view.View decor, long down, long at, int action, float x, float y) {
+            android.view.MotionEvent event = android.view.MotionEvent.obtain(down, at, action, x, y, 0);
+            try {
+                decor.dispatchTouchEvent(event);
+            } finally {
+                event.recycle();
             }
         }
 
