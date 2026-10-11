@@ -40,6 +40,7 @@ public final class RememberClearDisplayPatch {
     // Clear-mode event types, from TikTok's enum of them (X.0vGX getType on 47.1.4).
     private static final int SCREEN_RECORD = 1;
     private static final int SWITCH_PAGE = 3;
+    private static final int OTHER_EXIT = 6;
     private static final int NOTIFY_EXIT = 9;
     private static final int SWITCH_AD = 11;
     private static final int BACK_BUTTON = 12;
@@ -406,12 +407,14 @@ public final class RememberClearDisplayPatch {
         automaticHidden = false;
         setCarrying(false);
         // Exits TikTok makes by itself, not the reader's choice: on an opened video the first back
-        // press leaves clear mode before the page (DetailPageComponent on 47.1.4), a screen
-        // recording or cast starting leaves it, and so does paid series content. The state follows
-        // them, but they don't stick to the video or overwrite the remembered choice. Counted, the
-        // back press kept a video replayed from search from clearing again (#84).
+        // press leaves clear mode before the page (BACK_BUTTON from DetailPageComponent, OTHER_EXIT
+        // from the clear-mode panel's Back key handler on 47.1.4), a screen recording or cast
+        // starting leaves it, and so does paid series content. OTHER_EXIT also comes from the more
+        // button opening the share panel and from background play. The state follows them, but
+        // they don't stick to the video or overwrite the remembered choice. Counted, the back
+        // press kept a video replayed from search from clearing again (#84).
         int kind = (Integer) type;
-        if (kind == BACK_BUTTON || kind == SCREEN_RECORD || kind == SWITCH_AD) return;
+        if (kind == BACK_BUTTON || kind == OTHER_EXIT || kind == SCREEN_RECORD || kind == SWITCH_AD) return;
         long observed = generation;
         Runnable changed = () -> {
             if (observed != generation) return;
