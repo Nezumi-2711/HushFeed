@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Mostra le date nella griglia del profilo e Mostra il tasso di interazione ora funzionano nelle griglie di TikTok 47.1.4, sia sui video di un profilo sia nei Preferiti e nei video che ti piacciono. Quella versione scrive le visualizzazioni di ogni riquadro in un punto che la patch non raggiungeva, quindi lì non comparivano né la data né il tasso.
+
 * **TikTok:** Creator bloccati, parole bloccate, gli intervalli di visualizzazioni e Mi piace e interruttori come Nascondi i video LIVE e Nascondi le storie ora funzionano anche nella scheda Seguiti. Su TikTok 47.1.4 quella scheda perdeva solo le pubblicità e i video con un luogo, quindi un creator che avevi bloccato poteva ancora comparire lì.
 
 * **TikTok:** Una parola che non è un codice lingua in Non tradurre automaticamente queste lingue ora riceve un semplice messaggio "non è un codice lingua". Prima avvisava che nessun video avrebbe mai corrisposto, che è l'avviso del filtro sulla lingua delle didascalie e non c'entra con un elenco che lascia solo il testo non tradotto (#121).

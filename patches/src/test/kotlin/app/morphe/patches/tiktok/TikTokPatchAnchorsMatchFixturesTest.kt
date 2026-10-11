@@ -33,7 +33,9 @@ import app.morphe.patches.tiktok.interaction.exactcounts.CompactCountFormatterFi
 import app.morphe.patches.tiktok.interaction.exactcounts.CountFormatterFingerprint
 import app.morphe.patches.tiktok.interaction.exactcounts.isCountFormatter
 import app.morphe.patches.tiktok.interaction.engagement.ProfileGridBindFingerprint
+import app.morphe.patches.tiktok.interaction.engagement.ProfileGridHolderBindFingerprint
 import app.morphe.patches.tiktok.interaction.engagement.gridCountSite
+import app.morphe.patches.tiktok.interaction.engagement.holderCountSites
 import app.morphe.patches.tiktok.interaction.feedtoolbar.SidebarIconViewFingerprint
 import app.morphe.patches.tiktok.interaction.feedtoolbar.isToolbarEnabledCheck
 import app.morphe.patches.tiktok.profile.BASE_UI_COMPONENT
@@ -560,6 +562,37 @@ class TikTokPatchAnchorsMatchFixturesTest {
             }
             assertEquals("the cell's text is the formatted count", site.textRegister,
                 (instructions[setText] as FiveRegisterInstruction).registerD)
+        }
+    }
+
+    /**
+     * The grid cell holder's bind, which set the count on another creator's Videos tab, Favorites
+     * and Liked on the S22 with 47.1.4: one bind per declared build, the item in the parameter register its statistics
+     * are read from (v15), and two count sites (the plain cell and the pinned or scheduled one),
+     * each text the one the next setText writes.
+     */
+    @Test
+    fun `profile grid holder view count sites resolve on every declared build`() {
+        Fixtures.forEachDeclared { apk ->
+            val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
+            val classes = container.dexEntryNames.asSequence()
+                .flatMap { container.getEntry(it)!!.dexFile.classes.asSequence() }.toList()
+            val binds = classes.flatMap { cls -> cls.methods.filter { ProfileGridHolderBindFingerprint.takes(it, cls) } }
+            assertEquals("grid holder binds", 1, binds.size)
+            val bind = binds.single()
+            val found = runCatching { bind.holderCountSites() }.getOrElse { throw AssertionError(it.message, it) }
+            assertEquals("item register", 15, found.itemRegister)
+            assertEquals("count sites", 2, found.sites.size)
+            assertTrue("highest first", found.sites.zipWithNext().all { (a, b) -> a.insertAt > b.insertAt })
+            val instructions = bind.implementation!!.instructions.toList()
+            found.sites.forEach { site ->
+                val setText = (site.insertAt until instructions.size).first {
+                    val reference = (instructions[it] as? ReferenceInstruction)?.reference as? MethodReference
+                    reference?.name == "setText" && reference.parameterTypes.map(CharSequence::toString) == listOf("Ljava/lang/CharSequence;")
+                }
+                assertEquals("the cell's text is the formatted count", site.textRegister,
+                    (instructions[setText] as FiveRegisterInstruction).registerD)
+            }
         }
     }
 

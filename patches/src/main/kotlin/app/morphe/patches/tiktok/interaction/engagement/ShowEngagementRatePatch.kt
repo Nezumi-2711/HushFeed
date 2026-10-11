@@ -23,6 +23,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
+import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 private const val EXTENSION = "Lapp/morphe/extension/tiktok/feed/ProfileGridCount;"
 private const val AWEME = "Lcom/ss/android/ugc/aweme/feed/model/Aweme;"
@@ -30,10 +31,10 @@ private const val STATISTICS = "Lcom/ss/android/ugc/aweme/feed/model/AwemeStatis
 private const val WHAT = "Profile grid count"
 
 /**
- * The bind of the profile grid's adapter, which a profile's Videos, Liked and other tabs list
- * their cells through (X/0Of2 on 47.1.4, X/0Oey on 47.1.3, X/0lEk on 47.0.3, built by
- * AwemeListFragmentImpl and ProfileBaseAwemeListFragment). It reads one view count: the cell's
- * play icon label, formatted by TikTok's main count formatter.
+ * The bind of the older profile grid adapter (X/0Of2 on 47.1.4, X/0Oey on 47.1.3, X/0lEk on
+ * 47.0.3, built by AwemeListFragmentImpl and ProfileBaseAwemeListFragment). It reads one view
+ * count: the cell's play icon label, formatted by TikTok's main count formatter. On the S22 with
+ * 47.1.4 the count on screen came from the cell holder's own bind below instead (2026-10-11).
  */
 internal object ProfileGridBindFingerprint : Fingerprint(
     name = "onBindBasicViewHolder",
@@ -124,10 +125,118 @@ internal fun Method.gridCountSite(): GridCountSite {
     return GridCountSite(insertAt, textRegister, itemRegister)
 }
 
+/** Whether this instruction writes [register], either half of a wide write included. */
+private fun Instruction.writes(register: Int) = opcode.setsRegister() &&
+    (this as? OneRegisterInstruction)?.registerA.let {
+        it == register || (opcode.setsWideRegister() && it == register - 1)
+    }
+
 /**
- * Hands each profile grid cell's view count text and its Aweme to the extension. Show engagement
- * rate and Always show publish date share it, so a build with both installs the hook once and
- * each adds its part to the text: the rate after the count, the date on a line of its own.
+ * The profile grid cell holder's own bind, which sets the count a profile's Videos tab shows on
+ * 47.1.4 (X/0Oec.r6, seen on the S22 2026-10-11 on another creator's Videos tab and on Favorites
+ * and Liked: the cell's tv_play_count is its field, and the adapter's count above never reached
+ * the screen). It formats the count through a (I, Number, String)CharSequence formatter on two
+ * branches, one for a pinned or scheduled cell.
+ */
+internal object ProfileGridHolderBindFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf(
+        AWEME, "I", "Z", "Z", "I", "Ljava/lang/String;", "Ljava/lang/String;", "Z", "Z", "Ljava/util/Set;", "Ljava/util/Set;",
+    ),
+    custom = { method, _ -> method.viewCountReads().isNotEmpty() },
+)
+
+/** One formatted count in the holder's bind: the hook goes at [insertAt], after the text's cast to String. */
+internal data class HolderCountSite(val insertAt: Int, val textRegister: Int)
+
+/** The holder bind's count sites, highest first so inserting at one leaves the others' indices alone. */
+internal data class HolderCountSites(val itemRegister: Int, val sites: List<HolderCountSite>)
+
+private val NUMBER_FORMATTER_PARAMETERS = listOf("I", "Ljava/lang/Number;", "Ljava/lang/String;")
+
+/**
+ * The holder reads the cell's statistics once, from the register holding the cell's item (a
+ * story cell swaps in its first story before that), and every view count it reads comes from
+ * them. Each count is boxed with Long.valueOf, formatted, cast to String and later set on the
+ * count's view. The item's register is last written before the statistics read and nothing jumps
+ * back over that write, so it holds the same item at every hook.
+ */
+internal fun Method.holderCountSites(): HolderCountSites {
+    val instructions = implementation?.instructions?.toList()
+        ?: throw PatchException("$WHAT: the grid holder's bind has no code.")
+    val reads = viewCountReads()
+    val statistics = instructions.indices.filter { instructions[it].calls(AWEME, "getStatistics") }.singleOrNull()
+        ?: throw PatchException("$WHAT: expected one statistics read in the grid holder's bind.")
+    val statisticsRegister = (instructions.getOrNull(statistics + 1) as? OneRegisterInstruction)
+        ?.takeIf { instructions[statistics + 1].opcode == Opcode.MOVE_RESULT_OBJECT }?.registerA
+        ?: throw PatchException("$WHAT: the grid holder's statistics aren't kept.")
+    val counts = reads.map { read ->
+        if ((instructions[read] as FiveRegisterInstruction).registerC != statisticsRegister ||
+            instructions.getOrNull(read + 1)?.opcode != Opcode.MOVE_RESULT_WIDE
+        ) {
+            throw PatchException("$WHAT: a grid holder view count isn't read from the cell's statistics.")
+        }
+        (instructions[read + 1] as OneRegisterInstruction).registerA
+    }.toSet()
+
+    val itemRegister = (instructions[statistics] as FiveRegisterInstruction).registerC
+    val lastWrite = instructions.indices.lastOrNull { instructions[it].writes(itemRegister) } ?: -1
+    if (lastWrite >= statistics) {
+        throw PatchException("$WHAT: the grid holder's item changes after its statistics are read.")
+    }
+    val flow = ControlFlow.of(this)
+    instructions.indices.forEach { from ->
+        if (from > lastWrite && (flow.normal[from] + flow.exceptional[from]).any { it <= lastWrite }) {
+            throw PatchException("$WHAT: instruction $from jumps back over the grid holder's item.")
+        }
+    }
+
+    val sites = instructions.indices.filter { index ->
+        val reference = instructions[index].getReference<MethodReference>()
+        instructions[index].opcode == Opcode.INVOKE_STATIC && reference?.returnType == "Ljava/lang/CharSequence;" &&
+            reference.parameterTypes.map(CharSequence::toString) == NUMBER_FORMATTER_PARAMETERS
+    }.map { format ->
+        val number = (instructions[format] as FiveRegisterInstruction).registerD
+        val boxed = instructions.getOrNull(format - 1)
+        val boxing = instructions.getOrNull(format - 2)
+        val cast = instructions.getOrNull(format + 2)
+        if (boxed?.opcode != Opcode.MOVE_RESULT_OBJECT || (boxed as OneRegisterInstruction).registerA != number ||
+            boxing?.calls("Ljava/lang/Long;", "valueOf") != true ||
+            (boxing as FiveRegisterInstruction).registerC !in counts ||
+            instructions.getOrNull(format + 1)?.opcode != Opcode.MOVE_RESULT_OBJECT ||
+            cast?.opcode != Opcode.CHECK_CAST || cast.getReference<TypeReference>()?.type != "Ljava/lang/String;"
+        ) {
+            throw PatchException("$WHAT: a grid holder count isn't boxed, formatted and cast to text in a row.")
+        }
+        val textRegister = (instructions[format + 1] as OneRegisterInstruction).registerA
+        if ((cast as OneRegisterInstruction).registerA != textRegister) {
+            throw PatchException("$WHAT: the grid holder casts another register than its count text.")
+        }
+        val insertAt = format + 3
+        if (flow.normal[format + 2] != listOf(insertAt)) {
+            throw PatchException("$WHAT: the grid holder's count text doesn't fall through to the hook.")
+        }
+        instructions.indices.forEach { from ->
+            if (from != format + 2 && insertAt in flow.normal[from] + flow.exceptional[from]) {
+                throw PatchException("$WHAT: instruction $from jumps past a grid holder hook.")
+            }
+        }
+        if (textRegister > 15) throw PatchException("$WHAT: v$textRegister doesn't fit a short invoke.")
+        HolderCountSite(insertAt, textRegister)
+    }
+    if (sites.size != reads.size) {
+        throw PatchException("$WHAT: the grid holder reads ${reads.size} view counts but formats ${sites.size}.")
+    }
+    if (itemRegister > 15) throw PatchException("$WHAT: v$itemRegister doesn't fit a short invoke.")
+    return HolderCountSites(itemRegister, sites.sortedByDescending { it.insertAt })
+}
+
+/**
+ * Hands each profile grid cell's view count text and its Aweme to the extension, in the old
+ * adapter's bind and in the cell holder's own bind, since a build can set the count in either.
+ * Show engagement rate, Always show publish date and Advanced downloads share it, so a build with
+ * them installs the hooks once and each adds its part to the text: the rate after the count, the
+ * date on a line of its own, the saved mark before it.
  */
 internal val profileGridCountPatch = bytecodePatch {
     dependsOn(sharedExtensionPatch)
@@ -145,6 +254,21 @@ internal val profileGridCountPatch = bytecodePatch {
                     move-result-object v${site.textRegister}
                 """,
             )
+        }
+        ProfileGridHolderBindFingerprint.method.apply {
+            if (AccessFlags.STATIC.isSet(accessFlags)) {
+                throw PatchException("$WHAT: the grid holder's bind is static.")
+            }
+            val sites = holderCountSites()
+            sites.sites.forEach { site ->
+                addInstructions(
+                    site.insertAt,
+                    """
+                        invoke-static { v${site.textRegister}, v${sites.itemRegister} }, $EXTENSION->text(Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+                        move-result-object v${site.textRegister}
+                    """,
+                )
+            }
         }
     }
 }
