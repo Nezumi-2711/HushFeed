@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Dengan Catat diagnostik aktif, log sekarang mencatat sekali per video berapa gambar pratinjau bilah progres yang dikirim TikTok bersamanya. Kalau pratinjau tidak muncul saat bilah digeser, ekspor diagnostik menunjukkan apakah video itu membawa gambar pratinjau (#140).
+
 * **TikTok:** Detail build dan ekspor log lengkap kini mencantumkan setiap patch di build kamu yang mengubah kode TikTok, dengan nama singkat, termasuk yang tanpa sakelar seperti Comment send fix dan Network request report.
 
 * **TikTok:** Tampilan bersih, yang diingat atau otomatis, kini juga membersihkan video yang kamu buka dari pencarian. TikTok menyerahkan video itu ke halaman yang dibuka dalam keadaan sudah diputar, dan Tampilan bersih menunggu awal pemutaran yang tidak pernah datang di sana, jadi tombol dan bilah pencarian TikTok tetap tampil (#84).

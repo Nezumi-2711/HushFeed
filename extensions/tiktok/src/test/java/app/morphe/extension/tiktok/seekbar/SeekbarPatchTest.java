@@ -8,6 +8,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.tiktok.settings.Settings;
 import org.junit.After;
@@ -110,5 +114,63 @@ public class SeekbarPatchTest {
     @Test
     public void thumbnailGatePassesThroughWhenDisabled() {
         assertEquals(0, SeekbarPatch.overrideThumbnailGate("seekbar_show_thumbnail_when_drag", 0));
+    }
+
+    /** TikTok's model shapes, by the names the line reads them through. */
+    public static final class FakeSheet {
+        public List<String> imgUrls;
+        public List<String> imgUris;
+
+        FakeSheet(List<String> urls, List<String> uris) {
+            imgUrls = urls;
+            imgUris = uris;
+        }
+    }
+
+    public static final class FakeVideo {
+        public List<FakeSheet> bigThumbs;
+    }
+
+    public static final class FakeAweme {
+        private final FakeVideo video;
+
+        FakeAweme(FakeVideo video) {
+            this.video = video;
+        }
+
+        public FakeVideo getVideo() {
+            return video;
+        }
+    }
+
+    private static FakeAweme videoWith(FakeSheet... sheets) {
+        FakeVideo video = new FakeVideo();
+        video.bigThumbs = sheets == null ? null : Arrays.asList(sheets);
+        return new FakeAweme(video);
+    }
+
+    @Test
+    public void thePreviewLineCountsSheetsAndTheOnesTikTokWouldUse() {
+        FakeSheet whole = new FakeSheet(List.of("https://p16/a.jpg"), List.of("tos/a"));
+        FakeSheet noUrls = new FakeSheet(Collections.emptyList(), List.of("tos/b"));
+        FakeSheet noUris = new FakeSheet(List.of("https://p16/c.jpg"), null);
+        assertEquals("sheets=3 complete=1", SeekbarPatch.describePreviewSheets(videoWith(whole, noUrls, noUris)));
+        assertEquals("sheets=2 complete=2", SeekbarPatch.describePreviewSheets(videoWith(whole, whole)));
+    }
+
+    @Test
+    public void aVideoWithoutSheetsSaysSo() {
+        assertEquals("sheets=0 complete=0", SeekbarPatch.describePreviewSheets(videoWith((FakeSheet[]) null)));
+        assertEquals("sheets=0 complete=0", SeekbarPatch.describePreviewSheets(videoWith()));
+        assertEquals("sheets=none (no video)", SeekbarPatch.describePreviewSheets(new FakeAweme(null)));
+    }
+
+    @Test
+    public void thePreviewCheckIgnoresNoVideoAndRepeats() {
+        // Nothing to read and nothing thrown, with Log diagnostics off or on.
+        SeekbarPatch.onPreviewCheck(null);
+        FakeAweme aweme = videoWith(new FakeSheet(List.of("u"), List.of("i")));
+        SeekbarPatch.onPreviewCheck(aweme);
+        SeekbarPatch.onPreviewCheck(aweme);
     }
 }

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Com Registrar diagnósticos ligado, o registro agora informa uma vez por vídeo quantas imagens de prévia da barra de progresso o TikTok mandou com ele. Se a prévia não aparece quando você arrasta a barra, uma exportação de diagnósticos mostra se o vídeo veio com alguma (#140).
+
 * **TikTok:** Detalhes da compilação e a exportação completa do log agora listam, com um nome curto, cada patch da sua compilação que alterou o código do TikTok, incluindo os sem chave, como Comment send fix e Network request report.
 
 * **TikTok:** Tela limpa, lembrada ou automática, agora também limpa um vídeo que você abre pela busca. O TikTok passa esse vídeo para a página aberta já tocando, e a Tela limpa esperava um início que ali nunca chegava, então os botões e a barra de busca do TikTok continuavam na tela (#84).

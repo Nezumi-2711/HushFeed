@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** With Log diagnostics on, the log now says once per video how many progress bar preview pictures TikTok sent with it. If the preview doesn't show while you drag the bar, a diagnostics export tells whether the video came with any (#140).
+
 * **TikTok:** Build details and the full log export now list every patch that changed TikTok's code in your build, by a short name, including the ones with no switch like Comment send fix and Network request report.
 
 * **TikTok:** Clear display, remembered or automatic, now also clears a video you open from search. TikTok hands that video to the opened page already playing, and Clear display waited for a start that never came there, so the buttons and TikTok's search bar stayed up (#84).

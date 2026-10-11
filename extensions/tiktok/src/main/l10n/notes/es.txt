@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Registrar diagnósticos activado, el registro ahora indica una vez por video cuántas imágenes de vista previa de la barra de progreso envió TikTok con él. Si la vista previa no aparece al arrastrar la barra, una exportación de diagnósticos muestra si el video traía alguna (#140).
+
 * **TikTok:** Detalles de la compilación y la exportación completa del registro ahora enumeran, con un nombre corto, cada parche de tu compilación que cambió el código de TikTok, incluidos los que no tienen interruptor, como Comment send fix y Network request report.
 
 * **TikTok:** Controles ocultos, recordado o automático, ahora también despeja un vídeo que abres desde la búsqueda. TikTok pasa ese vídeo a la página abierta ya reproduciéndose, y Controles ocultos esperaba un inicio que ahí nunca llegaba, así que los botones y la barra de búsqueda de TikTok se quedaban (#84).

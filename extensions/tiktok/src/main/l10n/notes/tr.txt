@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tanılamayı günlüğe kaydet açıkken günlük artık her video için bir kez TikTok'un onunla birlikte ilerleme çubuğu için kaç önizleme resmi gönderdiğini yazıyor. Çubuğu sürüklerken önizleme görünmüyorsa, tanılama dışa aktarımı videonun hiç önizleme resmiyle gelip gelmediğini gösterir (#140).
+
 * **TikTok:** Derleme ayrıntıları ve tam günlük dışa aktarımı artık derlemende TikTok'un kodunu değiştiren her yamayı kısa bir adla listeliyor, Comment send fix ve Network request report gibi anahtarı olmayanlar da dahil.
 
 * **TikTok:** Hatırlanan ya da otomatik Temiz ekran artık aramadan açtığın videoyu da temizliyor. TikTok o videoyu açılan sayfaya zaten oynarken veriyor, Temiz ekran ise orada hiç gelmeyen bir başlangıcı bekliyordu, bu yüzden düğmeler ve TikTok'un arama çubuğu kalıyordu (#84).

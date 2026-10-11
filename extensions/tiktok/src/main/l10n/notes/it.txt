@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Registra la diagnostica attivo, il registro ora indica una volta per video quante immagini di anteprima della barra di avanzamento TikTok ha inviato con esso. Se l'anteprima non compare mentre trascini la barra, un'esportazione della diagnostica mostra se il video ne aveva (#140).
+
 * **TikTok:** Dettagli della build e l'esportazione completa del log ora elencano, con un nome breve, ogni patch della tua build che ha modificato il codice di TikTok, comprese quelle senza interruttore come Comment send fix e Network request report.
 
 * **TikTok:** Vista pulita, ricordata o automatica, ora pulisce anche un video aperto dalla ricerca. TikTok passa quel video alla pagina aperta mentre è già in riproduzione, e Vista pulita aspettava un avvio che lì non arrivava mai, quindi i pulsanti e la barra di ricerca di TikTok restavano (#84).
