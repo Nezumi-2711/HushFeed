@@ -1,5 +1,8 @@
 ## Unreleased
 
+
+* **TikTok:** Build təfərrüatları və tam jurnal ixracı indi quruluşunda TikTok-un kodunu dəyişən hər yamağı qısa adı ilə sadalayır, Comment send fix və Network request report kimi açarı olmayanlar da daxil.
+
 * **TikTok:** Yadda saxlanan və ya avtomatik Təmiz ekran indi axtarışdan açdığınız videonu da təmizləyir. TikTok həmin videonu açılan səhifəyə artıq oynayarkən ötürür, Təmiz ekran isə orada heç vaxt gəlməyən başlanğıcı gözləyirdi, ona görə düymələr və TikTok-un axtarış çubuğu qalırdı (#84).
 
 * **TikTok:** Video örtüklərini gizlədin və lent mətn ölçüləri indi keçid TikTok-u arxasında Sizin üçün lenti olmadan birbaşa axtarışda və ya videoda açanda da işləyir. Əvvəl belə açılan videolarda bütün örtüklər və TikTok-un öz mətn ölçüsü qalırdı (#84).

@@ -1,5 +1,8 @@
 ## Unreleased
 
+
+* **TikTok:** Detail build dan ekspor log lengkap kini mencantumkan setiap patch di build kamu yang mengubah kode TikTok, dengan nama singkat, termasuk yang tanpa sakelar seperti Comment send fix dan Network request report.
+
 * **TikTok:** Tampilan bersih, yang diingat atau otomatis, kini juga membersihkan video yang kamu buka dari pencarian. TikTok menyerahkan video itu ke halaman yang dibuka dalam keadaan sudah diputar, dan Tampilan bersih menunggu awal pemutaran yang tidak pernah datang di sana, jadi tombol dan bilah pencarian TikTok tetap tampil (#84).
 
 * **TikTok:** Sembunyikan overlay video dan ukuran teks feed kini juga berfungsi saat sebuah tautan membuka TikTok langsung ke pencarian atau video, tanpa feed Untuk Anda di belakangnya. Sebelumnya, video yang dibuka dengan cara itu tetap menampilkan semua overlay dan ukuran teks bawaan TikTok (#84).

@@ -1,5 +1,8 @@
 ## Unreleased
 
+
+* **TikTok:** Build-Informationen und der vollständige Log-Export listen jetzt jeden Patch in deinem Build, der TikToks Code geändert hat, mit einem Kurznamen auf, auch die ohne Schalter wie Comment send fix und Network request report.
+
 * **TikTok:** Freie Ansicht, gemerkt oder automatisch, räumt jetzt auch ein Video frei, das du aus der Suche öffnest. TikTok gibt dieses Video schon laufend an die geöffnete Seite weiter, und Freie Ansicht wartete dort auf einen Start, der nie kam, sodass die Knöpfe und TikToks Suchleiste stehen blieben (#84).
 
 * **TikTok:** Video-Einblendungen ausblenden und die Textgrößen im Feed wirken jetzt auch, wenn ein Link TikTok direkt in der Suche oder in einem Video startet, ohne den Für-dich-Feed dahinter. Vorher behielten so geöffnete Videos alle Einblendungen und TikToks eigene Textgröße (#84).

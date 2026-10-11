@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -35,7 +36,32 @@ public final class BuildDetails {
                     + "kk km kn ko lt lv ml mr ms my nb nl or pa pl pt ro ru sk sl sq sv sw ta te th tr uk ur uz vi zh zu")
             .split(" ")));
 
+    /** How many names the report prints. The count line still says how many there were. */
+    private static final int MAX_LISTED_SWITCHES = 400;
+    private static final int MAX_SWITCH_NAME = 64;
+    /** Null until the extension reports which switches registered, so the report says unknown. */
+    private static volatile List<String> registeredSwitches;
+
     private BuildDetails() {}
+
+    /**
+     * The switches the installed extension says the patcher registered, one or more per patch
+     * that changed TikTok's code. Names outside letters and digits are dropped, so nothing typed
+     * by a person or read from TikTok can reach the report. Null returns the record to unknown.
+     */
+    public static void setRegisteredSwitches(Collection<String> names) {
+        if (names == null) {
+            registeredSwitches = null;
+            return;
+        }
+        Set<String> clean = new HashSet<>();
+        for (String name : names) {
+            if (name != null && name.length() <= MAX_SWITCH_NAME && name.matches("[A-Za-z0-9]+")) clean.add(name);
+        }
+        List<String> sorted = new ArrayList<>(clean);
+        Collections.sort(sorted);
+        registeredSwitches = Collections.unmodifiableList(sorted);
+    }
 
     public static String readMetadata(Context context) {
         if (context == null) return "";
@@ -78,7 +104,22 @@ public final class BuildDetails {
             text.append(choice || key.equals("amoled_color") || key.equals("native_locales_retained")
                     ? "patch_time." : "").append(key).append(": ").append(value).append('\n');
         }
-        return text.toString();
+        List<String> switches = registeredSwitches;
+        text.append("registered_switches_count: ").append(switches == null ? "unknown" : String.valueOf(switches.size()))
+                .append("\nregistered_switches: ");
+        if (switches == null) {
+            text.append("unknown");
+        } else if (switches.isEmpty()) {
+            text.append("none");
+        } else {
+            int listed = Math.min(switches.size(), MAX_LISTED_SWITCHES);
+            for (int index = 0; index < listed; index++) {
+                if (index > 0) text.append(',');
+                text.append(switches.get(index));
+            }
+            if (listed < switches.size()) text.append(",+").append(switches.size() - listed).append(" more");
+        }
+        return text.append('\n').toString();
     }
 
     private static Map<String, String> parse(String metadata) {

@@ -3,6 +3,10 @@ package app.morphe.extension.shared.diagnostics;
 import static org.junit.Assert.*;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Test;
 
 public class BuildDetailsTest {
@@ -122,6 +126,36 @@ public class BuildDetailsTest {
         }
         // A build the bundle no longer declares is no target of this one.
         assertUnknown(record.replace("47.1.4", "47.1.3").replace("2024701040", "2024701030"));
+    }
+
+    @Test public void registeredSwitchesStayUnknownUntilReportedAndKeepOnlyCleanSortedNames() throws Exception {
+        try {
+            BuildDetails.setRegisteredSwitches(null);
+            assertTrue(BuildDetails.report(metadata()).contains("registered_switches_count: unknown\nregistered_switches: unknown\n"));
+            BuildDetails.setRegisteredSwitches(Collections.emptyList());
+            assertTrue(BuildDetails.report("").contains("registered_switches_count: 0\nregistered_switches: none\n"));
+
+            BuildDetails.setRegisteredSwitches(Arrays.asList("ghostMode", "appLock", "ghostMode", null, "",
+                    "../RAW_SENTINEL", "sessionid=RAW_SENTINEL", "h264Playback", "x".repeat(65)));
+            String report = BuildDetails.report(metadata());
+            assertTrue(report, report.contains("registered_switches_count: 3\nregistered_switches: appLock,ghostMode,h264Playback\n"));
+            assertFalse(report.contains("RAW_SENTINEL"));
+            assertTrue(report.contains("build_metadata: available\n"));
+            // Unknown APK facts and a known switch list are separate answers.
+            assertTrue(BuildDetails.report("").contains("build_metadata: unknown\n"));
+            assertTrue(BuildDetails.report("").contains("registered_switches: appLock,ghostMode,h264Playback\n"));
+
+            // Past the printed cap the count stays true and the line says how many it left out.
+            List<String> many = new ArrayList<>();
+            for (int index = 0; index < 1000; index++) many.add(String.format("switch%04d", index));
+            BuildDetails.setRegisteredSwitches(many);
+            report = BuildDetails.report("");
+            assertTrue(report.contains("registered_switches_count: 1000\n"));
+            assertTrue(report, report.contains(",switch0399,+600 more\n"));
+            assertFalse(report.contains("switch0400"));
+        } finally {
+            BuildDetails.setRegisteredSwitches(null);
+        }
     }
 
     private static void assertUnknown(String record) {

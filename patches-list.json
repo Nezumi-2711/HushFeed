@@ -1103,7 +1103,9 @@
       "description": "Stops TikTok from forcing you to sign in before you can keep browsing. Works as soon as you patch it in, with no switch.",
       "category": "Settings",
       "use": true,
-      "dependencies": [],
+      "dependencies": [
+        "BytecodePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.1.4"
@@ -1139,7 +1141,9 @@
       "description": "Stops TikTok from noticing and reacting when you take a screenshot or record the screen. Works as soon as you patch it in, with no switch.",
       "category": "Downloads",
       "use": true,
-      "dependencies": [],
+      "dependencies": [
+        "BytecodePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.1.4"
@@ -1721,7 +1725,9 @@
       "description": "Makes Sign in with Google work in the patched app, where it would otherwise fail. Works as soon as you patch it in, with no switch.",
       "category": "Settings",
       "use": true,
-      "dependencies": [],
+      "dependencies": [
+        "BytecodePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.1.4"
