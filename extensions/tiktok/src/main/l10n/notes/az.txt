@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yadda saxlanan və ya avtomatik Təmiz ekran indi axtarışdan açdığınız videonu da təmizləyir. TikTok həmin videonu açılan səhifəyə artıq oynayarkən ötürür, Təmiz ekran isə orada heç vaxt gəlməyən başlanğıcı gözləyirdi, ona görə düymələr və TikTok-un axtarış çubuğu qalırdı (#84).
+
 * **TikTok:** Video örtüklərini gizlədin və lent mətn ölçüləri indi keçid TikTok-u arxasında Sizin üçün lenti olmadan birbaşa axtarışda və ya videoda açanda da işləyir. Əvvəl belə açılan videolarda bütün örtüklər və TikTok-un öz mətn ölçüsü qalırdı (#84).
 
 * **TikTok:** TikTok brauzerində xarici səhifələri qoruyun indi LIVE-ların və Mağazanın açdığı tapmaca CAPTCHA-nı TikTok-un öz səhifəsi sayır, buna görə tapmacanın TikTok ilə əlaqəsi qalır (#87). O, TikTok-un öz serverlərindən yüklənir, sadəcə açarın tanımadığı ünvandan.

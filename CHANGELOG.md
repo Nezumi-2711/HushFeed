@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Clear display, remembered or automatic, now also clears a video you open from search. TikTok hands that video to the opened page already playing, and Clear display waited for a start that never came there, so the buttons and TikTok's search bar stayed up (#84).
+
 * **TikTok:** Hide video overlays and Feed text sizes now also work when a link starts TikTok straight into search or a video, with no For You feed behind it. Before, the videos opened that way kept every overlay and TikTok's own text size (#84).
 
 * **TikTok:** Protect external pages in TikTok's browser now counts the puzzle CAPTCHA that LIVEs and the Shop open as one of TikTok's own pages, so the puzzle keeps its link back to TikTok (#87). It loads from TikTok's own servers, just not from an address the switch knew.

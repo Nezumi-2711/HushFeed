@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Hatırlanan ya da otomatik Temiz ekran artık aramadan açtığın videoyu da temizliyor. TikTok o videoyu açılan sayfaya zaten oynarken veriyor, Temiz ekran ise orada hiç gelmeyen bir başlangıcı bekliyordu, bu yüzden düğmeler ve TikTok'un arama çubuğu kalıyordu (#84).
+
 * **TikTok:** Video katmanlarını gizle ve akış metin boyutları artık bir bağlantı TikTok'u arkasında Sana Özel akışı olmadan doğrudan aramada veya bir videoda başlattığında da çalışıyor. Önceden bu şekilde açılan videolar tüm katmanları ve TikTok'un kendi metin boyutunu koruyordu (#84).
 
 * **TikTok:** TikTok tarayıcısındaki harici sayfaları koru artık LIVE'ların ve Mağaza'nın açtığı yapboz CAPTCHA'sını TikTok'un kendi sayfası sayıyor, böylece yapboz TikTok ile bağlantısını koruyor (#87). TikTok'un kendi sunucularından yükleniyor, sadece anahtarın tanımadığı bir adresten.

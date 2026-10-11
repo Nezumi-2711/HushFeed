@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tela limpa, lembrada ou automática, agora também limpa um vídeo que você abre pela busca. O TikTok passa esse vídeo para a página aberta já tocando, e a Tela limpa esperava um início que ali nunca chegava, então os botões e a barra de busca do TikTok continuavam na tela (#84).
+
 * **TikTok:** Esconder sobreposições do vídeo e os tamanhos de texto do feed agora também funcionam quando um link abre o TikTok direto na busca ou em um vídeo, sem o feed Para você por trás. Antes, os vídeos abertos assim mantinham todas as sobreposições e o tamanho de texto do próprio TikTok (#84).
 
 * **TikTok:** Proteger páginas externas no navegador do TikTok agora conta o CAPTCHA de quebra-cabeça que os LIVEs e a Loja abrem como uma página do próprio TikTok, então o quebra-cabeça mantém a ligação com o TikTok (#87). Ele carrega dos servidores do TikTok, só que de um endereço que a opção não conhecia.

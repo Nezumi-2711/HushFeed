@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Freie Ansicht, gemerkt oder automatisch, räumt jetzt auch ein Video frei, das du aus der Suche öffnest. TikTok gibt dieses Video schon laufend an die geöffnete Seite weiter, und Freie Ansicht wartete dort auf einen Start, der nie kam, sodass die Knöpfe und TikToks Suchleiste stehen blieben (#84).
+
 * **TikTok:** Video-Einblendungen ausblenden und die Textgrößen im Feed wirken jetzt auch, wenn ein Link TikTok direkt in der Suche oder in einem Video startet, ohne den Für-dich-Feed dahinter. Vorher behielten so geöffnete Videos alle Einblendungen und TikToks eigene Textgröße (#84).
 
 * **TikTok:** Externe Seiten in TikToks Browser schützen zählt das Puzzle-CAPTCHA, das LIVEs und der Shop öffnen, jetzt zu TikToks eigenen Seiten, damit das Puzzle seine Verbindung zu TikTok behält (#87). Es lädt von TikToks eigenen Servern, nur von einer Adresse, die der Schalter noch nicht kannte.
