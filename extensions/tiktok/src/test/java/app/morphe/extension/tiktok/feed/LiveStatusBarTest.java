@@ -300,14 +300,7 @@ public class LiveStatusBarTest {
         FrameLayout stream = heldStream(live, bar);
         LiveStatusBar.videoContainerForTests = View.generateViewId();
         FrameLayout controls = page(live, stream);
-        FrameLayout row = new FrameLayout(live);
-        controls.addView(row, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150));
-        View shade = new View(live);
-        GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[] {0x66000000, Color.TRANSPARENT});
-        gradient.setAlpha(128);
-        shade.setBackground(gradient);
-        row.addView(shade, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
+        View shade = shade(live, controls);
         FrameLayout plain = page(live, stream);
         room.start().resume().visible();
         layOut(live);
@@ -317,7 +310,7 @@ public class LiveStatusBarTest {
         assertTrue("the strip under the clock wasn't shaded", controls.getBackground() instanceof LiveStatusBar.BarShade);
         LiveStatusBar.BarShade fill = (LiveStatusBar.BarShade) controls.getBackground();
         assertEquals("the strip should be as tall as the bar", bar, fill.height);
-        assertEquals("the strip should start where the shade does, as drawn", 0x33000000, fill.color);
+        assertEquals("the strip should start where the shade does, as drawn", 0x33000000, fill.color());
         assertEquals("a layer without a shade got one", null, plain.getBackground());
         assertEquals("the shade was moved", 0f, shade.getTranslationY(), 0f);
 
@@ -325,6 +318,54 @@ public class LiveStatusBarTest {
         assertEquals("leaving kept the strip shaded", null, controls.getBackground());
         assertEquals(7, controls.getPaddingTop());
         room.stop().destroy();
+    }
+
+    /**
+     * #137: scrolling on through LIVE rooms, the strip under the clock went light again after the
+     * first few. The shade search had one budget for the whole visit, and TikTok keeps a room's
+     * shade hidden for a while, so a busy LIVE's layout passes used it up. A hidden shade is taken
+     * now and its fill shows only while the shade does, and each layer has a budget of its own.
+     */
+    @Test public void roomsFurtherOnStillGetTheShadeUnderTheClock() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        FrameLayout stream = heldStream(live, bar);
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout first = page(live, stream);
+        View firstShade = shade(live, first);
+        firstShade.setVisibility(View.INVISIBLE);
+        page(live, stream);
+        room.start().resume().visible();
+        for (int pass = 0; pass < 60; pass++) layOut(live);
+
+        assertTrue("a hidden shade got no fill to follow it", first.getBackground() instanceof LiveStatusBar.BarShade);
+        LiveStatusBar.BarShade fill = (LiveStatusBar.BarShade) first.getBackground();
+        assertEquals("the strip was shaded while TikTok's shade was hidden", 0, fill.color());
+        firstShade.setVisibility(View.VISIBLE);
+        assertEquals("the strip didn't follow the shade in", 0x33000000, fill.color());
+
+        FrameLayout later = page(live, stream);
+        shade(live, later);
+        layOut(live);
+        layOut(live);
+        assertTrue("a room further on got no shade under the clock", later.getBackground() instanceof LiveStatusBar.BarShade);
+        room.pause().stop().destroy();
+    }
+
+    /** TikTok's top shade as 47.1.4 has it: a gradient across the top of a row in the controls. */
+    private static View shade(Activity live, FrameLayout controls) {
+        FrameLayout row = new FrameLayout(live);
+        controls.addView(row, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150));
+        View shade = new View(live);
+        GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[] {0x66000000, Color.TRANSPARENT});
+        gradient.setAlpha(128);
+        shade.setBackground(gradient);
+        row.addView(shade, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
+        return shade;
     }
 
     /** With the bar hidden there's no clock to keep clear of, so the controls go up with the room. */

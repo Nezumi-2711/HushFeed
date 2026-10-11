@@ -205,6 +205,7 @@ public final class LiveStatusBar {
             // The room's views are laid out after it resumes, and its insets are only known once
             // the window is attached, so the strip is looked for on the layout passes that follow.
             decor.getViewTreeObserver().addOnGlobalLayoutListener(room);
+            if (!hideBar) decor.getViewTreeObserver().addOnPreDrawListener(room.shadeWatch);
             HookStatus.bound(HOOK_FAMILY, hideBar ? "LIVE room status bar hidden" : "LIVE room under the status bar");
         } catch (Throwable failure) {
             HookStatus.threw(HOOK_FAMILY, "hide", failure);
@@ -220,6 +221,7 @@ public final class LiveStatusBar {
             if (window == null) return;
             View decor = window.getDecorView();
             decor.getViewTreeObserver().removeOnGlobalLayoutListener(room);
+            decor.getViewTreeObserver().removeOnPreDrawListener(room.shadeWatch);
             room.putBack();
             if (!room.barHidden) {
                 window.setStatusBarColor(room.statusBarColor);
@@ -424,7 +426,8 @@ public final class LiveStatusBar {
     /**
      * TikTok's dark shade across the top of a room's controls: a view as wide as the layer, at the
      * top of what the layer lays out, no more than a third of it tall, with a gradient behind it.
-     * On 47.1.4 it sits three levels down (read off the S22, 2026-10-11).
+     * On 47.1.4 it sits three levels down (read off the S22, 2026-10-11). A hidden one counts too:
+     * TikTok keeps it hidden for a while as a room opens, and the fill follows it.
      */
     static View findShade(ViewGroup layer) {
         ArrayDeque<View> level = new ArrayDeque<>();
@@ -434,7 +437,7 @@ public final class LiveStatusBar {
             ArrayDeque<View> next = new ArrayDeque<>();
             for (View at : level) {
                 if (visited++ >= MAX_VISITS) return null;
-                if (at.getVisibility() != View.VISIBLE || topIn(at, layer) != layer.getPaddingTop()) continue;
+                if (at.getVisibility() == View.GONE || topIn(at, layer) != layer.getPaddingTop()) continue;
                 if (at.getBackground() instanceof GradientDrawable && at.getWidth() * 10 >= layer.getWidth() * 9
                         && at.getHeight() > 0 && at.getHeight() * 3 <= layer.getHeight()) {
                     return at;
@@ -464,35 +467,69 @@ public final class LiveStatusBar {
      * 0 when the shade isn't a plain vertical gradient this can read.
      */
     static int topColor(View shade) {
-        if (Build.VERSION.SDK_INT < 24 || !(shade.getBackground() instanceof GradientDrawable)) return 0;
+        if (!(shade.getBackground() instanceof GradientDrawable)) return 0;
         GradientDrawable gradient = (GradientDrawable) shade.getBackground();
+        return asDrawn(firstColor(gradient), gradient.getAlpha(), shade.getAlpha());
+    }
+
+    /** The color a top-to-bottom gradient starts with, 0 when it isn't a plain vertical one this can read. */
+    static int firstColor(GradientDrawable gradient) {
+        if (Build.VERSION.SDK_INT < 24) return 0;
         int[] colors = gradient.getColors();
         if (colors == null || colors.length == 0 || gradient.getGradientType() != GradientDrawable.LINEAR_GRADIENT) return 0;
-        int top;
-        if (gradient.getOrientation() == GradientDrawable.Orientation.TOP_BOTTOM) top = colors[0];
-        else if (gradient.getOrientation() == GradientDrawable.Orientation.BOTTOM_TOP) top = colors[colors.length - 1];
-        else return 0;
-        int alpha = Math.round(Color.alpha(top) * (gradient.getAlpha() / 255f) * shade.getAlpha());
-        return (top & 0x00FFFFFF) | (Math.max(0, Math.min(255, alpha)) << 24);
+        if (gradient.getOrientation() == GradientDrawable.Orientation.TOP_BOTTOM) return colors[0];
+        if (gradient.getOrientation() == GradientDrawable.Orientation.BOTTOM_TOP) return colors[colors.length - 1];
+        return 0;
+    }
+
+    private static int asDrawn(int color, int drawableAlpha, float viewAlpha) {
+        int alpha = Math.round(Color.alpha(color) * (drawableAlpha / 255f) * viewAlpha);
+        return (color & 0x00FFFFFF) | (Math.max(0, Math.min(255, alpha)) << 24);
     }
 
     /**
      * Fills the top of a controls layer held a bar lower with the color TikTok's shade starts with,
      * so the strip under the clock is shaded like the rest of the top instead of showing as a
-     * lighter band above it (#137).
+     * lighter band above it (#137). It follows the shade: nothing while TikTok keeps the shade
+     * hidden, and the shade's own fade as it shows.
      */
     static final class BarShade extends Drawable {
-        final int color;
         final int height;
+        private final WeakReference<View> shade;
         private final Paint paint = new Paint();
+        /** The shade's background {@link #first} was read from, read again if TikTok swaps it. */
+        private Drawable read;
+        private int first;
+        /** The color the strip was last drawn in. */
+        private int drawn;
 
-        BarShade(int color, int height) {
-            this.color = color;
+        BarShade(View shade, int height) {
+            this.shade = new WeakReference<>(shade);
             this.height = height;
-            paint.setColor(color);
+        }
+
+        /** The strip's color now: the shade's first color as drawn, or 0 while the shade is hidden. */
+        int color() {
+            View at = shade.get();
+            if (at == null || !at.isShown()) return 0;
+            Drawable background = at.getBackground();
+            if (!(background instanceof GradientDrawable)) return 0;
+            if (background != read) {
+                read = background;
+                first = firstColor((GradientDrawable) background);
+            }
+            return asDrawn(first, background.getAlpha(), at.getAlpha());
+        }
+
+        /** Whether the shade showed, hid or faded since the strip was last drawn. */
+        boolean changed() {
+            return color() != drawn;
         }
 
         @Override public void draw(Canvas canvas) {
+            drawn = color();
+            if (Color.alpha(drawn) == 0) return;
+            paint.setColor(drawn);
             android.graphics.Rect bounds = getBounds();
             canvas.drawRect(bounds.left, bounds.top, bounds.right, Math.min(bounds.bottom, bounds.top + height), paint);
         }
@@ -543,7 +580,28 @@ public final class LiveStatusBar {
         /** The LIVE page's stream in the detail pager, or nothing for a room of its own. */
         final WeakReference<View> stream;
         private Offset lifted;
-        private int searches, relifts, coverSearches, shadeSearches;
+        private int searches, relifts, coverSearches;
+        /**
+         * Shade searches spent on each layer held lower. One budget for the whole visit ran out
+         * in the first few rooms, so rooms further on kept a light strip under the clock (#137).
+         */
+        private final WeakHashMap<View, Integer> shadeSearches = new WeakHashMap<>();
+        private boolean shadeWatchFailed;
+        /** Redraws a strip whose shade TikTok showed, hid or faded since the last frame. */
+        final ViewTreeObserver.OnPreDrawListener shadeWatch = () -> {
+            if (this.left || shadeWatchFailed) return true;
+            try {
+                for (View layer : this.lowered.keySet()) {
+                    Drawable background = layer == null ? null : layer.getBackground();
+                    if (background instanceof BarShade && ((BarShade) background).changed()) layer.invalidate();
+                }
+            } catch (Throwable failure) {
+                shadeWatchFailed = true;
+                HookStatus.threw(HOOK_FAMILY, "shade watch", failure);
+                Logger.printException(() -> "Could not follow the LIVE room's top shade", failure);
+            }
+            return true;
+        };
         private long fightStart;
         private boolean fought;
         /**
@@ -576,7 +634,6 @@ public final class LiveStatusBar {
             } catch (Throwable failure) {
                 searches = MAX_SEARCHES;
                 coverSearches = MAX_SEARCHES;
-                shadeSearches = MAX_SEARCHES;
                 videoId = 0;
                 HookStatus.threw(HOOK_FAMILY, "top strip", failure);
                 Logger.printException(() -> "Could not take away the LIVE room's top strip", failure);
@@ -683,7 +740,7 @@ public final class LiveStatusBar {
         /**
          * TikTok's top shade is part of the controls, so it went a bar lower with them and the
          * strip under the clock showed lighter than the rest of the top (#137). Each layer held
-         * lower gets the shade's first color across that strip once the shade is found; a layer
+         * lower gets a fill across that strip that follows the shade once it's found; a layer
          * with a background of TikTok's own is left alone.
          */
         private void shadeUnderBar() {
@@ -692,12 +749,12 @@ public final class LiveStatusBar {
                 if (!(layer instanceof ViewGroup) || layer.getPaddingTop() != entry.getValue() + loweredBy) continue;
                 Drawable background = layer.getBackground();
                 if (background instanceof BarShade ? ((BarShade) background).height == loweredBy : background != null) continue;
-                if (shadeSearches >= MAX_SEARCHES) continue;
-                shadeSearches++;
+                Integer spent = shadeSearches.get(layer);
+                if (spent != null && spent >= MAX_SEARCHES) continue;
+                shadeSearches.put(layer, spent == null ? 1 : spent + 1);
                 View shade = findShade((ViewGroup) layer);
-                int color = shade == null ? 0 : topColor(shade);
-                if (Color.alpha(color) == 0) continue;
-                layer.setBackground(new BarShade(color, loweredBy));
+                if (shade == null || Color.alpha(firstColor((GradientDrawable) shade.getBackground())) == 0) continue;
+                layer.setBackground(new BarShade(shade, loweredBy));
                 HookStatus.bound(HOOK_FAMILY, "LIVE room shade kept under the bar");
             }
         }

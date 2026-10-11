@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** LIVE-ı status panelinin altında göstərin açıq olanda sonrakı otaqlarda da saatın altındakı kölgə qalır. Əvvəllər ilk bir neçə LIVE-dan sonra zolaq yenə açıq görünürdü (#137).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** LIVE otaqlarında status panelini gizlədin və LIVE-ı status panelinin altında göstərin artıq axtarışda yaradıcının kartının altındakı önizləmədən açılan LIVE-da da işləyir. TikTok həmin LIVE-ı açılmış videolar üçün istifadə etdiyi səhifənin içində açır, açarlar ora çatmırdı (#137).

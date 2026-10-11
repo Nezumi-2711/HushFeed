@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Con Mostra il LIVE sotto la barra di stato attivo, anche le stanze successive tengono l'ombra sotto l'orologio. Prima la striscia tornava chiara dopo i primi LIVE scorsi (#137).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** Nascondi la barra di stato nelle stanze LIVE e Mostra il LIVE sotto la barra di stato ora funzionano anche su un LIVE aperto dall'anteprima sotto la scheda di un creator nella ricerca. TikTok apre quel LIVE dentro la pagina che usa per i video aperti, dove gli interruttori non arrivavano (#137).

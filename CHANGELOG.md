@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** With Show a LIVE under the status bar on, rooms further on keep the shade under the clock too. It used to go light again after the first few LIVEs you scrolled through (#137).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** Hide the status bar in LIVE rooms and Show a LIVE under the status bar now work on a LIVE opened from the preview under a creator's card in search too. TikTok opens that LIVE inside the page it uses for opened videos, which the switches didn't reach (#137).

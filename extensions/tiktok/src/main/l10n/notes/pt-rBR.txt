@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Com Mostrar a LIVE sob a barra de status ligado, as salas seguintes também mantêm a sombra sob o relógio. Antes a faixa voltava a ficar clara depois das primeiras LIVEs que você passava (#137).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** Ocultar a barra de status nas LIVEs e Mostrar a LIVE sob a barra de status agora também funcionam numa LIVE aberta pela prévia abaixo do cartão de um criador na busca. O TikTok abre essa LIVE dentro da página que usa para vídeos abertos, onde as chaves não chegavam (#137).
