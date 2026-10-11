@@ -29,10 +29,19 @@ public final class CaptionTools {
     private static final Map<Object, String> OWNERS = new WeakHashMap<>();
     private static WeakReference<TextView> overlay = new WeakReference<>(null);
     private static WeakReference<View> captionSource = new WeakReference<>(null);
+    private static WeakReference<View> captionStrip = new WeakReference<>(null);
     private static WeakReference<View> observedDecor = new WeakReference<>(null);
     private static ViewTreeObserver.OnPreDrawListener preDrawListener;
     private static String currentId, cueId, cue = "";
     private static boolean clear;
+    /**
+     * How far above the window's bottom TikTok's caption strip last ended, in pixels, or -1
+     * before one has been seen. The kept line used to sit at a fixed 96 dp, near the bottom edge
+     * and below where the reader had been looking (#141), so it takes the strip's spot now. It
+     * carries over to the next video, since Automatic clear display can clear one before its
+     * first caption shows.
+     */
+    private static int stripGap = -1;
 
     /**
      * Puts every static back to a fresh process's state. {@code onVideoChanged(null)} is not that:
@@ -45,6 +54,8 @@ public final class CaptionTools {
             detachOverlay();
             OWNERS.clear();
             captionSource = new WeakReference<>(null);
+            captionStrip = new WeakReference<>(null);
+            stripGap = -1;
             currentId = null;
             cueId = null;
             cue = "";
@@ -82,6 +93,7 @@ public final class CaptionTools {
             String owner = OWNERS.get(renderer);
             if (owner == null || !owner.equals(currentId)) return;
             captionSource = new WeakReference<>(root);
+            captionStrip = new WeakReference<>(CaptionStyle.strip(root));
             cueId = owner;
             cue = "EXPANDED".equals(String.valueOf(state)) && text != null ? text : "";
             if (Settings.KEEP_CAPTIONS_CLEAR_DISPLAY.get()) attach(root);
@@ -123,7 +135,7 @@ public final class CaptionTools {
         int padding = Math.round(12 * text.getResources().getDisplayMetrics().density);
         text.setPadding(padding, padding / 2, padding, padding / 2);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.bottomMargin = padding * 8;
+        params.bottomMargin = fallbackMargin(text);
         params.leftMargin = params.rightMargin = padding * 2;
         text.setVisibility(View.GONE);
         ((FrameLayout) decor).addView(text, params);
@@ -165,6 +177,8 @@ public final class CaptionTools {
         }
         TextView text = overlay.get();
         if (text == null) return;
+        View decor = observedDecor.get();
+        if (!clear && decor != null) noteStrip(decor);
         Activity activity = activity(text.getContext());
         View source = captionSource.get();
         boolean visible = clear && !cue.isEmpty()
@@ -181,9 +195,41 @@ public final class CaptionTools {
             if (text.getTextSize() != wanted) text.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, wanted);
             int color = CaptionStyle.backgroundColor();
             if (!Objects.equals(text.getTag(), color)) { text.setBackgroundColor(color); text.setTag(color); }
+            place(text, decor);
         }
         int visibility = visible ? View.VISIBLE : View.GONE;
         if (text.getVisibility() != visibility) text.setVisibility(visibility);
+    }
+
+    /**
+     * Notes where TikTok's caption strip ends while clear display is off. A strip in the window's
+     * top half isn't where the feed draws captions, so it's left out.
+     */
+    private static void noteStrip(View decor) {
+        View strip = captionStrip.get();
+        int height = decor.getHeight();
+        if (strip == null || height == 0 || strip.getHeight() == 0 || !strip.isShown()
+                || strip.getRootView() != decor) return;
+        int[] at = new int[2];
+        strip.getLocationInWindow(at);
+        int gap = height - at[1] - strip.getHeight();
+        if (gap >= 0 && gap < height / 2) stripGap = gap;
+    }
+
+    /** Lines the kept caption's bottom up with the strip's, or the old spot before one was seen. */
+    private static void place(TextView text, View decor) {
+        if (!(text.getLayoutParams() instanceof FrameLayout.LayoutParams)) return;
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) text.getLayoutParams();
+        int margin = stripGap < 0 || decor == null
+                ? fallbackMargin(text)
+                : Math.max(0, stripGap - decor.getPaddingBottom());
+        if (params.bottomMargin == margin) return;
+        params.bottomMargin = margin;
+        text.setLayoutParams(params);
+    }
+
+    private static int fallbackMargin(View text) {
+        return Math.round(12 * text.getResources().getDisplayMetrics().density) * 8;
     }
 
     private static Activity activity(Context context) {

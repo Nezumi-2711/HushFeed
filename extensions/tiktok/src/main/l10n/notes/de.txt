@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Ist Untertitel in der freien Ansicht behalten an, steht der Untertitel in der freien Ansicht jetzt dort, wo TikTok ihn gezeigt hat, bevor die Steuerung verschwand, statt an den unteren Rand zu rutschen (#141). Solange noch kein Untertitel zu sehen war, bleibt er an der alten Stelle.
+
 ## 0.71.0 (2026-10-11)
 
 * **TikTok:** Ist Doppeltippen auf eine Aktion von Hushfeed gestellt und Long-press controls mitgepatcht, öffnet ein zweites Tippen, auf dem der Finger etwas zu lange bleibt, nicht mehr zusätzlich TikToks Menü für langes Drücken. Das Teilen-Feld geht also nicht mehr über den Kommentaren auf. (#63)

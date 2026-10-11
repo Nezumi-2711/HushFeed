@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Təmiz ekranda başlıqları saxlayın açıq olanda, təmiz ekrandakı başlıq artıq aşağı kənara düşmür, TikTok-un idarəetmə düymələri gizlənməzdən əvvəl göstərdiyi yerdə qalır (#141). Hələ heç bir başlıq görünməyibsə, köhnə yerində qalır.
+
 ## 0.71.0 (2026-10-11)
 
 * **TikTok:** İki dəfə toxunma Hushfeed-in hərəkətlərindən birinə qoyulubsa və Long-press controls yamağı tətbiq olunubsa, barmağın bir az çox qaldığı ikinci toxunuş artıq TikTok-un uzun basma menyusunu da açmır, yəni paylaşım paneli şərhlərin üstündə açılmır. (#63)

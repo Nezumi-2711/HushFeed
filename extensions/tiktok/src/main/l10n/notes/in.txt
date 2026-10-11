@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Kalau Pertahankan keterangan saat tampilan bersih aktif, keterangan di tampilan bersih kini tetap di tempat TikTok menampilkannya sebelum kontrol disembunyikan, bukan turun ke tepi bawah (#141). Selama belum ada keterangan yang muncul, posisinya tetap di tempat lama.
+
 ## 0.71.0 (2026-10-11)
 
 * **TikTok:** Kalau Ketuk dua kali diatur ke salah satu aksi Hushfeed dan Long-press controls ikut dipatch, ketukan kedua yang jarinya tertahan sedikit terlalu lama tidak lagi ikut membuka menu tekan lama TikTok, jadi panel bagikan tidak lagi muncul di atas komentar. (#63)

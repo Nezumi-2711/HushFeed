@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Temiz ekranda altyazıları koru açıkken, temiz ekrandaki altyazı artık alt kenara inmek yerine TikTok'un kontroller kaybolmadan önce gösterdiği yerde duruyor (#141). Henüz hiç altyazı görünmediyse eski yerinde kalır.
+
 ## 0.71.0 (2026-10-11)
 
 * **TikTok:** Çift dokunma Hushfeed'in eylemlerinden birine ayarlıysa ve Long-press controls yamada varsa, parmağın biraz fazla kaldığı ikinci dokunuş artık TikTok'un uzun basma menüsünü de açmıyor, yani paylaşım paneli artık yorumların üstünde açılmıyor. (#63)

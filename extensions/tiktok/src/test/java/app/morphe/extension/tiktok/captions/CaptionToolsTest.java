@@ -460,6 +460,77 @@ public class CaptionToolsTest {
         }
     }
 
+    /**
+     * Clear display dropped the kept line to a fixed 96 dp, near the bottom edge and below where
+     * the reader had been looking (#141). It ends where TikTok's caption strip ended now, keeps
+     * the old spot until a strip has been seen, and carries the spot to the next video.
+     */
+    @Test @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    public void theKeptCaptionEndsWhereTikTokDrewTheCaption() {
+        try (var owner = Robolectric.buildActivity(CaptionActivity.class).setup().visible()) {
+            var activity = owner.get();
+            Utils.setContext(activity);
+            int stripId = View.generateViewId();
+            CaptionStyle.resolveForTests("47.1.4:dm5", stripId);
+            FrameLayout source = new FrameLayout(activity);
+            FrameLayout strip = new FrameLayout(activity);
+            strip.setId(stripId);
+            FrameLayout.LayoutParams spot = new FrameLayout.LayoutParams(-1, 90, android.view.Gravity.BOTTOM);
+            spot.bottomMargin = 700;
+            source.addView(strip, spot);
+            activity.setContentView(source);
+            owner.windowFocusChanged(true);
+            Settings.KEEP_CAPTIONS_CLEAR_DISPLAY.save(true);
+            View decor = activity.getWindow().getDecorView();
+
+            CaptionTools.onVideoChanged("first");
+            strip.setVisibility(View.GONE);
+            CaptionTools.onCaption(source, "first", "EXPANDED", "Before any strip");
+            lay(decor);
+            decor.getViewTreeObserver().dispatchOnPreDraw();
+            CaptionTools.onClear(new Video("first"), true);
+            TextView caption = find(decor, "Before any strip");
+            assertNotNull(caption);
+            int fallback = Math.round(12 * activity.getResources().getDisplayMetrics().density) * 8;
+            assertEquals("with no strip seen yet the line should keep its old spot",
+                    fallback, ((FrameLayout.LayoutParams) caption.getLayoutParams()).bottomMargin);
+
+            CaptionTools.onClear(new Video("first"), false);
+            strip.setVisibility(View.VISIBLE);
+            CaptionTools.onCaption(source, null, "EXPANDED", "Where TikTok drew it");
+            lay(decor);
+            decor.getViewTreeObserver().dispatchOnPreDraw();
+            int stripBottom = bottom(strip);
+            CaptionTools.onClear(new Video("first"), true);
+            lay(decor);
+            assertEquals(View.VISIBLE, caption.getVisibility());
+            assertEquals("Where TikTok drew it", caption.getText().toString());
+            assertEquals("the kept line should end where TikTok's strip ended", stripBottom, bottom(caption));
+
+            // Automatic clear display can clear the next video before its first caption shows.
+            CaptionTools.onVideoChanged("second");
+            strip.setVisibility(View.GONE);
+            CaptionTools.onCaption(source, "second", "EXPANDED", "The next video");
+            CaptionTools.onClear(new Video("second"), true);
+            lay(decor);
+            assertEquals(View.VISIBLE, caption.getVisibility());
+            assertEquals("the spot should carry over to the next video", stripBottom, bottom(caption));
+        }
+    }
+
+    private static void lay(View decor) {
+        android.util.DisplayMetrics screen = decor.getResources().getDisplayMetrics();
+        decor.measure(View.MeasureSpec.makeMeasureSpec(screen.widthPixels, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(screen.heightPixels, View.MeasureSpec.EXACTLY));
+        decor.layout(0, 0, screen.widthPixels, screen.heightPixels);
+    }
+
+    private static int bottom(View view) {
+        int[] at = new int[2];
+        view.getLocationInWindow(at);
+        return at[1] + view.getHeight();
+    }
+
     @Test public void preDrawTracksFocusAndSourceAttachmentWithoutAnotherCaption() {
         try (var owner = Robolectric.buildActivity(CaptionActivity.class).setup().visible()) {
             var activity = owner.get();
