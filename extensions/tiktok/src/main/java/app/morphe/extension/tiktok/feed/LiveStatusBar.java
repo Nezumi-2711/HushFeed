@@ -36,7 +36,9 @@ import java.util.WeakHashMap;
  *
  * <p>Show a LIVE under the status bar takes only the strip away and leaves the bar showing, see
  * through, over the stream. That's how rooms looked until TikTok started keeping a black strip
- * for the bar in October 2026, with or without Hushfeed (#137).
+ * for the bar in October 2026, with or without Hushfeed (#137). The black is two things: the
+ * offset that holds the room a bar lower, and a plain view the bar's height that TikTok draws
+ * over the top of the room. Both go while the room is in front.
  */
 public final class LiveStatusBar {
     /** TikTok's LIVE room, real-named on 47.0.3 and 47.1.3 (read off the S22, 2026-09-27). */
@@ -114,7 +116,7 @@ public final class LiveStatusBar {
             HIDDEN.put(activity, room);
             if (!hideBar) {
                 // See through, so the stream shows under the clock. Android 15 draws every app's
-                // bar see through already and ignores this; the strip was the black there.
+                // bar see through already and ignores this; the black there is TikTok's cover.
                 window.setStatusBarColor(Color.TRANSPARENT);
             }
             // Only a room that stays out of the cutout is let in. 47.1.3's LIVE window already
@@ -244,6 +246,35 @@ public final class LiveStatusBar {
         return null;
     }
 
+    /**
+     * TikTok's cover for the bar: a plain view exactly a status bar tall, across the top of the
+     * room and drawn over it. On 47.1.4 under Android 16 it's the last child of the content view's
+     * root (read off the emulator, 2026-10-11), so with the strip taken away the room's top row,
+     * the creator and the close button, sat under a black bar. Looked for two levels down, last
+     * child first, and only along views that start at the top.
+     */
+    static View findCover(View content, int[] bars) {
+        if (!(content instanceof ViewGroup)) return null;
+        ArrayDeque<ViewGroup> level = new ArrayDeque<>();
+        level.add((ViewGroup) content);
+        for (int depth = 0; depth < 3 && !level.isEmpty(); depth++) {
+            ArrayDeque<ViewGroup> next = new ArrayDeque<>();
+            for (ViewGroup group : level) {
+                for (int i = group.getChildCount() - 1; i >= 0; i--) {
+                    View child = group.getChildAt(i);
+                    if (child.getVisibility() != View.VISIBLE || child.getTop() != 0) continue;
+                    if (child.getClass() == View.class && child.getBackground() != null
+                            && child.getWidth() == content.getWidth() && isBar(child.getHeight(), bars)) {
+                        return child;
+                    }
+                    if (child instanceof ViewGroup) next.add((ViewGroup) child);
+                }
+            }
+            level = next;
+        }
+        return null;
+    }
+
     /** A padding or margin this took away, with the height it had. */
     static final class Offset {
         final WeakReference<View> view;
@@ -283,9 +314,11 @@ public final class LiveStatusBar {
         private final WeakReference<Activity> activity;
         private final WeakReference<View> decor;
         private Offset lifted;
-        private int searches, relifts;
+        private int searches, relifts, coverSearches;
         private long fightStart;
         private boolean fought;
+        private WeakReference<View> cover = new WeakReference<>(null);
+        private float coverAlpha;
 
         Room(Activity activity, View decor, int cutout, boolean barHidden, int statusBarColor) {
             this.activity = new WeakReference<>(activity);
@@ -297,6 +330,7 @@ public final class LiveStatusBar {
 
         @Override public void onGlobalLayout() {
             try {
+                keepCoverAway();
                 if (lifted != null) {
                     View target = lifted.view.get();
                     // TikTok put the strip back, on a relayout of its own: a panel opening or
@@ -335,8 +369,30 @@ public final class LiveStatusBar {
             }
         }
 
-        /** Gives the strip back unless TikTok has already set one of its own. */
+        /** Hides TikTok's cover once it's found, and again whenever a relayout shows it. */
+        private void keepCoverAway() {
+            View known = cover.get();
+            if (known == null) {
+                Activity room = activity.get();
+                View window = decor.get();
+                if (room == null || window == null || coverSearches >= MAX_SEARCHES) return;
+                View content = room.findViewById(android.R.id.content);
+                if (content == null || content.getHeight() == 0) return;
+                coverSearches++;
+                known = findCover(content, barHeights(window));
+                if (known == null) return;
+                cover = new WeakReference<>(known);
+                coverAlpha = known.getAlpha();
+                HookStatus.bound(HOOK_FAMILY, "LIVE room bar cover taken away");
+            }
+            if (known.getAlpha() != 0f) known.setAlpha(0f);
+        }
+
+        /** Gives the strip and the cover back unless TikTok has already set its own. */
         void putBack() {
+            View known = cover.get();
+            if (known != null && known.getAlpha() == 0f) known.setAlpha(coverAlpha);
+            cover = new WeakReference<>(null);
             if (lifted == null) return;
             View target = lifted.view.get();
             if (target != null && lifted.current(target) == 0) lifted.set(target, lifted.value);

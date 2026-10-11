@@ -191,10 +191,59 @@ public class LiveStatusBarTest {
         FrameLayout container = new FrameLayout(live);
         container.setPadding(0, bar, 0, 0);
         live.setContentView(container);
+        View cover = cover(live, (FrameLayout) container.getParent(), bar);
         room.start().resume().visible();
         layOut(live);
         assertEquals(bar, container.getPaddingTop());
+        assertEquals("the cover went with the switch off", 1f, cover.getAlpha(), 0f);
         room.pause().stop().destroy();
+    }
+
+    /**
+     * #137 on Android 16: TikTok also draws a plain view the bar's height over the top of the room,
+     * so under the bar the room's top row sat under black once the strip was gone.
+     */
+    @Test public void tikToksCoverOverTheBarGoesWhileTheRoomIsInFront() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        FrameLayout root = new FrameLayout(live);
+        FrameLayout stream = new FrameLayout(live);
+        FrameLayout.LayoutParams held = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        held.topMargin = bar;
+        root.addView(stream, held);
+        View shade = new View(live);
+        shade.setBackgroundColor(Color.DKGRAY);
+        root.addView(shade, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, bar * 2));
+        live.setContentView(root);
+        View cover = cover(live, root, bar);
+        room.start().resume().visible();
+
+        layOut(live);
+        assertEquals("the cover stayed", 0f, cover.getAlpha(), 0f);
+        assertEquals("a view that isn't the bar's height went", 1f, shade.getAlpha(), 0f);
+        assertEquals("the strip stayed", 0, topMargin(stream));
+
+        cover.setAlpha(1f);
+        layOut(live);
+        assertEquals("the cover came back on a relayout", 0f, cover.getAlpha(), 0f);
+
+        room.pause();
+        assertEquals("leaving didn't give the cover back", 1f, cover.getAlpha(), 0f);
+        room.resume();
+        layOut(live);
+        assertEquals("coming back kept the cover", 0f, cover.getAlpha(), 0f);
+        room.pause().stop().destroy();
+    }
+
+    private static View cover(Activity live, FrameLayout parent, int bar) {
+        View cover = new View(live);
+        cover.setBackgroundColor(Color.BLACK);
+        parent.addView(cover, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, bar));
+        return cover;
     }
 
     /**
