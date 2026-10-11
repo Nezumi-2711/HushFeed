@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Proteger páginas externas no navegador do TikTok agora conta o CAPTCHA de quebra-cabeça que os LIVEs e a Loja abrem como uma página do próprio TikTok, então o quebra-cabeça mantém a ligação com o TikTok (#87). Ele carrega dos servidores do TikTok, só que de um endereço que a opção não conhecia.
+
 * **TikTok:** Um segundo toque rápido em Detalhes da compilação, Verificação de recursos, Licenças ou Novidades não abre mais a mesma janela duas vezes, uma em cima da outra.
 
 * **TikTok:** Curtir o vídeo, como ação de Toque duplo ou Toque longo, agora fica no vídeo que você está vendo em qualquer tipo de feed. Se esse vídeo não tiver coração para tocar, ele avisa em vez de curtir o vídeo ao lado.

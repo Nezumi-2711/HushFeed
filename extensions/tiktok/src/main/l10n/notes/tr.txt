@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** TikTok tarayıcısındaki harici sayfaları koru artık LIVE'ların ve Mağaza'nın açtığı yapboz CAPTCHA'sını TikTok'un kendi sayfası sayıyor, böylece yapboz TikTok ile bağlantısını koruyor (#87). TikTok'un kendi sunucularından yükleniyor, sadece anahtarın tanımadığı bir adresten.
+
 * **TikTok:** Derleme ayrıntıları, Kanca durumu, Lisanslar veya Yenilikler üzerine hızlı ikinci dokunuş artık aynı pencereyi üst üste iki kez açmıyor.
 
 * **TikTok:** Videoyu beğen, Çift dokunma ya da Uzun basma eylemi olarak, artık her akışta izlediğin videoda kalıyor. O videoda basılacak bir kalp yoksa yanındaki videoyu beğenmek yerine bunu sana söylüyor.

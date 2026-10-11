@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Proteger páginas externas en el navegador de TikTok ahora cuenta el CAPTCHA de rompecabezas que abren los LIVE y la Tienda como una página propia de TikTok, así el rompecabezas conserva su conexión con TikTok (#87). Se carga desde los servidores de TikTok, solo que desde una dirección que el interruptor no conocía.
+
 * **TikTok:** Un segundo toque rápido en Detalles de la compilación, Comprobación de funciones, Licencias o Novedades ya no abre la misma ventana dos veces, una encima de otra.
 
 * **TikTok:** Dar me gusta al vídeo, como acción de Doble toque o Pulsación larga, ahora se queda en el vídeo que estás viendo en cualquier tipo de feed. Si ese vídeo no tiene corazón que pulsar, te lo dice en vez de dar me gusta al de al lado.

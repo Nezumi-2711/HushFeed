@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** TikTok brauzerində xarici səhifələri qoruyun indi LIVE-ların və Mağazanın açdığı tapmaca CAPTCHA-nı TikTok-un öz səhifəsi sayır, buna görə tapmacanın TikTok ilə əlaqəsi qalır (#87). O, TikTok-un öz serverlərindən yüklənir, sadəcə açarın tanımadığı ünvandan.
+
 * **TikTok:** Build təfərrüatları, Qoşulma statusu, Lisenziyalar və ya Yeniliklər üzərinə tez ikinci toxunuş artıq eyni pəncərəni bir-birinin üstündə iki dəfə açmır.
 
 * **TikTok:** Videonu bəyənin, İki dəfə toxunma və ya Uzun basma əməli kimi, indi hər növ lentdə baxdığınız videoda qalır. Həmin videoda basılacaq ürək yoxdursa, yanındakı videonu bəyənmək əvəzinə bunu sizə deyir.

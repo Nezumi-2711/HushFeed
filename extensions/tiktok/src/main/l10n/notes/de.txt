@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Externe Seiten in TikToks Browser schützen zählt das Puzzle-CAPTCHA, das LIVEs und der Shop öffnen, jetzt zu TikToks eigenen Seiten, damit das Puzzle seine Verbindung zu TikTok behält (#87). Es lädt von TikToks eigenen Servern, nur von einer Adresse, die der Schalter noch nicht kannte.
+
 * **TikTok:** Ein schnelles zweites Tippen auf Build-Informationen, Funktionsprüfung, Lizenzen oder Neu in Hushfeed öffnet dasselbe Fenster nicht mehr doppelt übereinander.
 
 * **TikTok:** Video liken als Aktion für Doppeltippen oder Langes Drücken bleibt jetzt in jedem Feed bei dem Video, das du gerade siehst. Hat dieses Video kein Herz zum Drücken, sagt es dir das, statt das Video daneben zu liken.

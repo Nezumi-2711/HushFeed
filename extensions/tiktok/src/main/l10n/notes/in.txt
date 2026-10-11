@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Lindungi halaman eksternal di browser TikTok kini menganggap CAPTCHA teka-teki yang dibuka LIVE dan Toko sebagai halaman TikTok sendiri, sehingga teka-teki tetap terhubung ke TikTok (#87). CAPTCHA itu dimuat dari server TikTok sendiri, hanya dari alamat yang belum dikenal sakelar ini.
+
 * **TikTok:** Ketukan kedua yang cepat pada Detail build, Pemeriksaan fitur, Lisensi, atau Yang baru tidak lagi membuka jendela yang sama dua kali secara bertumpuk.
 
 * **TikTok:** Sukai video, sebagai aksi Ketuk dua kali atau Tekan lama, kini tetap pada video yang sedang kamu tonton di semua jenis feed. Kalau video itu tidak punya tombol hati, kamu diberi tahu, bukan video di sebelahnya yang disukai.

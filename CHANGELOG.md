@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Protect external pages in TikTok's browser now counts the puzzle CAPTCHA that LIVEs and the Shop open as one of TikTok's own pages, so the puzzle keeps its link back to TikTok (#87). It loads from TikTok's own servers, just not from an address the switch knew.
+
 * **TikTok:** A quick second tap on Build details, Hook status, Licenses or What's new no longer opens the same window twice, one on top of the other.
 
 * **TikTok:** Like the video, as a Double tap or Long press action, now stays with the video you're on in every kind of feed. Where that video has no heart to press, it tells you instead of liking the one next to it.
