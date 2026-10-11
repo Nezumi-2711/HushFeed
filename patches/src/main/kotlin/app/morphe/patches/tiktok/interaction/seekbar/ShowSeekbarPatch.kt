@@ -128,32 +128,46 @@ val showSeekbarPatch = bytecodePatch(
 
         // Both extras below are held to every declared build by their anchors tests, so a miss
         // there fails the patch. A build the patch is forced onto keeps the bar without them.
-        fun extra(what: String, hook: () -> Unit) = try {
-            hook()
-        } catch (problem: Exception) {
-            if (packageMetadata.versionName in declaredVersions()) throw problem
-            println("[Show the progress bar] Left out $what on ${packageMetadata.versionName}: ${problem.message}")
+        // Every hook an extra needs is checked before any goes in, so an extra goes in whole or
+        // not at all, and its switches show only once it's in.
+        fun extra(what: String, status: String, hooks: () -> List<() -> Unit>) {
+            val checked = try {
+                hooks()
+            } catch (problem: Exception) {
+                if (packageMetadata.versionName in declaredVersions()) throw problem
+                println("[Show the progress bar] Left out $what on ${packageMetadata.versionName}: ${problem.message}")
+                return
+            }
+            checked.forEach { it() }
+            SettingsStatusLoadFingerprint.method.addInstruction(
+                0,
+                "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->$status()V",
+            )
         }
 
         // The time beside the bar and the bigger handle (#90), two switches that start off. Both
         // work through the bar's own methods, found from the show-type setter's class, and the
         // time learns the video and its length from the player's progress event.
-        extra("the time beside the bar and the bigger handle") {
+        extra("the time beside the bar and the bigger handle", "enableSeekbarExtras") {
             val showType = SetSeekBarShowTypeFingerprint.method
             val bar = mutableClassDefBy(showType.definingClass)
-            bar.methods.named(barProgressOf(bar.type, bar.methods)).hookBarProgress()
-            bar.methods.named(showType.barStyle()).hookBarStyle()
             val event = PlayProgressFingerprint.method.progressEvent()
-            mutableClassDefBy(event.definingClass).methods.named(event).recordProgressTick()
+            listOf(
+                bar.methods.named(barProgressOf(bar.type, bar.methods)).barProgressHook(),
+                bar.methods.named(showType.barStyle()).barStyleHook(),
+                mutableClassDefBy(event.definingClass).methods.named(event).progressTickHook(),
+            )
         }
 
         // The seek bar on video stories (#72), a switch that starts off. The story cell reports
         // its view and each story it shows, and the same progress callback says which story is
         // playing and where.
-        extra("the seek bar on video stories") {
-            StoryVideoCellViewFingerprint.method.hookStoryCellView()
-            StoryVideoCellBindFingerprint.method.hookStoryCellBind()
-            PlayProgressFingerprint.method.hookStoryProgress()
+        extra("the seek bar on video stories", "enableStorySeekbar") {
+            listOf(
+                StoryVideoCellViewFingerprint.method.storyCellViewHook(),
+                StoryVideoCellBindFingerprint.method.storyCellBindHook(),
+                PlayProgressFingerprint.method.storyProgressHook(),
+            )
         }
     }
 }

@@ -50,16 +50,21 @@ internal object StoryVideoCellBindFingerprint : Fingerprint(
     custom = { method, _ -> !AccessFlags.STATIC.isSet(method.accessFlags) },
 )
 
+/*
+ * Each hook checks its method and returns the call it would add, adding nothing yet, so the patch
+ * can check all three before any goes in.
+ */
+
 /** Hands the extension the view the story cell built, before the cell sets it up. */
-internal fun MutableMethod.hookStoryCellView() {
+internal fun MutableMethod.storyCellViewHook(): () -> Unit {
     requireInstanceParameters(listOf("Landroid/view/View;"))
-    addInstruction(0, "invoke-static/range {p0 .. p1}, $STORY_SEEKBAR->onCellView(Ljava/lang/Object;Landroid/view/View;)V")
+    return { addInstruction(0, "invoke-static/range {p0 .. p1}, $STORY_SEEKBAR->onCellView(Ljava/lang/Object;Landroid/view/View;)V") }
 }
 
 /** Hands the extension each story the cell is bound to, before the cell shows it. */
-internal fun MutableMethod.hookStoryCellBind() {
+internal fun MutableMethod.storyCellBindHook(): () -> Unit {
     requireInstanceParameters(listOf(VIDEO_ITEM_PARAMS))
-    addInstruction(0, "invoke-static/range {p0 .. p1}, $STORY_SEEKBAR->onCellBind(Ljava/lang/Object;Ljava/lang/Object;)V")
+    return { addInstruction(0, "invoke-static/range {p0 .. p1}, $STORY_SEEKBAR->onCellBind(Ljava/lang/Object;Ljava/lang/Object;)V") }
 }
 
 /**
@@ -67,9 +72,9 @@ internal fun MutableMethod.hookStoryCellBind() {
  * length, p0 to p5 as they arrive. A range call takes them in place, however high the frame puts
  * them.
  */
-internal fun MutableMethod.hookStoryProgress() {
+internal fun MutableMethod.storyProgressHook(): () -> Unit {
     requireInstanceParameters(listOf("Ljava/lang/String;", "J", "J"))
-    addInstruction(0, "invoke-static/range {p0 .. p5}, $STORY_SEEKBAR->onProgress(Ljava/lang/Object;Ljava/lang/String;JJ)V")
+    return { addInstruction(0, "invoke-static/range {p0 .. p5}, $STORY_SEEKBAR->onProgress(Ljava/lang/Object;Ljava/lang/String;JJ)V") }
 }
 
 /**

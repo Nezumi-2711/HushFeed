@@ -104,9 +104,9 @@ class StorySeekbarAnchorsTest {
     fun `the patch hooks the story cell and the progress callback`() {
         val root = File("src/main/kotlin").takeIf { it.isDirectory } ?: File("patches/src/main/kotlin")
         val source = File(root, "app/morphe/patches/tiktok/interaction/seekbar/ShowSeekbarPatch.kt").readText()
-        assertTrue("the cell's view is not hooked", source.contains("StoryVideoCellViewFingerprint.method.hookStoryCellView()"))
-        assertTrue("the cell's bind is not hooked", source.contains("StoryVideoCellBindFingerprint.method.hookStoryCellBind()"))
-        assertTrue("the progress callback is not hooked", source.contains("PlayProgressFingerprint.method.hookStoryProgress()"))
+        assertTrue("the cell's view is not hooked", source.contains("StoryVideoCellViewFingerprint.method.storyCellViewHook()"))
+        assertTrue("the cell's bind is not hooked", source.contains("StoryVideoCellBindFingerprint.method.storyCellBindHook()"))
+        assertTrue("the progress callback is not hooked", source.contains("PlayProgressFingerprint.method.storyProgressHook()"))
     }
 
     private fun Method.calls(): List<MethodReference> =

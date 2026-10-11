@@ -139,6 +139,8 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                     "Show TikTok's own progress bar on videos where it's normally hidden.",
                     Settings.SHOW_SEEKBAR
             ));
+        }
+        if (SettingsStatus.showSeekbarEnabled && SettingsStatus.seekbarExtrasEnabled) {
             addPreference(new TogglePreference(
                     context,
                     "Show the time beside the progress bar",
@@ -153,6 +155,8 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                             + "easier to see where you are.",
                     Settings.SEEKBAR_BIG_HANDLE
             ));
+        }
+        if (SettingsStatus.showSeekbarEnabled && SettingsStatus.storySeekbarEnabled) {
             addPreference(new TogglePreference(
                     context,
                     "Seek bar on video stories",
