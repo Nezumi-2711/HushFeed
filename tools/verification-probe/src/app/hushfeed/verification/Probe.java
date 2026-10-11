@@ -2017,6 +2017,30 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok like-targets");
                         break;
                     }
+                    case "topviews": {
+                        // Wide views across the top of the window, for the LIVE room's shade under
+                        // a see-through bar (#137): each view at least 80% of the window wide that
+                        // starts above -e below (default 400 px), with its place, padding, offset,
+                        // alpha and background. Technical fields only, no text.
+                        String belowText = intent.getStringExtra("below");
+                        int below = belowText == null ? 400 : Integer.parseInt(belowText);
+                        android.app.Activity activity = (android.app.Activity) loader.loadClass(UTILS)
+                                .getMethod("getActivity").invoke(null);
+                        if (activity == null) throw new IllegalStateException("no current activity");
+                        StringBuilder out = new StringBuilder();
+                        for (android.view.View root : windowRoots()) {
+                            out.append("root ").append(root.getClass().getSimpleName()).append('\n');
+                            topViews(root, 0, below, root.getWidth(), out, activity.getResources());
+                        }
+                        String text = out.toString();
+                        int pieces = 0;
+                        for (int at = 0; at < text.length(); at += 3000, pieces++) {
+                            Log.i(TAG, "topviews[" + pieces + "] "
+                                    + text.substring(at, Math.min(text.length(), at + 3000)));
+                        }
+                        Log.i(TAG, "ok topviews " + text.length() + " chars in " + pieces + " pieces");
+                        break;
+                    }
                     case "windowviews": {
                         // Dialogs and bottom sheets can live in a separate WindowManager root.
                         // TikTok 47.0.3's comment sheet leaves MainActivity's own content view
@@ -2327,6 +2351,34 @@ public final class Probe extends Instrumentation {
                 return state;
             } catch (Exception error) {
                 return getter + "=" + error.getClass().getSimpleName();
+            }
+        }
+
+        private static void topViews(android.view.View view, int depth, int below, int width, StringBuilder out,
+                android.content.res.Resources resources) {
+            if (view.getVisibility() == android.view.View.GONE) return;
+            int[] where = new int[2];
+            view.getLocationOnScreen(where);
+            if (where[1] < below && view.getWidth() * 10 >= width * 8) {
+                out.append(depth).append(' ').append(view.getClass().getName())
+                        .append(" id=").append(idName(view, resources))
+                        .append(" vis=").append(view.getVisibility())
+                        .append(" at=").append(where[0]).append(',').append(where[1])
+                        .append(" size=").append(view.getWidth()).append('x').append(view.getHeight())
+                        .append(" padTop=").append(view.getPaddingTop())
+                        .append(" ty=").append(view.getTranslationY())
+                        .append(" alpha=").append(view.getAlpha())
+                        .append(" bg=").append(describeDrawable(view.getBackground(), 0));
+                if (view instanceof android.widget.ImageView) {
+                    out.append(" img=").append(describeDrawable(((android.widget.ImageView) view).getDrawable(), 0));
+                }
+                out.append('\n');
+            }
+            if (view instanceof android.view.ViewGroup && depth < 30) {
+                android.view.ViewGroup group = (android.view.ViewGroup) view;
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    topViews(group.getChildAt(i), depth + 1, below, width, out, resources);
+                }
             }
         }
 
