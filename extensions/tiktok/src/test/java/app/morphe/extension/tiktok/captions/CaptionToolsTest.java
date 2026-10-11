@@ -518,11 +518,68 @@ public class CaptionToolsTest {
         }
     }
 
+    /**
+     * Every frame used to overwrite the spot, so the last frame of a strip sliding away in a swipe
+     * stuck, and the next video's line went halfway up or down to the edge. A window of another
+     * height can't use a spot read in this one either.
+     */
+    @Test @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    public void aStripCaughtMidSwipeOrInAnotherWindowSizeDoesNotPlaceTheLine() {
+        try (var owner = Robolectric.buildActivity(CaptionActivity.class).setup().visible()) {
+            var activity = owner.get();
+            Utils.setContext(activity);
+            int stripId = View.generateViewId();
+            CaptionStyle.resolveForTests("47.1.4:dm5", stripId);
+            FrameLayout source = new FrameLayout(activity);
+            FrameLayout strip = new FrameLayout(activity);
+            strip.setId(stripId);
+            FrameLayout.LayoutParams spot = new FrameLayout.LayoutParams(-1, 90, android.view.Gravity.BOTTOM);
+            spot.bottomMargin = 700;
+            source.addView(strip, spot);
+            activity.setContentView(source);
+            owner.windowFocusChanged(true);
+            Settings.KEEP_CAPTIONS_CLEAR_DISPLAY.save(true);
+            View decor = activity.getWindow().getDecorView();
+
+            CaptionTools.onVideoChanged("first");
+            CaptionTools.onCaption(source, "first", "EXPANDED", "Settled");
+            lay(decor);
+            decor.getViewTreeObserver().dispatchOnPreDraw();
+            decor.getViewTreeObserver().dispatchOnPreDraw();
+            int settled = bottom(strip);
+            for (int margin : new int[] {800, 900, 1000}) {
+                spot.bottomMargin = margin;
+                strip.setLayoutParams(spot);
+                lay(decor);
+                decor.getViewTreeObserver().dispatchOnPreDraw();
+            }
+            strip.setVisibility(View.GONE);
+            CaptionTools.onClear(new Video("first"), true);
+            lay(decor);
+            TextView caption = find(decor, "Settled");
+            assertNotNull(caption);
+            assertEquals(View.VISIBLE, caption.getVisibility());
+            assertEquals("a strip read partway through a swipe shouldn't move the line", settled, bottom(caption));
+
+            CaptionTools.onClear(new Video("first"), false);
+            android.util.DisplayMetrics screen = decor.getResources().getDisplayMetrics();
+            layAt(decor, screen.heightPixels - 300);
+            CaptionTools.onClear(new Video("first"), true);
+            int fallback = Math.round(12 * activity.getResources().getDisplayMetrics().density) * 8;
+            assertEquals("a spot read in a taller window should give way to the old one",
+                    fallback, ((FrameLayout.LayoutParams) caption.getLayoutParams()).bottomMargin);
+        }
+    }
+
     private static void lay(View decor) {
-        android.util.DisplayMetrics screen = decor.getResources().getDisplayMetrics();
-        decor.measure(View.MeasureSpec.makeMeasureSpec(screen.widthPixels, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(screen.heightPixels, View.MeasureSpec.EXACTLY));
-        decor.layout(0, 0, screen.widthPixels, screen.heightPixels);
+        layAt(decor, decor.getResources().getDisplayMetrics().heightPixels);
+    }
+
+    private static void layAt(View decor, int height) {
+        int width = decor.getResources().getDisplayMetrics().widthPixels;
+        decor.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+        decor.layout(0, 0, width, height);
     }
 
     private static int bottom(View view) {

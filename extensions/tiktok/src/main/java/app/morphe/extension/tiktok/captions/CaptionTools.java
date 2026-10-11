@@ -42,6 +42,10 @@ public final class CaptionTools {
      * first caption shows.
      */
     private static int stripGap = -1;
+    /** The window height {@link #stripGap} was read in. After a rotation or split screen it's left unused. */
+    private static int stripGapHeight;
+    /** The last frame's reading, which the next frame has to repeat before it counts. */
+    private static int pendingGap = -1;
 
     /**
      * Puts every static back to a fresh process's state. {@code onVideoChanged(null)} is not that:
@@ -56,6 +60,8 @@ public final class CaptionTools {
             captionSource = new WeakReference<>(null);
             captionStrip = new WeakReference<>(null);
             stripGap = -1;
+            stripGapHeight = 0;
+            pendingGap = -1;
             currentId = null;
             cueId = null;
             cue = "";
@@ -78,6 +84,9 @@ public final class CaptionTools {
         String id = Reflect.string(aweme, "getAid", "aid");
         Utils.runOnMainThreadNowOrLater(() -> {
             if (id != null && id.equals(currentId)) {
+                // TikTok hasn't hidden its strip yet, so it still sits where the reader saw it.
+                View decor = observedDecor.get();
+                if (enabled && !clear && decor != null) noteStrip(decor, true);
                 clear = enabled;
                 refresh();
             }
@@ -140,7 +149,11 @@ public final class CaptionTools {
         text.setVisibility(View.GONE);
         ((FrameLayout) decor).addView(text, params);
         overlay = new WeakReference<>(text);
-        ViewTreeObserver.OnPreDrawListener draw = () -> { refresh(); return true; };
+        ViewTreeObserver.OnPreDrawListener draw = () -> {
+            if (!clear) noteStrip(decor, false);
+            refresh();
+            return true;
+        };
         observedDecor = new WeakReference<>(decor);
         preDrawListener = draw;
         decor.getViewTreeObserver().addOnPreDrawListener(draw);
@@ -178,7 +191,6 @@ public final class CaptionTools {
         TextView text = overlay.get();
         if (text == null) return;
         View decor = observedDecor.get();
-        if (!clear && decor != null) noteStrip(decor);
         Activity activity = activity(text.getContext());
         View source = captionSource.get();
         boolean visible = clear && !cue.isEmpty()
@@ -202,25 +214,35 @@ public final class CaptionTools {
     }
 
     /**
-     * Notes where TikTok's caption strip ends while clear display is off. A strip in the window's
-     * top half isn't where the feed draws captions, so it's left out.
+     * Notes where TikTok's caption strip ends while clear display is off. Each frame's reading
+     * counts only once the next frame repeats it, so a strip sliding away in a swipe, or sliding
+     * back after clear display, isn't caught partway. {@code settled} skips that wait for the
+     * moment clear display starts. A strip in the window's top half isn't where the feed draws
+     * captions, so it's left out.
      */
-    private static void noteStrip(View decor) {
+    private static void noteStrip(View decor, boolean settled) {
         View strip = captionStrip.get();
         int height = decor.getHeight();
-        if (strip == null || height == 0 || strip.getHeight() == 0 || !strip.isShown()
-                || strip.getRootView() != decor) return;
-        int[] at = new int[2];
-        strip.getLocationInWindow(at);
-        int gap = height - at[1] - strip.getHeight();
-        if (gap >= 0 && gap < height / 2) stripGap = gap;
+        int gap = -1;
+        if (strip != null && height != 0 && strip.getHeight() != 0 && strip.isShown()
+                && strip.getRootView() == decor) {
+            int[] at = new int[2];
+            strip.getLocationInWindow(at);
+            gap = height - at[1] - strip.getHeight();
+            if (gap >= height / 2) gap = -1;
+        }
+        if (gap >= 0 && (settled || gap == pendingGap)) {
+            stripGap = gap;
+            stripGapHeight = height;
+        }
+        pendingGap = gap;
     }
 
     /** Lines the kept caption's bottom up with the strip's, or the old spot before one was seen. */
     private static void place(TextView text, View decor) {
         if (!(text.getLayoutParams() instanceof FrameLayout.LayoutParams)) return;
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) text.getLayoutParams();
-        int margin = stripGap < 0 || decor == null
+        int margin = stripGap < 0 || decor == null || decor.getHeight() != stripGapHeight
                 ? fallbackMargin(text)
                 : Math.max(0, stripGap - decor.getPaddingBottom());
         if (params.bottomMargin == margin) return;
