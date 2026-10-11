@@ -59,8 +59,18 @@ class SeekbarPreviewTest {
         return v2
     """)
 
-    /** Other getters of the class: a plain flag, and one that asks the gate but no loader. */
+    /**
+     * Other getters of the class: a plain flag, one that asks the gate but no loader, and one that
+     * asks the loader without the gate first.
+     */
     private val decoys = listOf(
+        getter("LJIILJJIL", 2, """
+            iget-object v0, p0, $SEEKBAR->LLLLII:$LOADER
+            invoke-virtual {v0}, LX/0F5J;->LIZ()Z
+            move-result v0
+            invoke-virtual {p0}, $SEEKBAR->LJII()Z
+            return v0
+        """),
         getter("LJIILIIL", 2, """
             iget-boolean v0, p0, $SEEKBAR->LLLLIIIILLL:Z
             return v0
@@ -111,5 +121,22 @@ class SeekbarPreviewTest {
         assertEquals("onPreviewCheck", call.name)
         assertEquals(0, (after[1] as FiveRegisterInstruction).registerC)
         assertEquals(before.map { it.opcode }, after.drop(2).map { it.opcode })
+    }
+
+    @Test
+    fun `a check with no local register or this past v15 is refused before anything is written`() {
+        val video = previewCheckOf(seekbar(gate(), check())).video
+        for (registers in listOf(1, 17)) {
+            val method = MutableMethod(ImmutableMethod(
+                SEEKBAR, "LJIJI", emptyList(), "Z", AccessFlags.PUBLIC.value, null, null,
+                ImmutableMethodImplementation(registers, emptyList(), null, null),
+            ))
+            assertThrows("$registers registers", PatchException::class.java) { method.reportPreviewCheck(video) }
+            assertEquals("$registers registers", 0, method.implementation!!.instructions.count())
+        }
+        // The last register count that still reaches this with iget.
+        val reachable = getter("LJIJI", 16, "const/4 v0, 0x0\nreturn v0")
+        reachable.reportPreviewCheck(video)
+        assertEquals(15, (reachable.implementation!!.instructions.first() as TwoRegisterInstruction).registerB)
     }
 }

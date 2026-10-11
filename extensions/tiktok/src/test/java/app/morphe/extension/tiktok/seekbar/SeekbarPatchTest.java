@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.BaseSettings;
 import app.morphe.extension.tiktok.settings.Settings;
 import org.junit.After;
 import org.junit.Before;
@@ -166,11 +167,33 @@ public class SeekbarPatchTest {
     }
 
     @Test
-    public void thePreviewCheckIgnoresNoVideoAndRepeats() {
-        // Nothing to read and nothing thrown, with Log diagnostics off or on.
-        SeekbarPatch.onPreviewCheck(null);
+    public void eachVideoIsLookedAtOnceEvenWhenTikTokAlternates() {
+        FakeAweme first = videoWith(new FakeSheet(List.of("u"), List.of("i")));
+        FakeAweme second = videoWith();
+        assertFalse(SeekbarPatch.firstPreviewLook(null));
+        assertTrue(SeekbarPatch.firstPreviewLook(first));
+        assertTrue(SeekbarPatch.firstPreviewLook(second));
+        // The bar's layout asks about the current video and its neighbour in turn.
+        assertFalse(SeekbarPatch.firstPreviewLook(first));
+        assertFalse(SeekbarPatch.firstPreviewLook(second));
+        assertFalse(SeekbarPatch.firstPreviewLook(first));
+    }
+
+    @Test
+    public void thePreviewCheckLeavesVideosUnseenWhileLogDiagnosticsIsOff() {
+        BaseSettings.DEBUG.save(false);
         FakeAweme aweme = videoWith(new FakeSheet(List.of("u"), List.of("i")));
+        SeekbarPatch.onPreviewCheck(null);
         SeekbarPatch.onPreviewCheck(aweme);
-        SeekbarPatch.onPreviewCheck(aweme);
+        assertTrue(SeekbarPatch.firstPreviewLook(aweme));
+
+        BaseSettings.DEBUG.save(true);
+        try {
+            FakeAweme logged = videoWith(new FakeSheet(List.of("u"), List.of("i")));
+            SeekbarPatch.onPreviewCheck(logged);
+            assertFalse(SeekbarPatch.firstPreviewLook(logged));
+        } finally {
+            BaseSettings.DEBUG.save(false);
+        }
     }
 }

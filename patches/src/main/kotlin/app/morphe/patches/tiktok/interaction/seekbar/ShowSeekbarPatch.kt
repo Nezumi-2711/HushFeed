@@ -201,7 +201,7 @@ val showSeekbarThumbnailPatch = bytecodePatch(
             val seekbar = mutableClassDefBy(SeekbarGateLogFingerprint.method.definingClass)
             val check = previewCheckOf(seekbar)
             seekbar.methods.named(check.method).reportPreviewCheck(check.video)
-        } catch (problem: PatchException) {
+        } catch (problem: Exception) {
             if (packageMetadata.versionName in declaredVersions()) throw problem
             println("[Show the progress bar thumbnail] Left out the preview check line on ${packageMetadata.versionName}: ${problem.message}")
         }

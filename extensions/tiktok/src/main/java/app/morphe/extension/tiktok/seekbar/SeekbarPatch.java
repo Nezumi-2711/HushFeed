@@ -4,7 +4,10 @@
  */
 package app.morphe.extension.tiktok.seekbar;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.diagnostics.HookStatus;
@@ -61,8 +64,9 @@ public final class SeekbarPatch {
         return Settings.SHOW_SEEKBAR_THUMBNAIL.get() ? 1 : value;
     }
 
-    /** The video the last preview line was written for, so each video logs once. */
-    private static volatile Object lastPreviewVideo;
+    /** Videos a preview line was written for, so each logs once; weak, so none are kept alive. */
+    private static final Map<Object, Boolean> previewLogged =
+            Collections.synchronizedMap(new WeakHashMap<>());
 
     /**
      * TikTok's check for the picture above the bar while it's dragged (#140). Past the gate
@@ -70,15 +74,19 @@ public final class SeekbarPatch {
      * ({@code Video.bigThumbs}) with an image address on each, and those come from the server
      * alone. With Log diagnostics on, each video logs once how many sheets it brought, so a
      * report says which side is missing. TikTok asks this while laying out the bar, so it runs
-     * often; everything past the first look at a video is one comparison.
+     * often; with Log diagnostics off it stops at the setting.
      */
     public static void onPreviewCheck(Object video) {
         HookStatus.bound("seekbar preview", "check");
-        if (video == null || video == lastPreviewVideo || !BaseSettings.DEBUG.get()) return;
-        lastPreviewVideo = video;
+        if (!BaseSettings.DEBUG.get() || !firstPreviewLook(video)) return;
         String sheets = describePreviewSheets(video);
         Logger.printDebug(() -> LOG_PREFIX + " preview " + sheets
                 + " switch=" + Settings.SHOW_SEEKBAR_THUMBNAIL.get());
+    }
+
+    /** True the first time a video is seen here, never for null. */
+    static boolean firstPreviewLook(Object video) {
+        return video != null && previewLogged.put(video, Boolean.TRUE) == null;
     }
 
     /**

@@ -62,8 +62,10 @@ class SeekbarPreviewAnchorsTest {
     @Test
     fun `the patch writes the line from the thumbnail patch`() {
         val root = File("src/main/kotlin").takeIf { it.isDirectory } ?: File("patches/src/main/kotlin")
-        val source = File(root, "app/morphe/patches/tiktok/interaction/seekbar/ShowSeekbarPatch.kt").readText()
-        assertTrue("the preview check is not hooked", source.contains(".named(check.method).reportPreviewCheck(check.video)"))
+        val source = File(root, "app/morphe/patches/tiktok/interaction/seekbar/ShowSeekbarPatch.kt").readLines()
+        val hooked = source.filter { it.contains(".named(check.method).reportPreviewCheck(check.video)") }
+        assertEquals("the preview check is hooked once", 1, hooked.size)
+        assertTrue("the preview check's hook is commented out", !hooked.single().trimStart().startsWith("//"))
     }
 
     /** One fixture's classes by type; methods are walked on each ask, never held. */
