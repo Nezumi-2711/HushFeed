@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -41,6 +42,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
@@ -65,6 +67,7 @@ public class StorySeekbarTest {
     private RadiusLayout frame;
     private TouchView touch;
     private Controller controller;
+    private VideoItemParams params;
 
     @Before
     public void setUp() {
@@ -177,7 +180,9 @@ public class StorySeekbarTest {
     }
 
     private void bind(Aweme story) {
-        StorySeekbar.onCellBind(component, new VideoItemParams(story));
+        // The cell keeps its params, as TikTok's does; the hook only holds them weakly.
+        params = new VideoItemParams(story);
+        StorySeekbar.onCellBind(component, params);
     }
 
     private void tick(Object player, String aid, long positionMs, long durationMs) {
@@ -441,6 +446,8 @@ public class StorySeekbarTest {
     @Test
     public void aScreenReaderHearsASeekBarAndCanMoveIt() {
         StorySeekbarView line = playing();
+        // A view outside a window gets an empty node, so this one goes in a window as on the phone.
+        Robolectric.buildActivity(Activity.class).setup().get().setContentView(root);
 
         AccessibilityNodeInfo node = line.createAccessibilityNodeInfo();
         assertEquals(SeekBar.class.getName(), node.getClassName().toString());
