@@ -152,23 +152,27 @@ class StoryShareSaveAnchorsTest {
             assertEquals("$version: the package is stored", 1, touches(Opcode.IPUT_OBJECT, fields.sharePackage))
 
             // Share sheet tools filters the builder's row between the read and the store, and the
-            // same field is found through it.
-            val filtered = MutableMethod(found.snapshotConstructor)
+            // same field is found through it, with another hook's filter in there too.
             val builder = found.snapshotConstructor.parameterTypes.single().toString()
-            filtered.implementation!!.instructions.withIndex().toList().asReversed().forEach { (index, instruction) ->
-                if (instruction.opcode != Opcode.IGET_OBJECT) return@forEach
-                val field = instruction.getReference<FieldReference>() ?: return@forEach
-                if (field.definingClass != builder || field.name != SHARE_BUILDER_ACTIONS) return@forEach
-                val register = (instruction as TwoRegisterInstruction).registerA
-                filtered.addInstructions(
-                    index + 1,
-                    """
-                        invoke-static/range { v$register .. v$register }, Lfixture/Filter;->actions(Ljava/util/List;)Ljava/util/List;
-                        move-result-object v$register
-                    """,
-                )
+            for (filters in 1..2) {
+                val filtered = MutableMethod(found.snapshotConstructor)
+                filtered.implementation!!.instructions.withIndex().toList().asReversed().forEach { (index, instruction) ->
+                    if (instruction.opcode != Opcode.IGET_OBJECT) return@forEach
+                    val field = instruction.getReference<FieldReference>() ?: return@forEach
+                    if (field.definingClass != builder || field.name != SHARE_BUILDER_ACTIONS) return@forEach
+                    val register = (instruction as TwoRegisterInstruction).registerA
+                    filtered.addInstructions(
+                        index + 1,
+                        List(filters) {
+                            """
+                                invoke-static/range { v$register .. v$register }, Lfixture/Filter$it;->actions(Ljava/util/List;)Ljava/util/List;
+                                move-result-object v$register
+                            """
+                        }.joinToString("\n"),
+                    )
+                }
+                assertEquals("$version, $filters filters: ", fields, filtered.snapshotActionFields(found.snapshot))
             }
-            assertEquals("$version: ", fields, filtered.snapshotActionFields(found.snapshot))
         }
     }
 

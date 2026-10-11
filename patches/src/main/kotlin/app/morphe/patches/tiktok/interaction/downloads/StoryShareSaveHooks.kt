@@ -20,6 +20,7 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
+import com.android.tools.smali.dexlib2.iface.instruction.OffsetInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
@@ -28,6 +29,9 @@ import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 private const val SHARE_SAVE = "Advanced downloads (story share sheet)"
 internal const val STORY_SHARE_SAVE = "Lapp/morphe/extension/tiktok/download/StoryShareSave;"
+
+/** How far past the builder's read its store may sit: Share sheet tools adds two, room for another hook's two. */
+private const val STORE_REACH = 8
 private const val SAVE_ACTIVITY = "Landroid/app/Activity;"
 private const val SAVE_CONTEXT = "Landroid/content/Context;"
 private const val SAVE_AWEME = "Lcom/ss/android/ugc/aweme/feed/model/Aweme;"
@@ -126,7 +130,10 @@ internal fun Method.snapshotActionFields(snapshot: ClassDef): SnapshotActionFiel
             return@forEachIndexed
         }
         val register = (instruction as TwoRegisterInstruction).registerA
-        val store = code.subList(index + 1, minOf(code.size, index + 4)).firstOrNull { next ->
+        // Not past a branch or a return: a store there might not follow this read.
+        val reach = code.subList(index + 1, minOf(code.size, index + 1 + STORE_REACH))
+            .takeWhile { it !is OffsetInstruction && it.opcode.canContinue() }
+        val store = reach.firstOrNull { next ->
             next.opcode == Opcode.IPUT_OBJECT && (next as TwoRegisterInstruction).registerA == register &&
                 ((next as ReferenceInstruction).reference as? FieldReference)
                     ?.let { it.definingClass == definingClass && it.type == SAVE_LIST } == true
