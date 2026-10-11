@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.1 (2026-10-11)
 
 * **TikTok:** Con Mantener los subtítulos con los controles ocultos activado, el subtítulo con los controles ocultos ahora queda donde TikTok lo mostraba antes de que se ocultaran los controles, en vez de bajar hasta el borde inferior (#141). Mientras no se haya mostrado ningún subtítulo, se queda en el sitio de antes.
 

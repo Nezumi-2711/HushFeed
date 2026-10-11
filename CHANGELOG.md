@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+## 0.71.1 (2026-10-11)
+
 * **TikTok:** With Keep captions in Clear display on, the caption in Clear display now sits where TikTok showed it before the controls went away, instead of dropping to the bottom edge (#141). Before any caption has shown, it keeps the old spot.
 
 ## 0.71.0 (2026-10-11)

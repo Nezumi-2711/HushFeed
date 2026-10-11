@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.1 (2026-10-11)
 
 * **TikTok:** Təmiz ekranda başlıqları saxlayın açıq olanda, təmiz ekrandakı başlıq artıq aşağı kənara düşmür, TikTok-un idarəetmə düymələri gizlənməzdən əvvəl göstərdiyi yerdə qalır (#141). Hələ heç bir başlıq görünməyibsə, köhnə yerində qalır.
 

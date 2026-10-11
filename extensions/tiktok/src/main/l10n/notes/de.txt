@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.1 (2026-10-11)
 
 * **TikTok:** Ist Untertitel in der freien Ansicht behalten an, steht der Untertitel in der freien Ansicht jetzt dort, wo TikTok ihn gezeigt hat, bevor die Steuerung verschwand, statt an den unteren Rand zu rutschen (#141). Solange noch kein Untertitel zu sehen war, bleibt er an der alten Stelle.
 
