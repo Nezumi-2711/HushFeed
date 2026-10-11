@@ -1456,8 +1456,10 @@ public final class FeedItemsFilter {
             FeedFilterCounters.removed(FOR_YOU_DISTRIBUTION_SOURCE, dropped == null ? 0 : dropped, UNPERSONALIZED_REASON);
         }
         // Never restore ads, blocked creators/words, seen videos, or other hard rejects. (A video a
-        // link opened was kept above, before any rule could take it out.)
-        if (rangeKept.isEmpty() && qualityFallback != null) {
+        // link opened was kept above, before any rule could take it out.) Not on the Following
+        // read either: that list grows under the video playing, so one put back now would go
+        // again the moment a video that passes arrives, from under the player.
+        if (rangeKept.isEmpty() && qualityFallback != null && phase == FilterPhase.RESPONSE) {
             if (capture != null) {
                 capture.putBack(extractor.extract(qualityFallback), "QualityFilter", "closest-to-quality-rule");
             }
