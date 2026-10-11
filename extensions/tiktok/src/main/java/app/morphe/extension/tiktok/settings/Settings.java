@@ -473,6 +473,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting SEEKBAR_TIME = new BooleanSetting("seekbar_time", FALSE);
     /** A larger handle and a slightly thicker line on the progress bar at rest (#90). */
     public static final BooleanSetting SEEKBAR_BIG_HANDLE = new BooleanSetting("seekbar_big_handle", FALSE);
+    /** A line along the bottom of a video story that can be dragged to seek (#72). */
+    public static final BooleanSetting STORY_SEEKBAR = new BooleanSetting("story_seekbar", FALSE);
     public static final BooleanSetting SHOW_SEEKBAR_THUMBNAIL = new BooleanSetting(
             "show_seekbar_thumbnail",
             TRUE

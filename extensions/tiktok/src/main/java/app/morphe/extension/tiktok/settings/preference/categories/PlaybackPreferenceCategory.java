@@ -153,6 +153,14 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                             + "easier to see where you are.",
                     Settings.SEEKBAR_BIG_HANDLE
             ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Seek bar on video stories",
+                    "Add a thin line along the bottom of a video story that you can drag to go "
+                            + "back or skip ahead. The time shows while you drag, and a tap on it "
+                            + "still moves between stories.",
+                    Settings.STORY_SEEKBAR
+            ));
         }
         if (SettingsStatus.seekbarThumbnailEnabled) {
             addPreference(new TogglePreference(

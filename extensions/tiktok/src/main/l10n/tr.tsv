@@ -1047,6 +1047,10 @@ Show the time beside the progress bar	Süreyi ilerleme çubuğunun yanında gös
 Show the time played and the video's length at the end of the progress bar while it's on screen.	İlerleme çubuğu ekrandayken oynatılan süreyi ve videonun uzunluğunu çubuğun sonunda göster.
 Bigger progress bar handle	Daha büyük ilerleme çubuğu tutamacı
 Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are.	İlerleme çubuğunda daha büyük bir tutamaç ve biraz daha kalın bir çizgi çiz, böylece nerede olduğunu daha kolay görürsün.
+Seek bar on video stories	Video hikayelerde sarma çubuğu
+Add a thin line along the bottom of a video story that you can drag to go back or skip ahead. The time shows while you drag, and a tap on it still moves between stories.	Video hikayenin altına, geri sarmak veya ileri atlamak için sürükleyebileceğin ince bir çizgi ekle. Sürüklerken süre gösterilir ve çizgiye dokunmak yine hikayeler arasında geçiş yapar.
+Story position	Hikayedeki konum
+%1$s of %2$s	%1$s / %2$s
 Show the progress bar thumbnail	İlerleme çubuğu küçük resmini göster
 Show the search entry inside TikTok's LIVE drawer, where available. This doesn't add a search box to video comments.	TikTok'un CANLI çekmecesindeki arama girişini, mümkün olan yerlerde göster. Bu, video yorumlarına bir arama kutusu eklemez.
 Show the whole Activity and New followers lists instead of stopping at a View all button.	Tümünü gör düğmesinde durmak yerine Etkinlik ve Yeni takipçiler listelerinin tamamını göster.

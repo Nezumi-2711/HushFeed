@@ -1014,6 +1014,10 @@ Show the time beside the progress bar	Mostrar el tiempo junto a la barra de prog
 Show the time played and the video's length at the end of the progress bar while it's on screen.	Mostrar el tiempo reproducido y la duración del vídeo al final de la barra de progreso mientras está en pantalla.
 Bigger progress bar handle	Control más grande en la barra de progreso
 Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are.	Dibujar un control más grande y una línea algo más gruesa en la barra de progreso, para que sea más fácil ver por dónde vas.
+Seek bar on video stories	Barra de reproducción en historias de vídeo
+Add a thin line along the bottom of a video story that you can drag to go back or skip ahead. The time shows while you drag, and a tap on it still moves between stories.	Añadir una línea fina en la parte inferior de una historia de vídeo que puedes arrastrar para retroceder o avanzar. El tiempo se muestra mientras arrastras, y un toque en ella sigue pasando de una historia a otra.
+Story position	Posición en la historia
+%1$s of %2$s	%1$s de %2$s
 Show the progress bar thumbnail	Mostrar la miniatura de la barra de progreso
 Show the whole Activity and New followers lists instead of stopping at a View all button.	Mostrar las listas completas de Actividad y Nuevos seguidores en vez de pararse en un botón de Ver todo.
 Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.	Mostrar el vídeo entero en vez de recortarlo a la ventana. En un móvil alto no cambia nada, porque ya cabe. En un plegable abierto, en una pantalla más cuadrada o en vista dividida dejan de cortarse los lados o los extremos.

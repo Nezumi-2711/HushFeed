@@ -1013,6 +1013,10 @@ Show the time beside the progress bar,Tampilkan waktu di samping bilah progres
 Show the time played and the video's length at the end of the progress bar while it's on screen.,Tampilkan waktu yang sudah diputar dan durasi video di ujung bilah progres selama bilah itu terlihat.
 Bigger progress bar handle,Pegangan bilah progres lebih besar
 "Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are.","Gambar pegangan yang lebih besar dan garis yang sedikit lebih tebal pada bilah progres, agar lebih mudah melihat posisimu."
+Seek bar on video stories,Bilah geser di story video
+"Add a thin line along the bottom of a video story that you can drag to go back or skip ahead. The time shows while you drag, and a tap on it still moves between stories.","Tambahkan garis tipis di bagian bawah story video yang bisa kamu geser untuk mundur atau maju. Waktunya tampil saat kamu menggeser, dan ketukan pada garis itu tetap berpindah antar-story."
+Story position,Posisi dalam story
+%1$s of %2$s,%1$s dari %2$s
 Show the progress bar thumbnail,Tampilkan miniatur bilah progres
 Show the whole Activity and New followers lists instead of stopping at a View all button.,"Tampilkan seluruh daftar Aktivitas dan Pengikut baru, bukan berhenti di tombol Lihat semua."
 "Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.","Tampilkan video secara utuh, bukan dipotong mengikuti jendela. Di ponsel yang tinggi tidak ada yang berubah karena videonya memang sudah pas. Di ponsel lipat yang dibuka, layar yang lebih persegi, atau mode layar terbagi, sisi atau ujung videonya tidak lagi terpotong."

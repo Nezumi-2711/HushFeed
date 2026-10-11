@@ -69,7 +69,8 @@ val showSeekbarPatch = bytecodePatch(
     name = "Show the progress bar",
     description = "Shows the progress bar on videos where TikTok hides it, so you can see how " +
         "long a video is and skip around. On by default. Turn it off in Hushfeed settings > " +
-        "Playback, where you can also show the time beside the bar or give it a bigger handle.",
+        "Playback, where you can also show the time beside the bar or give it a bigger handle. " +
+        "A seek bar for video stories is there too.",
     default = true,
 ) {
     category("Playback")
@@ -133,6 +134,13 @@ val showSeekbarPatch = bytecodePatch(
         bar.methods.named(showType.barStyle()).hookBarStyle()
         val event = PlayProgressFingerprint.method.progressEvent()
         mutableClassDefBy(event.definingClass).methods.named(event).recordProgressTick()
+
+        // The seek bar on video stories (#72), a switch that starts off. The story cell reports
+        // its view and each story it shows, and the same progress callback says which story is
+        // playing and where.
+        StoryVideoCellViewFingerprint.method.hookStoryCellView()
+        StoryVideoCellBindFingerprint.method.hookStoryCellBind()
+        PlayProgressFingerprint.method.hookStoryProgress()
     }
 }
 
