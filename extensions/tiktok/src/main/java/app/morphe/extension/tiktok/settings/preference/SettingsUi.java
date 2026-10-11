@@ -1190,6 +1190,29 @@ public final class SettingsUi {
         }
     }
 
+    /** The dialog each settings row opened last, by the row's key, and the screen it opened on. */
+    private static final java.util.Map<String, java.lang.ref.WeakReference<Dialog>> OPEN_DIALOGS =
+            new java.util.HashMap<>();
+    private static final java.util.Map<String, java.lang.ref.WeakReference<Context>> OPENED_ON =
+            new java.util.HashMap<>();
+
+    /**
+     * Whether the dialog this row opened on this screen is still showing. A second tap can land
+     * on the row before the first tap's dialog takes input, and it opened another one on top.
+     */
+    static boolean dialogOpen(String key, Context context) {
+        java.lang.ref.WeakReference<Dialog> open = OPEN_DIALOGS.get(key);
+        java.lang.ref.WeakReference<Context> on = OPENED_ON.get(key);
+        Dialog dialog = open == null ? null : open.get();
+        return dialog != null && dialog.isShowing() && on != null && on.get() == context;
+    }
+
+    /** Remembers the dialog a row opened on this screen, for {@link #dialogOpen}. */
+    static void dialogOpened(String key, Context context, Dialog dialog) {
+        OPEN_DIALOGS.put(key, new java.lang.ref.WeakReference<>(dialog));
+        OPENED_ON.put(key, new java.lang.ref.WeakReference<>(context));
+    }
+
     public static void styleStandardAlertDialog(AlertDialog dialog) {
         styleFramedDialog(dialog);
 
