@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.0 (2026-10-11)
 
 * **TikTok:** İki dəfə toxunma Hushfeed-in hərəkətlərindən birinə qoyulubsa, barmağın bir az çox qaldığı ikinci toxunuş artıq TikTok-un uzun basma menyusunu da açmır, yəni paylaşım paneli şərhlərin üstündə açılmır. (#63)
 

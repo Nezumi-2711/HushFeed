@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.0 (2026-10-11)
 
 * **TikTok:** Com Toque duplo em uma das ações do Hushfeed, um segundo toque em que o dedo fica um pouco demais não abre mais junto o menu de toque longo do TikTok, então o painel de compartilhar não aparece mais por cima dos comentários. (#63)
 

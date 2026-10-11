@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.0 (2026-10-11)
 
 * **TikTok:** Çift dokunma Hushfeed'in eylemlerinden birine ayarlıysa, parmağın biraz fazla kaldığı ikinci dokunuş artık TikTok'un uzun basma menüsünü de açmıyor, yani paylaşım paneli artık yorumların üstünde açılmıyor. (#63)
 

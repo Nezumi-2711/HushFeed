@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+## 0.71.0 (2026-10-11)
+
 * **TikTok:** With Double tap set to one of Hushfeed's actions, a second tap your finger stays on a moment too long no longer brings up TikTok's long press menu as well, so the share panel stops opening on top of the comments. (#63)
 
 * **TikTok:** LIVE controls has a third switch, Offer LIVE quality in every room, under Hushfeed settings > Playback. TikTok offers Video quality in a LIVE's menu only when the stream asks for it or TikTok turns its newer quality picker on for your account, so in some rooms there was no way to pick one. With the switch on, rooms without it get the newer picker, and the next room opens at the quality you picked last until TikTok closes. It's off by default. (#57)

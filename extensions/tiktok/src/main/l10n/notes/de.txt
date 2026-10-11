@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.0 (2026-10-11)
 
 * **TikTok:** Ist Doppeltippen auf eine Aktion von Hushfeed gestellt, öffnet ein zweites Tippen, auf dem der Finger etwas zu lange bleibt, nicht mehr zusätzlich TikToks Menü für langes Drücken. Das Teilen-Feld geht also nicht mehr über den Kommentaren auf. (#63)
 
