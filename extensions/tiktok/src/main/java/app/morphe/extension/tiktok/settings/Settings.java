@@ -720,8 +720,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_RAIL_COUNTS = new BooleanSetting("hide_rail_counts", FALSE);
     /**
      * Whether the music disc turns (#68, MusicDiscSpin). TikTok reads the two settings behind it
-     * once per launch, so both take a restart. Holding it still is declared first because Spin
-     * names it as the switch that overrides it.
+     * once per launch, so both take a restart (Spin also lifts the holds past them, which are asked
+     * on every video). Holding it still is declared first because Spin names it as the switch that
+     * overrides it.
      */
     public static final BooleanSetting STOP_MUSIC_DISC_SPIN = new BooleanSetting("stop_music_disc_spin", FALSE, true);
     public static final BooleanSetting SPIN_MUSIC_DISC = new BooleanSetting("spin_music_disc", FALSE, true,
