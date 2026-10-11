@@ -62,14 +62,14 @@ public final class BrowserPrivacyGuard {
     };
 
     /**
-     * TikTok's own CDNs. They serve uploads too, so only its static frontend there is trusted:
-     * that's where the puzzle CAPTCHA in LIVEs and the Shop lives
+     * TikTok's own CDNs. They serve uploads and every ByteDance app's static pages too, so only
+     * the puzzle CAPTCHA's folder there is trusted: that's what LIVEs and the Shop open
      * (lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/oec-captcha-ttweb/..., read off a 47.1.4 LIVE
      * on 2026-10-11). The puzzle answers TikTok through its bridge, so withholding it there left
      * a check that could never pass (#87).
      */
     private static final String[] STATIC_CDN_DOMAINS = {"tiktokcdn.com", "tiktokcdn-us.com", "tiktokcdn-eu.com"};
-    private static final String STATIC_FRONTEND = "/obj/static-tx/";
+    private static final String STATIC_FRONTEND = "/obj/static-tx/oec-captcha-ttweb/";
 
     /** How long a request thread waits for the decision to reach the WebView's own thread. */
     private static final long DECISION_WAIT_MS = 250;

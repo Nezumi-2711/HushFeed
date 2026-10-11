@@ -73,7 +73,7 @@ public class BrowserPrivacyGuardTest {
                 "https://WWW.TIKTOK.COM./tns-inapp/pages/account_status",
                 // #87: the puzzle CAPTCHA a 47.1.4 LIVE opens, on TikTok's static frontend.
                 "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/oec-captcha-ttweb/captcha/ttp/3.0.75/2.0.0.886/index.html?verify_host=https%3A%2F%2Foec-api.tiktokv.com%2F&aid=1233",
-                "https://sf16-website-login.tiktokcdn.com/obj/static-tx/captcha/",
+                "https://sf16-website-login.tiktokcdn.com/obj/static-tx/oec-captcha-ttweb/captcha/",
         }) {
             assertTrue(page, BrowserPrivacyGuard.isTrustedAppPage(page));
         }
@@ -103,6 +103,11 @@ public class BrowserPrivacyGuardTest {
                 // somewhere else than they read.
                 "https://lf16-cdn-tos.tiktokcdn-us.com/obj/tiktok-obj/upload.html",
                 "https://lf16-cdn-tos.tiktokcdn-us.com/",
+                // Another app's page in the same static bucket.
+                "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/some-other-app/index.html?verify_host=x",
+                "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/oec-captcha-ttweb",
+                "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/oec-captcha-ttweb-evil/index.html",
+                "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/oec-captcha-ttweb/../other/index.html",
                 "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/../tiktok-obj/upload.html",
                 "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/%2e%2e/tiktok-obj/upload.html",
                 "https://lf16-cdn-tos.tiktokcdn-us.com/obj/static-tx/.\t./tiktok-obj/upload.html",
