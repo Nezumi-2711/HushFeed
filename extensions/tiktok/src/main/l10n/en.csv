@@ -1160,6 +1160,7 @@ Pulling down at the top of For You no longer reloads it.,Pulling down at the top
 Put %1$s in %2$s first.,Put %1$s in %2$s first.
 Put back the settings saved before the last restore or reset.,Put back the settings saved before the last restore or reset.
 Put every setting back to its default straight away. Your current settings are kept for Undo.,Put every setting back to its default straight away. Your current settings are kept for Undo.
+"Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.","Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it."
 "Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.","Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked."
 Putting seen videos back,Putting seen videos back
 Putting the saved videos back,Putting the saved videos back
@@ -1244,6 +1245,7 @@ Sample caption to test,Sample caption to test
 Sample category to test,Sample category to test
 Save,Save
 Save a profile picture on a long press,Save a profile picture on a long press
+Save a story from its share sheet,Save a story from its share sheet
 Save a story on a long press,Save a story on a long press
 Save again,Save again
 Save as video,Save as video
@@ -1736,6 +1738,7 @@ TikTok gets no location from your phone. The Region settings change your country
 TikTok is locked,TikTok is locked
 TikTok isn't locked because this phone has no screen lock,TikTok isn't locked because this phone has no screen lock
 "TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today.","TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today."
+"TikTok only had its watermarked copy of this story, so that copy was saved to %1$s","TikTok only had its watermarked copy of this story, so that copy was saved to %1$s"
 TikTok read it,TikTok read it
 "TikTok read it, but the override couldn't be applied. Reset it and save it again.","TikTok read it, but the override couldn't be applied. Reset it and save it again."
 TikTok refused the follow with code %1$s,TikTok refused the follow with code %1$s

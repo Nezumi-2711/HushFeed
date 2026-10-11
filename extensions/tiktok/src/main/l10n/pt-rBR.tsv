@@ -15,8 +15,11 @@ One language code, like en or es. Comments and captions TikTok translates come o
 Opus (.ogg), a smaller file	Opus (.ogg), arquivo menor
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.	O Opus não funcionou neste celular. Salvando o som do jeito que o TikTok enviou.
 Opus needs Android 10 or later, so sounds save as TikTok sent them.	O Opus precisa do Android 10 ou mais recente, então os sons são salvos como o TikTok enviou.
+Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.	Coloca um botão de salvar na folha que o botão Compartilhar de um story abre. Ele salva o story que você está vendo, e segurar um story ainda o pausa.
+Save a story from its share sheet	Salvar um story pela folha de compartilhamento
 Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.	Os vídeos salvos mostram o @nome de usuário e a primeira linha da legenda no canto inferior esquerdo. Para isso o celular codifica o vídeo inteiro de novo, então salvar demora mais. Vale para o que o Hushfeed salva.
 Sound format	Formato do som
+TikTok only had its watermarked copy of this story, so that copy was saved to %1$s	O TikTok só tinha a cópia com marca d'água deste story, então essa cópia foi salva em %1$s
 Translate button in comments	Botão de traduzir nos comentários
 Adds TikTok's translate button next to the comment count. One tap translates every comment, and another shows the originals again.	Adiciona o botão de traduzir do TikTok ao lado do número de comentários. Um toque traduz todos os comentários e outro mostra os originais de novo.
 Translate into	Traduzir para
