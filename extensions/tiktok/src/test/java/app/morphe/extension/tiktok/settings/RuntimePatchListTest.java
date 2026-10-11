@@ -31,7 +31,10 @@ public class RuntimePatchListTest {
     private static final Pattern REGISTRATION = Pattern.compile("registerForBuildDetails\\(\"(enable[A-Za-z0-9]+)\"\\)");
     /** What follows a registration: execute's closing brace, then the patch's. Nothing runs after it. */
     private static final String END_OF_EXECUTE = "\n    }\n}\n";
-    private static final Pattern PATCH_START = Pattern.compile("(?m)^val \\w+ = (bytecodePatch|resourcePatch|rawResourcePatch)\\(");
+    private static final Pattern PATCH_START = Pattern.compile(
+            "(?m)^(?:(?:internal|private|public) )?val \\w+ = (bytecodePatch|resourcePatch|rawResourcePatch)\\(");
+    /** A top-level patch declaration ends at the first closing brace in column 0. */
+    private static final String END_OF_PATCH = "\n}\n";
     private static final Pattern PATCH_NAME = Pattern.compile("\\bname = \"([^\"]+)\"");
     private static final Pattern ANY_REGISTRATION =
             Pattern.compile("SettingsStatus;->|SETTINGS_STATUS->enable|registerForBuildDetails\\(\"");
@@ -66,26 +69,47 @@ public class RuntimePatchListTest {
     @Test
     public void everyPatchThatChangesTikToksCodeRegisters() throws Exception {
         Set<String> silent = new TreeSet<>();
-        for (Path file : patchSources()) {
-            String source = read(file);
-            Matcher start = PATCH_START.matcher(source);
-            List<Integer> starts = new ArrayList<>();
-            List<String> kinds = new ArrayList<>();
-            while (start.find()) {
-                starts.add(start.start());
-                kinds.add(start.group(1));
-            }
-            for (int index = 0; index < starts.size(); index++) {
-                if (!kinds.get(index).equals("bytecodePatch")) continue;
-                int end = index + 1 < starts.size() ? starts.get(index + 1) : source.length();
-                String block = source.substring(starts.get(index), end);
-                Matcher name = PATCH_NAME.matcher(block.substring(0, Math.min(400, block.length())));
-                // An unnamed patch is a dependency another one pulls in, never a Manager row.
-                if (name.find() && !ANY_REGISTRATION.matcher(block).find()) silent.add(name.group(1));
-            }
-        }
+        for (Path file : patchSources()) silent.addAll(silentPatches(read(file)));
         assertEquals("a named code patch that never registers is missing from Build details",
                 Collections.emptySet(), silent);
+    }
+
+    @Test
+    public void aRegistrationOnlyInCodeAfterThePatchDoesNotCount() {
+        String source = "val quietPatch = bytecodePatch(\n    name = \"Quiet\",\n) {\n    execute {\n    }\n}\n\n"
+                + "private fun helper() {\n    \"SettingsStatus;->enableQuiet()V\"\n}\n";
+        assertEquals(Collections.singleton("Quiet"), silentPatches(source));
+    }
+
+    @Test
+    public void anInternalPatchEndsTheBlockBeforeIt() {
+        String source = "val quietPatch = bytecodePatch(\n    name = \"Quiet\",\n) {\n    execute {\n    }\n"
+                + "internal val helperPatch = bytecodePatch(\n) {\n    execute {\n"
+                + "        registerForBuildDetails(\"enableHelper\")\n    }\n}\n";
+        assertEquals(Collections.singleton("Quiet"), silentPatches(source));
+    }
+
+    /** Named bytecode patches in one Kotlin source whose own declaration never registers a switch. */
+    private static Set<String> silentPatches(String source) {
+        Matcher start = PATCH_START.matcher(source);
+        List<Integer> starts = new ArrayList<>();
+        List<String> kinds = new ArrayList<>();
+        while (start.find()) {
+            starts.add(start.start());
+            kinds.add(start.group(1));
+        }
+        Set<String> silent = new TreeSet<>();
+        for (int index = 0; index < starts.size(); index++) {
+            if (!kinds.get(index).equals("bytecodePatch")) continue;
+            int end = index + 1 < starts.size() ? starts.get(index + 1) : source.length();
+            int close = source.indexOf(END_OF_PATCH, starts.get(index));
+            if (close >= 0) end = Math.min(end, close + END_OF_PATCH.length());
+            String block = source.substring(starts.get(index), end);
+            Matcher name = PATCH_NAME.matcher(block.substring(0, Math.min(400, block.length())));
+            // An unnamed patch is a dependency another one pulls in, never a Manager row.
+            if (name.find() && !ANY_REGISTRATION.matcher(block).find()) silent.add(name.group(1));
+        }
+        return silent;
     }
 
     @Test
