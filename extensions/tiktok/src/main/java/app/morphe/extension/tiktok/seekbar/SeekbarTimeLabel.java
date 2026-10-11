@@ -74,7 +74,11 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
         setShadowLayer(2f * metrics.density, 0f, 0.5f * metrics.density, SHADOW_COLOR);
         // Every digit the same width, so the time doesn't shuffle sideways as it counts.
         setFontFeatureSettings("tnum");
-        setSingleLine(true);
+        // One line, but not setSingleLine: that scrolls sideways, and a sideways-scrolling line
+        // set to the end is laid out against a very wide edge, far off the label (#90). The
+        // width always fits the time, so one line never has to wrap.
+        setMaxLines(1);
+        setHorizontallyScrolling(false);
         setIncludeFontPadding(false);
         setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
         setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -284,7 +288,30 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
     }
 
     private int widthFor(String text) {
-        return (int) Math.ceil(getPaint().measureText(text)) + getPaddingLeft() + getPaddingRight();
+        return (int) Math.ceil(getPaint().measureText(withWidestDigit(text)))
+                + getPaddingLeft() + getPaddingRight();
+    }
+
+    /**
+     * The text with every digit swapped for the font's widest one. Not every phone font has even
+     * digits for "tnum", and a time a hair wider than its label would lose its second half.
+     */
+    private String withWidestDigit(String text) {
+        char widest = '0';
+        float widestWidth = -1f;
+        for (char digit = '0'; digit <= '9'; digit++) {
+            float width = getPaint().measureText(String.valueOf(digit));
+            if (width > widestWidth) {
+                widestWidth = width;
+                widest = digit;
+            }
+        }
+        StringBuilder out = new StringBuilder(text.length());
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            out.append(c >= '0' && c <= '9' ? widest : c);
+        }
+        return out.toString();
     }
 
     // Test access.
