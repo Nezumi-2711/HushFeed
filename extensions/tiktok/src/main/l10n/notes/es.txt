@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Controles ocultos recordado ya no se apaga solo cuando pulsas Atrás en un vídeo despejado o abres desde él el panel de compartir. TikTok sale de ese modo por su cuenta ahí, así que el siguiente vídeo vuelve a despejarse (#84).
+
 
 * **TikTok:** Detalles de la compilación y la exportación completa del registro ahora enumeran, con un nombre corto, cada parche de tu compilación que cambió el código de TikTok, incluidos los que no tienen interruptor, como Comment send fix y Network request report.
 

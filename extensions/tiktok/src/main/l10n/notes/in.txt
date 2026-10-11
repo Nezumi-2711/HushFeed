@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tampilan bersih yang diingat tidak lagi mati sendiri saat kamu menekan Kembali di video yang sudah bersih atau membuka panel bagikan dari sana. TikTok keluar dari mode bersih sendiri di situ, jadi video berikutnya dibersihkan lagi (#84).
+
 
 * **TikTok:** Detail build dan ekspor log lengkap kini mencantumkan setiap patch di build kamu yang mengubah kode TikTok, dengan nama singkat, termasuk yang tanpa sakelar seperti Comment send fix dan Network request report.
 

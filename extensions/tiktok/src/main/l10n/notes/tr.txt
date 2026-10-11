@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Hatırlanan Temiz ekran, temizlenmiş bir videoda Geri'ye bastığında ya da oradan paylaşım panelini açtığında artık kendiliğinden kapanmıyor. TikTok orada temiz moddan kendisi çıkıyor, bu yüzden sonraki video yine temizleniyor (#84).
+
 
 * **TikTok:** Derleme ayrıntıları ve tam günlük dışa aktarımı artık derlemende TikTok'un kodunu değiştiren her yamayı kısa bir adla listeliyor, Comment send fix ve Network request report gibi anahtarı olmayanlar da dahil.
 

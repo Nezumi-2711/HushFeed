@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yadda saxlanan Təmiz ekran artıq təmizlənmiş videoda Geri düyməsinə basanda və ya oradan paylaşma panelini açanda özünü söndürmür. TikTok orada təmiz rejimdən özü çıxır, ona görə növbəti video yenə təmizlənir (#84).
+
 
 * **TikTok:** Build təfərrüatları və tam jurnal ixracı indi quruluşunda TikTok-un kodunu dəyişən hər yamağı qısa adı ilə sadalayır, Comment send fix və Network request report kimi açarı olmayanlar da daxil.
 

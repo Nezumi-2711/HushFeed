@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Vista pulita ricordata non si spegne più da sola quando premi Indietro su un video pulito o apri da lì il pannello di condivisione. Lì TikTok esce da solo dalla modalità, quindi il video successivo torna pulito (#84).
+
 
 * **TikTok:** Dettagli della build e l'esportazione completa del log ora elencano, con un nome breve, ogni patch della tua build che ha modificato il codice di TikTok, comprese quelle senza interruttore come Comment send fix e Network request report.
 

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** A Tela limpa lembrada não se desliga mais sozinha quando você aperta Voltar num vídeo limpo ou abre o painel de compartilhar a partir dele. O TikTok sai desse modo sozinho ali, então o próximo vídeo fica limpo de novo (#84).
+
 
 * **TikTok:** Detalhes da compilação e a exportação completa do log agora listam, com um nome curto, cada patch da sua compilação que alterou o código do TikTok, incluindo os sem chave, como Comment send fix e Network request report.
 

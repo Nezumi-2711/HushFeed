@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A remembered Clear display no longer turns itself off when you press Back on a cleared video or open the share panel from it. TikTok leaves clear mode by itself there, so the next video clears again (#84).
+
 
 * **TikTok:** Build details and the full log export now list every patch that changed TikTok's code in your build, by a short name, including the ones with no switch like Comment send fix and Network request report.
 
