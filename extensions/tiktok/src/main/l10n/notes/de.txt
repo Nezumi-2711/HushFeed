@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.2 (2026-10-11)
 
 * **TikTok:** Statusleiste in LIVE-Räumen ausblenden und LIVE unter der Statusleiste zeigen wirken jetzt auch bei einem LIVE, das über die Vorschau unter der Karte eines Creators in der Suche geöffnet wird. TikTok öffnet dieses LIVE in der Seite für geöffnete Videos, die die Schalter bisher nicht erreicht haben (#137).
 

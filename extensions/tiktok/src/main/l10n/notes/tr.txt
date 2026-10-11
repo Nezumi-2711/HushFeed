@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.2 (2026-10-11)
 
 * **TikTok:** LIVE odalarında durum çubuğunu gizle ve LIVE'ı durum çubuğunun altında göster artık aramada bir içerik üreticinin kartının altındaki önizlemeden açılan LIVE'da da çalışıyor. TikTok bu LIVE'ı açılan videolar için kullandığı sayfanın içinde açıyor, anahtarlar oraya ulaşmıyordu (#137).
 
