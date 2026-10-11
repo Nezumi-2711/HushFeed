@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sembunyikan overlay video dan ukuran teks feed kini juga berfungsi saat sebuah tautan membuka TikTok langsung ke pencarian atau video, tanpa feed Untuk Anda di belakangnya. Sebelumnya, video yang dibuka dengan cara itu tetap menampilkan semua overlay dan ukuran teks bawaan TikTok (#84).
+
 * **TikTok:** Lindungi halaman eksternal di browser TikTok kini menganggap CAPTCHA teka-teki yang dibuka LIVE dan Toko sebagai halaman TikTok sendiri, sehingga teka-teki tetap terhubung ke TikTok (#87). CAPTCHA itu dimuat dari server TikTok sendiri, hanya dari alamat yang belum dikenal sakelar ini.
 
 * **TikTok:** Ketukan kedua yang cepat pada Detail build, Pemeriksaan fitur, Lisensi, atau Yang baru tidak lagi membuka jendela yang sama dua kali secara bertumpuk.

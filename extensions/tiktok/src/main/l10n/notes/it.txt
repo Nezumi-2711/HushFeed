@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Nascondi gli overlay dei video e le dimensioni del testo del feed ora funzionano anche quando un link avvia TikTok direttamente nella ricerca o in un video, senza il feed Per te dietro. Prima i video aperti così mantenevano tutti gli overlay e la dimensione del testo di TikTok (#84).
+
 * **TikTok:** Proteggi le pagine esterne nel browser di TikTok ora considera il CAPTCHA a puzzle che aprono i LIVE e lo Shop una pagina di TikTok, così il puzzle resta collegato a TikTok (#87). Si carica dai server di TikTok, solo da un indirizzo che l'interruttore non conosceva.
 
 * **TikTok:** Un secondo tocco rapido su Dettagli della build, Stato dell'hook, Licenze o Novità non apre più la stessa finestra due volte, una sopra l'altra.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ocultar superposiciones de vídeo y los tamaños de texto del feed ahora también funcionan cuando un enlace abre TikTok directamente en la búsqueda o en un vídeo, sin el feed Para ti detrás. Antes, los vídeos abiertos así conservaban todas las superposiciones y el tamaño de texto propio de TikTok (#84).
+
 * **TikTok:** Proteger páginas externas en el navegador de TikTok ahora cuenta el CAPTCHA de rompecabezas que abren los LIVE y la Tienda como una página propia de TikTok, así el rompecabezas conserva su conexión con TikTok (#87). Se carga desde los servidores de TikTok, solo que desde una dirección que el interruptor no conocía.
 
 * **TikTok:** Un segundo toque rápido en Detalles de la compilación, Comprobación de funciones, Licencias o Novedades ya no abre la misma ventana dos veces, una encima de otra.
