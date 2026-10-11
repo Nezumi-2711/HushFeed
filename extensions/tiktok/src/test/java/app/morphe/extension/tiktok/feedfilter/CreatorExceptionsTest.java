@@ -27,6 +27,8 @@ import com.ss.android.ugc.aweme.feed.model.FeedItemList;
 import com.ss.android.ugc.aweme.feed.model.PhotoModeImageInfo;
 import com.ss.android.ugc.aweme.feed.model.PhotoModeTextInfo;
 import com.ss.android.ugc.aweme.feed.model.RecReasonsStruct;
+import com.ss.android.ugc.aweme.follow.presenter.FollowFeed;
+import com.ss.android.ugc.aweme.follow.presenter.FollowFeedList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -376,6 +378,29 @@ public class CreatorExceptionsTest {
     /** The aids left on a page after the filter, in order, with no filter having thrown. */
     private static List<String> survivors(FeedItemList list) {
         FeedItemsFilter.filter(list);
+        assertNoFilterThrew();
+        List<String> aids = new ArrayList<>();
+        for (Object item : list.items) aids.add(((Aweme) item).getAid());
+        return aids;
+    }
+
+    /** The aids left in a Following list once TikTok reads it, with no filter having thrown. */
+    private static List<String> followingSurvivors(Item... items) {
+        FollowFeedList list = new FollowFeedList();
+        list.mItems = new ArrayList<>();
+        for (Item item : items) {
+            FollowFeed entry = new FollowFeed();
+            entry.aweme = item;
+            list.mItems.add(entry);
+        }
+        FeedItemsFilter.filterLate(list);
+        assertNoFilterThrew();
+        List<String> aids = new ArrayList<>();
+        for (Object entry : list.mItems) aids.add(((FollowFeed) entry).aweme.getAid());
+        return aids;
+    }
+
+    private static void assertNoFilterThrew() {
         try {
             java.lang.reflect.Field errors = FeedItemsFilter.class.getDeclaredField("filterExceptionLogCount");
             errors.setAccessible(true);
@@ -384,9 +409,6 @@ public class CreatorExceptionsTest {
         } catch (ReflectiveOperationException exception) {
             throw new AssertionError(exception);
         }
-        List<String> aids = new ArrayList<>();
-        for (Object item : list.items) aids.add(((Aweme) item).getAid());
-        return aids;
     }
 
     @Test
@@ -485,6 +507,27 @@ public class CreatorExceptionsTest {
                     List.of("post", "plain"), survivors(profile));
             assertEquals(which.filter + " did not run on the feed, so the profile case proves nothing",
                     List.of("plain"), survivors(page(tripped("post", which), stranger("plain"))));
+        }
+    }
+
+    /**
+     * The Following tab on 47.1.4 reaches the filter only where TikTok reads its list, never
+     * through the response hook, and a blocked creator still showed there on a phone. Every feed
+     * rule runs on that read now, except two: the For You padding rule, which reads marks only
+     * For You carries, and Hide seen videos, since the list grows under the video playing.
+     */
+    @Test
+    public void theFollowingTabsReadRunsEveryFeedRuleButSeenAndForYouPadding() {
+        List<Case> cases = new ArrayList<>(subjectiveCases());
+        cases.addAll(hardCases());
+        for (Case which : cases) {
+            quiet();
+            which.enable.run();
+            List<String> expected = which.filter.equals("SeenVideoFilter")
+                    || which.filter.equals("UnpersonalizedForYouFilter")
+                    ? List.of("post", "plain") : List.of("plain");
+            assertEquals(which.filter + " on the Following tab's read",
+                    expected, followingSurvivors(tripped("post", which), stranger("plain")));
         }
     }
 
