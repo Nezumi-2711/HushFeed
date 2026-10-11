@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Las filas Keep captions in Clear display y Automatic Clear display ahora escriben Clear display como lo hace TikTok, y el aviso bajo Send it now termina con punto.
+
 * **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, la barra de progreso de un video largo que abres desde la búsqueda o un perfil vuelve a quedar debajo de la descripción. Antes se dibujaba encima del nombre del creador (#50).
 
 * **TikTok:** Atenuar los controles del vídeo ahora también atenúa la barra de progreso de un vídeo en pausa, la píldora de historias de la pestaña Siguiendo y, en un vídeo abierto desde la búsqueda, la barra de búsqueda de arriba, el botón de Pantalla completa y la barra para añadir un comentario. Antes se quedaban a plena intensidad (#84).
@@ -36,7 +38,7 @@
 
 * **TikTok:** Remove LIVE extras ahora dice que quita los archivos para unirte al LIVE de otra persona como invitado, así que con él puede dejar de funcionar unirte por voz o video (#132). No lo incluyas si te unes a LIVEs.
 
-* **TikTok:** Cuando Clear display se recuerda, o Automatic clear display no tiene retraso, TikTok ya no muestra las pestañas bajo su círculo de carga ni los botones del primer video durante un segundo tras un arranque en frío. Un video abierto desde Favorites o un perfil también empieza despejado (#84).
+* **TikTok:** Cuando Clear display se recuerda, o Automatic Clear display no tiene retraso, TikTok ya no muestra las pestañas bajo su círculo de carga ni los botones del primer video durante un segundo tras un arranque en frío. Un video abierto desde Favorites o un perfil también empieza despejado (#84).
 
 * **TikTok:** Con Show where a video was posted activado, el nombre del creador ya no se corta para que quepa el país cuando la fila tiene espacio para los dos, así que "Rn D… · TR" vuelve a leerse completo (#127). Un nombre que de verdad es demasiado largo se sigue acortando para que el país se vea entero.
 

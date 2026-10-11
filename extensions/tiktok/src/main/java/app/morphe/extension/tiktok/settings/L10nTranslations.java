@@ -598,7 +598,7 @@ public final class L10nTranslations {
                 "Avtomatik keçid videoları");
         table.put("Automatic",
                 "Avtomatik");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Avtomatik təmiz ekran");
         table.put("Avatar and follow button",
                 "Avatar və izləmə düyməsi");
@@ -1777,7 +1777,7 @@ public final class L10nTranslations {
                 "Foto hekayəni toxunana və ya sürüşdürənə qədər ekranda saxla, bir neçə saniyədən sonra keçmə.");
         table.put("Keep a streak going",
                 "Seriyanı davam etdirin");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Təmiz ekranda başlıqları saxlayın");
         table.put("Keep going",
                 "Davam edin");
@@ -3771,8 +3771,8 @@ public final class L10nTranslations {
                 "Taymeri söndür (TikTok-un bağlanma vaxtı: %1$s)");
         table.put("Turn on %1$s first.",
                 "Əvvəlcə %1$s seçimini yandırın.");
-        table.put("Turn on Keep a streak going first",
-                "Əvvəlcə Seriyanı davam etdirin seçimini yandırın");
+        table.put("Turn on Keep a streak going first.",
+                "Əvvəlcə Seriyanı davam etdirin seçimini yandırın.");
         table.put("Turn on overrides",
                 "Əvəzləmələri yandırın");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -4621,7 +4621,7 @@ public final class L10nTranslations {
                 "Videos automatisch weiterschalten");
         table.put("Automatic",
                 "Automatisch");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Automatische freie Ansicht");
         table.put("Avatar and follow button",
                 "Avatar und Folgen-Button");
@@ -5800,7 +5800,7 @@ public final class L10nTranslations {
                 "Lässt eine Foto-Story auf dem Bildschirm, bis du tippst oder wischst, statt nach ein paar Sekunden weiterzugehen.");
         table.put("Keep a streak going",
                 "Eine Serie am Laufen halten");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Untertitel in der freien Ansicht behalten");
         table.put("Keep going",
                 "Weitermachen");
@@ -7794,8 +7794,8 @@ public final class L10nTranslations {
                 "Timer ausschalten (TikTok schließt um %1$s)");
         table.put("Turn on %1$s first.",
                 "Zuerst %1$s einschalten.");
-        table.put("Turn on Keep a streak going first",
-                "Schalte zuerst Eine Serie am Laufen halten ein");
+        table.put("Turn on Keep a streak going first.",
+                "Schalte zuerst Eine Serie am Laufen halten ein.");
         table.put("Turn on overrides",
                 "Überschreibungen einschalten");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -8644,7 +8644,7 @@ public final class L10nTranslations {
                 "Avanzar vídeos automáticamente");
         table.put("Automatic",
                 "Automático");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Ocultar controles automáticamente");
         table.put("Avatar and follow button",
                 "Avatar y botón de seguir");
@@ -9823,7 +9823,7 @@ public final class L10nTranslations {
                 "Mantiene una historia con foto en pantalla hasta que toques o deslices, en lugar de avanzar tras unos segundos.");
         table.put("Keep a streak going",
                 "Mantener una racha");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Mantener los subtítulos con los controles ocultos");
         table.put("Keep going",
                 "Seguir");
@@ -11817,8 +11817,8 @@ public final class L10nTranslations {
                 "Apagar el temporizador (TikTok se cierra a las %1$s)");
         table.put("Turn on %1$s first.",
                 "Activa antes %1$s.");
-        table.put("Turn on Keep a streak going first",
-                "Activa primero Mantener una racha");
+        table.put("Turn on Keep a streak going first.",
+                "Activa primero Mantener una racha.");
         table.put("Turn on overrides",
                 "Activar las sustituciones");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -12667,7 +12667,7 @@ public final class L10nTranslations {
                 "Lanjutkan video secara otomatis");
         table.put("Automatic",
                 "Otomatis");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Tampilan bersih otomatis");
         table.put("Avatar and follow button",
                 "Avatar dan tombol ikuti");
@@ -13846,7 +13846,7 @@ public final class L10nTranslations {
                 "Menahan story foto di layar sampai Anda mengetuk atau menggeser, bukan pindah setelah beberapa detik.");
         table.put("Keep a streak going",
                 "Pertahankan rentetan");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Pertahankan keterangan saat tampilan bersih");
         table.put("Keep going",
                 "Lanjutkan");
@@ -15840,8 +15840,8 @@ public final class L10nTranslations {
                 "Matikan pengatur waktu (TikTok tutup pukul %1$s)");
         table.put("Turn on %1$s first.",
                 "Nyalakan %1$s dulu.");
-        table.put("Turn on Keep a streak going first",
-                "Nyalakan Pertahankan rentetan dulu");
+        table.put("Turn on Keep a streak going first.",
+                "Nyalakan Pertahankan rentetan dulu.");
         table.put("Turn on overrides",
                 "Nyalakan penimpaan");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -16690,7 +16690,7 @@ public final class L10nTranslations {
                 "Avanzamento automatico dei video");
         table.put("Automatic",
                 "Automatico");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Vista pulita automatica");
         table.put("Avatar and follow button",
                 "Avatar e pulsante Segui");
@@ -17869,7 +17869,7 @@ public final class L10nTranslations {
                 "Mantiene una storia con foto sullo schermo finché non tocchi o scorri, invece di passare avanti dopo qualche secondo.");
         table.put("Keep a streak going",
                 "Mantieni viva una serie");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Mantieni i sottotitoli nella vista pulita");
         table.put("Keep going",
                 "Continua");
@@ -19863,8 +19863,8 @@ public final class L10nTranslations {
                 "Spegni il timer (TikTok si chiude alle %1$s)");
         table.put("Turn on %1$s first.",
                 "Attiva prima %1$s.");
-        table.put("Turn on Keep a streak going first",
-                "Attiva prima \"Mantieni viva una serie\"");
+        table.put("Turn on Keep a streak going first.",
+                "Attiva prima \"Mantieni viva una serie\".");
         table.put("Turn on overrides",
                 "Attiva le sovrascritture");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -20713,7 +20713,7 @@ public final class L10nTranslations {
                 "Avançar vídeos automaticamente");
         table.put("Automatic",
                 "Automático");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Limpar a tela automaticamente");
         table.put("Avatar and follow button",
                 "Avatar e botão de seguir");
@@ -21892,7 +21892,7 @@ public final class L10nTranslations {
                 "Mantém um story com foto na tela até você tocar ou deslizar, em vez de avançar após alguns segundos.");
         table.put("Keep a streak going",
                 "Manter uma sequência");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Manter as legendas com a tela limpa");
         table.put("Keep going",
                 "Continuar");
@@ -23886,8 +23886,8 @@ public final class L10nTranslations {
                 "Desligar o timer (o TikTok fecha às %1$s)");
         table.put("Turn on %1$s first.",
                 "Ative %1$s primeiro.");
-        table.put("Turn on Keep a streak going first",
-                "Ative primeiro Manter uma sequência");
+        table.put("Turn on Keep a streak going first.",
+                "Ative primeiro Manter uma sequência.");
         table.put("Turn on overrides",
                 "Ativar as substituições");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -24958,7 +24958,7 @@ public final class L10nTranslations {
                 "Автоматически переключать видео");
         table.put("Automatic",
                 "Автоматически");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Автоматический чистый вид");
         table.put("Avatar and follow button",
                 "Аватар и кнопка «Подписаться»");
@@ -26170,7 +26170,7 @@ public final class L10nTranslations {
                 "История с фото остаётся на экране, пока вы не коснётесь или не проведёте пальцем, и не переключается через несколько секунд.");
         table.put("Keep a streak going",
                 "Поддерживать серию");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Оставлять субтитры в чистом виде");
         table.put("Keep going",
                 "Продолжить");
@@ -28239,8 +28239,8 @@ public final class L10nTranslations {
                 "Выключить таймер (TikTok закроется в %1$s)");
         table.put("Turn on %1$s first.",
                 "Сначала включите %1$s.");
-        table.put("Turn on Keep a streak going first",
-                "Сначала включите «Поддерживать серию»");
+        table.put("Turn on Keep a streak going first.",
+                "Сначала включите «Поддерживать серию».");
         table.put("Turn on overrides",
                 "Включить переопределения");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -29107,7 +29107,7 @@ public final class L10nTranslations {
                 "Videoları otomatik geç");
         table.put("Automatic",
                 "Otomatik");
-        table.put("Automatic clear display",
+        table.put("Automatic Clear display",
                 "Otomatik temiz ekran");
         table.put("Avatar and follow button",
                 "Profil fotoğrafı ve takip düğmesi");
@@ -30286,7 +30286,7 @@ public final class L10nTranslations {
                 "Fotoğraflı bir hikayeyi siz dokunana veya kaydırana kadar ekranda tutar, birkaç saniye sonra geçmez.");
         table.put("Keep a streak going",
                 "Bir seriyi sürdür");
-        table.put("Keep captions in clear display",
+        table.put("Keep captions in Clear display",
                 "Temiz ekranda altyazıları koru");
         table.put("Keep going",
                 "Devam et");
@@ -32280,8 +32280,8 @@ public final class L10nTranslations {
                 "Zamanlayıcıyı kapat (TikTok'un kapanacağı saat: %1$s)");
         table.put("Turn on %1$s first.",
                 "Önce %1$s ayarını aç.");
-        table.put("Turn on Keep a streak going first",
-                "Önce Bir seriyi sürdür seçeneğini aç");
+        table.put("Turn on Keep a streak going first.",
+                "Önce Bir seriyi sürdür seçeneğini aç.");
         table.put("Turn on overrides",
                 "Geçersiz kılmaları aç");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",

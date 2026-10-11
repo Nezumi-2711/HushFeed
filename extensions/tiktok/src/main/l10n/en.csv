@@ -245,7 +245,7 @@ Auto-advance stopped after %1$d videos,Auto-advance stopped after %1$d videos
 Auto-advance stopped after one video,Auto-advance stopped after one video
 Auto-advance videos,Auto-advance videos
 Automatic,Automatic
-Automatic clear display,Automatic clear display
+Automatic Clear display,Automatic Clear display
 Avatar and follow button,Avatar and follow button
 Back,Back
 Back up settings,Back up settings
@@ -821,7 +821,7 @@ Keep a local record of what you have watched and hide those videos when the feed
 Keep a paused video paused,Keep a paused video paused
 "Keep a photo story on screen until you tap or swipe, instead of moving on after a few seconds.","Keep a photo story on screen until you tap or swipe, instead of moving on after a few seconds."
 Keep a streak going,Keep a streak going
-Keep captions in clear display,Keep captions in clear display
+Keep captions in Clear display,Keep captions in Clear display
 Keep going,Keep going
 Keep long press from quick sharing,Keep long press from quick sharing
 Keep long press from reposting,Keep long press from reposting
@@ -1794,7 +1794,7 @@ Turn off screen transitions,Turn off screen transitions
 Turn off swipe to reply,Turn off swipe to reply
 Turn off the timer (TikTok closes at %1$s),Turn off the timer (TikTok closes at %1$s)
 Turn on %1$s first.,Turn on %1$s first.
-Turn on Keep a streak going first,Turn on Keep a streak going first
+Turn on Keep a streak going first.,Turn on Keep a streak going first.
 Turn on overrides,Turn on overrides
 "Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.","Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to."
 Turned off %1$d gates of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.,Turned off %1$d gates of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.

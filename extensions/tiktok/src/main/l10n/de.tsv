@@ -230,7 +230,7 @@ Auto-advance	Automatisches Weiterschalten
 Staying on a video	Beim Video bleiben
 Auto-advance stopped after %1$d videos	Automatisches Weiterschalten nach %1$d Videos angehalten
 Auto-advance stopped after one video	Automatisches Weiterschalten nach einem Video angehalten
-Automatic clear display	Automatische freie Ansicht
+Automatic Clear display	Automatische freie Ansicht
 Avatar and follow button	Avatar und Folgen-Button
 Back	Zurück
 Back up settings	Einstellungen sichern
@@ -650,7 +650,7 @@ Inserted cards	Eingefügte Karten
 Keep a local record of what you have watched and hide those videos when the feed sends them again.	Lokal festhalten, was du gesehen hast, und diese Videos ausblenden, wenn der Feed sie noch einmal schickt.
 Keep a paused video paused	Pausiertes Video pausiert lassen
 Move to the next video when the current one ends. Pauses, open dialogs and screen-time holds stop it. Restart TikTok to apply this.	Zum nächsten Video wechseln, wenn das aktuelle endet. Pausen, offene Dialoge und Bildschirmzeit-Sperren halten dies an. Starte TikTok nach einer Änderung neu.
-Keep captions in clear display	Untertitel in der freien Ansicht behalten
+Keep captions in Clear display	Untertitel in der freien Ansicht behalten
 Keep going	Weitermachen
 Keep the Favorites tab	Favoriten-Tab behalten
 Keep the clock and status icons off the screen while TikTok is open. Swipe down from the top to peek at them.	Uhr und Statussymbole ausblenden, solange TikTok geöffnet ist. Wische von oben nach unten, um sie kurz zu sehen.
@@ -1507,7 +1507,7 @@ Message	Nachricht
 What gets sent each day.	Was jeden Tag geschickt wird.
 Send it now	Jetzt senden
 Sends today's message right away. The daily one then waits for tomorrow.	Schickt die heutige Nachricht sofort. Die tägliche wartet dann bis morgen.
-Turn on Keep a streak going first	Schalte zuerst Eine Serie am Laufen halten ein
+Turn on Keep a streak going first.	Schalte zuerst Eine Serie am Laufen halten ein.
 Sending the message	Nachricht wird gesendet
 A message is already on its way	Eine Nachricht ist schon unterwegs
 Enter who to message below to start.	Trag unten ein, wem geschrieben werden soll, um zu beginnen.

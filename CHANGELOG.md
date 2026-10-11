@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The Keep captions in Clear display and Automatic Clear display rows now spell Clear display the way TikTok does, and the hint under Send it now ends with a period.
+
 * **TikTok:** With Hide the comment bar on opened videos on, the progress bar on a long video you open from search or a profile now sits under the caption again. Before, it drew across the creator's name (#50).
 
 * **TikTok:** Fade the video controls now also fades the progress bar on a paused video, the Following tab's stories pill, and on a video opened from search its top search bar, Full screen button and Add comment bar. Before, those stayed at full strength (#84).
@@ -40,7 +42,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Remove LIVE extras now says it takes out the files for joining someone's LIVE as a guest, so joining by voice or video may stop working with it in (#132). Leave it out if you join LIVEs.
 
-* **TikTok:** When Clear display is remembered, or Automatic clear display has no delay, TikTok no longer shows the tabs under its loading spinner and the first video's buttons for about a second after a cold start. A video opened from Favorites or a profile starts cleared the same way (#84).
+* **TikTok:** When Clear display is remembered, or Automatic Clear display has no delay, TikTok no longer shows the tabs under its loading spinner and the first video's buttons for about a second after a cold start. A video opened from Favorites or a profile starts cleared the same way (#84).
 
 * **TikTok:** With Show where a video was posted on, the creator's name no longer gets cut short to fit the country when the row has room for both, so "Rn D… · TR" reads in full again (#127). A name that's really too long is still shortened so the country stays whole.
 

@@ -227,7 +227,7 @@ Auto-advance	Avance automático
 Staying on a video	Quedarse en un vídeo
 Auto-advance stopped after %1$d videos	El avance automático se detuvo tras %1$d vídeos
 Auto-advance stopped after one video	El avance automático se detuvo tras un vídeo
-Automatic clear display	Ocultar controles automáticamente
+Automatic Clear display	Ocultar controles automáticamente
 Avatar and follow button	Avatar y botón de seguir
 Back	Atrás
 Back up settings	Copia de seguridad de los ajustes
@@ -647,7 +647,7 @@ Inserted cards	Tarjetas insertadas
 Keep a local record of what you have watched and hide those videos when the feed sends them again.	Guardar en el dispositivo un registro de lo que has visto y ocultar esos vídeos cuando el feed los vuelva a enviar.
 Keep a paused video paused	Mantener en pausa un vídeo pausado
 Move to the next video when the current one ends. Pauses, open dialogs and screen-time holds stop it. Restart TikTok to apply this.	Pasa al siguiente vídeo cuando termine el actual. Las pausas, los diálogos abiertos y los bloqueos de tiempo de pantalla lo detienen. Reinicia TikTok después de cambiar este ajuste.
-Keep captions in clear display	Mantener los subtítulos con los controles ocultos
+Keep captions in Clear display	Mantener los subtítulos con los controles ocultos
 Keep going	Seguir
 Keep the Favorites tab	Mantener la pestaña Favoritos
 Keep the clock and status icons off the screen while TikTok is open. Swipe down from the top to peek at them.	Mantener el reloj y los iconos de estado fuera de la pantalla mientras TikTok está abierto. Desliza desde arriba para verlos.
@@ -1504,7 +1504,7 @@ Message	Mensaje
 What gets sent each day.	Lo que se envía cada día.
 Send it now	Enviar ahora
 Sends today's message right away. The daily one then waits for tomorrow.	Envía el mensaje de hoy ahora mismo. El diario espera entonces a mañana.
-Turn on Keep a streak going first	Activa primero Mantener una racha
+Turn on Keep a streak going first.	Activa primero Mantener una racha.
 Sending the message	Enviando el mensaje
 A message is already on its way	Ya hay un mensaje en camino
 Enter who to message below to start.	Escribe abajo a quién enviar para empezar.
