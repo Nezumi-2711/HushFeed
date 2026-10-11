@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import app.morphe.extension.shared.Logger;
+
 /**
  * The time at the end of TikTok's progress bar row.
  *
@@ -55,7 +57,11 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
     private long durationMs;
     private boolean hidden;
     private boolean dragging;
+    /** Whether the last answer drew the label; null before the first. */
+    @Nullable private Boolean drawn;
     private String sizedFor = "";
+
+    private static boolean reportedShape;
 
     private SeekbarTimeLabel(Context context, View frame, ViewGroup.LayoutParams frameParams) {
         super(context);
@@ -99,10 +105,16 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
     static SeekbarTimeLabel attach(LinearLayout bar) {
         SeekbarTimeLabel label = find(bar);
         if (label != null) return label;
-        if (bar.getOrientation() != LinearLayout.HORIZONTAL || bar.getChildCount() != 1) return null;
+        if (bar.getOrientation() != LinearLayout.HORIZONTAL || bar.getChildCount() != 1) {
+            refused(bar);
+            return null;
+        }
         View frame = bar.getChildAt(0);
         ViewGroup.LayoutParams original = frame.getLayoutParams();
-        if (original == null) return null;
+        if (original == null) {
+            refused(bar);
+            return null;
+        }
 
         LinearLayout.LayoutParams squeezed;
         if (original instanceof LinearLayout.LayoutParams) {
@@ -123,6 +135,26 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
         frame.setLayoutParams(squeezed);
         bar.addView(label, own);
         return label;
+    }
+
+    /** Says once a launch which bar shape was left alone, so a device log shows a new layout. */
+    private static void refused(LinearLayout bar) {
+        if (reportedShape) return;
+        reportedShape = true;
+        Logger.printInfo(() -> "Seekbar time: left a bar alone, " + shapeOf(bar));
+    }
+
+    /** The row's orientation and its children's classes, as the refusal reports them. */
+    static String shapeOf(LinearLayout bar) {
+        StringBuilder shape = new StringBuilder(
+                bar.getOrientation() == LinearLayout.HORIZONTAL ? "horizontal [" : "vertical [");
+        for (int i = 0; i < bar.getChildCount(); i++) {
+            View child = bar.getChildAt(i);
+            if (i > 0) shape.append(", ");
+            shape.append(child.getClass().getName());
+            if (child.getLayoutParams() == null) shape.append(" without layout params");
+        }
+        return shape.append(']').toString();
     }
 
     /** Takes the label out and gives the frame back the layout params TikTok gave it. */
@@ -166,9 +198,27 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
     /** Draws as the seek bar does, and not at all without a time or during a drag. */
     void follow() {
         float wanted = 0f;
-        if (!dragging && length() > 0) {
+        String why;
+        if (dragging) {
+            why = "a drag";
+        } else if (length() == 0) {
+            why = "no time yet";
+        } else {
             ProgressBar bar = seekBar();
-            if (bar != null && bar.getVisibility() == View.VISIBLE) wanted = bar.getAlpha();
+            if (bar == null) {
+                why = "no seek bar in the row";
+            } else if (bar.getVisibility() != View.VISIBLE) {
+                why = "the seek bar isn't visible";
+            } else {
+                wanted = bar.getAlpha();
+                why = "the seek bar's alpha " + wanted;
+            }
+        }
+        // The first answer is logged too, so a label that never shows still leaves a line.
+        Boolean shows = wanted > 0f;
+        if (!shows.equals(drawn)) {
+            drawn = shows;
+            Logger.printDebug(() -> "Seekbar time: " + (shows ? "shown, " : "hidden, ") + why);
         }
         if (getAlpha() != wanted) setAlpha(wanted);
     }

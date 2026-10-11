@@ -320,4 +320,16 @@ public class SeekbarTimeTest {
         assertEquals(2, crowded.getChildCount());
         assertNull(SeekbarTimeLabel.find(crowded));
     }
+
+    @Test
+    public void aRefusedBarIsDescribedByItsOrientationAndChildren() {
+        LinearLayout crowded = bar();
+        crowded.addView(new View(context));
+        assertEquals("horizontal [android.widget.FrameLayout, android.view.View]",
+                SeekbarTimeLabel.shapeOf(crowded));
+
+        LinearLayout vertical = bar();
+        vertical.setOrientation(LinearLayout.VERTICAL);
+        assertEquals("vertical [android.widget.FrameLayout]", SeekbarTimeLabel.shapeOf(vertical));
+    }
 }
