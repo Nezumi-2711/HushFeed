@@ -8,7 +8,7 @@
 
 * **TikTok:** Hushfeed-in siyahısında olmayan TikTok versiyasını patch etmək indi daha təhlükəsizdir. İrəliləyiş panelini göstərin əlavələri və şərh tərcümə düyməsi həmin versiyaya uyğun gəlmədikdə indi ayrıca kənarda qalır, ona görə patch-i dayandıra və ya yarımçıq qura bilməz.
 
-* **TikTok:** Keep captions in Clear display və Automatic Clear display sətirləri indi Clear display sözünü TikTok-un yazdığı kimi yazır, Send it now altındakı ipucu isə nöqtə ilə bitir.
+* **TikTok:** Keep captions in Clear display və Automatic Clear display sətirləri indi Clear display sözünü TikTok-un yazdığı kimi yazır.
 
 * **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, axtarışdan və ya profildən açdığınız uzun videoda irəliləyiş paneli yenidən başlığın altında durur. Əvvəllər o, müəllifin adının üstündən keçirdi (#50).
 

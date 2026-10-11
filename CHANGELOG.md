@@ -12,7 +12,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Patching a TikTok version Hushfeed doesn't list is safer. The extras of Show the progress bar and the comment translate button are now left out on their own when they don't fit that version, so they can't stop the patch or go in halfway.
 
-* **TikTok:** The Keep captions in Clear display and Automatic Clear display rows now spell Clear display the way TikTok does, and the hint under Send it now ends with a period.
+* **TikTok:** The Keep captions in Clear display and Automatic Clear display rows now spell Clear display the way TikTok does.
 
 * **TikTok:** With Hide the comment bar on opened videos on, the progress bar on a long video you open from search or a profile now sits under the caption again. Before, it drew across the creator's name (#50).
 

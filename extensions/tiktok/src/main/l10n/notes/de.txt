@@ -8,7 +8,7 @@
 
 * **TikTok:** Eine TikTok-Version zu patchen, die Hushfeed nicht aufführt, ist jetzt sicherer. Die Extras von Fortschrittsbalken anzeigen und der Übersetzen-Knopf für Kommentare werden für sich weggelassen, wenn sie nicht zu dieser Version passen, und können den Patch so weder stoppen noch nur halb eingebaut werden.
 
-* **TikTok:** Die Zeilen Keep captions in Clear display und Automatic Clear display schreiben Clear display jetzt so wie TikTok, und der Hinweis unter Send it now endet mit einem Punkt.
+* **TikTok:** Die Zeilen Keep captions in Clear display und Automatic Clear display schreiben Clear display jetzt so wie TikTok.
 
 * **TikTok:** Ist Kommentarleiste bei geöffneten Videos ausblenden an, sitzt der Fortschrittsbalken bei einem langen Video, das du aus der Suche oder einem Profil öffnest, wieder unter der Beschreibung. Vorher lief er quer über den Namen des Creators (#50).
 

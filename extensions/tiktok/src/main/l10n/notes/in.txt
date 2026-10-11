@@ -8,7 +8,7 @@
 
 * **TikTok:** Mem-patch versi TikTok yang tidak ada di daftar Hushfeed kini lebih aman. Tambahan Tampilkan bilah progres dan tombol terjemahan komentar kini dilewati sendiri-sendiri kalau tidak cocok dengan versi itu, jadi tidak bisa menghentikan patch atau terpasang setengah.
 
-* **TikTok:** Baris Keep captions in Clear display dan Automatic Clear display kini menulis Clear display seperti TikTok, dan petunjuk di bawah Send it now diakhiri dengan titik.
+* **TikTok:** Baris Keep captions in Clear display dan Automatic Clear display kini menulis Clear display seperti TikTok.
 
 * **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, bilah progres pada video panjang yang kamu buka dari pencarian atau profil kini kembali berada di bawah keterangan. Sebelumnya bilah itu menimpa nama kreator (#50).
 

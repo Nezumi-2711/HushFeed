@@ -32,7 +32,7 @@ public final class SendStreakNowPreference extends Preference implements Immedia
         setSummary(L10n.t(context, "Sends today's message right away. The daily one then waits for tomorrow."));
         setOnPreferenceClickListener(preference -> {
             if (!Settings.AUTO_STREAK.get()) {
-                Utils.showToastShort(L10n.t(context, "Turn on Keep a streak going first."));
+                Utils.showToastShort(L10n.t(context, "Turn on Keep a streak going first"));
                 return true;
             }
             Utils.showToastShort(L10n.t(context, "Sending the message"));

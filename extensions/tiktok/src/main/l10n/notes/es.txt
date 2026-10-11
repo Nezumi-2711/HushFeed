@@ -8,7 +8,7 @@
 
 * **TikTok:** Parchear una versión de TikTok que Hushfeed no incluye en su lista es más seguro. Los extras de Mostrar la barra de progreso y el botón para traducir comentarios ahora se quedan fuera por separado cuando no encajan con esa versión, así que no pueden detener el parcheo ni quedar a medias.
 
-* **TikTok:** Las filas Keep captions in Clear display y Automatic Clear display ahora escriben Clear display como lo hace TikTok, y el aviso bajo Send it now termina con punto.
+* **TikTok:** Las filas Keep captions in Clear display y Automatic Clear display ahora escriben Clear display como lo hace TikTok.
 
 * **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, la barra de progreso de un video largo que abres desde la búsqueda o un perfil vuelve a quedar debajo de la descripción. Antes se dibujaba encima del nombre del creador (#50).
 

@@ -3771,8 +3771,8 @@ public final class L10nTranslations {
                 "Taymeri söndür (TikTok-un bağlanma vaxtı: %1$s)");
         table.put("Turn on %1$s first.",
                 "Əvvəlcə %1$s seçimini yandırın.");
-        table.put("Turn on Keep a streak going first.",
-                "Əvvəlcə Seriyanı davam etdirin seçimini yandırın.");
+        table.put("Turn on Keep a streak going first",
+                "Əvvəlcə Seriyanı davam etdirin seçimini yandırın");
         table.put("Turn on overrides",
                 "Əvəzləmələri yandırın");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -7794,8 +7794,8 @@ public final class L10nTranslations {
                 "Timer ausschalten (TikTok schließt um %1$s)");
         table.put("Turn on %1$s first.",
                 "Zuerst %1$s einschalten.");
-        table.put("Turn on Keep a streak going first.",
-                "Schalte zuerst Eine Serie am Laufen halten ein.");
+        table.put("Turn on Keep a streak going first",
+                "Schalte zuerst Eine Serie am Laufen halten ein");
         table.put("Turn on overrides",
                 "Überschreibungen einschalten");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -11817,8 +11817,8 @@ public final class L10nTranslations {
                 "Apagar el temporizador (TikTok se cierra a las %1$s)");
         table.put("Turn on %1$s first.",
                 "Activa antes %1$s.");
-        table.put("Turn on Keep a streak going first.",
-                "Activa primero Mantener una racha.");
+        table.put("Turn on Keep a streak going first",
+                "Activa primero Mantener una racha");
         table.put("Turn on overrides",
                 "Activar las sustituciones");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -15840,8 +15840,8 @@ public final class L10nTranslations {
                 "Matikan pengatur waktu (TikTok tutup pukul %1$s)");
         table.put("Turn on %1$s first.",
                 "Nyalakan %1$s dulu.");
-        table.put("Turn on Keep a streak going first.",
-                "Nyalakan Pertahankan rentetan dulu.");
+        table.put("Turn on Keep a streak going first",
+                "Nyalakan Pertahankan rentetan dulu");
         table.put("Turn on overrides",
                 "Nyalakan penimpaan");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -19863,8 +19863,8 @@ public final class L10nTranslations {
                 "Spegni il timer (TikTok si chiude alle %1$s)");
         table.put("Turn on %1$s first.",
                 "Attiva prima %1$s.");
-        table.put("Turn on Keep a streak going first.",
-                "Attiva prima \"Mantieni viva una serie\".");
+        table.put("Turn on Keep a streak going first",
+                "Attiva prima \"Mantieni viva una serie\"");
         table.put("Turn on overrides",
                 "Attiva le sovrascritture");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -23886,8 +23886,8 @@ public final class L10nTranslations {
                 "Desligar o timer (o TikTok fecha às %1$s)");
         table.put("Turn on %1$s first.",
                 "Ative %1$s primeiro.");
-        table.put("Turn on Keep a streak going first.",
-                "Ative primeiro Manter uma sequência.");
+        table.put("Turn on Keep a streak going first",
+                "Ative primeiro Manter uma sequência");
         table.put("Turn on overrides",
                 "Ativar as substituições");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -28239,8 +28239,8 @@ public final class L10nTranslations {
                 "Выключить таймер (TikTok закроется в %1$s)");
         table.put("Turn on %1$s first.",
                 "Сначала включите %1$s.");
-        table.put("Turn on Keep a streak going first.",
-                "Сначала включите «Поддерживать серию».");
+        table.put("Turn on Keep a streak going first",
+                "Сначала включите «Поддерживать серию»");
         table.put("Turn on overrides",
                 "Включить переопределения");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",
@@ -32280,8 +32280,8 @@ public final class L10nTranslations {
                 "Zamanlayıcıyı kapat (TikTok'un kapanacağı saat: %1$s)");
         table.put("Turn on %1$s first.",
                 "Önce %1$s ayarını aç.");
-        table.put("Turn on Keep a streak going first.",
-                "Önce Bir seriyi sürdür seçeneğini aç.");
+        table.put("Turn on Keep a streak going first",
+                "Önce Bir seriyi sürdür seçeneğini aç");
         table.put("Turn on overrides",
                 "Geçersiz kılmaları aç");
         table.put("Turn the music disc at the bottom of the right column while a video plays, the way TikTok used to.",

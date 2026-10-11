@@ -8,7 +8,7 @@
 
 * **TikTok:** Applicare le patch a una versione di TikTok che Hushfeed non elenca è più sicuro. Gli extra di Mostra la barra di avanzamento e il pulsante per tradurre i commenti ora vengono esclusi da soli quando non si adattano a quella versione, così non possono fermare la patch né restare a metà.
 
-* **TikTok:** Le righe Keep captions in Clear display e Automatic Clear display ora scrivono Clear display come fa TikTok, e il suggerimento sotto Send it now finisce con un punto.
+* **TikTok:** Le righe Keep captions in Clear display e Automatic Clear display ora scrivono Clear display come fa TikTok.
 
 * **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, la barra di avanzamento di un video lungo aperto dalla ricerca o da un profilo torna sotto la descrizione. Prima passava sopra il nome del creator (#50).
 
