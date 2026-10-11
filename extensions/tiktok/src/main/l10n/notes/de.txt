@@ -1,5 +1,9 @@
 ## Unreleased
 
+* **TikTok:** Eine Story lässt sich jetzt über ihr Teilen-Menü speichern. Schalte unter Downloads Story über das Teilen-Menü speichern ein, dann erscheint dort ein Speichern-Knopf. Er speichert die Kopie ohne Wasserzeichen, wenn TikTok eine hat, und sagt dir Bescheid, wenn es nur die Kopie mit Wasserzeichen gibt (#93).
+
+* **TikTok:** Fortschrittsbalken anzeigen hat unter Wiedergabe einen neuen Schalter, Spulleiste in Video-Storys, der zuerst aus ist. Er legt eine dünne Linie unten über eine Video-Story, die du ziehen kannst, um zurück- oder vorzuspulen, und zeigt beim Ziehen die Zeit an. Tippen wechselt weiterhin zwischen Storys (#72).
+
 * **TikTok:** Im Hintergrund weiterspielen kann ein Video jetzt von vorn starten, wenn es endet, damit du nicht jedes Mal in der Benachrichtigung auf Abspielen tippen musst. Schalte unter Wiedergabe Im Hintergrund wiederholen ein. Ein Anruf oder der Ton einer anderen App hält es weiterhin an (#99).
 
 * **TikTok:** Die Musikscheibe kann sich wieder drehen. TikTok 47.1.4 hält sie von Haus aus still, deshalb gibt es in der Feed-Ansicht jetzt Musikscheibe drehen lassen, und Musikscheibe stillhalten, falls sie sich nie drehen soll. Beide brauchen einen Neustart (#68).

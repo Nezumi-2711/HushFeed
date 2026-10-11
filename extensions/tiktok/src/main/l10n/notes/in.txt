@@ -1,5 +1,9 @@
 ## Unreleased
 
+* **TikTok:** Story sekarang bisa disimpan dari menu bagikannya. Aktifkan Simpan Story dari menu bagikan di Unduhan, lalu tombol simpan muncul di sana. Tombol itu menyimpan salinan tanpa watermark kalau TikTok punya, dan memberi tahu kalau yang ada hanya salinan dengan watermark (#93).
+
+* **TikTok:** Tampilkan bilah progres punya sakelar baru di Pemutaran, Bilah geser di story video, yang awalnya mati. Sakelar ini menaruh garis tipis di bagian bawah story video yang bisa kamu geser untuk mundur atau maju, dengan waktu yang tampil saat kamu menggeser. Mengetuk tetap berpindah antar story (#72).
+
 * **TikTok:** Tetap putar di latar belakang sekarang bisa memulai ulang video saat selesai, jadi kamu tidak perlu menekan Putar di notifikasi setiap kali. Aktifkan Putar ulang di latar belakang di Pemutaran. Panggilan atau suara aplikasi lain tetap menjedanya (#99).
 
 * **TikTok:** Piringan musik bisa berputar lagi. TikTok 47.1.4 membuatnya diam sejak awal, jadi Layar feed sekarang punya Putar piringan musik, dan Biarkan piringan musik diam kalau kamu tidak ingin piringan itu berputar sama sekali. Keduanya perlu mulai ulang (#68).

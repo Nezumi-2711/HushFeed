@@ -1,5 +1,9 @@
 ## Unreleased
 
+* **TikTok:** Bir hikaye artık paylaşım menüsünden kaydedilebiliyor. İndirilenler altında Hikayeyi paylaşım menüsünden kaydet seçeneğini açın, orada bir kaydet düğmesi çıkar. TikTok'ta filigransız kopya varsa onu kaydeder, yalnızca filigranlı kopya varsa bunu size söyler (#93).
+
+* **TikTok:** İlerleme çubuğunu göster seçeneğinin Oynatma altında yeni bir anahtarı var, Video hikayelerde sarma çubuğu, başta kapalı. Bir video hikayenin altına geri dönmek ya da ileri atlamak için sürükleyebileceğiniz ince bir çizgi koyar ve sürüklerken süreyi gösterir. Dokunmak yine hikayeler arasında geçiş yapar (#72).
+
 * **TikTok:** Arka planda oynatmaya devam et artık bir video bittiğinde onu baştan başlatabiliyor, böylece her seferinde bildirimdeki Oynat düğmesine basmanız gerekmiyor. Oynatma altında Arka planda yeniden oynat seçeneğini açın. Bir arama ya da başka bir uygulamanın sesi onu yine duraklatır (#99).
 
 * **TikTok:** Müzik diski yeniden dönebiliyor. TikTok 47.1.4 onu baştan sabit tutuyor, bu yüzden Akış ekranı artık Müzik diskini döndür seçeneğine sahip, hiç dönmesini istemiyorsanız Müzik diskini sabit tut da var. İkisi de yeniden başlatma gerektiriyor (#68).

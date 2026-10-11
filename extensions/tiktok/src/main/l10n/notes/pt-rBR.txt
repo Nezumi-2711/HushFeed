@@ -1,5 +1,9 @@
 ## Unreleased
 
+* **TikTok:** Agora dá para salvar um story pela folha de compartilhamento. Ative Salvar um story pela folha de compartilhamento em Downloads e um botão de salvar aparece ali. Ele salva a cópia sem marca d'água quando o TikTok tem uma, e avisa quando só existe a cópia com marca d'água (#93).
+
+* **TikTok:** Mostrar a barra de progresso tem um novo botão em Reprodução, Barra de reprodução nos stories em vídeo, que começa desligado. Ele coloca uma linha fina na parte de baixo de um story em vídeo que você pode arrastar para voltar ou avançar, com o tempo aparecendo enquanto você arrasta. Tocar ainda passa de um story para outro (#72).
+
 * **TikTok:** Continuar tocando em segundo plano agora pode recomeçar um vídeo quando ele termina, então você não precisa tocar em Reproduzir na notificação toda vez. Ative Repetir em segundo plano em Reprodução. Uma ligação ou o som de outro app ainda pausa o vídeo (#99).
 
 * **TikTok:** O disco de música pode girar de novo. O TikTok 47.1.4 já vem com ele parado, então Tela do feed agora tem Girar o disco de música, e Manter o disco de música parado se você preferir que ele nunca gire. Os dois precisam reiniciar o app (#68).

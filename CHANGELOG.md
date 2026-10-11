@@ -4,6 +4,10 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A story can now be saved from its share sheet. Turn on Save a story from its share sheet under Downloads and a save button shows up there. It saves the copy without the watermark when TikTok has one, and tells you when only the watermarked copy is there (#93).
+
+* **TikTok:** Show the progress bar has a new switch under Playback, Seek bar on video stories, which starts off. It puts a thin line along the bottom of a video story that you can drag to go back or skip ahead, with the time shown while you drag. Tapping still moves between stories (#72).
+
 * **TikTok:** Keep playing in the background can now start a video over when it ends, so you don't have to press Play in the notification each time. Turn on Replay in the background under Playback. A call or another app's sound still pauses it (#99).
 
 * **TikTok:** The music disc can spin again. TikTok 47.1.4 keeps it still out of the box, so Feed screen now has Spin the music disc, and Keep the music disc still if you'd rather it never turns. Both need a restart (#68).
