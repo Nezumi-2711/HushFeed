@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Derleme ayrıntıları, Kanca durumu, Lisanslar veya Yenilikler üzerine hızlı ikinci dokunuş artık aynı pencereyi üst üste iki kez açmıyor.
+
+* **TikTok:** Videoyu beğen, Çift dokunma ya da Uzun basma eylemi olarak, artık her akışta izlediğin videoda kalıyor. O videoda basılacak bir kalp yoksa yanındaki videoyu beğenmek yerine bunu sana söylüyor.
+
+* **TikTok:** Hushfeed eylemlerinden birine ayarlanan Çift dokunma artık her dokunuşta onu bir kez çalıştırıyor, TikTok aynı dokunuşu kendi iki işleyicisine iletse bile.
+
+* **TikTok:** Hushfeed'in listesinde olmayan bir TikTok sürümüne yama yapmak artık daha güvenli. İlerleme çubuğunu göster'in ekleri ve yorum çevirme düğmesi o sürüme uymadığında artık tek başına dışarıda bırakılıyor, böylece yamayı durduramıyor ya da yarım kalamıyor.
+
 * **TikTok:** Keep captions in Clear display ve Automatic Clear display satırları artık Clear display'i TikTok'un yazdığı gibi yazıyor, Send it now altındaki ipucu da nokta ile bitiyor.
 
 * **TikTok:** Açılan videolarda yorum çubuğunu gizle açıkken, aramadan ya da bir profilden açtığın uzun bir videoda ilerleme çubuğu yeniden açıklamanın altında duruyor. Önceden içerik üreticisinin adının üstünden geçiyordu (#50).

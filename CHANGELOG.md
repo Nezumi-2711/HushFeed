@@ -4,6 +4,14 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A quick second tap on Build details, Hook status, Licenses or What's new no longer opens the same window twice, one on top of the other.
+
+* **TikTok:** Like the video, as a Double tap or Long press action, now stays with the video you're on in every kind of feed. Where that video has no heart to press, it tells you instead of liking the one next to it.
+
+* **TikTok:** A Double tap set to one of Hushfeed's actions now runs it once per tap, even if TikTok passes the same tap to two of its handlers.
+
+* **TikTok:** Patching a TikTok version Hushfeed doesn't list is safer. The extras of Show the progress bar and the comment translate button are now left out on their own when they don't fit that version, so they can't stop the patch or go in halfway.
+
 * **TikTok:** The Keep captions in Clear display and Automatic Clear display rows now spell Clear display the way TikTok does, and the hint under Send it now ends with a period.
 
 * **TikTok:** With Hide the comment bar on opened videos on, the progress bar on a long video you open from search or a profile now sits under the caption again. Before, it drew across the creator's name (#50).

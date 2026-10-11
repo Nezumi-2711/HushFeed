@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Um segundo toque rápido em Detalhes da compilação, Verificação de recursos, Licenças ou Novidades não abre mais a mesma janela duas vezes, uma em cima da outra.
+
+* **TikTok:** Curtir o vídeo, como ação de Toque duplo ou Toque longo, agora fica no vídeo que você está vendo em qualquer tipo de feed. Se esse vídeo não tiver coração para tocar, ele avisa em vez de curtir o vídeo ao lado.
+
+* **TikTok:** Um Toque duplo definido para uma ação do Hushfeed agora a executa uma vez por toque, mesmo que o TikTok passe o mesmo toque para dois dos seus tratadores.
+
+* **TikTok:** Aplicar o patch numa versão do TikTok que o Hushfeed não lista ficou mais seguro. Os extras de Mostrar a barra de progresso e o botão de traduzir comentários agora ficam de fora sozinhos quando não se encaixam nessa versão, então não podem parar o patch nem entrar pela metade.
+
 * **TikTok:** As linhas Keep captions in Clear display e Automatic Clear display agora escrevem Clear display do jeito que o TikTok escreve, e a dica embaixo de Send it now termina com ponto final.
 
 * **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, a barra de progresso de um vídeo longo que você abre pela busca ou por um perfil volta a ficar embaixo da legenda. Antes ela passava por cima do nome do criador (#50).

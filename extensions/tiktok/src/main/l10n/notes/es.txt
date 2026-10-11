@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Un segundo toque rápido en Detalles de la compilación, Comprobación de funciones, Licencias o Novedades ya no abre la misma ventana dos veces, una encima de otra.
+
+* **TikTok:** Dar me gusta al vídeo, como acción de Doble toque o Pulsación larga, ahora se queda en el vídeo que estás viendo en cualquier tipo de feed. Si ese vídeo no tiene corazón que pulsar, te lo dice en vez de dar me gusta al de al lado.
+
+* **TikTok:** Un Doble toque asignado a una acción de Hushfeed ahora la ejecuta una vez por toque, aunque TikTok pase el mismo toque a dos de sus controladores.
+
+* **TikTok:** Parchear una versión de TikTok que Hushfeed no incluye en su lista es más seguro. Los extras de Mostrar la barra de progreso y el botón para traducir comentarios ahora se quedan fuera por separado cuando no encajan con esa versión, así que no pueden detener el parcheo ni quedar a medias.
+
 * **TikTok:** Las filas Keep captions in Clear display y Automatic Clear display ahora escriben Clear display como lo hace TikTok, y el aviso bajo Send it now termina con punto.
 
 * **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, la barra de progreso de un video largo que abres desde la búsqueda o un perfil vuelve a quedar debajo de la descripción. Antes se dibujaba encima del nombre del creador (#50).

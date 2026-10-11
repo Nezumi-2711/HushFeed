@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Build təfərrüatları, Qoşulma statusu, Lisenziyalar və ya Yeniliklər üzərinə tez ikinci toxunuş artıq eyni pəncərəni bir-birinin üstündə iki dəfə açmır.
+
+* **TikTok:** Videonu bəyənin, İki dəfə toxunma və ya Uzun basma əməli kimi, indi hər növ lentdə baxdığınız videoda qalır. Həmin videoda basılacaq ürək yoxdursa, yanındakı videonu bəyənmək əvəzinə bunu sizə deyir.
+
+* **TikTok:** Hushfeed əməllərindən birinə qoyulmuş İki dəfə toxunma indi hər toxunuşda onu bir dəfə işlədir, hətta TikTok eyni toxunuşu öz iki işləyicisinə ötürsə belə.
+
+* **TikTok:** Hushfeed-in siyahısında olmayan TikTok versiyasını patch etmək indi daha təhlükəsizdir. İrəliləyiş panelini göstərin əlavələri və şərh tərcümə düyməsi həmin versiyaya uyğun gəlmədikdə indi ayrıca kənarda qalır, ona görə patch-i dayandıra və ya yarımçıq qura bilməz.
+
 * **TikTok:** Keep captions in Clear display və Automatic Clear display sətirləri indi Clear display sözünü TikTok-un yazdığı kimi yazır, Send it now altındakı ipucu isə nöqtə ilə bitir.
 
 * **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, axtarışdan və ya profildən açdığınız uzun videoda irəliləyiş paneli yenidən başlığın altında durur. Əvvəllər o, müəllifin adının üstündən keçirdi (#50).

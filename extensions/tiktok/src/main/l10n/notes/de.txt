@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Ein schnelles zweites Tippen auf Build-Informationen, Funktionsprüfung, Lizenzen oder Neu in Hushfeed öffnet dasselbe Fenster nicht mehr doppelt übereinander.
+
+* **TikTok:** Video liken als Aktion für Doppeltippen oder Langes Drücken bleibt jetzt in jedem Feed bei dem Video, das du gerade siehst. Hat dieses Video kein Herz zum Drücken, sagt es dir das, statt das Video daneben zu liken.
+
+* **TikTok:** Ist Doppeltippen auf eine Hushfeed-Aktion gestellt, läuft sie jetzt einmal pro Tippen, auch wenn TikTok dasselbe Tippen an zwei seiner Handler weitergibt.
+
+* **TikTok:** Eine TikTok-Version zu patchen, die Hushfeed nicht aufführt, ist jetzt sicherer. Die Extras von Fortschrittsbalken anzeigen und der Übersetzen-Knopf für Kommentare werden für sich weggelassen, wenn sie nicht zu dieser Version passen, und können den Patch so weder stoppen noch nur halb eingebaut werden.
+
 * **TikTok:** Die Zeilen Keep captions in Clear display und Automatic Clear display schreiben Clear display jetzt so wie TikTok, und der Hinweis unter Send it now endet mit einem Punkt.
 
 * **TikTok:** Ist Kommentarleiste bei geöffneten Videos ausblenden an, sitzt der Fortschrittsbalken bei einem langen Video, das du aus der Suche oder einem Profil öffnest, wieder unter der Beschreibung. Vorher lief er quer über den Namen des Creators (#50).
