@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Detail build sekarang juga menyebut patch yang hanya mengubah sumber daya TikTok, seperti Change app name, Custom launcher icon, dan Trust user certificates. Yang dicantumkan patch-nya, tidak pernah nama atau gambar yang kamu pilih di opsinya.
+
 * **TikTok:** Dengan Catat diagnostik aktif, log sekarang mencatat sekali per video berapa gambar pratinjau bilah progres yang dikirim TikTok bersamanya. Kalau pratinjau tidak muncul saat bilah digeser, ekspor diagnostik menunjukkan apakah video itu membawa gambar pratinjau (#140).
 
 * **TikTok:** Detail build dan ekspor log lengkap kini mencantumkan setiap patch di build kamu yang mengubah kode TikTok, dengan nama singkat, termasuk yang tanpa sakelar seperti Comment send fix dan Network request report.

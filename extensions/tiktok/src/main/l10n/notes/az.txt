@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Build təfərrüatları indi yalnız TikTok-un resurslarını dəyişən yamaları da adlandırır, məsələn Change app name, Custom launcher icon və Trust user certificates. Yamanın özü göstərilir, onun seçimlərində seçdiyiniz ad və ya şəkil heç vaxt göstərilmir.
+
 * **TikTok:** Diaqnostikanı qeyd edin açıq olanda qeyd indi hər video üçün bir dəfə TikTok-un onunla irəliləmə çubuğu üçün neçə önizləmə şəkli göndərdiyini yazır. Çubuğu sürüşdürəndə önizləmə görünmürsə, diaqnostika ixracı videonun belə şəkillərlə gəlib-gəlmədiyini göstərir (#140).
 
 * **TikTok:** Build təfərrüatları və tam jurnal ixracı indi quruluşunda TikTok-un kodunu dəyişən hər yamağı qısa adı ilə sadalayır, Comment send fix və Network request report kimi açarı olmayanlar da daxil.

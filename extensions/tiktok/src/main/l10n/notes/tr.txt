@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Derleme ayrıntıları artık yalnızca TikTok'un kaynaklarını değiştiren yamaları da adlandırıyor, örneğin Change app name, Custom launcher icon ve Trust user certificates. Yamanın kendisi listelenir, seçeneklerinde seçtiğin ad ya da resim asla listelenmez.
+
 * **TikTok:** Tanılamayı günlüğe kaydet açıkken günlük artık her video için bir kez TikTok'un onunla birlikte ilerleme çubuğu için kaç önizleme resmi gönderdiğini yazıyor. Çubuğu sürüklerken önizleme görünmüyorsa, tanılama dışa aktarımı videonun hiç önizleme resmiyle gelip gelmediğini gösterir (#140).
 
 * **TikTok:** Derleme ayrıntıları ve tam günlük dışa aktarımı artık derlemende TikTok'un kodunu değiştiren her yamayı kısa bir adla listeliyor, Comment send fix ve Network request report gibi anahtarı olmayanlar da dahil.

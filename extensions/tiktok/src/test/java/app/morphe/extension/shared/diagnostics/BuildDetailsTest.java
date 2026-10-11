@@ -33,7 +33,34 @@ public class BuildDetailsTest {
         assertTrue(report.contains("patch_time.tool_creation: absent\n"));
         assertTrue(report.contains("patch_time_selected.tool_live_extras: false\n"));
         assertTrue(report.contains("patch_time.version_code_override: 2147483647\n"));
+        assertTrue(report.contains("patch_time.resource_patches: changeAppName,customLauncherIcon\n"));
         assertEquals(report, BuildDetails.report(record));
+    }
+
+    @Test public void aRecordFromBeforeResourcePatchesStaysAvailableAndSaysUnknownForThem() throws Exception {
+        String legacy = metadata().replace("resource_patches=changeAppName,customLauncherIcon\n", "");
+        String report = BuildDetails.report(legacy);
+        assertTrue(report, report.contains("build_metadata: available\n"));
+        assertTrue(report.contains("patch_time.resource_patches: unknown\n"));
+        assertTrue(report.contains("patch_time.version_code_override: 2147483647\n"));
+        // One line short is the old shape only when it ends where the old record ended.
+        assertUnknown(legacy.stripTrailing());
+        assertUnknown(legacy.replace("version_code_override=2147483647\n", ""));
+    }
+
+    @Test public void resourcePatchNamesMustBeSortedUniqueAndPlain() throws Exception {
+        String listed = "resource_patches=changeAppName,customLauncherIcon";
+        assertTrue(BuildDetails.report(metadata().replace(listed, "resource_patches=none"))
+                .contains("patch_time.resource_patches: none\n"));
+        for (String value : new String[]{"customLauncherIcon,changeAppName", "changeAppName,changeAppName",
+                "changeAppName,", "ChangeAppName", "none,changeAppName", "change app name", "", "sessionid=RAW_SENTINEL"}) {
+            String changed = metadata().replace(listed, "resource_patches=" + value);
+            assertUnknown(changed);
+            assertFalse(BuildDetails.report(changed).contains("RAW_SENTINEL"));
+        }
+        StringBuilder many = new StringBuilder("patch00");
+        for (int index = 1; index <= 32; index++) many.append(String.format(",patch%02d", index));
+        assertUnknown(metadata().replace(listed, "resource_patches=" + many));
     }
 
     @Test public void legacyMissingOrIncompleteRecordsSayUnknownWithoutGuessing() throws Exception {
@@ -52,7 +79,8 @@ public class BuildDetailsTest {
         for (String field : new String[]{"bundle_version", "source_commit", "source_clean", "source_start",
                 "source_end", "target_package", "target_version", "target_version_code", "patcher_bundle_compat",
                 "patcher_applying_engine", "amoled", "amoled_color", "language_packs", "native_locales_retained",
-                "tool_p2p_relay", "tool_core_assets", "tool_creation", "tool_live_extras", "version_code_override"}) {
+                "tool_p2p_relay", "tool_core_assets", "tool_creation", "tool_live_extras", "version_code_override",
+                "resource_patches"}) {
             String changed = record.replaceFirst("(?m)^" + field + "=.*$", field + "=sessionid=RAW_SENTINEL");
             assertUnknown(changed);
             assertFalse(BuildDetails.report(changed).contains("RAW_SENTINEL"));

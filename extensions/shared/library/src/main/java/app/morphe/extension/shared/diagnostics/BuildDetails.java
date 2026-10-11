@@ -28,8 +28,12 @@ public final class BuildDetails {
             "schema", "bundle_version", "source_commit", "source_clean", "source_start", "source_end",
             "target_package", "target_version", "target_version_code", "patcher_bundle_compat",
             "patcher_applying_engine", "amoled", "amoled_color", "language_packs", "native_locales_retained",
-            "tool_p2p_relay", "tool_core_assets", "tool_creation", "tool_live_extras", "version_code_override"
+            "tool_p2p_relay", "tool_core_assets", "tool_creation", "tool_live_extras", "version_code_override",
+            "resource_patches"
     };
+    /** Records written before resource_patches end one line earlier; that key then says unknown. */
+    private static final int LEGACY_KEYS = KEYS.length - 1;
+    private static final int MAX_RESOURCE_PATCHES = 32;
     private static final String VERSION = "[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?";
     private static final Set<String> LOCALES = new HashSet<>(Arrays.asList((
             "af ar az bg bn ca ceb cs da de el en es et fa fi fil fr ga gu he hi hr hu id in is it iw ja jv "
@@ -102,7 +106,7 @@ public final class BuildDetails {
                         .append('\n');
             }
             text.append(choice || key.equals("amoled_color") || key.equals("native_locales_retained")
-                    ? "patch_time." : "").append(key).append(": ").append(value).append('\n');
+                    || key.equals("resource_patches") ? "patch_time." : "").append(key).append(": ").append(value).append('\n');
         }
         List<String> switches = registeredSwitches;
         text.append("registered_switches_count: ").append(switches == null ? "unknown" : String.valueOf(switches.size()))
@@ -126,12 +130,14 @@ public final class BuildDetails {
         Map<String, String> facts = new LinkedHashMap<>();
         if (metadata != null && metadata.length() <= MAX_BYTES) {
             String[] lines = metadata.split("\n", -1);
-            if (lines.length == KEYS.length + 1 && lines[KEYS.length].isEmpty()) {
-                for (int index = 0; index < KEYS.length; index++) {
+            int count = lines.length - 1;
+            if ((count == KEYS.length || count == LEGACY_KEYS) && lines[count].isEmpty()) {
+                for (int index = 0; index < count; index++) {
                     String prefix = KEYS[index] + "=";
                     if (!lines[index].startsWith(prefix)) break;
                     facts.put(KEYS[index], lines[index].substring(prefix.length()));
                 }
+                if (count == LEGACY_KEYS && facts.size() == LEGACY_KEYS) facts.put("resource_patches", "unknown");
             }
         }
         if (facts.size() == KEYS.length && valid(facts)) return Collections.unmodifiableMap(facts);
@@ -170,7 +176,21 @@ public final class BuildDetails {
         for (String key : new String[]{"tool_p2p_relay", "tool_core_assets", "tool_creation", "tool_live_extras"}) {
             if (!oneOf(facts.get(key), "unknown", "not_selected", "unverified", "absent", "stripped", "already_stripped")) return false;
         }
-        return oneOf(facts.get("version_code_override"), "unknown", "not_selected", "unverified", "2147483647");
+        if (!oneOf(facts.get("version_code_override"), "unknown", "not_selected", "unverified", "2147483647")) return false;
+        return validResourcePatches(facts.get("resource_patches"));
+    }
+
+    /** {@code unknown}, {@code none}, or patch names in letters and digits, sorted and unique. */
+    private static boolean validResourcePatches(String value) {
+        if (oneOf(value, "unknown", "none")) return true;
+        List<String> names = Arrays.asList(value.split(",", -1));
+        if (names.size() > MAX_RESOURCE_PATCHES) return false;
+        for (String name : names) {
+            if (!name.matches("[a-z][A-Za-z0-9]{0,63}")) return false;
+        }
+        List<String> sorted = new ArrayList<>(new HashSet<>(names));
+        Collections.sort(sorted);
+        return names.equals(sorted);
     }
 
     private static boolean validTarget(Map<String, String> facts) {

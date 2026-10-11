@@ -38,6 +38,11 @@ public class RuntimePatchListTest {
     private static final Pattern PATCH_NAME = Pattern.compile("\\bname = \"([^\"]+)\"");
     private static final Pattern ANY_REGISTRATION =
             Pattern.compile("SettingsStatus;->|SETTINGS_STATUS->enable|registerForBuildDetails\\(\"");
+    /** A resource patch has its own choice field, or adds its name to resource_patches. */
+    private static final Pattern RESOURCE_RECORD =
+            Pattern.compile("buildChoicePatch\\(BuildChoice\\.|BuildDetails\\.applied\\(");
+    private static final Pattern RESOURCE_APPLIED = Pattern.compile(
+            "(?m)^([ \\t]*)BuildDetails\\.applied\\(get\\(BUILD_DETAILS_ASSET\\), \"([A-Za-z0-9]+)\"\\)");
 
     @Test
     public void registeredNamesEveryRaisedSwitchAndNothingElse() throws Exception {
@@ -70,8 +75,41 @@ public class RuntimePatchListTest {
     public void everyPatchThatChangesTikToksCodeRegisters() throws Exception {
         Set<String> silent = new TreeSet<>();
         for (Path file : patchSources()) silent.addAll(silentPatches(read(file)));
-        assertEquals("a named code patch that never registers is missing from Build details",
+        assertEquals("a named patch that never records itself is missing from Build details",
                 Collections.emptySet(), silent);
+    }
+
+    @Test
+    public void aResourcePatchCountsOnlyWithItsChoiceOrItsName() {
+        String quiet = "val quietPatch = resourcePatch(\n    name = \"Quiet\",\n) {\n    execute {\n    }\n}\n";
+        assertEquals(Collections.singleton("Quiet"), silentPatches(quiet));
+        // A bytecode registration doesn't stand in for a resource patch's record.
+        assertEquals(Collections.singleton("Quiet"), silentPatches(quiet.replace("    execute {\n",
+                "    execute {\n        registerForBuildDetails(\"enableQuiet\")\n")));
+        assertEquals(Collections.emptySet(), silentPatches(quiet.replace("    execute {\n",
+                "    execute {\n        BuildDetails.applied(get(BUILD_DETAILS_ASSET), \"quiet\")\n")));
+        assertEquals(Collections.emptySet(), silentPatches(quiet.replace(") {\n",
+                ") {\n    dependsOn(buildChoicePatch(BuildChoice.AMOLED))\n")));
+    }
+
+    @Test
+    public void everyResourcePatchNamesItselfAndRecordsLast() throws Exception {
+        Set<String> applied = new TreeSet<>();
+        for (Path file : patchSources()) {
+            String source = read(file);
+            Matcher call = RESOURCE_APPLIED.matcher(source);
+            while (call.find()) {
+                String name = call.group(2);
+                assertTrue(file + " records " + name + " for its own patch",
+                        source.contains("val " + name + "Patch = resourcePatch(")
+                                || source.contains("val " + name + "Patch = rawResourcePatch("));
+                assertTrue(file + " already records " + name, applied.add(name));
+                assertTrue(file + " records " + name + " as the last statement of execute, at its indent",
+                        call.group(1).equals("        ") && source.startsWith(END_OF_EXECUTE, call.end()));
+            }
+        }
+        assertEquals(new TreeSet<>(Arrays.asList("changeAppName", "customLauncherIcon", "trustUserCertificates")),
+                applied);
     }
 
     @Test
@@ -89,7 +127,10 @@ public class RuntimePatchListTest {
         assertEquals(Collections.singleton("Quiet"), silentPatches(source));
     }
 
-    /** Named bytecode patches in one Kotlin source whose own declaration never registers a switch. */
+    /**
+     * Named patches in one Kotlin source whose own declaration never records itself: a bytecode
+     * patch registers a switch, a resource patch records its choice or its name.
+     */
     private static Set<String> silentPatches(String source) {
         Matcher start = PATCH_START.matcher(source);
         List<Integer> starts = new ArrayList<>();
@@ -100,14 +141,14 @@ public class RuntimePatchListTest {
         }
         Set<String> silent = new TreeSet<>();
         for (int index = 0; index < starts.size(); index++) {
-            if (!kinds.get(index).equals("bytecodePatch")) continue;
+            Pattern record = kinds.get(index).equals("bytecodePatch") ? ANY_REGISTRATION : RESOURCE_RECORD;
             int end = index + 1 < starts.size() ? starts.get(index + 1) : source.length();
             int close = source.indexOf(END_OF_PATCH, starts.get(index));
             if (close >= 0) end = Math.min(end, close + END_OF_PATCH.length());
             String block = source.substring(starts.get(index), end);
             Matcher name = PATCH_NAME.matcher(block.substring(0, Math.min(400, block.length())));
             // An unnamed patch is a dependency another one pulls in, never a Manager row.
-            if (name.find() && !ANY_REGISTRATION.matcher(block).find()) silent.add(name.group(1));
+            if (name.find() && !record.matcher(block).find()) silent.add(name.group(1));
         }
         return silent;
     }
