@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Fade the video controls now also fades the progress bar on a paused video, the Following tab's stories pill, and on a video opened from search its top search bar, Full screen button and Add comment bar. Before, those stayed at full strength (#84).
+
 * **TikTok:** A story can now be saved from its share sheet. Turn on Save a story from its share sheet under Downloads and a save button shows up there. It saves the copy without the watermark when TikTok has one, and tells you when only the watermarked copy is there (#93).
 
 * **TikTok:** Show the progress bar has a new switch under Playback, Seek bar on video stories, which starts off. It puts a thin line along the bottom of a video story that you can drag to go back or skip ahead, with the time shown while you drag. Tapping still moves between stories (#72).

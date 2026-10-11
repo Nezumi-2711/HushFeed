@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Videosteuerung ausblenden lassen blendet jetzt auch den Fortschrittsbalken eines pausierten Videos, die Story-Pille im Tab Folge ich und bei einem aus der Suche geöffneten Video die Suchleiste oben, den Vollbild-Knopf und die Kommentarleiste aus. Vorher blieben sie voll sichtbar (#84).
+
 * **TikTok:** Eine Story lässt sich jetzt über ihr Teilen-Menü speichern. Schalte unter Downloads Story über das Teilen-Menü speichern ein, dann erscheint dort ein Speichern-Knopf. Er speichert die Kopie ohne Wasserzeichen, wenn TikTok eine hat, und sagt dir Bescheid, wenn es nur die Kopie mit Wasserzeichen gibt (#93).
 
 * **TikTok:** Fortschrittsbalken anzeigen hat unter Wiedergabe einen neuen Schalter, Spulleiste in Video-Storys, der zuerst aus ist. Er legt eine dünne Linie unten über eine Video-Story, die du ziehen kannst, um zurück- oder vorzuspulen, und zeigt beim Ziehen die Zeit an. Tippen wechselt weiterhin zwischen Storys (#72).

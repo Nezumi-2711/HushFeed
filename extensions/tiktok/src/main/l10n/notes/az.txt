@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Video idarəetmələrini solğunlaşdır indi dayandırılmış videoda irəliləyiş panelini, İzlənilənlər bölməsindəki hekayələr düyməsini, axtarışdan açılan videoda isə yuxarıdakı axtarış panelini, Tam ekran düyməsini və Şərh əlavə et panelini də solğunlaşdırır. Əvvəllər bunlar tam parlaqlıqda qalırdı (#84).
+
 * **TikTok:** Hekayəni indi paylaşma vərəqindən saxlamaq olar. Endirmələr bölməsində Hekayəni paylaşma vərəqindən saxlayın seçimini yandırın, orada saxla düyməsi görünəcək. TikTok-da su nişanı olmayan nüsxə varsa onu saxlayır, yalnız su nişanlı nüsxə olduqda isə bunu bildirir (#93).
 
 * **TikTok:** İrəliləyiş panelini göstərin seçiminin Oxutma bölməsində yeni açarı var: Video hekayələrdə irəli-geri çəkmə zolağı, əvvəlcə söndürülüdür. O, video hekayənin altına nazik bir xətt qoyur, onu çəkərək geri qayıda və ya irəli keçə bilərsiniz, çəkərkən vaxt göstərilir. Toxunmaq yenə hekayələr arasında keçid edir (#72).

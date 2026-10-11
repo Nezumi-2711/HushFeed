@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Video kontrollerini soluklaştır artık duraklatılmış bir videodaki ilerleme çubuğunu, Takip edilenler sekmesindeki hikaye düğmesini ve aramadan açılan bir videoda üstteki arama çubuğunu, Tam ekran düğmesini ve Yorum ekle çubuğunu da soluklaştırıyor. Önceden bunlar tam parlaklıkta kalıyordu (#84).
+
 * **TikTok:** Bir hikaye artık paylaşım menüsünden kaydedilebiliyor. İndirilenler altında Hikayeyi paylaşım menüsünden kaydet seçeneğini açın, orada bir kaydet düğmesi çıkar. TikTok'ta filigransız kopya varsa onu kaydeder, yalnızca filigranlı kopya varsa bunu size söyler (#93).
 
 * **TikTok:** İlerleme çubuğunu göster seçeneğinin Oynatma altında yeni bir anahtarı var, Video hikayelerde sarma çubuğu, başta kapalı. Bir video hikayenin altına geri dönmek ya da ileri atlamak için sürükleyebileceğiniz ince bir çizgi koyar ve sürüklerken süreyi gösterir. Dokunmak yine hikayeler arasında geçiş yapar (#72).

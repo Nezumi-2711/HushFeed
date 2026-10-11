@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Atenuar los controles del vídeo ahora también atenúa la barra de progreso de un vídeo en pausa, la píldora de historias de la pestaña Siguiendo y, en un vídeo abierto desde la búsqueda, la barra de búsqueda de arriba, el botón de Pantalla completa y la barra para añadir un comentario. Antes se quedaban a plena intensidad (#84).
+
 * **TikTok:** Ahora puedes guardar una historia desde su panel de compartir. Activa Guardar una historia desde el panel de compartir en Descargas y aparece ahí un botón para guardar. Guarda la copia sin marca de agua cuando TikTok la tiene, y te avisa cuando solo está la copia con marca de agua (#93).
 
 * **TikTok:** Mostrar la barra de progreso tiene un nuevo interruptor en Reproducción, Barra de reproducción en historias de vídeo, que empieza desactivado. Pone una línea fina en la parte de abajo de una historia de vídeo que puedes arrastrar para retroceder o adelantar, con el tiempo visible mientras arrastras. Tocar sigue pasando de una historia a otra (#72).
