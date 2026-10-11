@@ -75,6 +75,10 @@ import java.util.WeakHashMap;
  *                         strip, so both go and the pager takes the room back (#50). cnk also
  *                         names a Space in other layouts, so only the child of
  *                         id/viewpager_container counts
+ *   id/j2g id/g5p         on a video opened from a profile, a hashtag, a sound or search, the
+ *                         search bar across the top (its back button and search box) and the
+ *                         dark gradient behind it. Both are children of the pager's page layer,
+ *                         outside the cells, and only the detail layouts have them (S22, 2026-10-10)
  *   id/i_l id/g85 id/eq5  the avatar, like and comment controls
  *   id/i93 id/pqg id/wct  the favourite, music and share controls
  *   id/g87 id/ek6         the rows under like, comment, favourite and share
@@ -168,6 +172,13 @@ public final class VideoOverlayHider {
      * bar never covers the picture. With the bar hidden it's only a black strip (#97).
      */
     private static final String[] STATUS_BAR_SPACER_IDS = {"47.1.4:dux"};
+    /**
+     * The search bar across the top of a video opened from search or a profile, and the gradient
+     * under it. The fade never reached them: they sit outside the cells and TikTok's Clear display
+     * leaves them up (#84). Only ever faded, never hidden.
+     */
+    private static final String[] TOP_SEARCH_BAR_IDS = {"47.1.4:j2g"};
+    private static final String[] TOP_SEARCH_SCRIM_IDS = {"47.1.4:g5p"};
     private static final String[] DETAIL_COMMENT_BAR_IDS = {"47.1.4:qqw"};
     private static final String[] DETAIL_COMMENT_STRIP_IDS = {"47.1.4:cnk"};
     /**
@@ -278,6 +289,8 @@ public final class VideoOverlayHider {
     private static final int SEARCH_BAR_TARGET = MUSIC_COVER_TARGET + 1;
     private static final int BOTTOM_TABS_DIVIDER_TARGET = SEARCH_BAR_TARGET + 1;
     private static final int LOADING_LINE_TARGET = BOTTOM_TABS_DIVIDER_TARGET + 1;
+    private static final int TOP_SEARCH_BAR_TARGET = LOADING_LINE_TARGET + 1;
+    private static final int TOP_SEARCH_SCRIM_TARGET = TOP_SEARCH_BAR_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -507,7 +520,11 @@ public final class VideoOverlayHider {
             // asks which window it's in: only an opened post has the bar, and the strip under it
             // is left alone wherever the bar isn't found (see the pairing after the walk). Asked
             // only in the detail pager, the switch left that photo's bar up.
-            boolean detailCommentBar = Settings.HIDE_DETAIL_COMMENT_BAR.get() || clearLive;
+            // The faded Clear display keeps the bar in sight at the chosen level like the rest of
+            // the controls, and the fade fades it outside Clear display too; only a fade of 0 takes
+            // it away, with its strip, the way the switch does.
+            boolean detailCommentBar = Settings.HIDE_DETAIL_COMMENT_BAR.get()
+                    || (clearLive && !fadedClear) || chosenFade == 0;
             // The faded Clear display keeps the anchor row and the search bar in sight but out of
             // reach, which is what hiding them was for.
             boolean anchor = clearLive && !fadedClear;
@@ -562,6 +579,9 @@ public final class VideoOverlayHider {
                 // Only ever faded, never hidden by a switch of its own.
                 wanted[MUSIC_COVER_TARGET] = false;
                 wanted[SEARCH_BAR_TARGET] = anchor;
+                // Only ever faded, never hidden.
+                wanted[TOP_SEARCH_BAR_TARGET] = false;
+                wanted[TOP_SEARCH_SCRIM_TARGET] = false;
                 wanted[STATUS_BAR_SPACER_TARGET] = statusBar;
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
                     wanted[RAIL_TARGET_START + i] = rail[i] || carryHides;
@@ -602,6 +622,7 @@ public final class VideoOverlayHider {
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f);
+                    fadeFullscreenEntries();
                     if (fadedClear && TapThroughControls.anyMarked()) TapThroughControls.watch(activity);
                     // The size goes on the icon inside each button, not the button. The slots
                     // are packed with no room between them, so a grown button lands on its
@@ -800,7 +821,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[LOADING_LINE_TARGET + 1][];
+        String[][] targets = new String[TOP_SEARCH_SCRIM_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -827,6 +848,8 @@ public final class VideoOverlayHider {
         targets[SEARCH_BAR_TARGET] = SEARCH_BAR_IDS;
         targets[BOTTOM_TABS_DIVIDER_TARGET] = BOTTOM_TABS_DIVIDER_IDS;
         targets[LOADING_LINE_TARGET] = LOADING_LINE_IDS;
+        targets[TOP_SEARCH_BAR_TARGET] = TOP_SEARCH_BAR_IDS;
+        targets[TOP_SEARCH_SCRIM_TARGET] = TOP_SEARCH_SCRIM_IDS;
         return targets;
     }
 
@@ -836,7 +859,8 @@ public final class VideoOverlayHider {
      */
     private static boolean outsideCells(int target) {
         return (target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START) || target == BOTTOM_TABS_TARGET
-                || target == BOTTOM_TABS_DIVIDER_TARGET;
+                || target == BOTTOM_TABS_DIVIDER_TARGET || target == TOP_SEARCH_BAR_TARGET
+                || target == TOP_SEARCH_SCRIM_TARGET;
     }
 
     private static int candidateCount(String[][] targets) {
@@ -942,9 +966,27 @@ public final class VideoOverlayHider {
                 HookStatus.bound("overlay", names[chosen - candidateAt]);
                 for (View view : found.get(chosen)) {
                     // The progress bar only goes see-through, so a drag along the bottom edge
-                    // still seeks while it's out of sight (#84).
-                    if (target == CLEAR_SEEK_BAR_TARGET) setTransparent(view, wanted);
-                    else if (target == LOADING_LINE_TARGET) {
+                    // still seeks while it's out of sight (#84). Otherwise it fades with the
+                    // controls. TikTok writes alpha on the SeekBar inside the row (a paused video
+                    // sets it to 1), never on the row, so the fade on the row stays.
+                    if (target == CLEAR_SEEK_BAR_TARGET) {
+                        if (wanted) {
+                            setFaded(view, 100);
+                            setTransparent(view, true);
+                        } else {
+                            setTransparent(view, false);
+                            setFaded(view, fadeLevel, fadedClear);
+                        }
+                    } else if (target == TOP_SEARCH_BAR_TARGET || target == TOP_SEARCH_SCRIM_TARGET) {
+                        // The way back out of the page: faded like the tabs, never past the floor.
+                        setFaded(view, Math.max(NAVIGATION_FADE_FLOOR, fadeLevel), fadedClear);
+                    } else if (target == DETAIL_COMMENT_BAR_TARGET) {
+                        // Hidden with its strip by the switch, Clear display and a fade of 0;
+                        // otherwise faded, and out of a finger's way in the faded Clear display.
+                        setFaded(view, wanted ? 100 : fadeLevel, fadedClear && !wanted);
+                        TapThroughControls.mark(view, !wanted && fadedClear);
+                        setHidden(view, wanted);
+                    } else if (target == LOADING_LINE_TARGET) {
                         android.view.ViewParent frame = view.getParent();
                         setTransparent(frame instanceof View ? (View) frame : view, wanted);
                     } else if (target == ANCHOR_TARGET || target == MUSIC_COVER_TARGET
@@ -964,7 +1006,9 @@ public final class VideoOverlayHider {
                         TapThroughControls.mark(view, !gone && fadedClear);
                         setHidden(view, gone);
                     } else if (target == TAB_STRIP_TARGET || target == BOTTOM_TABS_TARGET
-                            || target == BOTTOM_TABS_DIVIDER_TARGET) {
+                            || target == BOTTOM_TABS_DIVIDER_TARGET || target == FOLLOWING_STORY_TARGET) {
+                        // The Following stories pill is the strip's neighbour at the top of the
+                        // feed, so it fades with the tabs; it was only ever hidden (#84).
                         setFaded(view, wanted ? 100 : Math.max(NAVIGATION_FADE_FLOOR, fadeLevel));
                         setHidden(view, wanted);
                     } else setHidden(view, wanted);
@@ -977,6 +1021,34 @@ public final class VideoOverlayHider {
                 HookStatus.missingViewId("overlay", String.join("|", names));
             }
             candidateAt += names.length;
+        }
+    }
+
+    /**
+     * The Full screen buttons TikTok has bound, by the patch that hands each one to
+     * {@link FeedOverlayControls#bindFullscreen}. The hider looks up no id for it, so the faded
+     * look reaches it through the view the patch proved is the entry.
+     */
+    private static final Map<View, Boolean> FULLSCREEN_ENTRIES = new WeakHashMap<>();
+
+    /** Called as TikTok binds a Full screen button; the next pass fades it with the controls. */
+    static void noteFullscreenEntry(View entry) {
+        if (entry != null) FULLSCREEN_ENTRIES.put(entry, Boolean.TRUE);
+    }
+
+    /**
+     * Fades every noted Full screen button to the chosen level, whole in the faded Clear display
+     * where a finger goes through it, and out of sight at 0 without moving what is beside it.
+     * Put back to what TikTok had given it once the fade is off.
+     */
+    private static void fadeFullscreenEntries() {
+        if (FULLSCREEN_ENTRIES.isEmpty()) return;
+        boolean gone = fadeLevel == 0;
+        for (View entry : new ArrayList<>(FULLSCREEN_ENTRIES.keySet())) {
+            if (entry == null || !entry.isAttachedToWindow()) continue;
+            setFaded(entry, gone ? 100 : fadeLevel, fadedClear);
+            TapThroughControls.mark(entry, !gone && fadedClear);
+            setHidden(entry, gone, View.INVISIBLE);
         }
     }
 
