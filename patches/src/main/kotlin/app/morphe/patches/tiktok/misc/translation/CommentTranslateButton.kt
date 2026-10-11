@@ -9,6 +9,7 @@ import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patches.tiktok.shared.LazyAbGateSearch
+import app.morphe.patches.tiktok.shared.checkBooleanWhenOn
 import app.morphe.patches.tiktok.shared.returnBooleanWhenOn
 import app.morphe.util.addInstructions
 import app.morphe.util.addInstructionsAtControlFlowLabel
@@ -204,6 +205,9 @@ internal fun installCommentTranslateButton() {
     val styleAnswer = mutable(targets.styleAnswer)
     val stateRead = mutable(targets.stateRead)
     val stateWrite = mutable(targets.stateWrite)
+    // Both gates are checked before either is hooked, so a refusal leaves no hook behind.
+    enabledRead.checkBooleanWhenOn(PATCH_NAME)
+    styleAnswer.checkBooleanWhenOn(PATCH_NAME)
 
     enabledRead.returnBooleanWhenOn(PATCH_NAME, COMMENT_TRANSLATE_BUTTON_SWITCH, true)
     styleAnswer.returnBooleanWhenOn(PATCH_NAME, COMMENT_TRANSLATE_BUTTON_SWITCH, true)
