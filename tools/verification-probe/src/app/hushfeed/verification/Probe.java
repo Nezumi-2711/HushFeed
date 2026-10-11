@@ -1538,8 +1538,13 @@ public final class Probe extends Instrumentation {
                                 .getMethod("getActivity").invoke(null);
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
-                        int strip = resources.getIdentifier("dlk", "id", activity.getPackageName());
-                        int text = resources.getIdentifier("dlr", "id", activity.getPackageName());
+                        // 47.1.4 renamed them to dm5 and dmb: -e strip dm5 -e text dmb.
+                        String stripName = intent.getStringExtra("strip");
+                        String textName = intent.getStringExtra("text");
+                        if (stripName == null) stripName = "dlk";
+                        if (textName == null) textName = "dlr";
+                        int strip = resources.getIdentifier(stripName, "id", activity.getPackageName());
+                        int text = resources.getIdentifier(textName, "id", activity.getPackageName());
                         StringBuilder out = new StringBuilder();
                         java.util.ArrayDeque<android.view.View> pending = new java.util.ArrayDeque<>(windowRoots());
                         while (!pending.isEmpty()) {
@@ -1588,10 +1593,14 @@ public final class Probe extends Instrumentation {
                                     ? ((java.lang.ref.Reference<?>) staticField(tools, "overlay")).get() : null;
                             if (line instanceof android.widget.TextView) {
                                 android.widget.TextView label = (android.widget.TextView) line;
+                                int[] where = new int[2];
+                                label.getLocationOnScreen(where);
                                 out.append(" overlay[shown=").append(label.isShown())
                                         .append(" vis=").append(label.getVisibility())
+                                        .append(" at=").append(where[0]).append(',').append(where[1])
                                         .append(" size=").append(label.getWidth()).append('x').append(label.getHeight())
-                                        .append(" chars=").append(label.getText().length()).append(']');
+                                        .append(" chars=").append(label.getText().length())
+                                        .append(" stripGap=").append(staticField(tools, "stripGap")).append(']');
                             } else {
                                 out.append(" overlay=none");
                             }
@@ -1606,8 +1615,8 @@ public final class Probe extends Instrumentation {
                             out.append(" overlay=unreadable");
                         }
                         // An id this build lacks must not read the same as no caption on screen.
-                        if (strip == 0) out.append(" dlk=missing");
-                        if (text == 0) out.append(" dlr=missing");
+                        if (strip == 0) out.append(' ').append(stripName).append("=missing");
+                        if (text == 0) out.append(' ').append(textName).append("=missing");
                         Log.i(TAG, "ok captionstate" + (out.length() == 0 ? " none" : out.toString()));
                         break;
                     }
