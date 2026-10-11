@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, la barra de progreso de un video largo que abres desde la búsqueda o un perfil vuelve a quedar debajo de la descripción. Antes se dibujaba encima del nombre del creador (#50).
+
 * **TikTok:** Atenuar los controles del vídeo ahora también atenúa la barra de progreso de un vídeo en pausa, la píldora de historias de la pestaña Siguiendo y, en un vídeo abierto desde la búsqueda, la barra de búsqueda de arriba, el botón de Pantalla completa y la barra para añadir un comentario. Antes se quedaban a plena intensidad (#84).
 
 * **TikTok:** Ahora puedes guardar una historia desde su panel de compartir. Activa Guardar una historia desde el panel de compartir en Descargas y aparece ahí un botón para guardar. Guarda la copia sin marca de agua cuando TikTok la tiene, y te avisa cuando solo está la copia con marca de agua (#93).

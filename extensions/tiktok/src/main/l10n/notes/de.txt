@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ist Kommentarleiste bei geöffneten Videos ausblenden an, sitzt der Fortschrittsbalken bei einem langen Video, das du aus der Suche oder einem Profil öffnest, wieder unter der Beschreibung. Vorher lief er quer über den Namen des Creators (#50).
+
 * **TikTok:** Videosteuerung ausblenden lassen blendet jetzt auch den Fortschrittsbalken eines pausierten Videos, die Story-Pille im Tab Folge ich und bei einem aus der Suche geöffneten Video die Suchleiste oben, den Vollbild-Knopf und die Kommentarleiste aus. Vorher blieben sie voll sichtbar (#84).
 
 * **TikTok:** Eine Story lässt sich jetzt über ihr Teilen-Menü speichern. Schalte unter Downloads Story über das Teilen-Menü speichern ein, dann erscheint dort ein Speichern-Knopf. Er speichert die Kopie ohne Wasserzeichen, wenn TikTok eine hat, und sagt dir Bescheid, wenn es nur die Kopie mit Wasserzeichen gibt (#93).

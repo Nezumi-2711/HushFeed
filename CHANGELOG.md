@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** With Hide the comment bar on opened videos on, the progress bar on a long video you open from search or a profile now sits under the caption again. Before, it drew across the creator's name (#50).
+
 * **TikTok:** Fade the video controls now also fades the progress bar on a paused video, the Following tab's stories pill, and on a video opened from search its top search bar, Full screen button and Add comment bar. Before, those stayed at full strength (#84).
 
 * **TikTok:** A story can now be saved from its share sheet. Turn on Save a story from its share sheet under Downloads and a save button shows up there. It saves the copy without the watermark when TikTok has one, and tells you when only the watermarked copy is there (#93).

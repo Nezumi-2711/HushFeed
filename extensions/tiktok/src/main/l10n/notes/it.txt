@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, la barra di avanzamento di un video lungo aperto dalla ricerca o da un profilo torna sotto la descrizione. Prima passava sopra il nome del creator (#50).
+
 * **TikTok:** Attenua i controlli del video ora attenua anche la barra di avanzamento di un video in pausa, la pillola delle storie nella scheda Seguiti e, in un video aperto dalla ricerca, la barra di ricerca in alto, il pulsante Schermo intero e la barra Aggiungi un commento. Prima restavano a piena intensità (#84).
 
 * **TikTok:** Ora puoi salvare una storia dal suo menu di condivisione. Attiva Salva una storia dal menu di condivisione in Download e lì compare un pulsante per salvare. Salva la copia senza filigrana quando TikTok ce l'ha, e ti avvisa quando c'è solo la copia con la filigrana (#93).

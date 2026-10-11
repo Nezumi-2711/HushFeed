@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, axtarışdan və ya profildən açdığınız uzun videoda irəliləyiş paneli yenidən başlığın altında durur. Əvvəllər o, müəllifin adının üstündən keçirdi (#50).
+
 * **TikTok:** Video idarəetmələrini solğunlaşdır indi dayandırılmış videoda irəliləyiş panelini, İzlənilənlər bölməsindəki hekayələr düyməsini, axtarışdan açılan videoda isə yuxarıdakı axtarış panelini, Tam ekran düyməsini və Şərh əlavə et panelini də solğunlaşdırır. Əvvəllər bunlar tam parlaqlıqda qalırdı (#84).
 
 * **TikTok:** Hekayəni indi paylaşma vərəqindən saxlamaq olar. Endirmələr bölməsində Hekayəni paylaşma vərəqindən saxlayın seçimini yandırın, orada saxla düyməsi görünəcək. TikTok-da su nişanı olmayan nüsxə varsa onu saxlayır, yalnız su nişanlı nüsxə olduqda isə bunu bildirir (#93).

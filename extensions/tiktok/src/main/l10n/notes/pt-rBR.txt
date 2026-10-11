@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, a barra de progresso de um vídeo longo que você abre pela busca ou por um perfil volta a ficar embaixo da legenda. Antes ela passava por cima do nome do criador (#50).
+
 * **TikTok:** Esmaecer os controles do vídeo agora também esmaece a barra de progresso de um vídeo pausado, a pílula de stories da aba Seguindo e, num vídeo aberto pela busca, a barra de busca no topo, o botão Tela cheia e a barra de Adicionar comentário. Antes eles ficavam com intensidade total (#84).
 
 * **TikTok:** Agora dá para salvar um story pela folha de compartilhamento. Ative Salvar um story pela folha de compartilhamento em Downloads e um botão de salvar aparece ali. Ele salva a cópia sem marca d'água quando o TikTok tem uma, e avisa quando só existe a cópia com marca d'água (#93).

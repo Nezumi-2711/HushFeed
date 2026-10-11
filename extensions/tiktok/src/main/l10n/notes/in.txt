@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, bilah progres pada video panjang yang kamu buka dari pencarian atau profil kini kembali berada di bawah keterangan. Sebelumnya bilah itu menimpa nama kreator (#50).
+
 * **TikTok:** Pudarkan kontrol video sekarang juga memudarkan bilah progres pada video yang dijeda, tombol story di tab Mengikuti, dan pada video yang dibuka dari pencarian, bilah pencarian di atas, tombol Layar penuh, dan bilah Tambahkan komentar. Sebelumnya semua itu tetap terlihat penuh (#84).
 
 * **TikTok:** Story sekarang bisa disimpan dari menu bagikannya. Aktifkan Simpan Story dari menu bagikan di Unduhan, lalu tombol simpan muncul di sana. Tombol itu menyimpan salinan tanpa watermark kalau TikTok punya, dan memberi tahu kalau yang ada hanya salinan dengan watermark (#93).
