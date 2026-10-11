@@ -74,6 +74,7 @@ import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.value.StringEncodedValue
 import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
@@ -585,14 +586,24 @@ class TikTokPatchAnchorsMatchFixturesTest {
             assertEquals("count sites", 2, found.sites.size)
             assertTrue("highest first", found.sites.zipWithNext().all { (a, b) -> a.insertAt > b.insertAt })
             val instructions = bind.implementation!!.instructions.toList()
-            found.sites.forEach { site ->
+            val thisRegister = bind.implementation!!.registerCount - bind.parameters.size - 1
+            val views = found.sites.map { site ->
                 val setText = (site.insertAt until instructions.size).first {
                     val reference = (instructions[it] as? ReferenceInstruction)?.reference as? MethodReference
                     reference?.name == "setText" && reference.parameterTypes.map(CharSequence::toString) == listOf("Ljava/lang/CharSequence;")
                 }
-                assertEquals("the cell's text is the formatted count", site.textRegister,
-                    (instructions[setText] as FiveRegisterInstruction).registerD)
+                val call = instructions[setText] as FiveRegisterInstruction
+                assertEquals("the cell's text is the formatted count", site.textRegister, call.registerD)
+                // The view is the holder's own count field, read right before the call.
+                val load = instructions[setText - 1]
+                assertEquals("count view load", Opcode.IGET_OBJECT, load.opcode)
+                assertEquals("count view register", call.registerC, (load as TwoRegisterInstruction).registerA)
+                assertEquals("count view owner", thisRegister, load.registerB)
+                (load as ReferenceInstruction).reference as FieldReference
             }
+            assertEquals("one count view", 1, views.toSet().size)
+            assertEquals("count view class", bind.definingClass, views.first().definingClass)
+            assertEquals("count view type", "Lcom/bytedance/tux/input/TuxTextView;", views.first().type)
         }
     }
 

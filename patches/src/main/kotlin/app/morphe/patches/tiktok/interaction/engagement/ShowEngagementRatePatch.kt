@@ -22,6 +22,7 @@ import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.WideLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
@@ -191,6 +192,9 @@ internal fun Method.holderCountSites(): HolderCountSites {
         }
     }
 
+    val predecessors = List(instructions.size) { mutableListOf<Int>() }.also { into ->
+        instructions.indices.forEach { from -> (flow.normal[from] + flow.exceptional[from]).forEach { into[it] += from } }
+    }
     val sites = instructions.indices.filter { index ->
         val reference = instructions[index].getReference<MethodReference>()
         instructions[index].opcode == Opcode.INVOKE_STATIC && reference?.returnType == "Ljava/lang/CharSequence;" &&
@@ -216,10 +220,19 @@ internal fun Method.holderCountSites(): HolderCountSites {
         if (flow.normal[format + 2] != listOf(insertAt)) {
             throw PatchException("$WHAT: the grid holder's count text doesn't fall through to the hook.")
         }
+        // Paths may join at the boxing call (the missing-statistics zero does), but nothing may
+        // enter between it and the hook, where the value it boxed would be skipped.
+        val boxingAt = format - 2
         instructions.indices.forEach { from ->
-            if (from != format + 2 && insertAt in flow.normal[from] + flow.exceptional[from]) {
-                throw PatchException("$WHAT: instruction $from jumps past a grid holder hook.")
+            (flow.normal[from] + flow.exceptional[from]).forEach { to ->
+                if (to in boxingAt + 1..insertAt && from != to - 1) {
+                    throw PatchException("$WHAT: instruction $from jumps into a grid holder count at $to.")
+                }
             }
+        }
+        val boxedRegister = (boxing as FiveRegisterInstruction).registerC
+        if (!carriesViewCount(instructions, predecessors, boxingAt, boxedRegister, mutableSetOf())) {
+            throw PatchException("$WHAT: a grid holder count isn't the view count on every path.")
         }
         if (textRegister > 15) throw PatchException("$WHAT: v$textRegister doesn't fit a short invoke.")
         HolderCountSite(insertAt, textRegister)
@@ -229,6 +242,37 @@ internal fun Method.holderCountSites(): HolderCountSites {
     }
     if (itemRegister > 15) throw PatchException("$WHAT: v$itemRegister doesn't fit a short invoke.")
     return HolderCountSites(itemRegister, sites.sortedByDescending { it.insertAt })
+}
+
+private val GOTOS = setOf(Opcode.GOTO, Opcode.GOTO_16, Opcode.GOTO_32)
+private val WIDE_CONSTANTS = setOf(Opcode.CONST_WIDE_16, Opcode.CONST_WIDE_32, Opcode.CONST_WIDE, Opcode.CONST_WIDE_HIGH16)
+
+/**
+ * Whether every path into [index] arrives with [register] holding a view count: the wide result
+ * of a getPlayCount read, or the zero a cell without statistics gets. Gotos are followed back to
+ * where they came from, so a like count or any other number joining there fails the patch rather
+ * than getting the rate and the date.
+ */
+private fun carriesViewCount(
+    instructions: List<Instruction>,
+    predecessors: List<List<Int>>,
+    index: Int,
+    register: Int,
+    visited: MutableSet<Int>,
+): Boolean {
+    val into = predecessors[index]
+    return into.isNotEmpty() && into.all { from ->
+        if (!visited.add(from)) return@all true
+        val instruction = instructions[from]
+        when (instruction.opcode) {
+            Opcode.MOVE_RESULT_WIDE -> (instruction as OneRegisterInstruction).registerA == register &&
+                instructions.getOrNull(from - 1)?.calls(STATISTICS, "getPlayCount") == true
+            in WIDE_CONSTANTS -> (instruction as OneRegisterInstruction).registerA == register &&
+                (instruction as WideLiteralInstruction).wideLiteral == 0L
+            in GOTOS -> carriesViewCount(instructions, predecessors, from, register, visited)
+            else -> false
+        }
+    }
 }
 
 /**
