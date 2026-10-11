@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Nascondi la barra di stato nelle stanze LIVE e Mostra il LIVE sotto la barra di stato ora funzionano anche su un LIVE aperto dall'anteprima sotto la scheda di un creator nella ricerca. TikTok apre quel LIVE dentro la pagina che usa per i video aperti, dove gli interruttori non arrivavano (#137).
+
 ## 0.71.1 (2026-10-11)
 
 * **TikTok:** Con Mantieni i sottotitoli nella vista pulita attivo, nella vista pulita il sottotitolo ora resta dove TikTok lo mostrava prima che i controlli sparissero, invece di scendere fino al bordo inferiore (#141). Finché non è apparso nessun sottotitolo, resta nella posizione di prima.

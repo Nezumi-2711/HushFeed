@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Sembunyikan bilah status di ruang LIVE dan Tampilkan LIVE di bawah bilah status sekarang juga berlaku untuk LIVE yang dibuka dari pratinjau di bawah kartu kreator di pencarian. TikTok membuka LIVE itu di dalam halaman yang dipakainya untuk video yang dibuka, yang sebelumnya tidak terjangkau oleh tombol-tombol itu (#137).
+
 ## 0.71.1 (2026-10-11)
 
 * **TikTok:** Kalau Pertahankan keterangan saat tampilan bersih aktif, keterangan di tampilan bersih kini tetap di tempat TikTok menampilkannya sebelum kontrol disembunyikan, bukan turun ke tepi bawah (#141). Selama belum ada keterangan yang muncul, posisinya tetap di tempat lama.

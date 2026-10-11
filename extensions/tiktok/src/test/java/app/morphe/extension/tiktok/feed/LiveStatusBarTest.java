@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.tiktok.settings.Settings;
+import com.ss.android.ugc.aweme.detail.ui.DetailActivity;
 import com.ss.android.ugc.aweme.live.LivePlayActivity;
 import java.time.Duration;
 import org.junit.After;
@@ -453,6 +454,89 @@ public class LiveStatusBarTest {
         assertEquals("the bar wasn't hidden", WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES,
                 live.getWindow().getAttributes().layoutInDisplayCutoutMode);
         room.pause().stop().destroy();
+    }
+
+    /**
+     * #137: a LIVE opened from the preview under a creator's card in search is a page of TikTok's
+     * detail pager, held a bar lower by the page's own padding (read off the S22 on 47.1.4), and
+     * the switches did nothing there. It's handled like a room while it's on screen now, and
+     * swiping on to a video gives everything back.
+     */
+    @Test public void aLiveOpenedFromSearchIsUnderTheBarWhileItsPageIsOnScreen() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<DetailActivity> opened = Robolectric.buildActivity(DetailActivity.class).create();
+        DetailActivity detail = opened.get();
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout pager = new FrameLayout(detail);
+        FrameLayout livePage = detailPage(detail, pager, bar);
+        FrameLayout controls = page(detail, livePage);
+        detail.setContentView(pager);
+        detail.getWindow().setStatusBarColor(Color.BLACK);
+        opened.start().resume().visible();
+        layOut(detail);
+
+        assertEquals("the page's strip stayed", 0, livePage.getPaddingTop());
+        assertEquals("the controls went up under the clock", 7 + bar, controls.getPaddingTop());
+        assertEquals("the bar wasn't made see through", Color.TRANSPARENT, detail.getWindow().getStatusBarColor());
+
+        livePage.setTranslationY(-2316);
+        layOut(detail);
+        assertEquals("swiping on didn't give the strip back", bar, livePage.getPaddingTop());
+        assertEquals(7, controls.getPaddingTop());
+        assertEquals("swiping on didn't give the bar's color back", Color.BLACK, detail.getWindow().getStatusBarColor());
+
+        livePage.setTranslationY(0);
+        layOut(detail);
+        assertEquals("swiping back left the strip", 0, livePage.getPaddingTop());
+
+        opened.pause();
+        assertEquals("leaving didn't give the strip back", bar, livePage.getPaddingTop());
+        opened.stop().destroy();
+    }
+
+    /** The detail pager is mostly videos: the bar is hidden only while a LIVE page is in view. */
+    @Test public void aDetailPageHidesTheBarOnlyWhileALiveIsOnScreen() {
+        Settings.HIDE_STATUS_BAR_IN_LIVE.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<DetailActivity> opened = Robolectric.buildActivity(DetailActivity.class).create();
+        DetailActivity detail = opened.get();
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout pager = new FrameLayout(detail);
+        FrameLayout video = detailPage(detail, pager, bar);
+        FrameLayout livePage = detailPage(detail, pager, bar);
+        page(detail, livePage);
+        livePage.setTranslationY(2316);
+        detail.setContentView(pager);
+        opened.start().resume().visible();
+        layOut(detail);
+
+        assertFalse("a video page hid the bar", LiveStatusBar.isHidden(detail));
+        assertEquals("a video page lost its padding", bar, video.getPaddingTop());
+        assertEquals("the LIVE below the screen lost its strip", bar, livePage.getPaddingTop());
+
+        video.setTranslationY(-2316);
+        livePage.setTranslationY(0);
+        layOut(detail);
+        assertTrue("the LIVE in view kept its bar", LiveStatusBar.isHidden(detail));
+        assertEquals("the LIVE in view kept its strip", 0, livePage.getPaddingTop());
+        assertEquals(bar, video.getPaddingTop());
+
+        opened.pause();
+        assertFalse("leaving kept the bar hidden", LiveStatusBar.isHidden(detail));
+        assertEquals(bar, livePage.getPaddingTop());
+        opened.stop().destroy();
+    }
+
+    /** A page of the detail pager as 47.1.4 has it for a LIVE: held a bar lower by its own padding. */
+    private static FrameLayout detailPage(Activity detail, FrameLayout pager, int bar) {
+        FrameLayout page = new FrameLayout(detail);
+        page.setPadding(0, bar, 0, 0);
+        pager.addView(page, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        return page;
     }
 
     private static FrameLayout heldStream(Activity live, int bar) {

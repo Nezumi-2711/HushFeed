@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** LIVE odalarında durum çubuğunu gizle ve LIVE'ı durum çubuğunun altında göster artık aramada bir içerik üreticinin kartının altındaki önizlemeden açılan LIVE'da da çalışıyor. TikTok bu LIVE'ı açılan videolar için kullandığı sayfanın içinde açıyor, anahtarlar oraya ulaşmıyordu (#137).
+
 ## 0.71.1 (2026-10-11)
 
 * **TikTok:** Temiz ekranda altyazıları koru açıkken, temiz ekrandaki altyazı artık alt kenara inmek yerine TikTok'un kontroller kaybolmadan önce gösterdiği yerde duruyor (#141). Henüz hiç altyazı görünmediyse eski yerinde kalır.

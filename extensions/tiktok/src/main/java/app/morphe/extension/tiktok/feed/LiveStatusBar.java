@@ -50,10 +50,19 @@ import java.util.WeakHashMap;
  * over the top of the room. Both go while the room is in front, and the room's controls are held
  * a bar lower again on their own, so only the stream reaches up under the clock. TikTok's dark
  * shade across the top goes down with the controls, so its first color is drawn on into the strip.
+ *
+ * <p>A LIVE opened from the preview under a creator's card in search isn't a room of its own: it's
+ * a page of TikTok's detail pager, the one opened videos scroll in. The detail page is watched for a
+ * LIVE page on screen, which gets the same handling as a room until it's swiped away (#137).
  */
 public final class LiveStatusBar {
     /** TikTok's LIVE room, real-named on 47.0.3 and 47.1.3 (read off the S22, 2026-09-27). */
     static final String LIVE_ROOM = "com.ss.android.ugc.aweme.live.LivePlayActivity";
+    /**
+     * TikTok's detail pager, which holds a LIVE as one of its pages when it's opened from a
+     * creator's card in search (read off the S22 on 47.1.4, 2026-10-11).
+     */
+    static final String DETAIL = "com.ss.android.ugc.aweme.detail.ui.DetailActivity";
 
     private static final String HOOK_FAMILY = "LIVE status bar";
     private static final int LEGACY_FLAGS = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -63,6 +72,8 @@ public final class LiveStatusBar {
     private static final int MAX_VISITS = 200;
     /** Layout passes that look for the strip before giving up on a room that has none. */
     private static final int MAX_SEARCHES = 40;
+    /** Views looked at for the LIVE on screen in the detail pager, which is deeper than a room. */
+    private static final int MAX_DETAIL_VISITS = 2000;
     /**
      * TikTok putting the strip back this many times inside {@link #FIGHT_WINDOW_MS} is a layout
      * fight, and the room keeps its strip from then on. A count per visit stopped too soon: each
@@ -79,6 +90,8 @@ public final class LiveStatusBar {
     private static WeakReference<Application> followed = new WeakReference<>(null);
     /** The rooms whose bar this hid. */
     private static final WeakHashMap<Activity, Room> HIDDEN = new WeakHashMap<>();
+    /** The detail pages in front, watched for a LIVE page. */
+    private static final WeakHashMap<Activity, Detail> WATCHED = new WeakHashMap<>();
 
     private LiveStatusBar() {
     }
@@ -90,12 +103,14 @@ public final class LiveStatusBar {
         followed = new WeakReference<>(application);
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override public void onActivityResumed(Activity resumed) {
-                if (!isLiveRoom(resumed)) return;
-                if (Settings.HIDE_STATUS_BAR_IN_LIVE.get()) hide(resumed, true);
-                else if (Settings.LIVE_UNDER_STATUS_BAR.get()) hide(resumed, false);
+                boolean hideBar = Settings.HIDE_STATUS_BAR_IN_LIVE.get();
+                if (!hideBar && !Settings.LIVE_UNDER_STATUS_BAR.get()) return;
+                if (isLiveRoom(resumed)) hide(resumed, hideBar);
+                else if (isDetail(resumed)) watch(resumed, hideBar);
             }
 
             @Override public void onActivityPaused(Activity paused) {
+                unwatch(paused);
                 if (HIDDEN.containsKey(paused)) show(paused);
             }
 
@@ -103,12 +118,40 @@ public final class LiveStatusBar {
             @Override public void onActivityStarted(Activity started) { }
             @Override public void onActivityStopped(Activity stopped) { }
             @Override public void onActivitySaveInstanceState(Activity activity, Bundle state) { }
-            @Override public void onActivityDestroyed(Activity destroyed) { HIDDEN.remove(destroyed); }
+            @Override public void onActivityDestroyed(Activity destroyed) {
+                HIDDEN.remove(destroyed);
+                WATCHED.remove(destroyed);
+            }
         });
     }
 
     static boolean isLiveRoom(Activity activity) {
         return activity != null && LIVE_ROOM.equals(activity.getClass().getName());
+    }
+
+    static boolean isDetail(Activity activity) {
+        return activity != null && DETAIL.equals(activity.getClass().getName());
+    }
+
+    /** Watches a detail page in front for a LIVE page on screen, which is then handled like a room. */
+    static void watch(Activity activity, boolean hideBar) {
+        try {
+            Window window = activity.getWindow();
+            if (window == null || WATCHED.containsKey(activity)) return;
+            Detail detail = new Detail(activity, hideBar);
+            WATCHED.put(activity, detail);
+            window.getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(detail);
+        } catch (Throwable failure) {
+            HookStatus.threw(HOOK_FAMILY, "watch detail", failure);
+            Logger.printException(() -> "Could not watch the detail page for a LIVE", failure);
+        }
+    }
+
+    static void unwatch(Activity activity) {
+        Detail detail = WATCHED.remove(activity);
+        if (detail == null) return;
+        Window window = activity.getWindow();
+        if (window != null) window.getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(detail);
     }
 
     static boolean isHidden(Activity activity) {
@@ -121,13 +164,18 @@ public final class LiveStatusBar {
 
     /** With {@code hideBar} false only the strip goes, and the bar stays over the stream. */
     static void hide(Activity activity, boolean hideBar) {
+        hide(activity, hideBar, null);
+    }
+
+    /** {@code stream} is the LIVE page's stream in the detail pager, null for a room of its own. */
+    private static void hide(Activity activity, boolean hideBar, View stream) {
         try {
             Window window = activity.getWindow();
             if (window == null || HIDDEN.containsKey(activity)) return;
             WindowManager.LayoutParams attributes = window.getAttributes();
             int cutout = Build.VERSION.SDK_INT >= 28 ? attributes.layoutInDisplayCutoutMode : 0;
             View decor = window.getDecorView();
-            Room room = new Room(activity, decor, cutout, hideBar, window.getStatusBarColor());
+            Room room = new Room(activity, decor, cutout, hideBar, window.getStatusBarColor(), stream);
             HIDDEN.put(activity, room);
             if (!hideBar) {
                 // See through, so the stream shows under the clock. Android 15 draws every app's
@@ -257,6 +305,49 @@ public final class LiveStatusBar {
                 }
             }
             level = next;
+        }
+        return null;
+    }
+
+    /**
+     * The strip above a LIVE page's stream in the detail pager: the nearest view on the way up that
+     * is padded or held down a status bar's height. On 47.1.4 it's the page's own top padding,
+     * sixteen levels under the content view, too deep for {@link #findOffset}.
+     */
+    static Offset stripAbove(View stream, View content, int[] bars) {
+        for (View at = stream; at != null && at != content; ) {
+            if (at != stream && at instanceof ViewGroup && isBar(at.getPaddingTop(), bars)) {
+                return new Offset(at, true, at.getPaddingTop());
+            }
+            ViewGroup.LayoutParams params = at.getLayoutParams();
+            if (params instanceof ViewGroup.MarginLayoutParams && isBar(((ViewGroup.MarginLayoutParams) params).topMargin, bars)) {
+                return new Offset(at, false, ((ViewGroup.MarginLayoutParams) params).topMargin);
+            }
+            at = at.getParent() instanceof View ? (View) at.getParent() : null;
+        }
+        return null;
+    }
+
+    /**
+     * The LIVE stream on screen in the detail pager, or null. The pages either side of the one in
+     * view are laid out too, so only a stream across the middle of the window counts.
+     */
+    static View shownStream(View content, int videoId) {
+        if (content.findViewById(videoId) == null) return null;
+        int middle = content.getRootView().getHeight() / 2;
+        int[] at = new int[2];
+        ArrayDeque<View> queue = new ArrayDeque<>();
+        queue.add(content);
+        for (int visited = 0; !queue.isEmpty() && visited < MAX_DETAIL_VISITS; visited++) {
+            View view = queue.poll();
+            if (view.getVisibility() != View.VISIBLE) continue;
+            if (view.getId() == videoId) {
+                view.getLocationInWindow(at);
+                if (view.getHeight() > 0 && at[1] <= middle && at[1] + view.getHeight() >= middle) return view;
+            } else if (view instanceof ViewGroup) {
+                ViewGroup group = (ViewGroup) view;
+                for (int i = 0; i < group.getChildCount(); i++) queue.add(group.getChildAt(i));
+            }
         }
         return null;
     }
@@ -449,10 +540,17 @@ public final class LiveStatusBar {
         final int statusBarColor;
         private final WeakReference<Activity> activity;
         private final WeakReference<View> decor;
+        /** The LIVE page's stream in the detail pager, or nothing for a room of its own. */
+        final WeakReference<View> stream;
         private Offset lifted;
         private int searches, relifts, coverSearches, shadeSearches;
         private long fightStart;
         private boolean fought;
+        /**
+         * Set once everything is given back. A layout pass calls the listeners it started with, so
+         * a room the detail watcher let go during that pass would otherwise take the strip again.
+         */
+        private boolean left;
         private WeakReference<View> cover = new WeakReference<>(null);
         /** The controls layers held a bar lower, with the top padding each had of its own. */
         private final WeakHashMap<View, Integer> lowered = new WeakHashMap<>();
@@ -460,15 +558,17 @@ public final class LiveStatusBar {
         /** The stream's view id, -1 until it's been asked for and 0 when TikTok has none. */
         private int videoId = -1;
 
-        Room(Activity activity, View decor, int cutout, boolean barHidden, int statusBarColor) {
+        Room(Activity activity, View decor, int cutout, boolean barHidden, int statusBarColor, View stream) {
             this.activity = new WeakReference<>(activity);
             this.decor = new WeakReference<>(decor);
             this.cutout = cutout;
             this.barHidden = barHidden;
             this.statusBarColor = statusBarColor;
+            this.stream = stream == null ? null : new WeakReference<>(stream);
         }
 
         @Override public void onGlobalLayout() {
+            if (left) return;
             try {
                 keepCoverAway();
                 keepStripAway();
@@ -508,7 +608,8 @@ public final class LiveStatusBar {
             View content = room.findViewById(android.R.id.content);
             if (content == null || content.getHeight() == 0) return;
             searches++;
-            Offset offset = findOffset(content, barHeights(window));
+            Offset offset = stream == null ? findOffset(content, barHeights(window))
+                    : stripAbove(stream.get(), content, barHeights(window));
             if (offset == null) return;
             View target = offset.view.get();
             if (target == null) return;
@@ -616,6 +717,7 @@ public final class LiveStatusBar {
 
         /** Gives the strip, the cover and the controls back unless TikTok has already set its own. */
         void putBack() {
+            left = true;
             View known = cover.get();
             if (known != null && known.getVisibility() == View.INVISIBLE) known.setVisibility(View.VISIBLE);
             cover = new WeakReference<>(null);
@@ -624,6 +726,49 @@ public final class LiveStatusBar {
             View target = lifted.view.get();
             if (target != null && lifted.current(target) == 0) lifted.set(target, lifted.value);
             lifted = null;
+        }
+    }
+
+    /**
+     * A detail page in front, watched for a LIVE page on screen. The LIVE page is handled like a
+     * room while it's in view, and given back when it's swiped away or another LIVE takes its place.
+     */
+    private static final class Detail implements ViewTreeObserver.OnGlobalLayoutListener {
+        private final WeakReference<Activity> activity;
+        private final boolean hideBar;
+        /** The stream's view id, -1 until it's been asked for and 0 when TikTok has none. */
+        private int videoId = -1;
+
+        Detail(Activity activity, boolean hideBar) {
+            this.activity = new WeakReference<>(activity);
+            this.hideBar = hideBar;
+        }
+
+        @Override public void onGlobalLayout() {
+            try {
+                Activity page = activity.get();
+                if (page == null) return;
+                if (videoId < 0) {
+                    videoId = videoContainerForTests != 0 ? videoContainerForTests
+                            : page.getResources().getIdentifier(VIDEO_CONTAINER, "id", page.getPackageName());
+                    if (videoId == 0) HookStatus.missingViewId(HOOK_FAMILY, VIDEO_CONTAINER);
+                }
+                if (videoId == 0) return;
+                View content = page.findViewById(android.R.id.content);
+                View shown = content == null ? null : shownStream(content, videoId);
+                Room room = HIDDEN.get(page);
+                if (room != null && shown != null && room.stream != null && room.stream.get() == shown) return;
+                if (room != null) show(page);
+                if (shown == null) return;
+                hide(page, hideBar, shown);
+                room = HIDDEN.get(page);
+                // The room's own listener joins from the next layout pass; this one is now.
+                if (room != null) room.onGlobalLayout();
+            } catch (Throwable failure) {
+                videoId = 0;
+                HookStatus.threw(HOOK_FAMILY, "detail LIVE", failure);
+                Logger.printException(() -> "Could not handle a LIVE in the detail page", failure);
+            }
         }
     }
 }
