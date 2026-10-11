@@ -328,6 +328,9 @@ public final class VideoOverlayHider {
     private static final Map<View, Long> HELD_SINCE = new WeakHashMap<>();
     private static final long WHOLE_HOLD_MS = 1000;
 
+    /** TikTok's progress bar rows this class moved down, with the offset it wrote; see alignBarRows. */
+    private static final Map<View, Float> BAR_ROWS_MOVED = new WeakHashMap<>();
+
     /** The lowest opacity the tabs are faded to, so the way around the app stays findable. */
     static final int NAVIGATION_FADE_FLOOR = 10;
 
@@ -552,7 +555,7 @@ public final class VideoOverlayHider {
             if (caption || music || actionBar || surveys || tabStrip || carry || detailCommentBar || anchor
                     || clearControls
                     || statusBar || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty()
-                    || fadeLevel != 100 || !FADED_TO.isEmpty()
+                    || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
                     || touchScale != 1f || scaledLastPass) {
                 ViewGroup root = activity.findViewById(android.R.id.content);
                 int[] ids = TRAVERSAL.ids;
@@ -622,6 +625,7 @@ public final class VideoOverlayHider {
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f);
+                    alignBarRows(found, TRAVERSAL.selected, hidden);
                     fadeFullscreenEntries();
                     if (fadedClear && TapThroughControls.anyMarked()) TapThroughControls.watch(activity);
                     // The size goes on the icon inside each button, not the button. The slots
@@ -902,6 +906,97 @@ public final class VideoOverlayHider {
         boolean strip = selected[DETAIL_COMMENT_STRIP_TARGET] >= 0;
         if (bar && !strip) hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)] = false;
         if (strip && !bar) hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)] = false;
+    }
+
+    /**
+     * Keeps the progress bar of an opened video where TikTok draws it, at the bottom of the
+     * caption's frame, while the comment bar is away (#50). The row isn't in the cell: it sits
+     * at the top of its own slot beside the pager (S25, 2026-10-11: row 2025 to 2104 in a slot
+     * down to 2205), and the slot keeps room under it for the comment bar. With the bar and its
+     * strip gone the cell grows into that room and the caption comes down with it, so a long
+     * video's bar drew across the creator's name. The row comes down to where the caption's frame
+     * now ends, never past its own slot, and goes back up with the bar. A cell that keeps TikTok's
+     * search bar under the caption ends where the row does, so that row stays put. A row TikTok
+     * moved itself since is left to TikTok.
+     */
+    private static void alignBarRows(List<List<View>> found, int[] selected, boolean[] hidden) {
+        int rowsAt = selected[CLEAR_SEEK_BAR_TARGET];
+        List<View> rows = rowsAt >= 0 ? found.get(rowsAt) : new ArrayList<>();
+        boolean barGone = selected[DETAIL_COMMENT_BAR_TARGET] >= 0
+                && selected[DETAIL_COMMENT_STRIP_TARGET] >= 0
+                && hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)]
+                && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)];
+        int framesAt = selected[ANCHOR_TARGET];
+        List<View> frames = framesAt >= 0 ? found.get(framesAt) : new ArrayList<>();
+        for (View row : rows) {
+            moveBarRow(row, barGone ? barRowDrop(row, frames) : 0f);
+        }
+        if (BAR_ROWS_MOVED.isEmpty()) return;
+        for (View row : new ArrayList<>(BAR_ROWS_MOVED.keySet())) {
+            if (!rows.contains(row)) moveBarRow(row, 0f);
+        }
+    }
+
+    /**
+     * How far {@code row} comes down to end where the caption's frame on screen ends, at most to
+     * the bottom of the row's slot. The frame is the one crossing the slot; mid-swipe, the one
+     * covering more of it. Zero without a frame there or with one that ends above the row.
+     */
+    static float barRowDrop(View row, List<View> frames) {
+        if (row.getHeight() == 0 || !(row.getParent() instanceof View)) return 0f;
+        View slot = (View) row.getParent();
+        // The row's own offset is left out: it's the one being worked out.
+        float rowBottom = topInWindow(row) + row.getHeight();
+        float slotTop = topInWindow(slot) + slot.getTranslationY();
+        float slotBottom = slotTop + slot.getHeight();
+        if (slotBottom <= rowBottom) return 0f;
+        float frameBottom = 0f;
+        float covered = 0f;
+        for (View frame : frames) {
+            if (frame.getHeight() == 0) continue;
+            float top = topInWindow(frame) + frame.getTranslationY();
+            float bottom = top + frame.getHeight();
+            float overlap = Math.min(slotBottom, bottom) - Math.max(slotTop, top);
+            if (overlap > covered) {
+                covered = overlap;
+                frameBottom = bottom;
+            }
+        }
+        if (covered <= 0f) return 0f;
+        return Math.max(0f, Math.min(slotBottom, frameBottom) - rowBottom);
+    }
+
+    /**
+     * Where {@code view}'s laid-out top sits in its window, through each parent's position,
+     * scroll and offset, without the view's own offset.
+     */
+    private static float topInWindow(View view) {
+        float top = view.getTop();
+        android.view.ViewParent parent = view.getParent();
+        while (parent instanceof View) {
+            View group = (View) parent;
+            top += group.getTop() - group.getScrollY() + group.getTranslationY();
+            parent = group.getParent();
+        }
+        return top;
+    }
+
+    private static void moveBarRow(View row, float drop) {
+        Float wrote = BAR_ROWS_MOVED.get(row);
+        float ours = wrote == null ? 0f : wrote;
+        if (row.getTranslationY() != ours) {
+            BAR_ROWS_MOVED.remove(row);
+            return;
+        }
+        if (ours != drop) {
+            row.setTranslationY(drop);
+            Logger.printDebug(() -> "Progress bar row on an opened video moved down " + drop + " px");
+        }
+        if (drop == 0f) {
+            BAR_ROWS_MOVED.remove(row);
+        } else {
+            BAR_ROWS_MOVED.put(row, drop);
+        }
     }
 
     /**

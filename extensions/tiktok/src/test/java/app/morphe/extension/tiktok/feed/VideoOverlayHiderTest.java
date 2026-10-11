@@ -1405,6 +1405,123 @@ public class VideoOverlayHiderTest {
         }
     }
 
+    private static final int SEEK_ROW_ID = 0x7f0a0213;
+    private static final int CAPTION_FRAME_ID = 0x7f0a0214;
+
+    /**
+     * An opened video as the S25 lays it out (2026-10-11), at 1080 by 2205: the pager column with
+     * a cell over the 138 px strip, the caption's frame at the bottom of the cell, the comment bar,
+     * and TikTok's 79 px progress bar row at the top of its own 180 px slot at the bottom. With
+     * {@code searchBarUnderCaption} the cell keeps 101 px under the caption, as one does with
+     * TikTok's search bar there. Returns the root, the row, the strip and the caption's frame.
+     * The activity is never resumed, so no window lays the views out again in the middle of a
+     * pass; {@link #layOutAt} stands in for the layout that follows each one on a phone.
+     */
+    private static View[] openedVideo(Activity detail, boolean searchBarUnderCaption) {
+        FrameLayout root = new FrameLayout(detail);
+        View strip = new View(detail);
+        LinearLayout column = pagerColumn(detail, strip);
+        FrameLayout cell = column.findViewById(CELL_ID);
+        View frame = new View(detail);
+        frame.setId(CAPTION_FRAME_ID);
+        FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, 161, android.view.Gravity.BOTTOM);
+        frameParams.bottomMargin = searchBarUnderCaption ? 101 : 0;
+        cell.addView(frame, frameParams);
+        root.addView(column);
+        View bar = new View(detail);
+        bar.setId(BAR_ID);
+        root.addView(bar, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, 87, android.view.Gravity.BOTTOM));
+        FrameLayout slot = new FrameLayout(detail);
+        View row = new View(detail);
+        row.setId(SEEK_ROW_ID);
+        slot.addView(row, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 79));
+        root.addView(slot, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, 180, android.view.Gravity.BOTTOM));
+        detail.setContentView(root);
+        return new View[] {root, row, strip, frame};
+    }
+
+    private static void layOutAt(View root) {
+        root.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(2205, View.MeasureSpec.EXACTLY));
+        root.layout(0, 0, 1080, 2205);
+    }
+
+    /**
+     * With the comment bar and its strip gone the cell grows to the bottom and the caption comes
+     * down 138 px, but TikTok's bar row keeps its place, so a long video's bar drew across the
+     * creator's name (S25, 2026-10-11). The row comes down to where the caption now ends, 101 px
+     * to the bottom of its slot, and goes back up with the comment bar.
+     */
+    @Test
+    public void theProgressBarComesDownWithTheCaptionWhenTheCommentBarGoes() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            View row = views[1];
+            layOutAt(views[0]);
+
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.GONE, views[2].getVisibility());
+            // The cell grows into the strip's room on the next layout, and that layout's pass moves the row.
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the caption grew past the bar", 2205, views[3].getBottom());
+            assertEquals("the bar stayed above the caption's new place", 101f, row.getTranslationY(), 0.5f);
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.VISIBLE, views[2].getVisibility());
+            assertEquals("the bar didn't go back up with the comment bar", 0f, row.getTranslationY(), 0f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+        }
+    }
+
+    /**
+     * A cell with TikTok's search bar under the caption already ends where the bar row does, so the
+     * row stays put; and a row TikTok moved itself is left where TikTok put it.
+     */
+    @Test
+    public void theProgressBarStaysWhereTheCaptionAlreadyClearsIt() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, true);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.GONE, views[2].getVisibility());
+            assertEquals("a bar already under the caption moved", 0f, views[1].getTranslationY(), 0f);
+
+            views = openedVideo(detail, false);
+            views[1].setTranslationY(-20f);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("TikTok's own move was overwritten", -20f, views[1].getTranslationY(), 0f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+        }
+    }
+
     /**
      * On 47.1.4 a photo opened from search plays in the main activity (DetailSafRootFragment),
      * not the detail pager, with the same comment bar. Clear display takes it off there too, and
