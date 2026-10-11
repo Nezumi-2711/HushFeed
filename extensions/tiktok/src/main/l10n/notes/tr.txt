@@ -1,8 +1,5 @@
 ## Unreleased
 
-* **TikTok:** Hatırlanan Temiz ekran, temizlenmiş bir videoda Geri'ye bastığında ya da oradan paylaşım panelini açtığında artık kendiliğinden kapanmıyor. TikTok orada temiz moddan kendisi çıkıyor, bu yüzden sonraki video yine temizleniyor (#84).
-
-
 * **TikTok:** Derleme ayrıntıları ve tam günlük dışa aktarımı artık derlemende TikTok'un kodunu değiştiren her yamayı kısa bir adla listeliyor, Comment send fix ve Network request report gibi anahtarı olmayanlar da dahil.
 
 * **TikTok:** Hatırlanan ya da otomatik Temiz ekran artık aramadan açtığın videoyu da temizliyor. TikTok o videoyu açılan sayfaya zaten oynarken veriyor, Temiz ekran ise orada hiç gelmeyen bir başlangıcı bekliyordu, bu yüzden düğmeler ve TikTok'un arama çubuğu kalıyordu (#84).
@@ -53,7 +50,7 @@
 
 * **TikTok:** Tanılama raporunda TikTok depolamasındaki en büyük klasörleri listeleyen yeni bir Storage bölümü var. Böylece rapor, alanı neyin doldurduğunu gösterebiliyor (#70). Sadece klasör adlarını yazıyor, dosya adlarını asla, hesap numaralarını da gizliyor.
 
-* **TikTok:** Aramadan ya da bir profilden açılan temizlenmiş bir videoda geriye basmak artık Clear display'i kapatmak sayılmıyor. Aynı videoyu yeniden açınca o da diğerleri gibi temizleniyor ve hatırlanan Clear display açık kalıyor (#84).
+* **TikTok:** Temizlenmiş bir videoda geriye basmak ya da oradan paylaşım panelini açmak artık Clear display'i kapatmak sayılmıyor. Aynı videoyu yeniden açınca o da diğerleri gibi temizleniyor ve hatırlanan Clear display açık kalıyor (#84).
 
 * **TikTok:** Remove LIVE extras artık başkasının LIVE yayınına konuk olarak katılma dosyalarını da kaldırdığını söylüyor. Yani bu yamayla sesli ya da görüntülü katılım çalışmayabilir (#132). LIVE yayınlarına katılıyorsan bu yamayı seçme.
 

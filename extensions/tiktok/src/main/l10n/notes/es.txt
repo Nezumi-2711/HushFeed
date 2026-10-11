@@ -1,8 +1,5 @@
 ## Unreleased
 
-* **TikTok:** Controles ocultos recordado ya no se apaga solo cuando pulsas Atrás en un vídeo despejado o abres desde él el panel de compartir. TikTok sale de ese modo por su cuenta ahí, así que el siguiente vídeo vuelve a despejarse (#84).
-
-
 * **TikTok:** Detalles de la compilación y la exportación completa del registro ahora enumeran, con un nombre corto, cada parche de tu compilación que cambió el código de TikTok, incluidos los que no tienen interruptor, como Comment send fix y Network request report.
 
 * **TikTok:** Controles ocultos, recordado o automático, ahora también despeja un vídeo que abres desde la búsqueda. TikTok pasa ese vídeo a la página abierta ya reproduciéndose, y Controles ocultos esperaba un inicio que ahí nunca llegaba, así que los botones y la barra de búsqueda de TikTok se quedaban (#84).
@@ -53,7 +50,7 @@
 
 * **TikTok:** El informe de diagnóstico tiene una nueva sección Storage con las carpetas más grandes del almacenamiento de TikTok, así un informe puede mostrar qué lo está llenando (#70). Solo nombra carpetas, nunca archivos, y oculta los números de cuenta.
 
-* **TikTok:** Pulsar atrás en un video despejado que abriste desde la búsqueda o un perfil ya no cuenta como apagar Clear display. Si abres el mismo video otra vez, se despeja como cualquier otro, y un Clear display recordado sigue activo (#84).
+* **TikTok:** Pulsar atrás en un video despejado, o abrir desde él el panel de compartir, ya no cuenta como apagar Clear display. Si abres el mismo video otra vez, se despeja como cualquier otro, y un Clear display recordado sigue activo (#84).
 
 * **TikTok:** Remove LIVE extras ahora dice que quita los archivos para unirte al LIVE de otra persona como invitado, así que con él puede dejar de funcionar unirte por voz o video (#132). No lo incluyas si te unes a LIVEs.
 
