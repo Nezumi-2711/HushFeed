@@ -2017,6 +2017,35 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok like-targets");
                         break;
                     }
+                    case "padtop": {
+                        // Gives the first shown view with -e id <name> a top padding of -e value
+                        // pixels, to stand in for the strip TikTok keeps over a LIVE room on phones
+                        // that get it (#137). Prints the padding it had.
+                        String idName = required(intent, "id");
+                        int value = Integer.parseInt(required(intent, "value"));
+                        android.app.Activity activity = (android.app.Activity) loader.loadClass(UTILS)
+                                .getMethod("getActivity").invoke(null);
+                        if (activity == null) throw new IllegalStateException("no current activity");
+                        int id = activity.getResources().getIdentifier(idName, "id", activity.getPackageName());
+                        android.view.View found = null;
+                        java.util.ArrayDeque<android.view.View> queue = new java.util.ArrayDeque<>(windowRoots());
+                        while (!queue.isEmpty() && found == null) {
+                            android.view.View view = queue.removeFirst();
+                            if (id != 0 && view.getId() == id && view.isShown()) found = view;
+                            if (view instanceof android.view.ViewGroup) {
+                                android.view.ViewGroup group = (android.view.ViewGroup) view;
+                                for (int i = 0; i < group.getChildCount(); i++) queue.add(group.getChildAt(i));
+                            }
+                        }
+                        if (found == null) {
+                            Log.i(TAG, "ok padtop none for " + idName);
+                            break;
+                        }
+                        int before = found.getPaddingTop();
+                        found.setPadding(found.getPaddingLeft(), value, found.getPaddingRight(), found.getPaddingBottom());
+                        Log.i(TAG, "ok padtop " + idName + " " + before + " -> " + value);
+                        break;
+                    }
                     case "topviews": {
                         // Wide views across the top of the window, for the LIVE room's shade under
                         // a see-through bar (#137): each view at least 80% of the window wide that
