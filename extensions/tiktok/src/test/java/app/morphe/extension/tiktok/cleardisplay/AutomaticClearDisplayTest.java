@@ -672,6 +672,50 @@ public class AutomaticClearDisplayTest {
         assertEquals("old event delivery cancelled the next item's timer", List.of(false, false, true), events);
     }
 
+    /** Stands in for TikTok's PlayerController: the clear path reads its page from this field. */
+    static final class Player {
+        final Object activity;
+        Player(Object activity) { this.activity = activity; }
+    }
+
+    private static Object watchedWindow() {
+        return ((java.lang.ref.WeakReference<?>) org.robolectric.util.ReflectionHelpers.getStaticField(
+                RememberClearDisplayPatch.class, "window")).get();
+    }
+
+    /**
+     * A video opened from search's grid is handed to the detail page already playing, so that
+     * page's player reports progress but never a first frame, and nothing started the automatic
+     * clear there (#84, emulator 2026-10-11). Its first progress stands in for the first frame.
+     */
+    @Test public void progressFromAPlayerThatNeverShowedAFirstFrameStandsInForIt() {
+        try (var page = Robolectric.buildActivity(android.app.Activity.class).setup().visible()) {
+            Player player = new Player(page.get());
+            RememberClearDisplayPatch.onPlaybackProgress(player, "search");
+            Shadows.shadowOf(Looper.getMainLooper()).idle();
+            assertSame("the page's window is watched as after a first frame",
+                    page.get().getWindow().getDecorView(), watchedWindow());
+            assertSame(player, ((java.lang.ref.WeakReference<?>) org.robolectric.util.ReflectionHelpers
+                    .getStaticField(RememberClearDisplayPatch.class, "currentController")).get());
+        }
+    }
+
+    @Test public void aPlayerThatShowedAFirstFrameIsNotStoodInForAgain() {
+        try (var page = Robolectric.buildActivity(android.app.Activity.class).setup().visible()) {
+            Player player = new Player(page.get());
+            RememberClearDisplayPatch.onFirstFrame(player);
+            Shadows.shadowOf(Looper.getMainLooper()).idle();
+            // Another player is current now, as in the feed after a swipe to the next video.
+            org.robolectric.util.ReflectionHelpers.setStaticField(RememberClearDisplayPatch.class,
+                    "currentController", new java.lang.ref.WeakReference<>(new Object()));
+            org.robolectric.util.ReflectionHelpers.setStaticField(RememberClearDisplayPatch.class,
+                    "window", new java.lang.ref.WeakReference<>(null));
+            RememberClearDisplayPatch.onPlaybackProgress(player, "feed");
+            Shadows.shadowOf(Looper.getMainLooper()).idle();
+            assertNull("the old video's progress started it over", watchedWindow());
+        }
+    }
+
     @Test public void rejectedNativeEntryRetriesOnMatchingProgressWithoutRepeatingTheChosenDelay() {
         Object controller = new Object();
         org.robolectric.util.ReflectionHelpers.setStaticField(RememberClearDisplayPatch.class,
