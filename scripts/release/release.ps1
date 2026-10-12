@@ -182,7 +182,14 @@ function Get-PublishedReleaseDate {
     param([object]$Release, [string]$Tag)
     if ($null -eq $Release -or $Release.tag_name -cne $Tag -or $Release.draft -isnot [bool] -or
         $Release.draft -or -not $Release.published_at) { throw "$Tag isn't published. Run -Stage publish first." }
-    return ([DateTime]::Parse($Release.published_at).ToUniversalTime()).ToString('yyyy-MM-ddTHH:mm:ss')
+    # PowerShell 7's ConvertFrom-Json already returns a UTC DateTime. Parsing its culture string
+    # again reads it as local time and moves the index date by the machine's UTC offset.
+    $at = $Release.published_at
+    $utc = if ($at -is [DateTime]) { $at.ToUniversalTime() } else {
+        [DateTime]::Parse([string]$at, [Globalization.CultureInfo]::InvariantCulture,
+            [Globalization.DateTimeStyles]::AdjustToUniversal -bor [Globalization.DateTimeStyles]::AssumeUniversal)
+    }
+    return $utc.ToString('yyyy-MM-ddTHH:mm:ss')
 }
 
 function Assert-ImmutablePublicationEnabled {
@@ -490,6 +497,10 @@ switch ($Stage) {
         if (-not $ReadmeSummary -or -not $BundleSummary) { throw '-ReadmeSummary and -BundleSummary are the release''s README line and Manager text.' }
         $published = Get-PublicationRelease -Repository $Repository -Tag $tag
         $created = Get-PublishedReleaseDate -Release $published -Tag $tag
+        # Read before anything is written: a failed read used to come back empty and was then
+        # written over the live description.
+        $description = [string](gh repo view $Repository --json description --jq .description)
+        if ($LASTEXITCODE -ne 0) { throw "Couldn't read the $Repository description (exit $LASTEXITCODE), so nothing was indexed." }
         if ($RequireImmutableRelease) {
             foreach ($name in $bundleName, $receiptName, 'SHA256SUMS.txt') {
                 Test-ReleaseAttestation -Repository $Repository -Tag $tag -ArtifactPath (Join-Path $assets $name) `
@@ -503,7 +514,6 @@ switch ($Stage) {
                 --readme-summary $ReadmeSummary --bundle-summary $BundleSummary --device-line $DeviceLine --runtime $runtime --patch $patch
         }
         Copy-Item -LiteralPath (Join-Path $assets $receiptName) -Destination (Join-Path $root $receiptName) -Force
-        $description = gh repo view $Repository --json description --jq .description
         $list = Get-Content -LiteralPath (Join-Path $root 'patches-list.json') -Raw | ConvertFrom-Json
         $count = @($list.patches).Count
         $updated = $description -replace 'Hushfeed v\d+\.\d+\.\d+', "Hushfeed v$Version" -replace '\b\d+ patches\b', "$count patches"

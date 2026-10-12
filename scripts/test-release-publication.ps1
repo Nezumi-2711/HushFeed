@@ -67,6 +67,7 @@ function Reset-Case {
         Calls = (New-Object 'System.Collections.Generic.List[object]')
         DownloadDirectories = (New-Object 'System.Collections.Generic.List[string]')
         RemoteBytes = @{}; LastDownload = @(); AttestationFailure = ''
+        Description = 'Hushfeed v1.2.2 for TikTok, 130 patches'; DescriptionFailure = $false
     }
     $script:invoke = @{
         Root = $caseRoot; Version = '1.2.3'; Repository = 'example/project'; ExpectedCommit = $commit
@@ -204,6 +205,12 @@ function gh {
             }
             default { throw "Unexpected GitHub endpoint: $endpoint" }
         }
+    }
+    if ($a[0] -ceq 'repo') {
+        Assert-True (($a -join '|') -ceq 'repo|view|example/project|--json|description|--jq|.description') 'Description read lost its explicit repository.'
+        if ($script:state.DescriptionFailure) { $global:LASTEXITCODE = 1; return }
+        $script:state.Description
+        return
     }
     Assert-True ($a[0] -ceq 'release') 'Unexpected GitHub command family.'
     if ($a[1] -in @('verify', 'verify-asset')) {
@@ -612,6 +619,19 @@ try {
         $release.draft = $false
         Assert-True ((Get-PublishedReleaseDate -Release $release -Tag 'v1.2.3') -ceq '2026-10-12T12:00:00') 'Published index date changed.'
     }
+    Test-Case 'Index date stays in UTC when GitHub''s JSON arrives as a date' {
+        $release = '{"tag_name":"v1.2.3","draft":false,"published_at":"2026-10-12T12:00:00Z"}' | ConvertFrom-Json
+        Assert-True ($release.published_at -is [DateTime]) 'ConvertFrom-Json no longer returns a date here, so this contract tests nothing.'
+        Assert-True ((Get-PublishedReleaseDate -Release $release -Tag 'v1.2.3') -ceq '2026-10-12T12:00:00') 'Index date moved by the local UTC offset.'
+    }
+    function Get-IndexAction {
+        $switch = $ast.Find({ param($node)
+            $node -is [Management.Automation.Language.SwitchStatementAst] -and $node.Condition.Extent.Text -ceq '$Stage'
+        }, $false)
+        $clause = @($switch.Clauses | Where-Object { $_.Item1.Extent.Text -ceq "'index'" })[0]
+        $body = $clause.Item2.Extent.Text
+        return [scriptblock]::Create($body.Substring(1, $body.Length - 2))
+    }
     Test-Case 'Actual index stage rejects drafts before indexing or building' {
         Seed-Release
         $script:state.Release.published_at = '2026-10-12T12:00:00Z'
@@ -622,14 +642,43 @@ try {
         function Assert-PushedHead { return $commit }
         function Get-TestCount { throw 'A draft reached test-result collection.' }
         function Invoke-Native { throw 'A draft reached an index mutation.' }
-        $switch = $ast.Find({ param($node)
-            $node -is [Management.Automation.Language.SwitchStatementAst] -and $node.Condition.Extent.Text -ceq '$Stage'
-        }, $false)
-        $clause = @($switch.Clauses | Where-Object { $_.Item1.Extent.Text -ceq "'index'" })[0]
-        $body = $clause.Item2.Extent.Text
-        $indexAction = [scriptblock]::Create($body.Substring(1, $body.Length - 2))
+        $indexAction = Get-IndexAction
         Assert-Throws { & $indexAction } "isn't published"
         Assert-True ((Get-ReleaseWrites).Count -eq 0) 'Draft indexing caused a release mutation.'
+    }
+    Test-Case 'A failed description read stops the index before anything is written' {
+        Seed-Release -Published
+        $script:state.DescriptionFailure = $true
+        $Repository = 'example/project'
+        $tag = 'v1.2.3'
+        $ReadmeSummary = 'summary.txt'
+        $BundleSummary = 'summary.txt'
+        function Assert-PushedHead { return $commit }
+        function Get-TestCount { throw 'A failed description read reached test-result collection.' }
+        function Invoke-Native { throw 'A failed description read reached an index mutation.' }
+        $indexAction = Get-IndexAction
+        Assert-Throws { & $indexAction } "Couldn't read the example/project description"
+        Assert-True ((Get-ReleaseWrites).Count -eq 0) 'A failed description read changed the release.'
+    }
+    Test-Case 'Index stage writes the UTC date and the new version into the description' {
+        Seed-Release -Published
+        $Repository = 'example/project'
+        $tag = 'v1.2.3'
+        $Version = '1.2.3'
+        $ReadmeSummary = 'summary.txt'
+        $BundleSummary = 'summary.txt'
+        $root = $script:invoke.Root
+        $assets = $script:invoke.Assets
+        $receiptName = $names[1]
+        [IO.File]::WriteAllText((Join-Path $root 'patches-list.json'), '{"patches":[{},{}]}')
+        $native = New-Object 'System.Collections.Generic.List[string]'
+        function Assert-PushedHead { return $commit }
+        function Get-TestCount { return 1 }
+        function Invoke-Native([string]$What, [scriptblock]$Command) { $native.Add($What) }
+        . (Get-IndexAction)
+        Assert-True ($created -ceq '2026-10-12T12:00:00') "Index date was $created."
+        Assert-True ($updated -ceq 'Hushfeed v1.2.3 for TikTok, 2 patches') "Description became '$updated'."
+        Assert-True (($native -join '|') -ceq 'index|repository description') 'Index stage skipped or reordered its writes.'
     }
     Test-Case 'Changed local release notes stop before publication' {
         Seed-Release
