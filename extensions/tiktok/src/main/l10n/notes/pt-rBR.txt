@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Na Tela limpa, as abas de baixo continuam escondidas depois de deslizar até o perfil de um criador e voltar (#84).
+
 * **TikTok:** Os números digitados em Contagens do seu perfil continuam nos campos quando a tela gira ou o tema muda com o editor aberto.
 
 * **TikTok:** Se a pesquisa na atividade carregada falhar em uma versão do TikTok, a barra some e a lista do próprio TikTok continua na tela, em vez de o app fechar. A pesquisa fica desligada até o TikTok reiniciar.

@@ -1017,6 +1017,72 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * alexcsi on 0.71.2 (#84): swipe to a creator's profile and back a few times in Clear display
+     * and the bottom tabs stay up until the next scroll. The profile is a page of the feed's own
+     * pager and the tabs ride on the feed's page, so a pass while the profile showed put them
+     * back, and the swipe back only scrolls: no layout, no pass. They now stay away while the
+     * feed's page is scrolled aside, and another tab still gets them back.
+     */
+    @Test
+    public void clearDisplayKeepsTheBottomTabsAwayAcrossASwipeToTheProfileAndBack() {
+        int tabsId = 0x7f0a0b25;
+        int homeId = 0x7f0a0b26;
+        int cellId = 0x7f0a0b27;
+        VideoOverlayHider.resolveForTests("47.1.4:opp", tabsId);
+        VideoOverlayHider.resolveForTests("view_rootview", cellId);
+        try (var main = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = main.get();
+            Utils.setContext(activity);
+            FrameLayout pager = new FrameLayout(activity);
+            FrameLayout feedPage = new FrameLayout(activity);
+            FrameLayout cell = new FrameLayout(activity);
+            cell.setId(cellId);
+            feedPage.addView(cell);
+            FrameLayout tabs = new FrameLayout(activity);
+            tabs.setId(tabsId);
+            View home = new View(activity);
+            home.setId(homeId);
+            home.setSelected(true);
+            tabs.addView(home, new FrameLayout.LayoutParams(60, 40));
+            feedPage.addView(tabs, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 40, android.view.Gravity.BOTTOM));
+            pager.addView(feedPage, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+            activity.setContentView(pager);
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+            assertTrue("the window never laid out", home.getWidth() > 0 && pager.getWidth() > 0);
+            app.morphe.extension.tiktok.blockauthor.FeedVisibility.resolveForTests(
+                    activity.getPackageName(), "47.1.4:oph", homeId);
+
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(true, 0));
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, tabs.getVisibility());
+
+            // The swipe to the profile, and a layout pass while it's in front.
+            pager.scrollTo(pager.getWidth(), 0);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("the profile pass put the tabs back", View.GONE, tabs.getVisibility());
+
+            // The swipe back only scrolls, so no pass runs; the tabs are still away.
+            pager.scrollTo(0, 0);
+            assertEquals(View.GONE, tabs.getVisibility());
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, tabs.getVisibility());
+
+            // Another tab selected is another page: the tabs come back there.
+            home.setSelected(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.VISIBLE, tabs.getVisibility());
+        } finally {
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(false, 2));
+            app.morphe.extension.tiktok.blockauthor.FeedVisibility.resolveForTests(
+                    RuntimeEnvironment.getApplication().getPackageName(), "47.1.4:oph", 0);
+        }
+    }
+
+    /**
      * The hairline along the tab bar's top edge is the bar's sibling, so with only the bar taken
      * a thin line stayed across the bottom of each new video until TikTok's own clear landed
      * (#84). It goes and comes back with the bar, and one TikTok put away itself stays away.

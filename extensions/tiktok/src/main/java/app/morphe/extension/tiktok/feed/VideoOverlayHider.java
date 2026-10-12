@@ -570,8 +570,12 @@ public final class VideoOverlayHider {
                 wanted[SURVEY_TARGET] = surveys;
                 wanted[TAB_STRIP_TARGET] = tabStrip;
                 // Only over the Home feed. A live state that outlasts the feed (Inbox opened from
-                // a notification) must not take the tabs off another page.
-                wanted[BOTTOM_TABS_TARGET] = tabStrip && FeedVisibility.isOnFeed(activity);
+                // a notification) must not take the tabs off another page. The tabs ride on the
+                // feed's page, so they stay away while it's scrolled sideways to a creator's
+                // profile: put back there, nothing took them off again when the swipe back
+                // settled without a layout pass (#84).
+                wanted[BOTTOM_TABS_TARGET] = tabStrip && (FeedVisibility.isOnFeed(activity)
+                        || FeedVisibility.isFeedPageScrolledAway(activity));
                 wanted[BOTTOM_TABS_DIVIDER_TARGET] = wanted[BOTTOM_TABS_TARGET];
                 wanted[FOLLOWING_STORY_TARGET] = tabStrip && !FeedVisibility.isStoryVisible(activity);
                 wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;

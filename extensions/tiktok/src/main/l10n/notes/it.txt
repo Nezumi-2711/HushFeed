@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Nella visualizzazione pulita le schede in basso restano nascoste quando scorri al profilo di un creator e torni indietro (#84).
+
 * **TikTok:** I numeri digitati in Conteggi del tuo profilo restano nei campi se lo schermo ruota o il tema cambia mentre l’editor è aperto.
 
 * **TikTok:** Se la ricerca nelle attività caricate non riesce su una versione di TikTok, la sua barra sparisce e resta l’elenco di TikTok invece di far chiudere l’app. La ricerca resta disattivata fino al riavvio di TikTok.

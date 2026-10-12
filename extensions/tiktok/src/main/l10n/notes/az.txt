@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Təmiz ekranda müəllifin profilinə sürüşdürüb geri qayıdanda alt tablar gizli qalır (#84).
+
 * **TikTok:** Öz profilinizin sayları sahələrinə yazdığınız rəqəmlər redaktor açıq ikən ekran fırlananda və ya tema dəyişəndə sahələrdə qalır.
 
 * **TikTok:** Yüklənmiş fəaliyyətdə axtarış hansısa TikTok buildində uğursuz olarsa, onun paneli yox olur və tətbiq bağlanmaq əvəzinə TikTok-un öz siyahısı ekranda qalır. Axtarış TikTok yenidən başladılana qədər söndürülmüş qalır.

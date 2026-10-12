@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** In der freien Anzeige bleiben die unteren Tabs ausgeblendet, wenn du zum Profil eines Creators und wieder zurück wischst (#84).
+
 * **TikTok:** Zahlen, die du unter „Zahlen des eigenen Profils“ eingibst, bleiben in den Feldern, wenn sich der Bildschirm dreht oder das Design wechselt, während der Editor offen ist.
 
 * **TikTok:** Schlägt die Suche in geladenen Aktivitäten in einer TikTok-Version fehl, verschwindet ihre Leiste und TikToks eigene Liste bleibt stehen, statt dass die App schließt. Die Suche bleibt bis zum nächsten Start von TikTok aus.

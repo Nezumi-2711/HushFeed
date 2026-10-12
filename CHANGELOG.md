@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** In Clear display, the bottom tabs stay hidden after you swipe over to a creator's profile and back (#84).
+
 * **TikTok:** Numbers typed into Own profile counts stay in their fields when the screen rotates or the theme changes while the editor is open.
 
 * **TikTok:** If the loaded Activity search fails on a TikTok build, its bar goes away and TikTok's own list stays on screen instead of the app closing. The search stays off until TikTok restarts.
