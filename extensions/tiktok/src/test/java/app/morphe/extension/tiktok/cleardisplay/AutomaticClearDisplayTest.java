@@ -338,7 +338,7 @@ public class AutomaticClearDisplayTest {
         RememberClearDisplayPatch.rememberClearDisplayEvent(new Event(false, 2));
         assertFalse(RememberClearDisplayPatch.isCarryingClear());
 
-        RememberClearDisplayPatch.onPageOpened();
+        RememberClearDisplayPatch.onPageOpened(null);
         assertTrue("the result's controls show until its clear lands", RememberClearDisplayPatch.isCarryingClear());
         RememberClearDisplayPatch.firstFrame("result", () -> true, events::add);
         Shadows.shadowOf(Looper.getMainLooper()).idle();
@@ -346,8 +346,12 @@ public class AutomaticClearDisplayTest {
         assertTrue(RememberClearDisplayPatch.isCarryingClear());
     }
 
-    /** The page opening again on the video whose controls were brought back leaves them up. */
-    @Test public void aPageOpenedOnTheRestoredVideoKeepsItsControls() {
+    /**
+     * Back on the video whose controls were brought back, with a page's start window still open
+     * because that page never played anything: the window's focus coming back runs the video's
+     * first frame again, and the controls stay up.
+     */
+    @Test public void aStartWindowEndsBackOnTheRestoredVideo() {
         SettingsStatus.automaticClearDisplayEnabled = true;
         Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
         List<Boolean> events = new ArrayList<>();
@@ -355,22 +359,54 @@ public class AutomaticClearDisplayTest {
         Shadows.shadowOf(Looper.getMainLooper()).idle();
         RememberClearDisplayPatch.rememberClearDisplayEvent(new Event(false, 2));
 
-        RememberClearDisplayPatch.onPageOpened();
+        RememberClearDisplayPatch.onPageOpened(null);
         RememberClearDisplayPatch.firstFrame("one", () -> true, events::add);
         Shadows.shadowOf(Looper.getMainLooper()).idle();
         assertFalse("the restore was undone", RememberClearDisplayPatch.isClearDisplayNow());
         assertFalse("the controls stayed away", RememberClearDisplayPatch.isCarryingClear());
     }
 
+    /**
+     * Backing out of a page before its clear landed gives the controls of the video behind it
+     * back at once, not after the page's limit, and only that page leaving does (review of
+     * 1fe6863a9).
+     */
+    @Test public void aPageLeftBeforeItsClearLandsEndsItsWindow() {
+        SettingsStatus.automaticClearDisplayEnabled = true;
+        Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
+        List<Boolean> events = new ArrayList<>();
+        RememberClearDisplayPatch.firstFrame("feed", () -> true, events::add);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        RememberClearDisplayPatch.rememberClearDisplayEvent(new Event(false, 2));
+        try (var page = Robolectric.buildActivity(android.app.Activity.class).setup();
+             var other = Robolectric.buildActivity(android.app.Activity.class).setup()) {
+            RememberClearDisplayPatch.onPageOpened(page.get());
+            assertTrue(RememberClearDisplayPatch.isCarryingClear());
+            RememberClearDisplayPatch.onPageLeft(other.get());
+            assertTrue("another screen pausing ended the page's window", RememberClearDisplayPatch.isCarryingClear());
+            RememberClearDisplayPatch.onPageLeft(page.get());
+            assertFalse("the feed's restored controls stayed hidden", RememberClearDisplayPatch.isCarryingClear());
+        }
+    }
+
+    /** A page whose post never plays (a photo post reports nothing) gets its controls back soon. */
+    @Test public void aPageThatNeverPlaysGetsItsControlsBackAfterItsLimit() {
+        SettingsStatus.automaticClearDisplayEnabled = true;
+        Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
+        RememberClearDisplayPatch.onPageOpened(null);
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(RememberClearDisplayPatch.PAGE_LIMIT_MS - 100));
+        assertTrue(RememberClearDisplayPatch.isCarryingClear());
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(100));
+        assertFalse("the page's controls stayed away", RememberClearDisplayPatch.isCarryingClear());
+    }
+
     /** With a delay the controls show first anyway, so a new page carries nothing. */
     @Test public void aPageOpenedWithADelayCarriesNothing() {
         SettingsStatus.automaticClearDisplayEnabled = true;
-        RememberClearDisplayPatch.onPageOpened();
+        RememberClearDisplayPatch.onPageOpened(null);
         assertFalse(RememberClearDisplayPatch.isCarryingClear());
         Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
         assertTrue(RememberClearDisplayPatch.isCarryingClear());
-        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(RememberClearDisplayPatch.START_LIMIT_MS));
-        assertFalse("a page that never played kept its controls away", RememberClearDisplayPatch.isCarryingClear());
     }
 
     /** The overlay hider keeps the incoming video's controls away while the clear carries. */

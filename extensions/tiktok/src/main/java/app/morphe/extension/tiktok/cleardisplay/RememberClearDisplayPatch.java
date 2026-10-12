@@ -106,6 +106,9 @@ public final class RememberClearDisplayPatch {
     private static volatile boolean starting = true;
     private static boolean startLimitArmed;
     static final long START_LIMIT_MS = 10000;
+    static final long PAGE_LIMIT_MS = 3000;
+    /** The video page whose opening started the window, until it goes; see {@link #onPageOpened}. */
+    private static WeakReference<Activity> openedPage = new WeakReference<>(null);
     private static final Runnable END_START = () -> {
         if (!starting) return;
         starting = false;
@@ -275,7 +278,8 @@ public final class RememberClearDisplayPatch {
         if (pending != null || applied || manuallyChanged) {
             Logger.printDebug(() -> "Clear display: automatic clear not started, "
                     + (manuallyChanged ? "changed by hand on this video" : applied ? "already cleared" : "one is pending"));
-            // A page that opens again on the video whose controls were brought back keeps them.
+            // Back on the video whose controls were brought back, through its window's focus
+            // coming back, a page's start window that never saw a video of its own ends here.
             if (manuallyChanged && starting) setCarrying(false);
             return;
         }
@@ -331,6 +335,7 @@ public final class RememberClearDisplayPatch {
         starting = true;
         startLimitArmed = false;
         MAIN.removeCallbacks(END_START);
+        openedPage.clear();
         View old = window.get();
         if (old != null) {
             if (old.getViewTreeObserver().isAlive()) old.getViewTreeObserver().removeOnWindowFocusChangeListener(FOCUS);
@@ -390,11 +395,25 @@ public final class RememberClearDisplayPatch {
      * brought back by hand on the feed (which a search starts with, since Clear display hides the
      * search button) they showed for about half a second (#84).
      */
-    public static void onPageOpened() {
+    public static void onPageOpened(Activity page) {
         if (carrying) return;
         starting = true;
-        startLimitArmed = false;
+        // A page's own limit, armed now: the result is usually handed over already playing, and
+        // a photo post never reports anything, so its controls come back after a moment.
+        startLimitArmed = true;
         MAIN.removeCallbacks(END_START);
+        MAIN.postDelayed(END_START, PAGE_LIMIT_MS);
+        openedPage = new WeakReference<>(page);
+    }
+
+    /**
+     * The page that opened a start window is going away. Left before its clear landed, the window
+     * would have hidden the controls of the video behind it, which had them brought back by hand.
+     */
+    public static void onPageLeft(Activity page) {
+        if (page == null || openedPage.get() != page) return;
+        openedPage.clear();
+        END_START.run();
     }
 
     private static void setCarrying(boolean carry) {
