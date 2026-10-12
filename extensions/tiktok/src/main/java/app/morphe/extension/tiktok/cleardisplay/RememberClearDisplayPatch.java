@@ -275,6 +275,8 @@ public final class RememberClearDisplayPatch {
         if (pending != null || applied || manuallyChanged) {
             Logger.printDebug(() -> "Clear display: automatic clear not started, "
                     + (manuallyChanged ? "changed by hand on this video" : applied ? "already cleared" : "one is pending"));
+            // A page that opens again on the video whose controls were brought back keeps them.
+            if (manuallyChanged && starting) setCarrying(false);
             return;
         }
         long attempt = generation;
@@ -378,6 +380,21 @@ public final class RememberClearDisplayPatch {
             MAIN.postDelayed(END_START, START_LIMIT_MS);
         }
         return true;
+    }
+
+    /**
+     * A video page opened from search, a profile, a hashtag or a sound (DetailActivity) starts the
+     * way a cold start does: with a choice that clears each video as it starts, its first video's
+     * controls stay away until its own clear lands. Its player there often reports no first
+     * frame, so that clear waits for the first progress report, and after the controls had been
+     * brought back by hand on the feed (which a search starts with, since Clear display hides the
+     * search button) they showed for about half a second (#84).
+     */
+    public static void onPageOpened() {
+        if (carrying) return;
+        starting = true;
+        startLimitArmed = false;
+        MAIN.removeCallbacks(END_START);
     }
 
     private static void setCarrying(boolean carry) {

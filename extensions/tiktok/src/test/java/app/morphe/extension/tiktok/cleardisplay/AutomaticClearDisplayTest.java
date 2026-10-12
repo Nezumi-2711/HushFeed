@@ -323,6 +323,56 @@ public class AutomaticClearDisplayTest {
         assertTrue(RememberClearDisplayPatch.isCarryingClear());
     }
 
+    /**
+     * A video opened from search after the controls were brought back on the feed (which a
+     * search starts with, since Clear display hides the search button) showed them for about half
+     * a second, until its player's first progress report started its clear (S22 2026-10-12, #84).
+     * A newly opened page carries the clear from its first draw, the way a cold start does.
+     */
+    @Test public void aNewlyOpenedPageCarriesTheClearAfterARestoreOnTheFeed() {
+        SettingsStatus.automaticClearDisplayEnabled = true;
+        Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
+        List<Boolean> events = new ArrayList<>();
+        RememberClearDisplayPatch.firstFrame("feed", () -> true, events::add);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        RememberClearDisplayPatch.rememberClearDisplayEvent(new Event(false, 2));
+        assertFalse(RememberClearDisplayPatch.isCarryingClear());
+
+        RememberClearDisplayPatch.onPageOpened();
+        assertTrue("the result's controls show until its clear lands", RememberClearDisplayPatch.isCarryingClear());
+        RememberClearDisplayPatch.firstFrame("result", () -> true, events::add);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertTrue(RememberClearDisplayPatch.isClearDisplayNow());
+        assertTrue(RememberClearDisplayPatch.isCarryingClear());
+    }
+
+    /** The page opening again on the video whose controls were brought back leaves them up. */
+    @Test public void aPageOpenedOnTheRestoredVideoKeepsItsControls() {
+        SettingsStatus.automaticClearDisplayEnabled = true;
+        Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
+        List<Boolean> events = new ArrayList<>();
+        RememberClearDisplayPatch.firstFrame("one", () -> true, events::add);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        RememberClearDisplayPatch.rememberClearDisplayEvent(new Event(false, 2));
+
+        RememberClearDisplayPatch.onPageOpened();
+        RememberClearDisplayPatch.firstFrame("one", () -> true, events::add);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertFalse("the restore was undone", RememberClearDisplayPatch.isClearDisplayNow());
+        assertFalse("the controls stayed away", RememberClearDisplayPatch.isCarryingClear());
+    }
+
+    /** With a delay the controls show first anyway, so a new page carries nothing. */
+    @Test public void aPageOpenedWithADelayCarriesNothing() {
+        SettingsStatus.automaticClearDisplayEnabled = true;
+        RememberClearDisplayPatch.onPageOpened();
+        assertFalse(RememberClearDisplayPatch.isCarryingClear());
+        Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
+        assertTrue(RememberClearDisplayPatch.isCarryingClear());
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(RememberClearDisplayPatch.START_LIMIT_MS));
+        assertFalse("a page that never played kept its controls away", RememberClearDisplayPatch.isCarryingClear());
+    }
+
     /** The overlay hider keeps the incoming video's controls away while the clear carries. */
     @Test public void aCarriedClearHidesTheIncomingVideosControls() {
         Class<?> hider = app.morphe.extension.tiktok.feed.VideoOverlayHider.class;

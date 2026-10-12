@@ -395,6 +395,7 @@ public final class VideoOverlayHider {
         if (activity == null) {
             return;
         }
+        if (FeedVisibility.isDetailPager(activity)) RememberClearDisplayPatch.onPageOpened();
         FRONT.add(activity);
         Utils.runOnMainThread(() -> {
             if (FRONT.mayTake(activity)) installNow(activity);
