@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Telah diverifikasi bahwa TalkBack membacakan tindakan pemberitahuan pengaturan sebagai Ketuk dua kali untuk menutup.
+
 * **TikTok:** Hapus semua di Kotak masuk kini tetap terlihat di samping akun yang disarankan, dengan ruang untuk area sentuh tombol berukuran penuh.
 
 * **TikTok:** Yang baru merangkum setiap perubahan dalam bahasa pengaturan, dengan Semua perubahan untuk riwayat lengkap. Nanti dan Mengerti tetap bekerja seperti sebelumnya, dan tombol pindah baris pada layar sempit atau teks lebih besar.

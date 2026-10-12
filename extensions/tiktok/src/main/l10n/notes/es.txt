@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Se verificó que TalkBack anuncia la acción de un aviso de ajustes como Toca dos veces para cerrar.
+
 * **TikTok:** Borrar todo permanece visible junto a las cuentas sugeridas de la bandeja de entrada, con espacio para toda la superficie táctil del botón.
 
 * **TikTok:** Novedades resume cada cambio en el idioma de los ajustes, con Todos los cambios para ver el historial completo. Más tarde y Entendido mantienen su comportamiento. Las acciones pasan a otra línea en pantallas estrechas o con texto más grande.

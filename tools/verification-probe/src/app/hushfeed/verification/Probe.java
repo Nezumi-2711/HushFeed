@@ -185,6 +185,24 @@ public final class Probe extends Instrumentation {
                         openSettings();
                         Log.i(TAG, "ok settings opened");
                         break;
+                    case "settings-notice": {
+                        android.app.Activity activity = (android.app.Activity) loader.loadClass(UTILS)
+                                .getMethod("getVisibleActivity").invoke(null);
+                        if (activity == null || !SETTINGS_ACTIVITY.equals(activity.getClass().getName())) {
+                            throw new IllegalStateException("Hushfeed settings must be in front");
+                        }
+                        loader.loadClass("app.morphe.extension.tiktok.settings.preference.SettingsActionBanner")
+                                .getMethod("showNotice", Context.class, String.class)
+                                .invoke(null, activity, "Settings notice.");
+                        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                            android.view.View banner = activity.findViewById(android.R.id.content)
+                                    .findViewWithTag("hushfeed_settings_action_banner");
+                            boolean focused = banner != null && banner.performAccessibilityAction(
+                                    android.view.accessibility.AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null);
+                            Log.i(TAG, "ok settings-notice focused=" + focused);
+                        }, 250);
+                        break;
+                    }
                     case "dump":
                         Log.i(TAG, "ok dump\n" + dump());
                         break;

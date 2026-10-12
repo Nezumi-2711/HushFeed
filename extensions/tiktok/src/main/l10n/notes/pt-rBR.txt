@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Verificado que o TalkBack anuncia a ação de um aviso nas configurações como Toque duas vezes para fechar.
+
 * **TikTok:** Limpar tudo fica visível ao lado das contas sugeridas na Caixa de entrada, com espaço para toda a área de toque do botão.
 
 * **TikTok:** Novidades resume todas as mudanças no idioma das configurações, com Histórico completo para ver tudo. Mais tarde e Entendi mantêm o comportamento, e as ações se dividem em linhas em telas estreitas ou com texto maior.

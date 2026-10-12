@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** TalkBack'in ayarlardaki bir bildirimin eylemini Kapatmak için iki kez dokunun olarak okuduğu doğrulandı.
+
 * **TikTok:** Gelen kutusundaki Tümünü temizle, önerilen hesapların yanında görünür kalır. Düğmenin tam boyutlu dokunma alanı için artık yer ayrılır.
 
 * **TikTok:** Yenilikler, ayar dilinde her değişikliği özetliyor. Tam değişiklik günlüğü bütün geçmişi açıyor. Sonra ve Anladım aynı şekilde çalışıyor, dar ekranlarda veya büyük metinde eylemler alt satıra geçiyor.
