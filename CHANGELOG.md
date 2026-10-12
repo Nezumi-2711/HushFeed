@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Received DM stickers open a preview with Save media. Saving uses the chosen sticker format and checks encrypted files before writing them. Opening the preview sends no message.
+
 * **TikTok:** Release uploads now stay in a draft until the bundle, receipt and checksums have been downloaded and verified. Interrupted uploads resume only after existing assets match. An optional immutable check requires GitHub's repository setting and verifies the published attestation.
 
 * **TikTok:** Verified that TalkBack announces a settings notice's action as Double tap to close.

@@ -502,6 +502,8 @@ With `Advanced downloads`, **Save details beside the video** writes a TXT file c
 
 **Write the username and caption on the video** draws the @username and the first line of the caption in the bottom left corner of a saved video. The phone encodes the whole video again to do it, so these saves take longer, and they always show their progress with a Cancel button. If a phone can't do it for a video, the video is saved without the text and a message says so.
 
+Tap a received DM sticker to open a preview with **Save media**. The Downloads patch supplies this preview. It uses your sticker folder and animated format preference, and opening it sends no message. The preview shows a still image; saving fetches the complete sticker. Encrypted source files must pass authentication before anything reaches the gallery.
+
 **Show download progress**, under Downloads & sharing > Downloads, adds a progress bar while a video saves. It shows a percentage when the video stream's size is known, then stays busy while the sound is fetched or the file is prepared and written. The switch starts off. It also works with Automatic quality. A save finished before the share sheet closes skips the progress row and shows its result. Screen readers hear the start once; changing percentages stay quiet.
 
 <img src="assets/settings/single-save-progress.png" alt="A single video save at 50 percent" width="328" />

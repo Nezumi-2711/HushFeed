@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Alınan DM çıkartmaları, Medyayı kaydet düğmesi olan bir önizleme açar. Kayıt, seçilen çıkartma biçimini kullanır ve şifreli dosyaları yazmadan önce doğrular. Önizlemeyi açmak mesaj göndermez.
+
 * **TikTok:** Sürüm yüklemeleri paket, makbuz ve sağlama toplamları indirilip doğrulanana kadar taslakta kalır. Sürdürme mevcut dosyaları denetler. İsteğe bağlı değişmezlik denetimi GitHub deposu ayarını gerektirir ve yayımlanan doğrulama beyanını denetler.
 
 * **TikTok:** TalkBack'in ayarlardaki bir bildirimin eylemini Kapatmak için iki kez dokunun olarak okuduğu doğrulandı.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Stickers recebidos por mensagem direta abrem uma prévia com Salvar mídia. O salvamento usa o formato escolhido e verifica arquivos criptografados antes de gravá-los. Abrir a prévia não envia mensagens.
+
 * **TikTok:** Os uploads de uma versão ficam em rascunho até baixar e verificar o pacote, o recibo e as somas de verificação. Ao retomar, os arquivos existentes são conferidos. A verificação opcional de versões imutáveis exige a configuração do repositório no GitHub e valida a atestação publicada.
 
 * **TikTok:** Verificado que o TalkBack anuncia a ação de um aviso nas configurações como Toque duas vezes para fechar.
