@@ -4,6 +4,10 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Feature Gate Lab has a New comment emoji preset. It enables the native comment emoji experiment while keeping TikTok's catalog availability and fallback checks. Restart TikTok after applying it. Assets and server eligibility still determine what appears.
+
+* **TikTok:** Feature Gate Lab has a More hashtags per post preset. It turns off the client hashtag cap without changing the maximum or unrelated caption checks. Restart TikTok after applying it. TikTok may still enforce a server limit.
+
 * **TikTok:** A new APK inspector checks native library load alignment and stored ZIP offsets for 16 KB pages. It reports failures per library without extracting files. Android runtime compatibility still needs a separate device check.
 
 * **TikTok:** Settings tables can be exported as XML, translated and imported before regeneration. The exchange preserves plural forms and format placeholders, and rejects changed keys or incomplete translations before replacing a table.

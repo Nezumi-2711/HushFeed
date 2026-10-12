@@ -558,6 +558,8 @@ The Lab can also bring back a missing See translation link. Open the Lab menu, c
 
 The same menu has presets for features other TikTok mods turn on by flag: repost with a comment, the profile banner and new profile layout, live photo, camera and audio comments, comments saved to Favorites, comment sort and dislike styles, message bubble colors, the Inbox archive and sharing to more chats at once, Manage topics, visual search, AI Self, the long-press menu on every post, TikTok's own hold to speed up, background play and Auto scroll, and post dates in the feed. The list shows the presets for the TikTok version you have installed, and opening one checks its keys against that build before Apply is offered. Some of those features also need TikTok's servers to allow them for your account.
 
+New comment emoji selects TikTok's native comment emoji experiment. Its catalog availability, cached assets and fallback checks still decide which emoji appear. More hashtags per post turns off the client cap while keeping the separate maximum and unrelated caption checks. A server limit can still reject a post. Both presets need the Lab's overrides switch and a TikTok restart. Undo restores the rules you had before applying them.
+
 The Lab uses a compact toolbar so more gates fit on small screens. Tap the warning icon beside Apply overrides for the explanation and account warning. Source and view tabs scroll sideways when larger text needs more room.
 
 <img src="assets/settings/lab.png" alt="Feature Gate Lab with compact controls and a scrollable gate list" width="300" />
