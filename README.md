@@ -374,15 +374,13 @@ Each switch controls its own surface. Turning one off doesn't change the others.
 
 ### Restore older backups
 
-Watch-history import and the additional restore feedback below are available in source builds and await release.
-
 App & advanced > Backup and restore > **Restore settings** accepts portable settings from an older Hushfeed or another TikTok version. A setting missing from the file keeps its current value. Keys this build can't restore are skipped, and the outcome reports their count separately from missing settings. TikTok's own preferences and local device records stay intact.
 
 Feature Gate Lab rules are checked against the supported TikTok catalogs. Rules whose gates changed return turned off. A backup from a version without a catalog restores its portable settings and leaves the current Lab rules alone. **Undo last change** restores the settings and compatible Lab state from before the import.
 
 ### Import watch history
 
-In source builds, **Undo clearing seen videos** restores only records that still fit the current retention period and 10,000-video limit. The result reports a partial restoration or explains when none can be kept. The merge runs in the background, and a storage error keeps Undo available.
+**Undo clearing seen videos** restores only records that still fit the current retention period and 10,000-video limit. The result reports a partial restoration or explains when none can be kept. The merge runs in the background, and a storage error keeps Undo available.
 
 Request [your TikTok data](https://support.tiktok.com/en/account-and-privacy/personalized-ads-and-data/requesting-your-data) in JSON format. Extract the downloaded archive, sign in to the account the export belongs to, then open Hushfeed settings > Feed & layout > Feed filter > Seen videos > **Import watch history** and choose the JSON file. The file must be at most 2 MB with at most 10,000 watch-history entries. TXT exports aren't supported yet.
 
@@ -394,7 +392,7 @@ To take your seen videos to another phone or account, use **Save seen history to
 
 ### Pages and navigation
 
-Source builds use a compact settings home. Hushfeed's status sits beside its name, with search directly below and seven groups for the controls. About Hushfeed sits at the bottom with build details and licenses. Tap the status to open App & advanced, where Pause and recovery controls live.
+The settings home is compact. Hushfeed's status sits beside its name, with search directly below and seven groups for the controls. About Hushfeed sits at the bottom with build details and licenses. Tap the status to open App & advanced, where Pause and recovery controls live.
 
 | Group | Pages and controls |
 | --- | --- |
