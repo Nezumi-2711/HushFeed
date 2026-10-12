@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Aynı videoyu yeni bir görüntüleyicide yeniden açtığınızda Otomatik ekranı temizle tekrar dener. Yorumlardan döndüğünüzde veya kısa bir odak kaybından sonra elle çıkış seçiminiz korunur (#84).
+
 * **TikTok:** Oturum bekletmesi kaldırıldığında veya süresi dolduğunda, başka bir uygulama ses odağını geri verene kadar videonun duraklatıldığı doğrulandı.
 
 * **TikTok:** Yerel geliştirme dizini önizlemeleri paketin gerçek sürümünü ve Manager'ın main/dev sıralamasını kontrol eder. Kararlı dizini değiştirmez ve hiçbir şey yayımlamaz.

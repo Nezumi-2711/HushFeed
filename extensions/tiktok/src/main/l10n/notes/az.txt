@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Eyni videonu yeni baxış pəncərəsində yenidən açanda Avtomatik Ekranı təmizlə yenidən cəhd edir. Şərhlərdən və ya qısa fokus itkisindən qayıdanda əl ilə çıxış seçiminiz saxlanılır (#84).
+
 * **TikTok:** Sessiya fasiləsi buraxıldıqda və ya bitdikdə başqa tətbiq səs fokusunu qaytarana qədər videonun dayandığı yoxlanıldı.
 
 * **TikTok:** Yerli inkişaf indeksi önizləmələri paketin faktiki versiyasını və Manager-in main/dev sırasını yoxlayır. Sabit indeks dəyişmir və heç nə yayımlanmır.

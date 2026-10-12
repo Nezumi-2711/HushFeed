@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** La pantalla despejada automática vuelve a intentarlo cuando abres el mismo video en un visor nuevo. Tu salida manual se conserva al volver de los comentarios o tras perder el foco brevemente (#84).
+
 * **TikTok:** Se comprobó que, al liberar o caducar una pausa de sesión, el vídeo sigue pausado hasta que otra app devuelve el foco de audio.
 
 * **TikTok:** Las vistas previas locales del índice de desarrollo comprueban la versión real del paquete y el orden main/dev de Manager. No cambian el índice estable ni publican nada.

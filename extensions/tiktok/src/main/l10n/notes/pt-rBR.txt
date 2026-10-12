@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** A tela limpa automática tenta de novo quando você reabre o mesmo vídeo em um novo visualizador. A saída manual continua valendo ao voltar dos comentários ou após uma breve perda de foco (#84).
+
 * **TikTok:** Verificado que liberar ou encerrar uma pausa de sessão mantém o vídeo pausado até outro app devolver o foco de áudio.
 
 * **TikTok:** As prévias locais do índice de desenvolvimento verificam a versão real do pacote e a ordem main/dev do Manager. Elas não alteram o índice estável nem publicam nada.

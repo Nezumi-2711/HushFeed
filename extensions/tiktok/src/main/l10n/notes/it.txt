@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** La visualizzazione pulita automatica riprova quando riapri lo stesso video in una nuova finestra. L'uscita manuale resta attiva tornando dai commenti o dopo una breve perdita di focus (#84).
+
 * **TikTok:** Verificato che il rilascio o la scadenza di una pausa di sessione mantiene il video in pausa finché un'altra app non restituisce il focus audio.
 
 * **TikTok:** Le anteprime locali dell'indice di sviluppo controllano la versione effettiva del pacchetto e l'ordine main/dev di Manager. Non modificano l'indice stabile e non pubblicano nulla.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Automatische freie Anzeige versucht es erneut, wenn du dasselbe Video in einem neuen Fenster öffnest. Nach Kommentaren oder einem kurzen Fokusverlust bleibt dein manuelles Beenden bestehen (#84).
+
 * **TikTok:** Geprüft: Nach dem Freigeben oder Ablauf einer Sitzungspause bleibt das Video pausiert, bis eine andere App den Audiofokus zurückgibt.
 
 * **TikTok:** Lokale Entwicklungsindex-Vorschauen prüfen die tatsächliche Bundle-Version und Managers main/dev-Reihenfolge. Der stabile Index bleibt unverändert. Es wird nichts veröffentlicht.

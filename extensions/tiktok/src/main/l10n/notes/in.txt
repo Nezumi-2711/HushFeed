@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tampilan bersih otomatis mencoba lagi saat video yang sama dibuka kembali di penampil baru. Pilihan keluar manual tetap berlaku saat kembali dari komentar atau setelah fokus hilang sebentar (#84).
+
 * **TikTok:** Sudah diverifikasi bahwa pelepasan atau berakhirnya jeda sesi tetap menjeda video sampai aplikasi lain mengembalikan fokus audio.
 
 * **TikTok:** Pratinjau indeks pengembangan lokal memeriksa versi bundel yang sebenarnya dan urutan main/dev Manager. Indeks stabil tidak diubah dan tidak ada yang dipublikasikan.
