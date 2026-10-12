@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Menambahkan pencarian opsional pada notifikasi Aktivitas yang sudah dimuat. Pencarian menjeda pemuatan berikutnya. Menghapus kueri memulihkan daftar saat ini dan posisinya.
+
 * **TikTok:** Tombol X pada postingan foto tetap dapat digunakan saat kontrol diredupkan dalam Tampilan bersih. Kontrol redup lainnya tetap meneruskan sentuhan ke video (#84).
 
 * **TikTok:** Menambahkan alat uji kecil Android 6 untuk tata letak teks asli dan kelompok feed kosong. Laporannya memisahkan pemeriksaan payload dari verifikasi seluruh aplikasi.

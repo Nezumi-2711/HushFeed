@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yüklənmiş Fəaliyyət bildirişləri üçün istəyə bağlı axtarış əlavə edildi. Axtarış əlavə yükləməni dayandırır. Sorğunu təmizləmək cari siyahını və mövqeyi bərpa edir.
+
 * **TikTok:** Təmiz ekranda idarələr solğun olduqda foto paylaşımlarının X düyməsi işlək qalır. Digər solğun idarələr toxunuşları videoya ötürür (#84).
 
 * **TikTok:** Android 6 üçün yerli başlıq düzülüşlərini və boş lent paketlərini yoxlayan kiçik sınaq köməkçisi əlavə edildi. Hesabat faydalı yük yoxlamalarını tam tətbiq təsdiqindən ayırır.

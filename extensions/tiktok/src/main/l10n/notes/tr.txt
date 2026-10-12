@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yüklenmiş Etkinlik bildirimleri için isteğe bağlı arama eklendi. Arama sırasında daha fazla bildirim yüklenmez. Sorgu temizlenince güncel liste ve konum geri yüklenir.
+
 * **TikTok:** Temiz ekranda denetimler solukken fotoğraf gönderilerinin X düğmesi kullanılabilir kalır. Diğer soluk denetimler dokunuşları videoya iletmeye devam eder (#84).
 
 * **TikTok:** Android 6 için yerel altyazı düzenlerini ve boş akış gruplarını sınayan küçük bir test aracı eklendi. Rapor, yük denetimlerini uygulamanın tamamının doğrulanmasından ayırır.

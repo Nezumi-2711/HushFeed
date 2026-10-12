@@ -317,6 +317,7 @@ Choose which bottom tabs stay visible.,Choose which bottom tabs stay visible.
 "Choose which feed tabs stay visible. If only For You is left, its tab name is hidden.","Choose which feed tabs stay visible. If only For You is left, its tab name is hidden."
 Choose which rows and controls appear,Choose which rows and controls appear
 Clean up shared links,Clean up shared links
+Clear,Clear
 Clear all,Clear all
 "Clear all Lab data (overrides, switch, recordings)","Clear all Lab data (overrides, switch, recordings)"
 Clear all suggested accounts,Clear all suggested accounts
@@ -1329,11 +1330,14 @@ Saving video: %1$s,Saving video: %1$s
 Screen layout recorded. Export the diagnostic report to send it.,Screen layout recorded. Export the diagnostic report to send it.
 Screen time,Screen time
 Search,Search
+Search Activity notifications already loaded on this screen. Loading more pauses while you search.,Search Activity notifications already loaded on this screen. Loading more pauses while you search.
 Search apps,Search apps
 Search by name or gate key,Search by name or gate key
 "Search by name, description or category.","Search by name, description or category."
 Search countries or operators,Search countries or operators
 Search hidden creators,Search hidden creators
+Search is unavailable on this screen,Search is unavailable on this screen
+Search loaded activity,Search loaded activity
 Search settings,Search settings
 Search share actions,Search share actions
 Search these comments,Search these comments
@@ -1891,6 +1895,7 @@ Volume,Volume
 Wait a day to loosen the budget,Wait a day to loosen the budget
 "Wait a day to loosen the budget is on, so Hushfeed stays on","Wait a day to loosen the budget is on, so Hushfeed stays on"
 Wait before hiding the controls.,Wait before hiding the controls.
+Wait for loading to finish,Wait for loading to finish
 Waiting for the file app to let go of the last file. Restart TikTok if it doesn't.,Waiting for the file app to let go of the last file. Restart TikTok if it doesn't.
 Waiting to record. Go to the screen you want recorded.,Waiting to record. Go to the screen you want recorded.
 Waiting to save %1$s files,Waiting to save %1$s files

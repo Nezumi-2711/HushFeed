@@ -778,6 +778,7 @@ public class Settings extends BaseSettings {
             new BooleanSetting("hide_inbox_conversations", FALSE);
     public static final BooleanSetting HIDE_INBOX_ADD_PEOPLE = new BooleanSetting("hide_inbox_add_people", FALSE);
     public static final BooleanSetting HIDE_INBOX_SEARCH = new BooleanSetting("hide_inbox_search", FALSE);
+    public static final BooleanSetting INBOX_LOADED_SEARCH = new BooleanSetting("inbox_loaded_search", FALSE);
     public static final BooleanSetting HIDE_INBOX_ACTIVITY_STATUS =
             new BooleanSetting("hide_inbox_activity_status", FALSE);
     /** The banner at the top of the Inbox that invites you to start a group chat. */

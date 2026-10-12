@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Added optional search for loaded Activity notifications. Search pauses loading more, and clearing the query restores the current list and position.
+
 * **TikTok:** Photo posts keep their X usable when the controls are faded in Clear display. Other faded controls still pass taps through to the video (#84).
 
 * **TikTok:** Added a small Android 6 test helper for native caption layouts and empty feed batches. Its report separates payload checks from full-app acceptance.

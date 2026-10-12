@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Adicionada uma busca opcional nas notificações de Atividade já carregadas. A busca pausa o carregamento de mais notificações. Limpar a consulta restaura a lista atual e a posição.
+
 * **TikTok:** O X das publicações de fotos continua funcionando com os controles esmaecidos em Tela limpa. Os outros controles esmaecidos continuam deixando os toques chegarem ao vídeo (#84).
 
 * **TikTok:** Adicionada uma pequena ferramenta de teste para layouts nativos de legendas e lotes vazios do feed no Android 6. O relatório separa as verificações do payload da validação do aplicativo completo.

@@ -140,6 +140,63 @@ public final class InboxFilter {
         }
     }
 
+    /** Called after native normal/payload notification binds, with the current PowerCell item. */
+    public static void onNotificationRowBound(Object holder) {
+        InboxQueryOwners.bound(holder);
+    }
+
+    /** Receives the native getter's result, without asking a dormant widget to create a VM. */
+    public static void onNotificationVmObserved(Object widget, Object vm) {
+        InboxQueryOwners.observedVm(widget, vm);
+    }
+
+    public static void onLoadedFragmentBound(Object fragment) { InboxQueryOwners.fragmentBound(fragment); }
+
+    public static java.util.List<?> onLoadedPublication(Object state, java.util.List<?> models,
+            boolean first, boolean second, Runnable completion, int mask) {
+        return InboxQueryNative.publication(state, models, first, second, completion, mask);
+    }
+
+    public static void onLoadedStubPublication(Object stub, Object wrapper, Object metadata) {
+        InboxQueryNative.stubPublication(stub, wrapper, metadata);
+    }
+
+    public static void onLoadedDiffSubmitted(Object diff, java.util.List<?> oldFiltered,
+            java.util.List<?> old, java.util.List<?> aggregate, Object metadata) {
+        InboxQueryNative.submitted(diff, oldFiltered, old, aggregate, metadata);
+    }
+
+    public static void onLoadedDiffAccepted(Object diff, Object metadata) { InboxQueryNative.accepted(diff, metadata); }
+
+    public static void onLoadedIndexedCallback(Object closure, Object helper, java.util.List<?> original, Object pair) {
+        InboxQueryNative.indexed(closure, helper, original, pair);
+    }
+
+    public static java.util.List<?> onLoadedIndexedList(Object fragment, java.util.List<?> original) {
+        return InboxQueryNative.indexedList(fragment, original);
+    }
+
+    public static boolean allowLoadedVisibleIndices(Object fragment, boolean loadingRow) {
+        return InboxQueryNative.visibleIndices(fragment, loadingRow);
+    }
+
+    public static boolean allowLoadedNotificationClick(Object holder) { return InboxQueryNative.click(holder); }
+    public static boolean allowLoadedRefresh(Object spring, boolean starting) { return InboxQueryNative.refresh(spring, starting); }
+    public static boolean allowLoadedManualRefresh(Object spring) { return InboxQueryNative.refresh(spring, true); }
+    public static boolean allowLoadedRequest(Object target) { return InboxNativeRequests.allowed(target); }
+    public static boolean beginLoadedRequest(Object target) { return InboxNativeRequests.begin(target); }
+    public static void returnedLoadedRequest(Object target) { InboxNativeRequests.returned(target); }
+    public static void onLoadedRequestJob(Object target, Object job) { InboxNativeRequests.launched(target, job); }
+    public static boolean beginLoadedClosureRequest(Object closure) {
+        return InboxNativeRequests.begin(app.morphe.extension.tiktok.blockauthor.Reflect.readField(closure, "l0"));
+    }
+    public static void returnedLoadedClosureRequest(Object closure) {
+        InboxNativeRequests.returned(app.morphe.extension.tiktok.blockauthor.Reflect.readField(closure, "l0"));
+    }
+    public static void onLoadedClosureRequestJob(Object closure, Object job) {
+        InboxNativeRequests.launched(app.morphe.extension.tiktok.blockauthor.Reflect.readField(closure, "l0"), job);
+    }
+
     private static WeakReference<Activity> activityReference = new WeakReference<>(null);
     private static final GlobalLayoutHook LAYOUT_HOOK = new GlobalLayoutHook();
 

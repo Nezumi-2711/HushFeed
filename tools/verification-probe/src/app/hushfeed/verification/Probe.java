@@ -217,6 +217,9 @@ public final class Probe extends Instrumentation {
                     case "feed":
                         Log.i(TAG, "ok feed\n" + feedReport());
                         break;
+                    case "inbox-query":
+                        Log.i(TAG, "ok inbox-query\n" + InboxQuerySnapshot.read(loader));
+                        break;
                     case "ad-evidence":
                         // Technical booleans only. Never emit the video id, creator, visible
                         // disclosure text or the raw anchors JSON into device evidence.

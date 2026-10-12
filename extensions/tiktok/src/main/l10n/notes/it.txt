@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Aggiunta una ricerca facoltativa nelle notifiche Attività già caricate. La ricerca sospende il caricamento di altre notifiche. Cancellando la ricerca si ripristinano l’elenco attuale e la posizione.
+
 * **TikTok:** La X dei post fotografici resta utilizzabile quando i controlli sono attenuati in Schermo pulito. Gli altri controlli attenuati continuano a lasciare passare i tocchi al video (#84).
 
 * **TikTok:** Aggiunto un piccolo strumento di prova per i layout nativi dei sottotitoli e i gruppi vuoti del feed su Android 6. Il rapporto distingue i controlli del payload dalla verifica dell’intera app.

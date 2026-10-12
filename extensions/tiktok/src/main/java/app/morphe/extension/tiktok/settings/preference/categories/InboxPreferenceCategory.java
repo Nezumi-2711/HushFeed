@@ -46,6 +46,9 @@ public final class InboxPreferenceCategory extends ConditionalPreferenceCategory
     @Override
     public void addPreferences(Context context) {
         if (SettingsStatus.inboxFilterEnabled) {
+            addPreference(new TogglePreference(context, "Search loaded activity",
+                    "Search Activity notifications already loaded on this screen. Loading more pauses while you search.",
+                    Settings.INBOX_LOADED_SEARCH));
             addPreference(new SectionHeadingPreference(context, "Rows"));
             addPreference(new TogglePreference(
                     context,

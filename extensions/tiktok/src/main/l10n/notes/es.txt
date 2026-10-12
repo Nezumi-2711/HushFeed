@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Se añadió una búsqueda opcional en las notificaciones de Actividad ya cargadas. La búsqueda pausa la carga de más avisos. Al borrar la consulta se recuperan la lista actual y su posición.
+
 * **TikTok:** La X de las publicaciones de fotos sigue funcionando con los controles atenuados en Pantalla limpia. Los demás controles atenuados siguen dejando pasar los toques al video (#84).
 
 * **TikTok:** Se añadió una pequeña herramienta de prueba para diseños nativos de subtítulos y lotes vacíos del feed en Android 6. Su informe distingue las pruebas de la carga de la validación de toda la app.
