@@ -1,8 +1,9 @@
 package app.hushfeed.verification.api23;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 /** Deliberately unavailable API24 members. A native API23 run must reject both. */
 final class Api24NegativeControl {
@@ -10,6 +11,11 @@ final class Api24NegativeControl {
         Map<Object, Object> map = new WeakHashMap<>();
         map.remove(new Object(), new Object());
     }
-    static void concurrentSet() { ConcurrentHashMap.newKeySet(); }
+    static void listSort() {
+        List<String> list = new ArrayList<>();
+        list.add("second");
+        list.add("first");
+        list.sort(null);
+    }
     private Api24NegativeControl() { }
 }

@@ -99,10 +99,12 @@ $utf8 = New-Object Text.UTF8Encoding($false)
 $sources = @((Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'src') -Recurse -Filter '*.java' -File).FullName)
 Invoke-ArtTool $javac (@('-J-Xmx128m', '--release', '8', '-encoding', 'UTF-8', '-classpath',
     (($productionCompile + @($android)) -join [IO.Path]::PathSeparator), '-d', (Join-Path $OutDir 'classes')) + $sources)
-Invoke-ArtTool $javac @('-J-Xmx128m', '--release', '8', '-classpath', (Join-Path $OutDir 'classes'), '-d',
-    (Join-Path $OutDir 'host'), (Join-Path $PSScriptRoot 'ContractChecksTest.java'))
+Invoke-ArtTool $javac @('-J-Xmx128m', '--release', '8', '-classpath', ((@((Join-Path $OutDir 'classes')) + $productionCompile) -join [IO.Path]::PathSeparator), '-d',
+    (Join-Path $OutDir 'host'), (Join-Path $PSScriptRoot 'ContractChecksTest.java'), (Join-Path $PSScriptRoot 'HookBindingsTest.java'))
 Invoke-ArtTool $Java @('-Xmx64m', '-cp', ((Join-Path $OutDir 'host') + [IO.Path]::PathSeparator + (Join-Path $OutDir 'classes')),
     'app.hushfeed.verification.api23.ContractChecksTest')
+Invoke-ArtTool $Java @('-Xmx64m', '-cp', ((@((Join-Path $OutDir 'host'), (Join-Path $OutDir 'classes')) + $productionCompile) -join [IO.Path]::PathSeparator),
+    'app.hushfeed.verification.api23.HookBindingsTest')
 $classes = @((Get-ChildItem -LiteralPath (Join-Path $OutDir 'classes') -Recurse -Filter '*.class' -File).FullName)
 Invoke-ArtTool (Join-Path $tools 'd8.bat') (@('--thread-count', '2', '--lib', $android, '--min-api', '23',
     '--classpath', $productionCompile[0], '--classpath', $productionCompile[1], '--classpath', $productionCompile[2],

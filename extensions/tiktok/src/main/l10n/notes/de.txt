@@ -6,7 +6,7 @@
 
 * **TikTok:** Bei Fotobeiträgen bleibt das X im klaren Bildschirm bedienbar, wenn die Steuerelemente verblassen. Andere verblasste Elemente lassen Berührungen weiterhin zum Video durch (#84).
 
-* **TikTok:** Ein kleines Android-6-Testwerkzeug prüft native Untertitellayouts und leere Feed-Pakete. Sein Bericht trennt Payload-Prüfungen von der Prüfung der vollständigen App.
+* **TikTok:** Unter Android 6 wurden Untertitelgestaltung und leere Feed-Listen im kleinen ART-Testprogramm geprüft. Die vollständige TikTok-Kompatibilität braucht weiterhin einen Gerätetest mit der App.
 
 * **TikTok:** Helligkeits- und Lautstärkegesten über der verblassten Kommentarleiste wurden geprüft. Gerätetests stellen Helligkeit, Audio und vorübergehende Einstellungen nach jeder Geste wieder her.
 

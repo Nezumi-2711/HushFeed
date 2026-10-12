@@ -6,7 +6,7 @@
 
 * **TikTok:** Photo posts keep their X usable when the controls are faded in Clear display. Other faded controls still pass taps through to the video (#84).
 
-* **TikTok:** Added a small Android 6 test helper for native caption layouts and empty feed batches. Its report separates payload checks from full-app acceptance.
+* **TikTok:** Verified caption styling and empty feed handling on Android 6 in the small ART helper. Full TikTok compatibility still needs an app-level device check.
 
 * **TikTok:** Verified brightness and volume drags over the faded comment rail. Device checks restore brightness, audio and temporary settings after each drag.
 

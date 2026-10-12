@@ -6,7 +6,7 @@
 
 * **TikTok:** Tombol X pada postingan foto tetap dapat digunakan saat kontrol diredupkan dalam Tampilan bersih. Kontrol redup lainnya tetap meneruskan sentuhan ke video (#84).
 
-* **TikTok:** Menambahkan alat uji kecil Android 6 untuk tata letak teks asli dan kelompok feed kosong. Laporannya memisahkan pemeriksaan payload dari verifikasi seluruh aplikasi.
+* **TikTok:** Gaya subtitel dan penanganan feed kosong telah diverifikasi di Android 6 melalui alat ART kecil. Kompatibilitas TikTok secara penuh masih perlu diuji pada aplikasi di perangkat.
 
 * **TikTok:** Geseran kecerahan dan volume di atas bilah komentar yang memudar telah diverifikasi. Pemeriksaan perangkat memulihkan kecerahan, audio, dan pengaturan sementara setelah setiap geseran.
 

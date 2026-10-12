@@ -1,4 +1,5 @@
 import com.android.tools.smali.dexlib2.Opcodes;
+import com.android.tools.smali.dexlib2.Opcode;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile;
 import com.android.tools.smali.dexlib2.iface.ClassDef;
 import com.android.tools.smali.dexlib2.iface.Method;
@@ -135,6 +136,9 @@ public final class VendorSlice {
         required.put("Lapp/morphe/extension/tiktok/feedfilter/FeedItemsFilter;", null);
         required.put("Lapp/morphe/extension/tiktok/settings/Settings;", null);
         required.put("Lapp/morphe/extension/shared/Utils;", null);
+        required.put("Lapp/morphe/extension/shared/diagnostics/HookStatus;", null);
+        required.put("Lapp/morphe/extension/shared/diagnostics/HookStatus$Snapshot;", null);
+        required.put("Lapp/morphe/extension/shared/diagnostics/HookStatus$FamilySnapshot;", null);
         int count = 0;
         Map<String, ClassDef> types = new LinkedHashMap<>();
         Map<String, ClassDef> uniqueShared = new LinkedHashMap<>();
@@ -169,6 +173,12 @@ public final class VendorSlice {
         requireMethod(feed, "filterCachedFeedList", SEEDS.get(0), SEEDS.get(0));
         requireMethod(feed, "filterOfflineFeedList", SEEDS.get(0), SEEDS.get(0));
         requireMethod(feed, "filterOnRead", SEEDS.get(0), "V");
+        requireMethod(required.get("Lapp/morphe/extension/shared/diagnostics/HookStatus;"), "snapshot",
+                java.util.Collections.emptyList(), "Lapp/morphe/extension/shared/diagnostics/HookStatus$Snapshot;");
+        requireField(required.get("Lapp/morphe/extension/shared/diagnostics/HookStatus$Snapshot;"), "families", "Ljava/util/List;");
+        ClassDef family = required.get("Lapp/morphe/extension/shared/diagnostics/HookStatus$FamilySnapshot;");
+        requireField(family, "name", "Ljava/lang/String;");
+        requireField(family, "bound", "Ljava/util/List;");
         byte[] sharedBytes = encoded(uniqueShared.values());
         DexBackedDexFile sliced = new DexBackedDexFile(Opcodes.forApi(23), ByteBuffer.wrap(sharedBytes));
         int sharedCount = 0;
@@ -190,10 +200,20 @@ public final class VendorSlice {
     }
 
     private static void requireMethod(ClassDef owner, String name, String parameter, String result) {
+        requireMethod(owner, name, Arrays.asList(parameter), result);
+    }
+
+    private static void requireMethod(ClassDef owner, String name, List<String> parameters, String result) {
         for (Method method : owner.getMethods()) if (method.getName().equals(name)
-                && method.getParameterTypes().equals(Arrays.asList(parameter)) && method.getReturnType().equals(result)
+                && method.getParameterTypes().equals(parameters) && method.getReturnType().equals(result)
                 && (method.getAccessFlags() & 9) == 9) return;
         throw new IllegalArgumentException("missing public static payload member " + owner.getType() + "->" + name);
+    }
+
+    private static void requireField(ClassDef owner, String name, String type) {
+        for (Field field : owner.getFields()) if (field.getName().equals(name) && field.getType().equals(type)
+                && (field.getAccessFlags() & 8) == 0) return;
+        throw new IllegalArgumentException("missing instance payload field " + owner.getType() + "->" + name);
     }
 
     private static void requireFeedMembers(ClassDef owner) {
@@ -231,7 +251,7 @@ public final class VendorSlice {
                 throw new IllegalArgumentException("APK payload/vendor slice bytes changed");
             }
             DexBackedDexFile helper = new DexBackedDexFile(Opcodes.forApi(23), ByteBuffer.wrap(read(zip, "classes.dex")));
-            boolean map = false, concurrent = false, caption = false, feed = false;
+            boolean map = false, sort = false, caption = false, feed = false;
             for (ClassDef owner : helper.getClasses()) {
                 if (!owner.getType().startsWith("Lapp/hushfeed/verification/api23/")) {
                     throw new IllegalArgumentException("helper DEX contains a production/model substitute: " + owner.getType());
@@ -241,16 +261,26 @@ public final class VendorSlice {
                         Object reference = ((ReferenceInstruction) instruction).getReference();
                         if (!(reference instanceof MethodReference)) continue;
                         MethodReference call = (MethodReference) reference;
-                        if (owner.getType().endsWith("/Api24NegativeControl;")) {
-                            map |= call.getDefiningClass().equals("Ljava/util/Map;") && call.getName().equals("remove") && call.getParameterTypes().size() == 2;
-                            concurrent |= call.getDefiningClass().equals("Ljava/util/concurrent/ConcurrentHashMap;") && call.getName().equals("newKeySet");
+                        if (owner.getType().equals("Lapp/hushfeed/verification/api23/Api24NegativeControl;")
+                                && method.getParameterTypes().isEmpty() && method.getReturnType().equals("V")
+                                && (instruction.getOpcode() == Opcode.INVOKE_INTERFACE || instruction.getOpcode() == Opcode.INVOKE_INTERFACE_RANGE)) {
+                            map |= method.getName().equals("mapDefault") && call.getDefiningClass().equals("Ljava/util/Map;")
+                                    && call.getName().equals("remove") && call.getReturnType().equals("Z")
+                                    && call.getParameterTypes().equals(Arrays.asList("Ljava/lang/Object;", "Ljava/lang/Object;"));
+                            sort |= method.getName().equals("listSort") && call.getDefiningClass().equals("Ljava/util/List;")
+                                    && call.getName().equals("sort") && call.getReturnType().equals("V")
+                                    && call.getParameterTypes().equals(Arrays.asList("Ljava/util/Comparator;"));
                         }
-                        caption |= call.getDefiningClass().equals("Lapp/morphe/extension/tiktok/captions/CaptionStyle;") && call.getName().equals("layout");
-                        feed |= call.getDefiningClass().equals("Lapp/morphe/extension/tiktok/feedfilter/FeedItemsFilter;") && call.getName().equals("filterOfflineFeedList");
+                        caption |= instruction.getOpcode() == Opcode.INVOKE_STATIC
+                                && call.getDefiningClass().equals("Lapp/morphe/extension/tiktok/captions/CaptionStyle;") && call.getName().equals("layout")
+                                && call.getReturnType().equals("Landroid/text/Layout;") && call.getParameterTypes().equals(Arrays.asList("Landroid/text/Layout;"));
+                        feed |= instruction.getOpcode() == Opcode.INVOKE_STATIC
+                                && call.getDefiningClass().equals("Lapp/morphe/extension/tiktok/feedfilter/FeedItemsFilter;") && call.getName().equals("filterOfflineFeedList")
+                                && call.getReturnType().equals(SEEDS.get(0)) && call.getParameterTypes().equals(Arrays.asList(SEEDS.get(0)));
                     }
                 }
             }
-            if (!map || !concurrent || !caption || !feed) throw new IllegalArgumentException("actual payload calls or API24 native negative controls were rewritten/missing");
+            if (!map || !sort || !caption || !feed) throw new IllegalArgumentException("actual payload calls or API24 native negative controls were rewritten/missing");
             System.out.println("APK preserves byte-identical payload/slice, actual production calls and API24 negative controls");
         }
     }

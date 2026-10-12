@@ -67,7 +67,7 @@ public final class Api23ArtProbe extends Instrumentation {
                 }
             });
             negative("map-default-negative", Api24NegativeControl::mapDefault);
-            negative("concurrent-set-negative", Api24NegativeControl::concurrentSet);
+            negative("list-sort-negative", Api24NegativeControl::listSort);
         } catch (Throwable error) { fail("runtime-or-artifact-qualification", error); }
         boolean accepted = checks.accepted(Build.VERSION.SDK_INT, art, identity, restored, failed);
         try {

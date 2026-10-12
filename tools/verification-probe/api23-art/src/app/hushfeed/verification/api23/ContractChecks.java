@@ -9,7 +9,7 @@ final class ContractChecks {
     static final Set<String> REQUIRED = new HashSet<>(Arrays.asList(
             "caption-disabled", "caption-layout", "caption-native-views", "caption-restored",
             "empty-cached-batch", "offline-disabled", "offline-emptied", "feed-hook-status",
-            "map-default-negative", "concurrent-set-negative"));
+            "map-default-negative", "list-sort-negative"));
     private final Set<String> passed = new HashSet<>();
     void pass(String name) {
         if (!REQUIRED.contains(name) || !passed.add(name)) throw new IllegalArgumentException("unknown or duplicate contract: " + name);

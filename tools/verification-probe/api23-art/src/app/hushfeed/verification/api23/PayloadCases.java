@@ -89,10 +89,7 @@ final class PayloadCases {
         receipt.pass("offline-emptied", "production hide-offline path replaces a one-marker List with empty ArrayList and returns null");
         FeedItemsFilter.filterOnRead(empty);
         require(!HookStatus.anyMissing(), "payload member lookup reported a missing native member");
-        String report = HookStatus.report().toString();
-        require(report.contains("captions") && report.contains("47.1.4:dmb") && report.contains("47.1.4:dm5")
-                && report.contains("main feed") && report.contains("FeedItemList.getItems"), "positive payload HookStatus bindings are missing");
-        receipt.pass("feed-hook-status", report);
+        receipt.pass("feed-hook-status", HookBindings.require(HookStatus.snapshot()));
     }
 
     static boolean restore() throws Throwable {

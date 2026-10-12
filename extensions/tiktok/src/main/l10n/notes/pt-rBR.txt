@@ -6,7 +6,7 @@
 
 * **TikTok:** O X das publicações de fotos continua funcionando com os controles esmaecidos em Tela limpa. Os outros controles esmaecidos continuam deixando os toques chegarem ao vídeo (#84).
 
-* **TikTok:** Adicionada uma pequena ferramenta de teste para layouts nativos de legendas e lotes vazios do feed no Android 6. O relatório separa as verificações do payload da validação do aplicativo completo.
+* **TikTok:** Verificados o estilo das legendas e o tratamento do feed vazio no Android 6 com a pequena ferramenta ART. A compatibilidade completa com o TikTok ainda precisa de um teste do app em um dispositivo.
 
 * **TikTok:** Verificados os gestos de brilho e volume sobre a barra de comentários esmaecida. Os testes restauram o brilho, o áudio e as configurações temporárias após cada gesto.
 
