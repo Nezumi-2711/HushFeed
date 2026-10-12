@@ -50,7 +50,7 @@ That JSON file doesn't contain the supported TikTok watch history.	Questo file J
 That watch-history file is damaged. Nothing was imported.	Il file della cronologia è danneggiato. Non è stato importato nulla.
 # Settings text, English on the left, Italian on the right, one entry per line, tab separated.
 # Keep %s and %d placeholders, {tokens} and product names as they are.
-# scripts/gen-l10n.py turns this into a table inside L10nTranslations.java.
+# scripts/gen-l10n.py turns this into L10nTranslationsIt.java.
 %1$d already matched	%1$d già corrispondenti
 %1$d areas were checked and everything they need is here.	%1$d aree sono state controllate e tutto ciò che serve è presente.
 %1$d fields overridden	%1$d campi sovrascritti

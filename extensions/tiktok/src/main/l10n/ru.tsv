@@ -59,7 +59,7 @@ That watch-history file is damaged. Nothing was imported.	Файл истори�
 %1$s entries skipped.|many	Пропущено %1$s записей.
 # Settings text, English on the left, Russian on the right, one entry per line, tab separated.
 # Keep %s and %d placeholders, {tokens} and product names as they are.
-# scripts/gen-l10n.py turns this into a table inside L10nTranslations.java.
+# scripts/gen-l10n.py turns this into L10nTranslationsRu.java.
 %1$d already matched	Совпало: %1$d
 %1$d areas were checked and everything they need is here.	Проверено %1$d разделов: всё необходимое на месте.
 %1$d areas were checked and everything they need is here.|one	%1$d раздел проверен, и всё необходимое на месте.

@@ -15,7 +15,7 @@ of patching memory, which is more than Morphe Manager gives by default (measured
 
 Each language's table is filled by several methods so no single one approaches the 64 KB
 bytecode limit. One file holding every language reached 2,500 KB on 2026-10-12, the most
-Android Lint reads, and the lint gate failed on it; a file per language keeps each near 320 KB.
+Android Lint reads, and the lint gate failed on it; a file per language keeps each under 450 KB.
 
 Anything it cannot make sense of stops the run with the file and line rather than being dropped
 on the way past: a row with no source text, a key that begins with the comment character, and a
