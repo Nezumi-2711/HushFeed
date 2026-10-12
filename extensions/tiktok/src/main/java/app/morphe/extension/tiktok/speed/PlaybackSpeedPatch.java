@@ -205,7 +205,10 @@ public final class PlaybackSpeedPatch {
      */
     public static float liveStartSpeed() {
         Live live = liveTarget();
-        if (live == null) return Float.NaN;
+        return live == null ? Float.NaN : liveStartSpeed(live);
+    }
+
+    private static float liveStartSpeed(Live live) {
         String id = live.aweme.getAid();
         synchronized (PlaybackSpeedPatch.class) {
             float dragged = liveSpeedFor(id == null ? "" : id);
@@ -230,10 +233,14 @@ public final class PlaybackSpeedPatch {
      * @return whether the video's own player took it
      */
     public static boolean setLiveSpeed(float speed) {
+        if (!isValidSpeed(snapLiveSpeed(speed))) return false;
+        Live live = liveTarget();
+        return live != null && setLiveSpeed(live, speed);
+    }
+
+    private static boolean setLiveSpeed(Live live, float speed) {
         float snapped = snapLiveSpeed(speed);
         if (!isValidSpeed(snapped)) return false;
-        Live live = liveTarget();
-        if (live == null) return false;
         try {
             // The player first: a player that refuses leaves nothing recorded as this video's speed.
             setSpeedOn(live.controller, snapped);
@@ -276,6 +283,8 @@ public final class PlaybackSpeedPatch {
      * @return the speed the video plays at now, or NaN when no player took the change
      */
     public static float toggleBoost() {
+        // One read of the player on screen for the whole toggle, so a swipe that lands mid-toggle
+        // can't speed up one video while the boost is recorded against another.
         Live live = liveTarget();
         if (live == null) return Float.NaN;
         String id = live.aweme.getAid();
@@ -301,7 +310,7 @@ public final class PlaybackSpeedPatch {
             }
             return from;
         }
-        from = liveStartSpeed();
+        from = liveStartSpeed(live);
         if (!isValidSpeed(from)) return Float.NaN;
         float boost = boostSpeed();
         float target = Float.compare(snapLiveSpeed(from), boost) == 0 ? 1f : boost;
@@ -313,7 +322,7 @@ public final class PlaybackSpeedPatch {
             liveId = liveVideoId;
             liveBefore = liveSpeed;
         }
-        if (!setLiveSpeed(target)) return Float.NaN;
+        if (!setLiveSpeed(live, target)) return Float.NaN;
         synchronized (PlaybackSpeedPatch.class) {
             boostedVideoId = id;
             boostedTo = target;

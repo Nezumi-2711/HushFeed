@@ -127,6 +127,34 @@ public class SpeedToggleTest {
         assertEquals(2f, PlaybackSpeedPatch.toggleBoost(), 0f);
     }
 
+    @Test public void aSwipeThatLandsMidToggleLeavesTheNextVideoAlone() {
+        Object first = new Object();
+        Object second = new Object();
+        player.videos.put(first, video("a"));
+        player.videos.put(second, video("b"));
+        PlaybackSpeedPatch.onPlayerProgress(first, "a");
+        List<Object> sped = new ArrayList<>();
+        int[] reads = {0};
+        PlaybackSpeedPatch.nativeForTests = new PlaybackSpeedPatch.NativePlayer() {
+            @Override public Aweme aweme(Object controller) {
+                // The next video's player reports in while the toggle is reading the first one.
+                if (++reads[0] == 1) PlaybackSpeedPatch.onPlayerProgress(second, "b");
+                return player.aweme(controller);
+            }
+            @Override public void setSpeed(Object controller, float speed) {
+                sped.add(controller);
+                player.setSpeed(controller, speed);
+            }
+        };
+
+        assertEquals(2f, PlaybackSpeedPatch.toggleBoost(), 0f);
+        assertEquals(List.of(first), sped);
+        // b's first frame picks its usual speed, and its first toggle speeds it up.
+        assertEquals(1.3f, PlaybackSpeedPatch.getPlaybackSpeedForVideo(player.videos.get(second)), 0f);
+        assertEquals(2f, PlaybackSpeedPatch.toggleBoost(), 0f);
+        assertEquals(List.of(first, second), sped);
+    }
+
     @Test public void withNoPlayerOnScreenNothingChanges() {
         assertTrue(Float.isNaN(PlaybackSpeedPatch.toggleBoost()));
         assertTrue(player.speeds.isEmpty());
