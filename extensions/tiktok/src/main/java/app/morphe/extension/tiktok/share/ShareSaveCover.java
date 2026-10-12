@@ -163,7 +163,9 @@ public final class ShareSaveCover {
     }
 
     public static void bindIcon(Object action, ImageView image) {
-        Drawable icon = icon(action);
+        if (!owns(action)) return;
+        Drawable icon = NativeShareIcon.restyle(image.getDrawable(), CoverGlyphDrawable::new);
+        if (icon == null) icon = icon(action);
         if (icon != null) image.setImageDrawable(icon);
     }
 

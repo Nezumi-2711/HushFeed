@@ -241,7 +241,9 @@ public final class ShareBlockAuthor {
     }
 
     public static void bindIcon(Object action, ImageView image) {
-        Drawable icon = icon(action);
+        if (!owns(action)) return;
+        Drawable icon = NativeShareIcon.restyle(image.getDrawable(), BlockGlyphDrawable::new);
+        if (icon == null) icon = icon(action);
         if (icon != null) image.setImageDrawable(icon);
     }
 

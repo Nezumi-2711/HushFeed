@@ -38,8 +38,8 @@ class OwnedShareActionAnchorsTest {
         val action: ClassDef,
         val constructor: Method,
         val helper: Method,
-        val iconBinder: Method,
-        val iconBind: OwnedShareIconBind,
+        val iconBinders: List<Pair<Method, OwnedShareIconBind>>,
+        val imageFields: List<String>,
         val snapshot: ClassDef,
         val snapshotConstructor: Method,
         val models: Map<String, ClassDef>,
@@ -137,25 +137,37 @@ class OwnedShareActionAnchorsTest {
     @Test fun `every native action bind resets its drawable before the owned icon hook`() {
         Fixtures.forEachDeclared { apk ->
             val found = find(apk)
-            val binder = MutableMethod(found.iconBinder)
-            val before = binder.implementation!!.instructions.toList()
-            binder.bindOwnedShareIcon(found.iconBind)
-            val code = binder.implementation!!.instructions.toList()
-            val at = found.iconBind.index
-            val callback = before[at - 2].getReference<MethodReference>()!!
-            assertTrue(callback.definingClass in found.action.interfaces)
-            assertTrue("The post Report carrier must declare the icon callback", found.action.methods.any {
-                it.definingClass == found.action.type && it.name == callback.name &&
-                    it.returnType == callback.returnType && it.parameterTypes.map(CharSequence::toString) ==
-                    callback.parameterTypes.map(CharSequence::toString)
-            })
-            assertEquals("setImageDrawable", code[at].getReference<MethodReference>()!!.name)
-            assertEquals("bindIcon", code[at + 1].getReference<MethodReference>()!!.name)
-            val args = code[at + 1] as FiveRegisterInstruction
-            assertEquals(found.iconBind.actionRegister, args.registerC)
-            assertEquals(found.iconBind.imageRegister, args.registerD)
-            assertTrue(args.registerC in 0..15 && args.registerD in 0..15)
-            assertEquals(before.map { it.opcode }, (code.take(at + 1) + code.drop(at + 2)).map { it.opcode })
+            for ((method, bind) in found.iconBinders) {
+                val binder = MutableMethod(method)
+                val before = binder.implementation!!.instructions.toList()
+                binder.bindOwnedShareIcon(bind)
+                val code = binder.implementation!!.instructions.toList()
+                val at = bind.index
+                val callback = before[at - 2].getReference<MethodReference>()!!
+                assertTrue(callback.definingClass in found.action.interfaces)
+                assertTrue("The post Report carrier must declare the icon callback", found.action.methods.any {
+                    it.definingClass == found.action.type && it.name == callback.name &&
+                        it.returnType == callback.returnType && it.parameterTypes.map(CharSequence::toString) ==
+                        callback.parameterTypes.map(CharSequence::toString)
+                })
+                assertEquals("setImageDrawable", code[at].getReference<MethodReference>()!!.name)
+                assertEquals("bindIcon", code[at + 1].getReference<MethodReference>()!!.name)
+                val args = code[at + 1] as FiveRegisterInstruction
+                assertEquals(bind.actionRegister, args.registerC)
+                assertEquals(bind.imageRegister, args.registerD)
+                assertTrue(args.registerC in 0..15 && args.registerD in 0..15)
+                assertEquals(before.map { it.opcode }, (code.take(at + 1) + code.drop(at + 2)).map { it.opcode })
+            }
+        }
+    }
+
+    @Test fun `the share grid and the long-press panel list both get the owned icon`() {
+        Fixtures.forEachDeclared { apk ->
+            val found = find(apk)
+            assertEquals("the grid's ImageView and the long-press list's TuxIconView",
+                listOf("Landroid/widget/ImageView;", "Lcom/bytedance/tux/icon/TuxIconView;"), found.imageFields.sorted())
+            assertTrue("only the plain ImageView store matches without the subclass check",
+                found.iconBinders.count { (method, _) -> method.ownedShareIconBind(found.action) != null } == 1)
         }
     }
 
@@ -226,7 +238,9 @@ class OwnedShareActionAnchorsTest {
             val actions = mutableListOf<Pair<ClassDef, Method>>()
             val snapshots = mutableListOf<Pair<ClassDef, Method>>()
             val models = mutableMapOf<String, ClassDef>()
+            val superclasses = mutableMapOf<String, String?>()
             walk(apk) { owner ->
+                superclasses[owner.type] = owner.superclass
                 if (owner.type in setOf(POST_PACKAGE, BASE, AWEME, USER)) models[owner.type] = owner
                 for (method in owner.methods) {
                     if (NativeReportActionFingerprint.takes(method, owner)) actions += owner to method
@@ -240,18 +254,24 @@ class OwnedShareActionAnchorsTest {
             var helper: Method? = null
             val binders = mutableListOf<Pair<Method, OwnedShareIconBind>>()
             val interfaces = mutableListOf<ClassDef>()
+            val isImageView = { type: String ->
+                generateSequence(type) { superclasses[it] }.take(20).any { it == "Landroid/widget/ImageView;" }
+            }
             walk(apk) { owner ->
                 if (owner.type in action.interfaces) interfaces += owner
                 if (owner.type == helperRef.definingClass) helper = owner.methods.single {
                     it.name == helperRef.name && it.parameterTypes.map(CharSequence::toString) ==
                         helperRef.parameterTypes.map(CharSequence::toString) && it.returnType == helperRef.returnType
                 }
-                for (method in owner.methods) method.ownedShareIconBind(action)?.let { binders += method to it }
+                for (method in owner.methods) method.ownedShareIconBind(action, isImageView)?.let { binders += method to it }
             }
             assertNotNull("native text helper", helper)
-            assertEquals("native action icon binders", 1, binders.size)
+            assertEquals("native action icon binders", 2, binders.size)
+            val imageFields = binders.map { (method, bind) ->
+                method.implementation!!.instructions.toList()[bind.index - 1].getReference<FieldReference>()!!.type
+            }
             val (snapshot, snapshotConstructor) = snapshots.single()
-            Found(action, constructor, helper!!, binders.single().first, binders.single().second,
+            Found(action, constructor, helper!!, binders, imageFields,
                 snapshot, snapshotConstructor, models, interfaces)
         }
     }

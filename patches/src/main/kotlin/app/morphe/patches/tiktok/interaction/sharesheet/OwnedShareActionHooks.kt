@@ -16,6 +16,7 @@ import app.morphe.patches.tiktok.shared.guardAtEntry
 import app.morphe.util.addInstructions
 import app.morphe.util.classesCalling
 import app.morphe.util.cloneMutable
+import app.morphe.util.extendsClass
 import app.morphe.util.findMutableMethodOf
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
@@ -137,16 +138,23 @@ internal fun MutableMethod.takeOwnedShareClick() {
 
 internal data class OwnedShareIconBind(val index: Int, val actionRegister: Int, val imageRegister: Int)
 
-/** The common icon store follows the same action's package callback, after all drawable branches. */
-internal fun Method.ownedShareIconBind(action: ClassDef): OwnedShareIconBind? {
+/**
+ * The common icon store follows the same action's package callback, after all drawable branches.
+ * The share grid stores into an ImageView and the long-press panel's list into a TuxIconView, so
+ * [isImageView] answers for ImageView subclasses too.
+ */
+internal fun Method.ownedShareIconBind(
+    action: ClassDef,
+    isImageView: (String) -> Boolean = { it == IMAGE },
+): OwnedShareIconBind? {
     if (name != "onBindViewHolder" || returnType != "V" ||
         parameterTypes.map(CharSequence::toString) != listOf("Landroidx/recyclerview/widget/RecyclerView\$ViewHolder;", "I")) return null
     val code = implementation?.instructions?.toList() ?: return null
     val stores = code.indices.filter { index ->
         val called = code[index].getReference<MethodReference>()
-        code[index].opcode == Opcode.INVOKE_VIRTUAL && called?.definingClass == IMAGE &&
-            called.name == "setImageDrawable" && called.parameterTypes.map(CharSequence::toString) ==
-            listOf("Landroid/graphics/drawable/Drawable;")
+        code[index].opcode == Opcode.INVOKE_VIRTUAL && called != null && called.name == "setImageDrawable" &&
+            called.parameterTypes.map(CharSequence::toString) == listOf("Landroid/graphics/drawable/Drawable;") &&
+            isImageView(called.definingClass)
     }
     if (stores.size != 1) return null
     val index = stores.single()
@@ -156,7 +164,7 @@ internal fun Method.ownedShareIconBind(action: ClassDef): OwnedShareIconBind? {
     val field = code[index - 1].getReference<FieldReference>() ?: return null
     val callback = code[index - 2].getReference<MethodReference>() ?: return null
     val invocation = code[index - 2] as? FiveRegisterInstruction ?: return null
-    if (code[index - 1].opcode != Opcode.IGET_OBJECT || field.type != IMAGE || image.registerA != store.registerC ||
+    if (code[index - 1].opcode != Opcode.IGET_OBJECT || !isImageView(field.type) || image.registerA != store.registerC ||
         code[index - 2].opcode != Opcode.INVOKE_INTERFACE || callback.definingClass !in action.interfaces ||
         callback.returnType != "V" || callback.parameterTypes.map(CharSequence::toString) != listOf(BASE_PACKAGE) ||
         invocation.registerC == store.registerC) return null
@@ -200,18 +208,22 @@ internal fun BytecodePatchContext.hookOwnedShareActions() {
     }
     val label = action.reportLabel(helper) as MutableMethod
     val callers = classesCalling(action.interfaces)
+    val imageViews = mutableMapOf<String, Boolean>()
+    val isImageView = { type: String -> imageViews.getOrPut(type) { extendsClass(type, IMAGE) } }
     val iconBinders = mutableListOf<Pair<Method, OwnedShareIconBind>>()
     classDefForEach { classDef ->
         if (classDef.type in callers) classDef.methods.forEach { method ->
-            method.ownedShareIconBind(action)?.let { bind -> iconBinders += method to bind }
+            method.ownedShareIconBind(action, isImageView)?.let { bind -> iconBinders += method to bind }
         }
     }
-    val (iconBinder, iconBind) = iconBinders.singleOrNull()
-        ?: throw PatchException("$BLOCK: found ${iconBinders.size} native action icon binders")
+    // The share grid's binder at least; the feed's long-press panel lists actions through a second one.
+    if (iconBinders.isEmpty()) throw PatchException("$BLOCK: found no native action icon binder")
     (action.reportKey() as MutableMethod).answerOwnedShareObject("key", STRING)
     label.answerOwnedShareObject("label", STRING)
     (action.reportClick() as MutableMethod).takeOwnedShareClick()
-    mutableClassDefBy(iconBinder.definingClass).findMutableMethodOf(iconBinder).bindOwnedShareIcon(iconBind)
+    iconBinders.forEach { (binder, bind) ->
+        mutableClassDefBy(binder.definingClass).findMutableMethodOf(binder).bindOwnedShareIcon(bind)
+    }
 
     val bridges = mutableClassDefBy(OWNED_SHARE_ACTIONS)
     val original = bridges.methods.singleOrNull { it.name == "newAction" && it.parameterTypes.size == 2 }
