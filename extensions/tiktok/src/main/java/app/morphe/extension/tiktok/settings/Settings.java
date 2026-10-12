@@ -709,10 +709,16 @@ public class Settings extends BaseSettings {
      * TikTok draws them, lower fades the rail, caption, music row and tabs while they keep taking
      * taps, and 0 hides the rail and caption the way Clear display does (#84). In Clear display a
      * level between keeps the rail and caption in sight at that level and lets taps through them
-     * to the video (VideoOverlayHider, TapThroughControls).
+     * to the video (VideoOverlayHider, TapThroughControls), unless FADE_IN_CLEAR_DISPLAY is off.
      */
     public static final IntegerSetting FADE_CONTROLS_OPACITY =
             new IntegerSetting("fade_controls_opacity", 100).withRange(0, 100);
+    /**
+     * Whether a fade between 0 and 100 keeps the controls in sight in Clear display (#84). Off,
+     * Clear display takes them away as it does at 100, and the fade only reaches them outside it,
+     * for those who want the fade on the feed and Clear display still clear.
+     */
+    public static final BooleanSetting FADE_IN_CLEAR_DISPLAY = new BooleanSetting("fade_in_clear_display", TRUE);
     /**
      * Burn-in guard for OLED screens (BurnInGuard): "dim" draws the controls the fade covers at a
      * quarter after a few seconds without a touch, "dim_shift" also moves the window's content a

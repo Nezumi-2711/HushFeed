@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Abaixo de Esmaecer os controles do vídeo há uma chave nova, Manter os controles esmaecidos na tela limpa, ligada por padrão. Desligada, a tela limpa volta a esconder os botões e a legenda, e o esmaecimento continua valendo em todo o resto (#84).
+
 * **TikTok:** Com Barra de reprodução nos stories em vídeo ativada, um visualizador de stories que você fechou não fica mais na memória enquanto você continua usando o TikTok.
 
 * **TikTok:** O nome na linha do autor não fica mais cortado depois de rolar rápido ou quando o selo de uma publicação de fotos encolhe para um ícone (#127).

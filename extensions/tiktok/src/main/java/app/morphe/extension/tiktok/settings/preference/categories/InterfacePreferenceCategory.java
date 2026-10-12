@@ -554,8 +554,14 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             addPreference(new NumberInputPreference(
                     context,
                     "Fade the video controls",
-                    "Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. In Clear display the buttons and caption stay on screen at this level, and taps go through them to the video. At 0 the buttons and caption are hidden, and the tabs stay at 10.",
+                    "Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. At 0 the buttons and caption are hidden, and the tabs stay at 10.",
                     Settings.FADE_CONTROLS_OPACITY, "%1$s%%"
+            ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Keep faded controls in Clear display",
+                    "With the fade below 100, the buttons and caption stay on screen at that level in Clear display, and taps go through them to the video. Off, Clear display hides them the way it does at 100.",
+                    Settings.FADE_IN_CLEAR_DISPLAY
             ));
             addPreference(new ChoicePreference(context, "Burn-in guard", Settings.BURN_IN_GUARD,
                     new String[]{"Off", "Dim when idle", "Dim when idle and shift"},

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sotto Attenua i controlli del video c'è un nuovo interruttore, Mantieni i controlli attenuati nella vista pulita, attivo di base. Se lo disattivi, la vista pulita torna a nascondere pulsanti e didascalia, mentre l'attenuazione continua a valere ovunque altrove (#84).
+
 * **TikTok:** Con Barra di riproduzione nelle storie video attiva, un visualizzatore di storie chiuso non resta più in memoria mentre continui a usare TikTok.
 
 * **TikTok:** Il nome nella riga del creator non resta più troncato dopo uno scorrimento veloce o quando il badge di un post fotografico si riduce a un'icona (#127).

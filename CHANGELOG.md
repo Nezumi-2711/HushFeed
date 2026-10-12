@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A new switch under Fade the video controls, Keep faded controls in Clear display, is on by default. Turn it off and Clear display hides the buttons and caption again while the fade still works everywhere else (#84).
+
 * **TikTok:** With Seek bar on video stories on, a story viewer you've closed doesn't stay in memory anymore while you keep using TikTok.
 
 * **TikTok:** A creator's name on the author line no longer stays cut short after a quick scroll, or after a photo post's badge shrinks to an icon (#127).

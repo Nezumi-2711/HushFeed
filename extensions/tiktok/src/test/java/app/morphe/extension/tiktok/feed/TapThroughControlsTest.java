@@ -82,6 +82,7 @@ public class TapThroughControlsTest {
         RememberClearDisplayPatch.rememberClearDisplayEvent(new VideoOverlayHiderTest.ClearEvent(false, 2));
         Settings.CLEAR_DISPLAY.save(false);
         Settings.FADE_CONTROLS_OPACITY.save(100);
+        Settings.FADE_IN_CLEAR_DISPLAY.save(true);
         Settings.HIDE_CLEAR_DISPLAY_CONTROLS.save(false);
         SettingsStatus.videoOverlaysEnabled = overlays;
         VideoOverlayHider.resolveForTests("view_rootview", 0);
@@ -254,6 +255,43 @@ public class TapThroughControlsTest {
             assertTrue("TikTok's own flags were never changed", column.isClickable());
             assertFalse(column.isLongClickable());
             assertTrue(column.isEnabled());
+        }
+    }
+
+    /**
+     * #84 on 0.71.2: any fade below 100 kept the buttons in sight in Clear display, and someone
+     * who wanted the fade on the feed had no way to keep Clear display clear. With Keep faded
+     * controls in Clear display off, the fade stays outside it and Clear display clears as at 100.
+     */
+    @Test
+    public void withTheFadeKeptOutOfClearDisplayItClearsAsAt100() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            feed(controller.get());
+            Settings.FADE_CONTROLS_OPACITY.save(50);
+            Settings.FADE_IN_CLEAR_DISPLAY.save(false);
+
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("outside Clear display the fade still applies", 0.5f, column.getAlpha(), 0f);
+            tap(column);
+            assertEquals(1, columnClicks);
+
+            clear(true);
+            VideoOverlayHider.applyTo(activity);
+            // TikTok's Clear display takes the controls to 0, and that's what stays.
+            column.setAlpha(0f);
+            frame.setAlpha(0f);
+            frameDrawn();
+            assertEquals("the rail isn't held at the level", 0f, column.getAlpha(), 0f);
+            assertEquals(0f, frame.getAlpha(), 0f);
+            assertFalse("no tap is sent through", VideoOverlayHider.tapsGoThroughNow());
+            assertFalse(TapThroughControls.isMarked(column));
+            assertFalse(TapThroughControls.isMarked(frame));
+
+            Settings.FADE_IN_CLEAR_DISPLAY.save(true);
+            VideoOverlayHider.applyTo(activity);
+            frameDrawn();
+            assertEquals("switched back on, the level holds again", 0.5f, column.getAlpha(), 0f);
+            assertTrue(VideoOverlayHider.tapsGoThroughNow());
         }
     }
 

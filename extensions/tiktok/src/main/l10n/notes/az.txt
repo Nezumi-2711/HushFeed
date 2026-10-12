@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Video idarəetmələrini solğunlaşdır altına standart olaraq açıq olan Təmiz ekranda solğun idarəetmələri saxlayın açarı əlavə olundu. Onu söndürsəniz, Təmiz ekran düymələri və başlığı yenə gizlədir, solğunluq isə başqa hər yerdə işləməyə davam edir (#84).
+
 * **TikTok:** Video hekayələrdə irəli-geri çəkmə zolağı açıq olanda bağladığınız hekayə pəncərəsi TikTok-dan istifadəyə davam etdiyiniz müddətdə artıq yaddaşda qalmır.
 
 * **TikTok:** Müəllif sətrindəki ad sürətli sürüşdürmədən sonra və ya foto paylaşımının nişanı ikonaya kiçiləndə artıq qısaldılmış qalmır (#127).

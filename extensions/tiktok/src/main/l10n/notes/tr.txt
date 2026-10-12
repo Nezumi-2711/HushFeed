@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Video kontrollerini soluklaştır'ın altına varsayılan olarak açık Temiz ekranda soluk kontrolleri koru anahtarı eklendi. Kapatırsanız Temiz ekran düğmeleri ve açıklamayı yeniden gizler, soluklaştırma ise diğer her yerde çalışmaya devam eder (#84).
+
 * **TikTok:** Video hikayelerde sarma çubuğu açıkken kapattığınız hikaye görüntüleyicisi, TikTok'u kullanmaya devam ederken artık bellekte kalmıyor.
 
 * **TikTok:** Üretici satırındaki ad artık hızlı kaydırmadan sonra ya da fotoğraf gönderisinin rozeti simgeye küçüldüğünde kısaltılmış kalmıyor (#127).

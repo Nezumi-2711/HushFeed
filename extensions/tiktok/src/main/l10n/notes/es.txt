@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Debajo de Atenuar los controles del vídeo hay un interruptor nuevo, Mantener los controles atenuados con Controles ocultos, activado por defecto. Si lo desactivas, Controles ocultos vuelve a ocultar los botones y la descripción, y la atenuación sigue funcionando en todo lo demás (#84).
+
 * **TikTok:** Con Barra de reproducción en historias de vídeo activada, un visor de historias que cerraste ya no se queda en memoria mientras sigues usando TikTok.
 
 * **TikTok:** El nombre en la línea del creador ya no se queda cortado al desplazarte rápido o cuando la insignia de una publicación de fotos se reduce a un icono (#127).
