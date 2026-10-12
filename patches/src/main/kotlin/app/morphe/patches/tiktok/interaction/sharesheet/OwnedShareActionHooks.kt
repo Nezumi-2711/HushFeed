@@ -7,9 +7,11 @@ package app.morphe.patches.tiktok.interaction.sharesheet
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patches.tiktok.interaction.downloads.addShareActionToSnapshot
 import app.morphe.patches.tiktok.interaction.downloads.snapshotActionFields
+import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.shared.guardAtEntry
 import app.morphe.util.addInstructions
 import app.morphe.util.classesCalling
@@ -27,8 +29,10 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
+internal const val OWNED_SHARE_ACTIONS = "Lapp/morphe/extension/tiktok/share/OwnedShareActions;"
 internal const val SHARE_BLOCK_AUTHOR = "Lapp/morphe/extension/tiktok/share/ShareBlockAuthor;"
-private const val BLOCK = "Share sheet tools (block author)"
+internal const val SHARE_SAVE_COVER = "Lapp/morphe/extension/tiktok/share/ShareSaveCover;"
+private const val BLOCK = "Owned share actions"
 private const val AWEME = "Lcom/ss/android/ugc/aweme/feed/model/Aweme;"
 private const val BASE_PACKAGE = "Lcom/ss/android/ugc/aweme/share/base/model/BaseSharePackage;"
 private const val CONTEXT = "Landroid/content/Context;"
@@ -111,30 +115,30 @@ internal object NativeReportActionFingerprint : Fingerprint(
 )
 
 /** Preserve the original body for every native Report instance the extension doesn't own. */
-internal fun MutableMethod.answerShareBlockObject(member: String, resultType: String) {
+internal fun MutableMethod.answerOwnedShareObject(member: String, resultType: String) {
     guardAtEntry(
         BLOCK,
-        "invoke-static/range { p0 .. p0 }, $SHARE_BLOCK_AUTHOR->owns($OBJECT)Z",
+        "invoke-static/range { p0 .. p0 }, $OWNED_SHARE_ACTIONS->owns($OBJECT)Z",
         """
-            invoke-static/range { p0 .. p0 }, $SHARE_BLOCK_AUTHOR->$member($OBJECT)$resultType
+            invoke-static/range { p0 .. p0 }, $OWNED_SHARE_ACTIONS->$member($OBJECT)$resultType
             move-result-object v0
             return-object v0
         """,
     )
 }
 
-internal fun MutableMethod.takeShareBlockClick() {
+internal fun MutableMethod.takeOwnedShareClick() {
     guardAtEntry(
         BLOCK,
-        "invoke-static/range { p0 .. p2 }, $SHARE_BLOCK_AUTHOR->click($OBJECT$CONTEXT$OBJECT)Z",
+        "invoke-static/range { p0 .. p2 }, $OWNED_SHARE_ACTIONS->click($OBJECT$CONTEXT$OBJECT)Z",
         "return-void",
     )
 }
 
-internal data class ShareBlockIconBind(val index: Int, val actionRegister: Int, val imageRegister: Int)
+internal data class OwnedShareIconBind(val index: Int, val actionRegister: Int, val imageRegister: Int)
 
 /** The common icon store follows the same action's package callback, after all drawable branches. */
-internal fun Method.shareBlockIconBind(action: ClassDef): ShareBlockIconBind? {
+internal fun Method.ownedShareIconBind(action: ClassDef): OwnedShareIconBind? {
     if (name != "onBindViewHolder" || returnType != "V" ||
         parameterTypes.map(CharSequence::toString) != listOf("Landroidx/recyclerview/widget/RecyclerView\$ViewHolder;", "I")) return null
     val code = implementation?.instructions?.toList() ?: return null
@@ -156,15 +160,15 @@ internal fun Method.shareBlockIconBind(action: ClassDef): ShareBlockIconBind? {
         code[index - 2].opcode != Opcode.INVOKE_INTERFACE || callback.definingClass !in action.interfaces ||
         callback.returnType != "V" || callback.parameterTypes.map(CharSequence::toString) != listOf(BASE_PACKAGE) ||
         invocation.registerC == store.registerC) return null
-    return ShareBlockIconBind(index, invocation.registerC, store.registerC)
+    return OwnedShareIconBind(index, invocation.registerC, store.registerC)
 }
 
-internal fun MutableMethod.bindShareBlockIcon(bind: ShareBlockIconBind) {
+internal fun MutableMethod.bindOwnedShareIcon(bind: OwnedShareIconBind) {
     addInstructions(bind.index + 1,
-        "invoke-static { v${bind.actionRegister}, v${bind.imageRegister} }, $SHARE_BLOCK_AUTHOR->bindIcon($OBJECT$IMAGE)V")
+        "invoke-static { v${bind.actionRegister}, v${bind.imageRegister} }, $OWNED_SHARE_ACTIONS->bindIcon($OBJECT$IMAGE)V")
 }
 
-internal fun Method.withShareBlockBody(action: ClassDef): MutableMethod {
+internal fun Method.withOwnedShareBody(action: ClassDef): MutableMethod {
     val constructor = action.methods.single { it.isReportActionConstructor() }
     check(AccessFlags.STATIC.isSet(accessFlags) && returnType == OBJECT &&
         parameterTypes.map(CharSequence::toString) == listOf(ACTIVITY, OBJECT)) { "$BLOCK: invalid native factory" }
@@ -187,7 +191,7 @@ internal fun Method.withShareBlockBody(action: ClassDef): MutableMethod {
     }
 }
 
-internal fun BytecodePatchContext.hookShareBlockAuthor() {
+internal fun BytecodePatchContext.hookOwnedShareActions() {
     val action = NativeReportActionFingerprint.classDef
     val helperReference = action.reportLabelHelper()
     val helper = mutableClassDefBy(helperReference.definingClass).methods.single {
@@ -196,26 +200,42 @@ internal fun BytecodePatchContext.hookShareBlockAuthor() {
     }
     val label = action.reportLabel(helper) as MutableMethod
     val callers = classesCalling(action.interfaces)
-    val iconBinders = mutableListOf<Pair<Method, ShareBlockIconBind>>()
+    val iconBinders = mutableListOf<Pair<Method, OwnedShareIconBind>>()
     classDefForEach { classDef ->
         if (classDef.type in callers) classDef.methods.forEach { method ->
-            method.shareBlockIconBind(action)?.let { bind -> iconBinders += method to bind }
+            method.ownedShareIconBind(action)?.let { bind -> iconBinders += method to bind }
         }
     }
     val (iconBinder, iconBind) = iconBinders.singleOrNull()
         ?: throw PatchException("$BLOCK: found ${iconBinders.size} native action icon binders")
-    (action.reportKey() as MutableMethod).answerShareBlockObject("key", STRING)
-    label.answerShareBlockObject("label", STRING)
-    (action.reportClick() as MutableMethod).takeShareBlockClick()
-    mutableClassDefBy(iconBinder.definingClass).findMutableMethodOf(iconBinder).bindShareBlockIcon(iconBind)
+    (action.reportKey() as MutableMethod).answerOwnedShareObject("key", STRING)
+    label.answerOwnedShareObject("label", STRING)
+    (action.reportClick() as MutableMethod).takeOwnedShareClick()
+    mutableClassDefBy(iconBinder.definingClass).findMutableMethodOf(iconBinder).bindOwnedShareIcon(iconBind)
 
-    val bridges = mutableClassDefBy(SHARE_BLOCK_AUTHOR)
+    val bridges = mutableClassDefBy(OWNED_SHARE_ACTIONS)
     val original = bridges.methods.singleOrNull { it.name == "newAction" && it.parameterTypes.size == 2 }
         ?: throw PatchException("$BLOCK: no single native action factory")
-    val bridge = original.withShareBlockBody(action)
+    val bridge = original.withOwnedShareBody(action)
     bridges.methods.remove(original)
     bridges.methods.add(bridge)
+}
 
+/** Adds [extension]'s actions to every finished share sheet row; its carriers answer through the shared hooks. */
+internal fun BytecodePatchContext.addOwnedShareAction(extension: String) {
     val snapshot = ShareSnapshotFingerprint.method
-    snapshot.addShareActionToSnapshot(snapshot.snapshotActionFields(ShareSnapshotFingerprint.classDef), SHARE_BLOCK_AUTHOR)
+    snapshot.addShareActionToSnapshot(snapshot.snapshotActionFields(ShareSnapshotFingerprint.classDef), extension)
+}
+
+/**
+ * The native Report carrier's key, label, click and icon hooks and its constructor bridge, which
+ * Block this creator (Share sheet tools) and Save cover (Advanced downloads) share. A build with
+ * both installs them once, and each patch adds its own action to the finished row.
+ */
+internal val ownedShareActionsPatch = bytecodePatch {
+    dependsOn(sharedExtensionPatch)
+
+    execute {
+        hookOwnedShareActions()
+    }
 }

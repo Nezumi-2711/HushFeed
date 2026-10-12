@@ -133,6 +133,9 @@ public class DownloadsPreferenceCategory extends ConditionalPreferenceCategory {
             addPreference(new TogglePreference(context, "Save the cover as well",
                     "Save the video's cover picture at the largest size TikTok has, each time you tap Download. It goes to your photo folder, named after the video.",
                     Settings.DOWNLOAD_COVER));
+            addPreference(new TogglePreference(context, "Save cover button in the share sheet",
+                    "Adds Save cover next to Download when you share a video, so you save the cover only when you want it. While this is on, Download saves just the video, even with Save the cover as well on.",
+                    Settings.SAVE_COVER_BUTTON));
             addPreference(new TogglePreference(context, "Show download progress",
                     "Show a progress bar while a video saves.", Settings.DOWNLOAD_PROGRESS));
             addPreference(new TogglePreference(context, "Save details beside the video",

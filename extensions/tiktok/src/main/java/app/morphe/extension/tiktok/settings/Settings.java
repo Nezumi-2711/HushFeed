@@ -137,6 +137,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting DOWNLOAD_WATERMARK_FALLBACK = new BooleanSetting("download_watermark_fallback", FALSE);
     /** The video's cover, at the largest size it comes in, saved with each Download. */
     public static final BooleanSetting DOWNLOAD_COVER = new BooleanSetting("download_cover", FALSE);
+    /** A Save cover button beside Download in a video's share sheet; Download then saves only the video (#146). */
+    public static final BooleanSetting SAVE_COVER_BUTTON = new BooleanSetting("save_cover_button", FALSE);
     public static final BooleanSetting DOWNLOAD_WITHOUT_SOUND =
             new BooleanSetting("download_without_sound", FALSE);
     public static final BooleanSetting DOWNLOAD_PROGRESS = new BooleanSetting("download_progress", false);

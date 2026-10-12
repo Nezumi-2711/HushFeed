@@ -1,5 +1,6 @@
 source,target
 "%1$s isn't a language code. Use two letters, like en, es or de.","%1$s bukan kode bahasa. Gunakan dua huruf, seperti en, es, atau de."
+"Adds Save cover next to Download when you share a video, so you save the cover only when you want it. While this is on, Download saves just the video, even with Save the cover as well on.","Menambahkan Simpan sampul di sebelah Unduh saat kamu membagikan video, jadi kamu menyimpan sampul hanya saat kamu mau. Selama ini aktif, Unduh hanya menyimpan videonya, meskipun Simpan sampulnya juga aktif."
 "Applies to Save the sound as well and to Save the original sound on a long press. Opus makes a smaller file, but the sound is encoded again from TikTok's copy.","Berlaku untuk Simpan suaranya juga dan Simpan suara asli saat tekan lama. Opus menghasilkan berkas lebih kecil, tapi suaranya dikodekan ulang dari salinan TikTok."
 As TikTok sent it (M4A or MP3),Seperti yang dikirim TikTok (M4A atau MP3)
 Burn-in guard,Pelindung burn-in layar
@@ -16,6 +17,8 @@ Keep the language picked in TikTok,Pertahankan bahasa yang dipilih di TikTok
 "Opus (.ogg), a smaller file","Opus (.ogg), berkas lebih kecil"
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.,Opus tidak berfungsi di ponsel ini. Menyimpan suaranya seperti yang dikirim TikTok.
 "Opus needs Android 10 or later, so sounds save as TikTok sent them.","Opus butuh Android 10 atau yang lebih baru, jadi suara disimpan seperti yang dikirim TikTok."
+Save cover,Simpan sampul
+Save cover button in the share sheet,Tombol Simpan sampul di menu bagikan
 "Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.","Video yang disimpan menampilkan @nama pengguna dan baris pertama keterangan di pojok kiri bawah. Untuk itu ponsel mengenkode ulang seluruh video, jadi menyimpan jadi lebih lama. Berlaku untuk simpanan yang dibuat Hushfeed."
 Sound format,Format suara
 Translate button in comments,Tombol terjemahkan di komentar

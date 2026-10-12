@@ -357,9 +357,9 @@ public final class ShareBlockAuthor {
     static volatile Transport transportForTests;
     static volatile Feedback feedbackForTests;
 
-    /** Replaced with the reviewed native Report carrier constructor by the patch. */
+    /** A native Report carrier from the shared bridge the patch fills in. */
     static Object newAction(Activity activity, Object aweme) {
         Native stand = nativeForTests;
-        return stand == null ? null : stand.newAction(activity, aweme);
+        return stand == null ? OwnedShareActions.newAction(activity, aweme) : stand.newAction(activity, aweme);
     }
 }

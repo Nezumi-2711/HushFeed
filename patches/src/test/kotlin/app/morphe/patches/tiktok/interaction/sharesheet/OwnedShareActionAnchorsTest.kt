@@ -32,14 +32,14 @@ import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
 
-/** Native-only tests: interface dispatch, exact post identity, and coexistence with story Save. */
-class ShareBlockAuthorAnchorsTest {
+/** Native-only tests: interface dispatch, exact post identity, and coexistence of every share sheet addition. */
+class OwnedShareActionAnchorsTest {
     private data class Found(
         val action: ClassDef,
         val constructor: Method,
         val helper: Method,
         val iconBinder: Method,
-        val iconBind: ShareBlockIconBind,
+        val iconBind: OwnedShareIconBind,
         val snapshot: ClassDef,
         val snapshotConstructor: Method,
         val models: Map<String, ClassDef>,
@@ -85,7 +85,7 @@ class ShareBlockAuthorAnchorsTest {
             for ((method, member) in listOf(found.action.reportKey() to "key", found.action.reportLabel(found.helper) to "label")) {
                 val patched = MutableMethod(method)
                 val before = method.implementation!!.instructions.toList()
-                patched.answerShareBlockObject(member, STRING)
+                patched.answerOwnedShareObject(member, STRING)
                 val code = patched.implementation!!.instructions.toList()
                 assertEquals(before.map { it.opcode }, code.takeLast(before.size).map { it.opcode })
                 assertEquals("owns", code[0].getReference<MethodReference>()!!.name)
@@ -96,11 +96,11 @@ class ShareBlockAuthorAnchorsTest {
             }
             val original = found.action.reportClick()
             val click = MutableMethod(original)
-            click.takeShareBlockClick()
+            click.takeOwnedShareClick()
             val code = click.implementation!!.instructions.toList()
             val call = code[0].getReference<MethodReference>()!!
             val registers = code[0] as RegisterRangeInstruction
-            assertEquals(SHARE_BLOCK_AUTHOR, call.definingClass)
+            assertEquals(OWNED_SHARE_ACTIONS, call.definingClass)
             assertEquals(listOf("Ljava/lang/Object;", "Landroid/content/Context;", "Ljava/lang/Object;"),
                 call.parameterTypes.map(CharSequence::toString))
             assertEquals(3, registers.registerCount)
@@ -139,7 +139,7 @@ class ShareBlockAuthorAnchorsTest {
             val found = find(apk)
             val binder = MutableMethod(found.iconBinder)
             val before = binder.implementation!!.instructions.toList()
-            binder.bindShareBlockIcon(found.iconBind)
+            binder.bindOwnedShareIcon(found.iconBind)
             val code = binder.implementation!!.instructions.toList()
             val at = found.iconBind.index
             val callback = before[at - 2].getReference<MethodReference>()!!
@@ -159,17 +159,17 @@ class ShareBlockAuthorAnchorsTest {
         }
     }
 
-    @Test fun `the factory binds the post and activity and both additions keep the current finished row`() {
+    @Test fun `the factory binds the post and activity and every addition keeps the current finished row`() {
         Fixtures.forEachDeclared { apk ->
             val found = find(apk)
             val stub = MutableMethod(ImmutableMethod(
-                SHARE_BLOCK_AUTHOR, "newAction",
+                OWNED_SHARE_ACTIONS, "newAction",
                 listOf(ImmutableMethodParameter("Landroid/app/Activity;", null, null),
                     ImmutableMethodParameter("Ljava/lang/Object;", null, null)),
                 "Ljava/lang/Object;", AccessFlags.STATIC.value, null, null,
                 ImmutableMethodImplementation(3, emptyList(), null, null),
             )).apply { addInstructions(0, "const/4 v0, 0x0\nreturn-object v0") }
-            val factory = stub.withShareBlockBody(found.action)
+            val factory = stub.withOwnedShareBody(found.action)
             val code = factory.implementation!!.instructions.toList()
             val total = factory.implementation!!.registerCount
             assertEquals(Opcode.CHECK_CAST, code[0].opcode)
@@ -190,8 +190,9 @@ class ShareBlockAuthorAnchorsTest {
             val returns = snapshot.implementation!!.instructions.count { it.opcode == Opcode.RETURN_VOID }
             snapshot.addShareActionToSnapshot(fields, SHARE_BLOCK_AUTHOR)
             snapshot.addStorySaveToSnapshot(fields)
+            snapshot.addShareActionToSnapshot(fields, SHARE_SAVE_COVER)
             val finished = snapshot.implementation!!.instructions.toList()
-            for (extension in listOf(SHARE_BLOCK_AUTHOR, STORY_SHARE_SAVE)) {
+            for (extension in listOf(SHARE_BLOCK_AUTHOR, STORY_SHARE_SAVE, SHARE_SAVE_COVER)) {
                 val calls = finished.indices.filter { finished[it].getReference<MethodReference>()?.definingClass == extension }
                 assertEquals(returns, calls.size)
                 for (at in calls) {
@@ -237,7 +238,7 @@ class ShareBlockAuthorAnchorsTest {
             val (action, constructor) = actions.single()
             val helperRef = action.reportLabelHelper()
             var helper: Method? = null
-            val binders = mutableListOf<Pair<Method, ShareBlockIconBind>>()
+            val binders = mutableListOf<Pair<Method, OwnedShareIconBind>>()
             val interfaces = mutableListOf<ClassDef>()
             walk(apk) { owner ->
                 if (owner.type in action.interfaces) interfaces += owner
@@ -245,7 +246,7 @@ class ShareBlockAuthorAnchorsTest {
                     it.name == helperRef.name && it.parameterTypes.map(CharSequence::toString) ==
                         helperRef.parameterTypes.map(CharSequence::toString) && it.returnType == helperRef.returnType
                 }
-                for (method in owner.methods) method.shareBlockIconBind(action)?.let { binders += method to it }
+                for (method in owner.methods) method.ownedShareIconBind(action)?.let { binders += method to it }
             }
             assertNotNull("native text helper", helper)
             assertEquals("native action icon binders", 1, binders.size)

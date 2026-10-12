@@ -24,7 +24,7 @@ val shareSheetToolsPatch = bytecodePatch(
         "and add apps you do use. Starts off. Turn it on in Hushfeed settings > Share sheet.",
 ) {
     category("Interaction")
-    dependsOn(settingsPatch, sharedExtensionPatch)
+    dependsOn(settingsPatch, sharedExtensionPatch, ownedShareActionsPatch)
 
     compatibleWith(*AppCompatibilities.tiktok())
 
@@ -35,7 +35,7 @@ val shareSheetToolsPatch = bytecodePatch(
         hookShareModes()
         hookShareContactBinds()
         hookSharePanel()
-        hookShareBlockAuthor()
+        addOwnedShareAction(SHARE_BLOCK_AUTHOR)
         SettingsStatusLoadFingerprint.method.addInstruction(
             0,
             "invoke-static {}, " +

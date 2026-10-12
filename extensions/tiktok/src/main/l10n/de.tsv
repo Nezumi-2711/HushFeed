@@ -1,4 +1,5 @@
 %1$s isn't a language code. Use two letters, like en, es or de.	%1$s ist kein Sprachcode. Nutze zwei Buchstaben, etwa en, es oder de.
+Adds Save cover next to Download when you share a video, so you save the cover only when you want it. While this is on, Download saves just the video, even with Save the cover as well on.	Fügt beim Teilen eines Videos „Titelbild speichern“ neben Herunterladen hinzu, damit du das Titelbild nur speicherst, wenn du es willst. Solange das an ist, speichert Herunterladen nur das Video, auch wenn Titelbild ebenfalls speichern an ist.
 Applies to Save the sound as well and to Save the original sound on a long press. Opus makes a smaller file, but the sound is encoded again from TikTok's copy.	Gilt für Ton ebenfalls speichern und für Originalsound speichern beim langen Drücken. Opus ergibt eine kleinere Datei, aber der Ton wird aus TikToks Kopie neu kodiert.
 As TikTok sent it (M4A or MP3)	So, wie TikTok ihn liefert (M4A oder MP3)
 Burn-in guard	Einbrennschutz
@@ -17,6 +18,8 @@ Opus didn't work on this phone. Saving the sound as TikTok sent it instead.	Opus
 Opus needs Android 10 or later, so sounds save as TikTok sent them.	Opus braucht Android 10 oder neuer, deshalb werden Töne so gespeichert, wie TikTok sie liefert.
 Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.	Fügt dem Menü, das der Teilen-Button einer Story öffnet, einen Speichern-Button hinzu. Er speichert die Story, die du gerade ansiehst, und Gedrückthalten pausiert eine Story weiterhin.
 Save a story from its share sheet	Story über das Teilen-Menü speichern
+Save cover	Titelbild speichern
+Save cover button in the share sheet	„Titelbild speichern“ im Teilen-Menü
 Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.	Gespeicherte Videos zeigen unten links den @Benutzernamen und die erste Zeile der Beschreibung. Dafür kodiert das Handy das ganze Video neu, das Speichern dauert also länger. Gilt für Speicherungen durch Hushfeed.
 Sound format	Tonformat
 TikTok only had its watermarked copy of this story, so that copy was saved to %1$s	TikTok hatte von dieser Story nur die Kopie mit Wasserzeichen, deshalb wurde diese Kopie unter %1$s gespeichert

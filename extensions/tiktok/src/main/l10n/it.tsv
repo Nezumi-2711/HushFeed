@@ -1,4 +1,5 @@
 %1$s isn't a language code. Use two letters, like en, es or de.	%1$s non è un codice lingua. Usa due lettere, come en, es o de.
+Adds Save cover next to Download when you share a video, so you save the cover only when you want it. While this is on, Download saves just the video, even with Save the cover as well on.	Aggiunge Salva copertina accanto a Scarica quando condividi un video, così salvi la copertina solo quando vuoi. Finché è attivo, Scarica salva solo il video, anche con Salva anche la copertina attivo.
 Applies to Save the sound as well and to Save the original sound on a long press. Opus makes a smaller file, but the sound is encoded again from TikTok's copy.	Vale per Salva anche l'audio e per Salva l'audio originale con la pressione prolungata. Opus crea un file più piccolo, ma l'audio viene ricodificato dalla copia di TikTok.
 As TikTok sent it (M4A or MP3)	Come lo invia TikTok (M4A o MP3)
 Burn-in guard	Protezione dal burn-in
@@ -17,6 +18,8 @@ Opus didn't work on this phone. Saving the sound as TikTok sent it instead.	Opus
 Opus needs Android 10 or later, so sounds save as TikTok sent them.	Opus richiede Android 10 o successivo, quindi l'audio viene salvato come lo invia TikTok.
 Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.	Aggiunge un pulsante di salvataggio al menu che si apre dal pulsante Condividi di una storia. Salva la storia che stai guardando, e tenere premuta una storia la mette ancora in pausa.
 Save a story from its share sheet	Salva una storia dal menu di condivisione
+Save cover	Salva copertina
+Save cover button in the share sheet	Pulsante Salva copertina nel menu di condivisione
 Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.	I video salvati mostrano il @nome utente e la prima riga della descrizione nell'angolo in basso a sinistra. Per farlo il telefono ricodifica tutto il video, quindi il salvataggio richiede più tempo. Vale per i salvataggi fatti da Hushfeed.
 Sound format	Formato audio
 TikTok only had its watermarked copy of this story, so that copy was saved to %1$s	TikTok aveva solo la copia con filigrana di questa storia, quindi è stata salvata quella copia in %1$s
