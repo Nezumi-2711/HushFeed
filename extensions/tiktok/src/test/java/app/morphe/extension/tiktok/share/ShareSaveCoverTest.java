@@ -200,4 +200,12 @@ public class ShareSaveCoverTest {
         OwnedShareActions.bindIcon(button, image);
         assertTrue(image.getDrawable() instanceof CoverGlyphDrawable);
     }
+
+    /** The binder's framed-icon test sees Report's key on the button, so the button gets TikTok's frame. */
+    @Test public void theButtonAsksForTikToksIconFrameAndNothingElseDoes() {
+        Object button = ShareSaveCover.actions(sheet("11"), row()).get(2);
+        assertEquals("report", OwnedShareActions.framedKey(button, "save_cover"));
+        assertEquals("share", OwnedShareActions.framedKey(new Action("share"), "share"));
+        assertNull(OwnedShareActions.framedKey(new Object(), null));
+    }
 }

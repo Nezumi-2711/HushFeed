@@ -161,6 +161,47 @@ class OwnedShareActionAnchorsTest {
         }
     }
 
+    @Test fun `each icon binder's framed-key test asks the owned carrier for its key once`() {
+        Fixtures.forEachDeclared { apk ->
+            val found = find(apk)
+            val lists = mutableSetOf<String>()
+            for ((method, bind) in found.iconBinders) {
+                val frame = method.ownedShareFrameCheck(found.action)
+                assertNotNull("${method.definingClass} lost its framed-key test", frame)
+                frame!!
+                assertTrue("the test comes before the icon store", frame.keyIndex < bind.index)
+                val binder = MutableMethod(method)
+                val before = binder.implementation!!.instructions.toList()
+                binder.frameOwnedShareIcon(frame)
+                val code = binder.implementation!!.instructions.toList()
+                val asked = code[frame.keyIndex + 1]
+                assertEquals("framedKey", asked.getReference<MethodReference>()!!.name)
+                assertEquals(listOf(frame.actionRegister, frame.keyRegister),
+                    (asked as FiveRegisterInstruction).let { listOf(it.registerC, it.registerD) })
+                assertEquals(frame.keyRegister, (code[frame.keyIndex + 2] as OneRegisterInstruction).registerA)
+                // The key's register dies at the index-of, so nothing after it sees Report's key.
+                val test = code[frame.keyIndex + 3] as FiveRegisterInstruction
+                assertEquals(frame.keyRegister, test.registerC)
+                assertEquals(Opcode.MOVE_RESULT, code[frame.keyIndex + 4].opcode)
+                assertEquals(frame.keyRegister, (code[frame.keyIndex + 4] as OneRegisterInstruction).registerA)
+                // The list is the static String[] the test reads; on 47.1.4 it holds "report".
+                val list = before[frame.keyIndex - 2].getReference<FieldReference>()!!
+                assertEquals("[Ljava/lang/String;", list.type)
+                assertEquals(Opcode.SGET_OBJECT, before[frame.keyIndex - 2].opcode)
+                lists += list.definingClass
+            }
+            val holding = mutableSetOf<String>()
+            walk(apk) { owner ->
+                if (owner.type in lists && owner.methods.any { method ->
+                        method.name == "<clinit>" && method.implementation!!.instructions.any {
+                            it.getReference<StringReference>()?.string == "report"
+                        }
+                    }) holding += owner.type
+            }
+            assertEquals("the framed-key list holds Report's key", lists, holding)
+        }
+    }
+
     @Test fun `the share grid and the long-press panel list both get the owned icon`() {
         Fixtures.forEachDeclared { apk ->
             val found = find(apk)

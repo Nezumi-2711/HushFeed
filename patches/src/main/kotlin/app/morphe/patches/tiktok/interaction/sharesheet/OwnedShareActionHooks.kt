@@ -176,6 +176,47 @@ internal fun MutableMethod.bindOwnedShareIcon(bind: OwnedShareIconBind) {
         "invoke-static { v${bind.actionRegister}, v${bind.imageRegister} }, $OWNED_SHARE_ACTIONS->bindIcon($OBJECT$IMAGE)V")
 }
 
+/** [keyIndex] is the move-result-object that takes the action's key for the framed-key test. */
+internal data class OwnedShareFrameCheck(val keyIndex: Int, val actionRegister: Int, val keyRegister: Int)
+
+/**
+ * A binder draws TikTok's icon frame (its themed circle under a TuxIconDrawable) only for an action
+ * whose key is on its framed-key list, and a bare resource drawable for any other, so an owned
+ * carrier's own key left it no frame to put its glyph in (S22, 2026-10-12). The list is read as
+ * `sget-object` of a static String[], the key, and an index-of whose result overwrites the key's
+ * register at once, so the key read there feeds that one test and nothing else.
+ */
+internal fun Method.ownedShareFrameCheck(action: ClassDef): OwnedShareFrameCheck? {
+    val code = implementation?.instructions?.toList() ?: return null
+    val checks = (0 until code.size - 4).mapNotNull { at ->
+        val list = code[at].takeIf { it.opcode == Opcode.SGET_OBJECT && it.getReference<FieldReference>()?.type == "[$STRING" }
+            as? OneRegisterInstruction ?: return@mapNotNull null
+        val read = code[at + 1] as? FiveRegisterInstruction ?: return@mapNotNull null
+        val key = code[at + 1].getReference<MethodReference>()
+        if (code[at + 1].opcode != Opcode.INVOKE_INTERFACE || key?.name != "key" || key.returnType != STRING ||
+            key.parameterTypes.isNotEmpty() || key.definingClass !in action.interfaces) return@mapNotNull null
+        val result = code[at + 2].takeIf { it.opcode == Opcode.MOVE_RESULT_OBJECT } as? OneRegisterInstruction
+            ?: return@mapNotNull null
+        val test = code[at + 3] as? FiveRegisterInstruction ?: return@mapNotNull null
+        val call = code[at + 3].getReference<MethodReference>()
+        if (code[at + 3].opcode != Opcode.INVOKE_STATIC || call?.returnType != "I" ||
+            call.parameterTypes.map(CharSequence::toString) != listOf(OBJECT, "[$OBJECT") ||
+            test.registerCount != 2 || test.registerC != result.registerA || test.registerD != list.registerA) return@mapNotNull null
+        val found = code[at + 4].takeIf { it.opcode == Opcode.MOVE_RESULT } as? OneRegisterInstruction
+            ?: return@mapNotNull null
+        if (found.registerA != result.registerA || read.registerC > 15 || result.registerA > 15) return@mapNotNull null
+        OwnedShareFrameCheck(at + 2, read.registerC, result.registerA)
+    }
+    return checks.singleOrNull()
+}
+
+internal fun MutableMethod.frameOwnedShareIcon(check: OwnedShareFrameCheck) {
+    addInstructions(check.keyIndex + 1, """
+        invoke-static { v${check.actionRegister}, v${check.keyRegister} }, $OWNED_SHARE_ACTIONS->framedKey($OBJECT$STRING)$STRING
+        move-result-object v${check.keyRegister}
+    """)
+}
+
 internal fun Method.withOwnedShareBody(action: ClassDef): MutableMethod {
     val constructor = action.methods.single { it.isReportActionConstructor() }
     check(AccessFlags.STATIC.isSet(accessFlags) && returnType == OBJECT &&
@@ -222,7 +263,13 @@ internal fun BytecodePatchContext.hookOwnedShareActions() {
     label.answerOwnedShareObject("label", STRING)
     (action.reportClick() as MutableMethod).takeOwnedShareClick()
     iconBinders.forEach { (binder, bind) ->
-        mutableClassDefBy(binder.definingClass).findMutableMethodOf(binder).bindOwnedShareIcon(bind)
+        val frame = binder.ownedShareFrameCheck(action)
+        mutableClassDefBy(binder.definingClass).findMutableMethodOf(binder).apply {
+            // The icon store comes after the key test, so its index still holds once it's in.
+            bindOwnedShareIcon(bind)
+            // Without the test the glyph keeps its bare fallback, which is how it looked before.
+            if (frame != null && frame.keyIndex < bind.index) frameOwnedShareIcon(frame)
+        }
     }
 
     val bridges = mutableClassDefBy(OWNED_SHARE_ACTIONS)

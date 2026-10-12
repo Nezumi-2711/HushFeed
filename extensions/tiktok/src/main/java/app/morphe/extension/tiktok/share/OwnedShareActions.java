@@ -36,6 +36,19 @@ public final class OwnedShareActions {
                 || ShareSaveCover.click(action, context, sharePackage);
     }
 
+    /**
+     * The key a native action binder looks up in its framed-icon list, read for that test alone.
+     * TikTok draws its themed circle and icon only for a key on the list and a bare drawable for
+     * any other, so an owned carrier answers Report's here: it gets Report's frame, and
+     * {@link #bindIcon} puts its own glyph inside it. Every other read keeps the carrier's key.
+     */
+    public static String framedKey(Object action, String key) {
+        return owns(action) ? FRAMED_KEY : key;
+    }
+
+    /** The native carrier's own key, which TikTok's framed-icon list holds. */
+    static final String FRAMED_KEY = "report";
+
     public static void bindIcon(Object action, ImageView image) {
         ShareBlockAuthor.bindIcon(action, image);
         ShareSaveCover.bindIcon(action, image);
