@@ -4,6 +4,8 @@
 
 * **TikTok:** Ocultar la burbuja de Tako ahora también oculta la burbuja de Tako en la esquina inferior derecha de los videos del feed, que algunas cuentas ven en lugar de la que está encima del botón de perfil (#115).
 
+* **TikTok:** Feature Gate Lab tiene un nuevo ajuste Banner de perfil. Activa Add background en Edit profile de TikTok sin pasar el resto del perfil al nuevo diseño (#80).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** Ocultar la barra de estado en los LIVE y Mostrar el LIVE bajo la barra de estado ahora también funcionan en un LIVE abierto desde la vista previa bajo la tarjeta de un creador en la búsqueda. TikTok abre ese LIVE dentro de la página que usa para los videos abiertos, a la que los interruptores no llegaban (#137).

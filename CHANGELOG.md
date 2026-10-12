@@ -8,6 +8,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Hide the Tako bubble now also hides the Tako bubble in the bottom right corner of feed videos, which some accounts get instead of the one above the profile button (#115).
 
+* **TikTok:** The Feature Gate Lab has a new Profile banner preset. It turns on Add background in TikTok's Edit profile without switching the rest of the profile to the new layout (#80).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** Hide the status bar in LIVE rooms and Show a LIVE under the status bar now work on a LIVE opened from the preview under a creator's card in search too. TikTok opens that LIVE inside the page it uses for opened videos, which the switches didn't reach (#137).
