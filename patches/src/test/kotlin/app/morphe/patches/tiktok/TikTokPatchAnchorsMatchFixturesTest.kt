@@ -250,6 +250,50 @@ class TikTokPatchAnchorsMatchFixturesTest {
         }
     }
 
+    /**
+     * Discussion #115. Both bottom-right Tako entrances keep one bind of the guarded shape and
+     * an onViewCreated that calls the base first, each with a local for the guard's answer, so
+     * the bind can return early and the view can be hidden before the coroutine starts.
+     */
+    @Test
+    fun `both bottom right Tako entrances keep one bind and a guardable onViewCreated on every retained fixture`() {
+        val base = "Lcom/ss/android/ugc/aweme/tako/otherpage/feed/mainentrance/ui/AbsTakoRightBottomEntrance;"
+        val variants = listOf("TakoRightBottomFixedEntrance", "TakoRightBottomInCellEntrance")
+            .map { "Lcom/ss/android/ugc/aweme/tako/otherpage/feed/mainentrance/ui/$it;" }
+        val apks = fixtures()
+        for (apk in apks) {
+            val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
+            val classes = container.dexEntryNames.asSequence()
+                .flatMap { container.getEntry(it)!!.dexFile.classes.asSequence() }
+                .filter { it.type in variants }.associateBy { it.type }
+            assertEquals("${apk.name}: bottom right Tako entrances", variants.toSet(), classes.keys)
+            for ((type, entrance) in classes) {
+                assertEquals("${apk.name}: $type extends the shared entrance", base, entrance.superclass)
+                val binds = entrance.methods.filter {
+                    it.returnType == "V" && it.implementation != null &&
+                        it.parameterTypes.map(CharSequence::toString) == listOf("Lcom/ss/android/ugc/aweme/feed/model/VideoItemParams;")
+                }
+                assertEquals("${apk.name}: $type bind", 1, binds.size)
+                assertTrue("${apk.name}: $type bind has no local for the guard",
+                    binds.single().implementation!!.registerCount - 2 >= 1)
+                val created = entrance.methods.single {
+                    it.name == "onViewCreated" && it.returnType == "V" &&
+                        it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/view/View;")
+                }
+                val body = created.implementation!!
+                assertTrue("${apk.name}: $type onViewCreated has no local for the guard", body.registerCount - 2 >= 1)
+                val instructions = body.instructions.toList()
+                val superIndex = instructions.indexOfFirst {
+                    it.opcode == Opcode.INVOKE_SUPER &&
+                        ((it as ReferenceInstruction).reference as MethodReference).name == "onViewCreated"
+                }
+                assertEquals("${apk.name}: $type onViewCreated calls the base first", 0, superIndex)
+                assertTrue("${apk.name}: $type onViewCreated ends at the base call",
+                    superIndex + 1 < instructions.size)
+            }
+        }
+    }
+
     @Test
     fun `block skip native pager methods survive every retained fixture`() {
         val apks = fixtures()
