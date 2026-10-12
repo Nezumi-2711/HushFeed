@@ -732,10 +732,15 @@ try {
         $release.draft = $false
         Assert-True ((Get-PublishedReleaseDate -Release $release -Tag 'v1.2.3') -ceq '2026-10-12T12:00:00') 'Published index date changed.'
     }
-    Test-Case 'Index date stays in UTC when GitHub''s JSON arrives as a date' {
-        $release = '{"tag_name":"v1.2.3","draft":false,"published_at":"2026-10-12T12:00:00Z"}' | ConvertFrom-Json
-        Assert-True ($release.published_at -is [DateTime]) 'ConvertFrom-Json no longer returns a date here, so this contract tests nothing.'
-        Assert-True ((Get-PublishedReleaseDate -Release $release -Tag 'v1.2.3') -ceq '2026-10-12T12:00:00') 'Index date moved by the local UTC offset.'
+    Test-Case 'Index date stays in UTC whether the JSON reader returns a date or a string' {
+        # PowerShell 7 turns published_at into a DateTime and 5.1 leaves a string, so cover both shapes
+        # explicitly instead of depending on which shell is running.
+        $parsed = '{"tag_name":"v1.2.3","draft":false,"published_at":"2026-10-12T12:00:00Z"}' | ConvertFrom-Json
+        $instant = [DateTime]::new(2026, 10, 12, 12, 0, 0, [DateTimeKind]::Utc)
+        foreach ($value in @($parsed.published_at, '2026-10-12T12:00:00Z', $instant, $instant.ToLocalTime())) {
+            $release = [pscustomobject]@{ tag_name = 'v1.2.3'; draft = $false; published_at = $value }
+            Assert-True ((Get-PublishedReleaseDate -Release $release -Tag 'v1.2.3') -ceq '2026-10-12T12:00:00') "Index date moved for a $($value.GetType().Name) published_at."
+        }
     }
     function Get-IndexAction {
         $switch = $ast.Find({ param($node)

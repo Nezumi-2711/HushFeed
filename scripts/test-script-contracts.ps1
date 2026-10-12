@@ -53,7 +53,10 @@ $phoneParserCommand = "PHONE_SERIAL=TESTPHONE01 HUSHFEED_DEVICE_SERIAL=TESTPHONE
 function Invoke-PhoneTopParser {
     param([Parameter(Mandatory)][string]$Fixture, [switch]$Popup)
     $parserCommand = if ($Popup) { $phoneParserCommand -replace ' parse_top$', ' parse_popup_top' } else { $phoneParserCommand }
-    $output = @($Fixture | & $bashHost @bashArguments $parserCommand 2> $null)
+    # Windows PowerShell 5.1 prefixes piped native stdin with a UTF-8 byte-order mark, so the fixture
+    # travels inside the command as base64 and reaches the parser byte for byte in both shells.
+    $encoded = [Convert]::ToBase64String([Text.UTF8Encoding]::new($false).GetBytes($Fixture.Replace("`r`n", "`n").TrimEnd("`n") + "`n"))
+    $output = @(& $bashHost @bashArguments "printf %s $encoded | base64 -d | $parserCommand" 2> $null)
     return [pscustomobject]@{
         ExitCode = $LASTEXITCODE
         Output   = ($output -join "`n").Trim()
