@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pemeriksaan media kini menguji muxer terpasang dengan klip buatan dan memastikan hasilnya bisa diputar. File uji dihapus setelah pemeriksaan.
+
 * **TikTok:** Mengganti kategori Aktivitas setelah pencarian tidak lagi membuat aplikasi berhenti. Pencarian bisa memakai daftar yang sudah tampil di layar.
 
 * **TikTok:** Pemeriksaan perangkat kini mengenali menu pop-up dari aplikasi pemiliknya. Aplikasi lain dan jendela yang tidak cocok tetap menolak input.

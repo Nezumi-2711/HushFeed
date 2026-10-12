@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** I controlli multimediali ora provano il muxer installato con clip generate e verificano che il risultato sia riproducibile. I file di prova vengono poi rimossi.
+
 * **TikTok:** Cambiare categoria di Attività dopo una ricerca non fa più chiudere l'app. La ricerca può usare l'elenco già sullo schermo.
 
 * **TikTok:** I controlli del dispositivo ora riconoscono i menu a comparsa in base all'app a cui appartengono. Le altre app e le finestre non riconosciute continuano a rifiutare gli input.

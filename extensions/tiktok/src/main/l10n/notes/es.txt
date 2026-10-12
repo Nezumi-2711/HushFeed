@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Las comprobaciones multimedia ahora prueban el muxer instalado con clips generados y verifican que se reproduzcan. Los archivos de prueba se eliminan al terminar.
+
 * **TikTok:** Cambiar de categoría de Actividad después de una búsqueda ya no cierra la app. La búsqueda puede usar la lista que ya está en pantalla.
 
 * **TikTok:** Las comprobaciones del dispositivo ahora reconocen los menús emergentes por la app a la que pertenecen. Otras apps y ventanas sin coincidencia siguen rechazando la entrada.

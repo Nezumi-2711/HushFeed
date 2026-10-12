@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Media yoxlamaları indi quraşdırılmış multipleksoru yaradılmış kliplərlə sınayır və nəticənin oynadıldığını yoxlayır. Sınaq faylları yoxlamadan sonra silinir.
+
 * **TikTok:** Axtarışdan sonra Fəaliyyət kateqoriyasını dəyişmək artıq tətbiqi çökdürmür. Axtarış ekranda görünən siyahıdan başlaya bilər.
 
 * **TikTok:** Cihaz yoxlamaları indi açılan menyuları aid olduqları tətbiqə görə tanıyır. Digər tətbiqlərə və uyğun gəlməyən pəncərələrə giriş yenə rədd edilir.

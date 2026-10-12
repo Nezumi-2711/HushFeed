@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Medya denetimleri artık yüklü çoklayıcıyı oluşturulan kliplerle sınar ve çıktının oynatılabildiğini doğrular. Test dosyaları doğrulamadan sonra kaldırılır.
+
 * **TikTok:** Aramadan sonra Etkinlik kategorisini değiştirmek artık uygulamayı çökertmez. Arama, ekranda zaten görünen listeyi kullanabilir.
 
 * **TikTok:** Cihaz denetimleri artık açılır menüleri ait oldukları uygulamadan tanır. Diğer uygulamalar ve eşleşmeyen pencereler için giriş yine reddedilir.

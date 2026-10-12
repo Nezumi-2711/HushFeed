@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Media checks now exercise the installed muxer with generated clips and verify playable output. Test files are removed after verification.
+
 * **TikTok:** Switching Activity categories after a search no longer crashes the app. Search can start from the list already on screen.
 
 * **TikTok:** Device checks now recognize popup menus through their app ownership. Other apps and unmatched windows still refuse input.
