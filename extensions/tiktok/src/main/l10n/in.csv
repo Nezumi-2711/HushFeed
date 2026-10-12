@@ -13,14 +13,17 @@ Importing new history ended Undo for the earlier clear. You can clear the import
 %1$d settings in that file can't be restored here and were skipped,%1$d pengaturan dalam berkas tidak dapat dipulihkan di sini dan dilewati
 "Import watch history","Impor riwayat tontonan"
 Keep the language picked in TikTok,Pertahankan bahasa yang dipilih di TikTok
+Nothing is playing to speed up,Tidak ada yang diputar untuk dipercepat
 "One language code, like en or es. Comments and captions TikTok translates come out in this language instead of the app's. Leave it empty to keep TikTok's choice.","Satu kode bahasa, seperti en atau es. Komentar dan keterangan yang diterjemahkan TikTok muncul dalam bahasa ini, bukan bahasa aplikasi. Biarkan kosong untuk memakai pilihan TikTok."
 "Opus (.ogg), a smaller file","Opus (.ogg), berkas lebih kecil"
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.,Opus tidak berfungsi di ponsel ini. Menyimpan suaranya seperti yang dikirim TikTok.
 "Opus needs Android 10 or later, so sounds save as TikTok sent them.","Opus butuh Android 10 atau yang lebih baru, jadi suara disimpan seperti yang dikirim TikTok."
+Playing at %1$sx,Diputar pada %1$sx
 Save cover,Simpan sampul
 Save cover button in the share sheet,Tombol Simpan sampul di menu bagikan
 "Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.","Video yang disimpan menampilkan @nama pengguna dan baris pertama keterangan di pojok kiri bawah. Untuk itu ponsel mengenkode ulang seluruh video, jadi menyimpan jadi lebih lama. Berlaku untuk simpanan yang dibuat Hushfeed."
 Sound format,Format suara
+"Speed up this video, double tap again to undo","Percepat video ini, ketuk dua kali lagi untuk membatalkan"
 Translate button in comments,Tombol terjemahkan di komentar
 "Adds TikTok's translate button next to the comment count. One tap translates every comment, and another shows the originals again.","Menambahkan tombol terjemahkan milik TikTok di samping jumlah komentar. Sekali ketuk menerjemahkan semua komentar, ketuk sekali lagi untuk menampilkan aslinya."
 Translate into,Terjemahkan ke

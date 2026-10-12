@@ -30,6 +30,7 @@ import app.morphe.extension.tiktok.share.ShareUrlSanitizer;
 import app.morphe.extension.tiktok.feedfilter.SoundIdentity;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.L10n;
+import app.morphe.extension.tiktok.speed.PlaybackSpeedPatch;
 import app.morphe.extension.tiktok.wellbeing.SleepTimer;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
@@ -326,6 +327,13 @@ public final class GestureActions {
         }
         if ("save_cover".equals(action)) {
             CoverSaver.save(Utils.getActivity(), onScreenAweme());
+            return true;
+        }
+        if ("speed_toggle".equals(action)) {
+            // This video's speed alone, through the player on screen, so the next one plays as usual (#136).
+            float speed = PlaybackSpeedPatch.toggleBoost();
+            Utils.showToastShort(Float.isNaN(speed) ? L10n.t("Nothing is playing to speed up")
+                    : L10n.f("Playing at %1$sx", PlaybackSpeedPatch.speedLabel(speed)));
             return true;
         }
         if (!"comments".equals(action)) return false;

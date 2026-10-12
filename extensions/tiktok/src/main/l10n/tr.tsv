@@ -12,16 +12,19 @@ Importing new history ended Undo for the earlier clear. You can clear the import
 %1$d settings in that file can't be restored here and were skipped	Dosyadaki %1$d ayar burada geri yüklenemedi ve atlandı
 Import watch history	İzleme geçmişini içe aktar
 Keep the language picked in TikTok	TikTok'ta seçilen dili koru
+Nothing is playing to speed up	Hızlandırılacak bir şey oynatılmıyor
 One language code, like en or es. Comments and captions TikTok translates come out in this language instead of the app's. Leave it empty to keep TikTok's choice.	Tek bir dil kodu, örneğin en veya es. TikTok'un çevirdiği yorumlar ve açıklamalar uygulamanın dili yerine bu dilde çıkar. TikTok'un seçimini korumak için boş bırak.
 Opus (.ogg), a smaller file	Opus (.ogg), daha küçük dosya
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.	Opus bu telefonda çalışmadı. Ses, TikTok'un gönderdiği haliyle kaydediliyor.
 Opus needs Android 10 or later, so sounds save as TikTok sent them.	Opus için Android 10 veya üstü gerekir, bu yüzden sesler TikTok'un gönderdiği gibi kaydedilir.
+Playing at %1$sx	%1$sx hızında oynatılıyor
 Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.	Bir hikayenin Paylaş düğmesinin açtığı menüye bir kaydet düğmesi ekler. İzlediğin hikayeyi kaydeder ve bir hikayeye basılı tutmak onu yine duraklatır.
 Save a story from its share sheet	Hikayeyi paylaşım menüsünden kaydet
 Save cover	Kapağı kaydet
 Save cover button in the share sheet	Paylaşım menüsünde Kapağı kaydet düğmesi
 Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.	Kaydedilen videolarda sol alt köşede @kullanıcı adı ve açıklamanın ilk satırı görünür. Bunun için telefon videonun tamamını yeniden kodlar, bu yüzden kaydetmek daha uzun sürer. Hushfeed'in yaptığı kayıtlar için geçerlidir.
 Sound format	Ses biçimi
+Speed up this video, double tap again to undo	Bu videoyu hızlandır, geri almak için tekrar çift dokun
 TikTok only had its watermarked copy of this story, so that copy was saved to %1$s	TikTok'ta bu hikayenin yalnızca filigranlı kopyası vardı, bu yüzden o kopya şuraya kaydedildi: %1$s
 Translate button in comments	Yorumlarda çeviri düğmesi
 Adds TikTok's translate button next to the comment count. One tap translates every comment, and another shows the originals again.	TikTok'un çeviri düğmesini yorum sayısının yanına ekler. Bir dokunuş tüm yorumları çevirir, bir dokunuş daha orijinalleri yeniden gösterir.

@@ -12,16 +12,19 @@ Importing new history ended Undo for the earlier clear. You can clear the import
 %1$d settings in that file can't be restored here and were skipped	%1$d configurações do arquivo não podem ser restauradas aqui e foram ignoradas
 Import watch history	Importar histórico de visualização
 Keep the language picked in TikTok	Manter o idioma escolhido no TikTok
+Nothing is playing to speed up	Não há nada tocando para acelerar
 One language code, like en or es. Comments and captions TikTok translates come out in this language instead of the app's. Leave it empty to keep TikTok's choice.	Um código de idioma, como en ou es. Os comentários e legendas que o TikTok traduz saem neste idioma em vez do idioma do app. Deixe vazio para manter a escolha do TikTok.
 Opus (.ogg), a smaller file	Opus (.ogg), arquivo menor
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.	O Opus não funcionou neste celular. Salvando o som do jeito que o TikTok enviou.
 Opus needs Android 10 or later, so sounds save as TikTok sent them.	O Opus precisa do Android 10 ou mais recente, então os sons são salvos como o TikTok enviou.
+Playing at %1$sx	Tocando a %1$sx
 Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.	Coloca um botão de salvar na folha que o botão Compartilhar de um story abre. Ele salva o story que você está vendo, e segurar um story ainda o pausa.
 Save a story from its share sheet	Salvar um story pela folha de compartilhamento
 Save cover	Salvar capa
 Save cover button in the share sheet	Botão Salvar capa na folha de compartilhamento
 Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.	Os vídeos salvos mostram o @nome de usuário e a primeira linha da legenda no canto inferior esquerdo. Para isso o celular codifica o vídeo inteiro de novo, então salvar demora mais. Vale para o que o Hushfeed salva.
 Sound format	Formato do som
+Speed up this video, double tap again to undo	Acelerar este vídeo, toque duplo de novo para desfazer
 TikTok only had its watermarked copy of this story, so that copy was saved to %1$s	O TikTok só tinha a cópia com marca d'água deste story, então essa cópia foi salva em %1$s
 Translate button in comments	Botão de traduzir nos comentários
 Adds TikTok's translate button next to the comment count. One tap translates every comment, and another shows the originals again.	Adiciona o botão de traduzir do TikTok ao lado do número de comentários. Um toque traduz todos os comentários e outro mostra os originais de novo.

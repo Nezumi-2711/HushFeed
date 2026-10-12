@@ -1052,6 +1052,7 @@ Not sent,Not sent
 "Nothing has been looked up yet. Use the app for a moment, then come back.","Nothing has been looked up yet. Use the app for a moment, then come back."
 Nothing hidden.,Nothing hidden.
 Nothing is playing to seek,Nothing is playing to seek
+Nothing is playing to speed up,Nothing is playing to speed up
 "Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected.","Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected."
 "Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected. First rejection: %4$s","Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected. First rejection: %4$s"
 Nothing on this page changes what TikTok does until they are on.,Nothing on this page changes what TikTok does until they are on.
@@ -1160,6 +1161,7 @@ Play sounds TikTok pulled,Play sounds TikTok pulled
 Play the audio on videos TikTok silenced because their sound was pulled for copyright or in your region. TikTok may still say the sound isn't available.,Play the audio on videos TikTok silenced because their sound was pulled for copyright or in your region. TikTok may still say the sound isn't available.
 Playback,Playback
 Player,Player
+Playing at %1$sx,Playing at %1$sx
 Playlist posts,Playlist posts
 Plays videos that TikTok covers with a content warning without asking you to tap through first.,Plays videos that TikTok covers with a content warning without asking you to tap through first.
 Popular,Popular
@@ -1538,6 +1540,7 @@ Sound: %1$s,Sound: %1$s
 Source,Source
 Speed,Speed
 Speed menu choices,Speed menu choices
+"Speed up this video, double tap again to undo","Speed up this video, double tap again to undo"
 Speed while you hold the video,Speed while you hold the video
 Spin the music disc,Spin the music disc
 Split comment minimum width,Split comment minimum width

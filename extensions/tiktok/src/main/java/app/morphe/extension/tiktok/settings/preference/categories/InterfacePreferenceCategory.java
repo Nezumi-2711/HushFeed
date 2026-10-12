@@ -8,6 +8,7 @@ import android.content.Context;
 import android.preference.PreferenceScreen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import app.morphe.extension.tiktok.captions.CaptionStyle;
@@ -603,14 +604,21 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     Settings.SWIPE_LEVELS_STRIP_PERCENT, "%1$s%%"));
         }
         if (SettingsStatus.doubleTapEnabled) {
-            // Long press's actions, which GestureActions runs the same way for both gestures.
+            // Long press's actions, which GestureActions runs the same way for both gestures. The
+            // speed toggle changes the playing video's speed, so it needs the Playback speed patch's
+            // player bridge (#136).
+            List<String> tapLabels = new ArrayList<>(Arrays.asList("TikTok default", "Do nothing", "Open comments",
+                    "Save the original sound", "Copy the video link", "Copy the sound link",
+                    "Find the sound on YouTube Music", "Set a sleep timer that closes TikTok",
+                    "Save the frame on screen as a photo", "Save the video's cover"));
+            List<String> tapValues = new ArrayList<>(Arrays.asList("default", "nothing", "comments", "original_sound",
+                    "copy_link", "copy_sound_link", "youtube_music", "sleep_timer", "save_frame", "save_cover"));
+            if (SettingsStatus.liveSpeedEnabled) {
+                tapLabels.add("Speed up this video, double tap again to undo");
+                tapValues.add("speed_toggle");
+            }
             addPreference(new ChoicePreference(context, "Double tap", Settings.DOUBLE_TAP_ACTION,
-                    new String[]{"TikTok default", "Do nothing", "Open comments",
-                            "Save the original sound", "Copy the video link", "Copy the sound link",
-                            "Find the sound on YouTube Music", "Set a sleep timer that closes TikTok",
-                            "Save the frame on screen as a photo", "Save the video's cover"},
-                    new String[]{"default", "nothing", "comments", "original_sound", "copy_link",
-                            "copy_sound_link", "youtube_music", "sleep_timer", "save_frame", "save_cover"}));
+                    tapLabels.toArray(new String[0]), tapValues.toArray(new String[0])));
         }
         if (SettingsStatus.swipeLeftEnabled) {
             addPreference(new ChoicePreference(context, "Swipe left", Settings.SWIPE_LEFT_ACTION,
