@@ -365,15 +365,18 @@ public final class AuthorRegion {
             return;
         }
         String tail = SEPARATOR + region;
+        if (!shown.toString().endsWith(tail)) return;
+        String cutName = shown.subSequence(0, shown.length() - tail.length()).toString();
         int gaveUp = Math.max(0, fittedRowWidth - ((View) name.getParent()).getWidth());
         float room = name.getWidth() - name.getCompoundPaddingLeft() - name.getCompoundPaddingRight()
                 + gaveUp - name.getPaint().measureText(tail);
         if (room <= 0) return;
         // The same cut again means nothing came free: a row measured afresh also gives back the
         // part of a letter the cut left unused, and writing the whole name for that would only
-        // flash it for a frame before the next pass cut it to the same place.
-        CharSequence longer = TextUtils.ellipsize(label, name.getPaint(), room, TextUtils.TruncateAt.END);
-        if (longer.length() <= shown.length() - tail.length()) return;
+        // flash it for a frame before the next pass cut it to the same place. Compared as text:
+        // a name cut by one letter is as long as the whole one, the "…" standing in for it.
+        String longer = TextUtils.ellipsize(label, name.getPaint(), room, TextUtils.TruncateAt.END).toString();
+        if (longer.equals(cutName) || longer.length() < cutName.length()) return;
         fittedRowWidth = -1;
         decoratedText = whole;
         name.setText(whole);
