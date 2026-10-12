@@ -312,6 +312,7 @@ Choose a backup file. Your current settings are kept for Undo.,Choose a backup f
 Choose a folder on internal storage. SD cards aren't supported.,Choose a folder on internal storage. SD cards aren't supported.
 Choose a preset to fill the SIM details.,Choose a preset to fill the SIM details.
 Choose a subfolder under %1$s.,Choose a subfolder under %1$s.
+Choose counts for this signed-in account. Leave a field empty to use TikTok's count. Zero shows zero. Choices stay on this phone.,Choose counts for this signed-in account. Leave a field empty to use TikTok's count. Zero shows zero. Choices stay on this phone.
 Choose what reaches your feed,Choose what reaches your feed
 Choose which bottom tabs stay visible.,Choose which bottom tabs stay visible.
 "Choose which feed tabs stay visible. If only For You is left, its tab name is hidden.","Choose which feed tabs stay visible. If only For You is left, its tab name is hidden."
@@ -557,6 +558,7 @@ First rejection:,First rejection:
 Fit the video to the screen,Fit the video to the screen
 Focus,Focus
 Follow probe,Follow probe
+Followers,Followers
 Following,Following
 Follows you,Follows you
 "For OLED screens. After 5 seconds without a touch, the buttons, caption and tabs over the video dim to a quarter, and your next touch brings them back. Shift also moves everything on the feed a few pixels every 2 minutes.","For OLED screens. After 5 seconds without a touch, the buttons, caption and tabs over the video dim to a quarter, and your next touch brings them back. Shift also moves everything on the feed a few pixels every 2 minutes."
@@ -903,6 +905,7 @@ Loaded values are still being read. Try again in a moment.,Loaded values are sti
 Loaded-value file export failed,Loaded-value file export failed
 Loading gates…,Loading gates…
 Loading the gate list and TikTok's current values…,Loading the gate list and TikTok's current values…
+Local profile counts,Local profile counts
 Location-tagged videos,Location-tagged videos
 Lock TikTok,Lock TikTok
 Lock again after,Lock again after
@@ -1098,6 +1101,7 @@ Override this gate,Override this gate
 Overrides are disabled in the Feature Gate Lab.,Overrides are disabled in the Feature Gate Lab.
 Overrides disabled. Restart TikTok to apply this.,Overrides disabled. Restart TikTok to apply this.
 Overrides enabled. Restart TikTok to apply this.,Overrides enabled. Restart TikTok to apply this.
+Own profile counts,Own profile counts
 Paid partnerships,Paid partnerships
 Pass TikTok's install checks,Pass TikTok's install checks
 Pause,Pause
@@ -1406,6 +1410,7 @@ Show TikTok's own progress bar on videos where it's normally hidden.,Show TikTok
 Show a LIVE under the status bar,Show a LIVE under the status bar
 Show a progress bar while a video saves.,Show a progress bar while a video saves.
 Show a video preview thumbnail while dragging the progress bar.,Show a video preview thumbnail while dragging the progress bar.
+Show chosen counts on your own profile on this phone. Other people see the real counts.,Show chosen counts on your own profile on this phone. Other people see the real counts.
 "Show counts as full numbers, like 1,234,567 instead of 1.2M.","Show counts as full numbers, like 1,234,567 instead of 1.2M."
 Show dates on profile grids,Show dates on profile grids
 Show download progress,Show download progress
@@ -1459,6 +1464,7 @@ Shows every emoji in your phone's own emoji font. The newest emoji your phone do
 Shows the Duet and Stitch options even when the creator turned them off. TikTok may still refuse to accept the result.,Shows the Duet and Stitch options even when the creator turned them off. TikTok may still refuse to accept the result.
 Sign in to TikTok before importing watch history.,Sign in to TikTok before importing watch history.
 Sign in to TikTok before saving or restoring seen history.,Sign in to TikTok before saving or restoring seen history.
+Sign in to edit your own profile counts,Sign in to edit your own profile counts
 Sign in without a passkey,Sign in without a passkey
 Silence the feed while comments are open,Silence the feed while comments are open
 Skip TikTok's setup screens,Skip TikTok's setup screens
@@ -1849,6 +1855,7 @@ Use Save report for this large report,Use Save report for this large report
 Use TikTok for a while. A popup shows up here after TikTok first tries to show it.,Use TikTok for a while. A popup shows up here after TikTok first tries to show it.
 "Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another.","Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another."
 Use a default playback speed,Use a default playback speed
+"Use a whole number from 0 to %1$s, or leave the field empty.","Use a whole number from 0 to %1$s, or leave the field empty."
 Use non-personalized search,Use non-personalized search
 Use screen lock,Use screen lock
 Use system emoji,Use system emoji
@@ -1937,6 +1944,7 @@ Yes,Yes
 YouTube Music couldn't be opened. Open it yourself and search for the sound.,YouTube Music couldn't be opened. Open it yourself and search for the sound.
 YouTube Music isn't installed,YouTube Music isn't installed
 Your TikTok account changed. Choose the file again for this account.,Your TikTok account changed. Choose the file again for this account.
+Your account changed. Open the count editor again.,Your account changed. Open the count editor again.
 Your current settings already match Calm feed.,Your current settings already match Calm feed.
 Your filters hid everything TikTok just sent. Most were %1$s.,Your filters hid everything TikTok just sent. Most were %1$s.
 "Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s.","Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s."

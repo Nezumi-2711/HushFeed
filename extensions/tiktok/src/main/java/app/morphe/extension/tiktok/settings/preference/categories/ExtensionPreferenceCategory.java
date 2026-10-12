@@ -15,6 +15,7 @@ import app.morphe.extension.tiktok.settings.SettingsStatus;
 import app.morphe.extension.tiktok.settings.preference.ChoicePreference;
 import app.morphe.extension.tiktok.settings.preference.InputTextPreference;
 import app.morphe.extension.tiktok.settings.preference.ProfileShortcutChecklistPreference;
+import app.morphe.extension.tiktok.settings.preference.LocalProfileCountsPreference;
 import app.morphe.extension.tiktok.settings.preference.SectionHeadingPreference;
 import app.morphe.extension.tiktok.settings.preference.TogglePreference;
 
@@ -203,6 +204,10 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                             + "that don't follow you back.",
                     Settings.SHOW_FOLLOW_STATUS
             ));
+            addPreference(new TogglePreference(context, "Local profile counts",
+                    "Show chosen counts on your own profile on this phone. Other people see the real counts.",
+                    Settings.LOCAL_PROFILE_COUNTS));
+            addPreference(new LocalProfileCountsPreference(context));
         }
         if (SettingsStatus.copyIdsEnabled) {
             addPreference(new TogglePreference(

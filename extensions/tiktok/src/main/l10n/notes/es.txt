@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tu perfil puede mostrar las cifras que elijas en este teléfono. Los campos vacíos conservan las cifras de TikTok. Otras personas ven los valores reales.
+
 * **TikTok:** Se añadió una búsqueda opcional en las notificaciones de Actividad ya cargadas. La búsqueda pausa la carga de más avisos. Al borrar la consulta se recuperan la lista actual y su posición.
 
 * **TikTok:** La X de las publicaciones de fotos sigue funcionando con los controles atenuados en Pantalla limpia. Los demás controles atenuados siguen dejando pasar los toques al video (#84).

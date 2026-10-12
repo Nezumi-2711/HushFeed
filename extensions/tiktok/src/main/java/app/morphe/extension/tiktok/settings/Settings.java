@@ -1002,6 +1002,10 @@ public class Settings extends BaseSettings {
     public static final StringSetting POPUP_LABEL_CATALOG = new StringSetting("popup_label_catalog", "");
     // "Follows you" under the @username on a profile, and a mark on the follow list accounts that don't follow back.
     public static final BooleanSetting SHOW_FOLLOW_STATUS = new BooleanSetting("show_follow_status", TRUE);
+    public static final BooleanSetting LOCAL_PROFILE_COUNTS = new BooleanSetting("local_profile_counts", FALSE, true);
+    // Account-scoped presentation choices stay on this phone, apart from portable settings backups.
+    public static final StringSetting LOCAL_PROFILE_COUNT_VALUES =
+            new StringSetting("local_profile_count_values", "", true, false);
     // Long-press a bio to copy it, and copy buttons for a profile's or a video's IDs on the share sheet.
     public static final BooleanSetting COPY_IDS = new BooleanSetting("copy_ids", TRUE);
     // An Account facts button on a profile's share sheet, from what TikTok already sent about the account.

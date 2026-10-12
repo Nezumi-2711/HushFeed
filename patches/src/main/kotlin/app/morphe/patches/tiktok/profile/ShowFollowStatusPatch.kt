@@ -79,7 +79,7 @@ val showFollowStatusPatch = bytecodePatch(
     name = "Show follow status",
     description = "Shows on a profile whether that person follows you back, and marks " +
         "accounts in your follow lists that don't. On by default. Turn it off in Hushfeed " +
-        "settings > App.",
+        "settings > App. Also offers local counts for your own profile, off by default.",
     default = true,
 ) {
     category("Interaction")
@@ -126,5 +126,6 @@ val showFollowStatusPatch = bytecodePatch(
                 """,
             )
         }
+        hookLocalProfileCounts()
     }
 }

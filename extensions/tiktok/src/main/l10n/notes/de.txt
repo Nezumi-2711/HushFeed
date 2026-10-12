@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Dein eigenes Profil kann auf diesem Handy selbst gewählte Zähler anzeigen. Leere Felder behalten TikToks Zähler bei. Andere sehen die echten Werte.
+
 * **TikTok:** Optionale Suche in bereits geladenen Aktivitätsmeldungen hinzugefügt. Während der Suche pausiert das Nachladen. Beim Leeren der Suche werden die aktuelle Liste und Position wiederhergestellt.
 
 * **TikTok:** Bei Fotobeiträgen bleibt das X im klaren Bildschirm bedienbar, wenn die Steuerelemente verblassen. Andere verblasste Elemente lassen Berührungen weiterhin zum Video durch (#84).

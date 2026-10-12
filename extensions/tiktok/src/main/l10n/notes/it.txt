@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Il tuo profilo può mostrare i conteggi che scegli su questo telefono. I campi vuoti mantengono quelli di TikTok. Le altre persone vedono i valori reali.
+
 * **TikTok:** Aggiunta una ricerca facoltativa nelle notifiche Attività già caricate. La ricerca sospende il caricamento di altre notifiche. Cancellando la ricerca si ripristinano l’elenco attuale e la posizione.
 
 * **TikTok:** La X dei post fotografici resta utilizzabile quando i controlli sono attenuati in Schermo pulito. Gli altri controlli attenuati continuano a lasciare passare i tocchi al video (#84).

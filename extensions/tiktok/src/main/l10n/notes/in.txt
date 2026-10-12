@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Profil Anda dapat menampilkan jumlah pilihan Anda di ponsel ini. Kolom kosong tetap memakai jumlah TikTok. Orang lain melihat nilai sebenarnya.
+
 * **TikTok:** Menambahkan pencarian opsional pada notifikasi Aktivitas yang sudah dimuat. Pencarian menjeda pemuatan berikutnya. Menghapus kueri memulihkan daftar saat ini dan posisinya.
 
 * **TikTok:** Tombol X pada postingan foto tetap dapat digunakan saat kontrol diredupkan dalam Tampilan bersih. Kontrol redup lainnya tetap meneruskan sentuhan ke video (#84).

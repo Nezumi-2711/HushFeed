@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Öz profilinizdə bu telefonda seçdiyiniz saylar göstərilə bilər. Boş sahələr TikTok-un saylarını saxlayır. Başqaları həqiqi dəyərləri görür.
+
 * **TikTok:** Yüklənmiş Fəaliyyət bildirişləri üçün istəyə bağlı axtarış əlavə edildi. Axtarış əlavə yükləməni dayandırır. Sorğunu təmizləmək cari siyahını və mövqeyi bərpa edir.
 
 * **TikTok:** Təmiz ekranda idarələr solğun olduqda foto paylaşımlarının X düyməsi işlək qalır. Digər solğun idarələr toxunuşları videoya ötürür (#84).
