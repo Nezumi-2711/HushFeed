@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Double tap has a new choice, Speed up this video, double tap again to undo. The video on screen plays at your Speed while you hold the video (2x unless you picked another), a second double tap puts back the speed it had, and the next video plays at its usual speed (#136).
+
 * **TikTok:** Downloads has a new switch, Save cover button in the share sheet. With it on, a video's share sheet shows Save cover right after Download, so you save the cover only when you want it, and Download saves just the video. While it's off, Save the cover as well works as before (#146).
 
 * **TikTok:** Search loaded activity also steps aside when it runs into a problem while TikTok loads more of the list: the search closes and TikTok's request goes ahead instead of the app closing.

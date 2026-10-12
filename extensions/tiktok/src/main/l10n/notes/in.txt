@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ketuk dua kali punya pilihan baru, Percepat video ini, ketuk dua kali lagi untuk membatalkan. Video di layar diputar pada Kecepatan saat video ditahan (2x kecuali kamu memilih yang lain), ketuk dua kali berikutnya mengembalikan kecepatan sebelumnya, dan video berikutnya diputar dengan kecepatan biasanya (#136).
+
 * **TikTok:** Unduhan punya sakelar baru, Tombol Simpan sampul di menu bagikan. Saat aktif, menu bagikan video menampilkan Simpan sampul tepat setelah Unduh, jadi kamu menyimpan sampul hanya saat kamu mau, dan Unduh hanya menyimpan videonya. Saat nonaktif, Simpan sampulnya juga bekerja seperti sebelumnya (#146).
 
 * **TikTok:** Cari aktivitas yang dimuat juga mengalah saat mengalami masalah ketika TikTok memuat lanjutan daftar: pencarian ditutup dan permintaan TikTok tetap berjalan, bukan aplikasinya yang tertutup.

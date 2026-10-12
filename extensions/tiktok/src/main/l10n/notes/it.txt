@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Doppio tocco ha una nuova scelta, Accelera questo video, doppio tocco di nuovo per annullare. Il video sullo schermo va alla tua Velocità mentre tieni premuto il video (2x se non ne hai scelta un'altra), un secondo doppio tocco rimette la velocità che aveva e il video successivo va alla sua velocità solita (#136).
+
 * **TikTok:** Download ha un nuovo interruttore, Pulsante Salva copertina nel menu di condivisione. Quando è attivo, il menu di condivisione di un video mostra Salva copertina subito dopo Scarica, così salvi la copertina solo quando vuoi, e Scarica salva solo il video. Quando è spento, Salva anche la copertina funziona come prima (#146).
 
 * **TikTok:** Cerca nelle attività caricate si fa da parte anche quando incontra un problema mentre TikTok carica altro dell'elenco: la ricerca si chiude e la richiesta di TikTok prosegue invece di far chiudere l'app.

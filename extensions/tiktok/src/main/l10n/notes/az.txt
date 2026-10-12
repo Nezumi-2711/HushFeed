@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** İki dəfə toxunmada yeni seçim var: Bu videonu sürətləndir, geri qaytarmaq üçün yenə iki dəfə toxun. Ekrandakı video Videonu basıb saxlayarkən sürət ilə oxunur (başqasını seçməmisinizsə 2x), ikinci iki dəfə toxunma əvvəlki sürəti qaytarır, növbəti video isə adi sürəti ilə oxunur (#136).
+
 * **TikTok:** Endirmələrdə yeni açar var: Paylaşma vərəqində Örtüyü saxla düyməsi. Açıq olanda videonun paylaşma vərəqində Endir düyməsindən dərhal sonra Örtüyü saxla görünür, beləliklə örtüyü yalnız istədiyiniz zaman saxlayırsınız, Endir isə yalnız videonu saxlayır. Bağlı olanda Örtüyü də saxla əvvəlki kimi işləyir (#146).
 
 * **TikTok:** Yüklənmiş fəaliyyətdə axtarış TikTok siyahının davamını yükləyərkən problemlə qarşılaşsa da kənara çəkilir: tətbiq bağlanmaq əvəzinə axtarış bağlanır və TikTok-un sorğusu davam edir.

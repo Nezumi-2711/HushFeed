@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Toque duplo tem uma opção nova, Acelerar este vídeo, toque duplo de novo para desfazer. O vídeo na tela toca na sua Velocidade enquanto você segura o vídeo (2x, a menos que você escolha outra), um segundo toque duplo volta à velocidade que ele tinha e o próximo vídeo toca na velocidade de sempre (#136).
+
 * **TikTok:** Downloads tem um novo botão de ativação, Botão Salvar capa na folha de compartilhamento. Com ele ligado, a folha de compartilhamento de um vídeo mostra Salvar capa logo depois de Baixar, para você salvar a capa só quando quiser, e Baixar salva só o vídeo. Enquanto ele está desligado, Salvar a capa também funciona como antes (#146).
 
 * **TikTok:** Pesquisar atividade carregada também sai do caminho quando encontra um problema enquanto o TikTok carrega mais da lista: a pesquisa fecha e a solicitação do TikTok continua, em vez de o app fechar.
