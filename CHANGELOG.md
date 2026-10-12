@@ -4,6 +4,14 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** AMOLED dark theme now also turns black the panel that opens when you press and hold a feed video, and Inbox's Activity and New followers pages. They had kept TikTok's dark gray. The cards inside the panel stay gray so they still stand out.
+
+* **TikTok:** Network proxy now says which connections skip it. Hushfeed's saves and the short-link lookup behind Copy link connect directly, after their own address checks, and the exported diagnostic report lists every route under Network routes.
+
+* **TikTok:** On Android 6 through 8.1, screen readers now announce the page titles, section titles and recovery screen titles in Hushfeed settings as headings, the same as on newer Android.
+
+* **TikTok:** Release publishing works under Windows PowerShell 5.1 as well as PowerShell 7. The duplicate-tag check now reads each release on a page under 5.1, where it used to take the whole page for one release, and the publication and script checks pass in both shells.
+
 * **TikTok:** Silence the feed while comments are open now pauses the video as the comments open, also the first time after TikTok starts and on a video with no comments. Before, that first sheet kept playing until its comments had loaded. It also works now with Block author button left out of the patch selection.
 
 * **TikTok:** Swipe for brightness and volume leaves the comment sheet alone: a drag near the edge while the comments are open scrolls them and doesn't change the brightness or volume.

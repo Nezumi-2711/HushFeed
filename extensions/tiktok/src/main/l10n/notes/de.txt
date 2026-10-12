@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** AMOLED dark theme färbt jetzt auch das Feld schwarz, das sich öffnet, wenn du ein Video im Feed gedrückt hältst, dazu im Posteingang die Seiten Aktivität und Neue Follower. Sie waren in TikToks Dunkelgrau geblieben. Die Karten im Feld bleiben grau, damit sie sich weiter abheben.
+
+* **TikTok:** Network proxy sagt jetzt, welche Verbindungen nicht über ihn laufen. Hushfeeds Downloads und das Auflösen kurzer Links hinter „Link kopieren“ verbinden sich nach ihren eigenen Adressprüfungen direkt, und der exportierte Diagnosebericht listet jede Route unter Network routes auf.
+
+* **TikTok:** Unter Android 6 bis 8.1 sagen Screenreader die Seiten-, Abschnitts- und Wiederherstellungstitel in den Hushfeed-Einstellungen jetzt als Überschriften an, genau wie unter neueren Android-Versionen.
+
+* **TikTok:** Die Release-Veröffentlichung läuft jetzt unter Windows PowerShell 5.1 genauso wie unter PowerShell 7. Die Prüfung auf doppelte Tags liest unter 5.1 jedes Release einer Seite einzeln, statt die ganze Seite für ein Release zu halten, und die Veröffentlichungs- und Skriptprüfungen bestehen in beiden Shells.
+
 * **TikTok:** „Feed stummschalten, solange Kommentare offen sind“ pausiert das Video jetzt, sobald sich die Kommentare öffnen, auch beim ersten Mal nach dem Start von TikTok und bei einem Video ohne Kommentare. Vorher lief es beim ersten Öffnen weiter, bis die Kommentare geladen waren. Es funktioniert jetzt auch, wenn Block author button nicht mitgepatcht ist.
 
 * **TikTok:** „Wischen für Helligkeit und Lautstärke“ lässt die Kommentare in Ruhe: Ein Wisch am Rand, während die Kommentare offen sind, scrollt sie und ändert weder Helligkeit noch Lautstärke.

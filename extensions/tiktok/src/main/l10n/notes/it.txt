@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** AMOLED dark theme ora rende nero anche il pannello che si apre tenendo premuto un video del feed, e le pagine Attività e Nuovi follower della Posta. Erano rimasti del grigio scuro di TikTok. Le schede nel pannello restano grigie per continuare a distinguersi.
+
+* **TikTok:** Network proxy ora dice quali connessioni non passano dal proxy. I salvataggi di Hushfeed e la risoluzione dei link brevi di Copia link si collegano direttamente, dopo i loro controlli sull'indirizzo, e il report diagnostico esportato elenca ogni percorso sotto Network routes.
+
+* **TikTok:** Su Android da 6 a 8.1 i lettori di schermo ora annunciano come intestazioni i titoli delle pagine, delle sezioni e della schermata di ripristino nelle impostazioni di Hushfeed, come sulle versioni di Android più recenti.
+
+* **TikTok:** La pubblicazione delle release funziona con Windows PowerShell 5.1 oltre che con PowerShell 7. Il controllo dei tag duplicati ora legge ogni release di una pagina anche in 5.1, dove prima prendeva l'intera pagina per una sola release, e i controlli di pubblicazione e degli script passano in entrambe le shell.
+
 * **TikTok:** Silenzia il feed quando i commenti sono aperti ora mette in pausa il video appena si aprono i commenti, anche la prima volta dopo l'avvio di TikTok e su un video senza commenti. Prima, quella prima apertura continuava a riprodurre finché i commenti non erano caricati. Ora funziona anche se Block author button non è tra le patch selezionate.
 
 * **TikTok:** Scorri per luminosità e volume lascia stare i commenti: trascinare vicino al bordo con i commenti aperti li fa scorrere e non cambia luminosità o volume.

@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** AMOLED dark theme indi lentdəki videonu basıb saxlayanda açılan paneli, həmçinin Gələnlər qutusundakı Fəaliyyət və Yeni izləyicilər səhifələrini də qara edir. Onlar TikTok-un tünd boz rəngində qalırdı. Paneldəki kartlar seçilsin deyə boz qalır.
+
+* **TikTok:** Network proxy indi hansı bağlantıların ondan keçmədiyini deyir. Hushfeed-in yükləmələri və Linki kopyala arxasındakı qısa link yoxlaması öz ünvan yoxlamalarından sonra birbaşa qoşulur, ixrac olunan diaqnostika hesabatı isə bütün marşrutları Network routes altında göstərir.
+
+* **TikTok:** Android 6-dan 8.1-ə qədər ekran oxuyucuları indi Hushfeed ayarlarındakı səhifə, bölmə və bərpa ekranı başlıqlarını daha yeni Android-dəki kimi başlıq kimi oxuyur.
+
+* **TikTok:** Buraxılışın dərci indi PowerShell 7 ilə yanaşı Windows PowerShell 5.1-də də işləyir. Təkrarlanan teq yoxlaması 5.1-də artıq səhifədəki hər buraxılışı ayrıca oxuyur, əvvəllər isə bütün səhifəni bir buraxılış sayırdı. Dərc və skript yoxlamaları hər iki mühitdə keçir.
+
 * **TikTok:** Şərhlər açıq olanda lenti səssiz edin indi şərhlər açılan kimi videonu dayandırır, TikTok başladıqdan sonra ilk dəfə və şərhi olmayan videoda da. Əvvəl həmin ilk pəncərə şərhlər yüklənənə qədər oynamağa davam edirdi. Block author button patç seçimində olmasa da indi işləyir.
 
 * **TikTok:** Parlaqlıq və səs üçün sürüşdür şərhlər pəncərəsinə toxunmur: şərhlər açıq olanda kənara yaxın sürüşdürmə onları sürüşdürür, parlaqlığı və ya səsi dəyişmir.

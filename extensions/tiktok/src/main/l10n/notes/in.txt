@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** AMOLED dark theme sekarang juga membuat hitam panel yang terbuka saat kamu menekan lama video di feed, serta halaman Aktivitas dan Pengikut baru di Kotak masuk. Sebelumnya semuanya tetap abu-abu gelap bawaan TikTok. Kartu di dalam panel tetap abu-abu agar tetap terlihat jelas.
+
+* **TikTok:** Network proxy sekarang menyebutkan koneksi mana yang tidak lewat proxy. Unduhan Hushfeed dan pencarian tautan pendek di balik Salin tautan terhubung langsung setelah pemeriksaan alamatnya sendiri, dan laporan diagnostik yang diekspor mencantumkan setiap rute di bawah Network routes.
+
+* **TikTok:** Di Android 6 sampai 8.1, pembaca layar sekarang membacakan judul halaman, judul bagian, dan judul layar pemulihan di pengaturan Hushfeed sebagai judul, sama seperti di Android yang lebih baru.
+
+* **TikTok:** Penerbitan rilis sekarang berjalan di Windows PowerShell 5.1 maupun PowerShell 7. Pemeriksaan tag ganda di 5.1 sekarang membaca setiap rilis di satu halaman, padahal sebelumnya menganggap seluruh halaman sebagai satu rilis, dan pemeriksaan penerbitan serta skrip lolos di kedua shell.
+
 * **TikTok:** Senyapkan feed saat komentar terbuka sekarang menjeda video begitu komentar dibuka, termasuk pertama kali setelah TikTok dibuka dan pada video tanpa komentar. Sebelumnya, pembukaan pertama itu tetap memutar video sampai komentarnya selesai dimuat. Sekarang juga berfungsi jika Block author button tidak ikut dipilih saat patch.
 
 * **TikTok:** Geser untuk kecerahan dan volume tidak lagi mengganggu lembar komentar: menggeser di dekat tepi saat komentar terbuka akan menggulir komentar dan tidak mengubah kecerahan atau volume.
