@@ -273,17 +273,7 @@ public final class GestureActions {
             return true;
         }
         if ("copy_link".equals(action)) {
-            String link = ExternalDownloader.shareUrl(onScreenAweme());
-            // The same treatment a shared link gets: TikTok's own link carries the parameters
-            // that say who sent it, and the clipboard is somewhere else that goes.
-            String clean = link == null ? null : ShareUrlSanitizer.rewriteShareUrl(link);
-            if (copyToClipboard("TikTok link", clean)) {
-                if (android.os.Build.VERSION.SDK_INT < 33) {
-                    Utils.showToastShort(L10n.t("Link copied"));
-                }
-            } else {
-                Utils.showToastShort(L10n.t("This video has no link to copy"));
-            }
+            copyVideoLink(onScreenAweme());
             return true;
         }
         if ("copy_sound_link".equals(action)) {
@@ -363,6 +353,24 @@ public final class GestureActions {
      * building their own {@code ClipData}, so they were the only ones a clipboard viewer could
      * read back without the warning.
      */
+    /**
+     * Copies {@code aweme}'s link and says so, for a gesture and for a press on Share alike.
+     * Android 13 and newer show their own note for every copy, so the toast is for older ones.
+     */
+    public static void copyVideoLink(Object aweme) {
+        String link = ExternalDownloader.shareUrl(aweme);
+        // The same treatment a shared link gets: TikTok's own link carries the parameters
+        // that say who sent it, and the clipboard is somewhere else that goes.
+        String clean = link == null ? null : ShareUrlSanitizer.rewriteShareUrl(link);
+        if (copyToClipboard("TikTok link", clean)) {
+            if (android.os.Build.VERSION.SDK_INT < 33) {
+                Utils.showToastShort(L10n.t("Link copied"));
+            }
+        } else {
+            Utils.showToastShort(L10n.t("This video has no link to copy"));
+        }
+    }
+
     static boolean copyToClipboard(String label, String text) {
         if (text == null || text.isEmpty()) return false;
         Context context = Utils.getContext();

@@ -139,6 +139,7 @@ A long press on Share plays the video at the hold speed instead of opening the q
 A message is already on its way,A message is already on its way
 A name of your own under this tab's icon. Leave it empty to keep TikTok's.,A name of your own under this tab's icon. Leave it empty to keep TikTok's.
 A port is a whole number from 1 to 65535,A port is a whole number from 1 to 65535
+A press on Share under a video copies its link instead of opening the share sheet. Press Share again right after to open the sheet.,A press on Share under a video copies its link instead of opening the share sheet. Press Share again right after to open the sheet.
 "A profile's share sheet gets an Account facts button. It shows what TikTok already sent about the account: when it joined, its region and language, when its username and display name last changed, whether it's private and whether its liked videos are public. Nothing extra is fetched.","A profile's share sheet gets an Account facts button. It shows what TikTok already sent about the account: when it joined, its region and language, when its username and display name last changed, whether it's private and whether its liked videos are public. Nothing extra is fetched."
 "A screen's layout is recorded. Export the diagnostic report to send it, or tap to record another.","A screen's layout is recorded. Export the diagnostic report to send it, or tap to record another."
 "A small label on the feed shows the minutes or videos left of today's budget, whichever is closer to running out.","A small label on the feed shows the minutes or videos left of today's budget, whichever is closer to running out."
@@ -377,6 +378,7 @@ Copy or save which patches and options this Hushfeed was built with.,Copy or sav
 Copy quick report,Copy quick report
 Copy report,Copy report
 Copy the full link for short links,Copy the full link for short links
+Copy the link with one press on Share,Copy the link with one press on Share
 Copy the sound link,Copy the sound link
 Copy the video link,Copy the video link
 Copy user ID,Copy user ID

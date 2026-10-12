@@ -21,7 +21,8 @@ private const val EXTENSION_CLASS_DESCRIPTOR =
 val shareSheetToolsPatch = bytecodePatch(
     name = "Share sheet tools",
     description = "Lets you hide people, apps and buttons you don't use from the share sheet, " +
-        "and add apps you do use. Starts off. Turn it on in Hushfeed settings > Share sheet.",
+        "add apps you do use, and copy a video's link with one press on Share. Starts off. " +
+        "Turn it on in Hushfeed settings > Share sheet.",
 ) {
     category("Interaction")
     dependsOn(settingsPatch, sharedExtensionPatch, ownedShareActionsPatch)
@@ -36,6 +37,7 @@ val shareSheetToolsPatch = bytecodePatch(
         hookShareContactBinds()
         hookSharePanel()
         addOwnedShareAction(SHARE_BLOCK_AUTHOR)
+        hookShareButtonTap()
         SettingsStatusLoadFingerprint.method.addInstruction(
             0,
             "invoke-static {}, " +
