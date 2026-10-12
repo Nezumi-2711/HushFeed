@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Bloquear a este creador y Guardar portada ahora aparecen en el mismo círculo gris que los botones de TikTok en el menú de compartir, con un icono del tamaño y el color de los suyos en modo claro y oscuro. También tienen su icono en el panel que se abre al mantener pulsado un vídeo del feed, donde faltaba.
+
 * **TikTok:** Doble toque tiene una opción nueva, Acelerar este vídeo, doble toque otra vez para deshacerlo. El vídeo en pantalla se reproduce a tu Velocidad mientras mantienes pulsado el vídeo (2x salvo que elijas otra), un segundo doble toque devuelve la velocidad que tenía y el siguiente vídeo se reproduce a su velocidad habitual (#136).
 
 * **TikTok:** Descargas tiene un interruptor nuevo, Botón Guardar portada en el panel de compartir. Con él activado, el panel de compartir de un vídeo muestra Guardar portada justo después de Descargar, para que guardes la portada solo cuando la quieras, y Descargar guarda solo el vídeo. Mientras está desactivado, Guardar también la portada funciona como antes (#146).

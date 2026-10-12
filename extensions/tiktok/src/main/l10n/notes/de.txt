@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Diesen Ersteller blockieren und Titelbild speichern sitzen im Teilen-Menü jetzt im selben grauen Kreis wie TikToks eigene Schaltflächen, mit einem Symbol in deren Größe und Farbe im hellen und im dunklen Modus. Auch im Menü, das sich beim Gedrückthalten eines Feed-Videos öffnet, haben sie jetzt ihr Symbol, das dort fehlte.
+
 * **TikTok:** Doppeltippen hat eine neue Auswahl, Dieses Video beschleunigen, erneut doppeltippen zum Zurücksetzen. Das Video auf dem Bildschirm läuft mit deiner Geschwindigkeit, solange du das Video gedrückt hältst (2x, außer du hast etwas anderes gewählt), ein zweites Doppeltippen stellt die vorherige Geschwindigkeit wieder her, und das nächste Video läuft mit seiner üblichen Geschwindigkeit (#136).
 
 * **TikTok:** Downloads hat einen neuen Schalter, „Titelbild speichern“ im Teilen-Menü. Ist er an, zeigt das Teilen-Menü eines Videos direkt nach Herunterladen „Titelbild speichern“, damit du das Titelbild nur speicherst, wenn du es willst, und Herunterladen speichert nur das Video. Solange er aus ist, funktioniert Titelbild ebenfalls speichern wie bisher (#146).

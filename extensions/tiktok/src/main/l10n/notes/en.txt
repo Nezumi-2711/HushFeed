@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Block this creator and Save cover now sit in the same gray circle as TikTok's own buttons in the share sheet, with an icon the size and color of theirs in light and dark mode. They also get their icon in the panel that opens when you press and hold a feed video, where it was missing.
+
 * **TikTok:** Double tap has a new choice, Speed up this video, double tap again to undo. The video on screen plays at your Speed while you hold the video (2x unless you picked another), a second double tap puts back the speed it had, and the next video plays at its usual speed (#136).
 
 * **TikTok:** Downloads has a new switch, Save cover button in the share sheet. With it on, a video's share sheet shows Save cover right after Download, so you save the cover only when you want it, and Download saves just the video. While it's off, Save the cover as well works as before (#146).

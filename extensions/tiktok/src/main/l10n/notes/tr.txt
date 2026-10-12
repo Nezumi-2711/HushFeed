@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Bu içerik üreticisini engelle ve Kapağı kaydet artık paylaşım menüsünde TikTok'un kendi düğmeleriyle aynı gri dairede duruyor, açık ve koyu modda onların boyutunda ve renginde bir simgeyle. Akıştaki bir videoya basılı tutunca açılan panelde de artık simgeleri var, önceden orada yoktu.
+
 * **TikTok:** Çift dokunmada yeni bir seçenek var: Bu videoyu hızlandır, geri almak için tekrar çift dokun. Ekrandaki video Videoyu basılı tutarken hız ayarınla oynar (başka bir şey seçmediysen 2x), ikinci çift dokunma önceki hızı geri getirir ve sonraki video her zamanki hızında oynar (#136).
 
 * **TikTok:** İndirilenler'de yeni bir anahtar var: Paylaşım menüsünde Kapağı kaydet düğmesi. Açıkken bir videonun paylaşım menüsünde İndir'in hemen ardından Kapağı kaydet görünür, böylece kapağı yalnızca istediğinde kaydedersin ve İndir yalnızca videoyu kaydeder. Kapalıyken Kapağı da kaydet eskisi gibi çalışır (#146).
