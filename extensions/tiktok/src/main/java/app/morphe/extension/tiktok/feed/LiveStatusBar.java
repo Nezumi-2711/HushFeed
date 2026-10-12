@@ -72,6 +72,12 @@ public final class LiveStatusBar {
     private static final int MAX_VISITS = 200;
     /** Layout passes that look for the strip before giving up on a room that has none. */
     private static final int MAX_SEARCHES = 40;
+    /**
+     * Least time between two shade searches on one layer. A LIVE room lays out many times a second
+     * while it loads, so a budget spent per pass was gone before TikTok's shade could be found and
+     * some rooms kept a light strip under the clock (#137, S22). Spaced out, it lasts 20 seconds.
+     */
+    private static final long SHADE_RETRY_MS = 500;
     /** Views looked at for the LIVE on screen in the detail pager, which is deeper than a room. */
     private static final int MAX_DETAIL_VISITS = 2000;
     /**
@@ -587,6 +593,16 @@ public final class LiveStatusBar {
     }
 
     /** One visit to a LIVE room with its bar hidden. It holds its views weakly. */
+    /** The shade searches spent on one layer and when the last one ran. */
+    private static final class ShadeSearches {
+        int spent;
+        long last;
+
+        @Override public String toString() {
+            return spent + " last at " + last;
+        }
+    }
+
     private static final class Room implements ViewTreeObserver.OnGlobalLayoutListener {
         final int cutout;
         /** Whether the bar was hidden, or only the strip taken away under a bar left showing. */
@@ -612,7 +628,7 @@ public final class LiveStatusBar {
          * Shade searches spent on each layer held lower. One budget for the whole visit ran out
          * in the first few rooms, so rooms further on kept a light strip under the clock (#137).
          */
-        private final WeakHashMap<View, Integer> shadeSearches = new WeakHashMap<>();
+        private final WeakHashMap<View, ShadeSearches> shadeSearches = new WeakHashMap<>();
         private boolean shadeWatchFailed;
         /** Redraws a strip whose shade TikTok showed, hid or faded since the last frame. */
         final ViewTreeObserver.OnPreDrawListener shadeWatch = () -> {
@@ -847,9 +863,19 @@ public final class LiveStatusBar {
                 if (!(layer instanceof ViewGroup) || layer.getPaddingTop() != entry.getValue() + loweredBy) continue;
                 Drawable background = layer.getBackground();
                 if (background instanceof BarShade ? ((BarShade) background).height == loweredBy : background != null) continue;
-                Integer spent = shadeSearches.get(layer);
-                if (spent != null && spent >= MAX_SEARCHES) continue;
-                shadeSearches.put(layer, spent == null ? 1 : spent + 1);
+                // Until it's laid out a bar lower nothing in it is where the shade is looked for,
+                // and a room scrolled away can't show a strip.
+                if (layer.isLayoutRequested() || !layer.isAttachedToWindow()) continue;
+                ShadeSearches searches = shadeSearches.get(layer);
+                long now = SystemClock.uptimeMillis();
+                if (searches == null) {
+                    searches = new ShadeSearches();
+                    shadeSearches.put(layer, searches);
+                } else if (searches.spent >= MAX_SEARCHES || now - searches.last < SHADE_RETRY_MS) {
+                    continue;
+                }
+                searches.spent++;
+                searches.last = now;
                 View shade = findShade((ViewGroup) layer);
                 if (shade == null || Color.alpha(firstColor((GradientDrawable) shade.getBackground())) == 0) continue;
                 layer.setBackground(new BarShade(shade, loweredBy));

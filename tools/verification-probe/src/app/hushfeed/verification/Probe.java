@@ -2119,6 +2119,39 @@ public final class Probe extends Instrumentation {
                                     out.append('<').append(value.getClass().getSimpleName()).append('>');
                                 }
                             }
+                            // What findShade makes of each layer in front now, and every gradient
+                            // under it with the values the search goes by.
+                            Field loweredField = room.getClass().getDeclaredField("lowered");
+                            loweredField.setAccessible(true);
+                            java.lang.reflect.Method findShade = owner.getDeclaredMethod("findShade", android.view.ViewGroup.class);
+                            findShade.setAccessible(true);
+                            for (Object key : new java.util.ArrayList<>(((Map<?, ?>) loweredField.get(room)).keySet())) {
+                                if (!(key instanceof android.view.ViewGroup) || !((android.view.View) key).isAttachedToWindow()) continue;
+                                android.view.ViewGroup layer = (android.view.ViewGroup) key;
+                                Object found = findShade.invoke(null, layer);
+                                out.append("\n  findShade(").append(liveRoomView(layer, resources)).append(")=")
+                                        .append(found instanceof android.view.View ? liveRoomView((android.view.View) found, resources) : "null");
+                                java.util.ArrayDeque<android.view.View> walk = new java.util.ArrayDeque<>();
+                                walk.add(layer);
+                                while (!walk.isEmpty()) {
+                                    android.view.View at = walk.poll();
+                                    if (at != layer && at.getBackground() instanceof android.graphics.drawable.GradientDrawable) {
+                                        int top = 0, depth = 0;
+                                        for (android.view.View up = at; up != layer && up.getParent() instanceof android.view.View; up = (android.view.View) up.getParent()) {
+                                            top += up.getTop();
+                                            depth++;
+                                        }
+                                        out.append("\n    gradient ").append(liveRoomView(at, resources)).append(" depth=").append(depth)
+                                                .append(" vis=").append(at.getVisibility()).append(" topIn=").append(top)
+                                                .append(" w=").append(at.getWidth()).append(" h=").append(at.getHeight())
+                                                .append(" layerPad=").append(layer.getPaddingTop()).append(" layerH=").append(layer.getHeight());
+                                    }
+                                    if (at instanceof android.view.ViewGroup) {
+                                        android.view.ViewGroup group = (android.view.ViewGroup) at;
+                                        for (int i = 0; i < group.getChildCount(); i++) walk.add(group.getChildAt(i));
+                                    }
+                                }
+                            }
                             out.append('\n');
                         }
                         String text = out.toString();
@@ -2285,8 +2318,23 @@ public final class Probe extends Instrumentation {
             if (drawable instanceof android.graphics.drawable.ColorDrawable) {
                 out.append('#').append(Integer.toHexString(((android.graphics.drawable.ColorDrawable) drawable).getColor()));
             } else if (drawable instanceof android.graphics.drawable.GradientDrawable) {
-                android.content.res.ColorStateList colors = ((android.graphics.drawable.GradientDrawable) drawable).getColor();
+                android.graphics.drawable.GradientDrawable gradient = (android.graphics.drawable.GradientDrawable) drawable;
+                android.content.res.ColorStateList colors = gradient.getColor();
                 out.append('#').append(colors == null ? "none" : Integer.toHexString(colors.getDefaultColor()));
+                int[] stops = android.os.Build.VERSION.SDK_INT >= 24 ? gradient.getColors() : null;
+                if (stops != null) {
+                    out.append(" stops=");
+                    for (int i = 0; i < stops.length; i++) out.append(i == 0 ? "" : "/").append(Integer.toHexString(stops[i]));
+                    out.append(' ').append(gradient.getOrientation()).append(" alpha=").append(gradient.getAlpha());
+                }
+            } else if (drawable.getClass().getSimpleName().equals("BarShade")) {
+                try {
+                    java.lang.reflect.Method color = drawable.getClass().getDeclaredMethod("color");
+                    color.setAccessible(true);
+                    out.append(" paints=").append(Integer.toHexString((Integer) color.invoke(drawable)));
+                } catch (ReflectiveOperationException e) {
+                    out.append(" paints=?");
+                }
             } else if (drawable instanceof android.graphics.drawable.LayerDrawable && depth < 3) {
                 android.graphics.drawable.LayerDrawable layers = (android.graphics.drawable.LayerDrawable) drawable;
                 out.append('[');

@@ -356,6 +356,34 @@ public class LiveStatusBarTest {
     }
 
     /**
+     * #137, seen on the S22 after the strip fix: a LIVE room lays out many times a second while it
+     * loads, and TikTok's shade isn't there to find yet, so the layer's 40 searches were gone in a
+     * second and the room kept a light strip under the clock once the shade showed.
+     */
+    @Test public void aBusyRoomStillFindsItsShadeOnceTikTokShowsIt() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        FrameLayout stream = heldStream(live, bar);
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout controls = page(live, stream);
+        View shade = shade(live, controls);
+        shade.setVisibility(View.GONE);
+        room.start().resume().visible();
+        for (int pass = 0; pass < 100; pass++) layOut(live);
+        assertEquals("a shade not there yet got a fill", null, controls.getBackground());
+
+        shade.setVisibility(View.VISIBLE);
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(600));
+        layOut(live);
+        assertTrue("the busy room's searches ran out before the shade showed",
+                controls.getBackground() instanceof LiveStatusBar.BarShade);
+        room.pause().stop().destroy();
+    }
+
+    /**
      * #137, seen on the S22 with 0.71.3: every room is a page of the room pager, and the pager
      * pads a page as it binds a room to it. The search over the window took the panel TikTok
      * shows while a room opens, the first view held down a bar's height, and left every page
