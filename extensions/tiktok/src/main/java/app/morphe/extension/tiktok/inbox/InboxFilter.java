@@ -150,7 +150,10 @@ public final class InboxFilter {
         InboxQueryOwners.observedVm(widget, vm);
     }
 
-    public static void onLoadedFragmentBound(Object fragment) { InboxQueryOwners.fragmentBound(fragment); }
+    public static void onLoadedFragmentBound(Object fragment) {
+        try { InboxQueryOwners.fragmentBound(fragment); }
+        catch (Throwable failure) { InboxQueryNative.contain("loaded fragment", failure); }
+    }
 
     public static java.util.List<?> onLoadedPublication(Object state, java.util.List<?> models,
             boolean first, boolean second, Runnable completion, int mask) {

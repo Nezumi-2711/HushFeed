@@ -99,10 +99,17 @@ final class InboxQueryNative {
         } finally {
             List<InboxQueryOwners.Owner> owners = InboxQueryOwners.snapshot();
             if (owner != null && !owners.contains(owner)) owners.add(owner);
-            for (InboxQueryOwners.Owner open : owners) {
-                try { open.close(); }
-                catch (Throwable cleanup) { Logger.printException(() -> "Could not hand the Inbox list back to TikTok", cleanup); }
-            }
+            // A delegate can throw on one of TikTok's list threads, and closing hands the list
+            // and the bar's views back, which only the main thread may touch. threw is already
+            // set, so every delegate passes TikTok's own values through until the close lands.
+            app.morphe.extension.shared.Utils.runOnMainThreadNowOrLater(() -> closeAll(owners));
+        }
+    }
+
+    private static void closeAll(List<InboxQueryOwners.Owner> owners) {
+        for (InboxQueryOwners.Owner open : owners) {
+            try { open.close(); }
+            catch (Throwable cleanup) { Logger.printException(() -> "Could not hand the Inbox list back to TikTok", cleanup); }
         }
     }
 
@@ -117,7 +124,7 @@ final class InboxQueryNative {
      * owner is not needed: every open list is handed back to TikTok. Reporting must never throw
      * into the native frame either, or the guard would only move the crash.
      */
-    private static void contain(String hook, Throwable failure) {
+    static void contain(String hook, Throwable failure) {
         try { failed(null, hook, failure); }
         catch (Throwable ignored) { /* the native frame must get its default back */ }
     }

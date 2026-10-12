@@ -632,6 +632,22 @@ public class InboxQueryNativeTest {
         assertSearchEnded(surface, "loaded publication");
     }
 
+    /** TikTok publishes from its list threads, and handing the list back touches the bar's views. */
+    @Test public void aThrowOnTikToksListThreadHandsTheListBackOnTheMainThread() throws Exception {
+        Surface surface = searchingThenFaultAt("loaded publication");
+        List<Object> models = new ArrayList<>(Arrays.asList(surface.alpha, surface.beta));
+        List<Object> returned = new ArrayList<>();
+        Thread listThread = new Thread(() -> returned.add(
+                InboxFilter.onLoadedPublication(surface.state, models, false, false, null, 14)));
+        listThread.start();
+        listThread.join(5_000);
+        assertEquals("the delegate did not return", 1, returned.size());
+        assertSame("the native models did not come back", models, returned.get(0));
+        assertNotNull("the list was handed back off the main thread", InboxQueryOwners.ownerForTests(surface.list));
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertSearchEnded(surface, "loaded publication");
+    }
+
     @Test public void aThrowInTheStubAndDiffDelegatesReturnsNormallyAndHandsTheListBack() {
         for (String hook : new String[] {"loaded stub", "loaded diff", "loaded diff accepted"}) {
             Surface surface = searchingThenFaultAt(hook);
