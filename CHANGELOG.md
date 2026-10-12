@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Turning off Hide suggested accounts restores a suggestion cell's original spacing, including negative margins.
+
 * **TikTok:** The original reporter confirmed that the post date follows Author text size (#66).
 
 ## 0.71.3 (2026-10-11)
