@@ -130,15 +130,18 @@ class DmTranslationAccountHooksTest {
             assertTrue(index >= 3)
             val call = code[index] as FiveRegisterInstruction
             assertEquals(2, call.registerCount)
-            assertEquals(call.registerD, (code[index - 1] as OneRegisterInstruction).registerA)
-            assertEquals(if (success) 1 else 0, (code[index - 1] as NarrowLiteralInstruction).narrowLiteral)
             if (success) {
+                assertEquals(call.registerD, (code[index - 1] as OneRegisterInstruction).registerA)
+                assertEquals(1, (code[index - 1] as NarrowLiteralInstruction).narrowLiteral)
                 assertEquals(Opcode.MOVE_RESULT_OBJECT, code[index - 2].opcode)
                 assertEquals(call.registerC, (code[index - 2] as OneRegisterInstruction).registerA)
                 assertEquals("getCurUser", code[index - 3].getReference<MethodReference>()!!.name)
             } else {
-                assertEquals(call.registerC, (code[index - 2] as OneRegisterInstruction).registerA)
-                assertEquals(0, (code[index - 2] as NarrowLiteralInstruction).narrowLiteral)
+                // The failure path loads its two zeros in either order (47.1.4 writes the flag first).
+                val loads = (index - 2 until index).associate {
+                    (code[it] as OneRegisterInstruction).registerA to (code[it] as NarrowLiteralInstruction).narrowLiteral
+                }
+                assertEquals(mapOf(call.registerC to 0, call.registerD to 0), loads)
             }
             if (method.definingClass == "LX/1E4X;") assertTrue(index < code.indexOfFirst {
                 it.getReference<MethodReference>()?.let { continuation -> continuation.definingClass == "LX/1E4k;" && continuation.name == "LIZIZ" } == true
