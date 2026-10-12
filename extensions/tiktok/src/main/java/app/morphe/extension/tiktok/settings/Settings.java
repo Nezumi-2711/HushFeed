@@ -1003,6 +1003,8 @@ public class Settings extends BaseSettings {
     // "Follows you" under the @username on a profile, and a mark on the follow list accounts that don't follow back.
     public static final BooleanSetting SHOW_FOLLOW_STATUS = new BooleanSetting("show_follow_status", TRUE);
     public static final BooleanSetting LOCAL_PROFILE_COUNTS = new BooleanSetting("local_profile_counts", FALSE, true);
+    public static final BooleanSetting LOCAL_PROFILE_VERIFIED_BADGE = new BooleanSetting("local_profile_verified_badge", FALSE, true);
+    public static final BooleanSetting HIDE_OWN_PROFILE_RESTRICTION_NOTICE = new BooleanSetting("hide_own_profile_restriction_notice", FALSE, true);
     // Account-scoped presentation choices stay on this phone, apart from portable settings backups.
     public static final StringSetting LOCAL_PROFILE_COUNT_VALUES =
             new StringSetting("local_profile_count_values", "", true, false);

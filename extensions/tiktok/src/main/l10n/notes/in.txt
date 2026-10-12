@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Profilmu bisa menampilkan lencana verifikasi atau menyembunyikan peringatan akun di ponsel ini. Orang lain tetap melihat status aslimu.
+
 * **TikTok:** Pemeriksaan media kini menguji muxer terpasang dengan klip buatan dan memastikan hasilnya bisa diputar. File uji dihapus setelah pemeriksaan.
 
 * **TikTok:** Mengganti kategori Aktivitas setelah pencarian tidak lagi membuat aplikasi berhenti. Pencarian bisa memakai daftar yang sudah tampil di layar.

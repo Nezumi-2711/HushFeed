@@ -1978,3 +1978,9 @@ Show chosen counts on your own profile on this phone. Other people see the real 
 Sign in to edit your own profile counts	Melde dich an, um die Zahlen deines eigenen Profils zu ändern
 Use a whole number from 0 to %1$s, or leave the field empty.	Verwende eine ganze Zahl von 0 bis %1$s oder lass das Feld leer.
 Your account changed. Open the count editor again.	Dein Konto hat sich geändert. Öffne den Zahleneditor erneut.
+
+# context: local own-profile appearance
+Local verified badge	Lokales Verifizierungsabzeichen
+Show a verified badge on your own profile on this phone. Other people see your real status.	Zeige auf diesem Handy ein Verifizierungsabzeichen in deinem eigenen Profil. Andere sehen deinen echten Status.
+Hide your account warning	Eigene Kontowarnung ausblenden
+Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Blende den Einschränkungshinweis in deinem eigenen Profil auf diesem Handy aus. TikToks Einschränkungen und Einspruchsmöglichkeiten gelten weiterhin.

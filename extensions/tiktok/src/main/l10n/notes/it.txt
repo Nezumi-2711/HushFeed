@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Il tuo profilo può mostrare un badge di verifica o nascondere l’avviso dell’account su questo telefono. Gli altri vedono il tuo stato reale.
+
 * **TikTok:** I controlli multimediali ora provano il muxer installato con clip generate e verificano che il risultato sia riproducibile. I file di prova vengono poi rimossi.
 
 * **TikTok:** Cambiare categoria di Attività dopo una ricerca non fa più chiudere l'app. La ricerca può usare l'elenco già sullo schermo.

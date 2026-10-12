@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Your profile can show a verified badge or hide its account warning on this phone. Other people see your real status.
+
 * **TikTok:** Media checks now exercise the installed muxer with generated clips and verify playable output. Test files are removed after verification.
 
 * **TikTok:** Switching Activity categories after a search no longer crashes the app. Search can start from the list already on screen.

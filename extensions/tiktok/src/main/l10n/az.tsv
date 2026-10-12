@@ -1975,3 +1975,9 @@ Show chosen counts on your own profile on this phone. Other people see the real 
 Sign in to edit your own profile counts	Öz profilinizin saylarını dəyişmək üçün daxil olun
 Use a whole number from 0 to %1$s, or leave the field empty.	0 ilə %1$s arasında tam ədəd daxil edin və ya sahəni boş saxlayın.
 Your account changed. Open the count editor again.	Hesabınız dəyişdi. Say redaktorunu yenidən açın.
+
+# context: local own-profile appearance
+Local verified badge	Yerli təsdiq nişanı
+Show a verified badge on your own profile on this phone. Other people see your real status.	Bu telefonda öz profilinizdə təsdiq nişanı göstərin. Digər insanlar həqiqi statusunuzu görür.
+Hide your account warning	Hesab xəbərdarlığınızı gizlət
+Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Bu telefonda öz profilinizdə məhdudiyyət bildirişini gizlədin. TikTok məhdudiyyətləri və etiraz qaydaları qüvvədə qalır.

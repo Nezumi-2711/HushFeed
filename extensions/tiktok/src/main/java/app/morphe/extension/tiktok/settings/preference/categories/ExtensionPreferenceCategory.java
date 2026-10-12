@@ -208,6 +208,12 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                     "Show chosen counts on your own profile on this phone. Other people see the real counts.",
                     Settings.LOCAL_PROFILE_COUNTS));
             addPreference(new LocalProfileCountsPreference(context));
+            addPreference(new TogglePreference(context, "Local verified badge",
+                    "Show a verified badge on your own profile on this phone. Other people see your real status.",
+                    Settings.LOCAL_PROFILE_VERIFIED_BADGE));
+            addPreference(new TogglePreference(context, "Hide your account warning",
+                    "Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.",
+                    Settings.HIDE_OWN_PROFILE_RESTRICTION_NOTICE));
         }
         if (SettingsStatus.copyIdsEnabled) {
             addPreference(new TogglePreference(

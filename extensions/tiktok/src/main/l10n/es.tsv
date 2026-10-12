@@ -1975,3 +1975,9 @@ Show chosen counts on your own profile on this phone. Other people see the real 
 Sign in to edit your own profile counts	Inicia sesión para editar las cifras de tu perfil
 Use a whole number from 0 to %1$s, or leave the field empty.	Usa un número entero de 0 a %1$s o deja el campo vacío.
 Your account changed. Open the count editor again.	Tu cuenta ha cambiado. Abre de nuevo el editor de cifras.
+
+# context: local own-profile appearance
+Local verified badge	Insignia de verificación local
+Show a verified badge on your own profile on this phone. Other people see your real status.	Muestra una insignia de verificación en tu propio perfil en este teléfono. Los demás ven tu estado real.
+Hide your account warning	Ocultar la advertencia de tu cuenta
+Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Oculta el aviso de restricción de tu propio perfil en este teléfono. Las restricciones y apelaciones de TikTok siguen vigentes.

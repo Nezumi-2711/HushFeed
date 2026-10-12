@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Dein Profil kann auf diesem Handy ein Verifizierungsabzeichen zeigen oder die Kontowarnung ausblenden. Andere sehen deinen echten Status.
+
 * **TikTok:** Medienprüfungen testen jetzt den installierten Muxer mit erzeugten Clips und prüfen die Abspielbarkeit. Die Testdateien werden danach entfernt.
 
 * **TikTok:** Beim Wechsel der Aktivitätskategorie nach einer Suche stürzt die App nicht mehr ab. Die Suche kann mit der bereits angezeigten Liste beginnen.

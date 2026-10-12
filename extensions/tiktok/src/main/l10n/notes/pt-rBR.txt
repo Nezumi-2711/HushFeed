@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Seu perfil pode mostrar um selo de verificação ou ocultar o aviso da conta neste celular. Outras pessoas veem seu status real.
+
 * **TikTok:** As verificações de mídia agora testam o muxer instalado com clipes gerados e confirmam que os arquivos são reproduzíveis. Os arquivos de teste são removidos depois.
 
 * **TikTok:** Trocar a categoria de Atividade após uma busca não fecha mais o app. A busca pode usar a lista que já está na tela.
