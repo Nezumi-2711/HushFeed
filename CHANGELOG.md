@@ -8,6 +8,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).
 
+* **TikTok:** With Show a LIVE under the status bar on, Clear display in a LIVE no longer leaves a dark strip under the clock, and the top row of the side panel you open by swiping left stays below the clock (#137).
+
 * **TikTok:** Hide the Tako bubble now also hides the Tako bubble in the bottom right corner of feed videos, which some accounts get instead of the one above the profile button (#115).
 
 * **TikTok:** The Feature Gate Lab has a new Profile banner preset. It turns on Add background in TikTok's Edit profile without switching the rest of the profile to the new layout (#80).
