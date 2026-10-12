@@ -68,27 +68,54 @@ public class NativeShareIconTest {
         circle.setColor(0xFFF1F1F2);
         Icon icon = new Icon(48, 0xFF545454);
         icon.setBounds(3, 4, 5, 6);
+        LayerDrawable native_ = new LayerDrawable(new Drawable[]{circle, icon});
+        native_.setId(0, 7);
+        native_.setLayerInset(0, 1, 2, 3, 4);
 
-        LayerDrawable styled = (LayerDrawable) NativeShareIcon.restyle(
-                new LayerDrawable(new Drawable[]{circle, icon}), this::glyph);
+        LayerDrawable styled = (LayerDrawable) NativeShareIcon.restyle(native_, this::glyph);
 
         assertEquals(2, styled.getNumberOfLayers());
         assertSame(circle, styled.getDrawable(0));
+        assertEquals("the circle keeps its id", 7, styled.getId(0));
+        assertEquals("and its insets", List.of(1, 2, 3, 4), List.of(styled.getLayerInsetLeft(0),
+                styled.getLayerInsetTop(0), styled.getLayerInsetRight(0), styled.getLayerInsetBottom(0)));
         assertEquals(List.of(0xFF545454), inks);
         assertEquals(List.of(4f), strokes);
         assertEquals(60, styled.getLayerWidth(1));
         assertEquals(60, styled.getLayerHeight(1));
         assertEquals(Gravity.CENTER, styled.getLayerGravity(1));
+        assertEquals("the sheet lays it out at TikTok's size", native_.getIntrinsicWidth(), styled.getIntrinsicWidth());
+        assertEquals(native_.getIntrinsicHeight(), styled.getIntrinsicHeight());
         assertEquals("the native icon's bounds are put back", new Rect(3, 4, 5, 6), icon.getBounds());
     }
 
+    /**
+     * The list row sizes its icon view to the drawable. A drawable a quarter larger than TikTok's
+     * grew the row, or a fixed view scaled it back down and undid the larger glyph (review of
+     * 5f943bf55), so the glyph reaches past the drawable's bounds instead.
+     */
     @Test public void theLongPressListsLoneIconIsSwappedForTheGlyphInItsInk() {
-        LayerDrawable styled = (LayerDrawable) NativeShareIcon.restyle(
-                new LayerDrawable(new Drawable[]{new Icon(40, 0xFFFFFFFF)}), this::glyph);
+        LayerDrawable native_ = new LayerDrawable(new Drawable[]{new Icon(40, 0xFFFFFFFF)});
+        LayerDrawable styled = (LayerDrawable) NativeShareIcon.restyle(native_, this::glyph);
 
         assertEquals(1, styled.getNumberOfLayers());
         assertEquals(List.of(0xFFFFFFFF), inks);
         assertEquals(50, styled.getLayerWidth(0));
+        assertEquals(40, styled.getIntrinsicWidth());
+        assertEquals(40, styled.getIntrinsicHeight());
+        styled.setBounds(0, 0, 40, 40);
+        assertEquals("centred on the icon's box", new Rect(-5, -5, 45, 45), styled.getDrawable(0).getBounds());
+    }
+
+    /** An icon layer TikTok sized itself is measured by that size, not the artwork's. */
+    @Test public void anIconLayerWithASizeOfItsOwnSetsTheGlyphsSize() {
+        LayerDrawable native_ = new LayerDrawable(new Drawable[]{new Icon(48, 0xFF161823)});
+        native_.setLayerSize(0, 36, 36);
+        LayerDrawable styled = (LayerDrawable) NativeShareIcon.restyle(native_, this::glyph);
+
+        assertEquals(List.of(3f), strokes);
+        assertEquals(45, styled.getLayerWidth(0));
+        assertEquals(36, styled.getIntrinsicWidth());
     }
 
     @Test public void anythingButTikToksLayeredIconFallsBackToTheGlyphAlone() {

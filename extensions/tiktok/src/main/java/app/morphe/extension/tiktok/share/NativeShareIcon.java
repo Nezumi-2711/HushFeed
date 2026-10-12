@@ -44,21 +44,52 @@ final class NativeShareIcon {
         LayerDrawable layers = (LayerDrawable) current;
         int count = layers.getNumberOfLayers();
         if (count < 1) return null;
-        Drawable icon = layers.getDrawable(count - 1);
+        int last = count - 1;
+        Drawable icon = layers.getDrawable(last);
         if (icon == null) return null;
-        int size = Math.min(icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+        // The size TikTok gave the icon's layer, when it gave one, is the size it shows at.
+        int width = layers.getLayerWidth(last) > 0 ? layers.getLayerWidth(last) : icon.getIntrinsicWidth();
+        int height = layers.getLayerHeight(last) > 0 ? layers.getLayerHeight(last) : icon.getIntrinsicHeight();
+        int size = Math.min(width, height);
         if (size <= 0) return null;
         Integer ink = inkOf(icon, size);
         if (ink == null) return null;
 
         Drawable[] parts = new Drawable[count];
-        for (int i = 0; i < count - 1; i++) parts[i] = layers.getDrawable(i);
-        parts[count - 1] = glyph.make(ink, size * STROKE_FRACTION);
+        for (int i = 0; i < last; i++) parts[i] = layers.getDrawable(i);
+        parts[last] = glyph.make(ink, size * STROKE_FRACTION);
         LayerDrawable styled = new LayerDrawable(parts);
+        styled.setPaddingMode(layers.getPaddingMode());
+        for (int i = 0; i < count; i++) copyLayout(layers, styled, i);
         int box = Math.round(size * BOX_SCALE);
-        styled.setLayerSize(count - 1, box, box);
-        styled.setLayerGravity(count - 1, Gravity.CENTER);
+        styled.setLayerSize(last, box, box);
+        styled.setLayerGravity(last, Gravity.CENTER);
+        // The glyph's box reaches past the icon's own insets by what it grew, so the drawable keeps
+        // TikTok's intrinsic size: a list row sized to it neither grows nor scales the glyph back.
+        int growX = box - width;
+        int growY = box - height;
+        int start = layers.getLayerInsetStart(last);
+        int end = layers.getLayerInsetEnd(last);
+        if (start != LayerDrawable.INSET_UNDEFINED) styled.setLayerInsetStart(last, start - growX / 2);
+        else styled.setLayerInsetLeft(last, layers.getLayerInsetLeft(last) - growX / 2);
+        if (end != LayerDrawable.INSET_UNDEFINED) styled.setLayerInsetEnd(last, end - (growX - growX / 2));
+        else styled.setLayerInsetRight(last, layers.getLayerInsetRight(last) - (growX - growX / 2));
+        styled.setLayerInsetTop(last, layers.getLayerInsetTop(last) - growY / 2);
+        styled.setLayerInsetBottom(last, layers.getLayerInsetBottom(last) - (growY - growY / 2));
         return styled;
+    }
+
+    /** Layer [i]'s id, insets, size and gravity, which the new drawable would otherwise drop. */
+    private static void copyLayout(LayerDrawable from, LayerDrawable to, int i) {
+        to.setId(i, from.getId(i));
+        to.setLayerInset(i, from.getLayerInsetLeft(i), from.getLayerInsetTop(i),
+                from.getLayerInsetRight(i), from.getLayerInsetBottom(i));
+        int start = from.getLayerInsetStart(i);
+        if (start != LayerDrawable.INSET_UNDEFINED) to.setLayerInsetStart(i, start);
+        int end = from.getLayerInsetEnd(i);
+        if (end != LayerDrawable.INSET_UNDEFINED) to.setLayerInsetEnd(i, end);
+        to.setLayerSize(i, from.getLayerWidth(i), from.getLayerHeight(i));
+        to.setLayerGravity(i, from.getLayerGravity(i));
     }
 
     /** The most opaque pixel the native icon draws, as an opaque colour, or null if it draws nothing. */
