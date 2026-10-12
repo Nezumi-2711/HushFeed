@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A sticker preview gets its Save action when TikTok adds the native actions late, replaces their row or removes the Save button. Reusing the preview still saves the sticker currently shown.
+
 * **TikTok:** Turning off Hide suggested accounts restores a suggestion cell's original spacing, including negative margins.
 
 * **TikTok:** The original reporter confirmed that the post date follows Author text size (#66).

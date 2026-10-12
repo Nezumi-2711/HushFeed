@@ -85,7 +85,7 @@ public final class StickerGallerySaver {
     private static final int READ_TIMEOUT_MS = 20_000;
 
     private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-    /** The sticker each decorated sheet is currently showing, so a reused sheet saves its own. */
+    /** The sticker each bound sheet is currently showing, so a reused sheet saves its own. */
     private static final WeakHashMap<View, StickerAsset> ATTACHED_SHEETS = new WeakHashMap<>();
     private static final WeakHashMap<Object, Object> STICKER_SOURCES = new WeakHashMap<>();
 
@@ -114,15 +114,11 @@ public final class StickerGallerySaver {
                 return;
             }
 
-            // The button is added once per sheet, but the sheet is reused for whatever sticker
-            // is opened next. Recording it before anything below can return keeps the button
-            // pointed at what is on screen whatever happens after this.
-            boolean alreadyDecorated;
+            // The sheet can receive its actions after a bind or replace their parent. Refresh
+            // its sticker first, then check the current action row for our button below.
             synchronized (ATTACHED_SHEETS) {
-                alreadyDecorated = ATTACHED_SHEETS.containsKey(sheetView);
                 ATTACHED_SHEETS.put(sheetView, asset);
             }
-            if (alreadyDecorated) return;
 
             List<View> actionButtons = findActionButtons(sheetView);
             ViewGroup actionParent = findCommonParent(actionButtons);
