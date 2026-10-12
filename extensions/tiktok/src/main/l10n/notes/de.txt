@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ist Automatische freie Ansicht ohne Verzögerung eingestellt, startet ein Video, das du aus der Suche, einem Profil, einem Hashtag oder einem Sound öffnest, jetzt schon mit ausgeblendeten Bedienelementen, auch wenn du sie im Feed zurückgeholt hast, um zur Suche zu kommen. Vorher waren seine Schaltflächen und die Suchleiste oben etwa eine halbe Sekunde zu sehen (#84).
+
 * **TikTok:** Diesen Ersteller blockieren und Titelbild speichern sitzen im Teilen-Menü jetzt im selben grauen Kreis wie TikToks eigene Schaltflächen, mit einem Symbol in deren Größe und Farbe im hellen und im dunklen Modus. Auch im Menü, das sich beim Gedrückthalten eines Feed-Videos öffnet, haben sie jetzt ihr Symbol, das dort fehlte.
 
 * **TikTok:** Doppeltippen hat eine neue Auswahl, Dieses Video beschleunigen, erneut doppeltippen zum Zurücksetzen. Das Video auf dem Bildschirm läuft mit deiner Geschwindigkeit, solange du das Video gedrückt hältst (2x, außer du hast etwas anderes gewählt), ein zweites Doppeltippen stellt die vorherige Geschwindigkeit wieder her, und das nächste Video läuft mit seiner üblichen Geschwindigkeit (#136).

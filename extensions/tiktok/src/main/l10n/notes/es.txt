@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Ocultar controles automáticamente sin retraso, un vídeo que abres desde la búsqueda, un perfil, un hashtag o un sonido ahora empieza con los controles ya ocultos, también después de haberlos recuperado en el feed para llegar a la búsqueda. Antes, sus botones y la barra de búsqueda de arriba se veían durante medio segundo más o menos (#84).
+
 * **TikTok:** Bloquear a este creador y Guardar portada ahora aparecen en el mismo círculo gris que los botones de TikTok en el menú de compartir, con un icono del tamaño y el color de los suyos en modo claro y oscuro. También tienen su icono en el panel que se abre al mantener pulsado un vídeo del feed, donde faltaba.
 
 * **TikTok:** Doble toque tiene una opción nueva, Acelerar este vídeo, doble toque otra vez para deshacerlo. El vídeo en pantalla se reproduce a tu Velocidad mientras mantienes pulsado el vídeo (2x salvo que elijas otra), un segundo doble toque devuelve la velocidad que tenía y el siguiente vídeo se reproduce a su velocidad habitual (#136).

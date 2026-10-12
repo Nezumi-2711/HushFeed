@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** With Automatic Clear display set to no delay, a video you open from search, a profile, a hashtag or a sound now starts with its controls already hidden, also after you brought them back on the feed to get to search. Before, its buttons and the search bar at the top showed for about half a second (#84).
+
 * **TikTok:** Block this creator and Save cover now sit in the same gray circle as TikTok's own buttons in the share sheet, with an icon the size and color of theirs in light and dark mode. They also get their icon in the panel that opens when you press and hold a feed video, where it was missing.
 
 * **TikTok:** Double tap has a new choice, Speed up this video, double tap again to undo. The video on screen plays at your Speed while you hold the video (2x unless you picked another), a second double tap puts back the speed it had, and the next video plays at its usual speed (#136).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Vista pulita automatica senza ritardo, un video che apri dalla ricerca, da un profilo, da un hashtag o da un suono ora parte con i controlli già nascosti, anche dopo che li hai fatti tornare nel feed per arrivare alla ricerca. Prima i suoi pulsanti e la barra di ricerca in alto restavano visibili per circa mezzo secondo (#84).
+
 * **TikTok:** Blocca questo creator e Salva copertina ora stanno nello stesso cerchio grigio dei pulsanti di TikTok nel menu di condivisione, con un'icona delle loro dimensioni e del loro colore in modalità chiara e scura. Hanno la loro icona anche nel pannello che si apre tenendo premuto un video del feed, dove mancava.
 
 * **TikTok:** Doppio tocco ha una nuova scelta, Accelera questo video, doppio tocco di nuovo per annullare. Il video sullo schermo va alla tua Velocità mentre tieni premuto il video (2x se non ne hai scelta un'altra), un secondo doppio tocco rimette la velocità che aveva e il video successivo va alla sua velocità solita (#136).

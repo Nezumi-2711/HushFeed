@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Avtomatik təmiz ekran gecikməsiz qurulubsa, axtarışdan, profildən, heşteqdən və ya səsdən açdığınız video indi idarəetmə elementləri artıq gizli halda başlayır, axtarışa keçmək üçün onları lentdə geri qaytardıqdan sonra da. Əvvəl onun düymələri və yuxarıdakı axtarış sətri təxminən yarım saniyə görünürdü (#84).
+
 * **TikTok:** Bu yaradıcını bloklayın və Örtüyü saxla indi paylaşım panelində TikTok-un öz düymələri kimi eyni boz dairənin içindədir, işıqlı və qaranlıq rejimdə onların ölçüsündə və rəngində ikonla. Lent videosunu basıb saxlayanda açılan paneldə də artıq ikonları var, əvvəl orada yox idi.
 
 * **TikTok:** İki dəfə toxunmada yeni seçim var: Bu videonu sürətləndir, geri qaytarmaq üçün yenə iki dəfə toxun. Ekrandakı video Videonu basıb saxlayarkən sürət ilə oxunur (başqasını seçməmisinizsə 2x), ikinci iki dəfə toxunma əvvəlki sürəti qaytarır, növbəti video isə adi sürəti ilə oxunur (#136).

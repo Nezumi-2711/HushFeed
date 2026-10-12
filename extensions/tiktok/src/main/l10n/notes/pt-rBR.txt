@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Com Limpar a tela automaticamente sem atraso, um vídeo que você abre pela busca, por um perfil, por uma hashtag ou por um som agora começa com os controles já escondidos, mesmo depois de você trazê-los de volta no feed para chegar à busca. Antes, os botões dele e a barra de busca no topo apareciam por cerca de meio segundo (#84).
+
 * **TikTok:** Bloquear este criador e Salvar capa agora ficam no mesmo círculo cinza dos botões do próprio TikTok no menu de compartilhar, com um ícone do tamanho e da cor deles nos modos claro e escuro. Eles também ganharam o ícone no painel que abre quando você segura um vídeo do feed, onde ele faltava.
 
 * **TikTok:** Toque duplo tem uma opção nova, Acelerar este vídeo, toque duplo de novo para desfazer. O vídeo na tela toca na sua Velocidade enquanto você segura o vídeo (2x, a menos que você escolha outra), um segundo toque duplo volta à velocidade que ele tinha e o próximo vídeo toca na velocidade de sempre (#136).

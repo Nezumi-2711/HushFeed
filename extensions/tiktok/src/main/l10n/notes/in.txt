@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Dengan Tampilan bersih otomatis tanpa jeda, video yang kamu buka dari pencarian, profil, hashtag, atau suara sekarang mulai dengan kontrol yang sudah tersembunyi, juga setelah kamu memunculkannya lagi di feed untuk membuka pencarian. Sebelumnya, tombol-tombolnya dan bilah pencarian di atas terlihat sekitar setengah detik (#84).
+
 * **TikTok:** Blokir kreator ini dan Simpan sampul sekarang berada di lingkaran abu-abu yang sama dengan tombol TikTok sendiri di lembar bagikan, dengan ikon seukuran dan sewarna tombol itu di mode terang dan gelap. Keduanya juga mendapat ikon di panel yang terbuka saat kamu menahan video feed, yang sebelumnya tidak ada.
 
 * **TikTok:** Ketuk dua kali punya pilihan baru, Percepat video ini, ketuk dua kali lagi untuk membatalkan. Video di layar diputar pada Kecepatan saat video ditahan (2x kecuali kamu memilih yang lain), ketuk dua kali berikutnya mengembalikan kecepatan sebelumnya, dan video berikutnya diputar dengan kecepatan biasanya (#136).
