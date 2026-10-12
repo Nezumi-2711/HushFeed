@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pemeriksaan perangkat kini mendukung gerakan dua jari asli. Kedua posisi jari pada bilah samping terbukti keluar dari tampilan bersih (#84).
+
 * **TikTok:** Bilah pencarian yang disembunyikan pada tampilan bersih tetap transparan setelah TikTok mengubah opasitas atau mengganti baris. Menonaktifkan pengaturan sembunyikan memulihkan opasitas terakhir TikTok (#84).
 
 * **TikTok:** Tampilan bersih otomatis mencoba lagi saat video yang sama dibuka kembali di penampil baru. Pilihan keluar manual tetap berlaku saat kembali dari komentar atau setelah fokus hilang sebentar (#84).

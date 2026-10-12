@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** I controlli sul dispositivo supportano gesti reali a due dita. Entrambe le posizioni del dito sulla barra laterale sono state verificate per uscire dalla visualizzazione pulita (#84).
+
 * **TikTok:** La barra di avanzamento nascosta nella visualizzazione pulita resta trasparente quando TikTok cambia l'opacità o sostituisce la riga. Disattivare l'opzione ripristina l'ultima opacità di TikTok (#84).
 
 * **TikTok:** La visualizzazione pulita automatica riprova quando riapri lo stesso video in una nuova finestra. L'uscita manuale resta attiva tornando dai commenti o dopo una breve perdita di focus (#84).

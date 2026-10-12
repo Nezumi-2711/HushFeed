@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Device checks now support real two-finger gestures. Both finger positions on the rail were verified to exit Clear display (#84).
+
 * **TikTok:** A hidden Clear display seekbar stays transparent after TikTok changes its opacity or replaces the row. Turning the hide setting off restores TikTok's latest opacity (#84).
 
 * **TikTok:** Automatic Clear display tries again when you reopen the same video in a new viewer. A manual exit still lasts while you return from comments or another brief focus loss (#84).

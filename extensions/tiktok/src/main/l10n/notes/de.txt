@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Gerätetests unterstützen jetzt echte Zwei-Finger-Gesten. Beide Fingerpositionen auf der Seitenleiste wurden zum Beenden der freien Anzeige geprüft (#84).
+
 * **TikTok:** Eine in der freien Anzeige verborgene Suchleiste bleibt transparent, wenn TikTok ihre Deckkraft ändert oder die Zeile ersetzt. Ausschalten stellt TikToks letzte Deckkraft wieder her (#84).
 
 * **TikTok:** Automatische freie Anzeige versucht es erneut, wenn du dasselbe Video in einem neuen Fenster öffnest. Nach Kommentaren oder einem kurzen Fokusverlust bleibt dein manuelles Beenden bestehen (#84).

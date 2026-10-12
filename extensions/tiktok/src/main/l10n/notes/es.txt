@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Las pruebas en el dispositivo admiten gestos reales con dos dedos. Se verificó que ambas posiciones del dedo en la barra lateral salen de la pantalla despejada (#84).
+
 * **TikTok:** La barra de progreso oculta en la pantalla despejada sigue transparente cuando TikTok cambia su opacidad o reemplaza la fila. Desactivar la opción restaura la última opacidad de TikTok (#84).
 
 * **TikTok:** La pantalla despejada automática vuelve a intentarlo cuando abres el mismo video en un visor nuevo. Tu salida manual se conserva al volver de los comentarios o tras perder el foco brevemente (#84).
