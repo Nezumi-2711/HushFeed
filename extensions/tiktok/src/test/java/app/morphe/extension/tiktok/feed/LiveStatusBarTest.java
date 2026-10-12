@@ -451,6 +451,47 @@ public class LiveStatusBarTest {
     }
 
     /**
+     * #137, from BynchPOP and read off the S22: Clear display in a LIVE shows a black view a bar
+     * tall across the top of the room's page, so the band under the clock came back over the
+     * stream. It stays hidden while the page's strip is away, and goes back as the room closes.
+     */
+    @Test public void clearDisplaysBlackBandStaysAwayWithTheStrip() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout pager = new FrameLayout(live);
+        live.setContentView(pager);
+        FrameLayout first = roomPage(live, pager, bar);
+        roomPage(live, pager, bar);
+        View band = new View(live);
+        band.setBackgroundColor(Color.BLACK);
+        band.setVisibility(View.GONE);
+        ((FrameLayout) first.getChildAt(0)).addView(band,
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, bar));
+        room.start().resume().visible();
+        layOut(live);
+        layOut(live);
+        assertEquals(0, first.getPaddingTop());
+        assertEquals(View.GONE, band.getVisibility());
+
+        band.setVisibility(View.VISIBLE);
+        layOut(live);
+        assertEquals("Clear display's band covered the stream under the clock", View.INVISIBLE, band.getVisibility());
+
+        band.setVisibility(View.VISIBLE);
+        assertTrue("a band shown again without a layout pass wasn't kept out of the frame",
+                live.getWindow().getDecorView().getViewTreeObserver().dispatchOnPreDraw());
+        assertEquals(View.INVISIBLE, band.getVisibility());
+
+        room.pause();
+        assertEquals("leaving kept TikTok's band hidden", View.VISIBLE, band.getVisibility());
+        room.stop().destroy();
+    }
+
+    /**
      * #137, seen on the S22 with 0.71.3: every room is a page of the room pager, and the pager
      * pads a page as it binds a room to it. The search over the window took the panel TikTok
      * shows while a room opens, the first view held down a bar's height, and left every page

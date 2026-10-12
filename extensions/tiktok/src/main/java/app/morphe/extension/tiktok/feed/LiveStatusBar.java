@@ -211,6 +211,7 @@ public final class LiveStatusBar {
             // The room's views are laid out after it resumes, and its insets are only known once
             // the window is attached, so the strip is looked for on the layout passes that follow.
             decor.getViewTreeObserver().addOnGlobalLayoutListener(room);
+            decor.getViewTreeObserver().addOnPreDrawListener(room.coverWatch);
             if (!hideBar) decor.getViewTreeObserver().addOnPreDrawListener(room.shadeWatch);
             HookStatus.bound(HOOK_FAMILY, hideBar ? "LIVE room status bar hidden" : "LIVE room under the status bar");
         } catch (Throwable failure) {
@@ -227,6 +228,7 @@ public final class LiveStatusBar {
             if (window == null) return;
             View decor = window.getDecorView();
             decor.getViewTreeObserver().removeOnGlobalLayoutListener(room);
+            decor.getViewTreeObserver().removeOnPreDrawListener(room.coverWatch);
             decor.getViewTreeObserver().removeOnPreDrawListener(room.shadeWatch);
             room.putBack();
             if (!room.barHidden) {
@@ -397,6 +399,36 @@ public final class LiveStatusBar {
                     if (child.getVisibility() != View.VISIBLE || child.getTop() != 0) continue;
                     if (child.getClass() == View.class && child.getBackground() != null
                             && child.getWidth() == content.getWidth() && isBar(child.getHeight(), bars)) {
+                        return child;
+                    }
+                    if (child instanceof ViewGroup) next.add((ViewGroup) child);
+                }
+            }
+            level = next;
+        }
+        return null;
+    }
+
+    /**
+     * TikTok's Clear display cover on a room's page: a plain view exactly a status bar tall across
+     * the top of the page, shown while Clear display is on. On 47.1.4 it sits beside the layout
+     * with the stream and the controls (read off the S22, 2026-10-11). Looked for three levels
+     * down, only along views that start at the top.
+     */
+    static View findPageCover(View page, int[] bars) {
+        if (!(page instanceof ViewGroup)) return null;
+        ArrayDeque<ViewGroup> level = new ArrayDeque<>();
+        level.add((ViewGroup) page);
+        int visited = 0;
+        for (int depth = 0; depth < 3 && !level.isEmpty(); depth++) {
+            ArrayDeque<ViewGroup> next = new ArrayDeque<>();
+            for (ViewGroup group : level) {
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    if (visited++ >= MAX_VISITS) return null;
+                    View child = group.getChildAt(i);
+                    if (child.getVisibility() != View.VISIBLE || child.getTop() != 0) continue;
+                    if (child.getClass() == View.class && child.getBackground() != null
+                            && child.getWidth() == page.getWidth() && isBar(child.getHeight(), bars)) {
                         return child;
                     }
                     if (child instanceof ViewGroup) next.add((ViewGroup) child);
@@ -674,6 +706,25 @@ public final class LiveStatusBar {
             }
             return true;
         };
+        /**
+         * TikTok's covers over the top of a room's page, hidden while its strip is away. Clear
+         * display (a swipe right in the room) shows a black view a bar tall across the top of the
+         * page, so the band under the clock came back over the stream (#137, read off the S22).
+         */
+        private final WeakHashMap<View, Boolean> pageCovers = new WeakHashMap<>();
+        private boolean coverWatchFailed;
+        /** Hides a page cover TikTok showed again without a layout pass, before it's drawn. */
+        final ViewTreeObserver.OnPreDrawListener coverWatch = () -> {
+            if (this.left || coverWatchFailed) return true;
+            try {
+                return !hidePageCovers();
+            } catch (Throwable failure) {
+                coverWatchFailed = true;
+                HookStatus.threw(HOOK_FAMILY, "cover watch", failure);
+                Logger.printException(() -> "Could not keep the LIVE room's Clear display cover away", failure);
+                return true;
+            }
+        };
         private long fightStart;
         private boolean fought;
         /**
@@ -702,6 +753,7 @@ public final class LiveStatusBar {
             try {
                 keepCoverAway();
                 keepStripAway();
+                keepPageCoversAway();
                 if (!barHidden) keepControlsBelowBar();
             } catch (Throwable failure) {
                 searches = MAX_SEARCHES;
@@ -795,6 +847,34 @@ public final class LiveStatusBar {
                 return false;
             }
             return true;
+        }
+
+        /** Finds the cover on each page whose strip is away and hides every cover found so far. */
+        private void keepPageCoversAway() {
+            View window = decor.get();
+            if (window == null) return;
+            int[] bars = null;
+            for (View page : liftedTargets()) {
+                if (!page.isAttachedToWindow()) continue;
+                if (bars == null) bars = barHeights(window);
+                View found = findPageCover(page, bars);
+                if (found != null && pageCovers.put(found, Boolean.TRUE) == null) {
+                    HookStatus.bound(HOOK_FAMILY, "LIVE room Clear display cover taken away");
+                }
+            }
+            hidePageCovers();
+        }
+
+        /** Hides the page covers TikTok is showing; true when one was. */
+        private boolean hidePageCovers() {
+            boolean hid = false;
+            for (View known : pageCovers.keySet()) {
+                if (known != null && known.getVisibility() == View.VISIBLE && known.isAttachedToWindow()) {
+                    known.setVisibility(View.INVISIBLE);
+                    hid = true;
+                }
+            }
+            return hid;
         }
 
         /** The views that hold a strip this took away and haven't had it put back. */
@@ -937,6 +1017,10 @@ public final class LiveStatusBar {
             View known = cover.get();
             if (known != null && known.getVisibility() == View.INVISIBLE) known.setVisibility(View.VISIBLE);
             cover = new WeakReference<>(null);
+            for (View pageCover : pageCovers.keySet()) {
+                if (pageCover != null && pageCover.getVisibility() == View.INVISIBLE) pageCover.setVisibility(View.VISIBLE);
+            }
+            pageCovers.clear();
             raiseControls();
             for (Map.Entry<View, Offset> entry : strips.entrySet()) {
                 View held = entry.getKey();
