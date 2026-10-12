@@ -343,7 +343,11 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_SEARCH_SHOP = new BooleanSetting("hide_search_shop", FALSE);
     public static final BooleanSetting HIDE_STORY = new BooleanSetting("hide_story", FALSE, true);
     public static final BooleanSetting HIDE_IMAGE = new BooleanSetting("hide_image", FALSE, true);
-    public static final BooleanSetting HIDE_CAPTCHA_POPUPS = new BooleanSetting("hide_captcha_popups", FALSE, true);
+    /**
+     * Its own key, not the old hide_captcha_popups: that row was unavailable for several
+     * releases, so a true saved under it was never a choice made for the browsing rule.
+     */
+    public static final BooleanSetting HIDE_CAPTCHA_POPUPS = new BooleanSetting("hide_browsing_captcha_popups", FALSE, true);
     public static final BooleanSetting HIDE_HOMEPAGE_COIN = new BooleanSetting("hide_homepage_coin", FALSE, true);
     public static final BooleanSetting HIDE_PROFILE_REWARDS_SHORTCUT =
             new BooleanSetting("hide_profile_rewards_shortcut", FALSE);

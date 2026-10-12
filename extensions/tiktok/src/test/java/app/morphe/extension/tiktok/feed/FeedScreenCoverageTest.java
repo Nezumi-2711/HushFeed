@@ -183,7 +183,7 @@ public class FeedScreenCoverageTest {
         // every window goes through.
         put("hide_homepage_coin", YES, YES, NONE);
         // SecApiImpl's puzzle entry points serve every window, and LiveHostUser has its own copy.
-        put("hide_captcha_popups", YES, YES, YES);
+        put("hide_browsing_captcha_popups", YES, YES, YES);
         put("popup_label_checklist", YES, YES, YES);
         put("hide_live_bubble", YES, YES, NONE);
         put("hide_wind_down_screens", YES, YES, NONE);
