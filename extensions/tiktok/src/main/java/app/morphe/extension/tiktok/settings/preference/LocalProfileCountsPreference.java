@@ -98,9 +98,14 @@ public final class LocalProfileCountsPreference extends DialogPreference {
     @Override protected void showDialog(Bundle state) {
         super.showDialog(state);
         Typed typed = restoring;
-        // Generated field ids change with each recreate, so the dialog's own restore can't find them.
-        if (typed != null && owner != null && owner.equals(typed.owner)) {
-            for (Metric metric : Metric.values()) editors.get(metric).setText(typed.values[metric.ordinal()]);
+        // Generated field ids change with each recreate, so the dialog's own restore can't find
+        // them, and after process death a reused id could hand these fields another account's
+        // typing. A restore ends with this account's numbers: typed here, or as saved.
+        if (state != null && owner != null) {
+            boolean same = typed != null && owner.equals(typed.owner);
+            for (Metric metric : Metric.values()) {
+                editors.get(metric).setText(same ? typed.values[metric.ordinal()] : LocalProfileCounts.value(owner, metric));
+            }
         }
         AlertDialog dialog = (AlertDialog) getDialog();
         SettingsUi.styleFramedDialog(dialog);

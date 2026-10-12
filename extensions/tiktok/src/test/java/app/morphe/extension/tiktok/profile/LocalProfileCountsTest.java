@@ -10,8 +10,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.preference.SwitchPreference;
 import android.text.SpannableString;
+import android.view.View;
 import android.widget.EditText;
 
 import app.morphe.extension.shared.Utils;
@@ -41,6 +43,7 @@ import org.robolectric.util.ReflectionHelpers;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.lang.reflect.Proxy;
 
 @RunWith(RobolectricTestRunner.class)
@@ -301,7 +304,9 @@ public class LocalProfileCountsTest {
             // A dark mode switch rebuilds the screen and its dialog, with new generated field ids.
             LocalProfileCountsPreference recreated = (LocalProfileCountsPreference) open(activity).findPreference("local_profile_counts_editor");
             assertNotSame(row, recreated);
-            recreated.restoreHierarchyState(saved);
+            AtomicInteger ids = ReflectionHelpers.getStaticField(View.class, "sNextGeneratedId");
+            int beforeReopen = ids.get();
+            recreated.restoreHierarchyState(parcelled(saved));
             AlertDialog reopened = (AlertDialog) recreated.getDialog();
             assertNotNull(reopened);
             assertTrue(reopened.isShowing());
@@ -313,15 +318,28 @@ public class LocalProfileCountsTest {
             recreated.saveHierarchyState(again);
             reopened.dismiss();
 
-            // Typed counts never carry over to another signed-in account.
+            // Typed counts never carry over to another signed-in account, even when the id
+            // counter starts over after process death and the new fields get the old ids.
             SignedInUser.idForTests = "account-b";
+            save("account-b", "3", "", "9");
             LocalProfileCountsPreference other = (LocalProfileCountsPreference) open(activity).findPreference("local_profile_counts_editor");
-            other.restoreHierarchyState(again);
+            ids.set(beforeReopen);
+            other.restoreHierarchyState(parcelled(again));
             AlertDialog otherDialog = (AlertDialog) other.getDialog();
-            assertEquals("", field(otherDialog, "followers").getText().toString());
+            assertEquals(field(reopened, "followers").getId(), field(otherDialog, "followers").getId());
+            assertEquals("3", field(otherDialog, "followers").getText().toString());
             assertEquals("", field(otherDialog, "following").getText().toString());
+            assertEquals("9", field(otherDialog, "likes").getText().toString());
             otherDialog.dismiss();
         }
+    }
+
+    /** A saved state as the system hands it back: written to a parcel and read again. */
+    private static Bundle parcelled(Bundle state) {
+        Parcel parcel = Parcel.obtain();
+        parcel.writeBundle(state);
+        parcel.setDataPosition(0);
+        return parcel.readBundle(LocalProfileCountsPreference.class.getClassLoader());
     }
 
     private static EditText field(AlertDialog dialog, String metric) {
