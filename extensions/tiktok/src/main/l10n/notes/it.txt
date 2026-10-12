@@ -1,5 +1,15 @@
 ## Unreleased
 
+* **TikTok:** Silenzia il feed quando i commenti sono aperti ora mette in pausa il video appena si aprono i commenti, anche la prima volta dopo l'avvio di TikTok e su un video senza commenti. Prima, quella prima apertura continuava a riprodurre finché i commenti non erano caricati. Ora funziona anche se Block author button non è tra le patch selezionate.
+
+* **TikTok:** Scorri per luminosità e volume lascia stare i commenti: trascinare vicino al bordo con i commenti aperti li fa scorrere e non cambia luminosità o volume.
+
+* **TikTok:** Show commenter handle and region usa il paese che il feed ha mostrato per l'account di chi commenta quando il commento non ne porta uno, cosa che TikTok omette spesso. Serve che uno dei suoi video sia già passato nel tuo feed.
+
+* **TikTok:** Se Cerca nelle attività caricate incontra un problema durante un aggiornamento della lista di TikTok, la ricerca si chiude e la lista di TikTok resta sullo schermo invece di far chiudere l'app.
+
+* **TikTok:** La pubblicazione delle release ora carica e scarica i file tramite la release esatta che ha verificato, invece di cercarla di nuovo per tag, e si ferma quando due release condividono lo stesso tag. Ricompilare un tag già pubblicato viene rifiutato, e il passaggio dell'indice confronta la ricevuta con il checksum della copia pubblicata prima di copiarla.
+
 * **TikTok:** Nuova patch Show commenter handle and region: i commenti possono mostrare il @nomeutente di chi commenta al posto del nome visualizzato, e il paese impostato nel suo account dopo l'ora del commento. Ognuna ha il suo interruttore in Impostazioni di Hushfeed > Commenti, ed entrambe partono disattivate. Ripresa dalle patch onlynazril di na-x-ril.
 
 * **TikTok:** Usa il carattere di sistema ora può mostrare il testo di TikTok anche con un file .ttf o .otf che importi. Attiva Usa un carattere importato in App, scegli il file e riavvia TikTok. Se il file viene rimosso o non si può leggere, il testo torna a ciò che mostra Usa il carattere di sistema. Ripresa dalle patch onlynazril di na-x-ril.

@@ -1,5 +1,15 @@
 ## Unreleased
 
+* **TikTok:** Silenciar o feed enquanto os comentários estão abertos agora pausa o vídeo assim que os comentários abrem, inclusive na primeira vez depois que o TikTok inicia e em um vídeo sem comentários. Antes, essa primeira abertura continuava tocando até os comentários carregarem. Agora também funciona quando Block author button fica fora da seleção de patches.
+
+* **TikTok:** Deslizar para brilho e volume não mexe mais nos comentários: arrastar perto da borda com os comentários abertos rola os comentários e não muda o brilho nem o volume.
+
+* **TikTok:** Show commenter handle and region usa o país que o feed mostrou para a conta de quem comentou quando o comentário não traz um, o que o TikTok costuma omitir. É preciso que um dos vídeos dessa pessoa já tenha passado pelo seu feed.
+
+* **TikTok:** Se Pesquisar atividade carregada tiver um problema durante uma atualização da lista do TikTok, a pesquisa fecha e a lista do próprio TikTok continua na tela em vez de o app fechar.
+
+* **TikTok:** A publicação de versões agora envia e baixa os arquivos pela mesma versão que verificou, em vez de procurá-la de novo pela tag, e para quando duas versões têm a mesma tag. Recompilar uma tag já publicada é recusado, e a etapa do índice compara o recibo com o checksum da cópia publicada antes de copiá-lo.
+
 * **TikTok:** Novo patch Show commenter handle and region: os comentários podem mostrar o @usuário de quem comenta no lugar do nome de exibição, e o país definido na conta depois do horário do comentário. Cada um tem sua própria chave em Configurações do Hushfeed > Comentários, e os dois começam desligados. Trazido dos patches onlynazril de na-x-ril.
 
 * **TikTok:** Usar a fonte do sistema agora também pode mostrar o texto do TikTok com um arquivo .ttf ou .otf que você importar. Ative Usar uma fonte importada em Aplicativo, escolha o arquivo e reinicie o TikTok. Se o arquivo for removido ou não puder ser lido, o texto volta ao que Usar a fonte do sistema mostra. Trazido dos patches onlynazril de na-x-ril.

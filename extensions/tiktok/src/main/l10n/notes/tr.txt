@@ -1,5 +1,15 @@
 ## Unreleased
 
+* **TikTok:** Yorumlar açıkken akışın sesini kapat artık yorumlar açılır açılmaz videoyu duraklatıyor; TikTok açıldıktan sonraki ilk seferde ve yorumu olmayan bir videoda da. Önceden bu ilk açılışta video, yorumlar yüklenene kadar oynamaya devam ediyordu. Block author button yama seçiminde olmasa da artık çalışıyor.
+
+* **TikTok:** Parlaklık ve ses için kaydır artık yorumlara karışmıyor: yorumlar açıkken kenara yakın bir kaydırma yorumları kaydırıyor, parlaklığı veya sesi değiştirmiyor.
+
+* **TikTok:** Show commenter handle and region, yorumun kendisinde ülke yoksa (TikTok bunu sık sık göndermiyor) akışın o hesap için gösterdiği ülkeyi kullanıyor. Bunun için o kişinin videolarından birinin akışınızdan geçmiş olması gerekiyor.
+
+* **TikTok:** Yüklenmiş etkinlikte ara, TikTok'un liste güncellemelerinden birinde bir sorunla karşılaşırsa uygulama kapanmak yerine arama kapanıyor ve TikTok'un kendi listesi ekranda kalıyor.
+
+* **TikTok:** Sürüm yayımlama artık dosyaları etiketle yeniden aramak yerine doğruladığı sürümün kendisi üzerinden yüklüyor ve indiriyor, iki sürüm aynı etiketi paylaştığında da duruyor. Zaten yayımlanmış bir etiketi yeniden derlemek reddediliyor ve dizin adımı makbuzu içeri kopyalamadan önce yayımlanan kopyanın sağlama toplamıyla karşılaştırıyor.
+
 * **TikTok:** Yeni Show commenter handle and region yaması: yorumlar, yorum yazanın görünen adı yerine @kullanıcıadını ve yorumun zamanından sonra hesabında ayarlı ülkeyi gösterebilir. Her birinin Hushfeed ayarları > Yorumlar bölümünde kendi anahtarı var ve ikisi de başta kapalı. na-x-ril'in onlynazril yamalarından alındı.
 
 * **TikTok:** Sistem yazı tipini kullan artık TikTok metnini içe aktardığınız bir .ttf veya .otf dosyasıyla da gösterebilir. Uygulama bölümünde İçe aktarılan yazı tipini kullan'ı açın, dosyayı seçin ve TikTok'u yeniden başlatın. Dosya silinir veya okunamazsa metin, Sistem yazı tipini kullan'ın gösterdiğine döner. na-x-ril'in onlynazril yamalarından alındı.

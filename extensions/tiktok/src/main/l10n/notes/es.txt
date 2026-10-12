@@ -1,5 +1,15 @@
 ## Unreleased
 
+* **TikTok:** Silenciar el feed mientras los comentarios están abiertos ahora pausa el video en cuanto se abren los comentarios, también la primera vez después de abrir TikTok y en un video sin comentarios. Antes, esa primera vez seguía reproduciéndose hasta que cargaban los comentarios. Ahora también funciona si Block author button no está en la selección de parches.
+
+* **TikTok:** Deslizar para el brillo y el volumen deja en paz los comentarios: arrastrar cerca del borde con los comentarios abiertos los desplaza y no cambia el brillo ni el volumen.
+
+* **TikTok:** Show commenter handle and region usa el país que el feed mostró para la cuenta de quien comenta cuando el comentario no trae uno, algo que TikTok suele omitir. Hace falta que uno de sus videos haya pasado por tu feed.
+
+* **TikTok:** Si Buscar en la actividad cargada falla dentro de una de las actualizaciones de lista de TikTok, la búsqueda se cierra y la lista de TikTok sigue en pantalla en lugar de cerrarse la app.
+
+* **TikTok:** La publicación de versiones ahora sube y descarga los archivos a través de la misma versión que comprobó, en lugar de volver a buscarla por etiqueta, y se detiene cuando dos versiones comparten etiqueta. Se rechaza volver a compilar una etiqueta ya publicada, y el paso del índice compara el recibo con la suma de comprobación de la copia publicada antes de copiarlo.
+
 * **TikTok:** Nuevo parche Show commenter handle and region: los comentarios pueden mostrar el @usuario de quien comenta en vez de su nombre visible, y el país configurado en su cuenta después de la hora del comentario. Cada opción tiene su propio interruptor en Ajustes de Hushfeed > Comentarios y ambas empiezan desactivadas. Adaptado de los parches onlynazril de na-x-ril.
 
 * **TikTok:** Usar la fuente del sistema ahora también puede mostrar el texto de TikTok con un archivo .ttf u .otf que importes. Activa Usar una fuente importada en Aplicación, elige el archivo y reinicia TikTok. Si el archivo se borra o no se puede leer, el texto vuelve a lo que muestra Usar la fuente del sistema. Adaptado de los parches onlynazril de na-x-ril.

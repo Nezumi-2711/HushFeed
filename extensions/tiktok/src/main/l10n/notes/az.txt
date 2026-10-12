@@ -1,5 +1,15 @@
 ## Unreleased
 
+* **TikTok:** Şərhlər açıq olanda lenti səssiz edin indi şərhlər açılan kimi videonu dayandırır, TikTok başladıqdan sonra ilk dəfə və şərhi olmayan videoda da. Əvvəl həmin ilk pəncərə şərhlər yüklənənə qədər oynamağa davam edirdi. Block author button patç seçimində olmasa da indi işləyir.
+
+* **TikTok:** Parlaqlıq və səs üçün sürüşdür şərhlər pəncərəsinə toxunmur: şərhlər açıq olanda kənara yaxın sürüşdürmə onları sürüşdürür, parlaqlığı və ya səsi dəyişmir.
+
+* **TikTok:** Show commenter handle and region şərhin özündə ölkə olmayanda (TikTok bunu tez-tez buraxır) lentin həmin hesab üçün göstərdiyi ölkəni istifadə edir. Bunun üçün onların videolarından biri lentinizdən keçmiş olmalıdır.
+
+* **TikTok:** Yüklənmiş fəaliyyətdə axtarış TikTok-un siyahı yeniləmələrindən birində problemlə qarşılaşsa, tətbiq bağlanmaq əvəzinə axtarış bağlanır və TikTok-un öz siyahısı ekranda qalır.
+
+* **TikTok:** Buraxılışın dərci indi faylları teqə görə yenidən axtarmaq əvəzinə yoxladığı buraxılışın özü ilə yükləyir və endirir, iki buraxılış eyni teqi paylaşanda isə dayanır. Artıq dərc olunmuş teqi yenidən yığmaq qəbul edilmir, indeks addımı isə qəbzi içəri köçürməzdən əvvəl onu serverdəki nüsxənin yoxlama cəmi ilə müqayisə edir.
+
 * **TikTok:** Yeni Show commenter handle and region yaması: şərhlər şərh yazanın görünən adı əvəzinə @istifadəçi adını, şərhin vaxtından sonra isə hesabında qurulmuş ölkəni göstərə bilər. Hər birinin Hushfeed ayarları > Şərhlər bölməsində öz açarı var və hər ikisi əvvəlcə söndürülüdür. na-x-ril-in onlynazril yamalarından götürülüb.
 
 * **TikTok:** Sistem şriftindən istifadə edin indi TikTok mətnini idxal etdiyiniz .ttf və ya .otf faylı ilə də göstərə bilər. Tətbiq bölməsində İdxal edilmiş şriftdən istifadə edin seçimini açın, faylı seçin və TikTok-u yenidən başladın. Fayl silinərsə və ya oxuna bilməzsə, mətn Sistem şriftindən istifadə edin seçiminin göstərdiyinə qayıdır. na-x-ril-in onlynazril yamalarından götürülüb.

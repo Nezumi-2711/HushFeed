@@ -1,5 +1,15 @@
 ## Unreleased
 
+* **TikTok:** Senyapkan feed saat komentar terbuka sekarang menjeda video begitu komentar dibuka, termasuk pertama kali setelah TikTok dibuka dan pada video tanpa komentar. Sebelumnya, pembukaan pertama itu tetap memutar video sampai komentarnya selesai dimuat. Sekarang juga berfungsi jika Block author button tidak ikut dipilih saat patch.
+
+* **TikTok:** Geser untuk kecerahan dan volume tidak lagi mengganggu lembar komentar: menggeser di dekat tepi saat komentar terbuka akan menggulir komentar dan tidak mengubah kecerahan atau volume.
+
+* **TikTok:** Show commenter handle and region memakai negara yang ditampilkan feed untuk akun pemberi komentar jika komentarnya sendiri tidak membawa negara, yang sering dihilangkan TikTok. Salah satu videonya perlu sudah lewat di feed kamu.
+
+* **TikTok:** Jika Cari aktivitas yang dimuat mengalami masalah di salah satu pembaruan daftar TikTok, pencarian ditutup dan daftar milik TikTok tetap tampil, bukan aplikasinya yang tertutup.
+
+* **TikTok:** Penerbitan rilis sekarang mengunggah dan mengunduh aset melalui rilis yang sudah diperiksanya, bukan mencari rilis lagi berdasarkan tag, dan berhenti jika dua rilis memakai tag yang sama. Membangun ulang tag yang sudah terbit ditolak, dan langkah indeks membandingkan tanda terima dengan checksum salinan yang dihosting sebelum menyalinnya.
+
 * **TikTok:** Patch baru Show commenter handle and region: komentar bisa menampilkan @namapengguna pengomentar sebagai ganti nama tampilannya, dan negara yang diatur di akunnya setelah waktu komentar. Masing-masing punya tombol sendiri di Pengaturan Hushfeed > Komentar, dan keduanya mati di awal. Diadaptasi dari patch onlynazril milik na-x-ril.
 
 * **TikTok:** Gunakan font sistem kini juga bisa menampilkan teks TikTok dengan file .ttf atau .otf yang kamu impor. Nyalakan Gunakan font yang diimpor di Aplikasi, pilih filenya, lalu mulai ulang TikTok. Jika file dihapus atau tidak bisa dibaca, teks kembali seperti yang ditampilkan Gunakan font sistem. Diadaptasi dari patch onlynazril milik na-x-ril.
