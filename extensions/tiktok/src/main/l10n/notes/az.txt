@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yüklənmiş fəaliyyətdə axtarış TikTok siyahının davamını yükləyərkən problemlə qarşılaşsa da kənara çəkilir: tətbiq bağlanmaq əvəzinə axtarış bağlanır və TikTok-un sorğusu davam edir.
+
 * **TikTok:** AMOLED dark theme indi lentdəki videonu basıb saxlayanda açılan paneli, həmçinin Gələnlər qutusundakı Fəaliyyət və Yeni izləyicilər səhifələrini də qara edir. Onlar TikTok-un tünd boz rəngində qalırdı. Paneldəki kartlar seçilsin deyə boz qalır.
 
 * **TikTok:** Network proxy indi hansı bağlantıların ondan keçmədiyini deyir. Hushfeed-in yükləmələri və Linki kopyala arxasındakı qısa link yoxlaması öz ünvan yoxlamalarından sonra birbaşa qoşulur, ixrac olunan diaqnostika hesabatı isə bütün marşrutları Network routes altında göstərir.

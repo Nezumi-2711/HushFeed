@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yüklenmiş etkinlikte ara, TikTok listenin devamını yüklerken bir sorunla karşılaşırsa da kenara çekiliyor: uygulama kapanmak yerine arama kapanıyor ve TikTok'un isteği devam ediyor.
+
 * **TikTok:** AMOLED dark theme artık akıştaki bir videoya basılı tuttuğunuzda açılan paneli ve Gelen Kutusu'ndaki Etkinlik ile Yeni takipçiler sayfalarını da siyah yapıyor. Bunlar TikTok'un koyu grisinde kalıyordu. Paneldeki kartlar öne çıkmaya devam etsin diye gri kalıyor.
 
 * **TikTok:** Network proxy artık hangi bağlantıların onu atladığını söylüyor. Hushfeed'in kaydetmeleri ve Bağlantıyı kopyala'nın kısa bağlantı çözümlemesi kendi adres kontrollerinden sonra doğrudan bağlanıyor, dışa aktarılan tanılama raporu da her yolu Network routes altında listeliyor.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** „Geladene Aktivitäten durchsuchen“ tritt auch zur Seite, wenn es auf ein Problem stößt, während TikTok mehr von der Liste lädt: Die Suche schließt sich und TikToks Anfrage läuft weiter, statt dass die App beendet wird.
+
 * **TikTok:** AMOLED dark theme färbt jetzt auch das Feld schwarz, das sich öffnet, wenn du ein Video im Feed gedrückt hältst, dazu im Posteingang die Seiten Aktivität und Neue Follower. Sie waren in TikToks Dunkelgrau geblieben. Die Karten im Feld bleiben grau, damit sie sich weiter abheben.
 
 * **TikTok:** Network proxy sagt jetzt, welche Verbindungen nicht über ihn laufen. Hushfeeds Downloads und das Auflösen kurzer Links hinter „Link kopieren“ verbinden sich nach ihren eigenen Adressprüfungen direkt, und der exportierte Diagnosebericht listet jede Route unter Network routes auf.

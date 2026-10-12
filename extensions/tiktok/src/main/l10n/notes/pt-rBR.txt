@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pesquisar atividade carregada também sai do caminho quando encontra um problema enquanto o TikTok carrega mais da lista: a pesquisa fecha e a solicitação do TikTok continua, em vez de o app fechar.
+
 * **TikTok:** AMOLED dark theme agora também deixa preto o painel que abre quando você mantém um vídeo do feed pressionado, e as páginas Atividade e Novos seguidores da Caixa de entrada. Eles continuavam no cinza-escuro do TikTok. Os cartões dentro do painel continuam cinza para se destacarem.
 
 * **TikTok:** Network proxy agora informa quais conexões não passam por ele. Os downloads do Hushfeed e a consulta de links curtos do Copiar link se conectam direto, depois das próprias verificações de endereço, e o relatório de diagnóstico exportado lista cada rota em Network routes.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Cari aktivitas yang dimuat juga mengalah saat mengalami masalah ketika TikTok memuat lanjutan daftar: pencarian ditutup dan permintaan TikTok tetap berjalan, bukan aplikasinya yang tertutup.
+
 * **TikTok:** AMOLED dark theme sekarang juga membuat hitam panel yang terbuka saat kamu menekan lama video di feed, serta halaman Aktivitas dan Pengikut baru di Kotak masuk. Sebelumnya semuanya tetap abu-abu gelap bawaan TikTok. Kartu di dalam panel tetap abu-abu agar tetap terlihat jelas.
 
 * **TikTok:** Network proxy sekarang menyebutkan koneksi mana yang tidak lewat proxy. Unduhan Hushfeed dan pencarian tautan pendek di balik Salin tautan terhubung langsung setelah pemeriksaan alamatnya sendiri, dan laporan diagnostik yang diekspor mencantumkan setiap rute di bawah Network routes.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Search loaded activity also steps aside when it runs into a problem while TikTok loads more of the list: the search closes and TikTok's request goes ahead instead of the app closing.
+
 * **TikTok:** AMOLED dark theme now also turns black the panel that opens when you press and hold a feed video, and Inbox's Activity and New followers pages. They had kept TikTok's dark gray. The cards inside the panel stay gray so they still stand out.
 
 * **TikTok:** Network proxy now says which connections skip it. Hushfeed's saves and the short-link lookup behind Copy link connect directly, after their own address checks, and the exported diagnostic report lists every route under Network routes.
