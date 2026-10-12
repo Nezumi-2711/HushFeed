@@ -164,7 +164,7 @@ class OwnedShareActionAnchorsTest {
     @Test fun `each icon binder's framed-key test asks the owned carrier for its key once`() {
         Fixtures.forEachDeclared { apk ->
             val found = find(apk)
-            val lists = mutableSetOf<String>()
+            val lists = mutableSetOf<Pair<String, String>>()
             for ((method, bind) in found.iconBinders) {
                 val frame = method.ownedShareFrameCheck(found.action)
                 assertNotNull("${method.definingClass} lost its framed-key test", frame)
@@ -188,15 +188,26 @@ class OwnedShareActionAnchorsTest {
                 val list = before[frame.keyIndex - 2].getReference<FieldReference>()!!
                 assertEquals("[Ljava/lang/String;", list.type)
                 assertEquals(Opcode.SGET_OBJECT, before[frame.keyIndex - 2].opcode)
-                lists += list.definingClass
+                lists += list.definingClass to list.name
             }
-            val holding = mutableSetOf<String>()
+            // "report" among the strings built into that exact field in its class's <clinit>, between
+            // the static store before it and its own.
+            val holding = mutableSetOf<Pair<String, String>>()
             walk(apk) { owner ->
-                if (owner.type in lists && owner.methods.any { method ->
-                        method.name == "<clinit>" && method.implementation!!.instructions.any {
-                            it.getReference<StringReference>()?.string == "report"
-                        }
-                    }) holding += owner.type
+                val clinit = owner.methods.firstOrNull { it.name == "<clinit>" }
+                    ?.implementation?.instructions?.toList() ?: return@walk
+                for ((type, name) in lists) {
+                    if (owner.type != type) continue
+                    val store = clinit.indexOfFirst { instruction ->
+                        instruction.opcode == Opcode.SPUT_OBJECT &&
+                            instruction.getReference<FieldReference>()?.let { it.definingClass == type && it.name == name } == true
+                    }
+                    if (store < 0) continue
+                    val start = clinit.subList(0, store).indexOfLast { it.opcode == Opcode.SPUT_OBJECT } + 1
+                    if (clinit.subList(start, store).any { it.getReference<StringReference>()?.string == "report" }) {
+                        holding += type to name
+                    }
+                }
             }
             assertEquals("the framed-key list holds Report's key", lists, holding)
         }

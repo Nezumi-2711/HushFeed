@@ -204,7 +204,9 @@ internal fun Method.ownedShareFrameCheck(action: ClassDef): OwnedShareFrameCheck
             test.registerCount != 2 || test.registerC != result.registerA || test.registerD != list.registerA) return@mapNotNull null
         val found = code[at + 4].takeIf { it.opcode == Opcode.MOVE_RESULT } as? OneRegisterInstruction
             ?: return@mapNotNull null
-        if (found.registerA != result.registerA || read.registerC > 15 || result.registerA > 15) return@mapNotNull null
+        // A key that lands in the action's own register leaves nothing to ask the carrier with.
+        if (found.registerA != result.registerA || read.registerC == result.registerA ||
+            read.registerC > 15 || result.registerA > 15) return@mapNotNull null
         OwnedShareFrameCheck(at + 2, read.registerC, result.registerA)
     }
     return checks.singleOrNull()
