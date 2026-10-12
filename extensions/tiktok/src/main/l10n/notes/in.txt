@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sembunyikan root menyembunyikan status root dan detail alat root dari pemeriksaan perangkat TikTok. Awalnya nonaktif. Mulai ulang TikTok setelah mengubahnya.
+
 * **TikTok:** Blokir kreator ini di panel berbagi menambahkan Blokir di samping Laporkan. Opsi ini awalnya nonaktif dan menawarkan Urungkan setelah TikTok mengonfirmasi. Urungkan sebelumnya menunggu pemblokiran kreator yang sama selesai.
 
 * **TikTok:** Stiker DM yang diterima membuka pratinjau dengan Simpan media. Penyimpanan memakai format stiker yang dipilih dan memeriksa berkas terenkripsi sebelum menulisnya. Membuka pratinjau tidak mengirim pesan.

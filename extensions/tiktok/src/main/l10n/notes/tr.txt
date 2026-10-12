@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Root'u gizle, root durumunu ve root araçlarının ayrıntılarını TikTok'un cihaz kontrollerinden gizler. Başlangıçta kapalıdır. Değiştirdikten sonra TikTok'u yeniden başlatın.
+
 * **TikTok:** Paylaşım panelindeki Bu içerik üreticisini engelle, Bildir yanına Engelle ekler. Başlangıçta kapalıdır ve TikTok onayladıktan sonra Geri al sunar. Önceki bir Geri al, aynı üreticinin bekleyen engelleme işlemini bekler.
 
 * **TikTok:** Alınan DM çıkartmaları, Medyayı kaydet düğmesi olan bir önizleme açar. Kayıt, seçilen çıkartma biçimini kullanır ve şifreli dosyaları yazmadan önce doğrular. Önizlemeyi açmak mesaj göndermez.

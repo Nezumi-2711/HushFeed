@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ocultar root evita que las comprobaciones del dispositivo de TikTok reciban el estado de root y los detalles de sus herramientas. Empieza desactivado. Reinicia TikTok después de cambiarlo.
+
 * **TikTok:** Bloquear a este creador, en el panel de compartir, añade Bloquear junto a Denunciar. Empieza desactivado y ofrece Deshacer cuando TikTok confirma. Un Deshacer anterior espera a que termine un bloqueo pendiente del mismo creador.
 
 * **TikTok:** Los stickers recibidos por mensaje directo abren una vista previa con Guardar contenido. Se usa el formato elegido y se comprueban los archivos cifrados antes de escribirlos. Abrir la vista previa no envía mensajes.

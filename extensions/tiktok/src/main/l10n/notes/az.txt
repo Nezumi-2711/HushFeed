@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Kökü gizlət TikTok-un cihaz yoxlamalarında kök statusunu və kök alətləri haqqında məlumatı gizlədir. Əvvəlcə sönülüdür. Dəyişdikdən sonra TikTok-u yenidən başladın.
+
 * **TikTok:** Paylaşım panelində Bu yaradıcını blokla, Şikayət et yanında Blokla əməliyyatı əlavə edir. İlkin olaraq sönülüdür və TikTok təsdiqlədikdən sonra Geri al təklif edir. Əvvəlki Geri al eyni yaradıcının gözləyən bloklanmasını gözləyir.
 
 * **TikTok:** Alınmış DM stikerləri Medianı saxla düyməsi olan önbaxış açır. Saxlama seçilmiş stiker formatından istifadə edir və şifrələnmiş faylları yazmazdan əvvəl yoxlayır. Önbaxışın açılması mesaj göndərmir.

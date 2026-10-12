@@ -645,6 +645,13 @@ public class SettingsPagesTest {
                 String name = "pages/" + theme + "/" + SECTIONS[i].toLowerCase(java.util.Locale.ROOT);
                 UiCapture.save(page.getView(), name + ".png");
                 ListView list = page.getView().findViewById(android.R.id.list);
+                if ("PRIVACY".equals(SECTIONS[i])) {
+                    int root = positionOf(list, Settings.HIDE_ROOT.key);
+                    assertTrue("the root privacy control is missing", root > 0);
+                    list.setSelectionFromTop(Math.max(0, root - 2), 70);
+                    Shadows.shadowOf(Looper.getMainLooper()).idle();
+                    UiCapture.save(page.getView(), name + "-device.png");
+                }
                 if ("SHARE".equals(SECTIONS[i])) {
                     for (int row = 0; row < list.getCount(); row++) {
                         Object item = list.getAdapter().getItem(row);

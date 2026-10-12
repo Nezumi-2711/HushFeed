@@ -865,6 +865,8 @@ public class Settings extends BaseSettings {
     // answers TikTok's real value.
     public static final BooleanSetting HIDE_VPN = new BooleanSetting("hide_vpn", FALSE);
     public static final BooleanSetting BLOCK_ADVERTISING_ID = new BooleanSetting("block_advertising_id", FALSE);
+    // Native root collectors can retain an earlier answer, so a change requires a restart.
+    public static final BooleanSetting HIDE_ROOT = new BooleanSetting("hide_root", FALSE, true);
     public static final BooleanSetting BLOCK_MOTION_SENSORS = new BooleanSetting("block_motion_sensors", FALSE);
     // Off by default for the same reason, and read at each history write, so no restart.
     public static final BooleanSetting STOP_SEARCH_HISTORY = new BooleanSetting("stop_search_history", FALSE);

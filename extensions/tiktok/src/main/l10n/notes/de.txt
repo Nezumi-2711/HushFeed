@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Root verbergen hält den Root-Status und Angaben zu Root-Werkzeugen aus TikToks Geräteprüfungen heraus. Anfangs ist es aus. Starte TikTok nach einer Änderung neu.
+
 * **TikTok:** Diesen Creator blockieren unter Teilen fügt neben Melden eine Blockieraktion hinzu. Die Option ist zunächst aus. Nach TikToks Bestätigung erscheint Rückgängig. Ein älteres Rückgängig wartet auf eine laufende Blockierung desselben Creators.
 
 * **TikTok:** Empfangene DM-Sticker öffnen eine Vorschau mit Medien speichern. Beim Speichern gilt das gewählte Stickerformat. Verschlüsselte Dateien werden vor dem Schreiben geprüft. Das Öffnen der Vorschau sendet keine Nachricht.

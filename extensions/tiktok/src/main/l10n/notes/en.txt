@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Hide root keeps root status and root-tool details out of TikTok's device checks. It starts off. Restart TikTok after changing it.
+
 * **TikTok:** Block this creator under Share sheet adds a Block action beside Report. It starts off and offers Undo after TikTok confirms. An older Undo waits for a pending block of the same creator.
 
 * **TikTok:** Received DM stickers open a preview with Save media. Saving uses the chosen sticker format and checks encrypted files before writing them. Opening the preview sends no message.
