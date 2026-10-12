@@ -100,7 +100,15 @@ jobs:
       - name: Build the bundle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :patches:buildAndroid --stacktrace
+        run: |
+          set -o pipefail
+          if ! ./gradlew :patches:buildAndroid --stacktrace 2>&1 | tee "$RUNNER_TEMP/gradle.log"; then
+            # The failure as an annotation, so the run's summary page says why without the full log.
+            grep -E -A25 '^\* What went wrong|^e: |error:|FAILED' "$RUNNER_TEMP/gradle.log" | head -80 \
+              | sed -e 's/%/%25/g' -e 's/\r//g' | sed ':a;N;$!ba;s/\n/%0A/g' > "$RUNNER_TEMP/failure.txt"
+            echo "::error title=Gradle build failed::$(cat "$RUNNER_TEMP/failure.txt")"
+            exit 1
+          fi
 
       - name: Check the bundle
         run: |
