@@ -295,6 +295,42 @@ public class TapThroughControlsTest {
         }
     }
 
+    /** Switched off while Clear display is already on, the controls go back to TikTok's cleared look. */
+    @Test
+    public void turningTheSwitchOffInClearDisplayLetsTheControlsClear() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            feed(controller.get());
+            Settings.FADE_CONTROLS_OPACITY.save(50);
+
+            clear(true);
+            VideoOverlayHider.applyTo(activity);
+            column.setAlpha(0f);
+            frame.setAlpha(0f);
+            frameDrawn();
+            assertEquals(0.5f, column.getAlpha(), 0f);
+            assertTrue(VideoOverlayHider.tapsGoThroughNow());
+            assertTrue(TapThroughControls.isMarked(column));
+
+            Settings.FADE_IN_CLEAR_DISPLAY.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertFalse("taps stop going through at once", VideoOverlayHider.tapsGoThroughNow());
+            assertFalse(TapThroughControls.isMarked(column));
+            assertFalse(TapThroughControls.isMarked(frame));
+
+            // The level is let go the way a Clear display exit lets it go: held through one
+            // frame, then TikTok's 0 once the hold has run out.
+            column.setAlpha(0f);
+            frame.setAlpha(0f);
+            frameDrawn();
+            org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(1001));
+            column.setAlpha(0f);
+            frame.setAlpha(0f);
+            frameDrawn();
+            assertEquals("the rail clears with TikTok", 0f, column.getAlpha(), 0f);
+            assertEquals(0f, frame.getAlpha(), 0f);
+        }
+    }
+
     @Test
     public void aVisiblePhotoCloseInsideTheFadedRailKeepsItsNativeTap() {
         try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
