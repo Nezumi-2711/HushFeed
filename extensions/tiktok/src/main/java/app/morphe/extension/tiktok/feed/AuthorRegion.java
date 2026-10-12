@@ -46,8 +46,11 @@ public final class AuthorRegion {
     private static final String NAME_ID = "title";
     private static final String POST_TIME_ID = "tv_post_time";
 
-    /** Separates the name from the country, matching the row's own middle dot. */
-    private static final String SEPARATOR = " · ";
+    /**
+     * Separates the name from the country, matching the row's own middle dot. A comment's
+     * country follows its time with the same one.
+     */
+    public static final String SEPARATOR = " · ";
 
     private static int nameViewId;
     private static int postTimeViewId;
@@ -444,11 +447,18 @@ public final class AuthorRegion {
             return regionValue;
         }
 
-        String region = Reflect.string(aweme, "getRegion", "region");
-        String trimmed = region == null ? null : region.trim();
-        regionValue = trimmed == null || trimmed.isEmpty() ? null : trimmed.toUpperCase(Locale.ROOT);
+        regionValue = regionCode(Reflect.string(aweme, "getRegion", "region"));
         regionAweme = new WeakReference<>(aweme);
         return regionValue;
+    }
+
+    /**
+     * A country code the way Hushfeed shows one, trimmed and upper case, or null when there's
+     * none. The feed's row and a comment's time both go through this.
+     */
+    public static String regionCode(String raw) {
+        String trimmed = raw == null ? null : raw.trim();
+        return trimmed == null || trimmed.isEmpty() ? null : trimmed.toUpperCase(Locale.ROOT);
     }
 
     /**
