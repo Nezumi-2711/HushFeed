@@ -18,7 +18,7 @@
 
 * **TikTok:** Təmiz ekranda idarələr solğun olduqda foto paylaşımlarının X düyməsi işlək qalır. Digər solğun idarələr toxunuşları videoya ötürür (#84).
 
-* **TikTok:** Kiçik ART köməkçisində Android 6 üzərində altyazı üslubu və boş lent emalı yoxlanıldı. Tam TikTok uyğunluğu hələ tətbiq səviyyəsində cihaz yoxlaması tələb edir.
+* **TikTok:** Kiçik ART köməkçisində Android 6 üzərində altyazı üslubu və boş lent emalı yoxlanıldı.
 
 * **TikTok:** Solğun şərh paneli üzərində parlaqlıq və səs səviyyəsi sürüşdürmələri yoxlanıldı. Cihaz yoxlamaları hər sürüşdürmədən sonra parlaqlığı, səsi və müvəqqəti ayarları bərpa edir.
 

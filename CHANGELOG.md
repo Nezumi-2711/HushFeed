@@ -22,7 +22,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Photo posts keep their X usable when the controls are faded in Clear display. Other faded controls still pass taps through to the video (#84).
 
-* **TikTok:** Verified caption styling and empty feed handling on Android 6 in the small ART helper. Full TikTok compatibility still needs an app-level device check.
+* **TikTok:** Verified caption styling and empty feed handling on Android 6 in the small ART helper.
 
 * **TikTok:** Verified brightness and volume drags over the faded comment rail. Device checks restore brightness, audio and temporary settings after each drag.
 

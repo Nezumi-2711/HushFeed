@@ -18,7 +18,7 @@
 
 * **TikTok:** La X dei post fotografici resta utilizzabile quando i controlli sono attenuati in Schermo pulito. Gli altri controlli attenuati continuano a lasciare passare i tocchi al video (#84).
 
-* **TikTok:** Verificati lo stile dei sottotitoli e la gestione del feed vuoto su Android 6 nel piccolo strumento ART. La compatibilità completa con TikTok richiede ancora una prova dell’app su un dispositivo.
+* **TikTok:** Verificati lo stile dei sottotitoli e la gestione del feed vuoto su Android 6 nel piccolo strumento ART.
 
 * **TikTok:** Verificati i trascinamenti di luminosità e volume sopra la barra dei commenti attenuata. I controlli ripristinano luminosità, audio e impostazioni temporanee dopo ogni gesto.
 

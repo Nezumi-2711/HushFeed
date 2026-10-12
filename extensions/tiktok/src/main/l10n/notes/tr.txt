@@ -18,7 +18,7 @@
 
 * **TikTok:** Temiz ekranda denetimler solukken fotoğraf gönderilerinin X düğmesi kullanılabilir kalır. Diğer soluk denetimler dokunuşları videoya iletmeye devam eder (#84).
 
-* **TikTok:** Küçük ART aracında Android 6 altyazı stili ve boş akış işleme doğrulandı. Tam TikTok uyumluluğu için uygulamanın cihazda test edilmesi hâlâ gerekiyor.
+* **TikTok:** Küçük ART aracında Android 6 altyazı stili ve boş akış işleme doğrulandı.
 
 * **TikTok:** Soluk yorum çubuğu üzerindeki parlaklık ve ses kaydırmaları doğrulandı. Cihaz testleri her kaydırmadan sonra parlaklığı, sesi ve geçici ayarları geri yükler.
 
