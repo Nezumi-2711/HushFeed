@@ -42,6 +42,7 @@ source,target
 "%1$s isn't a language code. Use two letters, like en, es or de.","%1$s isn't a language code. Use two letters, like en, es or de."
 %1$s isn't in this Lab catalog.,%1$s isn't in this Lab catalog.
 %1$s isn't installed or doesn't take links,%1$s isn't installed or doesn't take links
+%1$s items loaded,%1$s items loaded
 %1$s left,%1$s left
 %1$s millisecond,%1$s millisecond
 %1$s milliseconds,%1$s milliseconds
@@ -270,6 +271,8 @@ Block this sound,Block this sound
 Blocked,Blocked
 Blocked %1$s,Blocked %1$s
 Blocked %1$s. Unblock,Blocked %1$s. Unblock
+Blocked account,Blocked account
+Blocked accounts,Blocked accounts
 Blocked and hidden creators,Blocked and hidden creators
 Blocked caption words,Blocked caption words
 Blocked comment words,Blocked comment words
@@ -393,6 +396,7 @@ Couldn't put the saved videos back. Try again.,Couldn't put the saved videos bac
 Couldn't reach the proxy at %1$s. TikTok may not load until it's back or you turn the proxy off.,Couldn't reach the proxy at %1$s. TikTok may not load until it's back or you turn the proxy off.
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.,Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.
 Couldn't read that file. Choose it again.,Couldn't read that file. Choose it again.
+Couldn't read this list. Close it and try again.,Couldn't read this list. Close it and try again.
 Couldn't read who posted this comment. Open their profile and block them there.,Couldn't read who posted this comment. Open their profile and block them there.
 Couldn't record the screen's layout. Start again from Diagnostics.,Couldn't record the screen's layout. Start again from Diagnostics.
 Couldn't reset the settings. Try again.,Couldn't reset the settings. Try again.
@@ -906,10 +910,13 @@ Links in comments open,Links in comments open
 Live photo clip,Live photo clip
 Live photo clip saved to %1$s,Live photo clip saved to %1$s
 Live photo clips: %1$s,Live photo clips: %1$s
+Load more,Load more
 Loaded current values. Loading all known gates…,Loaded current values. Loading all known gates…
 Loaded values are still being read. Try again in a moment.,Loaded values are still being read. Try again in a moment.
 Loaded-value file export failed,Loaded-value file export failed
+Loading cancelled. The list is incomplete.,Loading cancelled. The list is incomplete.
 Loading gates…,Loading gates…
+Loading page %1$s...,Loading page %1$s...
 Loading the gate list and TikTok's current values…,Loading the gate list and TikTok's current values…
 Local profile counts,Local profile counts
 Local verified badge,Local verified badge
@@ -959,6 +966,7 @@ Microphone in use,Microphone in use
 Mini dramas,Mini dramas
 Minimum,Minimum
 More hashtags per post,More hashtags per post
+More items are available.,More items are available.
 More opens the comments,More opens the comments
 More options,More options
 "More than %1$d comments were loaded, so the rest aren't in the file.","More than %1$d comments were loaded, so the rest aren't in the file."
@@ -1193,6 +1201,7 @@ Quality,Quality
 "Quality, files, subtitles and hand-off","Quality, files, subtitles and hand-off"
 "Quality, speed and auto-advance","Quality, speed and auto-advance"
 Quick setup,Quick setup
+Read-only list. Accounts won't be opened or unblocked.,Read-only list. Accounts won't be opened or unblocked.
 Reading,Reading
 Reading the seen-history file,Reading the seen-history file
 Reading watch history,Reading watch history
@@ -1313,6 +1322,8 @@ Saved %1$s original photos,Saved %1$s original photos
 Saved %1$s seen videos to the file,Saved %1$s seen videos to the file
 Saved 1 seen video to the file,Saved 1 seen video to the file
 Saved one original photo,Saved one original photo
+Saved post,Saved post
+Saved posts,Saved posts
 Saved the photos as a video in %1$s,Saved the photos as a video in %1$s
 "Saved the photos as a video in %1$s. The sound couldn't be added, so it's silent.","Saved the photos as a video in %1$s. The sound couldn't be added, so it's silent."
 Saved videos forgotten. The files are still there.,Saved videos forgotten. The files are still there.
@@ -1480,6 +1491,7 @@ Shows the Duet and Stitch options even when the creator turned them off. TikTok 
 Sign in to TikTok before importing watch history.,Sign in to TikTok before importing watch history.
 Sign in to TikTok before saving or restoring seen history.,Sign in to TikTok before saving or restoring seen history.
 Sign in to edit your own profile counts,Sign in to edit your own profile counts
+Sign in to view this list,Sign in to view this list
 Sign in without a passkey,Sign in without a passkey
 Silence the feed while comments are open,Silence the feed while comments are open
 Skip TikTok's setup screens,Skip TikTok's setup screens
@@ -1676,6 +1688,9 @@ The frame couldn't be saved. Try again.,The frame couldn't be saved. Try again.
 The last feed capture wasn't saved. Tap to try again.,The last feed capture wasn't saved. Tap to try again.
 The last one is still waiting to start,The last one is still waiting to start
 The last report is still being saved,The last report is still being saved
+The list changed while loading. Results are incomplete.,The list changed while loading. Results are incomplete.
+The list reached its limit. More items may remain.,The list reached its limit. More items may remain.
+The list stopped making progress. Results are incomplete.,The list stopped making progress. Results are incomplete.
 The live photo's clip couldn't be saved. Try again.,The live photo's clip couldn't be saved. Try again.
 The loaded-values file you chose couldn't be read. Try again.,The loaded-values file you chose couldn't be read. Try again.
 The message didn't go through. It tries again at %1$s.,The message didn't go through. It tries again at %1$s.
@@ -1693,6 +1708,7 @@ The profile picture couldn't be saved. Try again.,The profile picture couldn't b
 "The proxy's address, like 192.168.1.20 or proxy.example.com.","The proxy's address, like 192.168.1.20 or proxy.example.com."
 "The record of an interrupted settings change couldn't be read, so it was set aside. Check your settings.","The record of an interrupted settings change couldn't be read, so it was set aside. Check your settings."
 The report couldn't be saved. Try again.,The report couldn't be saved. Try again.
+The request timed out. The list may be incomplete.,The request timed out. The list may be incomplete.
 The row of story avatars across the top of the Inbox goes. Stories still play from the feed and from profiles.,The row of story avatars across the top of the Inbox goes. Stories still play from the feed and from profiles.
 The saved-video choice couldn't open. Try again.,The saved-video choice couldn't open. Try again.
 The saved-video choice is still open,The saved-video choice is still open
@@ -1720,6 +1736,7 @@ There is no diagnostic data to put back,There is no diagnostic data to put back
 There was nothing to put back,There was nothing to put back
 There were no saved videos to forget,There were no saved videos to forget
 There's no video on screen to save a frame from,There's no video on screen to save a frame from
+These are posts saved by your signed-in account. Other Favorites categories aren't included.,These are posts saved by your signed-in account. Other Favorites categories aren't included.
 These loaded values are for a different TikTok version.,These loaded values are for a different TikTok version.
 These notes are in English.,These notes are in English.
 This catalog entry is no longer available. Refresh the Lab and try again.,This catalog entry is no longer available. Refresh the Lab and try again.
@@ -1734,6 +1751,7 @@ This gate type isn't supported.,This gate type isn't supported.
 "This key touches account safety. Forcing it can change login, region, payment or security checks.","This key touches account safety. Forcing it can change login, region, payment or security checks."
 "This line opens a rule and doesn't finish it: %1$s. Write two phrases as ""a"" & ""b"" for both, or ""a"" !& ""b"" for the first without the second.","This line opens a rule and doesn't finish it: %1$s. Write two phrases as ""a"" & ""b"" for both, or ""a"" !& ""b"" for the first without the second."
 This list is too long to preview here. Saving still follows the usual limit.,This list is too long to preview here. Saving still follows the usual limit.
+This list isn't available on this TikTok build.,This list isn't available on this TikTok build.
 "This phone has no file picker, so there's no way to choose a file here","This phone has no file picker, so there's no way to choose a file here"
 This phone has no folder picker. Type the folder into the row instead.,This phone has no folder picker. Type the folder into the row instead.
 This preset doesn't match the installed gates. Nothing changed.,This preset doesn't match the installed gates. Nothing changed.
@@ -1779,7 +1797,10 @@ TikTok refused the follow with code %1$s,TikTok refused the follow with code %1$
 TikTok refused the follow with code %1$s. A hidden CAPTCHA may be the cause.,TikTok refused the follow with code %1$s. A hidden CAPTCHA may be the cause.
 TikTok refused the follow: %1$s,TikTok refused the follow: %1$s
 TikTok refused the follow: %1$s A hidden CAPTCHA may be the cause.,TikTok refused the follow: %1$s A hidden CAPTCHA may be the cause.
+TikTok refused this request (%1$s).,TikTok refused this request (%1$s).
 "TikTok removes videos saved for offline viewing after a set time, sometimes only two days, watched or not. With this on they stay until you delete them in TikTok's Offline videos settings. TikTok can still clear watched ones when your phone is low on space.","TikTok removes videos saved for offline viewing after a set time, sometimes only two days, watched or not. With this on they stay until you delete them in TikTok's Offline videos settings. TikTok can still clear watched ones when your phone is low on space."
+TikTok reports additional filtered accounts. This list is incomplete.,TikTok reports additional filtered accounts. This list is incomplete.
+TikTok reports no more items in this list.,TikTok reports no more items in this list.
 TikTok sees an empty contact list instead of yours. Find Friends and People you may know can no longer use your contacts.,TikTok sees an empty contact list instead of yours. Find Friends and People you may know can no longer use your contacts.
 "TikTok sees an empty list of apps instead of the apps on your phone. Checks for one specific app, such as when TikTok opens an app you tap, still work.","TikTok sees an empty list of apps instead of the apps on your phone. Checks for one specific app, such as when TikTok opens an app you tap, still work."
 TikTok slips the videos it saved for offline viewing back into For You when it can't load enough new ones. This takes them all out. Your offline list stays as it is.,TikTok slips the videos it saved for offline viewing back into For You when it can't load enough new ones. This takes them all out. Your offline list stays as it is.
@@ -1795,6 +1816,7 @@ TikTok's own name,TikTok's own name
 TikTok's own value,TikTok's own value
 TikTok's size,TikTok's size
 TikTok's suggested reply cells and their intro banner stop showing in a chat. Messages you type or receive are untouched.,TikTok's suggested reply cells and their intro banner stop showing in a chat. Messages you type or receive are untouched.
+TikTok's total: %1$s. Filtered accounts: %2$s.,TikTok's total: %1$s. Filtered accounts: %2$s.
 Timed logging stopped,Timed logging stopped
 Times you can open the feed anyway,Times you can open the feed anyway
 Today can't start over while Wait a day to loosen the budget is on. The day starts over at %1$s.,Today can't start over while Wait a day to loosen the budget is on. The day starts over at %1$s.
@@ -1965,6 +1987,7 @@ Yes,Yes
 YouTube Music couldn't be opened. Open it yourself and search for the sound.,YouTube Music couldn't be opened. Open it yourself and search for the sound.
 YouTube Music isn't installed,YouTube Music isn't installed
 Your TikTok account changed. Choose the file again for this account.,Your TikTok account changed. Choose the file again for this account.
+Your account changed. Close this list and open it again.,Your account changed. Close this list and open it again.
 Your account changed. Open the count editor again.,Your account changed. Open the count editor again.
 Your current settings already match Calm feed.,Your current settings already match Calm feed.
 Your filters hid everything TikTok just sent. Most were %1$s.,Your filters hid everything TikTok just sent. Most were %1$s.

@@ -2168,3 +2168,26 @@ Translated message	Переведённое сообщение
 Show original	Показать оригинал
 Show translation	Показать перевод
 Couldn't translate this message. Try again in a moment.	Не удалось перевести это сообщение. Повторите попытку чуть позже.
+Saved posts	Сохранённые публикации
+Blocked accounts	Заблокированные аккаунты
+These are posts saved by your signed-in account. Other Favorites categories aren't included.	Это публикации, сохранённые вашим аккаунтом, в который выполнен вход. Другие категории Избранного не включены.
+Read-only list. Accounts won't be opened or unblocked.	Список только для просмотра. Аккаунты не открываются и не разблокируются.
+Load more	Загрузить ещё
+%1$s items loaded	Загружено элементов: %1$s
+TikTok's total: %1$s. Filtered accounts: %2$s.	Всего по данным TikTok: %1$s. Отфильтровано аккаунтов: %2$s.
+Your account changed. Close this list and open it again.	Аккаунт изменился. Закройте этот список и откройте его снова.
+Loading cancelled. The list is incomplete.	Загрузка отменена. Список неполный.
+Loading page %1$s...	Загрузка страницы %1$s...
+TikTok reports no more items in this list.	По данным TikTok, в этом списке больше нет элементов.
+More items are available.	Доступны ещё элементы.
+Sign in to view this list	Войдите, чтобы посмотреть этот список
+This list isn't available on this TikTok build.	Этот список недоступен в этой версии TikTok.
+Couldn't read this list. Close it and try again.	Не удалось прочитать этот список. Закройте его и повторите попытку.
+TikTok refused this request (%1$s).	TikTok отклонил этот запрос (%1$s).
+The request timed out. The list may be incomplete.	Время ожидания запроса истекло. Список может быть неполным.
+The list stopped making progress. Results are incomplete.	Загрузка списка перестала продвигаться. Результаты неполные.
+The list reached its limit. More items may remain.	Список достиг предела. Могут остаться ещё элементы.
+The list changed while loading. Results are incomplete.	Список изменился во время загрузки. Результаты неполные.
+TikTok reports additional filtered accounts. This list is incomplete.	По данным TikTok, есть ещё отфильтрованные аккаунты. Этот список неполный.
+Saved post	Сохранённая публикация
+Blocked account	Заблокированный аккаунт
