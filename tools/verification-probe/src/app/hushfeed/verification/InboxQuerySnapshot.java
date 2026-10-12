@@ -1,5 +1,6 @@
 package app.hushfeed.verification;
 
+import app.morphe.extension.tiktok.inbox.InboxRenderedModels;
 import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
@@ -153,7 +154,13 @@ final class InboxQuerySnapshot {
         row.put("queryBasis", rows(required(query, "basis")));
         row.put("queryRendered", rows(required(query, "rendered")));
         Object diff = required(adapter, "LLLII");
-        row.put("nativeRendered", rows(required(diff, "LJIIJJI")));
+        InboxRenderedModels.Result displayed = InboxRenderedModels.read(adapter);
+        row.put("nativeRendered", rows(displayed.models));
+        row.put("differCached", rows(displayed.differCached));
+        row.put("nativeListMode", displayed.mode.name());
+        row.put("nativeStubCount", displayed.stubCount);
+        row.put("nativeLoadingPhase", displayed.loadingPhase);
+        row.put("nativeLoadingRow", displayed.loadingRow);
         row.put("nativeGeneration", integer(diff, "LJIIJ"));
         row.put("acceptedNativeGeneration", integer(surface, "nativeGeneration"));
         row.put("committed", publication(value(query, "committed")));
@@ -194,6 +201,17 @@ final class InboxQuerySnapshot {
     }
 
     private static JSONObject rows(Object object) throws org.json.JSONException {
+        IdentityRows rows = identityRows(object);
+        return new JSONObject().put("count", rows.count).put("orderedIdentityHash", rows.hash);
+    }
+
+    static final class IdentityRows {
+        final int count;
+        final String hash;
+        IdentityRows(int count, String hash) { this.count = count; this.hash = hash; }
+    }
+
+    static IdentityRows identityRows(Object object) {
         if (!(object instanceof List)) throw new SchemaFailure("models are not a List");
         List<?> list = (List<?>) object;
         int count = list.size();
@@ -205,7 +223,7 @@ final class InboxQuerySnapshot {
             if (list.size() != count) throw new SchemaFailure("models changed during snapshot");
             StringBuilder hex = new StringBuilder(64);
             for (byte b : hash.digest()) { hex.append(Character.forDigit((b >>> 4) & 15, 16)); hex.append(Character.forDigit(b & 15, 16)); }
-            return new JSONObject().put("count", count).put("orderedIdentityHash", hex.toString());
+            return new IdentityRows(count, hex.toString());
         } catch (java.security.NoSuchAlgorithmException failure) {
             throw new SchemaFailure("SHA-256 unavailable");
         }

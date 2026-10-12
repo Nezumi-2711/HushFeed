@@ -169,6 +169,7 @@ New-Item -ItemType Directory -Force -Path "$OutDir\classes", "$OutDir\dex" | Out
 # an array, and splatting a string spreads its characters, so javac is handed the colon out
 # of C:\ as though it were a flag.
 $sources = @(Get-ChildItem (Join-Path $here 'src') -Recurse -Filter *.java | ForEach-Object { $_.FullName })
+$sources += Join-Path $root 'extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxRenderedModels.java'
 Write-Host "[probe] compiling $($sources.Count) source file(s)"
 # --release rather than -source/-target with a boot class path: a current JDK refuses that
 # pairing outright. android.jar stays on the ordinary class path, which is where the android.*

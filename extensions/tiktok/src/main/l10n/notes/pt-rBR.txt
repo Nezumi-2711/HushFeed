@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Trocar a categoria de Atividade após uma busca não fecha mais o app. A busca pode usar a lista que já está na tela.
+
 * **TikTok:** As verificações do dispositivo agora reconhecem menus pop-up pelo app ao qual pertencem. Outros apps e janelas sem correspondência continuam recusando entrada.
 
 * **TikTok:** Seu perfil pode mostrar os números que você escolher neste celular. Campos vazios mantêm os números do TikTok. Outras pessoas veem os valores reais.

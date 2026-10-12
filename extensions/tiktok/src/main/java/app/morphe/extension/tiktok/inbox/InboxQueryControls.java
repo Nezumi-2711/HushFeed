@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import app.morphe.extension.shared.Utils;
 import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.settings.L10n;
 import app.morphe.extension.tiktok.settings.Settings;
@@ -150,7 +151,7 @@ final class InboxQueryControls implements ViewTreeObserver.OnGlobalLayoutListene
             list.removeCallbacks(apply);
             if (list.getViewTreeObserver().isAlive()) list.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
-        removeBar();
+        removeBar(true);
     }
     void cleared() {
         applied = "";
@@ -167,13 +168,25 @@ final class InboxQueryControls implements ViewTreeObserver.OnGlobalLayoutListene
         if (list != null && owner.current()) Toast.makeText(list.getContext(),
                 L10n.t(list.getContext(), "Search is unavailable on this screen"), Toast.LENGTH_SHORT).show();
     }
-    private void removeBar() {
+    private void removeBar() { removeBar(false); }
+    private void removeBar(boolean afterDetach) {
         if (bar == null) return;
         View list = owner.list.get();
-        if (list != null && addedPadding != 0) list.setPadding(list.getPaddingLeft(), list.getPaddingTop() - addedPadding,
-                list.getPaddingRight(), list.getPaddingBottom());
-        if (bar.getParent() instanceof ViewGroup) ((ViewGroup) bar.getParent()).removeView(bar);
+        LinearLayout retiredBar = bar;
+        ViewGroup retiredHost = retiredBar.getParent() instanceof ViewGroup ? (ViewGroup) retiredBar.getParent() : null;
+        int retiredPadding = addedPadding;
+        if (clear != null) clear.setOnClickListener(null);
+        if (editor != null) editor.setEnabled(false);
         bar = null; editor = null; clear = null; host = null; addedPadding = 0;
+        Runnable cleanup = () -> {
+            if (list != null && retiredPadding != 0) list.setPadding(list.getPaddingLeft(), list.getPaddingTop() - retiredPadding,
+                    list.getPaddingRight(), list.getPaddingBottom());
+            if (retiredHost != null && retiredBar.getParent() == retiredHost) retiredHost.removeView(retiredBar);
+        };
+        // Android notifies detach listeners before clearing attachment, while an ancestor may
+        // still be iterating its cached child array. Retire ownership now, mutate that tree later.
+        if (afterDetach) Utils.runOnMainThread(cleanup);
+        else cleanup.run();
     }
     private static boolean inside(View child, View root) {
         for (View current = child; current != null; current = current.getParent() instanceof View ? (View) current.getParent() : null) {

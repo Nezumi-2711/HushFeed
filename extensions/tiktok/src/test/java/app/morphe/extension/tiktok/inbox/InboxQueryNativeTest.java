@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import app.morphe.extension.shared.Utils;
@@ -43,12 +44,15 @@ public class InboxQueryNativeTest {
     @Before public void setUp() {
         Utils.setContext(RuntimeEnvironment.getApplication());
         InboxQueryOwners.resetForTests();
+        InboxQueryNative.renderedReader = adapter -> InboxRenderedModels.read(adapter, renderedSchema());
         Settings.INBOX_LOADED_SEARCH.save(true);
         controller = Robolectric.buildActivity(Activity.class).setup().visible();
         activity = controller.get();
     }
     @After public void tearDown() {
         InboxQueryOwners.resetForTests();
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        InboxQueryNative.renderedReader = InboxRenderedModels::read;
         for (Dialog dialog : dialogs) dialog.dismiss();
         Settings.INBOX_LOADED_SEARCH.resetToDefault();
         controller.close();
@@ -71,6 +75,110 @@ public class InboxQueryNativeTest {
         assertEquals(LoadedInboxQuery.Phase.IDLE, surface.owner().query.phase());
         assertEquals(1, surface.root.getChildCount());
         assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+    }
+
+    @Test public void initialFallbackSeedUsesPrimaryAndOrderedExtraStubsDespiteEmptyDifferCache() {
+        Surface surface = new Surface(false);
+        surface.adapter.LLLIIIIL.LJ = false;
+        surface.diff.LJIIJJI = Collections.emptyList();
+        surface.stub.LLL = Arrays.asList(surface.header, surface.alpha, surface.beta);
+        Object extraFooter = new Object();
+        surface.adapter.LLJJL.add(new NativeStub(surface.state, surface.adapter, Collections.singletonList(surface.footer)));
+        surface.adapter.LLJJL.add(new NativeStub(surface.state, surface.adapter, Collections.singletonList(extraFooter)));
+
+        assertTrue(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+        assertIdentity(surface.owner().query.rendered(), surface.header, surface.alpha, surface.beta, surface.footer, extraFooter);
+        assertIdentity(surface.state.published, surface.alpha);
+        assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+        assertTrue("seeding must not write a native differ cache", surface.diff.LJIIJJI.isEmpty());
+        assertEquals(1, surface.diff.pending.size());
+    }
+
+    @Test public void nullConfigSelectsStubAggregateWhileCacheModeIgnoresUnavailableFallbackValues() {
+        Surface fallback = new Surface(false);
+        fallback.adapter.LLLIIIIL = null;
+        fallback.diff.LJIIJJI = Collections.emptyList();
+        assertTrue(InboxQueryNative.query(fallback.owner(), "alpha", MATCH));
+        assertIdentity(fallback.owner().query.rendered(), fallback.header, fallback.alpha, fallback.beta, fallback.footer);
+
+        Surface cached = new Surface(false);
+        cached.adapter.LLJJJJLIIL = null;
+        cached.adapter.LLJJL = null;
+        cached.adapter.LLLIIL = Object.class;
+        cached.adapter.LLJLLL = null;
+        assertTrue(InboxQueryNative.query(cached.owner(), "alpha", MATCH));
+        assertIdentity(cached.owner().query.rendered(), cached.header, cached.alpha, cached.beta, cached.footer);
+    }
+
+    @Test public void fallbackSeedPreservesNativeLoadingTailForEveryPhaseAndStateBranch() {
+        NativeLoadingState[] states = {
+            new NativeRefreshState(NativePhase.Refresh), new NativeLoadingState(NativePhase.Refresh),
+            new NativeEmptyState(NativePhase.Next), new NativeLoadingState(NativePhase.Next),
+            new NativeEmptyState(NativePhase.Prev), new NativeLoadingState(NativePhase.Prev)
+        };
+        boolean[] appended = {true, false, false, true, false, true};
+        for (int i = 0; i < states.length; i++) {
+            Surface surface = new Surface(false);
+            surface.adapter.LLLIIIIL.LJ = false;
+            surface.diff.LJIIJJI = Collections.emptyList();
+            surface.adapter.LLLIIL = Object.class;
+            NativeLoading loading = new NativeLoading(states[i]);
+            surface.adapter.LLJLLL = loading;
+            assertTrue("native branch " + i, InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+            if (appended[i]) assertIdentity(surface.owner().query.rendered(), surface.header,
+                    surface.alpha, surface.beta, surface.footer, loading);
+            else assertIdentity(surface.owner().query.rendered(), surface.header, surface.alpha, surface.beta, surface.footer);
+            assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+        }
+    }
+
+    @Test public void unsupportedFallbackSchemaRefusesBeforeAnyPublicationOrEmptyBasisAcceptance() {
+        for (int malformed = 0; malformed < 3; malformed++) {
+            Surface surface = new Surface(false);
+            surface.adapter.LLLIIIIL.LJ = false;
+            surface.diff.LJIIJJI = Collections.emptyList();
+            if (malformed == 0) surface.adapter.LLJJL = null;
+            if (malformed == 1) surface.adapter.LLJJL.add(new Object());
+            if (malformed == 2) { surface.adapter.LLLIIL = Object.class; surface.adapter.LLJLLL = null; }
+            assertFalse(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+            assertNull(surface.state.published);
+            assertTrue(surface.diff.pending.isEmpty());
+            assertEquals(0, surface.owner().query.committedGeneration());
+            assertEquals(LoadedInboxQuery.Phase.IDLE, surface.owner().query.phase());
+            assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+        }
+    }
+
+    @Test public void seedRequiresTheBackingBodyAsAnIdentityContiguousSegment() {
+        for (boolean equalReplacement : new boolean[]{false, true}) {
+            Surface surface = new Surface(false);
+            surface.adapter.LLLIIIIL.LJ = false;
+            surface.diff.LJIIJJI = Collections.emptyList();
+            surface.stub.LLL = equalReplacement
+                    ? Arrays.asList(surface.header, new Notice("alpha"), surface.beta, surface.footer)
+                    : Arrays.asList(surface.header, surface.alpha, surface.footer, surface.beta);
+            assertFalse(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+            assertNull(surface.state.published);
+            assertEquals(0, surface.owner().query.committedGeneration());
+            assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+        }
+    }
+
+    @Test public void emptyBackingDoesNotDiscardNonemptyFallbackHeadersAndSeedIsBounded() {
+        Surface surface = new Surface(false);
+        surface.adapter.LLLIIIIL.LJ = false;
+        surface.diff.LJIIJJI = Collections.emptyList();
+        surface.state.LJ.clear();
+        surface.stub.LLL = Arrays.asList(surface.header, surface.footer);
+        assertTrue(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+        assertIdentity(surface.owner().query.rendered(), surface.header, surface.footer);
+        assertTrue(surface.state.published.isEmpty());
+
+        Surface oversized = new Surface(false);
+        oversized.state.LJ.addAll(Collections.nCopies(4097, new Object()));
+        assertFalse(InboxQueryNative.query(oversized.owner(), "alpha", MATCH));
+        assertNull(oversized.state.published);
+        assertEquals(0, oversized.owner().query.committedGeneration());
     }
 
     @Test public void queryWaitsForRealDiffAndAlignsNativeIndicesIncludingExternalChunks() {
@@ -275,6 +383,92 @@ public class InboxQueryNativeTest {
         assertNull(InboxQueryOwners.ownerForTests(surface.list));
     }
 
+    @Test public void wholeHostDetachLeavesSiblingChildrenStableUntilTraversalFinishes() {
+        Surface surface = new Surface(false);
+        int nativePadding = surface.list.getPaddingTop();
+        assertTrue(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+        surface.diff.accept(0);
+        assertTrue(InboxQueryNative.query(surface.owner(), "", MATCH));
+        surface.diff.accept(0);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        InboxQueryOwners.Owner owner = surface.owner();
+        assertEquals(LoadedInboxQuery.Phase.IDLE, owner.query.phase());
+        assertEquals(2, surface.outer.getChildCount());
+        View retiredBar = surface.outer.getChildAt(1);
+        measureSearchBar(surface, retiredBar);
+        assertTrue(surface.list.getPaddingTop() > nativePadding);
+        boolean[] attachedDuringDetach = {false};
+        surface.list.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override public void onViewAttachedToWindow(View view) {}
+            @Override public void onViewDetachedFromWindow(View view) {
+                attachedDuringDetach[0] = view.isAttachedToWindow();
+                assertNull("ownership must retire during the native detach callback", surface.owner());
+            }
+        });
+
+        // FrameLayout caches its child array/count while detaching spring then its sibling bar.
+        // Removing the bar from the list's callback leaves that traversal reading a null child.
+        surface.root.removeView(surface.outer);
+
+        assertTrue("the framework clears attachment after notifying listeners", attachedDuringDetach[0]);
+        assertEquals(LoadedInboxQuery.Phase.CLOSED, owner.query.phase());
+        assertSame("structural cleanup waits until after the ancestor traversal", surface.outer, retiredBar.getParent());
+        assertEquals(2, surface.outer.getChildCount());
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertNull(retiredBar.getParent());
+        assertEquals(1, surface.outer.getChildCount());
+        assertEquals(nativePadding, surface.list.getPaddingTop());
+    }
+
+    @Test public void queuedOldBarCleanupPreservesReattachedOwnersNewBarQueryAndPadding() {
+        Surface surface = new Surface(false);
+        InboxQueryOwners.Owner retiredOwner = surface.owner();
+        View retiredBar = surface.outer.getChildAt(1);
+        View retiredEditor = ((ViewGroup) retiredBar).getChildAt(0);
+        View retiredClear = ((ViewGroup) retiredBar).getChildAt(1);
+        int nativePadding = surface.list.getPaddingTop();
+        measureSearchBar(surface, retiredBar);
+        int retiredPadding = surface.list.getPaddingTop() - nativePadding;
+        assertTrue(retiredPadding > 0);
+        surface.root.removeView(surface.outer);
+        assertEquals(LoadedInboxQuery.Phase.CLOSED, retiredOwner.query.phase());
+        assertNull(surface.owner());
+        assertFalse(retiredEditor.isEnabled());
+        assertFalse("a retained old Clear button cannot act during queued cleanup", retiredClear.performClick());
+
+        surface.root.addView(surface.outer, new FrameLayout.LayoutParams(-1, -1));
+        InboxFilter.onNotificationRowBound(surface.holder);
+        InboxQueryOwners.Owner replacement = surface.owner();
+        assertNotNull(replacement);
+        assertNotSame(retiredOwner, replacement);
+        assertEquals(3, surface.outer.getChildCount());
+        View replacementBar = surface.outer.getChildAt(2);
+        assertNotSame(retiredBar, replacementBar);
+        measureSearchBar(surface, replacementBar);
+        int replacementPadding = surface.list.getPaddingTop() - nativePadding - retiredPadding;
+        assertTrue(replacementPadding > 0);
+        assertTrue(InboxQueryNative.query(replacement, "beta", MATCH));
+
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+
+        assertNull(retiredBar.getParent());
+        assertSame(surface.outer, replacementBar.getParent());
+        assertEquals(2, surface.outer.getChildCount());
+        assertEquals(nativePadding + replacementPadding, surface.list.getPaddingTop());
+        assertSame(replacement, surface.owner());
+        assertTrue(replacement.current());
+        assertEquals(LoadedInboxQuery.Phase.QUERY, replacement.query.phase());
+        assertFalse(InboxFilter.allowLoadedRequest(surface.vm));
+        assertIdentity(surface.state.published, surface.beta);
+        assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+    }
+
+    private void measureSearchBar(Surface surface, View bar) {
+        bar.measure(View.MeasureSpec.makeMeasureSpec(320, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        surface.list.getViewTreeObserver().dispatchOnGlobalLayout();
+    }
+
     @Test public void lateSharedStateRestoresTheQueryBeforeTheNewWindowsVmGetterRuns() {
         Surface first = new Surface(false);
         assertTrue(InboxQueryNative.query(first.owner(), "alpha", MATCH));
@@ -322,9 +516,10 @@ public class InboxQueryNativeTest {
         final TextView row = new TextView(activity);
         final NativeHolder holder = new NativeHolder(this);
         Surface(boolean secondWindow) {
-            state.surface = this; adapter.stub = stub;
+            state.surface = this; adapter.stub = adapter.LLJJJJLIIL = stub;
             state.LJ.addAll(Arrays.asList(alpha, beta));
             diff.LJIIJJI = aggregate(state.LJ);
+            stub.LLL = aggregate(state.LJ);
             list.addView(row);
             spring.requestTarget = vm;
             spring.addView(new View(activity));
@@ -405,6 +600,11 @@ public class InboxQueryNativeTest {
     public static final class NativeAdapter {
         public final NativeDiff LLLII;
         public final Object LLJLL = new Object();
+        public NativeConfig LLLIIIIL = new NativeConfig();
+        public NativeStub LLJJJJLIIL;
+        public List<Object> LLJJL = new ArrayList<>();
+        public Class<?> LLLIIL;
+        public NativeLoading LLJLLL;
         NativeStub stub;
         NativeAdapter(NativeDiff diff) { LLLII = diff; }
         public NativeStub LLLLLJIL() { return stub; }
@@ -432,9 +632,36 @@ public class InboxQueryNativeTest {
     }
     public static final class NativeStub {
         public final NativeAdapter LLJJIJIIJIL;
+        public List<?> LLL = Collections.emptyList();
         final NativeState state;
         NativeStub(NativeState state, NativeAdapter adapter) { this.state = state; LLJJIJIIJIL = adapter; }
+        NativeStub(NativeState state, NativeAdapter adapter, List<?> models) { this(state, adapter); LLL = models; }
         public NativeState LJIIZILJ() { return state; }
+    }
+    public static final class NativeConfig { public boolean LJ = true; }
+    public enum NativePhase { Refresh, Next, Prev }
+    public static class NativeLoadingState {
+        public final NativePhase LIZIZ;
+        NativeLoadingState(NativePhase phase) { LIZIZ = phase; }
+    }
+    public static final class NativeRefreshState extends NativeLoadingState {
+        NativeRefreshState(NativePhase phase) { super(phase); }
+    }
+    public static final class NativeEmptyState extends NativeLoadingState {
+        NativeEmptyState(NativePhase phase) { super(phase); }
+    }
+    public static final class NativeLoadingModel {
+        public final NativeLoadingState LIZIZ;
+        NativeLoadingModel(NativeLoadingState state) { LIZIZ = state; }
+    }
+    public static final class NativeLoading {
+        public final NativeLoadingModel LLJJIJIIJIL;
+        NativeLoading(NativeLoadingState state) { LLJJIJIIJIL = new NativeLoadingModel(state); }
+    }
+    private static InboxRenderedModels.Schema renderedSchema() throws ReflectiveOperationException {
+        return new InboxRenderedModels.Schema(NativeAdapter.class, NativeDiff.class, NativeConfig.class,
+                NativeStub.class, NativeLoading.class, NativeLoadingModel.class, NativeLoadingState.class,
+                NativePhase.class, NativeRefreshState.class, NativeEmptyState.class);
     }
     public static final class NativeFragment {
         final View root;

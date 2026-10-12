@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Axtarışdan sonra Fəaliyyət kateqoriyasını dəyişmək artıq tətbiqi çökdürmür. Axtarış ekranda görünən siyahıdan başlaya bilər.
+
 * **TikTok:** Cihaz yoxlamaları indi açılan menyuları aid olduqları tətbiqə görə tanıyır. Digər tətbiqlərə və uyğun gəlməyən pəncərələrə giriş yenə rədd edilir.
 
 * **TikTok:** Öz profilinizdə bu telefonda seçdiyiniz saylar göstərilə bilər. Boş sahələr TikTok-un saylarını saxlayır. Başqaları həqiqi dəyərləri görür.

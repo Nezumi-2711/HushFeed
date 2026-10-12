@@ -26,6 +26,7 @@ foreach ($name in $names) {
     if ($LASTEXITCODE) { throw "$name contract failed." }
 }
 $all = @(Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'src') -Recurse -Filter '*.java' | ForEach-Object FullName)
+$all += Join-Path $PSScriptRoot '../../extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxRenderedModels.java'
 & $javac --release 11 -cp $platform -d $output @all
 if ($LASTEXITCODE) { throw 'API 36 probe compilation failed.' }
 Write-Output "Six probe contract suites and API 36 compilation passed. No device actions. Output: $output"

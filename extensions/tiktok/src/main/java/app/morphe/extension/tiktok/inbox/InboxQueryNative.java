@@ -27,6 +27,8 @@ import java.util.concurrent.locks.Lock;
 final class InboxQueryNative {
     private static final Map<InboxQueryOwners.Owner, Surface> SURFACES = Collections.synchronizedMap(new IdentityHashMap<>());
     private static final ThreadLocal<Emission> EMITTING = new ThreadLocal<>();
+    interface RenderedReader { InboxRenderedModels.Result read(Object adapter) throws ReflectiveOperationException; }
+    static RenderedReader renderedReader = InboxRenderedModels::read;
 
     private InboxQueryNative() {}
 
@@ -264,11 +266,13 @@ final class InboxQueryNative {
 
     private static boolean seed(Surface surface) {
         InboxQueryOwners.Owner owner = surface.owner;
-        Object diff = Reflect.readField(owner.adapter.get(), "LLLII");
-        Object displayed = Reflect.readField(diff, "LJIIJJI");
-        List<?> basis = backing(owner.state.get());
-        if (basis == null || !(displayed instanceof List)) return false;
-        List<?> aggregate = new ArrayList<>((List<?>) displayed);
+        List<?> basis = backing(owner.state.get(), InboxRenderedModels.MAX_ROWS);
+        if (basis == null) return false;
+        List<?> aggregate;
+        try { aggregate = renderedReader.read(owner.adapter.get()).models; }
+        catch (ReflectiveOperationException | IllegalStateException | LinkageError unsupported) {
+            return false; // Refuse unsupported native schemas before creating any publication.
+        }
         if (!containsBody(aggregate, basis)) return false;
         LoadedInboxQuery.Publication publication = owner.query.nativePublication(basis, false, false, null, 14);
         if (!owner.query.committed(publication, publication.models, aggregate).accepted) return false;
@@ -277,10 +281,14 @@ final class InboxQueryNative {
     }
 
     private static List<?> backing(Object state) {
+        return backing(state, Integer.MAX_VALUE);
+    }
+
+    private static List<?> backing(Object state, int maximum) {
         Object lock = Reflect.readField(state, "LJFF"), backing = Reflect.readField(state, "LJ");
         if (!(lock instanceof Lock) || !(backing instanceof List)) return null;
         ((Lock) lock).lock();
-        try { return new ArrayList<>((List<?>) backing); }
+        try { return ((List<?>) backing).size() > maximum ? null : new ArrayList<>((List<?>) backing); }
         finally { ((Lock) lock).unlock(); }
     }
 

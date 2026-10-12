@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Beim Wechsel der Aktivitätskategorie nach einer Suche stürzt die App nicht mehr ab. Die Suche kann mit der bereits angezeigten Liste beginnen.
+
 * **TikTok:** Geräteprüfungen erkennen jetzt Popup-Menüs anhand der zugehörigen App. Andere Apps und nicht zugeordnete Fenster nehmen weiterhin keine Eingaben an.
 
 * **TikTok:** Dein eigenes Profil kann auf diesem Handy selbst gewählte Zähler anzeigen. Leere Felder behalten TikToks Zähler bei. Andere sehen die echten Werte.
