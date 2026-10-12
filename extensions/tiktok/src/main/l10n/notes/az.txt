@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Paylaşım panelində Bu yaradıcını blokla, Şikayət et yanında Blokla əməliyyatı əlavə edir. İlkin olaraq sönülüdür və TikTok təsdiqlədikdən sonra Geri al təklif edir. Əvvəlki Geri al eyni yaradıcının gözləyən bloklanmasını gözləyir.
+
 * **TikTok:** Alınmış DM stikerləri Medianı saxla düyməsi olan önbaxış açır. Saxlama seçilmiş stiker formatından istifadə edir və şifrələnmiş faylları yazmazdan əvvəl yoxlayır. Önbaxışın açılması mesaj göndərmir.
 
 * **TikTok:** Buraxılış yükləmələri paket, qəbz və yoxlama cəmləri endirilib yoxlanana qədər qaralamada qalır. Davam etmə mövcud faylları yoxlayır. İstəyə bağlı dəyişməzlik yoxlaması GitHub deposunun parametrini tələb edir və dərc edilmiş təsdiqi yoxlayır.

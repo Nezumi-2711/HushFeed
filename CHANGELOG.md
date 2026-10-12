@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Block this creator under Share sheet adds a Block action beside Report. It starts off and offers Undo after TikTok confirms. An older Undo waits for a pending block of the same creator.
+
 * **TikTok:** Received DM stickers open a preview with Save media. Saving uses the chosen sticker format and checks encrypted files before writing them. Opening the preview sends no message.
 
 * **TikTok:** Release uploads now stay in a draft until the bundle, receipt and checksums have been downloaded and verified. Interrupted uploads resume only after existing assets match. An optional immutable check requires GitHub's repository setting and verifies the published attestation.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Blokir kreator ini di panel berbagi menambahkan Blokir di samping Laporkan. Opsi ini awalnya nonaktif dan menawarkan Urungkan setelah TikTok mengonfirmasi. Urungkan sebelumnya menunggu pemblokiran kreator yang sama selesai.
+
 * **TikTok:** Stiker DM yang diterima membuka pratinjau dengan Simpan media. Penyimpanan memakai format stiker yang dipilih dan memeriksa berkas terenkripsi sebelum menulisnya. Membuka pratinjau tidak mengirim pesan.
 
 * **TikTok:** Unggahan rilis tetap menjadi draf hingga bundel, tanda terima, dan checksum diunduh serta diverifikasi. Pelanjutan memeriksa aset yang ada. Pemeriksaan rilis tetap yang opsional memerlukan pengaturan repositori GitHub dan memverifikasi pengesahan yang diterbitkan.

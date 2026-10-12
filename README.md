@@ -41,6 +41,8 @@ The main branch contains 132 patches, the same set as v0.71.2.
 - **Comments and inbox:** Filter comment text or accounts, translate comments into a language you pick and decide which Inbox rows appear. A creator's poll in the comments can show how the vote stands before you pick. Tapping more under a video can open its comments with the whole caption on top. Compact comment header removes the count, sort and close row and the suggestion area above it. Close comments with Back or a downward swipe. It's optional and needs a restart.
 - **Privacy and diagnostics:** Turn off supported telemetry, hide view and typing reports, keep videos out of Watch history, back up settings and export a useful diagnostic report. TikTok can also sit behind your phone's fingerprint or PIN.
 
+**Block this creator**, under **Downloads & sharing > Share sheet**, adds Block beside Report on a video share sheet for another creator while you’re signed in. It starts off. The action uses the creator of the post in that sheet, and Undo appears after TikTok confirms the block. An Undo from an earlier sheet waits for a pending block of the same creator to finish.
+
 Compact comment header keeps headers that switch between different lists, so those tabs remain reachable.
 
 **Easier comment likes**, under Comments, extends the heart's touch area into nearby blank space. The icon and row spacing don't change. Text and neighboring controls keep their own space. It's off by default and needs a restart.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Blocca questo creator nel pannello di condivisione aggiunge Blocca accanto a Segnala. L’opzione parte disattivata e offre Annulla dopo la conferma di TikTok. Un Annulla precedente attende un blocco in corso dello stesso creator.
+
 * **TikTok:** Gli sticker ricevuti nei messaggi diretti aprono un’anteprima con Salva contenuto. Il salvataggio usa il formato scelto e verifica i file cifrati prima di scriverli. Aprire l’anteprima non invia messaggi.
 
 * **TikTok:** I caricamenti di una versione restano in bozza finché pacchetto, ricevuta e checksum non vengono scaricati e verificati. La ripresa controlla i file esistenti. Il controllo facoltativo delle versioni immutabili richiede l'impostazione del repository GitHub e verifica l'attestazione pubblicata.

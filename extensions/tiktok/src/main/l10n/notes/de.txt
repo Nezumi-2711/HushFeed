@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Diesen Creator blockieren unter Teilen fügt neben Melden eine Blockieraktion hinzu. Die Option ist zunächst aus. Nach TikToks Bestätigung erscheint Rückgängig. Ein älteres Rückgängig wartet auf eine laufende Blockierung desselben Creators.
+
 * **TikTok:** Empfangene DM-Sticker öffnen eine Vorschau mit Medien speichern. Beim Speichern gilt das gewählte Stickerformat. Verschlüsselte Dateien werden vor dem Schreiben geprüft. Das Öffnen der Vorschau sendet keine Nachricht.
 
 * **TikTok:** Release-Uploads bleiben ein Entwurf, bis Bundle, Beleg und Prüfsummen heruntergeladen und geprüft sind. Beim Fortsetzen werden vorhandene Dateien geprüft. Die optionale Unveränderlichkeitsprüfung setzt GitHubs Repository-Einstellung voraus und prüft die veröffentlichte Attestierung.
