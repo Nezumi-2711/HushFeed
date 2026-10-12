@@ -134,6 +134,9 @@ public class ShareButtonTapTest {
         Settings.SHARE_TAP_COPIES_LINK.save(true);
         assertFalse("nothing bound yet", ShareButtonTap.onTap(button, null));
         assertFalse("an item without a post", ShareButtonTap.onTap(button, new Item(null)));
+        Item noId = new Item(new Post(null, "https://www.tiktok.com/@x/video/1"));
+        assertFalse("a post without an id, whose second press could never open the sheet",
+                ShareButtonTap.onTap(button, noId));
         assertEquals("before", clip());
     }
 

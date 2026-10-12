@@ -59,8 +59,11 @@ public final class ShareButtonTap {
             // Nothing bound yet, or a cell that isn't a post: TikTok knows what its button does.
             if (aweme == null) return false;
             String id = Reflect.string(aweme, "getAid", "aid");
+            // Without an id a second press couldn't be told from a first, and the sheet would
+            // never open, so such a post keeps TikTok's press.
+            if (id == null) return false;
             long now = SystemClock.uptimeMillis();
-            if (id != null && id.equals(lastCopied) && now - lastCopiedAt < AGAIN_MS) {
+            if (id.equals(lastCopied) && now - lastCopiedAt < AGAIN_MS) {
                 lastCopied = null;
                 return false;
             }
