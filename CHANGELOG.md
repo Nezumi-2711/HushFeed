@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Release uploads now stay in a draft until the bundle, receipt and checksums have been downloaded and verified. Interrupted uploads resume only after existing assets match. An optional immutable check requires GitHub's repository setting and verifies the published attestation.
+
 * **TikTok:** Verified that TalkBack announces a settings notice's action as Double tap to close.
 
 * **TikTok:** Clear all is visible beside Suggested accounts in the Inbox again. TikTok's full-width title wrapper now leaves room for a button with a full-size touch target.

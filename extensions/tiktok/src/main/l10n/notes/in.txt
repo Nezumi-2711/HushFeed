@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Unggahan rilis tetap menjadi draf hingga bundel, tanda terima, dan checksum diunduh serta diverifikasi. Pelanjutan memeriksa aset yang ada. Pemeriksaan rilis tetap yang opsional memerlukan pengaturan repositori GitHub dan memverifikasi pengesahan yang diterbitkan.
+
 * **TikTok:** Telah diverifikasi bahwa TalkBack membacakan tindakan pemberitahuan pengaturan sebagai Ketuk dua kali untuk menutup.
 
 * **TikTok:** Hapus semua di Kotak masuk kini tetap terlihat di samping akun yang disarankan, dengan ruang untuk area sentuh tombol berukuran penuh.

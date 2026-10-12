@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Buraxılış yükləmələri paket, qəbz və yoxlama cəmləri endirilib yoxlanana qədər qaralamada qalır. Davam etmə mövcud faylları yoxlayır. İstəyə bağlı dəyişməzlik yoxlaması GitHub deposunun parametrini tələb edir və dərc edilmiş təsdiqi yoxlayır.
+
 * **TikTok:** TalkBack-in parametr bildirişinin əməlini Bağlamaq üçün iki dəfə toxunun kimi oxuduğu yoxlanıldı.
 
 * **TikTok:** Gələnlər qutusunda Hamısını təmizləyin düyməsi indi təklif olunan hesabların yanında görünür və tam ölçülü toxunma sahəsi üçün yer qalır.

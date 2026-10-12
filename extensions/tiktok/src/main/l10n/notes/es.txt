@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Las subidas de una versión quedan en borrador hasta descargar y verificar el paquete, el recibo y las sumas de comprobación. Al reanudar se revisan los archivos existentes. La comprobación opcional de versiones inmutables exige el ajuste del repositorio en GitHub y verifica la atestación publicada.
+
 * **TikTok:** Se verificó que TalkBack anuncia la acción de un aviso de ajustes como Toca dos veces para cerrar.
 
 * **TikTok:** Borrar todo permanece visible junto a las cuentas sugeridas de la bandeja de entrada, con espacio para toda la superficie táctil del botón.

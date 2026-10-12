@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Release-Uploads bleiben ein Entwurf, bis Bundle, Beleg und Prüfsummen heruntergeladen und geprüft sind. Beim Fortsetzen werden vorhandene Dateien geprüft. Die optionale Unveränderlichkeitsprüfung setzt GitHubs Repository-Einstellung voraus und prüft die veröffentlichte Attestierung.
+
 * **TikTok:** Geprüft, dass TalkBack die Aktion eines Einstellungshinweises als Zum Schließen doppelt tippen vorliest.
 
 * **TikTok:** Alle löschen bleibt im Posteingang neben den vorgeschlagenen Konten sichtbar. Für die vollständige Berührungsfläche der Schaltfläche ist jetzt Platz.

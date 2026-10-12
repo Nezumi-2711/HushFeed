@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** I caricamenti di una versione restano in bozza finché pacchetto, ricevuta e checksum non vengono scaricati e verificati. La ripresa controlla i file esistenti. Il controllo facoltativo delle versioni immutabili richiede l'impostazione del repository GitHub e verifica l'attestazione pubblicata.
+
 * **TikTok:** Verificato che TalkBack legge l'azione di un avviso nelle impostazioni come Tocca due volte per chiudere.
 
 * **TikTok:** Cancella tutto resta visibile accanto agli account suggeriti nella Posta in arrivo, con spazio per l'intera area toccabile del pulsante.

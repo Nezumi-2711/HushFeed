@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Release uploads stay in a draft until the bundle, receipt and checksums are downloaded and verified. Resuming checks existing assets. An optional immutable check requires GitHub's repository setting and verifies the published attestation.
+
 * **TikTok:** Verified that TalkBack reads a settings notice's action as Double tap to close.
 
 * **TikTok:** Inbox Clear all now stays visible beside Suggested accounts, with room for its full-size touch target.

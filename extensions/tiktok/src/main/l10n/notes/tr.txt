@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sürüm yüklemeleri paket, makbuz ve sağlama toplamları indirilip doğrulanana kadar taslakta kalır. Sürdürme mevcut dosyaları denetler. İsteğe bağlı değişmezlik denetimi GitHub deposu ayarını gerektirir ve yayımlanan doğrulama beyanını denetler.
+
 * **TikTok:** TalkBack'in ayarlardaki bir bildirimin eylemini Kapatmak için iki kez dokunun olarak okuduğu doğrulandı.
 
 * **TikTok:** Gelen kutusundaki Tümünü temizle, önerilen hesapların yanında görünür kalır. Düğmenin tam boyutlu dokunma alanı için artık yer ayrılır.
