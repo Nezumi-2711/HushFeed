@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.3 (2026-10-11)
 
 * **TikTok:** Ist LIVE unter der Statusleiste zeigen an, behalten auch spätere Räume den Schatten unter der Uhr. Nach den ersten paar LIVEs, durch die man gescrollt hatte, wurde der Streifen wieder heller (#137).
 

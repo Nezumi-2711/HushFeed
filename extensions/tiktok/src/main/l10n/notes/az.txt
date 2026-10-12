@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin açıq olanda sonrakı otaqlarda da saatın altındakı kölgə qalır. Əvvəllər ilk bir neçə LIVE-dan sonra zolaq yenə açıq görünürdü (#137).
 

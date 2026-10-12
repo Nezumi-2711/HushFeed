@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.3 (2026-10-11)
 
 * **TikTok:** Con Mostra il LIVE sotto la barra di stato attivo, anche le stanze successive tengono l'ombra sotto l'orologio. Prima la striscia tornava chiara dopo i primi LIVE scorsi (#137).
 

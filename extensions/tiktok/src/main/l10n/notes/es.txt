@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.3 (2026-10-11)
 
 * **TikTok:** Con Mostrar el LIVE bajo la barra de estado activado, las salas siguientes también mantienen la sombra bajo el reloj. Antes la franja volvía a verse clara después de los primeros LIVE que pasabas (#137).
 

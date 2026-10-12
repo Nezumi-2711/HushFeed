@@ -1,4 +1,4 @@
-## Unreleased
+## 0.71.3 (2026-10-11)
 
 * **TikTok:** Saat Tampilkan LIVE di bawah bilah status aktif, ruang-ruang berikutnya juga tetap berbayang di bawah jam. Sebelumnya strip itu kembali terang setelah beberapa LIVE pertama yang kamu gulir (#137).
 
