@@ -408,6 +408,8 @@ Inside a page, rows sit under headings that say what they are about. Feed filter
 
 The home page uses plain rows with small outline icons on an AMOLED background. Related controls keep their grouped pages, and search has a framed field above its results. Light mode follows TikTok's theme, including the space behind the system bars. Longer labels and larger text can wrap without squeezing the status into the title. Invalid values stay in the editor with an inline explanation and clear as soon as you type again. Undo, restart and a refused change's reason stay inside settings in a banner with a full-size button. It stays for at least ten seconds and respects Android's longer accessibility timeout. Feed Undo and Unblock also respect that setting. Changing font size or navigation mode keeps the settings page you were using and its Back history. If a page can't finish loading, Hushfeed replaces the half-built controls with a page that says so, with Retry as the way forward and Back as the way out. These screenshots come from native Android views rendered by the local test suite. Enabled controls and values are test fixtures.
 
+What's new gives each change a concise summary in the settings language. Full changelog opens the complete release history. Later keeps the update pending, and Got it acknowledges it. The actions wrap when the screen is narrow or text is larger.
+
 <img src="assets/settings/settings.png" alt="Hushfeed settings home" width="260" /> <img src="assets/settings/playback-sound.png" alt="The Player card on the Playback page" width="260" /> <img src="assets/settings/playback-sound-light.png" alt="The Player card on the Playback page in light mode" width="260" />
 
 <details>
@@ -433,6 +435,8 @@ The home page uses plain rows with small outline icons on an AMOLED background. 
 | Backup and restore | [View](assets/settings/backup.png) |
 | Settings search | [View](assets/settings/search.png) |
 | Settings recovery | [View](assets/settings/settings-error.png) |
+| What's new | [Dark](assets/settings/whats-new.png), [light](assets/settings/whats-new-light.png) |
+| What's new with German text | [Narrow screen](assets/settings/whats-new-german-narrow.png), [twice the text size](assets/settings/whats-new-german-large.png) |
 | Feature Gate Lab | [View](assets/settings/lab.png) |
 | Gate details | [View](assets/settings/gate_details.png) |
 | Gate recording | [View](assets/settings/gate_recording.png) |
@@ -569,7 +573,7 @@ The Lab uses a compact toolbar so more gates fit on small screens. Tap the warni
 
 ## Building from source
 
-`tools/gen-release-notes.py` generates the in-app What's new text from published CHANGELOG entries starting at 0.60.0. It joins chunks at runtime so long notes and international text stay within Java's string-constant limit. Translated notes go in `extensions/tiktok/src/main/l10n/notes/<table>.txt`, one file per settings table in the CHANGELOG's own shape. A phone whose settings are translated reads a release in its own language when that file has it, and English otherwise. The generator refuses a release that's translated for some tables but not all of them, or whose bullet count doesn't match the CHANGELOG. Run `python -m unittest discover -s tools -p test_gen_release_notes.py` to check large notes through Java compilation and exact text round trips.
+`tools/gen-release-notes.py` generates the in-app What's new text from the concise summaries in `extensions/tiktok/src/main/l10n/notes/en.txt`, starting at 0.60.0. The full CHANGELOG remains the release history linked from the dialog. Translated summaries go in `notes/<table>.txt`, one file per settings table in the CHANGELOG's own shape. A phone whose settings are translated reads a release in its own language when that file has it, and English otherwise. Every summary must preserve the change's limits and required actions. The generator validates version headings, dates, issue references and bullet counts against the CHANGELOG. It rejects a release translated for only some tables. Runtime chunks keep international text within Java's string-constant limit. Run `python -m unittest discover -s tools -p test_gen_release_notes.py` to check Java compilation and exact text round trips.
 
 A release runs from `scripts/release/release.ps1`, one stage at a time: `prepare`, `preflight`, `build`, `publish` and `index`. Each stage checks that the one before it finished, so after a fix you rerun only that stage. The text work lives in `tools/release_text.py`. It cuts the CHANGELOG, checks the translated notes, writes the GitHub notes from the whole CHANGELOG section and points the index, README and bug form at the new release. Translate a bullet into every notes table when you add it under `## Unreleased`. `py -3.13 tools/release_text.py check-translations --unreleased` checks them, and the cut carries them into the release. `python -m unittest discover -s tools -p test_release_text.py` runs its tests.
 
