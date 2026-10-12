@@ -442,6 +442,53 @@ public class InboxQueryNativeTest {
         HookStatus.clear();
     }
 
+    @Test public void aThrowInOneListEndsTheSearchInEveryOpenList() {
+        HookStatus.clear();
+        Surface querying = new Surface(false);
+        View queryingBar = querying.outer.getChildAt(1);
+        assertTrue(InboxQueryNative.query(querying.owner(), "alpha", MATCH));
+        querying.diff.accept(0);
+        assertIdentity(querying.state.published, querying.alpha);
+
+        Surface failing = new Surface(true);
+        View failingBar = failing.outer.getChildAt(1);
+        InboxQueryNative.renderedReader = adapter -> { throw new ClassCastException("a drifted native row"); };
+        ((EditText) ((ViewGroup) failingBar).getChildAt(0)).setText("alpha");
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(200));
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+
+        assertNull(failingBar.getParent());
+        assertNull("the list that was searching lost its bar too", queryingBar.getParent());
+        assertIdentity(querying.state.published, querying.alpha, querying.beta);
+        assertEquals(14, querying.state.mask);
+        assertNull(InboxQueryOwners.ownerForTests(querying.list));
+        assertNull(InboxQueryOwners.ownerForTests(failing.list));
+        HookStatus.clear();
+    }
+
+    /** The aligned indices are posted to the list's queue, outside any native frame. */
+    @Test public void aNativeIndexHelperThatThrowsAfterAQueryHandsTheListBack() {
+        HookStatus.clear();
+        Surface surface = new Surface(false);
+        View bar = surface.outer.getChildAt(1);
+        surface.fragment.indicesEnabled = true;
+        surface.fragment.nativeIndexed(surface.state.LJ, new Pair<>(0, 1));
+        assertEquals(1, surface.fragment.helper.calls);
+        surface.fragment.helper.failure = new IndexOutOfBoundsException("a drifted adapter");
+
+        assertTrue(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+        surface.diff.accept(0);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+
+        assertEquals("the posted alignment reached TikTok's helper", 2, surface.fragment.helper.calls);
+        assertIdentity(surface.state.published, surface.alpha, surface.beta);
+        assertNull(bar.getParent());
+        assertNull(InboxQueryOwners.ownerForTests(surface.list));
+        assertTrue(HookStatus.missing(InboxQueryOwners.FAMILY).toString(), HookStatus.missing(InboxQueryOwners.FAMILY)
+                .contains("a working 'visible rows' hook (it threw java.lang.IndexOutOfBoundsException)"));
+        HookStatus.clear();
+    }
+
     @Test public void wholeHostDetachLeavesSiblingChildrenStableUntilTraversalFinishes() {
         Surface surface = new Surface(false);
         int nativePadding = surface.list.getPaddingTop();

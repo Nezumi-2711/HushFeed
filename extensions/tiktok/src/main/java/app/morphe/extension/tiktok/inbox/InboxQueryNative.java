@@ -86,13 +86,24 @@ final class InboxQueryNative {
         });
     }
 
-    /** Closing the owner republishes TikTok's unfiltered list if a query was showing and drops the bar. */
+    /**
+     * Closing an owner republishes TikTok's unfiltered list if a query was showing and drops the
+     * bar. Every open list closes, not just the one that threw: another Activity list would
+     * otherwise keep searching into the same fault. The closing runs even if reporting throws.
+     */
     static void failed(InboxQueryOwners.Owner owner, String hook, Throwable failure) {
         threw = true;
-        HookStatus.threw(InboxQueryOwners.FAMILY, hook, failure);
-        Logger.printException(() -> "Loaded Inbox search threw and is off until TikTok restarts", failure);
-        try { owner.close(); }
-        catch (Throwable cleanup) { Logger.printException(() -> "Could not hand the Inbox list back to TikTok", cleanup); }
+        try {
+            HookStatus.threw(InboxQueryOwners.FAMILY, hook, failure);
+            Logger.printException(() -> "Loaded Inbox search threw and is off until TikTok restarts", failure);
+        } finally {
+            List<InboxQueryOwners.Owner> owners = InboxQueryOwners.snapshot();
+            if (!owners.contains(owner)) owners.add(owner);
+            for (InboxQueryOwners.Owner open : owners) {
+                try { open.close(); }
+                catch (Throwable cleanup) { Logger.printException(() -> "Could not hand the Inbox list back to TikTok", cleanup); }
+            }
+        }
     }
 
     static void resetForTests() { threw = false; }
@@ -102,7 +113,8 @@ final class InboxQueryNative {
         InboxQueryOwners.Owner owner = InboxQueryOwners.forState(state);
         if (owner == null) return models;
         Surface surface = SURFACES.get(owner);
-        if (surface == null || (!Settings.INBOX_LOADED_SEARCH.get() && owner.query.phase() == LoadedInboxQuery.Phase.IDLE)) return models;
+        if (surface == null || threw
+                || (!Settings.INBOX_LOADED_SEARCH.get() && owner.query.phase() == LoadedInboxQuery.Phase.IDLE)) return models;
         synchronized (InboxNativeRequests.LOCK) {
             Emission emission = EMITTING.get();
             LoadedInboxQuery.Publication publication;
@@ -256,7 +268,7 @@ final class InboxQueryNative {
     }
 
     static boolean query(InboxQueryOwners.Owner owner, String value, LoadedInboxQuery.Matcher matcher) {
-        if (Looper.myLooper() != Looper.getMainLooper() || !owner.current()) return false;
+        if (threw || Looper.myLooper() != Looper.getMainLooper() || !owner.current()) return false;
         Surface surface = SURFACES.get(owner);
         if (surface == null) return false;
         synchronized (InboxNativeRequests.LOCK) {
@@ -320,28 +332,37 @@ final class InboxQueryNative {
         return false;
     }
 
+    /**
+     * The aligned callback runs from the list's queue on TikTok's main thread, outside any native
+     * frame, so a throw from it, TikTok's helper included, ends the search like a bar hook's.
+     */
     private static void postIndices(InboxQueryOwners.Owner owner, long generation) {
         View list = owner.list.get();
         if (list == null) return;
         list.post(() -> {
-            if (!owner.current() || owner.query.committedGeneration() != generation) return;
-            Surface surface = SURFACES.get(owner);
-            Object helper = surface == null ? null : surface.indices.get();
-            if (helper == null || !Boolean.TRUE.equals(Reflect.invoke(owner.fragment.get(), "hushLoadedInboxIndicesEnabled"))) return;
-            Object layout = Reflect.invoke(list, "getLayoutManager");
-            Object first = Reflect.invoke(layout, "findFirstCompletelyVisibleItemPosition");
-            Object last = Reflect.invoke(layout, "findLastCompletelyVisibleItemPosition");
-            if (!(first instanceof Integer) || !(last instanceof Integer)) return;
-            LoadedInboxQuery.Alignment alignment = owner.query.callback(generation, (Integer) first, (Integer) last);
-            if (alignment == null) return;
-            try {
-                Class<?> pair = Class.forName("kotlin.Pair", false, list.getClass().getClassLoader());
-                Object positions = pair.getConstructor(Object.class, Object.class).newInstance(first, last);
-                call(helper, "LJFF", alignment.models, positions);
-            } catch (ReflectiveOperationException failure) {
-                Logger.printException(() -> "Could not align loaded Inbox positions", failure);
-            }
+            try { alignIndices(owner, list, generation); }
+            catch (Throwable failure) { failed(owner, "visible rows", failure); }
         });
+    }
+
+    private static void alignIndices(InboxQueryOwners.Owner owner, View list, long generation) {
+        if (threw || !owner.current() || owner.query.committedGeneration() != generation) return;
+        Surface surface = SURFACES.get(owner);
+        Object helper = surface == null ? null : surface.indices.get();
+        if (helper == null || !Boolean.TRUE.equals(Reflect.invoke(owner.fragment.get(), "hushLoadedInboxIndicesEnabled"))) return;
+        Object layout = Reflect.invoke(list, "getLayoutManager");
+        Object first = Reflect.invoke(layout, "findFirstCompletelyVisibleItemPosition");
+        Object last = Reflect.invoke(layout, "findLastCompletelyVisibleItemPosition");
+        if (!(first instanceof Integer) || !(last instanceof Integer)) return;
+        LoadedInboxQuery.Alignment alignment = owner.query.callback(generation, (Integer) first, (Integer) last);
+        if (alignment == null) return;
+        try {
+            Class<?> pair = Class.forName("kotlin.Pair", false, list.getClass().getClassLoader());
+            Object positions = pair.getConstructor(Object.class, Object.class).newInstance(first, last);
+            call(helper, "LJFF", alignment.models, positions);
+        } catch (ReflectiveOperationException failure) {
+            Logger.printException(() -> "Could not align loaded Inbox positions", failure);
+        }
     }
 
     static Object call(Object target, String name, Object... arguments) {
