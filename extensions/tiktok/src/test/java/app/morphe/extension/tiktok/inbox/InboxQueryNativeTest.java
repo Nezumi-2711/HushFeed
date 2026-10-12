@@ -695,6 +695,36 @@ public class InboxQueryNativeTest {
         assertSearchEnded(surface, "loaded refresh");
     }
 
+    @Test public void aThrowInARequestGateLetsTikToksRequestGoAhead() {
+        Surface allowed = searchingThenFaultAt("loaded request");
+        assertTrue("a paused list's request goes ahead once the search ends", InboxFilter.allowLoadedRequest(allowed.vm));
+        assertSearchEnded(allowed, "loaded request");
+        InboxQueryOwners.resetForTests();
+        for (boolean viaClosure : new boolean[] {false, true}) {
+            Surface started = searchingThenFaultAt("loaded request start");
+            assertTrue(viaClosure ? InboxFilter.beginLoadedClosureRequest(new Closure(started.vm))
+                    : InboxFilter.beginLoadedRequest(started.vm));
+            assertSearchEnded(started, "loaded request start");
+            InboxQueryOwners.resetForTests();
+        }
+    }
+
+    @Test public void aThrowWhileARequestReturnsOrLaunchesItsJobReturnsNormallyAndHandsTheListBack() {
+        for (String hook : new String[] {"loaded request return", "loaded request job"}) {
+            for (boolean viaClosure : new boolean[] {false, true}) {
+                Surface surface = searchingThenFaultAt(hook);
+                Object job = new InboxNativeRequestsTest.NativeJob();
+                if (hook.equals("loaded request return")) {
+                    if (viaClosure) InboxFilter.returnedLoadedClosureRequest(new Closure(surface.vm));
+                    else InboxFilter.returnedLoadedRequest(surface.vm);
+                } else if (viaClosure) InboxFilter.onLoadedClosureRequestJob(new Closure(surface.vm), job);
+                else InboxFilter.onLoadedRequestJob(surface.vm, job);
+                assertSearchEnded(surface, hook);
+                InboxQueryOwners.resetForTests();
+            }
+        }
+    }
+
     @Test public void aNativeIndexedFailureDoesNotEndTheSearch() {
         HookStatus.clear();
         Surface surface = new Surface(false);

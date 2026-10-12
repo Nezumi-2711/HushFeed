@@ -129,7 +129,7 @@ final class InboxQueryNative {
         catch (Throwable ignored) { /* the native frame must get its default back */ }
     }
 
-    private static void probe(String hook) {
+    static void probe(String hook) {
         Fault current = fault;
         if (current != null) current.at(hook);
     }
