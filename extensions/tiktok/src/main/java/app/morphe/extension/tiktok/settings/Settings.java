@@ -201,6 +201,15 @@ public class Settings extends BaseSettings {
     /** A long press on Favorites plays at the hold speed instead of offering a new collection. */
     public static final BooleanSetting RAIL_HOLD_FAVORITES =
             new BooleanSetting("rail_hold_favorites", FALSE, RAIL_HOLD_POSSIBLE);
+    /** A long press on a video from someone's profile opens For You's full menu (#120). */
+    public static final BooleanSetting LONG_PRESS_FULL_MENU_ON_PROFILES =
+            new BooleanSetting("long_press_full_menu_on_profiles", FALSE, new Setting.Availability() {
+                // Only a long press left to TikTok opens its menu at all.
+                @Override
+                public boolean isAvailable() {
+                    return !GestureActions.takesLongPress(LONG_PRESS_ACTION.savedValue());
+                }
+            });
     /** What a left swipe on a feed video does: TikTok's creator profile, nothing, or the comments. */
     public static final StringSetting SWIPE_LEFT_ACTION = new StringSetting("swipe_left_action", "default");
     public static final BooleanSetting EDGE_SEEK = new BooleanSetting("edge_seek", FALSE);

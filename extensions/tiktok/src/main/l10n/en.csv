@@ -136,6 +136,7 @@ A forced value applies to this copy of TikTok whichever account is signed in. It
 A long press on Comment plays the video at the hold speed instead of opening the emoji row. It needs Long press on TikTok default and Seek from the edges off.,A long press on Comment plays the video at the hold speed instead of opening the emoji row. It needs Long press on TikTok default and Seek from the edges off.
 A long press on Favorites plays the video at the hold speed instead of offering a new collection. It needs Long press on TikTok default and Seek from the edges off.,A long press on Favorites plays the video at the hold speed instead of offering a new collection. It needs Long press on TikTok default and Seek from the edges off.
 A long press on Share plays the video at the hold speed instead of opening the quick share row. It needs Long press on TikTok default and Seek from the edges off.,A long press on Share plays the video at the hold speed instead of opening the quick share row. It needs Long press on TikTok default and Seek from the edges off.
+"A long press on a video you opened from someone's profile opens the same menu as on For You, not the small share sheet. It needs Long press on TikTok default.","A long press on a video you opened from someone's profile opens the same menu as on For You, not the small share sheet. It needs Long press on TikTok default."
 A message is already on its way,A message is already on its way
 A name of your own under this tab's icon. Leave it empty to keep TikTok's.,A name of your own under this tab's icon. Leave it empty to keep TikTok's.
 A port is a whole number from 1 to 65535,A port is a whole number from 1 to 65535
@@ -605,6 +606,7 @@ Full changelog,Full changelog
 Full comment sort options,Full comment sort options
 Full license,Full license
 Full link copied,Full link copied
+Full long-press menu on a creator's videos,Full long-press menu on a creator's videos
 Full report saved to %1$s,Full report saved to %1$s
 GIF,GIF
 Galaxy Store,Galaxy Store
