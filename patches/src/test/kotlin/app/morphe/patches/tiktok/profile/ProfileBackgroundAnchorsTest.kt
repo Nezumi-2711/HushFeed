@@ -51,6 +51,13 @@ class ProfileBackgroundAnchorsTest {
             }
             assertTrue("$version: ${holder.type}->${gate.name} doesn't read $ALLOW_LIST", readsAllowList)
 
+            // The switch answers with the avatar layout check: it must be the static boolean
+            // the gate asks on both branches, once before each return of true.
+            val layoutCheck = gate.profileBackgroundLayoutCheck()
+            assertTrue("$version: no single layout check in ${gate.name}", layoutCheck != null)
+            assertEquals("$version: the layout check isn't asked on both branches", 2,
+                gate.calls().count { "${it.definingClass}->${it.name}()Z" == layoutCheck })
+
             val body = gate.implementation!!
             assertTrue("$version: no local for the switch's answer",
                 body.registerCount - gate.numberOfParameterRegisters >= 1)

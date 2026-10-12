@@ -14,8 +14,10 @@ import app.morphe.extension.tiktok.settings.Settings;
  * <p>TikTok ships the whole profile background feature, the editor under Edit profile included,
  * and decides per account with one gate in its profile background experiment (31744). The editor
  * asks it with true and needs the account on the server's allow list; a profile asks it with
- * false to decide whether to show a background. With the switch on the gate answers yes both
- * ways, so the editor TikTok already has opens. Whether a background saved that way is kept is
+ * false to decide whether to show a background. With the switch on the gate skips the allow list
+ * both ways and answers with TikTok's own left-aligned avatar layout check, which every
+ * background is drawn into, so the editor TikTok already has opens wherever that layout is on.
+ * Whether a background saved that way is kept is
  * the server's call: saving goes to TikTok's own commit endpoint, which may refuse an account
  * outside the rollout. With the switch off, and while Hushfeed is paused, the gate runs as TikTok
  * ships it.

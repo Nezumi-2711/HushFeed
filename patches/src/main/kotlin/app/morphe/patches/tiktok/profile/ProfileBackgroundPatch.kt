@@ -18,8 +18,10 @@ import app.morphe.util.addInstruction
 import app.morphe.util.findMutableMethodOf
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
+import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
 private const val PATCH = "Profile background"
@@ -64,6 +66,21 @@ internal fun ClassDef.isProfileBackgroundGateHolder(): Boolean {
 internal fun Method.isProfileBackgroundGate(): Boolean =
     returnType == "Z" && parameterTypes.map(CharSequence::toString) == listOf("Z") && implementation != null
 
+/**
+ * The left-aligned avatar layout check the gate asks on both branches (`X.0ClT.LIZLLL()` on
+ * 47.1.4): the one static no-argument boolean it calls, or null when there isn't exactly one.
+ * A background drawn without that layout lands in the wrong place, so the switch stands in for
+ * the allow list only and still asks this.
+ */
+internal fun Method.profileBackgroundLayoutCheck(): String? =
+    implementation?.instructions
+        ?.filter { it.opcode == Opcode.INVOKE_STATIC || it.opcode == Opcode.INVOKE_STATIC_RANGE }
+        ?.mapNotNull { it.getReference<MethodReference>() }
+        ?.filter { it.returnType == "Z" && it.parameterTypes.isEmpty() }
+        ?.map { "${it.definingClass}->${it.name}()Z" }
+        ?.distinct()
+        ?.singleOrNull()
+
 @Suppress("unused")
 val profileBackgroundPatch = bytecodePatch(
     // A literal, not PATCH: the README and default-selection tests find patches by reading it.
@@ -96,11 +113,16 @@ val profileBackgroundPatch = bytecodePatch(
         // profile. The no-argument boolean beside it on 47.1.4 is a status bar fix of the same
         // experiment that defaults on, not the gate, and stays as TikTok has it.
         val argument = if (AccessFlags.STATIC.isSet(gate.accessFlags)) "p0" else "p1"
+        val layoutCheck = gate.profileBackgroundLayoutCheck() ?: throw PatchException(
+            "$PATCH: ${holder.type}->${gate.name} doesn't call exactly one static () -> boolean " +
+                "layout check, so the switch can't keep TikTok's avatar layout condition.",
+        )
         mutableClassDefBy(holder).findMutableMethodOf(gate).guardAtEntry(
             PATCH,
             "invoke-static/range { $argument .. $argument }, $PROFILE_BACKGROUND_SWITCH",
             """
-                const/4 v0, 0x1
+                invoke-static {}, $layoutCheck
+                move-result v0
                 return v0
             """,
         )
