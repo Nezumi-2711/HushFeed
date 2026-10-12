@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Downloads tem um novo botão abaixo de Qualidade de download do vídeo: Perguntar a qualidade a cada download. Com ele ligado, Baixar lista as qualidades em que o vídeo está disponível, com o tamanho que o TikTok informa para cada uma, e salva a que você escolher. Automático, o arquivo do próprio TikTok, vem sempre primeiro. A qualidade que você definiu continua igual para o próximo download.
+
 * **TikTok:** Uma nova chave ao lado de Toque longo, Menu completo de toque longo nos vídeos de um criador, faz um toque longo em um vídeo que você abriu pelo perfil de alguém abrir o mesmo menu completo de Para você em vez da folha de compartilhamento pequena (#120).
 
 * **TikTok:** Uma nova chave na página Folha de compartilhamento, Copiar o link com um toque em Compartilhar, faz um toque em Compartilhar embaixo de um vídeo copiar o link dele, limpo como um link compartilhado. Um segundo toque logo depois abre a folha de compartilhamento como sempre.

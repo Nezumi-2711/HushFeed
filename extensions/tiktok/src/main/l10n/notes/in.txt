@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Unduhan punya sakelar baru di bawah Kualitas unduhan video: Tanyakan kualitas setiap kali menyimpan. Jika aktif, Unduh menampilkan kualitas yang tersedia untuk video, dengan ukuran yang diberikan TikTok untuk masing-masing, lalu menyimpan yang Anda pilih. Otomatis, yaitu file TikTok sendiri, selalu ada di urutan pertama. Kualitas yang Anda atur tetap sama untuk penyimpanan berikutnya.
+
 * **TikTok:** Sakelar baru di samping Tekan lama, Menu tekan lama lengkap di video kreator, membuat tekan lama pada video yang kamu buka dari profil seseorang membuka menu lengkap yang sama seperti di Untuk Kamu, bukan menu bagikan yang kecil (#120).
 
 * **TikTok:** Sakelar baru di halaman Menu bagikan, Salin tautan dengan sekali tekan Bagikan, membuat tekanan pada Bagikan di bawah video menyalin tautan video itu, dibersihkan seperti tautan yang dibagikan. Tekanan kedua tepat setelahnya membuka menu bagikan seperti biasa.
