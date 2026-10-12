@@ -2191,3 +2191,20 @@ The list changed while loading. Results are incomplete.	Список измен�
 TikTok reports additional filtered accounts. This list is incomplete.	По данным TikTok, есть ещё отфильтрованные аккаунты. Этот список неполный.
 Saved post	Сохранённая публикация
 Blocked account	Заблокированный аккаунт
+Use an imported font	Использовать импортированный шрифт
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	Показывает текст TikTok шрифтом из файла, который вы импортируете ниже. Если включены оба переключателя, этот важнее, чем Использовать системный шрифт. Если файл удалён или не читается, текст снова выглядит так, как его показывает Использовать системный шрифт.
+Import a font file	Импортировать файл шрифта
+Remove the imported font	Удалить импортированный шрифт
+Pick a .ttf or .otf file of up to %1$s MB.	Выберите файл .ttf или .otf размером до %1$s МБ.
+Imported: %1$s. Pick another file to replace it.	Импортирован: %1$s. Выберите другой файл, чтобы заменить его.
+Reading the font file	Чтение файла шрифта
+Deletes %1$s from TikTok's storage.	Удаляет %1$s из хранилища TikTok.
+No font is imported	Шрифт не импортирован
+%1$s is imported. Restart TikTok to see it.	%1$s импортирован. Перезапустите TikTok, чтобы увидеть изменения.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s импортирован. Включите Использовать импортированный шрифт, чтобы увидеть его.
+%1$s is removed. Restart TikTok to see the change.	%1$s удалён. Перезапустите TikTok, чтобы увидеть изменения.
+%1$s is removed	%1$s удалён
+Couldn't remove the imported font. Try again.	Не удалось удалить импортированный шрифт. Попробуйте снова.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	Не удалось сохранить шрифт в хранилище TikTok. Освободите немного места и попробуйте снова.
+That file is larger than %1$s MB. Choose a smaller font file.	Файл больше %1$s МБ. Выберите файл шрифта меньшего размера.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	Этот файл не шрифт, который может использовать Android. Выберите файл .ttf или .otf.

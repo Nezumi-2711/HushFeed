@@ -2023,3 +2023,20 @@ The list changed while loading. Results are incomplete.	Siyahı yüklənərkən 
 TikTok reports additional filtered accounts. This list is incomplete.	TikTok əlavə süzgəclənmiş hesablar olduğunu bildirir. Bu siyahı natamamdır.
 Saved post	Yadda saxlanmış paylaşım
 Blocked account	Bloklanmış hesab
+Use an imported font	İdxal edilmiş şriftdən istifadə edin
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	TikTok mətnini aşağıda idxal etdiyiniz şrift faylı ilə göstərir. Hər ikisi açıq olduqda bu ayar Sistem şriftindən istifadə edin ayarından üstündür. Fayl silinərsə və ya oxuna bilməzsə, mətn Sistem şriftindən istifadə edin ayarının göstərdiyi kimi olur.
+Import a font file	Şrift faylını idxal edin
+Remove the imported font	İdxal edilmiş şrifti silin
+Pick a .ttf or .otf file of up to %1$s MB.	Ən çoxu %1$s MB olan .ttf və ya .otf faylı seçin.
+Imported: %1$s. Pick another file to replace it.	İdxal edilib: %1$s. Onu əvəz etmək üçün başqa fayl seçin.
+Reading the font file	Şrift faylı oxunur
+Deletes %1$s from TikTok's storage.	%1$s faylını TikTok-un yaddaşından silir.
+No font is imported	İdxal edilmiş şrift yoxdur
+%1$s is imported. Restart TikTok to see it.	%1$s idxal edildi. Dəyişikliyi görmək üçün TikTok-u yenidən başladın.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s idxal edildi. Onu görmək üçün İdxal edilmiş şriftdən istifadə edin ayarını açın.
+%1$s is removed. Restart TikTok to see the change.	%1$s silindi. Dəyişikliyi görmək üçün TikTok-u yenidən başladın.
+%1$s is removed	%1$s silindi
+Couldn't remove the imported font. Try again.	İdxal edilmiş şrift silinə bilmədi. Yenidən cəhd edin.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	Şrift TikTok-un yaddaşında saxlanıla bilmədi. Bir az yer boşaldıb yenidən cəhd edin.
+That file is larger than %1$s MB. Choose a smaller font file.	Bu fayl %1$s MB-dan böyükdür. Daha kiçik şrift faylı seçin.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	Bu fayl Android-in istifadə edə biləcəyi şrift deyil. .ttf və ya .otf faylı seçin.

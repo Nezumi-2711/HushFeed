@@ -13,6 +13,7 @@ import app.morphe.extension.tiktok.privacy.StoreIdentity;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 import app.morphe.extension.tiktok.settings.preference.ChoicePreference;
+import app.morphe.extension.tiktok.settings.preference.ImportedFontPreference;
 import app.morphe.extension.tiktok.settings.preference.InputTextPreference;
 import app.morphe.extension.tiktok.settings.preference.ProfileShortcutChecklistPreference;
 import app.morphe.extension.tiktok.settings.preference.LocalProfileCountsPreference;
@@ -112,6 +113,18 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                             + "phone doesn't have yet may show as a box or in pieces.",
                     Settings.SYSTEM_EMOJI
             ));
+            // The same hook again: the font engine's exit asks one question, imported font
+            // first, then the system font, then TikTok's own.
+            addPreference(new TogglePreference(
+                    context,
+                    "Use an imported font",
+                    "Shows TikTok's text in the font file you import below. While both are on, "
+                            + "this one wins over Use system font. If the file is removed or "
+                            + "can't be read, the text goes back to what Use system font shows.",
+                    Settings.IMPORTED_FONT
+            ));
+            addPreference(ImportedFontPreference.pickRow(context));
+            addPreference(ImportedFontPreference.removeRow(context));
         }
         if (SettingsStatus.turnOffHapticsEnabled) {
             addPreference(new TogglePreference(

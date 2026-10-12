@@ -36,6 +36,10 @@ source,target
 "%1$s hid everything TikTok sent, %2$d times in a row. Turn it off if that's not what you wanted.","%1$s hid everything TikTok sent, %2$d times in a row. Turn it off if that's not what you wanted."
 %1$s is a kind of value the Lab can't override.,%1$s is a kind of value the Lab can't override.
 %1$s is already hidden,%1$s is already hidden
+%1$s is imported. Restart TikTok to see it.,%1$s is imported. Restart TikTok to see it.
+%1$s is imported. Turn on Use an imported font to see it.,%1$s is imported. Turn on Use an imported font to see it.
+%1$s is removed,%1$s is removed
+%1$s is removed. Restart TikTok to see the change.,%1$s is removed. Restart TikTok to see the change.
 "%1$s is too long for a settings backup. Shorten it, then save the backup again.","%1$s is too long for a settings backup. Shorten it, then save the backup again."
 "%1$s isn't a country code, so no video would ever match it. Use two letters, like GB, IE or US.","%1$s isn't a country code, so no video would ever match it. Use two letters, like GB, IE or US."
 "%1$s isn't a language code, so no video would ever match it. Use two letters, like en, es or de.","%1$s isn't a language code, so no video would ever match it. Use two letters, like en, es or de."
@@ -399,12 +403,14 @@ Couldn't read that file. Choose it again.,Couldn't read that file. Choose it aga
 Couldn't read this list. Close it and try again.,Couldn't read this list. Close it and try again.
 Couldn't read who posted this comment. Open their profile and block them there.,Couldn't read who posted this comment. Open their profile and block them there.
 Couldn't record the screen's layout. Start again from Diagnostics.,Couldn't record the screen's layout. Start again from Diagnostics.
+Couldn't remove the imported font. Try again.,Couldn't remove the imported font. Try again.
 Couldn't reset the settings. Try again.,Couldn't reset the settings. Try again.
 Couldn't reset this override. Try again.,Couldn't reset this override. Try again.
 Couldn't restart TikTok. Close it and open it again.,Couldn't restart TikTok. Close it and open it again.
 Couldn't restore seen history. Your saved history is unchanged.,Couldn't restore seen history. Your saved history is unchanged.
 Couldn't restore the settings. Try again.,Couldn't restore the settings. Try again.
 Couldn't save the change. Try again.,Couldn't save the change. Try again.
+Couldn't save the font in TikTok's storage. Free up some space and try again.,Couldn't save the font in TikTok's storage. Free up some space and try again.
 Couldn't save the seen-history file. Try again.,Couldn't save the seen-history file. Try again.
 Couldn't save the settings backup. Try again.,Couldn't save the settings backup. Try again.
 Couldn't save these choices. Try again.,Couldn't save these choices. Try again.
@@ -455,6 +461,7 @@ Days to remember a video. Zero removes the age limit. History keeps at most %1$s
 "Days. Zero keeps every age. Posts without a usable timestamp, including future posts, stay visible.","Days. Zero keeps every age. Posts without a usable timestamp, including future posts, stay visible."
 Default,Default
 Default playback speed,Default playback speed
+Deletes %1$s from TikTok's storage.,Deletes %1$s from TikTok's storage.
 Delivery unconfirmed: %1$d/%2$d chats. Remaining chats still need a message.,Delivery unconfirmed: %1$d/%2$d chats. Remaining chats still need a message.
 Delivery unconfirmed: %1$d/%2$d chats. Those chats won't be retried today.,Delivery unconfirmed: %1$d/%2$d chats. Those chats won't be retried today.
 Description text size,Description text size
@@ -814,11 +821,13 @@ Hushfeed's downloader: %1$s,Hushfeed's downloader: %1$s
 "Hushfeed's switches are paused. Your settings stay saved. Changes made when you patched, like the app's name or icon, stay.","Hushfeed's switches are paused. Your settings stay saved. Changes made when you patched, like the app's name or icon, stay."
 "If that name is taken, Android adds a number to the new file.","If that name is taken, Android adds a number to the new file."
 "If that name is taken, Hushfeed adds a number to the new file.","If that name is taken, Hushfeed adds a number to the new file."
+Import a font file,Import a font file
 Import finished,Import finished
 Import loaded values,Import loaded values
 Import watch history,Import watch history
 Imported %1$d values,Imported %1$d values
 Imported %1$d values. Undo last Lab change is in the menu.,Imported %1$d values. Undo last Lab change is in the menu.
+Imported: %1$s. Pick another file to replace it.,Imported: %1$s. Pick another file to replace it.
 Importing new history ended Undo for the earlier clear. You can clear the imported history.,Importing new history ended Undo for the earlier clear. You can clear the imported history.
 Importing watch history,Importing watch history
 In a chat,In a chat
@@ -997,6 +1006,7 @@ No creator to hide on this video,No creator to hide on this video
 No current value,No current value
 No current value and no active override,No current value and no active override
 No delay,No delay
+No font is imported,No font is imported
 No gate data is available. Refresh values from the menu to try again.,No gate data is available. Refresh values from the menu to try again.
 No gate reads were recorded. Use a TikTok feature while recording.,No gate reads were recorded. Use a TikTok feature while recording.
 No gates match this filter.,No gates match this filter.
@@ -1133,6 +1143,7 @@ Photo destination,Photo destination
 Photo filename,Photo filename
 Photos and stickers,Photos and stickers
 "Photos can't be saved to the folder in that file, so your photo folder was kept","Photos can't be saved to the folder in that file, so your photo folder was kept"
+Pick a .ttf or .otf file of up to %1$s MB.,Pick a .ttf or .otf file of up to %1$s MB.
 "Pick apps to add to the Share via row, before More. Each gets the same link the other apps get.","Pick apps to add to the Share via row, before More. Each gets the same link the other apps get."
 Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.,Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.
 Pick the buttons to take off the column. The rest stay where they are.,Pick the buttons to take off the column. The rest stay where they are.
@@ -1203,6 +1214,7 @@ Quality,Quality
 Quick setup,Quick setup
 Read-only list. Accounts won't be opened or unblocked.,Read-only list. Accounts won't be opened or unblocked.
 Reading,Reading
+Reading the font file,Reading the font file
 Reading the seen-history file,Reading the seen-history file
 Reading watch history,Reading watch history
 Received message translation,Received message translation
@@ -1225,6 +1237,7 @@ Remove feed ads,Remove feed ads
 "Remove feed ads, creator commission posts, paid partnerships, and branded content.","Remove feed ads, creator commission posts, paid partnerships, and branded content."
 Remove story rings,Remove story rings
 Remove the LIVE ring,Remove the LIVE ring
+Remove the imported font,Remove the imported font
 Remove watermark,Remove watermark
 Removed %1$s,Removed %1$s
 "Reopen Hushfeed settings, then choose the file","Reopen Hushfeed settings, then choose the file"
@@ -1484,6 +1497,7 @@ Show where a video was posted,Show where a video was posted
 Showing %1$s again,Showing %1$s again
 "Shows TikTok's full sort menu on every post, with hot, newest, media and creator options, instead of the shorter one your account got. Restart TikTok to see the change.","Shows TikTok's full sort menu on every post, with hot, newest, media and creator options, instead of the shorter one your account got. Restart TikTok to see the change."
 "Shows TikTok's play, pause, previous and next buttons on the feed. TikTok normally shows them only to people who use a screen reader. TikTok can see when you use them.","Shows TikTok's play, pause, previous and next buttons on the feed. TikTok normally shows them only to people who use a screen reader. TikTok can see when you use them."
+"Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.","Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows."
 Shows TikTok's text in your phone's font instead of TikTok Sans. Icons and gift animations keep their own fonts. Restart TikTok to see the change.,Shows TikTok's text in your phone's font instead of TikTok Sans. Icons and gift animations keep their own fonts. Restart TikTok to see the change.
 "Shows a small count under TikTok's top tabs of what the feed filter has removed since TikTok started. It shows only on the feed, and taps on it go through to the video under it.","Shows a small count under TikTok's top tabs of what the feed filter has removed since TikTok started. It shows only on the feed, and taps on it go through to the video under it."
 Shows every emoji in your phone's own emoji font. The newest emoji your phone doesn't have yet may show as a box or in pieces.,Shows every emoji in your phone's own emoji font. The newest emoji your phone doesn't have yet may show as a box or in pieces.
@@ -1620,8 +1634,10 @@ That creator is already in the list,That creator is already in the list
 "That creator pattern is too long, so it wasn't added: %1$s","That creator pattern is too long, so it wasn't added: %1$s"
 That file has more than %1$s watch-history entries.,That file has more than %1$s watch-history entries.
 That file is larger than %1$s MB. Choose a seen-history file saved by Hushfeed.,That file is larger than %1$s MB. Choose a seen-history file saved by Hushfeed.
+That file is larger than %1$s MB. Choose a smaller font file.,That file is larger than %1$s MB. Choose a smaller font file.
 That file is larger than %1$s MB. Choose a smaller watch-history export.,That file is larger than %1$s MB. Choose a smaller watch-history export.
 That file is too large to be a settings backup. Nothing was altered.,That file is too large to be a settings backup. Nothing was altered.
+That file isn't a font Android can use. Choose a .ttf or .otf file.,That file isn't a font Android can use. Choose a .ttf or .otf file.
 "That file isn't a loaded-values export, or it's larger than the Lab accepts","That file isn't a loaded-values export, or it's larger than the Lab accepts"
 "That file isn't readable text, so it may have been damaged in transit. Nothing was altered.","That file isn't readable text, so it may have been damaged in transit. Nothing was altered."
 That file lists more than %1$s videos. Nothing was restored.,That file lists more than %1$s videos. Nothing was restored.
@@ -1897,6 +1913,7 @@ Use TikTok for a while. A popup shows up here after TikTok first tries to show i
 "Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another.","Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another."
 Use a default playback speed,Use a default playback speed
 "Use a whole number from 0 to %1$s, or leave the field empty.","Use a whole number from 0 to %1$s, or leave the field empty."
+Use an imported font,Use an imported font
 Use non-personalized search,Use non-personalized search
 Use screen lock,Use screen lock
 Use system emoji,Use system emoji

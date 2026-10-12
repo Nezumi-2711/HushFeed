@@ -2026,3 +2026,20 @@ The list changed while loading. Results are incomplete.	Die Liste hat sich beim 
 TikTok reports additional filtered accounts. This list is incomplete.	Laut TikTok gibt es weitere gefilterte Konten. Diese Liste ist unvollständig.
 Saved post	Gespeicherter Beitrag
 Blocked account	Blockiertes Konto
+Use an imported font	Importierte Schrift verwenden
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	Zeigt den Text von TikTok in der Schriftdatei, die du unten importierst. Sind beide an, hat diese Einstellung Vorrang vor Systemschrift verwenden. Wird die Datei entfernt oder kann sie nicht gelesen werden, sieht der Text wieder so aus, wie Systemschrift verwenden ihn zeigt.
+Import a font file	Schriftdatei importieren
+Remove the imported font	Importierte Schrift entfernen
+Pick a .ttf or .otf file of up to %1$s MB.	Wähle eine .ttf- oder .otf-Datei mit höchstens %1$s MB.
+Imported: %1$s. Pick another file to replace it.	Importiert: %1$s. Wähle eine andere Datei, um sie zu ersetzen.
+Reading the font file	Schriftdatei wird gelesen
+Deletes %1$s from TikTok's storage.	Löscht %1$s aus dem Speicher von TikTok.
+No font is imported	Keine Schrift importiert
+%1$s is imported. Restart TikTok to see it.	%1$s ist importiert. Starte TikTok neu, um die Änderung zu sehen.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s ist importiert. Schalte Importierte Schrift verwenden ein, um sie zu sehen.
+%1$s is removed. Restart TikTok to see the change.	%1$s ist entfernt. Starte TikTok neu, um die Änderung zu sehen.
+%1$s is removed	%1$s ist entfernt
+Couldn't remove the imported font. Try again.	Die importierte Schrift konnte nicht entfernt werden. Versuch es noch einmal.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	Die Schrift konnte nicht im Speicher von TikTok gesichert werden. Gib etwas Speicherplatz frei und versuch es noch einmal.
+That file is larger than %1$s MB. Choose a smaller font file.	Die Datei ist größer als %1$s MB. Wähle eine kleinere Schriftdatei.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	Die Datei ist keine Schrift, die Android verwenden kann. Wähle eine .ttf- oder .otf-Datei.

@@ -106,6 +106,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting ALLOW_SCREEN_CAPTURE = new BooleanSetting("allow_screen_capture", FALSE, true);
     public static final BooleanSetting SYSTEM_FONT = new BooleanSetting("system_font", FALSE, true);
     public static final BooleanSetting SYSTEM_EMOJI = new BooleanSetting("system_emoji", FALSE, true);
+    // Use system font's hook draws TikTok's text in the imported font file while this is on and
+    // the file loads; it wins over SYSTEM_FONT. The file itself lives in TikTok's files, not here.
+    public static final BooleanSetting IMPORTED_FONT = new BooleanSetting("imported_font", FALSE, true);
     // Off by default: both patches are in the default selection, so the switch is the ask.
     public static final BooleanSetting TURN_OFF_HAPTICS = new BooleanSetting("turn_off_haptics", FALSE);
     public static final BooleanSetting TURN_OFF_SCREEN_TRANSITIONS =

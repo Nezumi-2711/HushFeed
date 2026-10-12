@@ -2023,3 +2023,20 @@ The list changed while loading. Results are incomplete.	A lista mudou durante o 
 TikTok reports additional filtered accounts. This list is incomplete.	O TikTok informa mais contas filtradas. Esta lista está incompleta.
 Saved post	Post salvo
 Blocked account	Conta bloqueada
+Use an imported font	Usar uma fonte importada
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	Mostra o texto do TikTok com o arquivo de fonte que você importar abaixo. Com as duas ativadas, esta tem prioridade sobre Usar a fonte do sistema. Se o arquivo for removido ou não puder ser lido, o texto volta a aparecer como Usar a fonte do sistema mostra.
+Import a font file	Importar um arquivo de fonte
+Remove the imported font	Remover a fonte importada
+Pick a .ttf or .otf file of up to %1$s MB.	Escolha um arquivo .ttf ou .otf de até %1$s MB.
+Imported: %1$s. Pick another file to replace it.	Importado: %1$s. Escolha outro arquivo para substituí-lo.
+Reading the font file	Lendo o arquivo de fonte
+Deletes %1$s from TikTok's storage.	Apaga %1$s do armazenamento do TikTok.
+No font is imported	Nenhuma fonte importada
+%1$s is imported. Restart TikTok to see it.	%1$s foi importado. Reinicie o TikTok para ver a mudança.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s foi importado. Ative Usar uma fonte importada para ver a mudança.
+%1$s is removed. Restart TikTok to see the change.	%1$s foi removido. Reinicie o TikTok para ver a mudança.
+%1$s is removed	%1$s foi removido
+Couldn't remove the imported font. Try again.	Não foi possível remover a fonte importada. Tente de novo.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	Não foi possível salvar a fonte no armazenamento do TikTok. Libere um pouco de espaço e tente de novo.
+That file is larger than %1$s MB. Choose a smaller font file.	O arquivo tem mais de %1$s MB. Escolha um arquivo de fonte menor.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	O arquivo não é uma fonte que o Android possa usar. Escolha um arquivo .ttf ou .otf.

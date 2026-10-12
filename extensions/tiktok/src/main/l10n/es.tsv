@@ -2023,3 +2023,20 @@ The list changed while loading. Results are incomplete.	La lista cambió mientra
 TikTok reports additional filtered accounts. This list is incomplete.	TikTok indica que hay más cuentas filtradas. Esta lista está incompleta.
 Saved post	Publicación guardada
 Blocked account	Cuenta bloqueada
+Use an imported font	Usar una fuente importada
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	Muestra el texto de TikTok con el archivo de fuente que importes abajo. Si las dos están activadas, esta tiene prioridad sobre Usar la fuente del sistema. Si el archivo se quita o no se puede leer, el texto vuelve a verse como lo muestra Usar la fuente del sistema.
+Import a font file	Importar un archivo de fuente
+Remove the imported font	Quitar la fuente importada
+Pick a .ttf or .otf file of up to %1$s MB.	Elige un archivo .ttf u .otf de hasta %1$s MB.
+Imported: %1$s. Pick another file to replace it.	Importado: %1$s. Elige otro archivo para reemplazarlo.
+Reading the font file	Leyendo el archivo de fuente
+Deletes %1$s from TikTok's storage.	Borra %1$s del almacenamiento de TikTok.
+No font is imported	No hay ninguna fuente importada
+%1$s is imported. Restart TikTok to see it.	%1$s se importó. Reinicia TikTok para ver el cambio.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s se importó. Activa Usar una fuente importada para verla.
+%1$s is removed. Restart TikTok to see the change.	%1$s se quitó. Reinicia TikTok para ver el cambio.
+%1$s is removed	%1$s se quitó
+Couldn't remove the imported font. Try again.	No se pudo quitar la fuente importada. Inténtalo de nuevo.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	No se pudo guardar la fuente en el almacenamiento de TikTok. Libera algo de espacio e inténtalo de nuevo.
+That file is larger than %1$s MB. Choose a smaller font file.	El archivo supera los %1$s MB. Elige un archivo de fuente más pequeño.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	El archivo no es una fuente que Android pueda usar. Elige un archivo .ttf u .otf.

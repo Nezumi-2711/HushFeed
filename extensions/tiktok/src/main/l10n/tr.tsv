@@ -2023,3 +2023,20 @@ The list changed while loading. Results are incomplete.	Liste yüklenirken deği
 TikTok reports additional filtered accounts. This list is incomplete.	TikTok başka filtrelenmiş hesaplar olduğunu bildiriyor. Bu liste eksik.
 Saved post	Kaydedilen gönderi
 Blocked account	Engellenen hesap
+Use an imported font	İçe aktarılan yazı tipini kullan
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	TikTok'un metnini aşağıda içe aktardığınız yazı tipi dosyasıyla gösterir. İkisi de açıksa bu ayar, Sistem yazı tipini kullan ayarından önce gelir. Dosya kaldırılırsa veya okunamazsa metin, Sistem yazı tipini kullan ayarının gösterdiği hâline döner.
+Import a font file	Yazı tipi dosyası içe aktar
+Remove the imported font	İçe aktarılan yazı tipini kaldır
+Pick a .ttf or .otf file of up to %1$s MB.	En fazla %1$s MB boyutunda bir .ttf veya .otf dosyası seçin.
+Imported: %1$s. Pick another file to replace it.	İçe aktarıldı: %1$s. Değiştirmek için başka bir dosya seçin.
+Reading the font file	Yazı tipi dosyası okunuyor
+Deletes %1$s from TikTok's storage.	%1$s dosyasını TikTok'un depolama alanından siler.
+No font is imported	İçe aktarılmış yazı tipi yok
+%1$s is imported. Restart TikTok to see it.	%1$s içe aktarıldı. Değişikliği görmek için TikTok'u yeniden başlatın.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s içe aktarıldı. Görmek için İçe aktarılan yazı tipini kullan ayarını açın.
+%1$s is removed. Restart TikTok to see the change.	%1$s kaldırıldı. Değişikliği görmek için TikTok'u yeniden başlatın.
+%1$s is removed	%1$s kaldırıldı
+Couldn't remove the imported font. Try again.	İçe aktarılan yazı tipi kaldırılamadı. Tekrar deneyin.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	Yazı tipi TikTok'un depolama alanına kaydedilemedi. Biraz yer açıp tekrar deneyin.
+That file is larger than %1$s MB. Choose a smaller font file.	Dosya %1$s MB'tan büyük. Daha küçük bir yazı tipi dosyası seçin.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	Bu dosya, Android'in kullanabileceği bir yazı tipi değil. Bir .ttf veya .otf dosyası seçin.
