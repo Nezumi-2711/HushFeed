@@ -384,6 +384,42 @@ public class LiveStatusBarTest {
     }
 
     /**
+     * #137, seen on the S22: TikTok shows one shade as a room opens and a moment later puts it out
+     * of the layout for another. The fill stayed on the first, so it drew nothing and the strip
+     * under the clock was clear over a shaded room.
+     */
+    @Test public void whenTikTokSwapsItsShadeTheFillFollowsTheNewOne() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        FrameLayout stream = heldStream(live, bar);
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout controls = page(live, stream);
+        View opening = shade(live, controls);
+        room.start().resume().visible();
+        layOut(live);
+        layOut(live);
+        LiveStatusBar.BarShade first = (LiveStatusBar.BarShade) controls.getBackground();
+        assertEquals(0x33000000, first.color());
+
+        opening.setVisibility(View.GONE);
+        View swapped = new View(live);
+        swapped.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[] {0x4D000000, Color.TRANSPARENT}));
+        ((FrameLayout) opening.getParent()).addView(swapped, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(600));
+        layOut(live);
+        layOut(live);
+
+        assertTrue(controls.getBackground() instanceof LiveStatusBar.BarShade);
+        assertEquals("the fill stayed on the shade TikTok put away", 0x4D000000,
+                ((LiveStatusBar.BarShade) controls.getBackground()).color());
+        room.pause().stop().destroy();
+    }
+
+    /**
      * #137, seen on the S22 with 0.71.3: every room is a page of the room pager, and the pager
      * pads a page as it binds a room to it. The search over the window took the panel TikTok
      * shows while a room opens, the first view held down a bar's height, and left every page

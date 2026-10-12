@@ -545,6 +545,20 @@ public final class LiveStatusBar {
             return asDrawn(first, background.getAlpha(), at.getAlpha());
         }
 
+        /**
+         * Whether the shade it follows is still laid out. On 47.1.4 TikTok shows one shade as a
+         * room opens and swaps it for another a moment later, putting the first out of the layout,
+         * so a fill left on the first stayed clear over a shaded room (S22, #137).
+         */
+        boolean following() {
+            View at = shade.get();
+            if (at == null || !at.isAttachedToWindow()) return false;
+            for (View up = at; up != null; up = up.getParent() instanceof View ? (View) up.getParent() : null) {
+                if (up.getVisibility() == View.GONE) return false;
+            }
+            return true;
+        }
+
         /** Whether the shade showed, hid or faded since the strip was last drawn. */
         boolean changed() {
             return color() != drawn;
@@ -854,7 +868,8 @@ public final class LiveStatusBar {
         /**
          * TikTok's top shade is part of the controls, so it went a bar lower with them and the
          * strip under the clock showed lighter than the rest of the top (#137). Each layer held
-         * lower gets a fill across that strip that follows the shade once it's found; a layer
+         * lower gets a fill across that strip that follows the shade once it's found, and is
+         * looked for again when TikTok puts that shade out of the layout for another; a layer
          * with a background of TikTok's own is left alone.
          */
         private void shadeUnderBar() {
@@ -862,7 +877,12 @@ public final class LiveStatusBar {
                 View layer = entry.getKey();
                 if (!(layer instanceof ViewGroup) || layer.getPaddingTop() != entry.getValue() + loweredBy) continue;
                 Drawable background = layer.getBackground();
-                if (background instanceof BarShade ? ((BarShade) background).height == loweredBy : background != null) continue;
+                if (background instanceof BarShade) {
+                    BarShade fill = (BarShade) background;
+                    if (fill.height == loweredBy && fill.following()) continue;
+                } else if (background != null) {
+                    continue;
+                }
                 // Until it's laid out a bar lower nothing in it is where the shade is looked for,
                 // and a room scrolled away can't show a strip.
                 if (layer.isLayoutRequested() || !layer.isAttachedToWindow()) continue;
