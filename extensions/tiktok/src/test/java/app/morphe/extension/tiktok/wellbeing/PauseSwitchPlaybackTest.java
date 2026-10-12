@@ -48,6 +48,14 @@ public class PauseSwitchPlaybackTest {
 
     public static final class HostActivity extends Activity { }
 
+    /** The feed as TikTok builds it: its content set in onCreate, so the window is there by resume. */
+    public static final class FeedActivity extends Activity {
+        @Override protected void onCreate(android.os.Bundle state) {
+            super.onCreate(state);
+            setContentView(new FrameLayout(this));
+        }
+    }
+
     @Before public void setUp() throws Exception {
         Utils.setContext(RuntimeEnvironment.getApplication());
         SessionPlaybackHoldTest.installNativeControls();
@@ -370,6 +378,47 @@ public class PauseSwitchPlaybackTest {
             park(sheet);
             idleFor(300);
             assertEquals(1, player.manager.resumes);
+        }
+    }
+
+    @Test public void theFirstSheetOfAStartStopsTheVideoBeforeAnyCommentBinds() {
+        Settings.PAUSE_ON_COMMENTS.save(true);
+        // The first open of each start used to wait for a comment to bind, which comes only once
+        // the comments have loaded, and a video with none binds nothing at all.
+        try (var owner = Robolectric.buildActivity(FeedActivity.class).create()) {
+            PausePlayback.install(owner.get());
+            owner.start().resume().visible();
+            Activity activity = owner.get();
+            Utils.setActivity(activity);
+            NativeController player = playing("first");
+            // TikTok inflates the sheet as it opens the first time: a layout pass, no bind.
+            FrameLayout sheet = panelIn(activity, true);
+            idle();
+            assertEquals("a sheet that opened before any comment bound left the video playing",
+                    1, player.manager.pauses);
+
+            park(sheet);
+            idleFor(300);
+            assertEquals(1, player.manager.resumes);
+
+            // Opened again on a video with no comments: nothing binds this time either.
+            sheet.setTranslationY(0f);
+            sheet.getViewTreeObserver().dispatchOnGlobalLayout();
+            idle();
+            assertEquals("a sheet with nothing to bind left the video playing", 2, player.manager.pauses);
+        }
+    }
+
+    @Test public void watchingForTheSheetFromTheStartDoesNothingWithTheSwitchOff() {
+        try (var owner = Robolectric.buildActivity(FeedActivity.class).create()) {
+            PausePlayback.install(owner.get());
+            owner.start().resume().visible();
+            Activity activity = owner.get();
+            Utils.setActivity(activity);
+            NativeController player = playing("first");
+            panelIn(activity, true);
+            idleFor(300);
+            assertEquals("the switch is off and the comments paused the video", 0, player.manager.pauses);
         }
     }
 

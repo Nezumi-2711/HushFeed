@@ -195,16 +195,26 @@ public final class PausePlayback {
         if (activity == null || activity.getWindow() == null) return;
         View decor = activity.getWindow().getDecorView();
         if (cell.getRootView() != decor) return;
-        panelActivityReference = new WeakReference<>(activity);
-        View watched = panelWatchedReference.get();
-        if (watched != decor) {
-            if (watched != null) watched.getViewTreeObserver().removeOnGlobalLayoutListener(PANEL_LAYOUT);
-            decor.getViewTreeObserver().addOnGlobalLayoutListener(PANEL_LAYOUT);
-            panelWatchedReference = new WeakReference<>(decor);
-        }
+        watchPanel(activity, decor);
         if (!panelHeld) panelChecksLeft = PANEL_CHECKS_AFTER_A_BIND;
         syncPanel();
         checkPanelSoon();
+    }
+
+    /**
+     * Watches the activity's layout passes for the sheet. Started from the feed's resume as well
+     * as from a bind: waiting for a bind left the first sheet of each start playing until its
+     * comments had loaded, which on a slow connection is seconds, and a video with no comments
+     * binds nothing at all. Opening the sheet lays it out, so the pass is there either way. With
+     * the switch off each pass costs a setting read.
+     */
+    private static void watchPanel(Activity activity, View decor) {
+        panelActivityReference = new WeakReference<>(activity);
+        View watched = panelWatchedReference.get();
+        if (watched == decor) return;
+        if (watched != null) watched.getViewTreeObserver().removeOnGlobalLayoutListener(PANEL_LAYOUT);
+        decor.getViewTreeObserver().addOnGlobalLayoutListener(PANEL_LAYOUT);
+        panelWatchedReference = new WeakReference<>(decor);
     }
 
     /** Holds the feed while the sheet covers it, and hands it back once it has gone. */
@@ -368,7 +378,13 @@ public final class PausePlayback {
                     && Settings.PAUSE_ON_COMMENTS.get() && !SessionBudget.isLocked()) {
                 quieten();
             }
-            // The same for a sheet drawn into the activity, let go as the app went away.
+            // The same for a sheet drawn into the activity, let go as the app went away. The
+            // feed's own resume is where watching for that sheet starts: onCreate is too early to
+            // ask for the window's decor, which TikTok may still be configuring then.
+            if (activity != null && activity.getClass() == feedClass && activity.getWindow() != null
+                    && activity.getWindow().peekDecorView() != null) {
+                watchPanel(activity, activity.getWindow().getDecorView());
+            }
             if (activity != null && panelActivityReference.get() == activity) syncPanel();
             if (firstStartPending && activity != null && activity.getClass() == feedClass) {
                 firstStartPending = false;
