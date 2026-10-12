@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Un nuovo interruttore accanto a Pressione prolungata, Menu completo con pressione prolungata sui video di un creator, fa sì che una pressione prolungata su un video aperto dal profilo di qualcuno apra lo stesso menu completo di Per te invece del menu di condivisione ridotto (#120).
+
 * **TikTok:** Un nuovo interruttore nella pagina Menu di condivisione, Copia il link con un tocco su Condividi, fa sì che un tocco su Condividi sotto un video ne copi il link, ripulito come un link condiviso. Un secondo tocco subito dopo apre il menu di condivisione come sempre.
 
 * **TikTok:** Silenzia il feed quando i commenti sono aperti ora si chiama Metti in pausa il video quando i commenti sono aperti, che è quello che fa.

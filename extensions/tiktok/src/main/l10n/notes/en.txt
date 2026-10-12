@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** A new switch next to Long press, Full long-press menu on a creator's videos, makes a long press on a video you opened from someone's profile open the same full menu as on For You instead of the small share sheet (#120).
+
 * **TikTok:** A new switch on the Share sheet page, Copy the link with one press on Share, makes a press on Share under a video copy that video's link, cleaned the way a shared link is. A second press right after opens the share sheet as usual.
 
 * **TikTok:** Silence the feed while comments are open is now called Pause the video while comments are open, which says what it does.

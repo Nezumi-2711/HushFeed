@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ein neuer Schalter neben Langes Drücken, „Volles Menü bei langem Drücken auf Videos eines Creators“, sorgt dafür, dass langes Drücken auf ein Video, das du aus einem Profil geöffnet hast, dasselbe volle Menü wie bei Für dich öffnet statt des kleinen Teilen-Menüs (#120).
+
 * **TikTok:** Ein neuer Schalter auf der Seite Teilen-Menü, „Link mit einem Tippen auf Teilen kopieren“, lässt ein Tippen auf Teilen unter einem Video dessen Link kopieren, bereinigt wie ein geteilter Link. Ein zweites Tippen direkt danach öffnet das Teilen-Menü wie gewohnt.
 
 * **TikTok:** „Feed stummschalten, solange Kommentare offen sind“ heißt jetzt „Video anhalten, solange Kommentare offen sind“, denn genau das tut der Schalter.

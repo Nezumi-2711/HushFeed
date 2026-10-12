@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Uzun basma'nın yanındaki yeni Bir içerik üreticinin videolarında tam uzun basma menüsü anahtarı açıkken, birinin profilinden açtığın bir videoya uzun basmak küçük paylaşım menüsü yerine Senin İçin'deki tam menünün aynısını açar (#120).
+
 * **TikTok:** Paylaşım menüsü sayfasındaki yeni Paylaş'a tek basışla bağlantıyı kopyala anahtarı açıkken, bir videonun altındaki Paylaş'a basmak o videonun bağlantısını paylaşılan bir bağlantı gibi temizlenmiş olarak kopyalar. Hemen ardından ikinci bir basış paylaşım menüsünü her zamanki gibi açar.
 
 * **TikTok:** Yorumlar açıkken akışın sesini kapat artık Yorumlar açıkken videoyu duraklat adını taşıyor, çünkü yaptığı tam olarak bu.

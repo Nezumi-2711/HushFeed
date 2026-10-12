@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Un nuevo interruptor junto a Pulsación larga, Menú completo de pulsación larga en los videos de un creador, hace que una pulsación larga en un video que abriste desde el perfil de alguien abra el mismo menú completo que en Para ti en lugar del panel de compartir pequeño (#120).
+
 * **TikTok:** Un nuevo interruptor en la página Panel de compartir, Copiar el enlace con un toque en Compartir, hace que un toque en Compartir debajo de un vídeo copie su enlace, limpio como un enlace compartido. Un segundo toque justo después abre el panel de compartir como siempre.
 
 * **TikTok:** Silenciar el feed mientras los comentarios están abiertos ahora se llama Pausar el video mientras los comentarios están abiertos, que es lo que hace.
