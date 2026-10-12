@@ -53,6 +53,8 @@ public class SettingsStatus {
     public static boolean liveFeedFilterEnabled = false;
     public static boolean feedNavigationEnabled = false;
     public static boolean commentTranslationEnabled = false;
+    public static boolean dmTranslationPreviewEnabled = false;
+    public static boolean receivedDmTranslationPreviewEnabled = false;
     public static boolean hideCommentQuickReactionsEnabled = false;
     public static boolean copyCommentsWithoutUsernameEnabled = false;
     public static boolean downloadEnabled = false;
@@ -222,6 +224,14 @@ public class SettingsStatus {
 
     public static void enableCommentTranslation() {
         commentTranslationEnabled = true;
+    }
+
+    public static void enableDmTranslationPreview() {
+        dmTranslationPreviewEnabled = true;
+    }
+
+    public static void enableReceivedDmTranslationPreview() {
+        receivedDmTranslationPreviewEnabled = true;
     }
 
     /** Translate comments found the seven places TikTok reads its Don't translate list and hooked them. */

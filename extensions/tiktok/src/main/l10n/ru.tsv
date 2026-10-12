@@ -2149,3 +2149,20 @@ Local verified badge	Локальный значок верификации
 Show a verified badge on your own profile on this phone. Other people see your real status.	Показывать значок верификации в вашем профиле на этом телефоне. Другие видят ваш настоящий статус.
 Hide your account warning	Скрыть предупреждение вашего аккаунта
 Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Скрывать уведомление об ограничении в вашем профиле на этом телефоне. Ограничения TikTok и возможность обжалования сохраняются.
+
+# context: received-message and outgoing-draft translation previews
+DM translation preview	Предпросмотр перевода сообщений
+Preview a translation of your draft before sending it.	Просмотрите перевод черновика перед отправкой.
+Translate draft	Перевести черновик
+Translation preview	Предпросмотр перевода
+Use translation	Использовать перевод
+Translating…	Перевод…
+Couldn't translate this draft. Try again in a moment.	Не удалось перевести этот черновик. Повторите попытку чуть позже.
+Received message translation	Перевод входящих сообщений
+Preview a translation from a received text message's menu. The original message stays unchanged.	Просмотр перевода через меню полученного текстового сообщения. Исходное сообщение не меняется.
+Preview translation	Посмотреть перевод
+Original message	Исходное сообщение
+Translated message	Переведённое сообщение
+Show original	Показать оригинал
+Show translation	Показать перевод
+Couldn't translate this message. Try again in a moment.	Не удалось перевести это сообщение. Повторите попытку чуть позже.

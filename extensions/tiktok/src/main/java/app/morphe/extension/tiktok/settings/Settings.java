@@ -416,6 +416,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_TAKO_AI = new BooleanSetting("hide_tako_ai", FALSE, true);
     public static final BooleanSetting HIDE_BOTTOM_SEARCH_BAR = new BooleanSetting("hide_bottom_search_bar", FALSE, true);
     public static final BooleanSetting COMMENT_BATCH_TRANSLATION = new BooleanSetting("comment_batch_translation", FALSE);
+    public static final BooleanSetting DM_TRANSLATION_PREVIEW = new BooleanSetting("dm_translation_preview", FALSE);
+    public static final BooleanSetting RECEIVED_DM_TRANSLATION_PREVIEW = new BooleanSetting("received_dm_translation_preview", FALSE);
     /** Languages TikTok's automatic translation leaves alone, added to its own Don't translate list (#121). */
     public static final StringSetting DONT_AUTO_TRANSLATE_LANGUAGES = new StringSetting("dont_auto_translate_languages", "");
     /** The one language TikTok translates into instead of its own choice, empty for TikTok's (TranslateInto). */

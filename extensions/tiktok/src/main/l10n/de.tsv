@@ -1984,3 +1984,20 @@ Local verified badge	Lokales Verifizierungsabzeichen
 Show a verified badge on your own profile on this phone. Other people see your real status.	Zeige auf diesem Handy ein Verifizierungsabzeichen in deinem eigenen Profil. Andere sehen deinen echten Status.
 Hide your account warning	Eigene Kontowarnung ausblenden
 Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Blende den Einschränkungshinweis in deinem eigenen Profil auf diesem Handy aus. TikToks Einschränkungen und Einspruchsmöglichkeiten gelten weiterhin.
+
+# context: received-message and outgoing-draft translation previews
+DM translation preview	Übersetzungsvorschau für Direktnachrichten
+Preview a translation of your draft before sending it.	Zeigt eine Übersetzung deines Entwurfs vor dem Senden.
+Translate draft	Entwurf übersetzen
+Translation preview	Übersetzungsvorschau
+Use translation	Übersetzung verwenden
+Translating…	Übersetzung läuft…
+Couldn't translate this draft. Try again in a moment.	Der Entwurf konnte nicht übersetzt werden. Versuche es gleich noch einmal.
+Received message translation	Empfangene Nachricht übersetzen
+Preview a translation from a received text message's menu. The original message stays unchanged.	Eine Übersetzung im Menü einer empfangenen Textnachricht ansehen. Die ursprüngliche Nachricht bleibt unverändert.
+Preview translation	Übersetzung ansehen
+Original message	Ursprüngliche Nachricht
+Translated message	Übersetzte Nachricht
+Show original	Original anzeigen
+Show translation	Übersetzung anzeigen
+Couldn't translate this message. Try again in a moment.	Diese Nachricht konnte nicht übersetzt werden. Versuche es gleich noch einmal.

@@ -413,6 +413,8 @@ Couldn't start the import. Try again in a moment.,Couldn't start the import. Try
 Couldn't start the report export. Try again in a moment.,Couldn't start the report export. Try again in a moment.
 Couldn't start the settings change. Try again in a moment.,Couldn't start the settings change. Try again in a moment.
 Couldn't tell which folder to update. Choose it again.,Couldn't tell which folder to update. Choose it again.
+Couldn't translate this draft. Try again in a moment.,Couldn't translate this draft. Try again in a moment.
+Couldn't translate this message. Try again in a moment.,Couldn't translate this message. Try again in a moment.
 Couldn't undo that. Try again.,Couldn't undo that. Try again.
 Couldn't undo the clear. Try again.,Couldn't undo the clear. Try again.
 Couldn't undo the last change. Try again.,Couldn't undo the last change. Try again.
@@ -438,6 +440,7 @@ Custom value,Custom value
 Custom value…,Custom value…
 Customize,Customize
 Cuts the tracking bits out of links you share.,Cuts the tracking bits out of links you share.
+DM translation preview,DM translation preview
 Daily budget,Daily budget
 "Daily budgets, reminders and the hold","Daily budgets, reminders and the hold"
 Daily time budget,Daily time budget
@@ -1090,6 +1093,7 @@ Operator name,Operator name
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.,Opus didn't work on this phone. Saving the sound as TikTok sent it instead.
 "Opus needs Android 10 or later, so sounds save as TikTok sent them.","Opus needs Android 10 or later, so sounds save as TikTok sent them."
 Original language,Original language
+Original message,Original message
 Original photos,Original photos
 Original sound,Original sound
 Other,Other
@@ -1150,7 +1154,10 @@ Press and hold a profile picture to save the full size original to your photo de
 "Press and hold a story to save it. Stories have no save button of their own, and holding one is how TikTok pauses it, so this takes that gesture over.","Press and hold a story to save it. Stories have no save button of their own, and holding one is how TikTok pauses it, so this takes that gesture over."
 Press and hold the Home tab to open these settings. A tap on Home works as before.,Press and hold the Home tab to open these settings. A tap on Home works as before.
 Press and hold the left or right third of the screen to jump back or forward. The middle third keeps the Long press action.,Press and hold the left or right third of the screen to jump back or forward. The middle third keeps the Long press action.
+Preview a translation from a received text message's menu. The original message stays unchanged.,Preview a translation from a received text message's menu. The original message stays unchanged.
+Preview a translation of your draft before sending it.,Preview a translation of your draft before sending it.
 Preview shortened. Save report keeps the full report.,Preview shortened. Save report keeps the full report.
+Preview translation,Preview translation
 Preview with a made-up post:,Preview with a made-up post:
 Privacy,Privacy
 Private account,Private account
@@ -1188,6 +1195,7 @@ Quick setup,Quick setup
 Reading,Reading
 Reading the seen-history file,Reading the seen-history file
 Reading watch history,Reading watch history
+Received message translation,Received message translation
 Record a screen's layout,Record a screen's layout
 Recorded gate reads (%1$d),Recorded gate reads (%1$d)
 "Recording gate reads. Use a feature, then return here to stop.","Recording gate reads. Use a feature, then return here to stop."
@@ -1435,6 +1443,7 @@ Show only videos with this many favorites.,Show only videos with this many favor
 Show only videos with this many likes.,Show only videos with this many likes.
 Show only videos with this many shares.,Show only videos with this many shares.
 Show only videos with this many views.,Show only videos with this many views.
+Show original,Show original
 Show poll results before voting,Show poll results before voting
 Show search in LIVE,Show search in LIVE
 Show the Not interested button,Show the Not interested button
@@ -1455,6 +1464,7 @@ Show the time played and the video's length at the end of the progress bar while
 Show the time to the second,Show the time to the second
 Show the whole Activity and New followers lists instead of stopping at a View all button.,Show the whole Activity and New followers lists instead of stopping at a View all button.
 "Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.","Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off."
+Show translation,Show translation
 Show what is left of the budget,Show what is left of the budget
 "Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name.","Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name."
 Show when the camera or microphone is in use,Show when the camera or microphone is in use
@@ -1804,7 +1814,11 @@ Tracking,Tracking
 "Tracking, device access and links","Tracking, device access and links"
 Translate button in comments,Translate button in comments
 "Translate comments as they load, using TikTok's own translator.","Translate comments as they load, using TikTok's own translator."
+Translate draft,Translate draft
 Translate into,Translate into
+Translated message,Translated message
+Translating…,Translating…
+Translation preview,Translation preview
 Transparent,Transparent
 Try a different word or clear the search.,Try a different word or clear the search.
 Try a different word or clear the search. Switches from patches you didn't tick in Morphe Manager aren't listed.,Try a different word or clear the search. Switches from patches you didn't tick in Morphe Manager aren't listed.
@@ -1867,6 +1881,7 @@ Use system font,Use system font
 Use the preset for the region TikTok reports for your account and its shop too. May affect search.,Use the preset for the region TikTok reports for your account and its shop too. May affect search.
 "Use the split layout on wider screens. Restart TikTok to apply this. If the old layout is still there, unfold again.","Use the split layout on wider screens. Restart TikTok to apply this. If the old layout is still there, unfold again."
 "Use this account's TikTok JSON export, up to %1$s MB and %2$s entries. Dates without a time zone use this phone's time zone.","Use this account's TikTok JSON export, up to %1$s MB and %2$s entries. Dates without a time zone use this phone's time zone."
+Use translation,Use translation
 Use value,Use value
 Use your own offline videos limit,Use your own offline videos limit
 "Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.","Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you."

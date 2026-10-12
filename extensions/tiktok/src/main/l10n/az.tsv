@@ -1981,3 +1981,20 @@ Local verified badge	Yerli təsdiq nişanı
 Show a verified badge on your own profile on this phone. Other people see your real status.	Bu telefonda öz profilinizdə təsdiq nişanı göstərin. Digər insanlar həqiqi statusunuzu görür.
 Hide your account warning	Hesab xəbərdarlığınızı gizlət
 Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Bu telefonda öz profilinizdə məhdudiyyət bildirişini gizlədin. TikTok məhdudiyyətləri və etiraz qaydaları qüvvədə qalır.
+
+# context: received-message and outgoing-draft translation previews
+DM translation preview	Şəxsi mesaj tərcüməsinə baxış
+Preview a translation of your draft before sending it.	Göndərməzdən əvvəl qaralamanızın tərcüməsinə baxın.
+Translate draft	Qaralamanı tərcümə et
+Translation preview	Tərcüməyə baxış
+Use translation	Tərcüməni istifadə et
+Translating…	Tərcümə olunur…
+Couldn't translate this draft. Try again in a moment.	Bu qaralama tərcümə olunmadı. Bir az sonra yenidən cəhd edin.
+Received message translation	Alınan mesajın tərcüməsi
+Preview a translation from a received text message's menu. The original message stays unchanged.	Alınan mətn mesajının menyusundan tərcüməyə baxın. Orijinal mesaj dəyişmir.
+Preview translation	Tərcüməyə bax
+Original message	Orijinal mesaj
+Translated message	Tərcümə edilmiş mesaj
+Show original	Orijinalı göstər
+Show translation	Tərcüməni göstər
+Couldn't translate this message. Try again in a moment.	Bu mesaj tərcümə olunmadı. Bir az sonra yenidən cəhd edin.
