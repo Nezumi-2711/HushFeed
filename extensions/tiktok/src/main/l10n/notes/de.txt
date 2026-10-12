@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Mit „Spulleiste in Video-Storys“ bleibt eine geschlossene Story-Ansicht nicht mehr im Speicher, während du TikTok weiter nutzt.
+
 * **TikTok:** Der Name in der Creatorzeile bleibt nicht mehr gekürzt, wenn du schnell scrollst oder das Abzeichen eines Fotobeitrags zu einem Symbol schrumpft (#127).
 
 * **TikTok:** Dein Profil kann auf diesem Handy ein Verifizierungsabzeichen zeigen oder die Kontowarnung ausblenden. Andere sehen deinen echten Status.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Video hekayələrdə irəli-geri çəkmə zolağı açıq olanda bağladığınız hekayə pəncərəsi TikTok-dan istifadəyə davam etdiyiniz müddətdə artıq yaddaşda qalmır.
+
 * **TikTok:** Müəllif sətrindəki ad sürətli sürüşdürmədən sonra və ya foto paylaşımının nişanı ikonaya kiçiləndə artıq qısaldılmış qalmır (#127).
 
 * **TikTok:** Profiliniz bu telefonda təsdiq nişanı göstərə və ya hesab xəbərdarlığını gizlədə bilər. Başqaları həqiqi statusunuzu görür.

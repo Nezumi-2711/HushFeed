@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Video hikayelerde sarma çubuğu açıkken kapattığınız hikaye görüntüleyicisi, TikTok'u kullanmaya devam ederken artık bellekte kalmıyor.
+
 * **TikTok:** Üretici satırındaki ad artık hızlı kaydırmadan sonra ya da fotoğraf gönderisinin rozeti simgeye küçüldüğünde kısaltılmış kalmıyor (#127).
 
 * **TikTok:** Profiliniz bu telefonda doğrulama rozeti gösterebilir veya hesap uyarısını gizleyebilir. Başkaları gerçek durumunuzu görür.

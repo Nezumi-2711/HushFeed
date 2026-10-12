@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Barra di riproduzione nelle storie video attiva, un visualizzatore di storie chiuso non resta più in memoria mentre continui a usare TikTok.
+
 * **TikTok:** Il nome nella riga del creator non resta più troncato dopo uno scorrimento veloce o quando il badge di un post fotografico si riduce a un'icona (#127).
 
 * **TikTok:** Il tuo profilo può mostrare un badge di verifica o nascondere l’avviso dell’account su questo telefono. Gli altri vedono il tuo stato reale.

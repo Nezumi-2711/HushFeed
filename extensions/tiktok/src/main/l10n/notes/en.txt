@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** With Seek bar on video stories on, a story viewer you've closed doesn't stay in memory anymore while you keep using TikTok.
+
 * **TikTok:** A creator's name on the author line no longer stays cut short after a quick scroll, or after a photo post's badge shrinks to an icon (#127).
 
 * **TikTok:** Your profile can show a verified badge or hide its account warning on this phone. Other people see your real status.

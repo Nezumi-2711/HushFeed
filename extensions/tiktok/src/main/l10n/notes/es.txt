@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Barra de reproducción en historias de vídeo activada, un visor de historias que cerraste ya no se queda en memoria mientras sigues usando TikTok.
+
 * **TikTok:** El nombre en la línea del creador ya no se queda cortado al desplazarte rápido o cuando la insignia de una publicación de fotos se reduce a un icono (#127).
 
 * **TikTok:** Tu perfil puede mostrar una insignia de verificación u ocultar su aviso de cuenta en este teléfono. Los demás ven tu estado real.
