@@ -348,12 +348,6 @@ public final class GestureActions {
     }
 
     /**
-     * Puts a link on the clipboard through the shared helper, which marks the clip sensitive on
-     * the Android versions that understand the flag. These two were the only clips in the bundle
-     * building their own {@code ClipData}, so they were the only ones a clipboard viewer could
-     * read back without the warning.
-     */
-    /**
      * Copies {@code aweme}'s link and says so, for a gesture and for a press on Share alike.
      * Android 13 and newer show their own note for every copy, so the toast is for older ones.
      */
@@ -371,6 +365,12 @@ public final class GestureActions {
         }
     }
 
+    /**
+     * Puts a link on the clipboard through the shared helper, which marks the clip sensitive on
+     * the Android versions that understand the flag. These two were the only clips in the bundle
+     * building their own {@code ClipData}, so they were the only ones a clipboard viewer could
+     * read back without the warning.
+     */
     static boolean copyToClipboard(String label, String text) {
         if (text == null || text.isEmpty()) return false;
         Context context = Utils.getContext();
