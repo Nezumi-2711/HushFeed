@@ -1074,7 +1074,7 @@ Show each commenter's @username instead of the display name they chose. A reply 
 Show where commenters are from	Yorum yazanların nereden olduğunu göster
 Show the country a commenter's account is set to after the comment's time. Comments from accounts TikTok sends no country for stay as they are.	Yorumun zamanından sonra yorum yazanın hesabında ayarlı ülkeyi göster. TikTok'un ülke göndermediği hesaplardan gelen yorumlar olduğu gibi kalır.
 Showing %1$s again	%1$s yeniden gösteriliyor
-Silence the feed while comments are open	Yorumlar açıkken akışın sesini kapat
+Pause the video while comments are open	Yorumlar açıkken videoyu duraklat
 Hide videos with blocked sounds	Engellenen sesleri kullanan videoları gizle
 Skip content warnings	İçerik uyarılarını atla
 Hide feed videos with place badges, even when they aren't paid ads. To keep the video and hide only its badge, use Hide location labels in Feed screen.	Ücretli reklam olmasalar bile yer rozeti taşıyan akış videolarını gizle. Videoyu tutup yalnızca rozetini gizlemek için Akış ekranındaki Konum etiketlerini gizle ayarını kullan.

@@ -2382,15 +2382,17 @@ final class L10nTranslationsEs {
                 "Pausar Hushfeed");
         table.put("Pause Hushfeed's switches after TikTok restarts. Your settings stay saved. Changes made when you patched, like the app's name or icon, stay.",
                 "Pausa los interruptores de Hushfeed después de reiniciar TikTok. Tus ajustes siguen guardados. Los cambios hechos al aplicar el parche, como el nombre o el icono de la app, se mantienen.");
+        table.put("Pause the video while comments are open",
+                "Pausar el video mientras los comentarios están abiertos");
         table.put("Paused",
                 "En pausa");
         table.put("Pauses the video behind the comment sheet while you read. It plays on from the same spot when the sheet closes.",
                 "Pausa el video detrás de los comentarios mientras lees. Sigue desde el mismo punto cuando se cierran.");
-        table.put("People, shortcuts and sending controls",
-                "Personas, atajos y controles de envío");
     }
 
     private static void fill19(Map<String, String> table) {
+        table.put("People, shortcuts and sending controls",
+                "Personas, atajos y controles de envío");
         table.put("Performance",
                 "Rendimiento");
         table.put("Photo",
@@ -2509,11 +2511,11 @@ final class L10nTranslationsEs {
                 "Prueba");
         table.put("Protect external pages in TikTok's browser",
                 "Proteger páginas externas en el navegador de TikTok");
-        table.put("Proxy host",
-                "Host del proxy");
     }
 
     private static void fill20(Map<String, String> table) {
+        table.put("Proxy host",
+                "Host del proxy");
         table.put("Proxy password",
                 "Contraseña del proxy");
         table.put("Proxy port",
@@ -2632,11 +2634,11 @@ final class L10nTranslationsEs {
                 "%1$d interruptores restablecidos. Reinicia TikTok para aplicar esto.");
         table.put("Reset 1 gate of %2$d. Restart TikTok to apply this.",
                 "1 interruptor de %2$d restablecido. Reinicia TikTok para aplicar esto.");
-        table.put("Reset 1 gate. Restart TikTok to apply this.",
-                "1 interruptor restablecido. Reinicia TikTok para aplicar esto.");
     }
 
     private static void fill21(Map<String, String> table) {
+        table.put("Reset 1 gate. Restart TikTok to apply this.",
+                "1 interruptor restablecido. Reinicia TikTok para aplicar esto.");
         table.put("Reset didn't finish. Some settings may still be changed.",
                 "El restablecimiento no terminó. Puede que algunos ajustes hayan cambiado igualmente.");
         table.put("Reset didn't finish. Some settings may still be changed. Use Undo to put them back.",
@@ -2755,11 +2757,11 @@ final class L10nTranslationsEs {
                 "Guardar el historial de vídeos vistos en un archivo");
         table.put("Save subtitles beside videos",
                 "Guardar los subtítulos junto a los vídeos");
-        table.put("Save the cover as well",
-                "Guardar también la portada");
     }
 
     private static void fill22(Map<String, String> table) {
+        table.put("Save the cover as well",
+                "Guardar también la portada");
         table.put("Save the feed capture",
                 "Guardar la grabación del feed");
         table.put("Save the frame on screen as a photo",
@@ -2878,11 +2880,11 @@ final class L10nTranslationsEs {
                 "Búsqueda");
         table.put("Search Activity notifications already loaded on this screen. Loading more pauses while you search.",
                 "Busca en las notificaciones de Actividad ya cargadas en esta pantalla. No se cargan más mientras buscas.");
-        table.put("Search apps",
-                "Buscar apps");
     }
 
     private static void fill23(Map<String, String> table) {
+        table.put("Search apps",
+                "Buscar apps");
         table.put("Search by name or gate key",
                 "Buscar por nombre o clave de gate");
         table.put("Search by name, description or category.",
@@ -3001,11 +3003,11 @@ final class L10nTranslationsEs {
                 "Ajustes restaurados. Las reglas del Laboratorio de interruptores eran de otra versión de TikTok y se dejaron fuera. Reinicia TikTok para aplicar todos los cambios.");
         table.put("Share",
                 "Compartir");
-        table.put("Share sheet",
-                "Panel de compartir");
     }
 
     private static void fill24(Map<String, String> table) {
+        table.put("Share sheet",
+                "Panel de compartir");
         table.put("Shares range",
                 "Rango de veces compartido");
         table.put("Shop",
@@ -3124,11 +3126,11 @@ final class L10nTranslationsEs {
                 "Mostrar la hora al segundo");
         table.put("Show the whole Activity and New followers lists instead of stopping at a View all button.",
                 "Mostrar las listas completas de Actividad y Nuevos seguidores en vez de pararse en un botón de Ver todo.");
-        table.put("Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.",
-                "Mostrar el vídeo entero en vez de recortarlo a la ventana. En un móvil alto no cambia nada, porque ya cabe. En un plegable abierto, en una pantalla más cuadrada o en vista dividida dejan de cortarse los lados o los extremos.");
     }
 
     private static void fill25(Map<String, String> table) {
+        table.put("Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.",
+                "Mostrar el vídeo entero en vez de recortarlo a la ventana. En un móvil alto no cambia nada, porque ya cabe. En un plegable abierto, en una pantalla más cuadrada o en vista dividida dejan de cortarse los lados o los extremos.");
         table.put("Show translation",
                 "Mostrar traducción");
         table.put("Show what is left of the budget",
@@ -3167,8 +3169,6 @@ final class L10nTranslationsEs {
                 "Inicia sesión para ver esta lista");
         table.put("Sign in without a passkey",
                 "Iniciar sesión sin llave de acceso");
-        table.put("Silence the feed while comments are open",
-                "Silenciar el feed mientras los comentarios están abiertos");
         table.put("Skip TikTok's setup screens",
                 "Saltar las pantallas de configuración de TikTok");
         table.put("Skip content warnings",

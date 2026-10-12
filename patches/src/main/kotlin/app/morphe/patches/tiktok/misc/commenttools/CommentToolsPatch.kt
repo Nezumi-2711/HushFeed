@@ -134,7 +134,7 @@ val commentToolsPatch = bytecodePatch(
         "before you vote. Starts off. Turn it on in Hushfeed settings > Comments.",
 ) {
     category("Comments")
-    // The player bridge: "Silence the feed while comments are open" pauses the video through
+    // The player bridge: "Pause the video while comments are open" pauses the video through
     // TikTok's own pause, which only that patch wires in. Without it the request for the audio
     // focus was all the switch did, and 47.x's player plays on through that.
     dependsOn(settingsPatch, sharedExtensionPatch, doubleTapPatch, sessionPlaybackBridgePatch)

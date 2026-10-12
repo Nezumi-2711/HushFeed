@@ -2382,15 +2382,17 @@ final class L10nTranslationsIt {
                 "Metti in pausa Hushfeed");
         table.put("Pause Hushfeed's switches after TikTok restarts. Your settings stay saved. Changes made when you patched, like the app's name or icon, stay.",
                 "Sospendi gli interruttori di Hushfeed dopo il riavvio di TikTok. Le impostazioni restano salvate. Le modifiche fatte con la patch, come il nome o l'icona dell'app, restano.");
+        table.put("Pause the video while comments are open",
+                "Metti in pausa il video quando i commenti sono aperti");
         table.put("Paused",
                 "In pausa");
         table.put("Pauses the video behind the comment sheet while you read. It plays on from the same spot when the sheet closes.",
                 "Il video va in pausa dietro il riquadro dei commenti mentre leggi. Riprende dallo stesso punto quando il riquadro si chiude.");
-        table.put("People, shortcuts and sending controls",
-                "Persone, scorciatoie e opzioni di invio");
     }
 
     private static void fill19(Map<String, String> table) {
+        table.put("People, shortcuts and sending controls",
+                "Persone, scorciatoie e opzioni di invio");
         table.put("Performance",
                 "Prestazioni");
         table.put("Photo",
@@ -2509,11 +2511,11 @@ final class L10nTranslationsIt {
                 "Prova");
         table.put("Protect external pages in TikTok's browser",
                 "Proteggi le pagine esterne nel browser di TikTok");
-        table.put("Proxy host",
-                "Host del proxy");
     }
 
     private static void fill20(Map<String, String> table) {
+        table.put("Proxy host",
+                "Host del proxy");
         table.put("Proxy password",
                 "Password del proxy");
         table.put("Proxy port",
@@ -2632,11 +2634,11 @@ final class L10nTranslationsIt {
                 "Reimpostati %1$d gate. Riavvia TikTok per applicare la modifica.");
         table.put("Reset 1 gate of %2$d. Restart TikTok to apply this.",
                 "Reimpostato 1 gate su %2$d. Riavvia TikTok per applicare la modifica.");
-        table.put("Reset 1 gate. Restart TikTok to apply this.",
-                "Reimpostato 1 gate. Riavvia TikTok per applicare la modifica.");
     }
 
     private static void fill21(Map<String, String> table) {
+        table.put("Reset 1 gate. Restart TikTok to apply this.",
+                "Reimpostato 1 gate. Riavvia TikTok per applicare la modifica.");
         table.put("Reset didn't finish. Some settings may still be changed.",
                 "Il reset non è stato completato. Alcune impostazioni potrebbero essere ancora modificate.");
         table.put("Reset didn't finish. Some settings may still be changed. Use Undo to put them back.",
@@ -2755,11 +2757,11 @@ final class L10nTranslationsIt {
                 "Salva i video visti in un file");
         table.put("Save subtitles beside videos",
                 "Salva i sottotitoli insieme ai video");
-        table.put("Save the cover as well",
-                "Salva anche la copertina");
     }
 
     private static void fill22(Map<String, String> table) {
+        table.put("Save the cover as well",
+                "Salva anche la copertina");
         table.put("Save the feed capture",
                 "Salva la registrazione del feed");
         table.put("Save the frame on screen as a photo",
@@ -2878,11 +2880,11 @@ final class L10nTranslationsIt {
                 "Ricerca");
         table.put("Search Activity notifications already loaded on this screen. Loading more pauses while you search.",
                 "Cerca nelle notifiche di Attività già caricate in questa schermata. Il caricamento si ferma durante la ricerca.");
-        table.put("Search apps",
-                "Cerca app");
     }
 
     private static void fill23(Map<String, String> table) {
+        table.put("Search apps",
+                "Cerca app");
         table.put("Search by name or gate key",
                 "Cerca per nome o chiave del gate");
         table.put("Search by name, description or category.",
@@ -3001,11 +3003,11 @@ final class L10nTranslationsIt {
                 "Impostazioni ripristinate. Le regole del Feature Gate Lab erano per un'altra versione di TikTok e sono state escluse. Riavvia TikTok per applicare tutte le modifiche.");
         table.put("Share",
                 "Condividi");
-        table.put("Share sheet",
-                "Menu di condivisione");
     }
 
     private static void fill24(Map<String, String> table) {
+        table.put("Share sheet",
+                "Menu di condivisione");
         table.put("Shares range",
                 "Intervallo delle condivisioni");
         table.put("Shop",
@@ -3124,11 +3126,11 @@ final class L10nTranslationsIt {
                 "Mostra l'ora al secondo");
         table.put("Show the whole Activity and New followers lists instead of stopping at a View all button.",
                 "Mostra le liste complete \"Attività\" e \"Nuovi follower\" invece di fermarti al pulsante \"Visualizza tutto\".");
-        table.put("Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.",
-                "Mostra il video per intero invece di ritagliarlo nella finestra. Su un telefono molto allungato non cambia nulla, perché il video ci rientra già. Su un telefono pieghevole aperto, uno schermo più quadrato o in una visualizzazione divisa, i lati o le estremità non vengono più tagliati.");
     }
 
     private static void fill25(Map<String, String> table) {
+        table.put("Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.",
+                "Mostra il video per intero invece di ritagliarlo nella finestra. Su un telefono molto allungato non cambia nulla, perché il video ci rientra già. Su un telefono pieghevole aperto, uno schermo più quadrato o in una visualizzazione divisa, i lati o le estremità non vengono più tagliati.");
         table.put("Show translation",
                 "Mostra la traduzione");
         table.put("Show what is left of the budget",
@@ -3167,8 +3169,6 @@ final class L10nTranslationsIt {
                 "Accedi per vedere questo elenco");
         table.put("Sign in without a passkey",
                 "Accedi senza passkey");
-        table.put("Silence the feed while comments are open",
-                "Silenzia il feed quando i commenti sono aperti");
         table.put("Skip TikTok's setup screens",
                 "Salta le schermate di configurazione di TikTok");
         table.put("Skip content warnings",

@@ -2646,6 +2646,8 @@ final class L10nTranslationsRu {
                 "Поставить Hushfeed на паузу");
         table.put("Pause Hushfeed's switches after TikTok restarts. Your settings stay saved. Changes made when you patched, like the app's name or icon, stay.",
                 "Приостановить переключатели Hushfeed после перезапуска TikTok. Ваши настройки сохранятся. Изменения, сделанные при патчинге, например название или значок приложения, останутся.");
+        table.put("Pause the video while comments are open",
+                "Ставить видео на паузу, пока открыты комментарии");
         table.put("Paused",
                 "На паузе");
         table.put("Pauses the video behind the comment sheet while you read. It plays on from the same spot when the sheet closes.",
@@ -2758,11 +2760,11 @@ final class L10nTranslationsRu {
                 "Баннер профиля и новый вид профиля");
         table.put("Profile picture",
                 "Фото профиля");
-        table.put("Profile picture saved to %1$s",
-                "Фото профиля сохранено в %1$s");
     }
 
     private static void fill22(Map<String, String> table) {
+        table.put("Profile picture saved to %1$s",
+                "Фото профиля сохранено в %1$s");
         table.put("Profile share actions",
                 "Действия «Поделиться» в профиле");
         table.put("Profile tab name",
@@ -2881,11 +2883,11 @@ final class L10nTranslationsRu {
                 "Репост с комментарием");
         table.put("Required",
                 "Обязательно");
-        table.put("Researched",
-                "Исследовано");
     }
 
     private static void fill23(Map<String, String> table) {
+        table.put("Researched",
+                "Исследовано");
         table.put("Researched values",
                 "Исследованные значения");
         table.put("Reset",
@@ -3004,11 +3006,11 @@ final class L10nTranslationsRu {
                 "Сохранить сведения о сборке");
         table.put("Save cancelled. Nothing was saved.",
                 "Сохранение отменено. Ничего не сохранено.");
-        table.put("Save comments to Favorites",
-                "Сохранять комментарии в Избранное");
     }
 
     private static void fill24(Map<String, String> table) {
+        table.put("Save comments to Favorites",
+                "Сохранять комментарии в Избранное");
         table.put("Save cover",
                 "Сохранить обложку");
         table.put("Save cover button in the share sheet",
@@ -3127,11 +3129,11 @@ final class L10nTranslationsRu {
                 "Сохраняет настройки Hushfeed и правила Feature Gate Lab в файл.");
         table.put("Saving",
                 "Сохранение");
-        table.put("Saving %1$s of %2$s",
-                "Сохраняется файл %1$s из %2$s");
     }
 
     private static void fill25(Map<String, String> table) {
+        table.put("Saving %1$s of %2$s",
+                "Сохраняется файл %1$s из %2$s");
         table.put("Saving %1$s of %2$s: %3$s",
                 "Сохраняется %1$s из %2$s: %3$s");
         table.put("Saving %1$s original photos",
@@ -3250,11 +3252,11 @@ final class L10nTranslationsRu {
                 "Отправляет сегодняшнее сообщение немедленно. Ежедневное сообщение затем ждёт до завтра.");
         table.put("Sent to %1$d/%2$d chats. The rest still need a message.",
                 "Отправлено в %1$d/%2$d чатов. В остальные чаты ещё нужно отправить сообщение.");
-        table.put("Sent to %1$d/%2$d chats. They won't get another message today.",
-                "Отправлено в %1$d/%2$d чатов. Сегодня они больше не получат сообщений.");
     }
 
     private static void fill26(Map<String, String> table) {
+        table.put("Sent to %1$d/%2$d chats. They won't get another message today.",
+                "Отправлено в %1$d/%2$d чатов. Сегодня они больше не получат сообщений.");
         table.put("Separate account handles or user IDs with commas. Videos from these accounts are always hidden. An entry between slashes, like /^news_/, is a search pattern checked against the handle and display name.",
                 "Разделяйте имена аккаунтов или ID пользователей запятыми. Видео этих аккаунтов всегда скрываются. Запись между косыми чертами, например /^news_/, это шаблон поиска, который сверяется с именем пользователя и отображаемым именем.");
         table.put("Separate country codes with commas, like GB, IE. Videos posted from anywhere else are hidden. Leave empty for all countries.",
@@ -3373,11 +3375,11 @@ final class L10nTranslationsRu {
                 "Показывать только видео с таким количеством комментариев.");
         table.put("Show only videos with this many favorites.",
                 "Показывать только видео с таким количеством добавлений в избранное.");
-        table.put("Show only videos with this many likes.",
-                "Показывать только видео с таким количеством лайков.");
     }
 
     private static void fill27(Map<String, String> table) {
+        table.put("Show only videos with this many likes.",
+                "Показывать только видео с таким количеством лайков.");
         table.put("Show only videos with this many shares.",
                 "Показывать только видео, которыми поделились столько раз.");
         table.put("Show only videos with this many views.",
@@ -3464,8 +3466,6 @@ final class L10nTranslationsRu {
                 "Войдите, чтобы посмотреть этот список");
         table.put("Sign in without a passkey",
                 "Входить без ключа доступа");
-        table.put("Silence the feed while comments are open",
-                "Отключать звук ленты, пока открыты комментарии");
         table.put("Skip TikTok's setup screens",
                 "Пропускать экраны настройки TikTok");
         table.put("Skip content warnings",
