@@ -694,6 +694,17 @@ python scripts/gen-l10n.py
 
 The script writes two generated files, neither of them meant to be edited by hand. `L10nTranslations.java` is what the extension carries with its own code. `en.csv` is the list of source strings, which is the monolingual base a Weblate project points at, so a translator can work in Weblate and the export drops straight into `l10n/` as `<language code>.csv`. The tests fail on any settings text that has no entry, on a language missing one, and on a table whose values are not the ones in the generated class, so both a gap and a stale run of the script show up before anything ships. Name the file with the code Android reports, which for the three languages that have two is the older one: `in` rather than `id`. The generator makes the table answer to both. The translations used to go into TikTok's own resources, but merging a few hundred strings into a table of 74,765 pushed patching past the memory Morphe Manager allows by default.
 
+For an XML exchange, `scripts/l10n-xml.py` uses [XLIFF 1.2](https://docs.weblate.org/en/latest/formats/xliff.html). Export a table, translate its plain-text targets in your translation tool, then import it and regenerate:
+
+```bash
+python scripts/l10n-xml.py export extensions/tiktok/src/main/l10n/de.tsv de.xlf
+python scripts/l10n-xml.py import de.xlf extensions/tiktok/src/main/l10n/de.tsv
+python scripts/gen-l10n.py
+python -m unittest discover -s scripts -p test_l10n_xml.py
+```
+
+Each CLDR plural variant keeps its own source key and translation unit. The exchange keeps numbered placeholders, escaped newlines and table comments. CSV context columns stay too. Import refuses missing or changed keys, duplicate units, a mismatched language and invalid placeholders before replacing the table. XLIFF content uses plain text, with XML characters escaped, rather than inline formatting elements. This changes the authoring files without adding resources to TikTok's APK.
+
 <br>
 
 <br>
