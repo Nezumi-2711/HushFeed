@@ -101,13 +101,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -o pipefail
-          if ! ./gradlew :patches:buildAndroid --stacktrace 2>&1 | tee "$RUNNER_TEMP/gradle.log"; then
+          set +e -o pipefail
+          ./gradlew :patches:buildAndroid --stacktrace 2>&1 | tee "$RUNNER_TEMP/gradle.log"
+          status=$?
+          if [ "$status" -ne 0 ]; then
             # The failure as an annotation, so the run's summary page says why without the full log.
-            grep -E -A25 '^\* What went wrong|^e: |error:|FAILED' "$RUNNER_TEMP/gradle.log" | head -80 \
-              | sed -e 's/%/%25/g' -e 's/\r//g' | sed ':a;N;$!ba;s/\n/%0A/g' > "$RUNNER_TEMP/failure.txt"
-            echo "::error title=Gradle build failed::$(cat "$RUNNER_TEMP/failure.txt")"
-            exit 1
+            python - "$RUNNER_TEMP/gradle.log" << 'EOF'
+          import re, sys
+          lines = open(sys.argv[1], encoding="utf-8", errors="replace").read().splitlines()
+          start = next((i for i, l in enumerate(lines) if l.startswith("* What went wrong")), None)
+          picked = lines[start:start + 40] if start is not None else []
+          picked += ["", "... last lines ..."] + lines[-60:]
+          text = "\n".join(picked)
+          text = text.replace("%", "%25").replace("\r", "").replace("\n", "%0A")
+          print("::error title=Gradle build failed::" + text)
+          EOF
+            exit "$status"
           fi
 
       - name: Check the bundle
