@@ -1,5 +1,11 @@
 ## Unreleased
 
+* **TikTok:** Yeni Show commenter handle and region yaması: şərhlər şərh yazanın görünən adı əvəzinə @istifadəçi adını, şərhin vaxtından sonra isə hesabında qurulmuş ölkəni göstərə bilər. Hər birinin Hushfeed ayarları > Şərhlər bölməsində öz açarı var və hər ikisi əvvəlcə söndürülüdür. na-x-ril-in onlynazril yamalarından götürülüb.
+
+* **TikTok:** Sistem şriftindən istifadə edin indi TikTok mətnini idxal etdiyiniz .ttf və ya .otf faylı ilə də göstərə bilər. Tətbiq bölməsində İdxal edilmiş şriftdən istifadə edin seçimini açın, faylı seçin və TikTok-u yenidən başladın. Fayl silinərsə və ya oxuna bilməzsə, mətn Sistem şriftindən istifadə edin seçiminin göstərdiyinə qayıdır. na-x-ril-in onlynazril yamalarından götürülüb.
+
+* **TikTok:** Yeni Profile background yaması: Tətbiq bölməsində Profil altındakı açar TikTok-un öz profil fonu redaktorunu Profili redaktə et bölməsində açır və digər profillərin qoyduğu fonları göstərir. TikTok bu funksiyanı hesabınıza təklif etməyibsə, TikTok serverləri onu saxlamaqdan yenə də imtina edə bilər. Söndürülmüş başlayır. na-x-ril-in onlynazril yamalarından götürülüb.
+
 * **TikTok:** CAPTCHA pəncərələrini gizlədin yenidən açar oldu, Hushfeed ayarları > Lent ekranı bölməsində, və söndürülmüş başlayır. TikTok-un sən sadəcə gəzərkən göstərdiyi tapmacanı keçir. Bəyənmə, izləmə, şərh və ya yenidən paylaşımdan dərhal sonra gələn tapmaca yenə göstərilir, giriş, SMS və iki addımlı yoxlamalar da. Hide the risk control CAPTCHA yaması ilə o yoxlamanın gəzərkən çıxan tapmacaları da keçilir. Qayda na-x-ril-in onlynazril yamalarından gəlir.
 
 * **TikTok:** Kontakt siyahısına girişi bloklayın açıq olanda bütün sütunları istəyən kontakt oxuması artıq kontakt sütunlarını yenə də saxlayan boş siyahı alır, beləliklə kontakt kartının adını axtaran TikTok ekranı çatışmayan sütuna ilişmir.

@@ -1,5 +1,11 @@
 ## Unreleased
 
+* **TikTok:** Neuer Patch Show commenter handle and region: Kommentare können statt des Anzeigenamens den @Benutzernamen der kommentierenden Person zeigen und nach der Zeitangabe das Land, auf das ihr Konto eingestellt ist. Beides hat einen eigenen Schalter unter Hushfeed-Einstellungen > Kommentare und ist anfangs aus. Übernommen aus den onlynazril-Patches von na-x-ril.
+
+* **TikTok:** Systemschrift verwenden kann TikToks Text jetzt auch in einer importierten .ttf- oder .otf-Datei zeigen. Schalte in App „Importierte Schrift verwenden“ ein, wähle die Datei und starte TikTok neu. Wird die Datei entfernt oder ist sie nicht lesbar, zeigt der Text wieder, was Systemschrift verwenden zeigt. Übernommen aus den onlynazril-Patches von na-x-ril.
+
+* **TikTok:** Neuer Patch Profile background: Ein Schalter unter Profil in App öffnet TikToks eigenen Editor für den Profilhintergrund unter Profil bearbeiten und zeigt die Hintergründe anderer Profile. TikToks Server können das Speichern trotzdem ablehnen, wenn TikTok die Funktion deinem Konto nicht angeboten hat. Er ist zuerst aus. Übernommen aus den onlynazril-Patches von na-x-ril.
+
 * **TikTok:** „CAPTCHA-Popups ausblenden“ ist wieder ein Schalter, unter Hushfeed-Einstellungen > Feed-Ansicht, und startet ausgeschaltet. Er überspringt das Rätsel, das TikTok zeigt, während du nur stöberst. Ein Rätsel direkt nach einem Like, Folgen, Kommentar oder Repost erscheint weiter, ebenso Anmelde-, SMS- und Zwei-Schritt-Prüfungen. Mit dem Patch Hide the risk control CAPTCHA werden auch dessen Rätsel beim Stöbern übersprungen. Die Regel stammt aus den onlynazril-Patches von na-x-ril.
 
 * **TikTok:** Mit „Zugriff auf die Kontaktliste blockieren“ bekommt eine Kontaktabfrage, die alle Spalten will, jetzt eine leere Liste, die trotzdem die Kontaktspalten hat. So stolpert ein TikTok-Bildschirm, der den Namen einer Kontaktkarte nachschlägt, nicht über eine fehlende Spalte.

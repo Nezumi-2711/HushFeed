@@ -1,5 +1,11 @@
 ## Unreleased
 
+* **TikTok:** Nuevo parche Show commenter handle and region: los comentarios pueden mostrar el @usuario de quien comenta en vez de su nombre visible, y el país configurado en su cuenta después de la hora del comentario. Cada opción tiene su propio interruptor en Ajustes de Hushfeed > Comentarios y ambas empiezan desactivadas. Adaptado de los parches onlynazril de na-x-ril.
+
+* **TikTok:** Usar la fuente del sistema ahora también puede mostrar el texto de TikTok con un archivo .ttf u .otf que importes. Activa Usar una fuente importada en Aplicación, elige el archivo y reinicia TikTok. Si el archivo se borra o no se puede leer, el texto vuelve a lo que muestra Usar la fuente del sistema. Adaptado de los parches onlynazril de na-x-ril.
+
+* **TikTok:** Nuevo parche Profile background: un interruptor en Perfil dentro de Aplicación abre el editor de fondo de perfil del propio TikTok en Editar perfil y muestra los fondos que han puesto otros perfiles. Los servidores de TikTok pueden negarse a guardarlo si TikTok no le ofreció la función a tu cuenta. Empieza desactivado. Adaptado de los parches onlynazril de na-x-ril.
+
 * **TikTok:** Ocultar las ventanas de CAPTCHA vuelve a ser un interruptor, en Ajustes de Hushfeed > Pantalla del feed, y empieza apagado. Omite el rompecabezas que TikTok muestra mientras solo navegas. Un rompecabezas justo después de dar me gusta, seguir, comentar o republicar se sigue mostrando, igual que las verificaciones de inicio de sesión, SMS y dos pasos. Con el parche Hide the risk control CAPTCHA, también se omiten los rompecabezas de esa verificación mientras navegas. La regla viene de los parches onlynazril de na-x-ril.
 
 * **TikTok:** Con Bloquear el acceso a los contactos activado, una lectura de contactos que pide todas las columnas ahora recibe una lista vacía que conserva las columnas de contactos, así una pantalla de TikTok que busca el nombre de una tarjeta de contacto no falla por una columna que falta.

@@ -1,5 +1,11 @@
 ## Unreleased
 
+* **TikTok:** Patch baru Show commenter handle and region: komentar bisa menampilkan @namapengguna pengomentar sebagai ganti nama tampilannya, dan negara yang diatur di akunnya setelah waktu komentar. Masing-masing punya tombol sendiri di Pengaturan Hushfeed > Komentar, dan keduanya mati di awal. Diadaptasi dari patch onlynazril milik na-x-ril.
+
+* **TikTok:** Gunakan font sistem kini juga bisa menampilkan teks TikTok dengan file .ttf atau .otf yang kamu impor. Nyalakan Gunakan font yang diimpor di Aplikasi, pilih filenya, lalu mulai ulang TikTok. Jika file dihapus atau tidak bisa dibaca, teks kembali seperti yang ditampilkan Gunakan font sistem. Diadaptasi dari patch onlynazril milik na-x-ril.
+
+* **TikTok:** Patch baru Profile background: sakelar di Profil pada Aplikasi membuka editor latar profil milik TikTok di Edit profil dan menampilkan latar yang dipasang profil lain. Server TikTok mungkin tetap menolak menyimpannya untuk akun yang belum ditawari fitur ini. Awalnya mati. Diadaptasi dari patch onlynazril milik na-x-ril.
+
 * **TikTok:** Sembunyikan popup CAPTCHA kembali menjadi sakelar, di Pengaturan Hushfeed > Layar feed, dan mulai dalam keadaan mati. Sakelar ini melewati teka-teki yang ditampilkan TikTok saat kamu hanya menjelajah. Teka-teki tepat setelah kamu menyukai, mengikuti, berkomentar, atau memposting ulang tetap muncul, begitu juga pemeriksaan masuk, SMS, dan dua langkah. Dengan patch Hide the risk control CAPTCHA, teka-teki penjelajahan dari pemeriksaan itu juga dilewati. Aturannya berasal dari patch onlynazril milik na-x-ril.
 
 * **TikTok:** Dengan Blokir akses ke daftar kontak aktif, pembacaan kontak yang meminta semua kolom kini mendapat daftar kosong yang tetap punya kolom kontak, jadi layar TikTok yang mencari nama kartu kontak tidak tersandung kolom yang hilang.

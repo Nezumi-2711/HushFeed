@@ -1,5 +1,11 @@
 ## Unreleased
 
+* **TikTok:** Yeni Show commenter handle and region yaması: yorumlar, yorum yazanın görünen adı yerine @kullanıcıadını ve yorumun zamanından sonra hesabında ayarlı ülkeyi gösterebilir. Her birinin Hushfeed ayarları > Yorumlar bölümünde kendi anahtarı var ve ikisi de başta kapalı. na-x-ril'in onlynazril yamalarından alındı.
+
+* **TikTok:** Sistem yazı tipini kullan artık TikTok metnini içe aktardığınız bir .ttf veya .otf dosyasıyla da gösterebilir. Uygulama bölümünde İçe aktarılan yazı tipini kullan'ı açın, dosyayı seçin ve TikTok'u yeniden başlatın. Dosya silinir veya okunamazsa metin, Sistem yazı tipini kullan'ın gösterdiğine döner. na-x-ril'in onlynazril yamalarından alındı.
+
+* **TikTok:** Yeni Profile background yaması: Uygulama içinde Profil altındaki bir anahtar, TikTok'un kendi profil arka planı düzenleyicisini Profili düzenle bölümünde açar ve diğer profillerin ayarladığı arka planları gösterir. TikTok bu özelliği hesabınıza sunmadıysa TikTok sunucuları kaydetmeyi yine de reddedebilir. Kapalı başlar. na-x-ril'in onlynazril yamalarından alındı.
+
 * **TikTok:** CAPTCHA pencerelerini gizle yeniden bir anahtar oldu, Hushfeed ayarları > Akış ekranı altında, ve kapalı başlar. TikTok'un sen sadece gezinirken gösterdiği bulmacayı atlar. Beğeni, takip, yorum ya da yeniden paylaşımdan hemen sonra gelen bulmaca yine gösterilir, giriş, SMS ve iki adımlı doğrulamalar da öyle. Hide the risk control CAPTCHA yamasıyla o kontrolün gezinirken çıkan bulmacaları da atlanır. Kural, na-x-ril'in onlynazril yamalarından geliyor.
 
 * **TikTok:** Kişi listesine erişimi engelle açıkken tüm sütunları isteyen bir kişi okuması artık kişi sütunlarını yine de taşıyan boş bir liste alıyor. Böylece bir kişi kartının adını arayan TikTok ekranı eksik bir sütuna takılmıyor.

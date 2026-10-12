@@ -1,5 +1,11 @@
 ## Unreleased
 
+* **TikTok:** Nuova patch Show commenter handle and region: i commenti possono mostrare il @nomeutente di chi commenta al posto del nome visualizzato, e il paese impostato nel suo account dopo l'ora del commento. Ognuna ha il suo interruttore in Impostazioni di Hushfeed > Commenti, ed entrambe partono disattivate. Ripresa dalle patch onlynazril di na-x-ril.
+
+* **TikTok:** Usa il carattere di sistema ora può mostrare il testo di TikTok anche con un file .ttf o .otf che importi. Attiva Usa un carattere importato in App, scegli il file e riavvia TikTok. Se il file viene rimosso o non si può leggere, il testo torna a ciò che mostra Usa il carattere di sistema. Ripresa dalle patch onlynazril di na-x-ril.
+
+* **TikTok:** Nuova patch Profile background: un interruttore in App, sotto Profilo, apre l'editor dello sfondo del profilo di TikTok in Modifica profilo e mostra gli sfondi impostati dagli altri profili. I server di TikTok potrebbero comunque rifiutarsi di salvarlo per un account a cui TikTok non ha offerto la funzione. Parte disattivato. Ripresa dalle patch onlynazril di na-x-ril.
+
 * **TikTok:** Nascondi i popup CAPTCHA torna a essere un interruttore, in Impostazioni di Hushfeed > Schermata del feed, e parte spento. Salta il puzzle che TikTok mostra mentre stai solo navigando. Un puzzle subito dopo un mi piace, un follow, un commento o un repost compare comunque, così come i controlli di accesso, SMS e in due passaggi. Con la patch Hide the risk control CAPTCHA vengono saltati anche i puzzle di quel controllo durante la navigazione. La regola viene dalle patch onlynazril di na-x-ril.
 
 * **TikTok:** Con Blocca l'accesso alla lista contatti attivo, una lettura dei contatti che chiede tutte le colonne ora riceve una lista vuota che ha comunque le colonne dei contatti, così una schermata di TikTok che cerca il nome di una scheda contatto non inciampa in una colonna mancante.

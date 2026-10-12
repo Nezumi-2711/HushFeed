@@ -3570,6 +3570,45 @@
       "options": []
     },
     {
+      "name": "Profile background",
+      "description": "Opens TikTok's own profile background editor in Edit profile on accounts TikTok hasn't offered it to yet, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for such an account. Starts off. Turn it on in Hushfeed settings > App.",
+      "category": "Interaction",
+      "use": true,
+      "dependencies": [
+        "BytecodePatch",
+        "Settings"
+      ],
+      "compatiblePackages": {
+        "com.zhiliaoapp.musically": [
+          "47.1.4"
+        ]
+      },
+      "compatibility": [
+        {
+          "name": "TikTok",
+          "packageName": "com.zhiliaoapp.musically",
+          "description": null,
+          "appIconColor": 16657493,
+          "signatures": [
+            "9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"
+          ],
+          "targets": [
+            {
+              "version": "47.1.4",
+              "experimental": false,
+              "versionCodes": {
+                "ARM64_V8A": 2024701040,
+                "ARMEABI_V7A": 2024701040,
+                "X86": 2024701040,
+                "X86_64": 2024701040
+              }
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Region spoof",
       "description": "Makes TikTok's region and time zone match the country you set for SIM spoof. It changes every region check, sign-in included, and its store region switch is experimental, so it isn't picked for you. Starts off. Turn it on in Hushfeed settings > Region.",
       "category": "Settings",
@@ -4201,6 +4240,45 @@
       "name": "Show author region",
       "description": "Shows the country a video was posted from next to the creator's name. Starts off. Turn it on in Hushfeed settings > Feed screen.",
       "category": "Feed",
+      "use": true,
+      "dependencies": [
+        "BytecodePatch",
+        "Settings"
+      ],
+      "compatiblePackages": {
+        "com.zhiliaoapp.musically": [
+          "47.1.4"
+        ]
+      },
+      "compatibility": [
+        {
+          "name": "TikTok",
+          "packageName": "com.zhiliaoapp.musically",
+          "description": null,
+          "appIconColor": 16657493,
+          "signatures": [
+            "9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"
+          ],
+          "targets": [
+            {
+              "version": "47.1.4",
+              "experimental": false,
+              "versionCodes": {
+                "ARM64_V8A": 2024701040,
+                "ARMEABI_V7A": 2024701040,
+                "X86": 2024701040,
+                "X86_64": 2024701040
+              }
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Show commenter handle and region",
+      "description": "Shows a commenter's @username in place of their display name, and the country their account is set to after the comment's time. Both start off. Turn them on in Hushfeed settings > Comments.",
+      "category": "Comments",
       "use": true,
       "dependencies": [
         "BytecodePatch",
@@ -5176,7 +5254,7 @@
     },
     {
       "name": "Use system font",
-      "description": "Shows TikTok's text in your phone's own font instead of TikTok's, and can use your phone's emoji too. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok.",
+      "description": "Shows TikTok's text in your phone's own font or in a .ttf or .otf font file you import, instead of TikTok's, and can use your phone's emoji too. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok.",
       "category": "Interface",
       "use": true,
       "dependencies": [

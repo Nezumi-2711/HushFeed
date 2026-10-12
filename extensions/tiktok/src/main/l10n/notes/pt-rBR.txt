@@ -1,5 +1,11 @@
 ## Unreleased
 
+* **TikTok:** Novo patch Show commenter handle and region: os comentários podem mostrar o @usuário de quem comenta no lugar do nome de exibição, e o país definido na conta depois do horário do comentário. Cada um tem sua própria chave em Configurações do Hushfeed > Comentários, e os dois começam desligados. Trazido dos patches onlynazril de na-x-ril.
+
+* **TikTok:** Usar a fonte do sistema agora também pode mostrar o texto do TikTok com um arquivo .ttf ou .otf que você importar. Ative Usar uma fonte importada em Aplicativo, escolha o arquivo e reinicie o TikTok. Se o arquivo for removido ou não puder ser lido, o texto volta ao que Usar a fonte do sistema mostra. Trazido dos patches onlynazril de na-x-ril.
+
+* **TikTok:** Novo patch Profile background: uma chave em Aplicativo, na seção Perfil, abre o editor de fundo do perfil do próprio TikTok em Editar perfil e mostra os fundos que outros perfis definiram. Os servidores do TikTok ainda podem se recusar a salvar um fundo para uma conta à qual o TikTok não ofereceu o recurso. Começa desativado. Trazido dos patches onlynazril de na-x-ril.
+
 * **TikTok:** Esconder as janelas de CAPTCHA voltou a ser um botão, em Configurações do Hushfeed > Tela do feed, e começa desligado. Ele pula o quebra-cabeça que o TikTok mostra enquanto você só está navegando. Um quebra-cabeça logo depois de curtir, seguir, comentar ou republicar continua aparecendo, assim como as verificações de login, SMS e em duas etapas. Com o patch Hide the risk control CAPTCHA, os quebra-cabeças dessa verificação durante a navegação também são pulados. A regra vem dos patches onlynazril de na-x-ril.
 
 * **TikTok:** Com Bloquear o acesso à lista de contatos ligado, uma leitura de contatos que pede todas as colunas agora recebe uma lista vazia que ainda tem as colunas de contatos, então uma tela do TikTok que procura o nome de um cartão de contato não tropeça numa coluna que falta.
