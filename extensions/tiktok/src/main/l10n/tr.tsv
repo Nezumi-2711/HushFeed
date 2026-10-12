@@ -2040,3 +2040,5 @@ Couldn't remove the imported font. Try again.	İçe aktarılan yazı tipi kaldı
 Couldn't save the font in TikTok's storage. Free up some space and try again.	Yazı tipi TikTok'un depolama alanına kaydedilemedi. Biraz yer açıp tekrar deneyin.
 That file is larger than %1$s MB. Choose a smaller font file.	Dosya %1$s MB'tan büyük. Daha küçük bir yazı tipi dosyası seçin.
 That file isn't a font Android can use. Choose a .ttf or .otf file.	Bu dosya, Android'in kullanabileceği bir yazı tipi değil. Bir .ttf veya .otf dosyası seçin.
+Profile background	Profil arka planı
+Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet. Open Edit profile again after turning this on.	TikTok'un kendi profil arka planı düzenleyicisini Profili düzenle bölümünde açar ve diğer profillerin ayarladığı arka planları gösterir. TikTok bu özelliği hesabınıza henüz sunmadıysa TikTok sunucuları kaydetmeyi yine de reddedebilir. Bunu açtıktan sonra Profili düzenle sayfasını yeniden açın.

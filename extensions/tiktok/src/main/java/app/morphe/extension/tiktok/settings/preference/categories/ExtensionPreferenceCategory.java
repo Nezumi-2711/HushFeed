@@ -54,6 +54,7 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                 || SettingsStatus.keepFavoritesTabEnabled
                 || SettingsStatus.promotionalBannersEnabled
                 || SettingsStatus.profileShortcutsEnabled
+                || SettingsStatus.profileBackgroundEnabled
                 || SettingsStatus.followStatusEnabled
                 || SettingsStatus.copyIdsEnabled
                 || SettingsStatus.hdUploadEnabled
@@ -189,7 +190,7 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
         }
         if (SettingsStatus.keepFavoritesTabEnabled || SettingsStatus.promotionalBannersEnabled
                 || SettingsStatus.profileShortcutsEnabled || SettingsStatus.followStatusEnabled
-                || SettingsStatus.copyIdsEnabled) {
+                || SettingsStatus.copyIdsEnabled || SettingsStatus.profileBackgroundEnabled) {
             addPreference(new SectionHeadingPreference(context, "Profile"));
         }
         if (SettingsStatus.keepFavoritesTabEnabled) {
@@ -272,6 +273,17 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                         Settings.HIDE_PROFILE_THOUGHTS
                 ));
             }
+        }
+        if (SettingsStatus.profileBackgroundEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Profile background",
+                    "Opens TikTok's own profile background editor in Edit profile, and shows the "
+                            + "backgrounds other profiles have set. TikTok's servers may still refuse "
+                            + "to save one for an account TikTok hasn't offered it to yet. Open Edit "
+                            + "profile again after turning this on.",
+                    Settings.PROFILE_BACKGROUND
+            ));
         }
         if (SettingsStatus.hdUploadEnabled) {
             addPreference(new SectionHeadingPreference(context, "Posting"));

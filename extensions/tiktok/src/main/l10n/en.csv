@@ -1103,6 +1103,7 @@ Open the feed once so Hushfeed can see which tabs TikTok loaded.,Open the feed o
 Open the profile again and try once more,Open the profile again and try once more
 Open the story again and try once more,Open the story again and try once more
 "Open your profile once, then return here to choose its shortcuts.","Open your profile once, then return here to choose its shortcuts."
+"Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet. Open Edit profile again after turning this on.","Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet. Open Edit profile again after turning this on."
 Opens github.com in your browser,Opens github.com in your browser
 Operator code,Operator code
 Operator name,Operator name
@@ -1184,6 +1185,7 @@ Private account,Private account
 Problem detected.,Problem detected.
 Problem detected. Story views may still be reported. Check Ghost mode diagnostics. The warning stays until TikTok restarts.,Problem detected. Story views may still be reported. Check Ghost mode diagnostics. The warning stays until TikTok restarts.
 Profile,Profile
+Profile background,Profile background
 Profile banner,Profile banner
 Profile banner and new profile layout,Profile banner and new profile layout
 Profile picture,Profile picture

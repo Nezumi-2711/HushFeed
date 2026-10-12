@@ -664,6 +664,13 @@ public class SettingsStatus {
         appLanguageEnabled = true;
     }
 
+    /** Profile background put its switch in front of TikTok's profile background gate. */
+    public static boolean profileBackgroundEnabled = false;
+
+    public static void enableProfileBackground() {
+        profileBackgroundEnabled = true;
+    }
+
     // Patches with no settings row register too, so Build details can list every patch that
     // changed TikTok's code. Each one registers last in its execute, after everything it checks.
     public static boolean settingsEnabled = false;

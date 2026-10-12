@@ -2040,3 +2040,5 @@ Couldn't remove the imported font. Try again.	Impossibile rimuovere il carattere
 Couldn't save the font in TikTok's storage. Free up some space and try again.	Impossibile salvare il carattere nella memoria di TikTok. Libera un po' di spazio e riprova.
 That file is larger than %1$s MB. Choose a smaller font file.	Il file supera i %1$s MB. Scegli un file di carattere più piccolo.
 That file isn't a font Android can use. Choose a .ttf or .otf file.	Il file non è un carattere che Android può usare. Scegli un file .ttf o .otf.
+Profile background	Sfondo del profilo
+Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet. Open Edit profile again after turning this on.	Apre l'editor dello sfondo del profilo di TikTok in Modifica profilo e mostra gli sfondi impostati dagli altri profili. I server di TikTok potrebbero comunque rifiutarsi di salvarlo per un account a cui TikTok non ha ancora offerto la funzione. Riapri Modifica profilo dopo averlo attivato.
