@@ -66,7 +66,8 @@ internal fun Method.isProfileBackgroundGate(): Boolean =
 
 @Suppress("unused")
 val profileBackgroundPatch = bytecodePatch(
-    name = PATCH,
+    // A literal, not PATCH: the README and default-selection tests find patches by reading it.
+    name = "Profile background",
     description = "Opens TikTok's own profile background editor in Edit profile on accounts TikTok " +
         "hasn't offered it to yet, and shows the backgrounds other profiles have set. TikTok's " +
         "servers may still refuse to save one for such an account. Starts off. Turn it on in " +
