@@ -629,6 +629,8 @@ public final class VideoOverlayHider {
                             touchScale != 1f);
                     alignBarRows(found, TRAVERSAL.selected, hidden);
                     fadeFullscreenEntries();
+                    int photoExit = TRAVERSAL.selected[CLEAR_PHOTO_EXIT_TARGET];
+                    TapThroughControls.photoExits(activity, !clearControls && photoExit >= 0 ? found.get(photoExit) : null);
                     if (fadedClear && TapThroughControls.anyMarked()) TapThroughControls.watch(activity);
                     // The size goes on the icon inside each button, not the button. The slots
                     // are packed with no room between them, so a grown button lands on its

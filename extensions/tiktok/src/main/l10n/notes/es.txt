@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** La X de las publicaciones de fotos sigue funcionando con los controles atenuados en Pantalla limpia. Los demás controles atenuados siguen dejando pasar los toques al video (#84).
+
 * **TikTok:** Se añadió una pequeña herramienta de prueba para diseños nativos de subtítulos y lotes vacíos del feed en Android 6. Su informe distingue las pruebas de la carga de la validación de toda la app.
 
 * **TikTok:** Verificados los deslizamientos de brillo y volumen sobre la barra de comentarios atenuada. Las pruebas restauran el brillo, el audio y los ajustes temporales tras cada gesto.
