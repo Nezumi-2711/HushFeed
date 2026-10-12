@@ -356,27 +356,37 @@ public class LiveStatusBarTest {
     }
 
     /**
-     * #137, seen on the S22 with 0.71.3: every room is a page of its own in the room pager, each
-     * held down by the strip, and only the first page found lost it. Rooms the pager showed on
-     * its other pages kept a black band under the clock, so which rooms had it looked random.
+     * #137, seen on the S22 with 0.71.3: every room is a page of the room pager, and the pager
+     * pads a page as it binds a room to it. The search over the window took the panel TikTok
+     * shows while a room opens, the first view held down a bar's height, and left every page
+     * alone, so some rooms kept a black band under the clock. The strip is looked for above each
+     * room's stream now, on every page.
      */
-    @Test public void everyRoomPageLosesItsStripNotOnlyTheFirst() {
+    @Test public void everyRoomPageLosesItsStripAndTheOpeningPanelIsLeftAlone() {
         Settings.LIVE_UNDER_STATUS_BAR.save(true);
         followFromTheMainActivity();
         int bar = platformBar();
         ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
         LivePlayActivity live = room.get();
         LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout root = new FrameLayout(live);
+        FrameLayout opening = new FrameLayout(live);
+        opening.setPadding(0, bar, 0, 0);
+        root.addView(opening, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 626));
         FrameLayout pager = new FrameLayout(live);
-        live.setContentView(pager);
-        FrameLayout first = roomPage(live, pager, bar);
+        root.addView(pager, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        live.setContentView(root);
+        FrameLayout first = roomPage(live, pager, 0);
         FrameLayout second = roomPage(live, pager, bar);
         shade(live, controlsOf(second));
         room.start().resume().visible();
         layOut(live);
         layOut(live);
 
-        assertEquals("the first room kept its strip", 0, first.getPaddingTop());
+        assertEquals("the opening panel was taken for the strip", bar, opening.getPaddingTop());
+        assertEquals("a room without a strip was moved", 0, first.getPaddingTop());
+        assertEquals("a room without a strip had its controls lowered", 7, controlsOf(first).getPaddingTop());
         assertEquals("the next room kept its strip", 0, second.getPaddingTop());
         assertEquals("the next room's controls went up under the clock", 7 + bar, controlsOf(second).getPaddingTop());
         assertTrue("the next room got no shade under the clock",
@@ -387,24 +397,26 @@ public class LiveStatusBarTest {
         assertEquals("a page the pager made later kept its strip", 0, later.getPaddingTop());
         assertEquals(7 + bar, controlsOf(later).getPaddingTop());
 
-        // The pager reusing a page for another room pads it again.
-        second.setPadding(0, bar, 0, 0);
+        // The pager binding another room to a page pads it again.
+        first.setPadding(0, bar, 0, 0);
         layOut(live);
-        assertEquals("a reused page kept its strip", 0, second.getPaddingTop());
+        assertEquals("a page padded as a room was bound kept its strip", 0, first.getPaddingTop());
+        assertEquals(7 + bar, controlsOf(first).getPaddingTop());
 
         room.pause();
-        assertEquals("leaving didn't give the first room its strip back", bar, first.getPaddingTop());
-        assertEquals("leaving didn't give the other rooms their strip back", bar, second.getPaddingTop());
+        assertEquals("leaving didn't give the rooms their strip back", bar, second.getPaddingTop());
         assertEquals(bar, later.getPaddingTop());
+        assertEquals(bar, first.getPaddingTop());
         assertEquals("leaving didn't give the controls back", 7, controlsOf(second).getPaddingTop());
         assertEquals(null, controlsOf(second).getBackground());
+        assertEquals(bar, opening.getPaddingTop());
         room.stop().destroy();
     }
 
-    /** A room page as 47.1.4 has it on the S22: held down by the strip, the stream and controls inside. */
-    private static FrameLayout roomPage(Activity live, FrameLayout pager, int bar) {
+    /** A room page as 47.1.4 has it on the S22: held down by {@code strip}, the stream and controls inside. */
+    private static FrameLayout roomPage(Activity live, FrameLayout pager, int strip) {
         FrameLayout page = new FrameLayout(live);
-        page.setPadding(0, bar, 0, 0);
+        page.setPadding(0, strip, 0, 0);
         pager.addView(page, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         page(live, page);

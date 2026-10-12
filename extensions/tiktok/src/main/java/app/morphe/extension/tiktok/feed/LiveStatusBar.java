@@ -331,6 +331,24 @@ public final class LiveStatusBar {
     }
 
     /**
+     * The room pager, on the way up from one room's stream: the first view holding two children
+     * of one kind with a stream in each. On 47.1.4 that's the room pager with a page per room.
+     * Null while it holds a single room.
+     */
+    static ViewGroup findPager(View stream, View content, int videoId) {
+        for (View at = stream; at != content && at.getParent() instanceof ViewGroup; at = (View) at.getParent()) {
+            ViewGroup parent = (ViewGroup) at.getParent();
+            int rooms = 0;
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                View child = parent.getChildAt(i);
+                if (child.getClass() == at.getClass() && child.findViewById(videoId) != null) rooms++;
+            }
+            if (rooms >= 2) return parent;
+        }
+        return null;
+    }
+
+    /**
      * The LIVE stream on screen in the detail pager, or null. The pages either side of the one in
      * view are laid out too, so only a stream across the middle of the window counts.
      */
@@ -579,13 +597,16 @@ public final class LiveStatusBar {
         private final WeakReference<View> decor;
         /** The LIVE page's stream in the detail pager, or nothing for a room of its own. */
         final WeakReference<View> stream;
+        /** The strip found by the search over the window, where there's no stream to go by. */
         private Offset lifted;
         /**
-         * The room pager's other pages, lifted like the first. On the S22 every room is a page
-         * held down by a strip of its own, so lifting only the first page left a black band over
-         * the rooms the pager showed on its other pages (#137).
+         * The strips taken from above each room's stream, by the view that held them. On the S22
+         * every room is a page of the room pager, and the pager pads a page as it binds a room to
+         * it, so some rooms kept a black band under the clock (#137).
          */
-        private final WeakHashMap<View, Boolean> otherPages = new WeakHashMap<>();
+        private final WeakHashMap<View, Offset> strips = new WeakHashMap<>();
+        /** The room pager, found from a stream once it holds two rooms. */
+        private WeakReference<ViewGroup> pager = new WeakReference<>(null);
         private int searches, relifts, coverSearches;
         /**
          * Shade searches spent on each layer held lower. One budget for the whole visit ran out
@@ -647,16 +668,16 @@ public final class LiveStatusBar {
         }
 
         private void keepStripAway() {
+            if (stream == null && videoId() != 0) {
+                keepRoomStripsAway();
+                return;
+            }
             if (lifted != null) {
                 View target = lifted.view.get();
-                if (target == null || fought) return;
                 // TikTok put the strip back, on a relayout of its own: a panel opening or
                 // closing in the room does it.
-                if (lifted.current(target) == lifted.value) {
-                    if (!mayRelift()) return;
-                    lifted.set(target, 0);
-                }
-                liftOtherPages(target);
+                if (target == null || fought || lifted.current(target) != lifted.value || !mayRelift()) return;
+                lifted.set(target, 0);
                 return;
             }
             Activity room = activity.get();
@@ -672,7 +693,47 @@ public final class LiveStatusBar {
             if (target == null) return;
             lifted = offset;
             offset.set(target, 0);
-            liftOtherPages(target);
+            HookStatus.bound(HOOK_FAMILY, "LIVE room top strip taken away");
+        }
+
+        /**
+         * A room of its own: the strip is looked for just above each room's stream, on every page
+         * of the room pager and on every pass, since a page gets its strip as a room is bound to
+         * it. The search over the window took the first view held down a bar's height, which on
+         * 47.1.4 is a panel shown while a room opens, and left every room page as it was.
+         */
+        private void keepRoomStripsAway() {
+            Activity room = activity.get();
+            View window = decor.get();
+            if (fought || room == null || window == null) return;
+            View content = room.findViewById(android.R.id.content);
+            if (content == null || content.getHeight() == 0) return;
+            ViewGroup rooms = pager.get();
+            if (rooms == null || !rooms.isAttachedToWindow()) {
+                View first = content.findViewById(videoId);
+                if (first == null) return;
+                rooms = findPager(first, content, videoId);
+                pager = new WeakReference<>(rooms);
+                if (rooms == null) {
+                    liftAbove(first, content, barHeights(window));
+                    return;
+                }
+            }
+            int[] bars = barHeights(window);
+            for (int i = 0; i < rooms.getChildCount() && !fought; i++) {
+                View shown = rooms.getChildAt(i).findViewById(videoId);
+                if (shown != null) liftAbove(shown, content, bars);
+            }
+        }
+
+        /** Takes the strip above one room's stream, once, or again when TikTok has put it back. */
+        private void liftAbove(View shown, View content, int[] bars) {
+            Offset strip = stripAbove(shown, content, bars);
+            View target = strip == null ? null : strip.view.get();
+            if (target == null) return;
+            if (strips.containsKey(target) && !mayRelift()) return;
+            strips.put(target, strip);
+            strip.set(target, 0);
             HookStatus.bound(HOOK_FAMILY, "LIVE room top strip taken away");
         }
 
@@ -691,30 +752,28 @@ public final class LiveStatusBar {
             return true;
         }
 
-        /**
-         * The pages beside a lifted room page, of its class and held down as far, lose the strip
-         * too, as the pager makes or reuses them. A detail page's LIVE is one page and stays so.
-         */
-        private void liftOtherPages(View page) {
-            if (stream != null || !lifted.padding || !(page.getParent() instanceof ViewGroup)) return;
-            ViewGroup pager = (ViewGroup) page.getParent();
-            for (int i = 0; i < pager.getChildCount(); i++) {
-                View other = pager.getChildAt(i);
-                if (other == page || other.getClass() != page.getClass() || lifted.current(other) != lifted.value) continue;
-                if (otherPages.containsKey(other) && !mayRelift()) return;
-                otherPages.put(other, Boolean.TRUE);
-                lifted.set(other, 0);
+        /** The views that hold a strip this took away and haven't had it put back. */
+        private List<View> liftedTargets() {
+            List<View> targets = new ArrayList<>();
+            View target = lifted == null ? null : lifted.view.get();
+            if (target != null && lifted.current(target) == 0) targets.add(target);
+            for (Map.Entry<View, Offset> entry : strips.entrySet()) {
+                View held = entry.getKey();
+                if (held != null && entry.getValue().current(held) == 0) targets.add(held);
             }
+            return targets;
         }
 
-        /** The room pages lifted now: the first one, then the others still without their strip. */
-        private List<View> liftedPages(View target) {
-            List<View> pages = new ArrayList<>();
-            pages.add(target);
-            for (View page : otherPages.keySet()) {
-                if (page != null && lifted.current(page) == 0) pages.add(page);
+        /** The stream's view id, looked up once; 0 when TikTok has none. */
+        private int videoId() {
+            if (videoId < 0) {
+                Activity room = activity.get();
+                if (room == null) return 0;
+                videoId = videoContainerForTests != 0 ? videoContainerForTests
+                        : room.getResources().getIdentifier(VIDEO_CONTAINER, "id", room.getPackageName());
+                if (videoId == 0) HookStatus.missingViewId(HOOK_FAMILY, VIDEO_CONTAINER);
             }
-            return pages;
+            return videoId;
         }
 
         /**
@@ -750,21 +809,16 @@ public final class LiveStatusBar {
          * button stay clear of the clock (#137). With the strip back, they go back up with it.
          */
         private void keepControlsBelowBar() {
-            View target = lifted == null ? null : lifted.view.get();
-            if (target == null || lifted.current(target) != 0) {
+            List<View> targets = liftedTargets();
+            if (targets.isEmpty()) {
                 raiseControls();
                 return;
             }
-            if (videoId < 0) {
-                Activity room = activity.get();
-                if (room == null) return;
-                videoId = videoContainerForTests != 0 ? videoContainerForTests
-                        : room.getResources().getIdentifier(VIDEO_CONTAINER, "id", room.getPackageName());
-                if (videoId == 0) HookStatus.missingViewId(HOOK_FAMILY, VIDEO_CONTAINER);
-            }
-            if (videoId == 0) return;
-            for (View page : liftedPages(target)) {
-                for (View layer : findControls(page, videoId)) {
+            if (videoId() == 0) return;
+            for (View target : targets) {
+                Offset strip = strips.get(target);
+                int by = strip != null ? strip.value : lifted.value;
+                for (View layer : findControls(target, videoId)) {
                     Integer own = lowered.get(layer);
                     if (own == null) {
                         own = layer.getPaddingTop();
@@ -774,7 +828,7 @@ public final class LiveStatusBar {
                         // Already a bar lower, or TikTok set a padding of its own.
                         continue;
                     }
-                    loweredBy = lifted.value;
+                    loweredBy = by;
                     layer.setPadding(layer.getPaddingLeft(), own + loweredBy, layer.getPaddingRight(), layer.getPaddingBottom());
                 }
             }
@@ -823,13 +877,15 @@ public final class LiveStatusBar {
             if (known != null && known.getVisibility() == View.INVISIBLE) known.setVisibility(View.VISIBLE);
             cover = new WeakReference<>(null);
             raiseControls();
+            for (Map.Entry<View, Offset> entry : strips.entrySet()) {
+                View held = entry.getKey();
+                if (held != null && entry.getValue().current(held) == 0) entry.getValue().set(held, entry.getValue().value);
+            }
+            strips.clear();
+            pager = new WeakReference<>(null);
             if (lifted == null) return;
             View target = lifted.view.get();
             if (target != null && lifted.current(target) == 0) lifted.set(target, lifted.value);
-            for (View page : otherPages.keySet()) {
-                if (page != null && lifted.current(page) == 0) lifted.set(page, lifted.value);
-            }
-            otherPages.clear();
             lifted = null;
         }
     }

@@ -2070,6 +2070,65 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok topviews " + text.length() + " chars in " + pieces + " pieces");
                         break;
                     }
+                    case "liveroom": {
+                        // What the LIVE status bar code holds for each room in front (#137): the
+                        // view it lifted and how, its searches and relifts, the pages and layers it
+                        // changed. Technical fields only, read by reflection.
+                        android.app.Activity activity = (android.app.Activity) loader.loadClass(UTILS)
+                                .getMethod("getActivity").invoke(null);
+                        android.content.res.Resources resources = activity == null ? null : activity.getResources();
+                        Class<?> owner = loader.loadClass("app.morphe.extension.tiktok.feed.LiveStatusBar");
+                        Field hiddenField = owner.getDeclaredField("HIDDEN");
+                        hiddenField.setAccessible(true);
+                        Map<?, ?> hidden = (Map<?, ?>) hiddenField.get(null);
+                        StringBuilder out = new StringBuilder();
+                        for (Map.Entry<?, ?> entry : new java.util.HashMap<>(hidden).entrySet()) {
+                            Object room = entry.getValue();
+                            out.append("room of ").append(entry.getKey().getClass().getSimpleName());
+                            for (Field field : room.getClass().getDeclaredFields()) {
+                                if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) continue;
+                                field.setAccessible(true);
+                                Object value = field.get(room);
+                                out.append("\n  ").append(field.getName()).append('=');
+                                if (value instanceof java.lang.ref.Reference) value = ((java.lang.ref.Reference<?>) value).get();
+                                if (value instanceof android.view.View) {
+                                    out.append(liveRoomView((android.view.View) value, resources));
+                                } else if (value instanceof Map) {
+                                    out.append(((Map<?, ?>) value).size()).append(" [");
+                                    for (Map.Entry<?, ?> item : ((Map<?, ?>) value).entrySet()) {
+                                        Object key = item.getKey();
+                                        out.append(key instanceof android.view.View ? liveRoomView((android.view.View) key, resources) : String.valueOf(key))
+                                                .append("->").append(item.getValue()).append("; ");
+                                    }
+                                    out.append(']');
+                                } else if (value != null && value.getClass().getName().endsWith("$Offset")) {
+                                    Field viewField = value.getClass().getDeclaredField("view");
+                                    Field paddingField = value.getClass().getDeclaredField("padding");
+                                    Field valueField = value.getClass().getDeclaredField("value");
+                                    viewField.setAccessible(true);
+                                    paddingField.setAccessible(true);
+                                    valueField.setAccessible(true);
+                                    Object view = ((java.lang.ref.Reference<?>) viewField.get(value)).get();
+                                    out.append("Offset(").append(paddingField.get(value) == Boolean.TRUE ? "padding " : "margin ")
+                                            .append(valueField.get(value)).append(" on ")
+                                            .append(view instanceof android.view.View ? liveRoomView((android.view.View) view, resources) : "gone")
+                                            .append(')');
+                                } else if (value instanceof Number || value instanceof Boolean || value == null) {
+                                    out.append(value);
+                                } else {
+                                    out.append('<').append(value.getClass().getSimpleName()).append('>');
+                                }
+                            }
+                            out.append('\n');
+                        }
+                        String text = out.toString();
+                        int pieces = 0;
+                        for (int at = 0; at < text.length(); at += 3000, pieces++) {
+                            Log.i(TAG, "liveroom[" + pieces + "] " + text.substring(at, Math.min(text.length(), at + 3000)));
+                        }
+                        Log.i(TAG, "ok liveroom " + hidden.size() + " rooms");
+                        break;
+                    }
                     case "windowviews": {
                         // Dialogs and bottom sheets can live in a separate WindowManager root.
                         // TikTok 47.0.3's comment sheet leaves MainActivity's own content view
@@ -2292,6 +2351,15 @@ public final class Probe extends Instrumentation {
                 }
             }
             return null;
+        }
+
+        /** A view for the liveroom action: class, id, place on screen and top padding. */
+        private static String liveRoomView(android.view.View view, android.content.res.Resources resources) {
+            int[] at = new int[2];
+            view.getLocationInWindow(at);
+            return view.getClass().getSimpleName() + " id=" + (resources == null ? view.getId() : idName(view, resources))
+                    + " at=" + at[0] + "," + at[1] + " h=" + view.getHeight() + " padTop=" + view.getPaddingTop()
+                    + " attached=" + view.isAttachedToWindow();
         }
 
         /** The resource entry name of a view's id, the raw number for an id without one. */
