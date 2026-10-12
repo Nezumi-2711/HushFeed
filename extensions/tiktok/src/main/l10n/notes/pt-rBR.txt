@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Preferir vídeo H.264 e Reproduzir em SDR em vez de HDR agora mantêm as outras versões de um vídeo quando nenhuma das preferidas tem um endereço para tocar, então a Qualidade de reprodução continua escolhendo entre versões que tocam.
+
 * **TikTok:** Na Tela limpa, as abas de baixo continuam escondidas depois de deslizar até o perfil de um criador e voltar (#84).
 
 * **TikTok:** Os números digitados em Contagens do seu perfil continuam nos campos quando a tela gira ou o tema muda com o editor aberto.

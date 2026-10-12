@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Prefer H.264 video and Play SDR instead of HDR now keep a video's other versions when none of the preferred ones has an address to play from, so Playback quality still picks among versions that play.
+
 * **TikTok:** In Clear display, the bottom tabs stay hidden after you swipe over to a creator's profile and back (#84).
 
 * **TikTok:** Numbers typed into Own profile counts stay in their fields when the screen rotates or the theme changes while the editor is open.

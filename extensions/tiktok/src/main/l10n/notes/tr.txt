@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** H.264 videoyu tercih et ve HDR yerine SDR oynat artık tercih edilen sürümlerin hiçbirinin oynatılabilir adresi olmadığında videonun diğer sürümlerini korur. Böylece oynatma kalitesi yine oynayan sürümler arasından seçer.
+
 * **TikTok:** Temiz ekranda, bir içerik üreticinin profiline kaydırıp geri döndüğünüzde alt sekmeler gizli kalır (#84).
 
 * **TikTok:** Kendi profil sayılarınız alanlarına yazdığınız sayılar, düzenleyici açıkken ekran dönerse veya tema değişirse alanlarda kalır.

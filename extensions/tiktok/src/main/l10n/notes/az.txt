@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** H.264 videoya üstünlük ver və HDR əvəzinə SDR oynat artıq üstünlük verilən versiyaların heç birinin oynatmaq üçün ünvanı olmadıqda videonun digər versiyalarını saxlayır, beləliklə oynatma keyfiyyəti yenə oynayan versiyalar arasından seçir.
+
 * **TikTok:** Təmiz ekranda müəllifin profilinə sürüşdürüb geri qayıdanda alt tablar gizli qalır (#84).
 
 * **TikTok:** Öz profilinizin sayları sahələrinə yazdığınız rəqəmlər redaktor açıq ikən ekran fırlananda və ya tema dəyişəndə sahələrdə qalır.

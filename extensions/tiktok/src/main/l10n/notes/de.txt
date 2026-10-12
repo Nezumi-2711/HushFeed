@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** H.264-Video bevorzugen und SDR statt HDR abspielen behalten jetzt die anderen Fassungen eines Videos, wenn keine der bevorzugten eine abspielbare Adresse hat. So wählt die Wiedergabequalität weiter unter Fassungen, die laufen.
+
 * **TikTok:** In der freien Anzeige bleiben die unteren Tabs ausgeblendet, wenn du zum Profil eines Creators und wieder zurück wischst (#84).
 
 * **TikTok:** Zahlen, die du unter „Zahlen des eigenen Profils“ eingibst, bleiben in den Feldern, wenn sich der Bildschirm dreht oder das Design wechselt, während der Editor offen ist.

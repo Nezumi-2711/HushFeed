@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Utamakan video H.264 dan Putar SDR, bukan HDR kini mempertahankan versi lain sebuah video jika tidak ada versi pilihan yang punya alamat untuk diputar, jadi Kualitas pemutaran tetap memilih di antara versi yang bisa diputar.
+
 * **TikTok:** Dalam Tampilan bersih, tab bawah tetap tersembunyi setelah Anda menggeser ke profil kreator lalu kembali (#84).
 
 * **TikTok:** Angka yang diketik di Jumlah profil sendiri tetap ada di kolomnya saat layar diputar atau tema berganti selagi editor terbuka.
