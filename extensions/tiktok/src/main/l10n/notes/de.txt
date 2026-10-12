@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** „CAPTCHA-Popups ausblenden“ ist wieder ein Schalter, unter Hushfeed-Einstellungen > Feed-Ansicht, und startet ausgeschaltet. Er überspringt das Rätsel, das TikTok zeigt, während du nur stöberst. Ein Rätsel direkt nach einem Like, Folgen, Kommentar oder Repost erscheint weiter, ebenso Anmelde-, SMS- und Zwei-Schritt-Prüfungen. Mit dem Patch Hide the risk control CAPTCHA werden auch dessen Rätsel beim Stöbern übersprungen. Die Regel stammt aus den onlynazril-Patches von na-x-ril.
+
 * **TikTok:** Mit „Zugriff auf die Kontaktliste blockieren“ bekommt eine Kontaktabfrage, die alle Spalten will, jetzt eine leere Liste, die trotzdem die Kontaktspalten hat. So stolpert ein TikTok-Bildschirm, der den Namen einer Kontaktkarte nachschlägt, nicht über eine fehlende Spalte.
 
 * **TikTok:** H.264-Video bevorzugen und SDR statt HDR abspielen behalten jetzt die anderen Fassungen eines Videos, wenn keine der bevorzugten eine abspielbare Adresse hat. So wählt die Wiedergabequalität weiter unter Fassungen, die laufen.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** CAPTCHA pəncərələrini gizlədin yenidən açar oldu, Hushfeed ayarları > Lent ekranı bölməsində, və söndürülmüş başlayır. TikTok-un sən sadəcə gəzərkən göstərdiyi tapmacanı keçir. Bəyənmə, izləmə, şərh və ya yenidən paylaşımdan dərhal sonra gələn tapmaca yenə göstərilir, giriş, SMS və iki addımlı yoxlamalar da. Hide the risk control CAPTCHA yaması ilə o yoxlamanın gəzərkən çıxan tapmacaları da keçilir. Qayda na-x-ril-in onlynazril yamalarından gəlir.
+
 * **TikTok:** Kontakt siyahısına girişi bloklayın açıq olanda bütün sütunları istəyən kontakt oxuması artıq kontakt sütunlarını yenə də saxlayan boş siyahı alır, beləliklə kontakt kartının adını axtaran TikTok ekranı çatışmayan sütuna ilişmir.
 
 * **TikTok:** H.264 videoya üstünlük ver və HDR əvəzinə SDR oynat artıq üstünlük verilən versiyaların heç birinin oynatmaq üçün ünvanı olmadıqda videonun digər versiyalarını saxlayır, beləliklə oynatma keyfiyyəti yenə oynayan versiyalar arasından seçir.

@@ -6,7 +6,6 @@ package app.morphe.extension.tiktok.settings.preference.categories;
 
 import android.content.Context;
 import android.preference.PreferenceScreen;
-import android.preference.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -448,14 +447,14 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             ));
         }
         if (SettingsStatus.captchaPopupSuppressionEnabled) {
-            Preference captcha = new Preference(context);
-            captcha.setTitle(L10n.t(context, "Hide CAPTCHA popups"));
-            captcha.setSummary(L10n.t(context,
-                    "Unavailable on these TikTok builds. All verification challenges stay visible."));
-            captcha.setKey("hushfeed_captcha_unavailable");
-            captcha.setEnabled(false);
-            captcha.setSelectable(false);
-            addPreference(captcha);
+            addPreference(new TogglePreference(
+                    context,
+                    "Hide CAPTCHA popups",
+                    "Skip the puzzle TikTok shows while you're just browsing. A puzzle right after "
+                            + "you like, follow, comment or repost still shows, and so do sign-in, "
+                            + "SMS and two-step checks. If something stops working, turn this off.",
+                    Settings.HIDE_CAPTCHA_POPUPS
+            ));
         }
         if (SettingsStatus.popupLabelsEnabled) {
             addPreference(new PopupLabelChecklistPreference(context));

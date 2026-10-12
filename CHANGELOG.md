@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Hide CAPTCHA popups is a switch again, in Hushfeed settings > Feed screen, and starts off. It skips the puzzle TikTok raises while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. With Hide the risk control CAPTCHA patched in, that check's browsing puzzles are skipped too. The rule comes from na-x-ril's onlynazril patches.
+
 * **TikTok:** With Block contact list access on, a contacts read that asks for every column now gets back an empty list that still has the contacts columns, so a TikTok screen that looks up a contact card's name doesn't trip over a missing column.
 
 * **TikTok:** Prefer H.264 video and Play SDR instead of HDR now keep a video's other versions when none of the preferred ones has an address to play from, so Playback quality still picks among versions that play.

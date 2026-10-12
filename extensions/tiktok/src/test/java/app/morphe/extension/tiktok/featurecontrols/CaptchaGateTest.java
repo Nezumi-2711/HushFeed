@@ -276,28 +276,49 @@ public class CaptchaGateTest {
         assertFalse(CaptchaGate.shouldHideTuringCaptchaPopup(null, "twice_verify"));
     }
 
+    /**
+     * Signed in, with no write of the reader's in its window and nothing naming an account
+     * screen, a puzzle was raised while browsing, and every hook hides it while the switch is
+     * on. The first hidden one says so on screen.
+     */
     @Test
-    public void aSignedInAccountDoesNotMakeAnUnclassifiedSceneSafeToHide() {
+    public void aSignedInBrowsingPuzzleIsHiddenByEveryHook() {
         CaptchaGate.accountServiceForTests = new SignedInAccount();
-        String[] details = {null, "", " ", "{", "unknown", "slide", "slide_captcha",
-                "common_verify", "{\"subtype\":\"slide\"}", "{\"scene\":\"feed\"}"};
+        String[] details = {"{", "unknown", "slide", "slide_captcha", "common_verify",
+                "{\"subtype\":\"slide\"}", "{\"scene\":\"feed\"}"};
         ShadowToast.reset();
         for (String detail : details) {
             ShadowLog.clear();
-            assertEquals("its scene has no reviewed browsing contract",
-                    CaptchaGate.showReason(null, detail, afterEveryWrite()));
-            assertFalse(CaptchaGate.shouldHideCaptchaPopup(null, detail));
-            assertFalse(CaptchaGate.shouldHideOecCaptchaPopup(new VerifyRequest(detail)));
-            assertFalse(CaptchaGate.shouldHideTuringDialog(null, new VerifyRequest(detail)));
-            assertFalse(CaptchaGate.shouldHideTuringCaptchaPopup(null, detail));
-            assertTrue(ShadowLog.getLogs().stream().anyMatch(log ->
-                    log.msg.contains("Showing risk check")
-                            && log.msg.contains("no reviewed browsing contract")));
+            assertNull(detail, CaptchaGate.showReason(null, detail, afterEveryWrite()));
+            assertTrue(detail, CaptchaGate.shouldHideCaptchaPopup(null, detail));
+            assertTrue(detail, CaptchaGate.shouldHideOecCaptchaPopup(new VerifyRequest(detail)));
+            assertTrue(detail, CaptchaGate.shouldHideTuringDialog(null, new VerifyRequest(detail)));
+            assertTrue(detail, CaptchaGate.shouldHideTuringCaptchaPopup(null, detail));
+            assertTrue(ShadowLog.getLogs().stream().anyMatch(log -> log.msg.contains("Hid risk check")));
         }
-        assertFalse(CaptchaGate.shouldHideLegacyCaptchaPopup(null, 2148));
+        // popCaptchaV2's risk info and popCaptcha's error code describe nothing account-shaped
+        // when they're missing, the same as onlynazril's rule.
+        for (String detail : new String[]{null, "", " "}) {
+            assertTrue(CaptchaGate.shouldHideCaptchaPopup(null, detail));
+        }
+        assertTrue(CaptchaGate.shouldHideLegacyCaptchaPopup(null, 2148));
         Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertNotNull(CaptchaGate.recentlySuppressedCheckId());
+        assertEquals("one notice for the session", 1, ShadowToast.shownToastCount());
+    }
+
+    /** A verification request that names no scene might be the account's own, so it shows. */
+    @Test
+    public void aSignedInVerificationRequestWithNoReadableSceneIsShown() {
+        CaptchaGate.accountServiceForTests = new SignedInAccount();
+        for (String scene : new String[]{null, "", " "}) {
+            ShadowLog.clear();
+            assertFalse(CaptchaGate.shouldHideOecCaptchaPopup(new VerifyRequest(scene)));
+            assertFalse(CaptchaGate.shouldHideTuringDialog(null, new VerifyRequest(scene)));
+            assertTrue(ShadowLog.getLogs().stream().anyMatch(log ->
+                    log.msg.contains("Showing risk check") && log.msg.contains("its scene can't be read")));
+        }
         assertNull(CaptchaGate.recentlySuppressedCheckId());
-        assertEquals(0, ShadowToast.shownToastCount());
     }
 
     @Test
@@ -339,12 +360,12 @@ public class CaptchaGateTest {
     }
 
     @Test
-    public void offPauseAndWriteExpiryCannotTurnUnknownChallengesIntoBrowsingOnes() {
+    public void offAndPauseShowEveryChallengeAndAWriteHoldsItsWindow() {
         CaptchaGate.accountServiceForTests = new SignedInAccount();
         CaptchaGate.recordRequest(new Request("/aweme/v1/commit/item/digg/"));
         assertEquals("it gates a like", CaptchaGate.showReason(null, "slide",
                 now + CaptchaGate.WRITE_WINDOW_MS));
-        assertEquals("its scene has no reviewed browsing contract",
+        assertNull("once the like's window passes, the puzzle is a browsing one",
                 CaptchaGate.showReason(null, "slide", afterEveryWrite()));
         Settings.HIDE_CAPTCHA_POPUPS.save(false);
         assertEquals("the setting is off", CaptchaGate.showReason(null, "slide", now));

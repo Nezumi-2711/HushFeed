@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sembunyikan popup CAPTCHA kembali menjadi sakelar, di Pengaturan Hushfeed > Layar feed, dan mulai dalam keadaan mati. Sakelar ini melewati teka-teki yang ditampilkan TikTok saat kamu hanya menjelajah. Teka-teki tepat setelah kamu menyukai, mengikuti, berkomentar, atau memposting ulang tetap muncul, begitu juga pemeriksaan masuk, SMS, dan dua langkah. Dengan patch Hide the risk control CAPTCHA, teka-teki penjelajahan dari pemeriksaan itu juga dilewati. Aturannya berasal dari patch onlynazril milik na-x-ril.
+
 * **TikTok:** Dengan Blokir akses ke daftar kontak aktif, pembacaan kontak yang meminta semua kolom kini mendapat daftar kosong yang tetap punya kolom kontak, jadi layar TikTok yang mencari nama kartu kontak tidak tersandung kolom yang hilang.
 
 * **TikTok:** Utamakan video H.264 dan Putar SDR, bukan HDR kini mempertahankan versi lain sebuah video jika tidak ada versi pilihan yang punya alamat untuk diputar, jadi Kualitas pemutaran tetap memilih di antara versi yang bisa diputar.

@@ -107,11 +107,11 @@ Login trouble is the most common complaint about any patched TikTok. These are t
 - Turn off Private DNS, AdGuard or any other ad blocker while you log in. They can block the addresses TikTok checks a login against.
 - After several failed tries TikTok stops taking new ones for a while. Wait an hour, then try again.
 - Facebook login can't work on a patched build. Facebook checks the app's signing key, and a patched TikTok carries your manager's key instead of TikTok's. Log in with your email or phone number and a code, or with Google.
-- Since v0.67.0, Hide CAPTCHA popups isn't available and every verification challenge stays visible. Older builds still have the switch, so turn it off and restart TikTok when you're looking into a stalled login.
+- Hide CAPTCHA popups leaves sign-in, SMS and two-step checks alone, and anything right after a like, follow, comment or repost. If a login still stalls with it on, turn it off and restart TikTok.
 
 ### Can Feature Gate Lab hide CAPTCHA popups?
 
-Not today. A CAPTCHA is TikTok's servers asking you to prove you're a person, and none of the Lab's reviewed presets touch it. Hide CAPTCHA popups stays unavailable until it's been checked on a phone against a real challenge, so a hidden one can't quietly stop a login or a like.
+No. A CAPTCHA is TikTok's servers asking you to prove you're a person, and none of the Lab's presets touch it. Use the Hide CAPTCHA popups switch in Hushfeed settings > Feed screen instead. It only skips puzzles raised while you're browsing, so a hidden one can't quietly stop a login or a like.
 
 What the Lab does is change values the app reads for its own features, the same flags other TikTok mods flip. To try one:
 
@@ -215,7 +215,7 @@ Simple mode in Morphe Manager selects 115 of these patches. Each row below says 
 - Change app name, Custom launcher icon, Hide Play Store update offer, Look like the store app and Run beside the store app change the app's name, icon, signature, package or version code.
 - AMOLED dark theme, Block P2P video relay, Remove content credential and card scanner assets, Remove creation tools, Remove LIVE extras and Remove unused language packs change TikTok's files while patching. Only a fresh patch takes that back.
 - Trust user certificates changes TikTok with no switch in front of it.
-- Feature Gate Recorder, Hide the risk control CAPTCHA and Network request report only record what TikTok does, for research.
+- Feature Gate Recorder and Network request report only record what TikTok does, for research. Hide the risk control CAPTCHA sits on TikTok's account checks.
 - Region spoof changes the region TikTok sees on every read, sign-in included. Skip first-launch setup only helps when it's picked before TikTok's first start, so its switch starts on.
 
 | Patch | Description |
@@ -268,7 +268,7 @@ Simple mode in Morphe Manager selects 115 of these patches. Each row below says 
 | `Follow diagnostics` | Tells you when TikTok quietly turned down a follow, and why, since the app shows it as if it worked. With diagnostic logging on, the details go in the report too. Works as soon as you patch it in, with no switch. |
 | `Ghost mode` | Stops TikTok telling people you viewed their story or profile, or that you're typing. What TikTok already recorded stays. A separate switch hides your online status. Starts off. Turn it on in Hushfeed settings > Privacy. |
 | `Hide already seen videos` | Remembers the videos you've watched and hides them when the feed sends them again, so you only see new ones. The list stays on your phone. Starts off. Turn it on in Hushfeed settings > Feed filter. |
-| `Hide CAPTCHA popups` | Notes in Hushfeed's diagnostic report when TikTok shows a verification puzzle. Its hide switch isn't available on this TikTok version, so every puzzle still shows. Works as soon as you patch it in. |
+| `Hide CAPTCHA popups` | Skips the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. Starts off. Turn it on in Hushfeed settings > Feed screen, then restart TikTok. |
 | `Hide comment popup ads` | Stops the brand animation that pops up over the comments when someone types a word or emoji an advertiser paid for. Starts off. Turn it on in Hushfeed settings > Comments. |
 | `Hide feed follow button` | Removes the + follow button under creators' pictures on the feed, so you don't follow someone by accident. Starts off. Turn it on in Hushfeed settings > Feed screen. |
 | `Hide feed LIVE button` | Removes the LIVE button and the side menu button from the top left of the feed, for a cleaner screen. Each has its own switch, and both start off. Turn them on in Hushfeed settings > Feed screen. |
@@ -283,7 +283,7 @@ Simple mode in Morphe Manager selects 115 of these patches. Each row below says 
 | `Hide suggested accounts` | Hides TikTok's People you may like suggestions in the Inbox, on profiles, on the Friends tab and in the feed. It uses the same switch as Hide inbox items. Starts off. Turn it on in Hushfeed settings > Inbox. |
 | `Hide the launcher shortcuts` | Empties the menu that pops up when you press and hold TikTok's icon on your home screen. Tapping the icon still opens the app. Starts off. Turn it on in Hushfeed settings > App. |
 | `Hide Play Store update offer` | Stops the Play Store offering to swap the patched TikTok for the store version. The catch: a build with a lower version number won't install over it, and uninstalling to go back can erase TikTok's data on your phone. |
-| `Hide the risk control CAPTCHA` | Notes in the diagnostic report when TikTok's account safety check decides to show a verification puzzle. It doesn't hide anything, so it's only useful for research. It sits on TikTok's account checks, which is why it isn't picked for you. |
+| `Hide the risk control CAPTCHA` | Lets Hide CAPTCHA popups also skip the puzzle TikTok's account safety check raises while you're just browsing. SMS and two-step checks always show. It sits on TikTok's account checks, which is why it isn't picked for you. |
 | `Hide video overlays` | Lets you hide clutter over videos, like the caption, the music line, buttons on the right, surveys and location labels, so you see more of the video. It can also make the music disc spin again or keep it still. Each has its own switch. Starts off. Turn it on in Hushfeed settings > Feed screen. |
 | `Hold-and-slide 2x lock` | Turns on TikTok's own gesture where you hold a video, slide down and let go to keep it playing fast without holding. Starts off. Turn it on in Hushfeed settings > Feed screen. |
 | `In-app browser privacy guard` | Stops websites you open in TikTok's built-in browser from reaching into the TikTok app. TikTok's own pages, like Watch history and checkout, keep working. Starts off. Turn it on in Hushfeed settings > Privacy. |
@@ -836,6 +836,7 @@ Hushfeed stands on a lot of other people's work, and the licence asks that this 
 - [hxreborn/hxreborn-tiktok-patches](https://github.com/hxreborn/hxreborn-tiktok-patches) for the inbox injectors, the telemetry patch, the risk control CAPTCHA hook and several feed card filters.
 - [BlueDragon4251/tiktok-patches-for-morphe](https://github.com/BlueDragon4251/tiktok-patches-for-morphe) for the seen video filter, the gate recorder and the download quality ideas.
 - [eduardo3677-ai/tiktok-patches-for-morphe](https://github.com/eduardo3677-ai/tiktok-patches-for-morphe) for Ghost mode.
+- [na-x-ril/onlynazril-patches](https://github.com/na-x-ril/onlynazril-patches) for the rule Hide CAPTCHA popups uses to tell a browsing puzzle from a sign-in one.
 - [@lyyako](https://github.com/lyyako) for the sanitize sharing links hook, the seekbar patch, the anti-recording patch, `Open external links directly` and `Always show publish date`.
 - [@oscski](https://github.com/oscski) for `Disable the long press repost`.
 - The [Morphe](https://github.com/MorpheApp) team for the patcher, the manager and the patches template.

@@ -1880,7 +1880,7 @@
     },
     {
       "name": "Hide CAPTCHA popups",
-      "description": "Notes in Hushfeed's diagnostic report when TikTok shows a verification puzzle. Its hide switch isn't available on this TikTok version, so every puzzle still shows. Works as soon as you patch it in.",
+      "description": "Skips the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. Starts off. Turn it on in Hushfeed settings > Feed screen, then restart TikTok.",
       "category": "Feed",
       "use": true,
       "dependencies": [
@@ -2504,7 +2504,7 @@
     },
     {
       "name": "Hide the risk control CAPTCHA",
-      "description": "Notes in the diagnostic report when TikTok's account safety check decides to show a verification puzzle. It doesn't hide anything, so it's only useful for research. It sits on TikTok's account checks, which is why it isn't picked for you.",
+      "description": "Lets Hide CAPTCHA popups also skip the puzzle TikTok's account safety check raises while you're just browsing. SMS and two-step checks always show. It sits on TikTok's account checks, which is why it isn't picked for you.",
       "category": "Feed",
       "use": false,
       "dependencies": [

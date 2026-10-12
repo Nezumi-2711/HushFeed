@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** CAPTCHA pencerelerini gizle yeniden bir anahtar oldu, Hushfeed ayarları > Akış ekranı altında, ve kapalı başlar. TikTok'un sen sadece gezinirken gösterdiği bulmacayı atlar. Beğeni, takip, yorum ya da yeniden paylaşımdan hemen sonra gelen bulmaca yine gösterilir, giriş, SMS ve iki adımlı doğrulamalar da öyle. Hide the risk control CAPTCHA yamasıyla o kontrolün gezinirken çıkan bulmacaları da atlanır. Kural, na-x-ril'in onlynazril yamalarından geliyor.
+
 * **TikTok:** Kişi listesine erişimi engelle açıkken tüm sütunları isteyen bir kişi okuması artık kişi sütunlarını yine de taşıyan boş bir liste alıyor. Böylece bir kişi kartının adını arayan TikTok ekranı eksik bir sütuna takılmıyor.
 
 * **TikTok:** H.264 videoyu tercih et ve HDR yerine SDR oynat artık tercih edilen sürümlerin hiçbirinin oynatılabilir adresi olmadığında videonun diğer sürümlerini korur. Böylece oynatma kalitesi yine oynayan sürümler arasından seçer.

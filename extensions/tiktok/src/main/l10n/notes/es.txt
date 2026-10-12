@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ocultar las ventanas de CAPTCHA vuelve a ser un interruptor, en Ajustes de Hushfeed > Pantalla del feed, y empieza apagado. Omite el rompecabezas que TikTok muestra mientras solo navegas. Un rompecabezas justo después de dar me gusta, seguir, comentar o republicar se sigue mostrando, igual que las verificaciones de inicio de sesión, SMS y dos pasos. Con el parche Hide the risk control CAPTCHA, también se omiten los rompecabezas de esa verificación mientras navegas. La regla viene de los parches onlynazril de na-x-ril.
+
 * **TikTok:** Con Bloquear el acceso a los contactos activado, una lectura de contactos que pide todas las columnas ahora recibe una lista vacía que conserva las columnas de contactos, así una pantalla de TikTok que busca el nombre de una tarjeta de contacto no falla por una columna que falta.
 
 * **TikTok:** Preferir vídeo H.264 y Reproducir SDR en lugar de HDR ahora conservan las demás versiones de un video cuando ninguna de las preferidas tiene una dirección para reproducirse, así la Calidad de reproducción sigue eligiendo entre versiones que se reproducen.
