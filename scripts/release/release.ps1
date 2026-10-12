@@ -185,7 +185,9 @@ function Assert-SingleTagRelease {
     # second release on this tag means the lookup above may not be the one that was meant.
     $same = @()
     for ($page = 1; $page -le 10; $page++) {
-        $batch = @(Get-PublicationApi "repos/$Repository/releases?per_page=100&page=$page")
+        # Windows PowerShell 5.1's ConvertFrom-Json hands a JSON array on as one object, so @()
+        # alone would hold the whole page as a single release. ForEach-Object unrolls it there.
+        $batch = @(Get-PublicationApi "repos/$Repository/releases?per_page=100&page=$page" | ForEach-Object { $_ })
         $same += @($batch | Where-Object { $_.tag_name -ceq $Tag })
         if ($batch.Count -lt 100) { break }
         if ($page -eq 10) { throw "Too many releases to check $Tag for duplicates." }

@@ -63,7 +63,7 @@ function Reset-Case {
         ImmutableEnabled = $false; ImmutableSettingMissing = $false; UploadFailureAfter = 0; DownloadFailure = $false; PublishFailure = $false
         OmitDownload = ''; CorruptDownload = ''; ExtraDownload = $false; MetadataMutation = $null
         MetadataReads = 0; ApiFailure = 0; InvalidApiJson = $false; GraphQLFailure = $false; GitFailure = ''; NextAssetId = 100
-        RemoteTagObject = ''; SkipUpload = ''; BeforePublish = $null; ExtraReleases = @(); Uploaded = 0
+        RemoteTagObject = ''; SkipUpload = ''; BeforePublish = $null; ExtraReleases = @(); SecondPageReleases = @(); Uploaded = 0
         Calls = (New-Object 'System.Collections.Generic.List[object]')
         DownloadDirectories = (New-Object 'System.Collections.Generic.List[string]')
         RemoteBytes = @{}; LastDownload = @(); AttestationFailure = ''
@@ -197,6 +197,7 @@ function gh {
                 $items = @()
                 if ($script:state.Release -and $endpoint -match 'page=1$') { $items += $script:state.Release }
                 if ($endpoint -match 'page=1$') { $items += @($script:state.ExtraReleases) }
+                if ($endpoint -match 'page=2$') { $items += @($script:state.SecondPageReleases) }
                 if ($include) { "HTTP/2.0 200`nContent-Type: application/json`n`n" }
                 ConvertTo-Json -InputObject $items -Depth 12 -Compress
                 return
@@ -656,6 +657,30 @@ try {
         Seed-Release
         $script:state.MetadataMutation = { if ($script:state.MetadataReads -eq 2) { Add-StrayDraft } }
         Assert-Throws { Invoke-ReleasePublication @script:invoke } 'More than one release has the tag'
+        Assert-NoPublish
+    }
+    function New-OtherRelease([int]$Id) {
+        $other = New-Release -Draft $false
+        $other.id = $Id
+        $other.tag_name = "v0.0.$Id"
+        $other.name = $other.tag_name
+        return $other
+    }
+    # Windows PowerShell 5.1 hands the parsed release list on as one object; read as one release,
+    # every other tag in it looked like a duplicate of this one.
+    Test-Case 'Releases under other tags leave the duplicate check alone' {
+        $script:state.ExtraReleases = @((New-OtherRelease 41), (New-OtherRelease 40))
+        Invoke-ReleasePublication @script:invoke
+        Assert-True (@(Get-ReleaseWrites | Where-Object { (Get-WriteKind $_) -ceq 'publish' }).Count -eq 1) 'Other tags in the list stopped publication.'
+    }
+    Test-Case 'A stray draft on the second page of releases still stops publication' {
+        Seed-Release -AssetNames @($names[0])
+        $script:state.ExtraReleases = @(1..99 | ForEach-Object { New-OtherRelease $_ })
+        $stray = New-Release
+        $stray.id = 177
+        $script:state.SecondPageReleases = @($stray)
+        Assert-Throws { Invoke-ReleasePublication @script:invoke } 'More than one release has the tag v1.2.3 \(.*177'
+        Assert-NoAssetTransfer
         Assert-NoPublish
     }
     Test-Case 'Uploads and downloads go to the verified release and asset IDs, never the tag' {
