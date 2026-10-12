@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Added a small Android 6 test helper for native caption layouts and empty feed batches. Its report separates payload checks from full-app acceptance.
+
 * **TikTok:** Verified brightness and volume drags over the faded comment rail. Device checks restore brightness, audio and temporary settings after each drag.
 
 * **TikTok:** Gesture checks now refuse input when a muted stream hides its volume and reject gestures that finish after the deadline.

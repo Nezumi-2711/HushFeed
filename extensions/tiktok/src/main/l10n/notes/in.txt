@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Menambahkan alat uji kecil Android 6 untuk tata letak teks asli dan kelompok feed kosong. Laporannya memisahkan pemeriksaan payload dari verifikasi seluruh aplikasi.
+
 * **TikTok:** Geseran kecerahan dan volume di atas bilah komentar yang memudar telah diverifikasi. Pemeriksaan perangkat memulihkan kecerahan, audio, dan pengaturan sementara setelah setiap geseran.
 
 * **TikTok:** Pemeriksaan gestur menolak input saat aliran yang dibisukan menyembunyikan volumenya dan menolak gestur yang selesai setelah batas waktu.

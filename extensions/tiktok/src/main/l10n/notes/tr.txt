@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Android 6 için yerel altyazı düzenlerini ve boş akış gruplarını sınayan küçük bir test aracı eklendi. Rapor, yük denetimlerini uygulamanın tamamının doğrulanmasından ayırır.
+
 * **TikTok:** Soluk yorum çubuğu üzerindeki parlaklık ve ses kaydırmaları doğrulandı. Cihaz testleri her kaydırmadan sonra parlaklığı, sesi ve geçici ayarları geri yükler.
 
 * **TikTok:** Sessize alınmış akış ses düzeyini gizlediğinde hareket testleri girişi reddeder. Süre dolduktan sonra tamamlanan hareketler başarısız sayılır.

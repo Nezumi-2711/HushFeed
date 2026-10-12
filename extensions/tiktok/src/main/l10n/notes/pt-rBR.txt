@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Adicionada uma pequena ferramenta de teste para layouts nativos de legendas e lotes vazios do feed no Android 6. O relatório separa as verificações do payload da validação do aplicativo completo.
+
 * **TikTok:** Verificados os gestos de brilho e volume sobre a barra de comentários esmaecida. Os testes restauram o brilho, o áudio e as configurações temporárias após cada gesto.
 
 * **TikTok:** Os testes de gestos recusam entradas quando o áudio silenciado oculta o volume e rejeitam gestos concluídos após o prazo.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Android 6 üçün yerli başlıq düzülüşlərini və boş lent paketlərini yoxlayan kiçik sınaq köməkçisi əlavə edildi. Hesabat faydalı yük yoxlamalarını tam tətbiq təsdiqindən ayırır.
+
 * **TikTok:** Solğun şərh paneli üzərində parlaqlıq və səs səviyyəsi sürüşdürmələri yoxlanıldı. Cihaz yoxlamaları hər sürüşdürmədən sonra parlaqlığı, səsi və müvəqqəti ayarları bərpa edir.
 
 * **TikTok:** Səssiz axın səs səviyyəsini gizlətdikdə jest yoxlamaları girişdən imtina edir və vaxt həddindən sonra bitən jestləri rədd edir.
