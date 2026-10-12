@@ -1925,6 +1925,10 @@ public final class Probe extends Instrumentation {
                         BudgetFocusProbe.run(app, loader, intent.getStringExtra("op"), intent.getStringExtra("mode"));
                         break;
                     }
+                    case "edge-drag": {
+                        EdgeDragProbe.run(app, loader, intent);
+                        break;
+                    }
                     case "playerspeed": {
                         // The feed player's own speed and how far its position moves over a gap,
                         // read through the player TikTok's static getter hands out. The holder

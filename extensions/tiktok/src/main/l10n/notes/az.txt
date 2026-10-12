@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Solğun şərh paneli üzərində parlaqlıq və səs səviyyəsi sürüşdürmələri yoxlanıldı. Cihaz yoxlamaları hər sürüşdürmədən sonra parlaqlığı, səsi və müvəqqəti ayarları bərpa edir.
+
 * **TikTok:** Səssiz axın səs səviyyəsini gizlətdikdə jest yoxlamaları girişdən imtina edir və vaxt həddindən sonra bitən jestləri rədd edir.
 
 * **TikTok:** Cihaz yoxlamaları artıq həqiqi iki barmaq jestlərini dəstəkləyir. Yan paneldə hər iki barmaq mövqeyinin Ekranı təmizlə rejimindən çıxardığı təsdiqləndi (#84).

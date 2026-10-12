@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Verificados os gestos de brilho e volume sobre a barra de comentários esmaecida. Os testes restauram o brilho, o áudio e as configurações temporárias após cada gesto.
+
 * **TikTok:** Os testes de gestos recusam entradas quando o áudio silenciado oculta o volume e rejeitam gestos concluídos após o prazo.
 
 * **TikTok:** Os testes no dispositivo agora usam gestos reais com dois dedos. As duas posições do dedo na barra lateral foram verificadas para sair da tela limpa (#84).

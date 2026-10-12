@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Verified brightness and volume drags over the faded comment rail. Device checks restore brightness, audio and temporary settings after each drag.
+
 * **TikTok:** Gesture checks now refuse input when a muted stream hides its volume and reject gestures that finish after the deadline.
 
 * **TikTok:** Device checks now support real two-finger gestures. Both finger positions on the rail were verified to exit Clear display (#84).

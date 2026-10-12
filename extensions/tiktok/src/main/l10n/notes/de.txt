@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Helligkeits- und Lautstärkegesten über der verblassten Kommentarleiste wurden geprüft. Gerätetests stellen Helligkeit, Audio und vorübergehende Einstellungen nach jeder Geste wieder her.
+
 * **TikTok:** Gestentests lehnen Eingaben ab, wenn ein stummgeschalteter Audiostream seine Lautstärke verbirgt. Zu spät abgeschlossene Gesten gelten als fehlgeschlagen.
 
 * **TikTok:** Gerätetests unterstützen jetzt echte Zwei-Finger-Gesten. Beide Fingerpositionen auf der Seitenleiste wurden zum Beenden der freien Anzeige geprüft (#84).

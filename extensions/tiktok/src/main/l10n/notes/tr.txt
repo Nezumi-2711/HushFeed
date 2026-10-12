@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Soluk yorum çubuğu üzerindeki parlaklık ve ses kaydırmaları doğrulandı. Cihaz testleri her kaydırmadan sonra parlaklığı, sesi ve geçici ayarları geri yükler.
+
 * **TikTok:** Sessize alınmış akış ses düzeyini gizlediğinde hareket testleri girişi reddeder. Süre dolduktan sonra tamamlanan hareketler başarısız sayılır.
 
 * **TikTok:** Cihaz kontrolleri artık gerçek iki parmak hareketlerini destekliyor. Yan çubukta her iki parmak konumunun Ekranı temizle modundan çıktığı doğrulandı (#84).

@@ -15,7 +15,8 @@ $output = Join-Path ([IO.Path]::GetTempPath()) ('hushfeed-focus-contracts-' + [g
 New-Item -ItemType Directory -Path $output -ErrorAction Stop | Out-Null
 $source = Join-Path $PSScriptRoot 'src/app/hushfeed/verification'
 $tests = Join-Path $PSScriptRoot 'tests/app/hushfeed/verification'
-$names = @('BudgetStateSnapshot', 'PcmFocusFixture', 'RestorationRetry', 'VerifiedJournal')
+$names = @('BudgetStateSnapshot', 'PcmFocusFixture', 'RestorationRetry', 'VerifiedJournal',
+    'EdgeDragPlan', 'EdgeDragRestoration')
 $inputs = @($names | ForEach-Object { Join-Path $source ($_ + '.java') })
 $inputs += @($names | ForEach-Object { Join-Path $tests ($_ + 'Contract.java') })
 & $javac --release 11 -d $output @inputs
@@ -27,4 +28,4 @@ foreach ($name in $names) {
 $all = @(Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'src') -Recurse -Filter '*.java' | ForEach-Object FullName)
 & $javac --release 11 -cp $platform -d $output @all
 if ($LASTEXITCODE) { throw 'API 36 probe compilation failed.' }
-Write-Output "Four focus contracts and API 36 compilation passed. No device actions. Output: $output"
+Write-Output "Six probe contract suites and API 36 compilation passed. No device actions. Output: $output"
