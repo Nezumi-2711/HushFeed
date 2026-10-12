@@ -3179,6 +3179,7 @@ foreach ($tool in @('strip-hunt.ps1', 'record-markers.ps1')) {
 Write-Host '[scripts] shared phone log contracts passed'
 
 & (Join-Path $Root 'scripts/test-storage-probe.ps1') -Root $Root
+& (Join-Path $Root 'scripts/test-fixture-jobs.ps1') -Root $Root
 
 $global:LASTEXITCODE = 0
 Write-Host '[scripts] report, target, Java and guarded replacement contracts passed'

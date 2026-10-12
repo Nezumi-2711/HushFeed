@@ -628,6 +628,8 @@ The push hook runs script contracts before building when patch declarations, the
 
 Changes to runtime sources, native stubs, extension build files or consumed build pins also rebuild the release bundle and apply it to every declared TikTok APK. Tests and unconsumed documentation keep their narrower checks. Push source changes before updating the published index, which verifies the existing release artifact without rebuilding it.
 
+The fixture collector waits for every result and removes only the jobs it started, including when startup or result collection fails. `scripts/test-fixture-jobs.ps1` forces completion during output collection and checks mixed order, repeated batches, failure handling and child-process cleanup on both PowerShell hosts. The full script contracts also exercise repeated multi-ref pushes with the actual verifier wrapper.
+
 To save offscreen screenshots, run `./gradlew :extensions:tiktok:test -PscreenshotDir=<absolute-directory>`. The suite opens every settings section in dark and light themes, saves a value through the native picker, and exercises Lab search and overrides. A German fixture checks larger text at 360 dp width, and a Spanish one checks the same page at twice the text size on a 320 dp screen.
 
 Worker-backed settings and Feature Gate Lab tests drain their owned executors before asserting, reset per-sandbox state before each case, and keep the region semantics check separate from the API ICU cross-check. These assertions do not depend on screenshot output or polling sleeps.
