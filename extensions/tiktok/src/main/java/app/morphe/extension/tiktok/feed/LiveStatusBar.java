@@ -580,6 +580,12 @@ public final class LiveStatusBar {
         /** The LIVE page's stream in the detail pager, or nothing for a room of its own. */
         final WeakReference<View> stream;
         private Offset lifted;
+        /**
+         * The room pager's other pages, lifted like the first. On the S22 every room is a page
+         * held down by a strip of its own, so lifting only the first page left a black band over
+         * the rooms the pager showed on its other pages (#137).
+         */
+        private final WeakHashMap<View, Boolean> otherPages = new WeakHashMap<>();
         private int searches, relifts, coverSearches;
         /**
          * Shade searches spent on each layer held lower. One budget for the whole visit ran out
@@ -643,20 +649,14 @@ public final class LiveStatusBar {
         private void keepStripAway() {
             if (lifted != null) {
                 View target = lifted.view.get();
+                if (target == null || fought) return;
                 // TikTok put the strip back, on a relayout of its own: a panel opening or
                 // closing in the room does it.
-                if (target == null || fought || lifted.current(target) != lifted.value) return;
-                long now = SystemClock.uptimeMillis();
-                if (now - fightStart > FIGHT_WINDOW_MS) {
-                    fightStart = now;
-                    relifts = 0;
+                if (lifted.current(target) == lifted.value) {
+                    if (!mayRelift()) return;
+                    lifted.set(target, 0);
                 }
-                if (++relifts > MAX_RELIFTS) {
-                    fought = true;
-                    Logger.printDebug(() -> "TikTok keeps putting the LIVE room's top strip back; leaving it");
-                    return;
-                }
-                lifted.set(target, 0);
+                liftOtherPages(target);
                 return;
             }
             Activity room = activity.get();
@@ -672,7 +672,49 @@ public final class LiveStatusBar {
             if (target == null) return;
             lifted = offset;
             offset.set(target, 0);
+            liftOtherPages(target);
             HookStatus.bound(HOOK_FAMILY, "LIVE room top strip taken away");
+        }
+
+        /** Counts a strip TikTok put back; false once it has done so too often to keep up with. */
+        private boolean mayRelift() {
+            long now = SystemClock.uptimeMillis();
+            if (now - fightStart > FIGHT_WINDOW_MS) {
+                fightStart = now;
+                relifts = 0;
+            }
+            if (++relifts > MAX_RELIFTS) {
+                fought = true;
+                Logger.printDebug(() -> "TikTok keeps putting the LIVE room's top strip back; leaving it");
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * The pages beside a lifted room page, of its class and held down as far, lose the strip
+         * too, as the pager makes or reuses them. A detail page's LIVE is one page and stays so.
+         */
+        private void liftOtherPages(View page) {
+            if (stream != null || !lifted.padding || !(page.getParent() instanceof ViewGroup)) return;
+            ViewGroup pager = (ViewGroup) page.getParent();
+            for (int i = 0; i < pager.getChildCount(); i++) {
+                View other = pager.getChildAt(i);
+                if (other == page || other.getClass() != page.getClass() || lifted.current(other) != lifted.value) continue;
+                if (otherPages.containsKey(other) && !mayRelift()) return;
+                otherPages.put(other, Boolean.TRUE);
+                lifted.set(other, 0);
+            }
+        }
+
+        /** The room pages lifted now: the first one, then the others still without their strip. */
+        private List<View> liftedPages(View target) {
+            List<View> pages = new ArrayList<>();
+            pages.add(target);
+            for (View page : otherPages.keySet()) {
+                if (page != null && lifted.current(page) == 0) pages.add(page);
+            }
+            return pages;
         }
 
         /**
@@ -721,18 +763,20 @@ public final class LiveStatusBar {
                 if (videoId == 0) HookStatus.missingViewId(HOOK_FAMILY, VIDEO_CONTAINER);
             }
             if (videoId == 0) return;
-            for (View layer : findControls(target, videoId)) {
-                Integer own = lowered.get(layer);
-                if (own == null) {
-                    own = layer.getPaddingTop();
-                    lowered.put(layer, own);
-                    if (lowered.size() == 1) HookStatus.bound(HOOK_FAMILY, "LIVE room controls kept below the bar");
-                } else if (layer.getPaddingTop() != own) {
-                    // Already a bar lower, or TikTok set a padding of its own.
-                    continue;
+            for (View page : liftedPages(target)) {
+                for (View layer : findControls(page, videoId)) {
+                    Integer own = lowered.get(layer);
+                    if (own == null) {
+                        own = layer.getPaddingTop();
+                        lowered.put(layer, own);
+                        if (lowered.size() == 1) HookStatus.bound(HOOK_FAMILY, "LIVE room controls kept below the bar");
+                    } else if (layer.getPaddingTop() != own) {
+                        // Already a bar lower, or TikTok set a padding of its own.
+                        continue;
+                    }
+                    loweredBy = lifted.value;
+                    layer.setPadding(layer.getPaddingLeft(), own + loweredBy, layer.getPaddingRight(), layer.getPaddingBottom());
                 }
-                loweredBy = lifted.value;
-                layer.setPadding(layer.getPaddingLeft(), own + loweredBy, layer.getPaddingRight(), layer.getPaddingBottom());
             }
             shadeUnderBar();
         }
@@ -782,6 +826,10 @@ public final class LiveStatusBar {
             if (lifted == null) return;
             View target = lifted.view.get();
             if (target != null && lifted.current(target) == 0) lifted.set(target, lifted.value);
+            for (View page : otherPages.keySet()) {
+                if (page != null && lifted.current(page) == 0) lifted.set(page, lifted.value);
+            }
+            otherPages.clear();
             lifted = null;
         }
     }

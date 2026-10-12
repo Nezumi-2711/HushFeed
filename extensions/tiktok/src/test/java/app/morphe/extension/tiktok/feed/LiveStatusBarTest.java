@@ -355,6 +355,66 @@ public class LiveStatusBarTest {
         room.pause().stop().destroy();
     }
 
+    /**
+     * #137, seen on the S22 with 0.71.3: every room is a page of its own in the room pager, each
+     * held down by the strip, and only the first page found lost it. Rooms the pager showed on
+     * its other pages kept a black band under the clock, so which rooms had it looked random.
+     */
+    @Test public void everyRoomPageLosesItsStripNotOnlyTheFirst() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout pager = new FrameLayout(live);
+        live.setContentView(pager);
+        FrameLayout first = roomPage(live, pager, bar);
+        FrameLayout second = roomPage(live, pager, bar);
+        shade(live, controlsOf(second));
+        room.start().resume().visible();
+        layOut(live);
+        layOut(live);
+
+        assertEquals("the first room kept its strip", 0, first.getPaddingTop());
+        assertEquals("the next room kept its strip", 0, second.getPaddingTop());
+        assertEquals("the next room's controls went up under the clock", 7 + bar, controlsOf(second).getPaddingTop());
+        assertTrue("the next room got no shade under the clock",
+                controlsOf(second).getBackground() instanceof LiveStatusBar.BarShade);
+
+        FrameLayout later = roomPage(live, pager, bar);
+        layOut(live);
+        assertEquals("a page the pager made later kept its strip", 0, later.getPaddingTop());
+        assertEquals(7 + bar, controlsOf(later).getPaddingTop());
+
+        // The pager reusing a page for another room pads it again.
+        second.setPadding(0, bar, 0, 0);
+        layOut(live);
+        assertEquals("a reused page kept its strip", 0, second.getPaddingTop());
+
+        room.pause();
+        assertEquals("leaving didn't give the first room its strip back", bar, first.getPaddingTop());
+        assertEquals("leaving didn't give the other rooms their strip back", bar, second.getPaddingTop());
+        assertEquals(bar, later.getPaddingTop());
+        assertEquals("leaving didn't give the controls back", 7, controlsOf(second).getPaddingTop());
+        assertEquals(null, controlsOf(second).getBackground());
+        room.stop().destroy();
+    }
+
+    /** A room page as 47.1.4 has it on the S22: held down by the strip, the stream and controls inside. */
+    private static FrameLayout roomPage(Activity live, FrameLayout pager, int bar) {
+        FrameLayout page = new FrameLayout(live);
+        page.setPadding(0, bar, 0, 0);
+        pager.addView(page, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        page(live, page);
+        return page;
+    }
+
+    private static FrameLayout controlsOf(FrameLayout roomPage) {
+        return (FrameLayout) ((ViewGroup) roomPage.getChildAt(0)).getChildAt(1);
+    }
+
     /** TikTok's top shade as 47.1.4 has it: a gradient across the top of a row in the controls. */
     private static View shade(Activity live, FrameLayout controls) {
         FrameLayout row = new FrameLayout(live);

@@ -6,7 +6,7 @@ Every Hushfeed release, newest first.
 
 ## 0.71.3 (2026-10-11)
 
-* **TikTok:** With Show a LIVE under the status bar on, rooms further on keep the shade under the clock too. It used to go light again after the first few LIVEs you scrolled through (#137).
+* **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).
 
 * **TikTok:** Hide the Tako bubble now also hides the Tako bubble in the bottom right corner of feed videos, which some accounts get instead of the one above the profile button (#115).
 
