@@ -1063,6 +1063,10 @@ Show the whole video instead of cropping it to the window. Nothing changes on a 
 Show what is left of the budget	Büdcədən nə qaldığını göstərin
 Show when the camera or microphone is in use	Kamera və ya mikrofon istifadə olunanda göstərin
 Show where a video was posted	Videonun harada paylaşıldığını göstərin
+Show commenters' handles	Şərh yazanların istifadəçi adlarını göstərin
+Show each commenter's @username instead of the display name they chose. A reply to a reply names the person it answers the same way once their own comment has loaded.	Hər şərh yazanın seçdiyi görünən ad əvəzinə @istifadəçi adını göstərin. Cavaba yazılan cavab, cavab verdiyi şəxsin öz şərhi yükləndikdən sonra onu da eyni şəkildə göstərir.
+Show where commenters are from	Şərh yazanların haradan olduğunu göstərin
+Show the country a commenter's account is set to after the comment's time. Comments from accounts TikTok sends no country for stay as they are.	Şərhin vaxtından sonra şərh yazanın hesabında qurulmuş ölkəni göstərin. TikTok-un ölkə göndərmədiyi hesablardan gələn şərhlər olduğu kimi qalır.
 Showing %1$s again	%1$s yenidən göstərilir
 Silence the feed while comments are open	Şərhlər açıq olanda lenti səssiz edin
 Hide videos with blocked sounds	Bloklanmış səsləri olan videoları gizlədin

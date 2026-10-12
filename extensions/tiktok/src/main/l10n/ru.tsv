@@ -1107,6 +1107,10 @@ Show the whole video instead of cropping it to the window. Nothing changes on a 
 Show what is left of the budget	Показывать остаток бюджета
 Show when the camera or microphone is in use	Показывать, когда используется камера или микрофон
 Show where a video was posted	Показывать, откуда опубликовано видео
+Show commenters' handles	Показывать @имена авторов комментариев
+Show each commenter's @username instead of the display name they chose. A reply to a reply names the person it answers the same way once their own comment has loaded.	Показывать @имя_пользователя каждого автора комментария вместо отображаемого имени, которое он выбрал. Ответ на ответ так же называет того, кому отвечает, когда загрузится его собственный комментарий.
+Show where commenters are from	Показывать, откуда авторы комментариев
+Show the country a commenter's account is set to after the comment's time. Comments from accounts TikTok sends no country for stay as they are.	Показывать после времени комментария страну, указанную в аккаунте его автора. Комментарии от аккаунтов, для которых TikTok не присылает страну, остаются как есть.
 Showing %1$s again	%1$s снова показывается
 Hide videos with blocked sounds	Скрывать видео с заблокированными звуками
 Skip content warnings	Пропускать предупреждения о контенте

@@ -974,6 +974,13 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_COMMENT_BOX_BUTTONS = new BooleanSetting("hide_comment_box_buttons", FALSE);
     /** Draws a comment poll's results before the reader votes, from the counts TikTok already sends. */
     public static final BooleanSetting SHOW_POLL_RESULTS = new BooleanSetting("show_poll_results", FALSE);
+    /**
+     * A commenter's @username in place of their display name, and in a reply's label once the
+     * person it answers has been drawn. Read on each comment bind, so no restart.
+     */
+    public static final BooleanSetting SHOW_COMMENTER_HANDLE = new BooleanSetting("show_commenter_handle", FALSE);
+    /** The country a commenter's account is set to, after the comment's time. Read on each bind. */
+    public static final BooleanSetting SHOW_COMMENTER_REGION = new BooleanSetting("show_commenter_region", FALSE);
     /** Tapping "more" under a video opens its comments with the caption at the top (upstream #156). */
     public static final BooleanSetting CAPTION_OPENS_COMMENTS = new BooleanSetting("caption_opens_comments", FALSE);
     /** Every video's comments open with its caption at the top. */

@@ -671,6 +671,13 @@ public class SettingsStatus {
         profileBackgroundEnabled = true;
     }
 
+    /** Show commenter handle and region hooked the comment cell's name, reply label and time. */
+    public static boolean commenterDetailsEnabled = false;
+
+    public static void enableCommenterDetails() {
+        commenterDetailsEnabled = true;
+    }
+
     // Patches with no settings row register too, so Build details can list every patch that
     // changed TikTok's code. Each one registers last in its execute, after everything it checks.
     public static boolean settingsEnabled = false;

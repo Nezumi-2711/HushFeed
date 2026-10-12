@@ -1025,6 +1025,10 @@ Show the whole Activity and New followers lists instead of stopping at a View al
 Show what is left of the budget,Tampilkan sisa batas harian
 Show when the camera or microphone is in use,Tampilkan saat kamera atau mikrofon dipakai
 Show where a video was posted,Tampilkan asal unggahan video
+Show commenters' handles,Tampilkan nama pengguna pengomentar
+Show each commenter's @username instead of the display name they chose. A reply to a reply names the person it answers the same way once their own comment has loaded.,"Tampilkan @namapengguna setiap pengomentar, bukan nama tampilan yang mereka pilih. Balasan untuk balasan juga menyebut orang yang dibalasnya dengan cara yang sama setelah komentar orang itu sendiri dimuat."
+Show where commenters are from,Tampilkan asal pengomentar
+Show the country a commenter's account is set to after the comment's time. Comments from accounts TikTok sends no country for stay as they are.,Tampilkan negara yang diatur di akun pengomentar setelah waktu komentar. Komentar dari akun yang negaranya tidak dikirim TikTok tetap seperti semula.
 Showing %1$s again,Tampilkan %1$s lagi
 Hide videos with blocked sounds,Sembunyikan video dengan suara yang diblokir
 Skip content warnings,Lewati peringatan konten

@@ -1032,6 +1032,10 @@ Show the whole video instead of cropping it to the window. Nothing changes on a 
 Show what is left of the budget	Mostra quanto resta del budget
 Show when the camera or microphone is in use	Mostra quando la fotocamera o il microfono sono in uso
 Show where a video was posted	Mostra da dove è stato pubblicato un video
+Show commenters' handles	Mostra il nome utente di chi commenta
+Show each commenter's @username instead of the display name they chose. A reply to a reply names the person it answers the same way once their own comment has loaded.	Mostra il @nomeutente di ogni persona che commenta invece del nome visualizzato che ha scelto. Una risposta a una risposta indica allo stesso modo la persona a cui risponde, appena il suo commento è stato caricato.
+Show where commenters are from	Mostra da dove viene chi commenta
+Show the country a commenter's account is set to after the comment's time. Comments from accounts TikTok sends no country for stay as they are.	Mostra il paese impostato nell'account di chi commenta dopo l'ora del commento. I commenti degli account per cui TikTok non invia un paese restano come sono.
 Showing %1$s again	%1$s mostrato di nuovo
 Hide videos with blocked sounds	Nascondi i video con audio bloccato
 Skip content warnings	Salta gli avvisi sui contenuti
