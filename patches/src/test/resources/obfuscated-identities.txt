@@ -319,3 +319,26 @@ patches/src/main/kotlin/app/morphe/patches/tiktok/profile/LocalProfileAppearance
 patches/src/main/kotlin/app/morphe/patches/tiktok/profile/LocalProfileAppearanceHooks.kt|Ns
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationHooks.kt|LX/
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/ReceivedDmTranslationHooks.kt|LX/
+
+# 47.1.4 account lists and owner accessors read by Account management (fe4de469f) and the account hooks behind the DM translation previews (c0b85c4db). Both were merged on 2026-10-12 with these names unrecorded; they are 47.1.4 reflection and patch anchors with no stable name to anchor on yet.
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|LIZ
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|LIZIZ
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.02tk
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.02tX
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.02tY
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.0E1o
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.18r0
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.18r1
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.1TVY
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountLists.java|X.1TVZ
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountOwner.java|LJIIZILJ
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountOwner.java|LJJIIJ
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountOwner.java|LLLLZI
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/NativeAccountOwner.java|X.03IM
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LIZ
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LJI
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LJII
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LJIIIZ
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LX/
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LX/03Fg;
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LX/03Sh;
