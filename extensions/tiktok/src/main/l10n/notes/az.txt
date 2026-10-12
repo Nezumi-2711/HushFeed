@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** TikTok şəffaflığı dəyişəndə və ya sətri əvəz edəndə Ekranı təmizlə rejiminin gizli sürüşdürmə çubuğu şəffaf qalır. Gizlətmə ayarını söndürmək TikTok-un son şəffaflığını bərpa edir (#84).
+
 * **TikTok:** Eyni videonu yeni baxış pəncərəsində yenidən açanda Avtomatik Ekranı təmizlə yenidən cəhd edir. Şərhlərdən və ya qısa fokus itkisindən qayıdanda əl ilə çıxış seçiminiz saxlanılır (#84).
 
 * **TikTok:** Sessiya fasiləsi buraxıldıqda və ya bitdikdə başqa tətbiq səs fokusunu qaytarana qədər videonun dayandığı yoxlanıldı.

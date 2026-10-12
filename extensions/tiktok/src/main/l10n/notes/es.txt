@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** La barra de progreso oculta en la pantalla despejada sigue transparente cuando TikTok cambia su opacidad o reemplaza la fila. Desactivar la opción restaura la última opacidad de TikTok (#84).
+
 * **TikTok:** La pantalla despejada automática vuelve a intentarlo cuando abres el mismo video en un visor nuevo. Tu salida manual se conserva al volver de los comentarios o tras perder el foco brevemente (#84).
 
 * **TikTok:** Se comprobó que, al liberar o caducar una pausa de sesión, el vídeo sigue pausado hasta que otra app devuelve el foco de audio.

@@ -470,7 +470,7 @@ Caption appearance and the clear display option are under Feed & layout > Feed s
 
 Automatic Clear display tries again when you reopen the same video in a new viewer. If you exit it yourself, that choice lasts while the viewer stays open, including a return from comments.
 
-Fade the video controls sets the opacity of the buttons, caption and tabs over the video from 0 to 100. Faded controls still take taps. In Clear display the buttons and caption stay on screen at that level, and taps go through them to the video, so a press and hold or a pinch still gets you out. At 0, the buttons and caption are hidden and the tabs stay at 10.
+Fade the video controls sets the opacity of the buttons, caption and tabs over the video from 0 to 100. Faded controls still take taps. In Clear display the buttons and caption stay on screen at that level, and taps go through them to the video, so a press and hold or a pinch still gets you out. At 0, the buttons and caption are hidden and the tabs stay at 10. Hide the Clear display controls keeps the seekbar transparent when TikTok changes its opacity, including after comments close.
 
 Burn-in guard is for OLED screens. Dim when idle takes the buttons, caption and tabs down to a quarter once you haven't touched the screen for 5 seconds, and the next touch brings them back. Dim when idle and shift also moves everything on the feed a few pixels every 2 minutes. It's off by default and leaves Clear display alone.
 

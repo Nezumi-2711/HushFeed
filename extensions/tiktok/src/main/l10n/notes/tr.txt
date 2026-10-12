@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ekranı temizle modunda gizlenen ilerleme çubuğu, TikTok saydamlığı değiştirse veya satırı yenilese de saydam kalır. Gizleme ayarını kapatmak TikTok'un son saydamlığını geri getirir (#84).
+
 * **TikTok:** Aynı videoyu yeni bir görüntüleyicide yeniden açtığınızda Otomatik ekranı temizle tekrar dener. Yorumlardan döndüğünüzde veya kısa bir odak kaybından sonra elle çıkış seçiminiz korunur (#84).
 
 * **TikTok:** Oturum bekletmesi kaldırıldığında veya süresi dolduğunda, başka bir uygulama ses odağını geri verene kadar videonun duraklatıldığı doğrulandı.

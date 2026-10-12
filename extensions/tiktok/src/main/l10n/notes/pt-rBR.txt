@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** A barra de progresso oculta na tela limpa continua transparente quando o TikTok muda a opacidade ou substitui a linha. Desativar a opção restaura a última opacidade do TikTok (#84).
+
 * **TikTok:** A tela limpa automática tenta de novo quando você reabre o mesmo vídeo em um novo visualizador. A saída manual continua valendo ao voltar dos comentários ou após uma breve perda de foco (#84).
 
 * **TikTok:** Verificado que liberar ou encerrar uma pausa de sessão mantém o vídeo pausado até outro app devolver o foco de áudio.

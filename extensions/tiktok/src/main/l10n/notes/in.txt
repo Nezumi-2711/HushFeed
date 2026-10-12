@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Bilah pencarian yang disembunyikan pada tampilan bersih tetap transparan setelah TikTok mengubah opasitas atau mengganti baris. Menonaktifkan pengaturan sembunyikan memulihkan opasitas terakhir TikTok (#84).
+
 * **TikTok:** Tampilan bersih otomatis mencoba lagi saat video yang sama dibuka kembali di penampil baru. Pilihan keluar manual tetap berlaku saat kembali dari komentar atau setelah fokus hilang sebentar (#84).
 
 * **TikTok:** Sudah diverifikasi bahwa pelepasan atau berakhirnya jeda sesi tetap menjeda video sampai aplikasi lain mengembalikan fokus audio.

@@ -745,7 +745,8 @@ public final class VideoOverlayHider {
             }
         }
         View watched = rescaleRoot.get();
-        if (touchScale != 1f || !FADED_TO.isEmpty() || ClearDisplayShownControls.anyKept()) {
+        if (touchScale != 1f || !FADED_TO.isEmpty() || !FADED_HERE.isEmpty()
+                || ClearDisplayShownControls.anyKept()) {
             if (watched != root && root != null) {
                 if (watched != null && watched.getViewTreeObserver().isAlive()) {
                     watched.getViewTreeObserver().removeOnPreDrawListener(RESCALE);
@@ -792,8 +793,17 @@ public final class VideoOverlayHider {
     /** The pre-draw pass: every faded view TikTok has written its own opacity to, faded again. */
     static void reapplyFade() {
         ClearDisplayShownControls.apply(tapsGoThroughNow(), clearOn());
-        if (FADED_TO.isEmpty()) return;
+        if (FADED_TO.isEmpty() && FADED_HERE.isEmpty()) return;
         int corrected = 0;
+        for (Map.Entry<View, Float> entry : FADED_HERE.entrySet()) {
+            View view = entry.getKey();
+            if (view == null || !view.isAttachedToWindow()) continue;
+            float nativeAlpha = view.getAlpha();
+            if (nativeAlpha == 0f) continue;
+            entry.setValue(nativeAlpha);
+            view.setAlpha(0f);
+            corrected++;
+        }
         for (Map.Entry<View, float[]> entry : FADED_TO.entrySet()) {
             View view = entry.getKey();
             float[] held = entry.getValue();
@@ -1064,8 +1074,8 @@ public final class VideoOverlayHider {
                 for (View view : found.get(chosen)) {
                     // The progress bar only goes see-through, so a drag along the bottom edge
                     // still seeks while it's out of sight (#84). Otherwise it fades with the
-                    // controls. TikTok writes alpha on the SeekBar inside the row (a paused video
-                    // sets it to 1), never on the row, so the fade on the row stays.
+                    // controls. A native alpha write or comments rebind can bring the row back,
+                    // so the pre-draw pass keeps the transparent row out of sight too.
                     if (target == CLEAR_SEEK_BAR_TARGET) {
                         if (wanted) {
                             setFaded(view, 100);
@@ -1397,8 +1407,11 @@ public final class VideoOverlayHider {
         }
 
         if (transparent) {
-            if (!FADED_HERE.containsKey(view)) FADED_HERE.put(view, view.getAlpha());
-            if (view.getAlpha() != 0f) view.setAlpha(0f);
+            float nativeAlpha = view.getAlpha();
+            if (!FADED_HERE.containsKey(view) || nativeAlpha != 0f) {
+                FADED_HERE.put(view, nativeAlpha);
+            }
+            if (nativeAlpha != 0f) view.setAlpha(0f);
             return;
         }
 

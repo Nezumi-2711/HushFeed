@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A hidden Clear display seekbar stays transparent after TikTok changes its opacity or replaces the row. Turning the hide setting off restores TikTok's latest opacity (#84).
+
 * **TikTok:** Automatic Clear display tries again when you reopen the same video in a new viewer. A manual exit still lasts while you return from comments or another brief focus loss (#84).
 
 * **TikTok:** Verified that releasing or expiring a session hold keeps video paused until another app returns audio focus.
