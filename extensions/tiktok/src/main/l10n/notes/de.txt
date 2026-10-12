@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Mit „Zugriff auf die Kontaktliste blockieren“ bekommt eine Kontaktabfrage, die alle Spalten will, jetzt eine leere Liste, die trotzdem die Kontaktspalten hat. So stolpert ein TikTok-Bildschirm, der den Namen einer Kontaktkarte nachschlägt, nicht über eine fehlende Spalte.
+
 * **TikTok:** H.264-Video bevorzugen und SDR statt HDR abspielen behalten jetzt die anderen Fassungen eines Videos, wenn keine der bevorzugten eine abspielbare Adresse hat. So wählt die Wiedergabequalität weiter unter Fassungen, die laufen.
 
 * **TikTok:** In der freien Anzeige bleiben die unteren Tabs ausgeblendet, wenn du zum Profil eines Creators und wieder zurück wischst (#84).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Blocca l'accesso alla lista contatti attivo, una lettura dei contatti che chiede tutte le colonne ora riceve una lista vuota che ha comunque le colonne dei contatti, così una schermata di TikTok che cerca il nome di una scheda contatto non inciampa in una colonna mancante.
+
 * **TikTok:** Preferisci video H.264 e Riproduci in SDR invece che in HDR ora mantengono le altre versioni di un video quando nessuna di quelle preferite ha un indirizzo da cui riprodurla, così la qualità di riproduzione sceglie ancora tra versioni che si riproducono.
 
 * **TikTok:** Nella visualizzazione pulita le schede in basso restano nascoste quando scorri al profilo di un creator e torni indietro (#84).

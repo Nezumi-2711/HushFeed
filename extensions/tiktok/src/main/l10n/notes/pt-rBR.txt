@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Com Bloquear o acesso à lista de contatos ligado, uma leitura de contatos que pede todas as colunas agora recebe uma lista vazia que ainda tem as colunas de contatos, então uma tela do TikTok que procura o nome de um cartão de contato não tropeça numa coluna que falta.
+
 * **TikTok:** Preferir vídeo H.264 e Reproduzir em SDR em vez de HDR agora mantêm as outras versões de um vídeo quando nenhuma das preferidas tem um endereço para tocar, então a Qualidade de reprodução continua escolhendo entre versões que tocam.
 
 * **TikTok:** Na Tela limpa, as abas de baixo continuam escondidas depois de deslizar até o perfil de um criador e voltar (#84).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Dengan Blokir akses ke daftar kontak aktif, pembacaan kontak yang meminta semua kolom kini mendapat daftar kosong yang tetap punya kolom kontak, jadi layar TikTok yang mencari nama kartu kontak tidak tersandung kolom yang hilang.
+
 * **TikTok:** Utamakan video H.264 dan Putar SDR, bukan HDR kini mempertahankan versi lain sebuah video jika tidak ada versi pilihan yang punya alamat untuk diputar, jadi Kualitas pemutaran tetap memilih di antara versi yang bisa diputar.
 
 * **TikTok:** Dalam Tampilan bersih, tab bawah tetap tersembunyi setelah Anda menggeser ke profil kreator lalu kembali (#84).

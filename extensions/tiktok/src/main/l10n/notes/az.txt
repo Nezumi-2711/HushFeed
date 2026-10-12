@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Kontakt siyahısına girişi bloklayın açıq olanda bütün sütunları istəyən kontakt oxuması artıq kontakt sütunlarını yenə də saxlayan boş siyahı alır, beləliklə kontakt kartının adını axtaran TikTok ekranı çatışmayan sütuna ilişmir.
+
 * **TikTok:** H.264 videoya üstünlük ver və HDR əvəzinə SDR oynat artıq üstünlük verilən versiyaların heç birinin oynatmaq üçün ünvanı olmadıqda videonun digər versiyalarını saxlayır, beləliklə oynatma keyfiyyəti yenə oynayan versiyalar arasından seçir.
 
 * **TikTok:** Təmiz ekranda müəllifin profilinə sürüşdürüb geri qayıdanda alt tablar gizli qalır (#84).

@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** With Block contact list access on, a contacts read that asks for every column now gets back an empty list that still has the contacts columns, so a TikTok screen that looks up a contact card's name doesn't trip over a missing column.
+
 * **TikTok:** Prefer H.264 video and Play SDR instead of HDR now keep a video's other versions when none of the preferred ones has an address to play from, so Playback quality still picks among versions that play.
 
 * **TikTok:** In Clear display, the bottom tabs stay hidden after you swipe over to a creator's profile and back (#84).
