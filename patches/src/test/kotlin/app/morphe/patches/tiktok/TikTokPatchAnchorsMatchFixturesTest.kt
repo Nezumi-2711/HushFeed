@@ -38,6 +38,7 @@ import app.morphe.patches.tiktok.interaction.engagement.gridCountSite
 import app.morphe.patches.tiktok.interaction.engagement.holderCountSites
 import app.morphe.patches.tiktok.interaction.feedtoolbar.SidebarIconViewFingerprint
 import app.morphe.patches.tiktok.interaction.feedtoolbar.isToolbarEnabledCheck
+import app.morphe.patches.tiktok.interaction.favorites.isQuickFavoritePanelShow
 import app.morphe.patches.tiktok.profile.BASE_UI_COMPONENT
 import app.morphe.patches.tiktok.profile.HEADER_TEXT_ITEM
 import app.morphe.patches.tiktok.profile.PROFILE_COMMON_INFO
@@ -290,6 +291,35 @@ class TikTokPatchAnchorsMatchFixturesTest {
                 assertEquals("${apk.name}: $type onViewCreated calls the base first", 0, superIndex)
                 assertTrue("${apk.name}: $type onViewCreated ends at the base call",
                     superIndex + 1 < instructions.size)
+            }
+        }
+    }
+
+    /**
+     * Issue #142. The quick favorites popup comes in a horizontal and a vertical version under
+     * one abstract base, each with one renamed method that shows the dialog through TikTok's
+     * call interceptor (so it carries the base's name and "show") and returns normally, which is
+     * where the extension is handed the popup.
+     */
+    @Test
+    fun `both quick favorites popups keep one traced show on every retained fixture`() {
+        val apks = fixtures()
+        for (apk in apks) {
+            val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
+            val classes = container.dexEntryNames.asSequence()
+                .flatMap { container.getEntry(it)!!.dexFile.classes.asSequence() }.toList()
+            val shows = classes.flatMap { classDef ->
+                classDef.methods.filter { it.isQuickFavoritePanelShow() }.map { classDef to it }
+            }
+            assertEquals("${apk.name}: quick favorites shows ${shows.map { it.first.type }}", 2, shows.size)
+            assertEquals("${apk.name}: one show per popup", 2, shows.map { it.first.type }.toSet().size)
+            val bases = shows.map { it.first.superclass }.toSet()
+            assertEquals("${apk.name}: both popups share one base", 1, bases.size)
+            val base = classes.single { it.type == bases.single() }
+            assertTrue("${apk.name}: the shared base is abstract", AccessFlags.ABSTRACT.isSet(base.accessFlags))
+            for ((classDef, show) in shows) {
+                assertTrue("${apk.name}: ${classDef.type}->${show.name} never returns",
+                    show.implementation!!.instructions.any { it.opcode == Opcode.RETURN_VOID })
             }
         }
     }

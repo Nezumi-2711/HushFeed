@@ -6,6 +6,8 @@
 
 * **TikTok:** Feature Gate Lab'de yeni bir Profil afişi hazır ayarı var. Profilin geri kalanını yeni düzene geçirmeden TikTok'un Edit profile sayfasında Add background seçeneğini açıyor (#80).
 
+* **TikTok:** Favoriler düğmesine basılı tutunca açılan koleksiyon penceresi, TikTok karanlık moddayken artık beyaz değil koyu. Hushfeed ayarları > Uygulama içindeki Koyu Favoriler penceresi bunu kapatır (#142).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** LIVE odalarında durum çubuğunu gizle ve LIVE'ı durum çubuğunun altında göster artık aramada bir içerik üreticinin kartının altındaki önizlemeden açılan LIVE'da da çalışıyor. TikTok bu LIVE'ı açılan videolar için kullandığı sayfanın içinde açıyor, anahtarlar oraya ulaşmıyordu (#137).

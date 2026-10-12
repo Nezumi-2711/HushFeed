@@ -6,6 +6,8 @@
 
 * **TikTok:** Feature Gate Lab punya preset baru Banner profil. Preset ini menyalakan Add background di Edit profile TikTok tanpa mengubah bagian profil lainnya ke tata letak baru (#80).
 
+* **TikTok:** Popup koleksi yang muncul saat kamu menahan tombol Favorit sekarang gelap, bukan putih, saat TikTok dalam mode gelap. Popup Favorit gelap di pengaturan Hushfeed > Aplikasi mematikannya (#142).
+
 ## 0.71.2 (2026-10-11)
 
 * **TikTok:** Sembunyikan bilah status di ruang LIVE dan Tampilkan LIVE di bawah bilah status sekarang juga berlaku untuk LIVE yang dibuka dari pratinjau di bawah kartu kreator di pencarian. TikTok membuka LIVE itu di dalam halaman yang dipakainya untuk video yang dibuka, yang sebelumnya tidak terjangkau oleh tombol-tombol itu (#137).
