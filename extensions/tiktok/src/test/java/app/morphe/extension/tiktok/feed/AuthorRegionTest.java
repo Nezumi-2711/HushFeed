@@ -589,6 +589,40 @@ public class AuthorRegionTest {
         assertEquals("Rn Dunyasi", name.getText().toString());
     }
 
+    /**
+     * #127 again on 0.71.2 (ottaline): a video change posted ahead of the layout pass reached the
+     * row before it was measured with the country, fitted the name to the width the row had for
+     * the name alone, and "Shaur… · CA" never grew back, since the name is as wide as its text.
+     */
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    public void aCallBeforeTheRowIsMeasuredLeavesTheNameWhole() {
+        LinearLayout row = new LinearLayout(context);
+        TextView name = new TextView(context);
+        name.setId(NAME_ID);
+        name.setSingleLine(true);
+        name.setEllipsize(TextUtils.TruncateAt.END);
+        name.setText("Rn Dunyasi");
+        row.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        TextView postTime = new TextView(context);
+        postTime.setId(POST_TIME_ID);
+        postTime.setText(" · 13s ago");
+        row.addView(postTime);
+        FrameLayout root = new FrameLayout(context);
+        root.addView(row, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        layOut(root);
+
+        AuthorRegion.decorate(name, null, "TR");
+        AuthorRegion.decorate(name, null, "TR");
+        layOut(root);
+        AuthorRegion.decorate(name, null, "TR");
+
+        assertEquals("the name was cut before the row could make room", "Rn Dunyasi · TR", name.getText().toString());
+        assertEquals(0, name.getLayout().getEllipsisCount(0));
+        AuthorRegion.restore();
+    }
+
     /** On a LIVE preview or an ad with no author row, the only row left can be the cell beside it. */
     @Test
     public void aLoneRowOffScreenIsNotTheVideosRow() {

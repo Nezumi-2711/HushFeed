@@ -285,8 +285,11 @@ public final class AuthorRegion {
 
         if (ours && Objects.equals(handle, decoratedHandle) && Objects.equals(region, decoratedRegion)) {
             // Already saying this. Every layout pass lands here, and the first one after the
-            // write is when a name TikTok cut short can be fitted.
-            refit(name, originalName, handle, region);
+            // write is when a name TikTok cut short can be fitted. A call before that pass, from
+            // a video change posted ahead of it, still sees the width of the name the row had
+            // before, and a name cut to it never grew back: in a weighted row the name is as
+            // wide as its text, so "Shaur… · CA" stayed beside an empty row (#127).
+            if (!name.isLayoutRequested()) refit(name, originalName, handle, region);
             return;
         }
 
