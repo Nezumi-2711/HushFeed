@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -420,13 +421,44 @@ public class LiveStatusBarTest {
     }
 
     /**
+     * #137, from BynchPOP: Clear display in a LIVE (swipe right) fades the controls with the shade
+     * in them, but the strip under the clock stayed shaded, a dark band over a clear room.
+     */
+    @Test public void clearDisplayTakesTheStripsShadeAwayWithTheControls() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        FrameLayout stream = heldStream(live, bar);
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout controls = page(live, stream);
+        View shade = shade(live, controls);
+        room.start().resume().visible();
+        layOut(live);
+        layOut(live);
+        LiveStatusBar.BarShade fill = (LiveStatusBar.BarShade) controls.getBackground();
+        assertEquals(0x33000000, fill.color());
+
+        View row = (View) shade.getParent();
+        row.setAlpha(0f);
+        assertEquals("the controls faded out and the strip stayed shaded", 0, fill.color());
+        row.setAlpha(0.5f);
+        assertEquals("the strip didn't fade with the controls", 0x1A000000, fill.color());
+        row.setAlpha(1f);
+        assertEquals(0x33000000, fill.color());
+        room.pause().stop().destroy();
+    }
+
+    /**
      * #137, seen on the S22 with 0.71.3: every room is a page of the room pager, and the pager
      * pads a page as it binds a room to it. The search over the window took the panel TikTok
      * shows while a room opens, the first view held down a bar's height, and left every page
      * alone, so some rooms kept a black band under the clock. The strip is looked for above each
-     * room's stream now, on every page.
+     * room's stream now, on every page. TikTok's side panel (swipe left in a room) is held down a
+     * bar's height too, and BynchPOP saw its top row under the clock, so it's left alone as well.
      */
-    @Test public void everyRoomPageLosesItsStripAndTheOpeningPanelIsLeftAlone() {
+    @Test public void everyRoomPageLosesItsStripAndTikToksPanelsAreLeftAlone() {
         Settings.LIVE_UNDER_STATUS_BAR.save(true);
         followFromTheMainActivity();
         int bar = platformBar();
@@ -437,6 +469,9 @@ public class LiveStatusBarTest {
         FrameLayout opening = new FrameLayout(live);
         opening.setPadding(0, bar, 0, 0);
         root.addView(opening, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 626));
+        FrameLayout side = new FrameLayout(live);
+        side.setPadding(0, bar, 0, 0);
+        root.addView(side, new FrameLayout.LayoutParams(939, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.END));
         FrameLayout pager = new FrameLayout(live);
         root.addView(pager, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -449,6 +484,7 @@ public class LiveStatusBarTest {
         layOut(live);
 
         assertEquals("the opening panel was taken for the strip", bar, opening.getPaddingTop());
+        assertEquals("the side panel's top row went up under the clock", bar, side.getPaddingTop());
         assertEquals("a room without a strip was moved", 0, first.getPaddingTop());
         assertEquals("a room without a strip had its controls lowered", 7, controlsOf(first).getPaddingTop());
         assertEquals("the next room kept its strip", 0, second.getPaddingTop());
@@ -474,6 +510,7 @@ public class LiveStatusBarTest {
         assertEquals("leaving didn't give the controls back", 7, controlsOf(second).getPaddingTop());
         assertEquals(null, controlsOf(second).getBackground());
         assertEquals(bar, opening.getPaddingTop());
+        assertEquals(bar, side.getPaddingTop());
         room.stop().destroy();
     }
 

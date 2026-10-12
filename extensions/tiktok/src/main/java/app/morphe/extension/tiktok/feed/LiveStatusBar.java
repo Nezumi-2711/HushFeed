@@ -535,14 +535,29 @@ public final class LiveStatusBar {
         /** The strip's color now: the shade's first color as drawn, or 0 while the shade is hidden. */
         int color() {
             View at = shade.get();
-            if (at == null || !at.isShown()) return 0;
+            if (at == null || !at.isShown() || at.getWidth() == 0 || at.getHeight() == 0) return 0;
             Drawable background = at.getBackground();
             if (!(background instanceof GradientDrawable)) return 0;
             if (background != read) {
                 read = background;
                 first = firstColor((GradientDrawable) background);
             }
-            return asDrawn(first, background.getAlpha(), at.getAlpha());
+            return asDrawn(first, background.getAlpha(), drawnAlpha(at));
+        }
+
+        /**
+         * The shade's alpha times that of every view between it and the layer this fills. Clear
+         * display in a LIVE fades the controls, and a strip that went by the shade's own alpha
+         * alone stayed shaded under the clock once the rest of the top was clear (#137).
+         */
+        private float drawnAlpha(View at) {
+            View layer = getCallback() instanceof View ? (View) getCallback() : null;
+            if (layer == null) return at.getAlpha();
+            float alpha = 1f;
+            for (View up = at; up != null && up != layer; up = up.getParent() instanceof View ? (View) up.getParent() : null) {
+                alpha *= up.getAlpha();
+            }
+            return alpha;
         }
 
         /**
