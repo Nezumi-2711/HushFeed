@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Si la búsqueda en la actividad cargada falla en una versión de TikTok, su barra desaparece y la lista de TikTok sigue en pantalla en lugar de cerrarse la app. La búsqueda queda desactivada hasta que TikTok se reinicie.
+
 * **TikTok:** Debajo de Atenuar los controles del vídeo hay un interruptor nuevo, Mantener los controles atenuados con Controles ocultos, activado por defecto. Si lo desactivas, Controles ocultos vuelve a ocultar los botones y la descripción, y la atenuación sigue funcionando en todo lo demás (#84).
 
 * **TikTok:** Con Barra de reproducción en historias de vídeo activada, un visor de historias que cerraste ya no se queda en memoria mientras sigues usando TikTok.

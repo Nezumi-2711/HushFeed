@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /** Captures the notification cell's actual list, state and independently observed VM owners. */
 final class InboxQueryOwners {
-    private static final String FAMILY = "loaded Inbox query";
+    static final String FAMILY = "loaded Inbox query";
     private static final List<Owner> OWNERS = new CopyOnWriteArrayList<>();
     private static final List<Vm> VMS = new CopyOnWriteArrayList<>();
 
@@ -255,5 +255,6 @@ final class InboxQueryOwners {
         for (Owner owner : new ArrayList<>(OWNERS)) owner.close();
         VMS.clear();
         InboxNativeRequests.resetForTests();
+        InboxQueryNative.resetForTests();
     }
 }

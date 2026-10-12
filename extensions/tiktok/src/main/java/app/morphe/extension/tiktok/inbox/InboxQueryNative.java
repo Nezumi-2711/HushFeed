@@ -9,6 +9,7 @@ package app.morphe.extension.tiktok.inbox;
 import android.os.Looper;
 import android.view.View;
 import app.morphe.extension.shared.Logger;
+import app.morphe.extension.shared.diagnostics.HookStatus;
 import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.settings.Settings;
 import java.lang.ref.WeakReference;
@@ -29,10 +30,13 @@ final class InboxQueryNative {
     private static final ThreadLocal<Emission> EMITTING = new ThreadLocal<>();
     interface RenderedReader { InboxRenderedModels.Result read(Object adapter) throws ReflectiveOperationException; }
     static RenderedReader renderedReader = InboxRenderedModels::read;
+    /** Set when the search threw once; it stays off, with TikTok's own list, until TikTok restarts. */
+    private static volatile boolean threw;
 
     private InboxQueryNative() {}
 
     static void attach(InboxQueryOwners.Owner owner) {
+        if (threw) return;
         Surface surface = new Surface(owner);
         SURFACES.put(owner, surface);
         surface.controls = new InboxQueryControls(owner);
@@ -70,15 +74,28 @@ final class InboxQueryNative {
     static void ownershipChanged() {
         app.morphe.extension.shared.Utils.runOnMainThread(() -> {
             for (InboxQueryOwners.Owner owner : InboxQueryOwners.snapshot()) {
-                if (owner.current() && owner.query.phase() == LoadedInboxQuery.Phase.QUERY
-                        && (!owner.pagingIsolated() || !ready(owner))) {
-                    query(owner, "");
-                    Surface surface = SURFACES.get(owner);
-                    if (surface != null && surface.controls != null) surface.controls.cleared();
-                }
+                try {
+                    if (owner.current() && owner.query.phase() == LoadedInboxQuery.Phase.QUERY
+                            && (!owner.pagingIsolated() || !ready(owner))) {
+                        query(owner, "");
+                        Surface surface = SURFACES.get(owner);
+                        if (surface != null && surface.controls != null) surface.controls.cleared();
+                    }
+                } catch (Throwable failure) { failed(owner, "ownership change", failure); }
             }
         });
     }
+
+    /** Closing the owner republishes TikTok's unfiltered list if a query was showing and drops the bar. */
+    static void failed(InboxQueryOwners.Owner owner, String hook, Throwable failure) {
+        threw = true;
+        HookStatus.threw(InboxQueryOwners.FAMILY, hook, failure);
+        Logger.printException(() -> "Loaded Inbox search threw and is off until TikTok restarts", failure);
+        try { owner.close(); }
+        catch (Throwable cleanup) { Logger.printException(() -> "Could not hand the Inbox list back to TikTok", cleanup); }
+    }
+
+    static void resetForTests() { threw = false; }
 
     /** Called at ListState.LIZ entry. The other five arguments pass through untouched. */
     static List<?> publication(Object state, List<?> models, boolean first, boolean second, Runnable completion, int mask) {

@@ -8,10 +8,13 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.diagnostics.HookStatus;
 import app.morphe.extension.tiktok.settings.Settings;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -383,6 +386,62 @@ public class InboxQueryNativeTest {
         assertNull(InboxQueryOwners.ownerForTests(surface.list));
     }
 
+    @Test public void aReaderThatThrowsWhileTypingHandsTheListBackAndRemovesTheBarUntilRestart() {
+        HookStatus.clear();
+        Surface surface = new Surface(false);
+        int nativePadding = surface.list.getPaddingTop();
+        View bar = surface.outer.getChildAt(1);
+        measureSearchBar(surface, bar);
+        assertTrue(surface.list.getPaddingTop() > nativePadding);
+        InboxQueryNative.renderedReader = adapter -> { throw new ClassCastException("a drifted native row"); };
+
+        ((EditText) ((ViewGroup) bar).getChildAt(0)).setText("alpha");
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(200));
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+
+        assertNull("the bar is gone", bar.getParent());
+        assertEquals(1, surface.outer.getChildCount());
+        assertEquals(nativePadding, surface.list.getPaddingTop());
+        assertNull("nothing was published over TikTok's list", surface.state.published);
+        assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+        assertTrue(HookStatus.missing(InboxQueryOwners.FAMILY).toString(),
+                HookStatus.missing(InboxQueryOwners.FAMILY).contains(
+                        "a working 'search query' hook (it threw java.lang.ClassCastException)"));
+
+        // A later bind of the same list keeps TikTok's list and adds no bar until TikTok restarts.
+        InboxFilter.onNotificationRowBound(surface.holder);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(1, surface.outer.getChildCount());
+        assertFalse(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+        assertNull(surface.state.published);
+        HookStatus.clear();
+    }
+
+    @Test public void aLayoutPassThatThrowsDuringAQueryRepublishesTikToksUnfilteredList() {
+        HookStatus.clear();
+        Surface surface = new Surface(false);
+        int nativePadding = surface.list.getPaddingTop();
+        View bar = surface.outer.getChildAt(1);
+        measureSearchBar(surface, bar);
+        assertTrue(InboxQueryNative.query(surface.owner(), "alpha", MATCH));
+        surface.diff.accept(0);
+        assertIdentity(surface.state.published, surface.alpha);
+
+        surface.list.locationFailure = new IllegalStateException("a drifted window");
+        surface.list.getViewTreeObserver().dispatchOnGlobalLayout();
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+
+        assertIdentity(surface.state.published, surface.alpha, surface.beta);
+        assertEquals(14, surface.state.mask);
+        assertIdentity(surface.state.LJ, surface.alpha, surface.beta);
+        assertNull(bar.getParent());
+        assertEquals(nativePadding, surface.list.getPaddingTop());
+        assertNull(InboxQueryOwners.ownerForTests(surface.list));
+        assertTrue(HookStatus.missing(InboxQueryOwners.FAMILY).contains(
+                "a working 'search bar layout' hook (it threw java.lang.IllegalStateException)"));
+        HookStatus.clear();
+    }
+
     @Test public void wholeHostDetachLeavesSiblingChildrenStableUntilTraversalFinishes() {
         Surface surface = new Surface(false);
         int nativePadding = surface.list.getPaddingTop();
@@ -613,8 +672,13 @@ public class InboxQueryNativeTest {
         NativeState state;
         NativeAdapter adapter;
         final NativeLayout layout;
+        RuntimeException locationFailure;
         NativeList(Activity activity, NativeState state, NativeAdapter adapter, NativeLayout layout) {
             super(activity); this.state = state; this.adapter = adapter; this.layout = layout;
+        }
+        @Override public void getLocationInWindow(int[] location) {
+            if (locationFailure != null) throw locationFailure;
+            super.getLocationInWindow(location);
         }
         public NativeState getState() { return state; }
         public NativeAdapter getAdapter() { return adapter; }

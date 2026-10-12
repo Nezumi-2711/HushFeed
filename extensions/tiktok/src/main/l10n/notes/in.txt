@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Jika pencarian aktivitas yang dimuat gagal di suatu versi TikTok, bilahnya hilang dan daftar milik TikTok tetap tampil, bukan aplikasinya yang tertutup. Pencarian tetap nonaktif sampai TikTok dimulai ulang.
+
 * **TikTok:** Ada sakelar baru di bawah Pudarkan kontrol video, Pertahankan kontrol pudar di Tampilan bersih, yang aktif secara bawaan. Jika dimatikan, Tampilan bersih kembali menyembunyikan tombol dan keterangan, sementara efek pudar tetap berlaku di tempat lain (#84).
 
 * **TikTok:** Dengan Bilah geser di story video aktif, penampil story yang sudah ditutup tidak lagi tertahan di memori selama kamu tetap memakai TikTok.

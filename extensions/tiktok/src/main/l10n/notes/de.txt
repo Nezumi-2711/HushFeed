@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Schlägt die Suche in geladenen Aktivitäten in einer TikTok-Version fehl, verschwindet ihre Leiste und TikToks eigene Liste bleibt stehen, statt dass die App schließt. Die Suche bleibt bis zum nächsten Start von TikTok aus.
+
 * **TikTok:** Unter „Videosteuerung ausblenden lassen“ gibt es den neuen Schalter „Abgeblendete Steuerung in der freien Ansicht behalten“, standardmäßig an. Schaltest du ihn aus, blendet die freie Ansicht Tasten und Beschreibung wieder aus, und die Abblendung wirkt überall sonst weiter (#84).
 
 * **TikTok:** Mit „Spulleiste in Video-Storys“ bleibt eine geschlossene Story-Ansicht nicht mehr im Speicher, während du TikTok weiter nutzt.

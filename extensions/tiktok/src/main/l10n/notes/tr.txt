@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yüklenmiş etkinlikte arama bir TikTok sürümünde hata verirse çubuğu kaybolur ve uygulama kapanmak yerine TikTok'un kendi listesi ekranda kalır. Arama, TikTok yeniden başlatılana kadar kapalı kalır.
+
 * **TikTok:** Video kontrollerini soluklaştır'ın altına varsayılan olarak açık Temiz ekranda soluk kontrolleri koru anahtarı eklendi. Kapatırsanız Temiz ekran düğmeleri ve açıklamayı yeniden gizler, soluklaştırma ise diğer her yerde çalışmaya devam eder (#84).
 
 * **TikTok:** Video hikayelerde sarma çubuğu açıkken kapattığınız hikaye görüntüleyicisi, TikTok'u kullanmaya devam ederken artık bellekte kalmıyor.

@@ -35,7 +35,7 @@ final class InboxQueryControls implements ViewTreeObserver.OnGlobalLayoutListene
     private int top, addedPadding;
     private boolean internal;
     private String applied = "";
-    private final Runnable apply = this::apply;
+    private final Runnable apply = () -> guard("search query", this::apply);
 
     InboxQueryControls(InboxQueryOwners.Owner owner) { this.owner = owner; }
 
@@ -44,7 +44,15 @@ final class InboxQueryControls implements ViewTreeObserver.OnGlobalLayoutListene
         if (list != null) list.getViewTreeObserver().addOnGlobalLayoutListener(this);
         onGlobalLayout();
     }
-    @Override public void onGlobalLayout() {
+    @Override public void onGlobalLayout() { guard("search bar layout", this::layout); }
+
+    /** These run on TikTok's main thread: a throw hands the list back to TikTok instead of crashing it. */
+    private void guard(String hook, Runnable body) {
+        try { body.run(); }
+        catch (Throwable failure) { InboxQueryNative.failed(owner, hook, failure); }
+    }
+
+    private void layout() {
         View list = owner.list.get();
         if (list == null || !owner.current()) { owner.close(); return; }
         if (!Settings.INBOX_LOADED_SEARCH.get()) {
@@ -110,8 +118,10 @@ final class InboxQueryControls implements ViewTreeObserver.OnGlobalLayoutListene
             @Override public void onTextChanged(CharSequence value, int start, int before, int count) {}
             @Override public void afterTextChanged(Editable value) {
                 if (internal) return;
-                list.removeCallbacks(apply);
-                list.postDelayed(apply, 150);
+                guard("search typing", () -> {
+                    list.removeCallbacks(apply);
+                    list.postDelayed(apply, 150);
+                });
             }
         });
         top = list.getPaddingTop();
@@ -142,7 +152,7 @@ final class InboxQueryControls implements ViewTreeObserver.OnGlobalLayoutListene
             String message = InboxQueryOwners.requestsIdle(owner) ? "Search is unavailable on this screen" : "Wait for loading to finish";
             Toast.makeText(editor.getContext(), L10n.t(editor.getContext(), message), Toast.LENGTH_SHORT).show();
         }
-        onGlobalLayout();
+        layout();
     }
 
     void detach() {
