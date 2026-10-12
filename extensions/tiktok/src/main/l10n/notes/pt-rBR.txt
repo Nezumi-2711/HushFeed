@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Limpar tudo fica visível ao lado das contas sugeridas na Caixa de entrada, com espaço para toda a área de toque do botão.
+
 * **TikTok:** Novidades resume todas as mudanças no idioma das configurações, com Histórico completo para ver tudo. Mais tarde e Entendi mantêm o comportamento, e as ações se dividem em linhas em telas estreitas ou com texto maior.
 
 * **TikTok:** Novo emoji de comentário é uma predefinição do Lab para o experimento nativo de emoji do TikTok. Reinicie após aplicar. Verificações do catálogo, alternativa, recursos e elegibilidade do servidor ainda decidem o que aparece.

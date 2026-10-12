@@ -420,6 +420,7 @@ public final class InboxFilter {
         clearAll.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsUi.TEXT_BODY_SMALL);
         clearAll.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
         clearAll.setContentDescription(L10n.t(activity, "Clear all suggested accounts"));
+        clearAll.setMinimumWidth(SettingsUi.dp(activity, 48));
         clearAll.setMinimumHeight(SettingsUi.dp(activity, 48));
         int padding = SettingsUi.dp(activity, 16);
         clearAll.setPadding(padding, 0, padding, 0);
@@ -440,16 +441,45 @@ public final class InboxFilter {
         // all", enabled, while a run it silently refuses is still working through the list.
         setClearAllBusy(clearingSuggested);
 
-        // The heading is a horizontal LinearLayout (the view class behind q3m extends one on
-        // 47.0.3, as it did on 46.2.3, where the title ran from x 45 to 457 and Learn more
-        // from 470 to 501, of 1080), so zero width with weight takes the slack and the
-        // end gravity parks the text at the right edge. Any other parent would keep the
-        // zero width and drop the weight, leaving an invisible control, so it gets a
-        // plain wrap instead.
-        ViewGroup.LayoutParams params = headerGroup instanceof LinearLayout
-                ? new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
-                : new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        // 47.1.4 wraps the title and help icon in a MATCH_PARENT child. Giving only our
+        // action weight leaves it zero pixels wide beyond the screen. Reserve the action's
+        // measured width and give that native wrapper the remaining space instead.
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (headerGroup instanceof LinearLayout
+                && ((LinearLayout) headerGroup).getOrientation() == LinearLayout.HORIZONTAL) {
+            boolean hasFullWidthChild = false;
+            for (int index = 0; index < headerGroup.getChildCount(); index++) {
+                View child = headerGroup.getChildAt(index);
+                ViewGroup.LayoutParams original = child.getLayoutParams();
+                if (!(original instanceof LinearLayout.LayoutParams)) continue;
+                if (original.width != ViewGroup.LayoutParams.MATCH_PARENT
+                        && !(original.width == 0
+                                && ((LinearLayout.LayoutParams) original).weight > 0f)) continue;
+                LinearLayout.LayoutParams remaining = new LinearLayout.LayoutParams(
+                        (LinearLayout.LayoutParams) original);
+                remaining.width = 0;
+                remaining.weight = 1f;
+                child.setLayoutParams(remaining);
+                hasFullWidthChild = true;
+                // The native title must leave room for its help icon as its wrapper shrinks.
+                View title = findOptional(activity, SUGGESTED_TITLE_IDS);
+                if (title != null && title.getParent() == child
+                        && child instanceof LinearLayout
+                        && ((LinearLayout) child).getOrientation() == LinearLayout.HORIZONTAL
+                        && title.getLayoutParams() instanceof LinearLayout.LayoutParams) {
+                    LinearLayout.LayoutParams text = new LinearLayout.LayoutParams(
+                            (LinearLayout.LayoutParams) title.getLayoutParams());
+                    text.width = 0;
+                    text.weight = 1f;
+                    title.setLayoutParams(text);
+                }
+            }
+            params = hasFullWidthChild
+                    ? new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+                    : new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        }
         headerGroup.addView(clearAll, params);
 
         Logger.printDebug(() -> "Clear all control added to the suggested accounts heading");

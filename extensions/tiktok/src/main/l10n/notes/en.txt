@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Inbox Clear all now stays visible beside Suggested accounts, with room for its full-size touch target.
+
 * **TikTok:** What's new summarizes every change in the settings language, with Full changelog for complete history. Later and Got it keep their behavior, and actions wrap on narrow screens or with larger text.
 
 * **TikTok:** New comment emoji is a Lab preset for TikTok's native emoji experiment. Restart after applying it. Catalog checks, fallback, assets and server eligibility still decide what appears.

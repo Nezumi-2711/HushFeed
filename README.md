@@ -410,6 +410,8 @@ The home page uses plain rows with small outline icons on an AMOLED background. 
 
 What's new gives each change a concise summary in the settings language. Full changelog opens the complete release history. Later keeps the update pending, and Got it acknowledges it. The actions wrap when the screen is narrow or text is larger.
 
+In the Inbox, Clear all sits beside Suggested accounts with its own touch target. TikTok's title and help icon keep the rest of the row. A second tap stops a running clear, and the result reports how many accounts were dismissed.
+
 <img src="assets/settings/settings.png" alt="Hushfeed settings home" width="260" /> <img src="assets/settings/playback-sound.png" alt="The Player card on the Playback page" width="260" /> <img src="assets/settings/playback-sound-light.png" alt="The Player card on the Playback page in light mode" width="260" />
 
 <details>

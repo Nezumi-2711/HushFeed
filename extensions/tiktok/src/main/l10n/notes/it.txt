@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Cancella tutto resta visibile accanto agli account suggeriti nella Posta in arrivo, con spazio per l'intera area toccabile del pulsante.
+
 * **TikTok:** Novità riassume ogni modifica nella lingua delle impostazioni, con Tutte le modifiche per la cronologia completa. Più tardi e Capito mantengono il loro comportamento. Le azioni vanno a capo sugli schermi stretti o con testo più grande.
 
 * **TikTok:** Nuove emoji nei commenti è un preset del Lab per l'esperimento emoji nativo di TikTok. Riavvia dopo averlo applicato. Controlli del catalogo, ripiego, file disponibili e idoneità sul server continuano a decidere cosa compare.

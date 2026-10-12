@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Borrar todo permanece visible junto a las cuentas sugeridas de la bandeja de entrada, con espacio para toda la superficie táctil del botón.
+
 * **TikTok:** Novedades resume cada cambio en el idioma de los ajustes, con Todos los cambios para ver el historial completo. Más tarde y Entendido mantienen su comportamiento. Las acciones pasan a otra línea en pantallas estrechas o con texto más grande.
 
 * **TikTok:** Nuevos emojis en comentarios es un preajuste del Lab para el experimento de emojis nativo de TikTok. Reinicia después de aplicarlo. Las comprobaciones del catálogo, la alternativa de reserva, los archivos disponibles y la elegibilidad del servidor siguen decidiendo qué aparece.

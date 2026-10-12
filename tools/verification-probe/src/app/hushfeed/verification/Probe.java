@@ -2547,6 +2547,7 @@ public final class Probe extends Instrumentation {
                         .append(" at=").append(where[0]).append(',').append(where[1])
                         .append(" size=").append(view.getWidth()).append('x').append(view.getHeight())
                         .append(" scale=").append(view.getScaleX());
+                appendLayoutInfo(view, out);
                 if (find != null) {
                     out.append(" shown=").append(view.isShown())
                             .append(" clickable=").append(view.isClickable())
@@ -2564,11 +2565,50 @@ public final class Probe extends Instrumentation {
                     }
                 }
                 out.append('\n');
+                if (find != null && view instanceof android.view.ViewGroup) {
+                    appendLayoutChildren((android.view.ViewGroup) view, 0, out, resources);
+                }
             }
             if (view instanceof android.view.ViewGroup) {
                 android.view.ViewGroup group = (android.view.ViewGroup) view;
                 for (int i = 0, count = group.getChildCount(); i < count; i++) {
                     walkViews(group.getChildAt(i), depth + 1, find, out, resources);
+                }
+            }
+        }
+
+        private static void appendLayoutInfo(android.view.View view, StringBuilder out) {
+            android.view.ViewGroup.LayoutParams params = view.getLayoutParams();
+            if (params != null) {
+                out.append(" lp=").append(params.width).append('x').append(params.height);
+                if (params instanceof android.widget.LinearLayout.LayoutParams) {
+                    out.append(" weight=").append(((android.widget.LinearLayout.LayoutParams) params).weight);
+                }
+                if (params instanceof android.view.ViewGroup.MarginLayoutParams) {
+                    android.view.ViewGroup.MarginLayoutParams margins =
+                            (android.view.ViewGroup.MarginLayoutParams) params;
+                    out.append(" margins=").append(margins.leftMargin).append(',')
+                            .append(margins.topMargin).append(',').append(margins.rightMargin)
+                            .append(',').append(margins.bottomMargin);
+                }
+            }
+            if (view instanceof android.widget.LinearLayout) {
+                out.append(" orientation=").append(((android.widget.LinearLayout) view).getOrientation());
+            }
+        }
+
+        private static void appendLayoutChildren(android.view.ViewGroup parent, int depth,
+                StringBuilder out, android.content.res.Resources resources) {
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                android.view.View child = parent.getChildAt(i);
+                out.append(" child ").append(depth).append('.').append(i).append(' ')
+                        .append(child.getClass().getSimpleName()).append(" id=")
+                        .append(idName(child, resources)).append(" size=")
+                        .append(child.getWidth()).append('x').append(child.getHeight());
+                appendLayoutInfo(child, out);
+                out.append('\n');
+                if (depth < 2 && child instanceof android.view.ViewGroup) {
+                    appendLayoutChildren((android.view.ViewGroup) child, depth + 1, out, resources);
                 }
             }
         }

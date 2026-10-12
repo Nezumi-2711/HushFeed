@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Alle löschen bleibt im Posteingang neben den vorgeschlagenen Konten sichtbar. Für die vollständige Berührungsfläche der Schaltfläche ist jetzt Platz.
+
 * **TikTok:** Neu in Hushfeed fasst jede Änderung in der Einstellungssprache zusammen. Alle Änderungen öffnet den vollständigen Verlauf. Später und Verstanden behalten ihr Verhalten. Auf schmalen Bildschirmen oder bei größerer Schrift brechen die Aktionen um.
 
 * **TikTok:** Neue Kommentar-Emojis ist eine Lab-Vorlage für TikToks eigenes Emoji-Experiment. Nach dem Anwenden neu starten. Katalogprüfungen, Rückfallverhalten, verfügbare Dateien und die Freigabe durch den Server bestimmen weiterhin, was erscheint.

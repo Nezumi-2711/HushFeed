@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Gələnlər qutusunda Hamısını təmizləyin düyməsi indi təklif olunan hesabların yanında görünür və tam ölçülü toxunma sahəsi üçün yer qalır.
+
 * **TikTok:** Yeniliklər hər dəyişikliyi ayarların dilində qısa göstərir, Bütün dəyişikliklər isə tam tarixçəni açır. Sonra və Aydındır əvvəlki kimi işləyir, dar ekranlarda və ya böyük mətnlə əməliyyatlar yeni sətrə keçir.
 
 * **TikTok:** Yeni şərh emojiləri TikTok-un yerli emoji sınağı üçün Laboratoriya seçimidir. Tətbiq etdikdən sonra yenidən başladın. Kataloq yoxlamaları, ehtiyat seçim, resurslar və server uyğunluğu nəyin görünəcəyini yenə müəyyən edir.

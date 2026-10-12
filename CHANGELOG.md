@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Clear all is visible beside Suggested accounts in the Inbox again. TikTok's full-width title wrapper now leaves room for a button with a full-size touch target.
+
 * **TikTok:** What's new now shows a concise summary of each change in the settings language. Full changelog opens the complete release history. Later and Got it keep their existing behavior, and the actions wrap on narrow screens or with larger text.
 
 * **TikTok:** Feature Gate Lab has a New comment emoji preset. It enables the native comment emoji experiment while keeping TikTok's catalog availability and fallback checks. Restart TikTok after applying it. Assets and server eligibility still determine what appears.

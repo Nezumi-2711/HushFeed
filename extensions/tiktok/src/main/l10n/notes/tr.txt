@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Gelen kutusundaki Tümünü temizle, önerilen hesapların yanında görünür kalır. Düğmenin tam boyutlu dokunma alanı için artık yer ayrılır.
+
 * **TikTok:** Yenilikler, ayar dilinde her değişikliği özetliyor. Tam değişiklik günlüğü bütün geçmişi açıyor. Sonra ve Anladım aynı şekilde çalışıyor, dar ekranlarda veya büyük metinde eylemler alt satıra geçiyor.
 
 * **TikTok:** Yeni yorum emojisi, TikTok'un yerel emoji deneyi için bir Lab hazır ayarı. Uyguladıktan sonra yeniden başlat. Katalog denetimleri, yedek seçenek, dosyalar ve sunucu uygunluğu neyin görüneceğini belirlemeyi sürdürüyor.
