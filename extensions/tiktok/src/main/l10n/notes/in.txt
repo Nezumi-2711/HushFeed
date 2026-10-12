@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Unduhan punya sakelar baru, Tombol Simpan sampul di menu bagikan. Saat aktif, menu bagikan video menampilkan Simpan sampul tepat setelah Unduh, jadi kamu menyimpan sampul hanya saat kamu mau, dan Unduh hanya menyimpan videonya. Saat nonaktif, Simpan sampulnya juga bekerja seperti sebelumnya (#146).
+
 * **TikTok:** Cari aktivitas yang dimuat juga mengalah saat mengalami masalah ketika TikTok memuat lanjutan daftar: pencarian ditutup dan permintaan TikTok tetap berjalan, bukan aplikasinya yang tertutup.
 
 * **TikTok:** AMOLED dark theme sekarang juga membuat hitam panel yang terbuka saat kamu menekan lama video di feed, serta halaman Aktivitas dan Pengikut baru di Kotak masuk. Sebelumnya semuanya tetap abu-abu gelap bawaan TikTok. Kartu di dalam panel tetap abu-abu agar tetap terlihat jelas.

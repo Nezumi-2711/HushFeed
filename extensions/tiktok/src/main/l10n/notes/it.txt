@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Download ha un nuovo interruttore, Pulsante Salva copertina nel menu di condivisione. Quando è attivo, il menu di condivisione di un video mostra Salva copertina subito dopo Scarica, così salvi la copertina solo quando vuoi, e Scarica salva solo il video. Quando è spento, Salva anche la copertina funziona come prima (#146).
+
 * **TikTok:** Cerca nelle attività caricate si fa da parte anche quando incontra un problema mentre TikTok carica altro dell'elenco: la ricerca si chiude e la richiesta di TikTok prosegue invece di far chiudere l'app.
 
 * **TikTok:** AMOLED dark theme ora rende nero anche il pannello che si apre tenendo premuto un video del feed, e le pagine Attività e Nuovi follower della Posta. Erano rimasti del grigio scuro di TikTok. Le schede nel pannello restano grigie per continuare a distinguersi.

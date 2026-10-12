@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Downloads tem um novo botão de ativação, Botão Salvar capa na folha de compartilhamento. Com ele ligado, a folha de compartilhamento de um vídeo mostra Salvar capa logo depois de Baixar, para você salvar a capa só quando quiser, e Baixar salva só o vídeo. Enquanto ele está desligado, Salvar a capa também funciona como antes (#146).
+
 * **TikTok:** Pesquisar atividade carregada também sai do caminho quando encontra um problema enquanto o TikTok carrega mais da lista: a pesquisa fecha e a solicitação do TikTok continua, em vez de o app fechar.
 
 * **TikTok:** AMOLED dark theme agora também deixa preto o painel que abre quando você mantém um vídeo do feed pressionado, e as páginas Atividade e Novos seguidores da Caixa de entrada. Eles continuavam no cinza-escuro do TikTok. Os cartões dentro do painel continuam cinza para se destacarem.

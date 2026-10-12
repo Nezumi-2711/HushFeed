@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Downloads hat einen neuen Schalter, „Titelbild speichern“ im Teilen-Menü. Ist er an, zeigt das Teilen-Menü eines Videos direkt nach Herunterladen „Titelbild speichern“, damit du das Titelbild nur speicherst, wenn du es willst, und Herunterladen speichert nur das Video. Solange er aus ist, funktioniert Titelbild ebenfalls speichern wie bisher (#146).
+
 * **TikTok:** „Geladene Aktivitäten durchsuchen“ tritt auch zur Seite, wenn es auf ein Problem stößt, während TikTok mehr von der Liste lädt: Die Suche schließt sich und TikToks Anfrage läuft weiter, statt dass die App beendet wird.
 
 * **TikTok:** AMOLED dark theme färbt jetzt auch das Feld schwarz, das sich öffnet, wenn du ein Video im Feed gedrückt hältst, dazu im Posteingang die Seiten Aktivität und Neue Follower. Sie waren in TikToks Dunkelgrau geblieben. Die Karten im Feld bleiben grau, damit sie sich weiter abheben.

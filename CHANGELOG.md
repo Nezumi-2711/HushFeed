@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Downloads has a new switch, Save cover button in the share sheet. With it on, a video's share sheet shows Save cover right after Download, so you save the cover only when you want it, and Download saves just the video. While it's off, Save the cover as well works as before (#146).
+
 * **TikTok:** Search loaded activity also steps aside when it runs into a problem while TikTok loads more of the list: the search closes and TikTok's request goes ahead instead of the app closing.
 
 * **TikTok:** AMOLED dark theme now also turns black the panel that opens when you press and hold a feed video, and Inbox's Activity and New followers pages. They had kept TikTok's dark gray. The cards inside the panel stay gray so they still stand out.

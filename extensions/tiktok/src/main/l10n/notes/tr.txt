@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** İndirilenler'de yeni bir anahtar var: Paylaşım menüsünde Kapağı kaydet düğmesi. Açıkken bir videonun paylaşım menüsünde İndir'in hemen ardından Kapağı kaydet görünür, böylece kapağı yalnızca istediğinde kaydedersin ve İndir yalnızca videoyu kaydeder. Kapalıyken Kapağı da kaydet eskisi gibi çalışır (#146).
+
 * **TikTok:** Yüklenmiş etkinlikte ara, TikTok listenin devamını yüklerken bir sorunla karşılaşırsa da kenara çekiliyor: uygulama kapanmak yerine arama kapanıyor ve TikTok'un isteği devam ediyor.
 
 * **TikTok:** AMOLED dark theme artık akıştaki bir videoya basılı tuttuğunuzda açılan paneli ve Gelen Kutusu'ndaki Etkinlik ile Yeni takipçiler sayfalarını da siyah yapıyor. Bunlar TikTok'un koyu grisinde kalıyordu. Paneldeki kartlar öne çıkmaya devam etsin diye gri kalıyor.

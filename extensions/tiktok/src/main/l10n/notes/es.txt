@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Descargas tiene un interruptor nuevo, Botón Guardar portada en el panel de compartir. Con él activado, el panel de compartir de un vídeo muestra Guardar portada justo después de Descargar, para que guardes la portada solo cuando la quieras, y Descargar guarda solo el vídeo. Mientras está desactivado, Guardar también la portada funciona como antes (#146).
+
 * **TikTok:** Buscar en la actividad cargada también se aparta cuando encuentra un problema mientras TikTok carga más de la lista: la búsqueda se cierra y la solicitud de TikTok sigue adelante en lugar de cerrarse la app.
 
 * **TikTok:** AMOLED dark theme ahora también pone en negro el panel que se abre al mantener pulsado un video del feed, y las páginas Actividad y Nuevos seguidores de la Bandeja de entrada. Seguían con el gris oscuro de TikTok. Las tarjetas del panel siguen grises para que se distingan.
