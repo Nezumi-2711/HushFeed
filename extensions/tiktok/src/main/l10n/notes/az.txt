@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Paylaşma vərəqi səhifəsindəki yeni Paylaşmaya bir basışla keçidi kopyalayın açarı ilə videonun altındakı Paylaşmaya basmaq həmin videonun keçidini paylaşılan keçid kimi təmizlənmiş halda kopyalayır. Dərhal sonra ikinci basış paylaşma vərəqini həmişəki kimi açır.
+
 * **TikTok:** Şərhlər açıq olanda lenti səssiz edin indi Şərhlər açıq olanda videonu dayandırın adlanır, çünkü etdiyi elə budur.
 
 * **TikTok:** Avtomatik təmiz ekran gecikməsiz qurulubsa, axtarışdan, profildən, heşteqdən və ya səsdən açdığınız video indi idarəetmə elementləri artıq gizli halda başlayır, axtarışa keçmək üçün onları lentdə geri qaytardıqdan sonra da. Əvvəl onun düymələri və yuxarıdakı axtarış sətri təxminən yarım saniyə görünürdü (#84).

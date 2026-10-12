@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Un nuevo interruptor en la página Panel de compartir, Copiar el enlace con un toque en Compartir, hace que un toque en Compartir debajo de un vídeo copie su enlace, limpio como un enlace compartido. Un segundo toque justo después abre el panel de compartir como siempre.
+
 * **TikTok:** Silenciar el feed mientras los comentarios están abiertos ahora se llama Pausar el video mientras los comentarios están abiertos, que es lo que hace.
 
 * **TikTok:** Con Ocultar controles automáticamente sin retraso, un vídeo que abres desde la búsqueda, un perfil, un hashtag o un sonido ahora empieza con los controles ya ocultos, también después de haberlos recuperado en el feed para llegar a la búsqueda. Antes, sus botones y la barra de búsqueda de arriba se veían durante medio segundo más o menos (#84).

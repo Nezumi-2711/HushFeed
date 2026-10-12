@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Paylaşım menüsü sayfasındaki yeni Paylaş'a tek basışla bağlantıyı kopyala anahtarı açıkken, bir videonun altındaki Paylaş'a basmak o videonun bağlantısını paylaşılan bir bağlantı gibi temizlenmiş olarak kopyalar. Hemen ardından ikinci bir basış paylaşım menüsünü her zamanki gibi açar.
+
 * **TikTok:** Yorumlar açıkken akışın sesini kapat artık Yorumlar açıkken videoyu duraklat adını taşıyor, çünkü yaptığı tam olarak bu.
 
 * **TikTok:** Otomatik temiz ekran gecikmesiz ayarlıysa, aramadan, bir profilden, bir hashtag'den veya bir sesten açtığın video artık kontrolleri zaten gizli olarak başlıyor, aramaya gitmek için onları akışta geri getirdikten sonra da. Önceden düğmeleri ve üstteki arama çubuğu yaklaşık yarım saniye görünüyordu (#84).

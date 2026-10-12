@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Uma nova chave na página Folha de compartilhamento, Copiar o link com um toque em Compartilhar, faz um toque em Compartilhar embaixo de um vídeo copiar o link dele, limpo como um link compartilhado. Um segundo toque logo depois abre a folha de compartilhamento como sempre.
+
 * **TikTok:** Silenciar o feed enquanto os comentários estão abertos agora se chama Pausar o vídeo enquanto os comentários estão abertos, que é o que ele faz.
 
 * **TikTok:** Com Limpar a tela automaticamente sem atraso, um vídeo que você abre pela busca, por um perfil, por uma hashtag ou por um som agora começa com os controles já escondidos, mesmo depois de você trazê-los de volta no feed para chegar à busca. Antes, os botões dele e a barra de busca no topo apareciam por cerca de meio segundo (#84).

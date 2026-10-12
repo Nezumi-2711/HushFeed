@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Un nuovo interruttore nella pagina Menu di condivisione, Copia il link con un tocco su Condividi, fa sì che un tocco su Condividi sotto un video ne copi il link, ripulito come un link condiviso. Un secondo tocco subito dopo apre il menu di condivisione come sempre.
+
 * **TikTok:** Silenzia il feed quando i commenti sono aperti ora si chiama Metti in pausa il video quando i commenti sono aperti, che è quello che fa.
 
 * **TikTok:** Con Vista pulita automatica senza ritardo, un video che apri dalla ricerca, da un profilo, da un hashtag o da un suono ora parte con i controlli già nascosti, anche dopo che li hai fatti tornare nel feed per arrivare alla ricerca. Prima i suoi pulsanti e la barra di ricerca in alto restavano visibili per circa mezzo secondo (#84).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ein neuer Schalter auf der Seite Teilen-Menü, „Link mit einem Tippen auf Teilen kopieren“, lässt ein Tippen auf Teilen unter einem Video dessen Link kopieren, bereinigt wie ein geteilter Link. Ein zweites Tippen direkt danach öffnet das Teilen-Menü wie gewohnt.
+
 * **TikTok:** „Feed stummschalten, solange Kommentare offen sind“ heißt jetzt „Video anhalten, solange Kommentare offen sind“, denn genau das tut der Schalter.
 
 * **TikTok:** Ist Automatische freie Ansicht ohne Verzögerung eingestellt, startet ein Video, das du aus der Suche, einem Profil, einem Hashtag oder einem Sound öffnest, jetzt schon mit ausgeblendeten Bedienelementen, auch wenn du sie im Feed zurückgeholt hast, um zur Suche zu kommen. Vorher waren seine Schaltflächen und die Suchleiste oben etwa eine halbe Sekunde zu sehen (#84).

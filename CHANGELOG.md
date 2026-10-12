@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A new switch on the Share sheet page, Copy the link with one press on Share, makes a press on Share under a video copy that video's link, cleaned the way a shared link is. A second press right after opens the share sheet as usual.
+
 * **TikTok:** Silence the feed while comments are open is now called Pause the video while comments are open, which says what it does.
 
 * **TikTok:** With Automatic Clear display set to no delay, a video you open from search, a profile, a hashtag or a sound now starts with its controls already hidden, also after you brought them back on the feed to get to search. Before, its buttons and the search bar at the top showed for about half a second (#84).

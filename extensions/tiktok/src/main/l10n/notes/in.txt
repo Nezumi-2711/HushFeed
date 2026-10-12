@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sakelar baru di halaman Menu bagikan, Salin tautan dengan sekali tekan Bagikan, membuat tekanan pada Bagikan di bawah video menyalin tautan video itu, dibersihkan seperti tautan yang dibagikan. Tekanan kedua tepat setelahnya membuka menu bagikan seperti biasa.
+
 * **TikTok:** Senyapkan feed saat komentar terbuka sekarang bernama Jeda video saat komentar terbuka, sesuai dengan fungsinya.
 
 * **TikTok:** Dengan Tampilan bersih otomatis tanpa jeda, video yang kamu buka dari pencarian, profil, hashtag, atau suara sekarang mulai dengan kontrol yang sudah tersembunyi, juga setelah kamu memunculkannya lagi di feed untuk membuka pencarian. Sebelumnya, tombol-tombolnya dan bilah pencarian di atas terlihat sekitar setengah detik (#84).
