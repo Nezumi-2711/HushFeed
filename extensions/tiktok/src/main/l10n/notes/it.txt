@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** I controlli del dispositivo ora riconoscono i menu a comparsa in base all'app a cui appartengono. Le altre app e le finestre non riconosciute continuano a rifiutare gli input.
+
 * **TikTok:** Il tuo profilo può mostrare i conteggi che scegli su questo telefono. I campi vuoti mantengono quelli di TikTok. Le altre persone vedono i valori reali.
 
 * **TikTok:** Aggiunta una ricerca facoltativa nelle notifiche Attività già caricate. La ricerca sospende il caricamento di altre notifiche. Cancellando la ricerca si ripristinano l’elenco attuale e la posizione.

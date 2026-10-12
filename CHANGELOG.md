@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Device checks now recognize popup menus through their app ownership. Other apps and unmatched windows still refuse input.
+
 * **TikTok:** Your own profile can show counts you choose on this phone. Blank fields keep TikTok's counts. Other people see the real values.
 
 * **TikTok:** Added optional search for loaded Activity notifications. Search pauses loading more, and clearing the query restores the current list and position.

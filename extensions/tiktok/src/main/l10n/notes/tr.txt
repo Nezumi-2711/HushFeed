@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Cihaz denetimleri artık açılır menüleri ait oldukları uygulamadan tanır. Diğer uygulamalar ve eşleşmeyen pencereler için giriş yine reddedilir.
+
 * **TikTok:** Kendi profilinizde bu telefonda seçtiğiniz sayılar gösterilebilir. Boş alanlar TikTok sayısını korur. Başkaları gerçek değerleri görür.
 
 * **TikTok:** Yüklenmiş Etkinlik bildirimleri için isteğe bağlı arama eklendi. Arama sırasında daha fazla bildirim yüklenmez. Sorgu temizlenince güncel liste ve konum geri yüklenir.

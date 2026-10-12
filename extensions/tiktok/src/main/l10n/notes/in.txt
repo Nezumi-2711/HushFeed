@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pemeriksaan perangkat kini mengenali menu pop-up dari aplikasi pemiliknya. Aplikasi lain dan jendela yang tidak cocok tetap menolak input.
+
 * **TikTok:** Profil Anda dapat menampilkan jumlah pilihan Anda di ponsel ini. Kolom kosong tetap memakai jumlah TikTok. Orang lain melihat nilai sebenarnya.
 
 * **TikTok:** Menambahkan pencarian opsional pada notifikasi Aktivitas yang sudah dimuat. Pencarian menjeda pemuatan berikutnya. Menghapus kueri memulihkan daftar saat ini dan posisinya.

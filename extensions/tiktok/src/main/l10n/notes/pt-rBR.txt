@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** As verificações do dispositivo agora reconhecem menus pop-up pelo app ao qual pertencem. Outros apps e janelas sem correspondência continuam recusando entrada.
+
 * **TikTok:** Seu perfil pode mostrar os números que você escolher neste celular. Campos vazios mantêm os números do TikTok. Outras pessoas veem os valores reais.
 
 * **TikTok:** Adicionada uma busca opcional nas notificações de Atividade já carregadas. A busca pausa o carregamento de mais notificações. Limpar a consulta restaura a lista atual e a posição.
