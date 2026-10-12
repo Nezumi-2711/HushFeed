@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Se comprobó que, al liberar o caducar una pausa de sesión, el vídeo sigue pausado hasta que otra app devuelve el foco de audio.
+
 * **TikTok:** Las vistas previas locales del índice de desarrollo comprueban la versión real del paquete y el orden main/dev de Manager. No cambian el índice estable ni publican nada.
 
 * **TikTok:** Ocultar root evita que las comprobaciones del dispositivo de TikTok reciban el estado de root y los detalles de sus herramientas. Empieza desactivado. Reinicia TikTok después de cambiarlo.

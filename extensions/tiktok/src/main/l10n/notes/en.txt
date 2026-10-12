@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Verified that releasing or expiring a session hold keeps video paused until another app returns audio focus.
+
 * **TikTok:** Local development index previews check the bundle's actual version and Manager's main/dev ordering. They leave the stable index untouched and don't publish anything.
 
 * **TikTok:** Hide root keeps root status and root-tool details out of TikTok's device checks. It starts off. Restart TikTok after changing it.

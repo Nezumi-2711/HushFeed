@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Oturum bekletmesi kaldırıldığında veya süresi dolduğunda, başka bir uygulama ses odağını geri verene kadar videonun duraklatıldığı doğrulandı.
+
 * **TikTok:** Yerel geliştirme dizini önizlemeleri paketin gerçek sürümünü ve Manager'ın main/dev sıralamasını kontrol eder. Kararlı dizini değiştirmez ve hiçbir şey yayımlamaz.
 
 * **TikTok:** Root'u gizle, root durumunu ve root araçlarının ayrıntılarını TikTok'un cihaz kontrollerinden gizler. Başlangıçta kapalıdır. Değiştirdikten sonra TikTok'u yeniden başlatın.

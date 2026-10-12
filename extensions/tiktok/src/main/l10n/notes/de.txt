@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Geprüft: Nach dem Freigeben oder Ablauf einer Sitzungspause bleibt das Video pausiert, bis eine andere App den Audiofokus zurückgibt.
+
 * **TikTok:** Lokale Entwicklungsindex-Vorschauen prüfen die tatsächliche Bundle-Version und Managers main/dev-Reihenfolge. Der stabile Index bleibt unverändert. Es wird nichts veröffentlicht.
 
 * **TikTok:** Root verbergen hält den Root-Status und Angaben zu Root-Werkzeugen aus TikToks Geräteprüfungen heraus. Anfangs ist es aus. Starte TikTok nach einer Änderung neu.

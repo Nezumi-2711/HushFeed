@@ -109,6 +109,7 @@ public final class Probe extends Instrumentation {
             @Override public void run() {
                 try {
                     ClassLoader loader = waitForHushfeed(context);
+                    BudgetFocusProbe.recoverOnStart(context, loader);
                     IntentFilter filter = new IntentFilter(ACTION);
                     BroadcastReceiver receiver = new Commands(context, loader);
                     // The sender is adb, which is another uid, so the receiver has to be
@@ -1914,6 +1915,14 @@ public final class Probe extends Instrumentation {
                                 Log.e(TAG, "failed fieldswatch", error);
                             }
                         }, "hushfeed-probe-fieldswatch").start();
+                        break;
+                    }
+                    case "session-hold": {
+                        SessionHoldProbe.run(loader, intent.getStringExtra("op"), intent.getIntExtra("seconds", 15));
+                        break;
+                    }
+                    case "budget-focus": {
+                        BudgetFocusProbe.run(app, loader, intent.getStringExtra("op"), intent.getStringExtra("mode"));
                         break;
                     }
                     case "playerspeed": {

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Verificato che il rilascio o la scadenza di una pausa di sessione mantiene il video in pausa finché un'altra app non restituisce il focus audio.
+
 * **TikTok:** Le anteprime locali dell'indice di sviluppo controllano la versione effettiva del pacchetto e l'ordine main/dev di Manager. Non modificano l'indice stabile e non pubblicano nulla.
 
 * **TikTok:** Nascondi root evita che i controlli del dispositivo di TikTok ricevano lo stato root e i dettagli degli strumenti root. All'inizio è disattivato. Riavvia TikTok dopo averlo cambiato.
