@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Şərhlər açıq olanda lenti səssiz edin indi Şərhlər açıq olanda videonu dayandırın adlanır, çünkü etdiyi elə budur.
+
 * **TikTok:** Avtomatik təmiz ekran gecikməsiz qurulubsa, axtarışdan, profildən, heşteqdən və ya səsdən açdığınız video indi idarəetmə elementləri artıq gizli halda başlayır, axtarışa keçmək üçün onları lentdə geri qaytardıqdan sonra da. Əvvəl onun düymələri və yuxarıdakı axtarış sətri təxminən yarım saniyə görünürdü (#84).
 
 * **TikTok:** Bu yaradıcını bloklayın və Örtüyü saxla indi paylaşım panelində TikTok-un öz düymələri kimi eyni boz dairənin içindədir, işıqlı və qaranlıq rejimdə onların ölçüsündə və rəngində ikonla. Lent videosunu basıb saxlayanda açılan paneldə də artıq ikonları var, əvvəl orada yox idi.
@@ -18,7 +20,7 @@
 
 * **TikTok:** Buraxılışın dərci indi PowerShell 7 ilə yanaşı Windows PowerShell 5.1-də də işləyir. Təkrarlanan teq yoxlaması 5.1-də artıq səhifədəki hər buraxılışı ayrıca oxuyur, əvvəllər isə bütün səhifəni bir buraxılış sayırdı. Dərc və skript yoxlamaları hər iki mühitdə keçir.
 
-* **TikTok:** Şərhlər açıq olanda lenti səssiz edin indi şərhlər açılan kimi videonu dayandırır, TikTok başladıqdan sonra ilk dəfə və şərhi olmayan videoda da. Əvvəl həmin ilk pəncərə şərhlər yüklənənə qədər oynamağa davam edirdi. Block author button patç seçimində olmasa da indi işləyir.
+* **TikTok:** Şərhlər açıq olanda videonu dayandırın indi şərhlər açılan kimi videonu dayandırır, TikTok başladıqdan sonra ilk dəfə və şərhi olmayan videoda da. Əvvəl həmin ilk pəncərə şərhlər yüklənənə qədər oynamağa davam edirdi. Block author button patç seçimində olmasa da indi işləyir.
 
 * **TikTok:** Parlaqlıq və səs üçün sürüşdür şərhlər pəncərəsinə toxunmur: şərhlər açıq olanda kənara yaxın sürüşdürmə onları sürüşdürür, parlaqlığı və ya səsi dəyişmir.
 

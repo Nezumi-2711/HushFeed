@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Silence the feed while comments are open is now called Pause the video while comments are open, which says what it does.
+
 * **TikTok:** With Automatic Clear display set to no delay, a video you open from search, a profile, a hashtag or a sound now starts with its controls already hidden, also after you brought them back on the feed to get to search. Before, its buttons and the search bar at the top showed for about half a second (#84).
 
 * **TikTok:** Block this creator and Save cover now sit in the same gray circle as TikTok's own buttons in the share sheet, with an icon the size and color of theirs in light and dark mode. They also get their icon in the panel that opens when you press and hold a feed video, where it was missing.
@@ -22,7 +24,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Release publishing works under Windows PowerShell 5.1 as well as PowerShell 7. The duplicate-tag check now reads each release on a page under 5.1, where it used to take the whole page for one release, and the publication and script checks pass in both shells.
 
-* **TikTok:** Silence the feed while comments are open now pauses the video as the comments open, also the first time after TikTok starts and on a video with no comments. Before, that first sheet kept playing until its comments had loaded. It also works now with Block author button left out of the patch selection.
+* **TikTok:** Pause the video while comments are open now pauses the video as the comments open, also the first time after TikTok starts and on a video with no comments. Before, that first sheet kept playing until its comments had loaded. It also works now with Block author button left out of the patch selection.
 
 * **TikTok:** Swipe for brightness and volume leaves the comment sheet alone: a drag near the edge while the comments are open scrolls them and doesn't change the brightness or volume.
 

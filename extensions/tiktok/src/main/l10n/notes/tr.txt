@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yorumlar açıkken akışın sesini kapat artık Yorumlar açıkken videoyu duraklat adını taşıyor, çünkü yaptığı tam olarak bu.
+
 * **TikTok:** Otomatik temiz ekran gecikmesiz ayarlıysa, aramadan, bir profilden, bir hashtag'den veya bir sesten açtığın video artık kontrolleri zaten gizli olarak başlıyor, aramaya gitmek için onları akışta geri getirdikten sonra da. Önceden düğmeleri ve üstteki arama çubuğu yaklaşık yarım saniye görünüyordu (#84).
 
 * **TikTok:** Bu içerik üreticisini engelle ve Kapağı kaydet artık paylaşım menüsünde TikTok'un kendi düğmeleriyle aynı gri dairede duruyor, açık ve koyu modda onların boyutunda ve renginde bir simgeyle. Akıştaki bir videoya basılı tutunca açılan panelde de artık simgeleri var, önceden orada yoktu.
@@ -18,7 +20,7 @@
 
 * **TikTok:** Sürüm yayımlama artık PowerShell 7'nin yanı sıra Windows PowerShell 5.1'de de çalışıyor. Yinelenen etiket denetimi 5.1'de artık bir sayfadaki her sürümü ayrı okuyor, eskiden tüm sayfayı tek sürüm sayıyordu, ve yayımlama ile betik denetimleri iki kabukta da geçiyor.
 
-* **TikTok:** Yorumlar açıkken akışın sesini kapat artık yorumlar açılır açılmaz videoyu duraklatıyor; TikTok açıldıktan sonraki ilk seferde ve yorumu olmayan bir videoda da. Önceden bu ilk açılışta video, yorumlar yüklenene kadar oynamaya devam ediyordu. Block author button yama seçiminde olmasa da artık çalışıyor.
+* **TikTok:** Yorumlar açıkken videoyu duraklat artık yorumlar açılır açılmaz videoyu duraklatıyor; TikTok açıldıktan sonraki ilk seferde ve yorumu olmayan bir videoda da. Önceden bu ilk açılışta video, yorumlar yüklenene kadar oynamaya devam ediyordu. Block author button yama seçiminde olmasa da artık çalışıyor.
 
 * **TikTok:** Parlaklık ve ses için kaydır artık yorumlara karışmıyor: yorumlar açıkken kenara yakın bir kaydırma yorumları kaydırıyor, parlaklığı veya sesi değiştirmiyor.
 

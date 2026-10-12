@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Silenciar o feed enquanto os comentários estão abertos agora se chama Pausar o vídeo enquanto os comentários estão abertos, que é o que ele faz.
+
 * **TikTok:** Com Limpar a tela automaticamente sem atraso, um vídeo que você abre pela busca, por um perfil, por uma hashtag ou por um som agora começa com os controles já escondidos, mesmo depois de você trazê-los de volta no feed para chegar à busca. Antes, os botões dele e a barra de busca no topo apareciam por cerca de meio segundo (#84).
 
 * **TikTok:** Bloquear este criador e Salvar capa agora ficam no mesmo círculo cinza dos botões do próprio TikTok no menu de compartilhar, com um ícone do tamanho e da cor deles nos modos claro e escuro. Eles também ganharam o ícone no painel que abre quando você segura um vídeo do feed, onde ele faltava.
@@ -18,7 +20,7 @@
 
 * **TikTok:** A publicação de versões funciona no Windows PowerShell 5.1 além do PowerShell 7. A verificação de tags duplicadas agora lê cada versão de uma página no 5.1, onde antes tratava a página inteira como uma versão só, e as verificações de publicação e de scripts passam nos dois shells.
 
-* **TikTok:** Silenciar o feed enquanto os comentários estão abertos agora pausa o vídeo assim que os comentários abrem, inclusive na primeira vez depois que o TikTok inicia e em um vídeo sem comentários. Antes, essa primeira abertura continuava tocando até os comentários carregarem. Agora também funciona quando Block author button fica fora da seleção de patches.
+* **TikTok:** Pausar o vídeo enquanto os comentários estão abertos agora pausa o vídeo assim que os comentários abrem, inclusive na primeira vez depois que o TikTok inicia e em um vídeo sem comentários. Antes, essa primeira abertura continuava tocando até os comentários carregarem. Agora também funciona quando Block author button fica fora da seleção de patches.
 
 * **TikTok:** Deslizar para brilho e volume não mexe mais nos comentários: arrastar perto da borda com os comentários abertos rola os comentários e não muda o brilho nem o volume.
 

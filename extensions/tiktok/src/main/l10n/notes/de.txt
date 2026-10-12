@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** „Feed stummschalten, solange Kommentare offen sind“ heißt jetzt „Video anhalten, solange Kommentare offen sind“, denn genau das tut der Schalter.
+
 * **TikTok:** Ist Automatische freie Ansicht ohne Verzögerung eingestellt, startet ein Video, das du aus der Suche, einem Profil, einem Hashtag oder einem Sound öffnest, jetzt schon mit ausgeblendeten Bedienelementen, auch wenn du sie im Feed zurückgeholt hast, um zur Suche zu kommen. Vorher waren seine Schaltflächen und die Suchleiste oben etwa eine halbe Sekunde zu sehen (#84).
 
 * **TikTok:** Diesen Ersteller blockieren und Titelbild speichern sitzen im Teilen-Menü jetzt im selben grauen Kreis wie TikToks eigene Schaltflächen, mit einem Symbol in deren Größe und Farbe im hellen und im dunklen Modus. Auch im Menü, das sich beim Gedrückthalten eines Feed-Videos öffnet, haben sie jetzt ihr Symbol, das dort fehlte.
@@ -18,7 +20,7 @@
 
 * **TikTok:** Die Release-Veröffentlichung läuft jetzt unter Windows PowerShell 5.1 genauso wie unter PowerShell 7. Die Prüfung auf doppelte Tags liest unter 5.1 jedes Release einer Seite einzeln, statt die ganze Seite für ein Release zu halten, und die Veröffentlichungs- und Skriptprüfungen bestehen in beiden Shells.
 
-* **TikTok:** „Feed stummschalten, solange Kommentare offen sind“ pausiert das Video jetzt, sobald sich die Kommentare öffnen, auch beim ersten Mal nach dem Start von TikTok und bei einem Video ohne Kommentare. Vorher lief es beim ersten Öffnen weiter, bis die Kommentare geladen waren. Es funktioniert jetzt auch, wenn Block author button nicht mitgepatcht ist.
+* **TikTok:** „Video anhalten, solange Kommentare offen sind“ pausiert das Video jetzt, sobald sich die Kommentare öffnen, auch beim ersten Mal nach dem Start von TikTok und bei einem Video ohne Kommentare. Vorher lief es beim ersten Öffnen weiter, bis die Kommentare geladen waren. Es funktioniert jetzt auch, wenn Block author button nicht mitgepatcht ist.
 
 * **TikTok:** „Wischen für Helligkeit und Lautstärke“ lässt die Kommentare in Ruhe: Ein Wisch am Rand, während die Kommentare offen sind, scrollt sie und ändert weder Helligkeit noch Lautstärke.
 

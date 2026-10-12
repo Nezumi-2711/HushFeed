@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Senyapkan feed saat komentar terbuka sekarang bernama Jeda video saat komentar terbuka, sesuai dengan fungsinya.
+
 * **TikTok:** Dengan Tampilan bersih otomatis tanpa jeda, video yang kamu buka dari pencarian, profil, hashtag, atau suara sekarang mulai dengan kontrol yang sudah tersembunyi, juga setelah kamu memunculkannya lagi di feed untuk membuka pencarian. Sebelumnya, tombol-tombolnya dan bilah pencarian di atas terlihat sekitar setengah detik (#84).
 
 * **TikTok:** Blokir kreator ini dan Simpan sampul sekarang berada di lingkaran abu-abu yang sama dengan tombol TikTok sendiri di lembar bagikan, dengan ikon seukuran dan sewarna tombol itu di mode terang dan gelap. Keduanya juga mendapat ikon di panel yang terbuka saat kamu menahan video feed, yang sebelumnya tidak ada.
@@ -18,7 +20,7 @@
 
 * **TikTok:** Penerbitan rilis sekarang berjalan di Windows PowerShell 5.1 maupun PowerShell 7. Pemeriksaan tag ganda di 5.1 sekarang membaca setiap rilis di satu halaman, padahal sebelumnya menganggap seluruh halaman sebagai satu rilis, dan pemeriksaan penerbitan serta skrip lolos di kedua shell.
 
-* **TikTok:** Senyapkan feed saat komentar terbuka sekarang menjeda video begitu komentar dibuka, termasuk pertama kali setelah TikTok dibuka dan pada video tanpa komentar. Sebelumnya, pembukaan pertama itu tetap memutar video sampai komentarnya selesai dimuat. Sekarang juga berfungsi jika Block author button tidak ikut dipilih saat patch.
+* **TikTok:** Jeda video saat komentar terbuka sekarang menjeda video begitu komentar dibuka, termasuk pertama kali setelah TikTok dibuka dan pada video tanpa komentar. Sebelumnya, pembukaan pertama itu tetap memutar video sampai komentarnya selesai dimuat. Sekarang juga berfungsi jika Block author button tidak ikut dipilih saat patch.
 
 * **TikTok:** Geser untuk kecerahan dan volume tidak lagi mengganggu lembar komentar: menggeser di dekat tepi saat komentar terbuka akan menggulir komentar dan tidak mengubah kecerahan atau volume.
 
