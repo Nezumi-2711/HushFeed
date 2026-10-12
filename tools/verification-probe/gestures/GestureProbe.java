@@ -43,8 +43,8 @@ public final class GestureProbe extends Instrumentation {
     @Override public void onStart() {
         Bundle result = new Bundle();
         AudioManager audio = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        int volume = -1;
-        boolean muted = false;
+        GestureAudio.Port audioState = null;
+        GestureAudio.Snapshot baseline = null;
         boolean attemptedInput = false;
         int code = 1;
         try {
@@ -65,10 +65,16 @@ public final class GestureProbe extends Instrumentation {
                 throw new IllegalStateException("The resource anchors require TikTok 47.1.4");
             }
             if (audio == null) throw new IllegalStateException("No audio service for restoration");
-            volume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-            muted = audio.isStreamMute(AudioManager.STREAM_MUSIC);
-            result.putInt("volumeBefore", volume);
-            result.putBoolean("muteBefore", muted);
+            audioState = new GestureAudio.Port() {
+                @Override public int volume() { return audio.getStreamVolume(AudioManager.STREAM_MUSIC); }
+                @Override public boolean muted() { return audio.isStreamMute(AudioManager.STREAM_MUSIC); }
+                @Override public void setVolume(int value) { audio.setStreamVolume(AudioManager.STREAM_MUSIC, value, 0); }
+                @Override public void unmute() { audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0); }
+            };
+            baseline = new GestureAudio.Snapshot(audioState);
+            result.putInt("volumeBefore", baseline.volume);
+            result.putBoolean("muteBefore", baseline.muted);
+            if (!mode.equals("inspect")) baseline.requireInputAllowed();
             ui = getUiAutomation(UiAutomation.FLAG_DONT_SUPPRESS_ACCESSIBILITY_SERVICES);
             AccessibilityServiceInfo info = ui.getServiceInfo();
             info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS
@@ -107,7 +113,6 @@ public final class GestureProbe extends Instrumentation {
                 attemptedInput = true;
                 inject(events, result);
             }
-            result.putInt("injectedEvents", injected);
             result.putString("result", events == null ? "observed_only_acceptance_unverified"
                     : "input_complete_acceptance_unverified");
             code = 0;
@@ -115,23 +120,18 @@ public final class GestureProbe extends Instrumentation {
             result.putString("result", "failed");
             result.putString("error", error.getClass().getSimpleName() + ": " + error.getMessage());
         } finally {
-            if (volume >= 0) {
+            result.putInt("injectedEvents", injected);
+            if (baseline != null) {
                 try {
-                    result.putInt("volumeAfterInput", audio.getStreamVolume(AudioManager.STREAM_MUSIC));
-                    result.putBoolean("muteAfterInput", audio.isStreamMute(AudioManager.STREAM_MUSIC));
-                    if (attemptedInput && audio.getStreamVolume(AudioManager.STREAM_MUSIC) != volume) {
-                        audio.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-                    }
-                    if (attemptedInput && audio.isStreamMute(AudioManager.STREAM_MUSIC) != muted) {
-                        audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                                muted ? AudioManager.ADJUST_MUTE : AudioManager.ADJUST_UNMUTE, 0);
-                    }
-                    int restored = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                    boolean restoredMute = audio.isStreamMute(AudioManager.STREAM_MUSIC);
+                    result.putInt("volumeAfterInput", audioState.volume());
+                    result.putBoolean("muteAfterInput", audioState.muted());
+                    baseline.restore(audioState, attemptedInput);
+                    int restored = audioState.volume();
+                    boolean restoredMute = audioState.muted();
                     result.putInt("volumeRestored", restored);
                     result.putBoolean("muteRestored", restoredMute);
-                    result.putBoolean("audioRestoredExactly", restored == volume && restoredMute == muted);
-                    if (restored != volume || restoredMute != muted) code = 1;
+                    result.putBoolean("audioRestoredExactly", restored == baseline.volume && restoredMute == baseline.muted);
+                    if (restored != baseline.volume || restoredMute != baseline.muted) code = 1;
                 } catch (RuntimeException error) {
                     result.putBoolean("audioRestoredExactly", false);
                     result.putString("restorationError", error.getClass().getSimpleName());
@@ -166,37 +166,18 @@ public final class GestureProbe extends Instrumentation {
     }
 
     private void inject(List<GestureSequence.Event> events, Bundle result) {
-        long down = SystemClock.uptimeMillis();
-        GestureSequence.Event active = null;
+        GestureDriver.Outcome outcome = new GestureDriver.Outcome();
         try {
-            for (GestureSequence.Event event : events) {
-                if (SystemClock.uptimeMillis() - down > 5000) throw new IllegalStateException("Gesture exceeded five seconds");
-                long delay = down + event.offset - SystemClock.uptimeMillis();
-                if (delay > 0) SystemClock.sleep(delay);
-                if (foreground().getWindowId() != expectedWindow) throw new IllegalStateException("Target window changed");
-                int action = event.action & MotionEvent.ACTION_MASK;
-                if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN
-                        || action == MotionEvent.ACTION_MOVE) active = event;
-                send(event.action, down, event.xs, event.ys);
-                active = action == MotionEvent.ACTION_UP ? null : event;
-                if (action == MotionEvent.ACTION_POINTER_UP) {
-                    active = new GestureSequence.Event(GestureSequence.MOVE, 0,
-                            new float[]{event.xs[0]}, new float[]{event.ys[0]});
+            GestureDriver.inject(events, new GestureDriver.Host() {
+                @Override public long now() { return SystemClock.uptimeMillis(); }
+                @Override public void sleep(long delay) { SystemClock.sleep(delay); }
+                @Override public boolean ownsWindow() { return foreground().getWindowId() == expectedWindow; }
+                @Override public void send(GestureSequence.Event event, long down) {
+                    GestureProbe.this.send(event.action, down, event.xs, event.ys);
                 }
-            }
+            }, outcome);
         } finally {
-            if (active != null) {
-                try {
-                    if (foreground().getWindowId() != expectedWindow) {
-                        result.putString("cancel", "focus_changed_no_further_input");
-                    } else {
-                        send(MotionEvent.ACTION_CANCEL, down, active.xs, active.ys);
-                        result.putString("cancel", "sent");
-                    }
-                } catch (RuntimeException error) {
-                    result.putString("cancel", "failed_" + error.getClass().getSimpleName());
-                }
-            }
+            if (outcome.cancel != null) result.putString("cancel", outcome.cancel);
         }
     }
 

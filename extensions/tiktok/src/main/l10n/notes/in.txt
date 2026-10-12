@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pemeriksaan gestur menolak input saat aliran yang dibisukan menyembunyikan volumenya dan menolak gestur yang selesai setelah batas waktu.
+
 * **TikTok:** Pemeriksaan perangkat kini mendukung gerakan dua jari asli. Kedua posisi jari pada bilah samping terbukti keluar dari tampilan bersih (#84).
 
 * **TikTok:** Bilah pencarian yang disembunyikan pada tampilan bersih tetap transparan setelah TikTok mengubah opasitas atau mengganti baris. Menonaktifkan pengaturan sembunyikan memulihkan opasitas terakhir TikTok (#84).

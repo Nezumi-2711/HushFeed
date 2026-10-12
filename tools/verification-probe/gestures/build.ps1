@@ -40,12 +40,17 @@ $session = New-ApkSigningSession -BoundParameters $PSBoundParameters -Root $root
 try {
     $null = New-Item -ItemType Directory -Path $OutDir
     $null = New-Item -ItemType Directory -Path (Join-Path $OutDir 'classes'), (Join-Path $OutDir 'dex')
-    $sources = @('GestureSequence.java', 'GestureSequenceContract.java', 'GestureProbe.java') |
+    $sources = @('GestureSequence.java', 'GestureSequenceContract.java', 'GestureAudio.java',
+        'GestureAudioContract.java', 'GestureDriver.java', 'GestureDriverContract.java', 'GestureProbe.java') |
         ForEach-Object { Join-Path $PSScriptRoot $_ }
     Invoke-GestureTool $javac (@('--release', '11', '-encoding', 'UTF-8', '-classpath', $androidJar,
         '-d', (Join-Path $OutDir 'classes')) + $sources)
     Invoke-GestureTool $Java @('-cp', (Join-Path $OutDir 'classes'),
         'app.hushfeed.verification.gestures.GestureSequenceContract')
+    Invoke-GestureTool $Java @('-cp', (Join-Path $OutDir 'classes'),
+        'app.hushfeed.verification.gestures.GestureAudioContract')
+    Invoke-GestureTool $Java @('-cp', (Join-Path $OutDir 'classes'),
+        'app.hushfeed.verification.gestures.GestureDriverContract')
     $classes = @(Get-ChildItem (Join-Path $OutDir 'classes') -Recurse -Filter '*.class' | ForEach-Object FullName)
     Invoke-GestureTool (Join-Path $tools 'd8.bat') (@('--lib', $androidJar, '--min-api', '34',
         '--output', (Join-Path $OutDir 'dex')) + $classes)

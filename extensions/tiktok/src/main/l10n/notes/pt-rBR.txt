@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Os testes de gestos recusam entradas quando o áudio silenciado oculta o volume e rejeitam gestos concluídos após o prazo.
+
 * **TikTok:** Os testes no dispositivo agora usam gestos reais com dois dedos. As duas posições do dedo na barra lateral foram verificadas para sair da tela limpa (#84).
 
 * **TikTok:** A barra de progresso oculta na tela limpa continua transparente quando o TikTok muda a opacidade ou substitui a linha. Desativar a opção restaura a última opacidade do TikTok (#84).

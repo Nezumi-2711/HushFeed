@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** I controlli dei gesti rifiutano gli input quando un flusso silenziato nasconde il volume e rifiutano i gesti che terminano oltre il tempo limite.
+
 * **TikTok:** I controlli sul dispositivo supportano gesti reali a due dita. Entrambe le posizioni del dito sulla barra laterale sono state verificate per uscire dalla visualizzazione pulita (#84).
 
 * **TikTok:** La barra di avanzamento nascosta nella visualizzazione pulita resta trasparente quando TikTok cambia l'opacità o sostituisce la riga. Disattivare l'opzione ripristina l'ultima opacità di TikTok (#84).

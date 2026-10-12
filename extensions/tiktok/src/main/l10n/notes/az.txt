@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Səssiz axın səs səviyyəsini gizlətdikdə jest yoxlamaları girişdən imtina edir və vaxt həddindən sonra bitən jestləri rədd edir.
+
 * **TikTok:** Cihaz yoxlamaları artıq həqiqi iki barmaq jestlərini dəstəkləyir. Yan paneldə hər iki barmaq mövqeyinin Ekranı təmizlə rejimindən çıxardığı təsdiqləndi (#84).
 
 * **TikTok:** TikTok şəffaflığı dəyişəndə və ya sətri əvəz edəndə Ekranı təmizlə rejiminin gizli sürüşdürmə çubuğu şəffaf qalır. Gizlətmə ayarını söndürmək TikTok-un son şəffaflığını bərpa edir (#84).

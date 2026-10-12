@@ -5,7 +5,7 @@ import java.util.List;
 
 /** Bounded touchscreen event descriptions. Native acceptance still needs the host app. */
 final class GestureSequence {
-    static final int DOWN = 0, UP = 1, MOVE = 2, POINTER_DOWN = 5, POINTER_UP = 6;
+    static final int DOWN = 0, UP = 1, MOVE = 2, CANCEL = 3, POINTER_DOWN = 5, POINTER_UP = 6;
 
     static final class Event {
         final int action;
