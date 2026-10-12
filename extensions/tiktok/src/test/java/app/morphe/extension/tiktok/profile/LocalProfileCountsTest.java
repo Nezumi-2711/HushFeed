@@ -283,6 +283,51 @@ public class LocalProfileCountsTest {
         }
     }
 
+    @Test public void typedCountsSurviveARecreatedSettingsScreenForTheSameAccountOnly() {
+        save("account-a", "0", "", "42");
+        try (var owner = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = owner.get();
+            Utils.setContext(activity);
+            LocalProfileCountsPreference row = (LocalProfileCountsPreference) open(activity).findPreference("local_profile_counts_editor");
+            ReflectionHelpers.callInstanceMethod(row, "onClick");
+            AlertDialog dialog = (AlertDialog) row.getDialog();
+            field(dialog, "followers").setText("12");
+            field(dialog, "following").setText("7");
+            field(dialog, "likes").setText("");
+            Bundle saved = new Bundle();
+            row.saveHierarchyState(saved);
+            dialog.dismiss();
+
+            // A dark mode switch rebuilds the screen and its dialog, with new generated field ids.
+            LocalProfileCountsPreference recreated = (LocalProfileCountsPreference) open(activity).findPreference("local_profile_counts_editor");
+            assertNotSame(row, recreated);
+            recreated.restoreHierarchyState(saved);
+            AlertDialog reopened = (AlertDialog) recreated.getDialog();
+            assertNotNull(reopened);
+            assertTrue(reopened.isShowing());
+            assertNotEquals(field(dialog, "followers").getId(), field(reopened, "followers").getId());
+            assertEquals("12", field(reopened, "followers").getText().toString());
+            assertEquals("7", field(reopened, "following").getText().toString());
+            assertEquals("", field(reopened, "likes").getText().toString());
+            Bundle again = new Bundle();
+            recreated.saveHierarchyState(again);
+            reopened.dismiss();
+
+            // Typed counts never carry over to another signed-in account.
+            SignedInUser.idForTests = "account-b";
+            LocalProfileCountsPreference other = (LocalProfileCountsPreference) open(activity).findPreference("local_profile_counts_editor");
+            other.restoreHierarchyState(again);
+            AlertDialog otherDialog = (AlertDialog) other.getDialog();
+            assertEquals("", field(otherDialog, "followers").getText().toString());
+            assertEquals("", field(otherDialog, "following").getText().toString());
+            otherDialog.dismiss();
+        }
+    }
+
+    private static EditText field(AlertDialog dialog, String metric) {
+        return dialog.getWindow().getDecorView().findViewWithTag("local_profile_count_" + metric);
+    }
+
     private static Number override(String uid, Metric metric) {
         return LocalProfileCounts.override(uid, metric.component);
     }

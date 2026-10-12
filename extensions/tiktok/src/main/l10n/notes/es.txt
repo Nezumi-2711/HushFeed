@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Las cifras que escribes en Cifras de tu perfil se mantienen en los campos si la pantalla gira o cambia el tema mientras el editor está abierto.
+
 * **TikTok:** Si la búsqueda en la actividad cargada falla en una versión de TikTok, su barra desaparece y la lista de TikTok sigue en pantalla en lugar de cerrarse la app. La búsqueda queda desactivada hasta que TikTok se reinicie.
 
 * **TikTok:** Debajo de Atenuar los controles del vídeo hay un interruptor nuevo, Mantener los controles atenuados con Controles ocultos, activado por defecto. Si lo desactivas, Controles ocultos vuelve a ocultar los botones y la descripción, y la atenuación sigue funcionando en todo lo demás (#84).

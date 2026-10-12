@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Numbers typed into Own profile counts stay in their fields when the screen rotates or the theme changes while the editor is open.
+
 * **TikTok:** If the loaded Activity search fails on a TikTok build, its bar goes away and TikTok's own list stays on screen instead of the app closing. The search stays off until TikTok restarts.
 
 * **TikTok:** A new switch under Fade the video controls, Keep faded controls in Clear display, is on by default. Turn it off and Clear display hides the buttons and caption again while the fade still works everywhere else (#84).

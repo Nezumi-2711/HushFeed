@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** I numeri digitati in Conteggi del tuo profilo restano nei campi se lo schermo ruota o il tema cambia mentre l’editor è aperto.
+
 * **TikTok:** Se la ricerca nelle attività caricate non riesce su una versione di TikTok, la sua barra sparisce e resta l’elenco di TikTok invece di far chiudere l’app. La ricerca resta disattivata fino al riavvio di TikTok.
 
 * **TikTok:** Sotto Attenua i controlli del video c'è un nuovo interruttore, Mantieni i controlli attenuati nella vista pulita, attivo di base. Se lo disattivi, la vista pulita torna a nascondere pulsanti e didascalia, mentre l'attenuazione continua a valere ovunque altrove (#84).

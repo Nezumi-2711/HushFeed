@@ -5,9 +5,12 @@
 package app.morphe.extension.tiktok.settings.preference;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -33,6 +36,7 @@ import java.util.Map;
 public final class LocalProfileCountsPreference extends DialogPreference {
     private final Map<Metric, EditText> editors = new EnumMap<>(Metric.class);
     private String owner;
+    private Typed restoring;
 
     public LocalProfileCountsPreference(Context context) {
         super(context);
@@ -93,6 +97,11 @@ public final class LocalProfileCountsPreference extends DialogPreference {
 
     @Override protected void showDialog(Bundle state) {
         super.showDialog(state);
+        Typed typed = restoring;
+        // Generated field ids change with each recreate, so the dialog's own restore can't find them.
+        if (typed != null && owner != null && owner.equals(typed.owner)) {
+            for (Metric metric : Metric.values()) editors.get(metric).setText(typed.values[metric.ordinal()]);
+        }
         AlertDialog dialog = (AlertDialog) getDialog();
         SettingsUi.styleFramedDialog(dialog);
         SettingsUi.submitOnDone(editors.get(Metric.LIKES), dialog);
@@ -139,5 +148,58 @@ public final class LocalProfileCountsPreference extends DialogPreference {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!busy);
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(!busy);
         for (EditText editor : editors.values()) editor.setEnabled(!busy);
+    }
+
+    @Override protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        Dialog dialog = getDialog();
+        if (dialog == null || !dialog.isShowing() || editors.size() != Metric.values().length) return superState;
+        Typed typed = new Typed(superState);
+        typed.owner = owner;
+        typed.values = new String[Metric.values().length];
+        for (Metric metric : Metric.values()) typed.values[metric.ordinal()] = editors.get(metric).getText().toString();
+        return typed;
+    }
+
+    @Override protected void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof Typed)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        // DialogPreference reopens the dialog from inside this call; showDialog puts the typed counts back.
+        restoring = (Typed) state;
+        try { super.onRestoreInstanceState(restoring.getSuperState()); }
+        finally { restoring = null; }
+    }
+
+    private static final class Typed extends BaseSavedState {
+        String owner;
+        String[] values;
+
+        Typed(Parcelable superState) {
+            super(superState);
+        }
+
+        Typed(Parcel source) {
+            super(source);
+            owner = source.readString();
+            values = source.createStringArray();
+        }
+
+        @Override public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeString(owner);
+            dest.writeStringArray(values);
+        }
+
+        public static final Parcelable.Creator<Typed> CREATOR = new Parcelable.Creator<Typed>() {
+            @Override public Typed createFromParcel(Parcel source) {
+                return new Typed(source);
+            }
+
+            @Override public Typed[] newArray(int size) {
+                return new Typed[size];
+            }
+        };
     }
 }

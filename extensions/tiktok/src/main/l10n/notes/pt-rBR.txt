@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Os números digitados em Contagens do seu perfil continuam nos campos quando a tela gira ou o tema muda com o editor aberto.
+
 * **TikTok:** Se a pesquisa na atividade carregada falhar em uma versão do TikTok, a barra some e a lista do próprio TikTok continua na tela, em vez de o app fechar. A pesquisa fica desligada até o TikTok reiniciar.
 
 * **TikTok:** Abaixo de Esmaecer os controles do vídeo há uma chave nova, Manter os controles esmaecidos na tela limpa, ligada por padrão. Desligada, a tela limpa volta a esconder os botões e a legenda, e o esmaecimento continua valendo em todo o resto (#84).
