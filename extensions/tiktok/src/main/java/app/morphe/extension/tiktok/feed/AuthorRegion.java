@@ -66,7 +66,7 @@ public final class AuthorRegion {
     private static String decoratedHandle;
     private static String decoratedRegion;
 
-    /** The row's width once a name cut to fit was laid out, or -1 until it has been. */
+    /** The row's width when the name was cut to fit, or -1 while no cut of ours is showing. */
     private static int fittedRowWidth = -1;
 
     /**
@@ -338,7 +338,10 @@ public final class AuthorRegion {
         CharSequence fitted = fit(name, label(original, handle), region);
         if (fitted != null && !fitted.toString().equals(String.valueOf(name.getText()))) {
             decoratedText = fitted;
-            fittedRowWidth = -1;
+            // Taken now, while the row still has the width the whole name overflowed. The next
+            // pass can already be the one where the badge shrank, and a width read then would
+            // make the smaller row the baseline (#127).
+            fittedRowWidth = name.getParent() instanceof View ? ((View) name.getParent()).getWidth() : -1;
             name.setText(fitted);
         } else if (fitted == null) {
             regrow(name, original, handle, region);
@@ -346,25 +349,31 @@ public final class AuthorRegion {
     }
 
     /**
-     * Gives a name cut to fit its whole text back once the row has made room. A photo post's
+     * Gives a name cut to fit more of its text back once the row has made room. A photo post's
      * badge reads "Photo" as the post comes up and shrinks to an icon a moment later, and a name
-     * cut beside the wide badge stayed cut beside the small one (#127, S22). The row's width is
-     * taken once the cut name is laid out; when it's narrower than that by more than a letter,
-     * something beside the name gave up room, and the row measures the whole name again.
+     * cut beside the wide badge stayed cut beside the small one (#127, S22). In TikTok's
+     * wrap_content row (47.1.4) the row shrinks with the badge while the name stays as wide as
+     * its cut text, so the room the name has now is its own width plus what the row gave up
+     * since the cut. A row that keeps its width widens the name instead, which counts the same.
      */
     private static void regrow(TextView name, CharSequence original, String handle, String region) {
         CharSequence whole = build(original, handle, region);
-        if (whole == null || whole.toString().equals(String.valueOf(name.getText()))
-                || !(name.getParent() instanceof View)) {
-            fittedRowWidth = -1;
+        CharSequence label = label(original, handle);
+        CharSequence shown = name.getText();
+        if (whole == null || label == null || region == null || shown == null || fittedRowWidth < 0
+                || whole.toString().equals(shown.toString()) || !(name.getParent() instanceof View)) {
             return;
         }
-        int row = ((View) name.getParent()).getWidth();
-        if (fittedRowWidth < 0 || row > fittedRowWidth) {
-            fittedRowWidth = row;
-            return;
-        }
-        if (fittedRowWidth - row <= name.getPaint().measureText("W")) return;
+        String tail = SEPARATOR + region;
+        int gaveUp = Math.max(0, fittedRowWidth - ((View) name.getParent()).getWidth());
+        float room = name.getWidth() - name.getCompoundPaddingLeft() - name.getCompoundPaddingRight()
+                + gaveUp - name.getPaint().measureText(tail);
+        if (room <= 0) return;
+        // The same cut again means nothing came free: a row measured afresh also gives back the
+        // part of a letter the cut left unused, and writing the whole name for that would only
+        // flash it for a frame before the next pass cut it to the same place.
+        CharSequence longer = TextUtils.ellipsize(label, name.getPaint(), room, TextUtils.TruncateAt.END);
+        if (longer.length() <= shown.length() - tail.length()) return;
         fittedRowWidth = -1;
         decoratedText = whole;
         name.setText(whole);

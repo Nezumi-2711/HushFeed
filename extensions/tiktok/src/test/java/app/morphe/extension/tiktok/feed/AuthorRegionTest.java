@@ -675,6 +675,113 @@ public class AuthorRegionTest {
         assertEquals("Danielle Scarborough", name.getText().toString());
     }
 
+    /** A photo post's badge, with the room it takes before and after it shrinks to an icon. */
+    private static final class BadgeRow {
+        final FrameLayout root;
+        final TextView name;
+        final View badge;
+        final int whole;
+
+        BadgeRow(Context context, boolean rowKeepsItsWidth) {
+            LinearLayout row = new LinearLayout(context);
+            name = new TextView(context);
+            name.setId(NAME_ID);
+            name.setSingleLine(true);
+            name.setEllipsize(TextUtils.TruncateAt.END);
+            name.setText("Danielle Scarborough");
+            row.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+            whole = (int) Math.ceil(name.getPaint().measureText("Danielle Scarborough · US"));
+            badge = new View(context);
+            row.addView(badge, new LinearLayout.LayoutParams(400 - whole + 40, 10));
+            TextView postTime = new TextView(context);
+            postTime.setId(POST_TIME_ID);
+            postTime.setVisibility(View.GONE);
+            row.addView(postTime);
+            root = new FrameLayout(context);
+            root.addView(row, new FrameLayout.LayoutParams(rowKeepsItsWidth
+                    ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+
+        /** Writes the country and lets the row cut the name beside the wide badge. */
+        String cut() {
+            layOut(root);
+            AuthorRegion.decorate(name, null, "US");
+            layOut(root);
+            AuthorRegion.decorate(name, null, "US");
+            String shown = name.getText().toString();
+            assertTrue("the wide badge left no room for the whole name", shown.contains("…"));
+            assertTrue(shown.endsWith(" · US"));
+            return shown;
+        }
+
+        void shrinkBadge() {
+            badge.getLayoutParams().width = 400 - whole - 60;
+            badge.requestLayout();
+        }
+
+        void passes(int count) {
+            for (int pass = 0; pass < count; pass++) {
+                layOut(root);
+                AuthorRegion.decorate(name, null, "US");
+            }
+        }
+    }
+
+    /**
+     * The cut is the last thing a pass does, so the very next pass can be the one where the badge
+     * shrank. A width read then made the smaller row the baseline and the name never grew back.
+     */
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    public void aNameCutRightBeforeTheBadgeShrinksStillGrowsBack() {
+        BadgeRow photo = new BadgeRow(context, false);
+        photo.cut();
+
+        photo.shrinkBadge();
+        photo.passes(2);
+
+        assertEquals("Danielle Scarborough · US", photo.name.getText().toString());
+        assertEquals(0, photo.name.getLayout().getEllipsisCount(0));
+        AuthorRegion.restore();
+    }
+
+    /** A row that keeps its width hands the room to the name instead of shrinking. */
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    public void aCutNameGrowsBackInARowThatKeepsItsWidth() {
+        BadgeRow photo = new BadgeRow(context, true);
+        photo.cut();
+
+        photo.shrinkBadge();
+        photo.passes(2);
+
+        assertEquals("Danielle Scarborough · US", photo.name.getText().toString());
+        assertEquals(0, photo.name.getLayout().getEllipsisCount(0));
+        AuthorRegion.restore();
+    }
+
+    /**
+     * A row measured again with nothing beside the name changed gives back only the part of a
+     * letter the cut left unused. The cut stays put rather than flashing the whole name.
+     */
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    public void measuringTheRowAgainLeavesTheCutAlone() {
+        BadgeRow photo = new BadgeRow(context, false);
+        String cut = photo.cut();
+        CharSequence written = photo.name.getText();
+
+        for (int pass = 0; pass < 3; pass++) {
+            photo.name.getParent().requestLayout();
+            photo.passes(1);
+        }
+
+        assertEquals(cut, photo.name.getText().toString());
+        assertSame("the cut text was written again", written, photo.name.getText());
+        AuthorRegion.restore();
+    }
+
     /** On a LIVE preview or an ad with no author row, the only row left can be the cell beside it. */
     @Test
     public void aLoneRowOffScreenIsNotTheVideosRow() {
