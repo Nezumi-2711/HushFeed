@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Nama di baris kreator tidak lagi tetap terpotong setelah menggulir cepat atau saat lencana postingan foto mengecil menjadi ikon (#127).
+
 * **TikTok:** Profilmu bisa menampilkan lencana verifikasi atau menyembunyikan peringatan akun di ponsel ini. Orang lain tetap melihat status aslimu.
 
 * **TikTok:** Pemeriksaan media kini menguji muxer terpasang dengan klip buatan dan memastikan hasilnya bisa diputar. File uji dihapus setelah pemeriksaan.

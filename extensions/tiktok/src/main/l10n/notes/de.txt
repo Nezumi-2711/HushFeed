@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Der Name in der Creatorzeile bleibt nicht mehr gekürzt, wenn du schnell scrollst oder das Abzeichen eines Fotobeitrags zu einem Symbol schrumpft (#127).
+
 * **TikTok:** Dein Profil kann auf diesem Handy ein Verifizierungsabzeichen zeigen oder die Kontowarnung ausblenden. Andere sehen deinen echten Status.
 
 * **TikTok:** Medienprüfungen testen jetzt den installierten Muxer mit erzeugten Clips und prüfen die Abspielbarkeit. Die Testdateien werden danach entfernt.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Üretici satırındaki ad artık hızlı kaydırmadan sonra ya da fotoğraf gönderisinin rozeti simgeye küçüldüğünde kısaltılmış kalmıyor (#127).
+
 * **TikTok:** Profiliniz bu telefonda doğrulama rozeti gösterebilir veya hesap uyarısını gizleyebilir. Başkaları gerçek durumunuzu görür.
 
 * **TikTok:** Medya denetimleri artık yüklü çoklayıcıyı oluşturulan kliplerle sınar ve çıktının oynatılabildiğini doğrular. Test dosyaları doğrulamadan sonra kaldırılır.

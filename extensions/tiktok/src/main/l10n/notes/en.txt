@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** A creator's name on the author line no longer stays cut short after a quick scroll, or after a photo post's badge shrinks to an icon (#127).
+
 * **TikTok:** Your profile can show a verified badge or hide its account warning on this phone. Other people see your real status.
 
 * **TikTok:** Media checks now exercise the installed muxer with generated clips and verify playable output. Test files are removed after verification.

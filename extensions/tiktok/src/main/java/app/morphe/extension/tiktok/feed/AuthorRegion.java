@@ -66,6 +66,9 @@ public final class AuthorRegion {
     private static String decoratedHandle;
     private static String decoratedRegion;
 
+    /** The row's width once a name cut to fit was laid out, or -1 until it has been. */
+    private static int fittedRowWidth = -1;
+
     /**
      * A video opened from search, a profile or a sound plays in its own activity, with the same
      * author row, and the hook only watched the main feed's window, so those videos never got a
@@ -335,8 +338,37 @@ public final class AuthorRegion {
         CharSequence fitted = fit(name, label(original, handle), region);
         if (fitted != null && !fitted.toString().equals(String.valueOf(name.getText()))) {
             decoratedText = fitted;
+            fittedRowWidth = -1;
             name.setText(fitted);
+        } else if (fitted == null) {
+            regrow(name, original, handle, region);
         }
+    }
+
+    /**
+     * Gives a name cut to fit its whole text back once the row has made room. A photo post's
+     * badge reads "Photo" as the post comes up and shrinks to an icon a moment later, and a name
+     * cut beside the wide badge stayed cut beside the small one (#127, S22). The row's width is
+     * taken once the cut name is laid out; when it's narrower than that by more than a letter,
+     * something beside the name gave up room, and the row measures the whole name again.
+     */
+    private static void regrow(TextView name, CharSequence original, String handle, String region) {
+        CharSequence whole = build(original, handle, region);
+        if (whole == null || whole.toString().equals(String.valueOf(name.getText()))
+                || !(name.getParent() instanceof View)) {
+            fittedRowWidth = -1;
+            return;
+        }
+        int row = ((View) name.getParent()).getWidth();
+        if (fittedRowWidth < 0 || row > fittedRowWidth) {
+            fittedRowWidth = row;
+            return;
+        }
+        if (fittedRowWidth - row <= name.getPaint().measureText("W")) return;
+        fittedRowWidth = -1;
+        decoratedText = whole;
+        name.setText(whole);
+        name.requestLayout();
     }
 
     /**
@@ -451,6 +483,7 @@ public final class AuthorRegion {
         decoratedText = null;
         decoratedHandle = null;
         decoratedRegion = null;
+        fittedRowWidth = -1;
 
         if (name == null || previous == null || written == null) {
             return;

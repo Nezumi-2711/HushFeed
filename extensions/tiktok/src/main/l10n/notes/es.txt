@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** El nombre en la línea del creador ya no se queda cortado al desplazarte rápido o cuando la insignia de una publicación de fotos se reduce a un icono (#127).
+
 * **TikTok:** Tu perfil puede mostrar una insignia de verificación u ocultar su aviso de cuenta en este teléfono. Los demás ven tu estado real.
 
 * **TikTok:** Las comprobaciones multimedia ahora prueban el muxer instalado con clips generados y verifican que se reproduzcan. Los archivos de prueba se eliminan al terminar.

@@ -623,6 +623,58 @@ public class AuthorRegionTest {
         AuthorRegion.restore();
     }
 
+    /**
+     * #127, seen on the S22: a photo post's badge reads "Photo" as the post comes up and shrinks
+     * to an icon a moment later. A name cut beside the wide badge stayed cut beside the small one.
+     */
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    public void aCutNameGrowsBackWhenTheRowMakesRoom() {
+        LinearLayout row = new LinearLayout(context);
+        TextView name = new TextView(context);
+        name.setId(NAME_ID);
+        name.setSingleLine(true);
+        name.setEllipsize(TextUtils.TruncateAt.END);
+        name.setText("Danielle Scarborough");
+        row.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        int whole = (int) Math.ceil(name.getPaint().measureText("Danielle Scarborough · US"));
+        View badge = new View(context);
+        row.addView(badge, new LinearLayout.LayoutParams(400 - whole + 40, 10));
+        TextView postTime = new TextView(context);
+        postTime.setId(POST_TIME_ID);
+        postTime.setVisibility(View.GONE);
+        row.addView(postTime);
+        FrameLayout root = new FrameLayout(context);
+        root.addView(row, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        layOut(root);
+
+        AuthorRegion.decorate(name, null, "US");
+        layOut(root);
+        AuthorRegion.decorate(name, null, "US");
+        layOut(root);
+        AuthorRegion.decorate(name, null, "US");
+        assertTrue("the wide badge left no room for the whole name", name.getText().toString().contains("…"));
+        assertTrue(name.getText().toString().endsWith(" · US"));
+
+        badge.getLayoutParams().width = 400 - whole - 60;
+        badge.requestLayout();
+        for (int pass = 0; pass < 3; pass++) {
+            layOut(root);
+            AuthorRegion.decorate(name, null, "US");
+        }
+        assertEquals("the name stayed cut once the badge gave up its room",
+                "Danielle Scarborough · US", name.getText().toString());
+        assertEquals(0, name.getLayout().getEllipsisCount(0));
+
+        // Settled: more passes leave it be.
+        layOut(root);
+        AuthorRegion.decorate(name, null, "US");
+        assertEquals("Danielle Scarborough · US", name.getText().toString());
+        AuthorRegion.restore();
+        assertEquals("Danielle Scarborough", name.getText().toString());
+    }
+
     /** On a LIVE preview or an ad with no author row, the only row left can be the cell beside it. */
     @Test
     public void aLoneRowOffScreenIsNotTheVideosRow() {

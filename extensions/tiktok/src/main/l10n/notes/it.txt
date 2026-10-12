@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Il nome nella riga del creator non resta più troncato dopo uno scorrimento veloce o quando il badge di un post fotografico si riduce a un'icona (#127).
+
 * **TikTok:** Il tuo profilo può mostrare un badge di verifica o nascondere l’avviso dell’account su questo telefono. Gli altri vedono il tuo stato reale.
 
 * **TikTok:** I controlli multimediali ora provano il muxer installato con clip generate e verificano che il risultato sia riproducibile. I file di prova vengono poi rimossi.

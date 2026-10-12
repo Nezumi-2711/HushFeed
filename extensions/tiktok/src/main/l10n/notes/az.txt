@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Müəllif sətrindəki ad sürətli sürüşdürmədən sonra və ya foto paylaşımının nişanı ikonaya kiçiləndə artıq qısaldılmış qalmır (#127).
+
 * **TikTok:** Profiliniz bu telefonda təsdiq nişanı göstərə və ya hesab xəbərdarlığını gizlədə bilər. Başqaları həqiqi statusunuzu görür.
 
 * **TikTok:** Media yoxlamaları indi quraşdırılmış multipleksoru yaradılmış kliplərlə sınayır və nəticənin oynadıldığını yoxlayır. Sınaq faylları yoxlamadan sonra silinir.
