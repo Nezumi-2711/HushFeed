@@ -4,9 +4,11 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
-* **Translations:** Settings tables can be exported as XML, translated and imported before regeneration. The exchange preserves plural forms and format placeholders, and rejects changed keys or incomplete translations before replacing a table.
+* **TikTok:** A new APK inspector checks native library load alignment and stored ZIP offsets for 16 KB pages. It reports failures per library without extracting files. Android runtime compatibility still needs a separate device check.
 
-* **Build:** Fixture checks no longer print duplicate job-removal errors when patching finishes during output collection. Failed applications still reject the push.
+* **TikTok:** Settings tables can be exported as XML, translated and imported before regeneration. The exchange preserves plural forms and format placeholders, and rejects changed keys or incomplete translations before replacing a table.
+
+* **TikTok:** Fixture checks no longer print duplicate job-removal errors when patching finishes during output collection. Failed applications still reject the push.
 
 * **TikTok:** A sticker preview gets its Save action when TikTok adds the native actions late, replaces their row or removes the Save button. Reusing the preview still saves the sticker currently shown.
 
