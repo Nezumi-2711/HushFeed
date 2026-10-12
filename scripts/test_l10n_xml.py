@@ -68,7 +68,9 @@ class TranslationXmlTest(unittest.TestCase):
                 XML.GEN.main()
         finally:
             XML.GEN.L10N, XML.GEN.JAVA = old
-        generated = (self.root / "L10nTranslations.java").read_text(encoding="utf-8")
+        # The lookup and each language's table are separate generated files since 2026-10-12.
+        self.assertIn("L10nTranslationsRu.build()", (self.root / "L10nTranslations.java").read_text(encoding="utf-8"))
+        generated = (self.root / "L10nTranslationsRu.java").read_text(encoding="utf-8")
         self.assertIn('"Один результат"', generated)
         self.assertIn('"%1$d results|few"', generated)
         self.assertIn('"Количество %2$d, привет %1$s"', generated)
