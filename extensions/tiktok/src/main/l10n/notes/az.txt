@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yerli inkişaf indeksi önizləmələri paketin faktiki versiyasını və Manager-in main/dev sırasını yoxlayır. Sabit indeks dəyişmir və heç nə yayımlanmır.
+
 * **TikTok:** Kökü gizlət TikTok-un cihaz yoxlamalarında kök statusunu və kök alətləri haqqında məlumatı gizlədir. Əvvəlcə sönülüdür. Dəyişdikdən sonra TikTok-u yenidən başladın.
 
 * **TikTok:** Paylaşım panelində Bu yaradıcını blokla, Şikayət et yanında Blokla əməliyyatı əlavə edir. İlkin olaraq sönülüdür və TikTok təsdiqlədikdən sonra Geri al təklif edir. Əvvəlki Geri al eyni yaradıcının gözləyən bloklanmasını gözləyir.

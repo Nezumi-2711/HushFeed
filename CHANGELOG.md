@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Local development index previews check the bundle's actual version and Manager's main/dev ordering. They leave the stable index untouched and don't publish anything.
+
 * **TikTok:** Hide root keeps root status and root-tool details out of TikTok's device checks. It starts off. Restart TikTok after changing it.
 
 * **TikTok:** Block this creator under Share sheet adds a Block action beside Report. It starts off and offers Undo after TikTok confirms. An older Undo waits for a pending block of the same creator.

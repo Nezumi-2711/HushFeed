@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** As prévias locais do índice de desenvolvimento verificam a versão real do pacote e a ordem main/dev do Manager. Elas não alteram o índice estável nem publicam nada.
+
 * **TikTok:** Ocultar root impede que as verificações de dispositivo do TikTok recebam o status de root e os detalhes das ferramentas de root. Começa desativado. Reinicie o TikTok após alterar.
 
 * **TikTok:** Bloquear este criador, no painel de compartilhamento, adiciona Bloquear ao lado de Denunciar. A opção começa desativada e oferece Desfazer após a confirmação do TikTok. Um Desfazer anterior aguarda um bloqueio pendente do mesmo criador.

@@ -585,6 +585,17 @@ A release runs from `scripts/release/release.ps1`, one stage at a time: `prepare
 
 The publish stage keeps the bundle, receipt and checksum file in a draft until all three downloaded assets match the local files. Interrupted uploads resume only when existing assets match. A missing asset can be added, while an unexpected or changed asset stops publication. The verified draft is published by its ID, and the tag's commit is checked again afterward. Indexing rejects drafts. Pass `-RequireImmutableRelease` to `publish` and `index` when the repository already requires immutable releases. That option checks GitHub's setting before publication and verifies the resulting release and asset attestations. It doesn't change the repository setting. `scripts/test-release-publication.ps1` exercises these paths without publishing anything.
 
+`scripts/prepare-dev-index.py` prepares a local development index from a bundle's actual manifest version. It writes a fresh directory and leaves the stable index untouched. The preview follows Manager's main/dev ordering, including dev winning equal versions and stable winning over a prerelease with the same version core. It checks metadata only. Existing build, publication and release validation still apply.
+
+```powershell
+py -3.13 scripts/prepare-dev-index.py prepare --bundle patches/build/release/patches-0.71.3.mpp --description-file preview-description.txt --created-at 2026-10-12T07:30:00 --out-dir "$env:TEMP/hushfeed-dev-preview"
+py -3.13 scripts/prepare-dev-index.py validate --index "$env:TEMP/hushfeed-dev-preview/patches-bundle.json" --branch dev --bundle patches/build/release/patches-0.71.3.mpp
+py -3.13 scripts/prepare-dev-index.py select --stable-index patches-bundle.json --dev-index "$env:TEMP/hushfeed-dev-preview/patches-bundle.json"
+py -3.13 -m unittest discover -s scripts -p test_dev_index.py
+```
+
+The [Manager source contract](https://github.com/MorpheApp/morphe-manager/blob/da8545c92c94b83e23adf7b573b46b282fa2b062/app/src/main/java/app/morphe/manager/util/VersionUtils.kt) is pinned in the tool. Preparing a preview doesn't create a branch, release or hosted index. Promotion fixtures check that a newer stable version takes precedence and that the main index retains a stable version. Failed writes leave concurrent content intact and permit a retry when the owned output was cleaned up.
+
 The full `:patches:test` command includes `:patches:nativeTest` and `:patches:documentationTest`. README and artwork edits rerun the documentation checks while unchanged APK fixture results remain reusable. An edit to the Java extension reruns only the tests that read the extension, so the fingerprint checks against the fixtures are reused. Patch source, catalog, dependency and fixture changes still rerun the affected tests. Release validation checks all three result directories.
 
 APK fixture tests reuse read-only DEX containers only while the file's content and requested opcode version match. File replacement invalidates the cache even when its size and timestamp stay unchanged. Cache entries can be reclaimed under heap pressure, and each patch application keeps its own mutable context. Every declared and historical fixture stays in the test set.

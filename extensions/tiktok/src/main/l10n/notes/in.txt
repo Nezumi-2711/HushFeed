@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pratinjau indeks pengembangan lokal memeriksa versi bundel yang sebenarnya dan urutan main/dev Manager. Indeks stabil tidak diubah dan tidak ada yang dipublikasikan.
+
 * **TikTok:** Sembunyikan root menyembunyikan status root dan detail alat root dari pemeriksaan perangkat TikTok. Awalnya nonaktif. Mulai ulang TikTok setelah mengubahnya.
 
 * **TikTok:** Blokir kreator ini di panel berbagi menambahkan Blokir di samping Laporkan. Opsi ini awalnya nonaktif dan menawarkan Urungkan setelah TikTok mengonfirmasi. Urungkan sebelumnya menunggu pemblokiran kreator yang sama selesai.
