@@ -154,6 +154,8 @@
 
 * **TikTok:** Trocar de conta no meio de um vídeo não esconde mais esse vídeo na conta para a qual você trocou. Ele conta como visto só para a conta que assistiu.
 
+* **TikTok:** Girar o celular ou trocar o modo escuro com um editor de lista aberto mantém o que você marcou ou digitou, em vez de começar do zero. Cancelar continua sem mudar nada.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar a LIVE sob a barra de status agora preenche o topo de todas as salas, sem faixas pretas ou claras (#137).

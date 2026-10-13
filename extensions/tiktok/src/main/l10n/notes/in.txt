@@ -154,6 +154,8 @@
 
 * **TikTok:** Berganti akun saat video diputar tidak lagi menyembunyikan video itu di akun tujuan. Video hanya dihitung sudah ditonton untuk akun yang menontonnya.
 
+* **TikTok:** Memutar ponsel atau mengganti mode gelap saat editor daftar terbuka kini mempertahankan pilihan dan ketikanmu, tidak mulai dari awal. Batal tetap tidak mengubah apa pun.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).

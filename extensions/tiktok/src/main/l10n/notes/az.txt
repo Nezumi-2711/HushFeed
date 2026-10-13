@@ -154,6 +154,8 @@
 
 * **TikTok:** Video oynayarkən hesabı dəyişmək artıq həmin videonu keçdiyiniz hesabda gizlətmir. Video yalnız ona baxan hesab üçün baxılmış sayılır.
 
+* **TikTok:** Siyahı redaktoru açıq olanda telefonu çevirmək və ya qaranlıq rejimi dəyişmək artıq seçdiklərinizi və ya yazdıqlarınızı sıfırlamır. Ləğv edin yenə heç nəyi dəyişmir.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

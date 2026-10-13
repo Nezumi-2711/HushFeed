@@ -158,6 +158,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With Hide seen videos on, switching accounts while a video plays can no longer hide that video for the account you switched to. The watch stays with the account that watched it, and the next account still marks the same video when it plays it.
 
+* **TikTok:** Rotating the phone, resizing the window or switching dark mode while an editor is open no longer throws away what you picked or typed in it. The share action lists, Add apps to Share via, Hide profile shortcuts, the popup list, Locally hidden creators and the count ranges keep your unsaved choices, and Cancel still changes nothing.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).

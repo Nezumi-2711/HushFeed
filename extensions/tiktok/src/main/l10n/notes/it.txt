@@ -154,6 +154,8 @@
 
 * **TikTok:** Cambiare account a metà video non nasconde più quel video nell'account a cui passi. Conta come visto solo per l'account che l'ha guardato.
 
+* **TikTok:** Ruotare il telefono o cambiare il tema scuro con un editor di elenchi aperto mantiene quello che hai scelto o scritto invece di ricominciare. Annulla continua a non cambiare nulla.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).

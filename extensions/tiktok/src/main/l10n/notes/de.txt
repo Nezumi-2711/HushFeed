@@ -154,6 +154,8 @@
 
 * **TikTok:** Wechselst du mitten im Video das Konto, wird das Video für das neue Konto nicht mehr ausgeblendet. Es zählt nur für das Konto als gesehen, das es angeschaut hat.
 
+* **TikTok:** Drehst du das Handy oder wechselst den Dunkelmodus, während ein Listen-Editor offen ist, bleibt erhalten, was du ausgewählt oder eingetippt hast. Abbrechen ändert weiterhin nichts.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).

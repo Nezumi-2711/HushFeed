@@ -154,6 +154,8 @@
 
 * **TikTok:** Video oynarken hesap değiştirmek artık o videoyu geçilen hesapta gizlemiyor. Video yalnızca onu izleyen hesap için izlenmiş sayılıyor.
 
+* **TikTok:** Bir liste düzenleyicisi açıkken telefonu döndürmek veya karanlık modu değiştirmek artık seçtiklerini ya da yazdıklarını sıfırlamıyor. İptal yine hiçbir şeyi değiştirmiyor.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).
