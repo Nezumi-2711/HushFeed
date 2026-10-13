@@ -548,10 +548,14 @@ public class SettingsPagesTest {
             layout(home.getView(), 390, 844);
             Shadows.shadowOf(Looper.getMainLooper()).idle();
             ListView list = home.getView().findViewById(android.R.id.list);
-            // Report a problem and the Ko-fi row come after About and may scroll; the eight
-            // destinations may not.
-            assertTrue("the default index no longer fits its eight destinations on a phone",
-                    positionOf(list, "hub_about") <= list.getLastVisiblePosition());
+            // Search, Quick setups and the first destination open the page. The rest of the
+            // destinations, Report a problem and the Ko-fi row are a short scroll below them.
+            int quickSetups = positionOf(list, "quick_setups");
+            assertTrue("Quick setups is missing from the home page", quickSetups >= 0);
+            assertTrue("Quick setups is not right under the search field",
+                    quickSetups == positionOf(list, "action_search_settings") + 1);
+            assertTrue("the first destination no longer shows without scrolling",
+                    positionOf(list, menuRows(home).get(0).getKey()) <= list.getLastVisiblePosition());
             for (var row : menuRows(home)) {
                 assertTrue("the root row returned to the oversized card layout", row.isCompact());
                 assertEquals("the root index grew a changed-setting badge", 0, row.activeCount());

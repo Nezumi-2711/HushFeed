@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Quick setups sits right under the search field on the main settings page. Quiet turns on the Calm feed switches (ads, Shop, LIVE and the rest), Privacy turns on Ghost mode and the tracking blocks that cost you nothing, and Back to defaults puts every switch back the way Hushfeed ships. Each one tells you how many settings it changed and offers Undo, and the Restart row shows up when a change needs it.
+
 * **TikTok:** The main Hushfeed settings page ends with two new rows. Report a problem opens a GitHub bug report with your Hushfeed and TikTok versions, your phone and the switches you have on already filled in, so you only add what happened. Support Hushfeed opens the Ko-fi page if you'd like to buy me a coffee.
 
 * **TikTok:** Restarting TikTok from the Restart row or the banner now brings you back to the Hushfeed settings page you were on, so you can keep going where you left off. Back still takes you to the main settings page.

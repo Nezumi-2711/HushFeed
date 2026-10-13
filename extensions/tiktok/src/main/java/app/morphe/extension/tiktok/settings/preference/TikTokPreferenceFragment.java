@@ -1017,6 +1017,27 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         return found;
     }
 
+    /**
+     * Every setting on Hushfeed's pages that this build can reach, for Quick setups, which
+     * changes only what a reader could find and change back by hand.
+     */
+    private java.util.Collection<Setting<?>> settingsOnPages() {
+        java.util.Set<Setting<?>> all = new java.util.LinkedHashSet<>();
+        Context context = getActivity();
+        if (context == null) return all;
+        for (Section section : Section.values()) {
+            try {
+                for (Setting<?> setting : settingsOn(context, section)) {
+                    if (setting.isAvailable()) all.add(setting);
+                }
+            } catch (RuntimeException unreadable) {
+                app.morphe.extension.shared.Logger.printException(
+                        () -> "Couldn't read the settings on " + section + " for Quick setups", unreadable);
+            }
+        }
+        return all;
+    }
+
     private static void collectSettings(PreferenceGroup group, List<Setting<?>> found,
             java.util.Set<String> seen) {
         for (int index = 0; index < group.getPreferenceCount(); index++) {
@@ -1292,6 +1313,9 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         search.setKey("action_search_settings");
         search.setOrder(-900);
         screen.addPreference(search);
+        QuickSetupsPreference quickSetups = new QuickSetupsPreference(context, this::settingsOnPages);
+        quickSetups.setOrder(-850);
+        screen.addPreference(quickSetups);
         screen.addPreference(SectionHeadingPreference.compact(context, "Your experience"));
 
         if (FeedFilterPreferenceCategory.isAvailable()
