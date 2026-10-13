@@ -6,12 +6,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import app.morphe.extension.shared.settings.BaseSettings;
 import app.morphe.extension.shared.settings.BooleanSetting;
 import app.morphe.extension.shared.settings.Setting;
 import app.morphe.extension.tiktok.SettingsContextRule;
+import app.morphe.extension.tiktok.settings.preference.QuickSetupsPreference;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -30,9 +35,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.annotation.GraphicsMode;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 28)
@@ -148,5 +155,39 @@ public class QuickSetupsTest {
             assertFalse(setting.key + " didn't come back", setting.get());
         }
         assertFalse("Undo left the Calm feed card offering a restore", CalmFeedPreset.hasSnapshot(context));
+    }
+
+    /**
+     * "Back to defaults" wraps onto a second line in a button a third of the card wide, and the row
+     * lined its buttons up on their first baseline, which pushed that one down and cut off its
+     * bottom edge (S22, 2026-10-13). This is the narrowest width and the largest text that still
+     * keep the three side by side, so the label is sure to wrap.
+     */
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    @Config(qualifiers = "w360dp-h800dp-mdpi", fontScale = 1.3f)
+    public void aButtonWhoseLabelWrapsKeepsItsWholeOutline() {
+        try (var owner = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = owner.get();
+            View card = new QuickSetupsPreference(activity, Collections::emptyList).getView(null, null);
+            int width = Math.round(360 * activity.getResources().getDisplayMetrics().density);
+            card.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            card.layout(0, 0, width, card.getMeasuredHeight());
+
+            LinearLayout row = card.findViewWithTag("quick_setups_buttons");
+            assertEquals("the buttons stacked, so nothing here sits side by side",
+                    LinearLayout.HORIZONTAL, row.getOrientation());
+            TextView defaults = card.findViewWithTag("quick_setups_defaults");
+            assertTrue("Back to defaults fit on one line, so this proves nothing",
+                    defaults.getLineCount() > 1);
+            for (String tag : new String[]{"quick_setups_quiet", "quick_setups_privacy",
+                    "quick_setups_defaults"}) {
+                View button = card.findViewWithTag(tag);
+                assertEquals(tag + " doesn't start at the top of the row", 0, button.getTop());
+                assertEquals(tag + " doesn't reach the bottom of the row, or runs past it",
+                        row.getHeight(), button.getBottom());
+            }
+        }
     }
 }

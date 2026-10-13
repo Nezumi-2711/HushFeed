@@ -85,6 +85,10 @@ public final class QuickSetupsPreference extends Preference {
         LinearLayout buttons = new LinearLayout(context);
         buttons.setTag(BUTTONS_TAG);
         buttons.setOrientation(stack ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL);
+        // A row lines its children up on their first baseline by default, so when "Back to
+        // defaults" wrapped onto a second line it was pushed down and its bottom edge was cut off
+        // (S22, 2026-10-13). Lined up on their tops, and all three as tall as the tallest.
+        buttons.setBaselineAligned(false);
         buttons.addView(button(context, QUIET_TAG, QuickSetups.Choice.QUIET), params(context, stack, 0));
         buttons.addView(button(context, PRIVACY_TAG, QuickSetups.Choice.PRIVACY), params(context, stack, 1));
         buttons.addView(button(context, DEFAULTS_TAG, QuickSetups.Choice.DEFAULTS), params(context, stack, 2));
@@ -125,7 +129,7 @@ public final class QuickSetupsPreference extends Preference {
     private static LinearLayout.LayoutParams params(Context context, boolean stack, int index) {
         LinearLayout.LayoutParams params = stack
                 ? new LinearLayout.LayoutParams(-1, -2)
-                : new LinearLayout.LayoutParams(0, -2, 1);
+                : new LinearLayout.LayoutParams(0, -1, 1);
         if (index > 0) {
             if (stack) params.topMargin = SettingsUi.dp(context, 8);
             else params.setMarginStart(SettingsUi.dp(context, 8));
