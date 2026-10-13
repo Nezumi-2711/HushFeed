@@ -188,7 +188,7 @@ The compact status has Active, Paused and Restart pending text states. Tapping i
 
 The mockups establish hierarchy and category coverage. They are not evidence of native layout or device acceptance. Use the implementation's rendered screenshots and recorded checks for font scaling, accessibility, interaction and localization. Rendered checks cover both themes, navigation, translated text, twice the text size and right-to-left layout.
 
-The final signed build was exercised on a Galaxy S22 running Android 16 and TikTok 47.1.4 at 450dpi, in light mode with the default text size. The walkthrough visited all 24 surfaces above, including search and the creator editor. The final home and five hubs were recaptured after correcting icon scaling at phone density. Existing app data and settings were preserved. Dark mode and enlarged text were checked through the rendered suite; TalkBack interaction was not rerun for this refresh.
+The final signed build was exercised on a Galaxy S22 running Android 16 and TikTok 47.1.4 at 450dpi, in light mode with the default text size. The walkthrough visited all 24 surfaces above, including search and the creator editor. The final home and five hubs were recaptured after correcting icon scaling at phone density. Existing app data and settings were preserved. Dark mode and enlarged text were checked through the rendered suite. TalkBack interaction was not rerun for this refresh.
 
 ## Adding or changing a patch
 
