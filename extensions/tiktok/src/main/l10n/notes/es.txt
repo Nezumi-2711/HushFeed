@@ -142,6 +142,8 @@
 
 * **TikTok:** La flecha Atrás en una página de ajustes abierta desde «Mostrar el ajuste» ahora sale de los ajustes en lugar de no hacer nada.
 
+* **TikTok:** «Ocultar una conexión VPN» ahora dice que TikTok sigue viendo la dirección IP de la VPN, y «Bloquear el ID de publicidad» habla de eliminar en lugar de restablecer.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar el LIVE bajo la barra de estado ahora llena el borde superior en todas las salas, sin franjas negras ni claras (#137).

@@ -142,6 +142,8 @@
 
 * **TikTok:** A seta Voltar em uma página de configurações aberta por "Mostrar a opção" agora sai das configurações em vez de não fazer nada.
 
+* **TikTok:** "Ocultar uma conexão VPN" agora diz que o TikTok ainda vê o endereço IP da VPN, e "Bloquear o ID de publicidade" fala em excluir em vez de redefinir.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar a LIVE sob a barra de status agora preenche o topo de todas as salas, sem faixas pretas ou claras (#137).

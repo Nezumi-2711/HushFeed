@@ -142,6 +142,8 @@
 
 * **TikTok:** La freccia Indietro in una pagina delle impostazioni aperta da "Mostra l'interruttore" ora esce dalle impostazioni invece di non fare nulla.
 
+* **TikTok:** "Nascondi una connessione VPN" ora dice che TikTok vede comunque l'indirizzo IP della VPN, e "Blocca l'ID pubblicitario" parla di eliminare invece di reimpostare.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).

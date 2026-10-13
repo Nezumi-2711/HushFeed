@@ -240,9 +240,9 @@ Backup and restore	Backup e restauração
 Black	Preto
 Block clipboard reads	Bloquear a leitura da área de transferência
 Hide a VPN connection	Ocultar uma conexão VPN
-TikTok can't tell you're using a VPN. Your other connections show as they really are. Leave this off if you need a feature that checks for a VPN.	O TikTok não consegue saber que você está usando uma VPN. Suas outras conexões aparecem como realmente são. Deixe desligado se precisar de um recurso que verifique se há VPN.
+Android stops telling TikTok a VPN is on, and the VPN's tunnel is left out of the network list. TikTok can still see the VPN's IP address. Leave this off if you need a feature that checks for a VPN.	O Android para de avisar o TikTok que há uma VPN ligada, e o túnel da VPN fica fora da lista de redes. O TikTok ainda vê o endereço IP da VPN. Deixe desligado se precisar de um recurso que verifique se há VPN.
 Block the advertising ID	Bloquear o ID de publicidade
-TikTok gets a blank advertising ID, like the one Android gives after you reset yours. Apps can't use it to recognize your phone.	O TikTok recebe um ID de publicidade em branco, como o que o Android dá depois que você redefine o seu. Os apps não conseguem usá-lo para reconhecer seu celular.
+TikTok gets a blank advertising ID, like the one Android gives after you delete yours. Apps can't use it to recognize your phone.	O TikTok recebe um ID de publicidade em branco, como o que o Android dá depois que você exclui o seu. Os apps não conseguem usá-lo para reconhecer seu celular.
 Block contact list access	Bloquear o acesso à lista de contatos
 Block installed app scanning	Bloquear a varredura de apps instalados
 Block location	Bloquear a localização

@@ -236,9 +236,9 @@ Backup and restore,Cadangkan dan pulihkan
 Black,Hitam
 Block clipboard reads,Blokir pembacaan papan klip
 Hide a VPN connection,Sembunyikan koneksi VPN
-TikTok can't tell you're using a VPN. Your other connections show as they really are. Leave this off if you need a feature that checks for a VPN.,TikTok tidak bisa tahu kamu memakai VPN. Koneksimu yang lain tampak seperti aslinya. Biarkan mati jika kamu butuh fitur yang memeriksa VPN.
+"Android stops telling TikTok a VPN is on, and the VPN's tunnel is left out of the network list. TikTok can still see the VPN's IP address. Leave this off if you need a feature that checks for a VPN.","Android tidak lagi memberi tahu TikTok bahwa VPN menyala, dan terowongan VPN tidak muncul di daftar jaringan. TikTok tetap bisa melihat alamat IP VPN. Biarkan mati jika kamu butuh fitur yang memeriksa VPN."
 Block the advertising ID,Blokir ID iklan
-"TikTok gets a blank advertising ID, like the one Android gives after you reset yours. Apps can't use it to recognize your phone.","TikTok mendapat ID iklan kosong, seperti yang diberikan Android setelah kamu meresetnya. Aplikasi tidak bisa memakainya untuk mengenali ponselmu."
+"TikTok gets a blank advertising ID, like the one Android gives after you delete yours. Apps can't use it to recognize your phone.","TikTok mendapat ID iklan kosong, seperti yang diberikan Android setelah kamu menghapusnya. Aplikasi tidak bisa memakainya untuk mengenali ponselmu."
 Block contact list access,Blokir akses ke daftar kontak
 Block installed app scanning,Blokir pemindaian aplikasi terpasang
 Block location,Blokir lokasi

@@ -288,9 +288,9 @@ Backup and restore	Резервное копирование и восстано
 Black	Чёрный
 Block clipboard reads	Блокировать чтение буфера обмена
 Hide a VPN connection	Скрывать VPN-подключение
-TikTok can't tell you're using a VPN. Your other connections show as they really are. Leave this off if you need a feature that checks for a VPN.	TikTok не может определить, что вы используете VPN. Остальные подключения выглядят как есть. Оставьте выключенным, если нужна функция, проверяющая наличие VPN.
+Android stops telling TikTok a VPN is on, and the VPN's tunnel is left out of the network list. TikTok can still see the VPN's IP address. Leave this off if you need a feature that checks for a VPN.	Android больше не сообщает TikTok, что включён VPN, а туннель VPN не попадает в список сетей. IP-адрес VPN TikTok по-прежнему видит. Оставьте выключенным, если нужна функция, проверяющая наличие VPN.
 Block the advertising ID	Блокировать рекламный ID
-TikTok gets a blank advertising ID, like the one Android gives after you reset yours. Apps can't use it to recognize your phone.	TikTok получает пустой рекламный ID, такой же, какой Android выдаёт после сброса вашего. Приложения не смогут по нему узнавать ваш телефон.
+TikTok gets a blank advertising ID, like the one Android gives after you delete yours. Apps can't use it to recognize your phone.	TikTok получает пустой рекламный ID, такой же, какой Android выдаёт после удаления вашего. Приложения не смогут по нему узнавать ваш телефон.
 Block contact list access	Блокировать доступ к списку контактов
 Block installed app scanning	Блокировать сканирование установленных приложений
 Block location	Блокировать местоположение

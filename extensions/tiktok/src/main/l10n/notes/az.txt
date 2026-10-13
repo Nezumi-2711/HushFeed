@@ -142,6 +142,8 @@
 
 * **TikTok:** "Açarı göstərin" ilə açılan ayarlar səhifəsindəki Geri oxu artıq heç nə etməmək əvəzinə ayarlardan çıxır.
 
+* **TikTok:** "VPN bağlantısını gizlə" indi TikTok-un VPN-in IP ünvanını yenə də gördüyünü deyir, "Reklam ID-sini blokla" isə sıfırlama yox, silmə deyir.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

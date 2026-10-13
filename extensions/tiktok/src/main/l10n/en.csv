@@ -223,6 +223,7 @@ Amazon Appstore,Amazon Appstore
 An override changes the value TikTok reads from this gate. It doesn't change TikTok's saved copy or prove the named feature changed.,An override changes the value TikTok reads from this gate. It doesn't change TikTok's saved copy or prove the named feature changed.
 And %1$s more saves,And %1$s more saves
 And one more save,And one more save
+"Android stops telling TikTok a VPN is on, and the VPN's tunnel is left out of the network list. TikTok can still see the VPN's IP address. Leave this off if you need a feature that checks for a VPN.","Android stops telling TikTok a VPN is on, and the VPN's tunnel is left out of the network list. TikTok can still see the VPN's IP address. Leave this off if you need a feature that checks for a VPN."
 Animated sticker format,Animated sticker format
 "Animated stickers and GIFs decode each frame as it's shown instead of a few ahead, so they use a little less memory. Applies to the next ones that load.","Animated stickers and GIFs decode each frame as it's shown instead of a few ahead, so they use a little less memory. Applies to the next ones that load."
 App,App
@@ -1822,7 +1823,6 @@ This video isn't available as a complete file. Try again later.,This video isn't
 This video's sound has no title to look for,This video's sound has no title to look for
 Thumbs down blocks the commenter,Thumbs down blocks the commenter
 TikTok account facts,TikTok account facts
-TikTok can't tell you're using a VPN. Your other connections show as they really are. Leave this off if you need a feature that checks for a VPN.,TikTok can't tell you're using a VPN. Your other connections show as they really are. Leave this off if you need a feature that checks for a VPN.
 "TikTok checks how it was signed and installed. This answers those checks the way the Play Store version would. Try it if follows or likes undo themselves after a refresh. It may not help, since TikTok has other checks.","TikTok checks how it was signed and installed. This answers those checks the way the Play Store version would. Try it if follows or likes undo themselves after a refresh. It may not help, since TikTok has other checks."
 TikTok closed during these saves,TikTok closed during these saves
 "TikTok closed three times within a minute of starting, so Hushfeed paused itself. Your settings stay as they are.","TikTok closed three times within a minute of starting, so Hushfeed paused itself. Your settings stay as they are."
@@ -1833,7 +1833,7 @@ TikTok default (open the creator's profile),TikTok default (open the creator's p
 TikTok didn't accept the feedback. Try again later.,TikTok didn't accept the feedback. Try again later.
 TikTok didn't block %1$s. Try again in a moment.,TikTok didn't block %1$s. Try again in a moment.
 TikTok didn't unblock %1$s. Try again in a moment.,TikTok didn't unblock %1$s. Try again in a moment.
-"TikTok gets a blank advertising ID, like the one Android gives after you reset yours. Apps can't use it to recognize your phone.","TikTok gets a blank advertising ID, like the one Android gives after you reset yours. Apps can't use it to recognize your phone."
+"TikTok gets a blank advertising ID, like the one Android gives after you delete yours. Apps can't use it to recognize your phone.","TikTok gets a blank advertising ID, like the one Android gives after you delete yours. Apps can't use it to recognize your phone."
 TikTok gets no location from your phone. The Region settings change your country and time zone. This switch stops the exact position.,TikTok gets no location from your phone. The Region settings change your country and time zone. This switch stops the exact position.
 "TikTok hasn't loaded this setting yet. Open the part of the app that uses it, then come back.","TikTok hasn't loaded this setting yet. Open the part of the app that uses it, then come back."
 TikTok is locked,TikTok is locked

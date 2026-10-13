@@ -142,6 +142,8 @@
 
 * **TikTok:** Panah Kembali di halaman pengaturan yang dibuka dari "Tampilkan sakelarnya" sekarang keluar dari pengaturan, tidak lagi diam saja.
 
+* **TikTok:** "Sembunyikan koneksi VPN" sekarang menyebut TikTok tetap bisa melihat alamat IP VPN, dan "Blokir ID iklan" menyebut menghapus, bukan mereset.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).
