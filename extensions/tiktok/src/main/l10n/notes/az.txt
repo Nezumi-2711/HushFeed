@@ -138,6 +138,8 @@
 
 * **TikTok:** İlk bildirən şəxs paylaşım tarixinin Müəllif mətni ölçüsünə uyğunlaşdığını təsdiqləyib (#66).
 
+* **TikTok:** Çox uzun fayl adı şablonu və ya endirmə qovluğu olan bərpa edilmiş ehtiyat nüsxə artıq ayarlar səhifəsini dondurmur.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

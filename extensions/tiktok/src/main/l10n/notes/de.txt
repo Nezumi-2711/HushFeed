@@ -138,6 +138,8 @@
 
 * **TikTok:** Die Person, die das Problem ursprünglich gemeldet hat, hat bestätigt, dass Beitragsdaten der Textgröße des Creatornamens folgen (#66).
 
+* **TikTok:** Eine wiederhergestellte Sicherung mit einem sehr langen Dateinamenmuster oder Download-Ordner friert die Einstellungsseite nicht mehr ein.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).

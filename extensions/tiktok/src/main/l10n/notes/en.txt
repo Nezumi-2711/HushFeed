@@ -138,6 +138,8 @@
 
 * **TikTok:** The original reporter confirmed that post dates follow Author text size (#66).
 
+* **TikTok:** A restored backup with a very long filename pattern or download folder no longer freezes the settings page.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Show LIVE under the status bar now fills the top edge in every room, without a black band or pale strip (#137).

@@ -138,6 +138,8 @@
 
 * **TikTok:** İlk bildirimi yapan kişi, gönderi tarihlerinin Üretici metin boyutu ayarını izlediğini doğruladı (#66).
 
+* **TikTok:** Çok uzun bir dosya adı kalıbı veya indirme klasörü içeren geri yüklenmiş bir yedek artık ayarlar sayfasını dondurmuyor.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).

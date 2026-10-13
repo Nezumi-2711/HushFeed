@@ -142,6 +142,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** The original reporter confirmed that the post date follows Author text size (#66).
 
+* **TikTok:** A restored backup with a filename pattern full of dots, or a download folder full of slashes, no longer stalls the settings page. Trimming them took longer the longer the text got, and at a million characters that meant over a minute of a frozen screen.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).
