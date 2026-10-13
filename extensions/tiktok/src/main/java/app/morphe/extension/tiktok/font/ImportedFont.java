@@ -220,9 +220,12 @@ public final class ImportedFont {
         synchronized (LOCK) {
             boolean gone = true;
             File directory = directory(context);
-            // A font set aside by a cut-short replacement goes too, or the next look would bring it back.
-            for (File file : setAside(directory)) gone &= file.delete();
-            for (File file : fontFiles(directory)) gone &= file.delete();
+            // A font set aside by a cut-short replacement goes first, or the next look would put it
+            // back. One that won't go keeps the font in use where it is, so Remove fails as a whole.
+            for (File file : setAside(directory)) gone &= moves.delete(file);
+            if (gone) {
+                for (File file : fontFiles(directory)) gone &= moves.delete(file);
+            }
             forget();
             return gone;
         }

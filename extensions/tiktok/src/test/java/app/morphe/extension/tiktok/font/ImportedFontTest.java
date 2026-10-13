@@ -175,15 +175,27 @@ public class ImportedFontTest {
     private static final class Died extends RuntimeException {
     }
 
-    /** The real file moves, except move {@code at} (from 0), which fails or kills the process. */
+    /**
+     * The real file moves, except move {@code at} (from 0), which fails or kills the process, and
+     * move {@code also}, which fails too when set.
+     */
     private static final class FaultyMoves implements ImportedFont.Moves {
         private final int at;
+        private final int also;
         private final boolean dies;
         int made;
 
         FaultyMoves(int at, boolean dies) {
             this.at = at;
+            this.also = -1;
             this.dies = dies;
+        }
+
+        /** Two moves that fail: the second fault lands while the first is being undone. */
+        FaultyMoves(int at, int also) {
+            this.at = at;
+            this.also = also;
+            this.dies = false;
         }
 
         @Override public boolean rename(File from, File to) {
@@ -195,7 +207,9 @@ public class ImportedFontTest {
         }
 
         private boolean go() {
-            if (made++ != at) return true;
+            int move = made++;
+            if (move == also) return false;
+            if (move != at) return true;
             if (dies) throw new Died();
             return false;
         }
@@ -308,6 +322,43 @@ public class ImportedFontTest {
         ImportedFont.forget();
         assertNull("the removed font came back", ImportedFont.name(context));
         assertNull(ImportedFont.typeface());
+    }
+
+    /**
+     * Remove fails as a whole when a set-aside font won't go: deleting the font in use anyway
+     * would let the next look put the set-aside one back in its place.
+     */
+    @Test public void removeKeepsTheFontInUseWhenASetAsideCopyWontGo() throws IOException {
+        importFont(TRUETYPE, "Inter.ttf");
+        ImportedFont.Incoming incoming = ImportedFont.receive(context, new ByteArrayInputStream(OPENTYPE), "Display.otf");
+        ImportedFont.moves = new FaultyMoves(2, true);
+        try {
+            incoming.install();
+            fail("the move that kills the process never came");
+        } catch (Died killed) {
+            // The new font is in place and the old one is still set aside.
+        }
+        ImportedFont.moves = new FaultyMoves(0, false);
+        assertFalse("Remove said it worked with a set-aside font left", ImportedFont.remove(context));
+        assertOneWholeFont("Inter.ttf", TRUETYPE, "Display.otf", OPENTYPE, "after a Remove that failed");
+        assertEquals("a failed Remove swapped the font in use for the set-aside one",
+                "Display.otf", ImportedFont.name(context));
+    }
+
+    /** A failed move whose putting back fails too is settled the next time the font is looked for. */
+    @Test public void aFailedMoveWhosePutBackAlsoFailsIsSettledOnTheNextLook() throws IOException {
+        importFont(TRUETYPE, "Inter.ttf");
+        ImportedFont.Incoming incoming = ImportedFont.receive(context, new ByteArrayInputStream(OPENTYPE), "Display.otf");
+        // Move 0 sets Inter.ttf aside, move 1 fails to move the new font in, move 2 fails to put Inter.ttf back.
+        ImportedFont.moves = new FaultyMoves(1, 2);
+        try {
+            incoming.install();
+            fail("a replacement whose new font never moved in said it worked");
+        } catch (IOException failure) {
+            incoming.discard();
+        }
+        assertOneWholeFont("Inter.ttf", TRUETYPE, "Display.otf", OPENTYPE, "after a double fault");
+        assertEquals("Inter.ttf", ImportedFont.name(context));
     }
 
     @Test public void theNameAFileAppGivesIsMadeSafe() {
