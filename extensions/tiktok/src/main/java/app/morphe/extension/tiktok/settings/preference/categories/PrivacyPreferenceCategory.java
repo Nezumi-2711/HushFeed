@@ -190,6 +190,12 @@ public final class PrivacyPreferenceCategory extends ConditionalPreferenceCatego
                             + "reset yours. Apps can't use it to recognize your phone.",
                     Settings.BLOCK_ADVERTISING_ID
             ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Hide root",
+                    "Hide root status and details about root tools from TikTok.",
+                    Settings.HIDE_ROOT
+            ));
         }
         if (SettingsStatus.resourceGovernorEnabled) {
             addPreference(new TogglePreference(
@@ -246,7 +252,8 @@ public final class PrivacyPreferenceCategory extends ConditionalPreferenceCatego
                     "Copy the full link for short links",
                     "When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed "
                             + "opens it once in the background to find the full video link and "
-                            + "copies that instead. TikTok sees that visit. Links you send to "
+                            + "copies that instead. TikTok sees that visit, and it connects directly "
+                            + "even when a proxy is on. Links you send to "
                             + "another app go out as they were.",
                     Settings.EXPAND_SHORT_SHARE_LINKS
             ));

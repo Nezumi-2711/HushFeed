@@ -27,8 +27,10 @@ import app.morphe.extension.tiktok.settings.SettingsStatus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -46,8 +48,11 @@ public final class AuthorRegion {
     private static final String NAME_ID = "title";
     private static final String POST_TIME_ID = "tv_post_time";
 
-    /** Separates the name from the country, matching the row's own middle dot. */
-    private static final String SEPARATOR = " · ";
+    /**
+     * Separates the name from the country, matching the row's own middle dot. A comment's
+     * country follows its time with the same one.
+     */
+    public static final String SEPARATOR = " · ";
 
     private static int nameViewId;
     private static int postTimeViewId;
@@ -65,6 +70,9 @@ public final class AuthorRegion {
     /** What that text was asked to say, so a name shortened to fit still counts as settled. */
     private static String decoratedHandle;
     private static String decoratedRegion;
+
+    /** The row's width when the name was cut to fit, or -1 while no cut of ours is showing. */
+    private static int fittedRowWidth = -1;
 
     /**
      * A video opened from search, a profile or a sound plays in its own activity, with the same
@@ -285,8 +293,11 @@ public final class AuthorRegion {
 
         if (ours && Objects.equals(handle, decoratedHandle) && Objects.equals(region, decoratedRegion)) {
             // Already saying this. Every layout pass lands here, and the first one after the
-            // write is when a name TikTok cut short can be fitted.
-            refit(name, originalName, handle, region);
+            // write is when a name TikTok cut short can be fitted. A call before that pass, from
+            // a video change posted ahead of it, still sees the width of the name the row had
+            // before, and a name cut to it never grew back: in a weighted row the name is as
+            // wide as its text, so "Shaur… · CA" stayed beside an empty row (#127).
+            if (!name.isLayoutRequested()) refit(name, originalName, handle, region);
             return;
         }
 
@@ -332,8 +343,49 @@ public final class AuthorRegion {
         CharSequence fitted = fit(name, label(original, handle), region);
         if (fitted != null && !fitted.toString().equals(String.valueOf(name.getText()))) {
             decoratedText = fitted;
+            // Taken now, while the row still has the width the whole name overflowed. The next
+            // pass can already be the one where the badge shrank, and a width read then would
+            // make the smaller row the baseline (#127).
+            fittedRowWidth = name.getParent() instanceof View ? ((View) name.getParent()).getWidth() : -1;
             name.setText(fitted);
+        } else if (fitted == null) {
+            regrow(name, original, handle, region);
         }
+    }
+
+    /**
+     * Gives a name cut to fit more of its text back once the row has made room. A photo post's
+     * badge reads "Photo" as the post comes up and shrinks to an icon a moment later, and a name
+     * cut beside the wide badge stayed cut beside the small one (#127, S22). In TikTok's
+     * wrap_content row (47.1.4) the row shrinks with the badge while the name stays as wide as
+     * its cut text, so the room the name has now is its own width plus what the row gave up
+     * since the cut. A row that keeps its width widens the name instead, which counts the same.
+     */
+    private static void regrow(TextView name, CharSequence original, String handle, String region) {
+        CharSequence whole = build(original, handle, region);
+        CharSequence label = label(original, handle);
+        CharSequence shown = name.getText();
+        if (whole == null || label == null || region == null || shown == null || fittedRowWidth < 0
+                || whole.toString().equals(shown.toString()) || !(name.getParent() instanceof View)) {
+            return;
+        }
+        String tail = SEPARATOR + region;
+        if (!shown.toString().endsWith(tail)) return;
+        String cutName = shown.subSequence(0, shown.length() - tail.length()).toString();
+        int gaveUp = Math.max(0, fittedRowWidth - ((View) name.getParent()).getWidth());
+        float room = name.getWidth() - name.getCompoundPaddingLeft() - name.getCompoundPaddingRight()
+                + gaveUp - name.getPaint().measureText(tail);
+        if (room <= 0) return;
+        // The same cut again means nothing came free: a row measured afresh also gives back the
+        // part of a letter the cut left unused, and writing the whole name for that would only
+        // flash it for a frame before the next pass cut it to the same place. Compared as text:
+        // a name cut by one letter is as long as the whole one, the "…" standing in for it.
+        String longer = TextUtils.ellipsize(label, name.getPaint(), room, TextUtils.TruncateAt.END).toString();
+        if (longer.equals(cutName) || longer.length() < cutName.length()) return;
+        fittedRowWidth = -1;
+        decoratedText = whole;
+        name.setText(whole);
+        name.requestLayout();
     }
 
     /**
@@ -397,11 +449,85 @@ public final class AuthorRegion {
             return regionValue;
         }
 
-        String region = Reflect.string(aweme, "getRegion", "region");
-        String trimmed = region == null ? null : region.trim();
-        regionValue = trimmed == null || trimmed.isEmpty() ? null : trimmed.toUpperCase(Locale.ROOT);
+        regionValue = regionCode(Reflect.string(aweme, "getRegion", "region"));
         regionAweme = new WeakReference<>(aweme);
+        rememberSeen(handle(aweme), regionValue);
         return regionValue;
+    }
+
+    /** How many creators' countries are kept for the comment list to fall back on. */
+    private static final int MAX_SEEN = 256;
+
+    /**
+     * The country of every creator whose video was bound in the feed lately, by handle. Some
+     * payloads leave the country off a comment's account (S22, 47.1.4), while the video it sits
+     * under, or an earlier one by the same creator, did carry it. Access ordered and bounded, so
+     * it keeps the creators the reader met last; the bind runs on the main thread but the
+     * comment cell may ask from another, so every touch is under the map's lock.
+     */
+    private static final Map<String, String> SEEN_AT_BIND = new LinkedHashMap<String, String>(64, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+            return size() > MAX_SEEN;
+        }
+    };
+
+    /**
+     * One spelling of a handle for both sides of the cache: the at sign and spaces off, lower
+     * case, because handles are not case sensitive. Null for no handle.
+     */
+    static String handleKey(String handle) {
+        if (handle == null) {
+            return null;
+        }
+        String key = handle.trim();
+        if (key.startsWith("@")) {
+            key = key.substring(1).trim();
+        }
+        return key.isEmpty() ? null : key.toLowerCase(Locale.ROOT);
+    }
+
+    public static void rememberSeen(String handle, String region) {
+        String key = handleKey(handle);
+        String code = regionCode(region);
+        if (key == null || code == null) {
+            return;
+        }
+        synchronized (SEEN_AT_BIND) {
+            SEEN_AT_BIND.put(key, code);
+        }
+    }
+
+    /**
+     * The country a creator's video last showed in the feed, or null when none was bound with
+     * one. The exact handle is the key, so a different commenter never gets someone else's.
+     */
+    public static String seenRegion(String handle) {
+        String key = handleKey(handle);
+        if (key == null) {
+            return null;
+        }
+        synchronized (SEEN_AT_BIND) {
+            return SEEN_AT_BIND.get(key);
+        }
+    }
+
+    /** Lets a test start from no remembered creators. */
+    public static void forgetSeenRegions() {
+        synchronized (SEEN_AT_BIND) {
+            SEEN_AT_BIND.clear();
+        }
+        regionAweme = new WeakReference<>(null);
+        regionValue = null;
+    }
+
+    /**
+     * A country code the way Hushfeed shows one, trimmed and upper case, or null when there's
+     * none. The feed's row and a comment's time both go through this.
+     */
+    public static String regionCode(String raw) {
+        String trimmed = raw == null ? null : raw.trim();
+        return trimmed == null || trimmed.isEmpty() ? null : trimmed.toUpperCase(Locale.ROOT);
     }
 
     /**
@@ -414,7 +540,12 @@ public final class AuthorRegion {
     static String[] decoration(Object aweme) {
         boolean names = SettingsStatus.authorRegionEnabled;
         String handle = names && Settings.SHOW_AUTHOR_HANDLE.get() ? handle(aweme) : null;
-        String region = names && Settings.SHOW_AUTHOR_REGION.get() ? region(aweme) : null;
+        boolean showRegion = names && Settings.SHOW_AUTHOR_REGION.get();
+        // Reading the country is also what feeds the comment list's fallback, so it is read
+        // when the commenter switch wants it even if the feed's own row does not show it.
+        boolean wantSeen = names && SettingsStatus.commenterDetailsEnabled && Settings.SHOW_COMMENTER_REGION.get();
+        String read = showRegion || wantSeen ? region(aweme) : null;
+        String region = showRegion ? read : null;
         String rate = EngagementRate.forVideo(aweme);
         String tail = region == null ? rate : rate == null ? region : region + SEPARATOR + rate;
         return handle == null && tail == null ? null : new String[]{handle, tail};
@@ -448,6 +579,7 @@ public final class AuthorRegion {
         decoratedText = null;
         decoratedHandle = null;
         decoratedRegion = null;
+        fittedRowWidth = -1;
 
         if (name == null || previous == null || written == null) {
             return;

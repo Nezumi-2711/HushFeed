@@ -1,4 +1,5 @@
 %1$s isn't a language code. Use two letters, like en, es or de.	%1$s не является кодом языка. Используйте две буквы, например en, es или de.
+Adds Save cover next to Download when you share a video, so you save the cover only when you want it. While this is on, Download saves just the video, even with Save the cover as well on.	Добавляет «Сохранить обложку» рядом со «Скачать», когда вы делитесь видео, чтобы сохранять обложку, только когда она нужна. Пока это включено, «Скачать» сохраняет только видео, даже если включено «Сохранять обложку тоже».
 Applies to Save the sound as well and to Save the original sound on a long press. Opus makes a smaller file, but the sound is encoded again from TikTok's copy.	Относится к «Сохранять звук тоже» и к «Сохранять оригинальный звук» по долгому нажатию. Opus даёт файл поменьше, но звук заново кодируется из копии TikTok.
 As TikTok sent it (M4A or MP3)	Как прислал TikTok (M4A или MP3)
 Burn-in guard	Защита от выгорания экрана
@@ -14,14 +15,19 @@ Importing new history ended Undo for the earlier clear. You can clear the import
 %1$d settings in that file can't be restored here and were skipped|many	%1$d настроек из файла нельзя восстановить здесь, и они пропущены
 Import watch history	Импортировать историю просмотров
 Keep the language picked in TikTok	Сохранять язык, выбранный в TikTok
+Nothing is playing to speed up	Нет воспроизведения для ускорения
 One language code, like en or es. Comments and captions TikTok translates come out in this language instead of the app's. Leave it empty to keep TikTok's choice.	Один код языка, например en или es. Комментарии и описания, которые переводит TikTok, будут на этом языке, а не на языке приложения. Оставьте поле пустым, чтобы TikTok выбирал сам.
 Opus (.ogg), a smaller file	Opus (.ogg), файл поменьше
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.	Opus не сработал на этом телефоне. Звук сохраняется в том виде, в каком его прислал TikTok.
 Opus needs Android 10 or later, so sounds save as TikTok sent them.	Для Opus нужен Android 10 или новее, поэтому звук сохраняется так, как прислал TikTok.
+Playing at %1$sx	Скорость %1$sx
 Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.	Добавляет кнопку сохранения в меню, которое открывает кнопка «Поделиться» в истории. Она сохраняет историю, которую вы смотрите, а удержание истории по-прежнему ставит её на паузу.
 Save a story from its share sheet	Сохранять историю из меню «Поделиться»
+Save cover	Сохранить обложку
+Save cover button in the share sheet	Кнопка «Сохранить обложку» в меню «Поделиться»
 Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.	На сохранённых видео внизу слева видны @имя пользователя и первая строка описания. Для этого телефон заново кодирует всё видео, поэтому сохранение занимает больше времени. Действует для сохранений через Hushfeed.
 Sound format	Формат звука
+Speed up this video, double tap again to undo	Ускорить это видео, двойное нажатие ещё раз отменяет
 TikTok only had its watermarked copy of this story, so that copy was saved to %1$s	У TikTok была только копия этой истории с водяным знаком, поэтому в %1$s сохранена эта копия
 Translate button in comments	Кнопка перевода в комментариях
 Adds TikTok's translate button next to the comment count. One tap translates every comment, and another shows the originals again.	Добавляет кнопку перевода TikTok рядом с числом комментариев. Одно нажатие переводит все комментарии, следующее снова показывает оригиналы.
@@ -59,7 +65,7 @@ That watch-history file is damaged. Nothing was imported.	Файл истори�
 %1$s entries skipped.|many	Пропущено %1$s записей.
 # Settings text, English on the left, Russian on the right, one entry per line, tab separated.
 # Keep %s and %d placeholders, {tokens} and product names as they are.
-# scripts/gen-l10n.py turns this into a table inside L10nTranslations.java.
+# scripts/gen-l10n.py turns this into L10nTranslationsRu.java.
 %1$d already matched	Совпало: %1$d
 %1$d areas were checked and everything they need is here.	Проверено %1$d разделов: всё необходимое на месте.
 %1$d areas were checked and everything they need is here.|one	%1$d раздел проверен, и всё необходимое на месте.
@@ -584,7 +590,7 @@ Hide activity	Скрывать активность
 Hide activity status	Скрывать статус активности
 Hide archive	Скрывать архив
 Hide bottom tabs TikTok adds later unless you allow them.	Скрывать нижние вкладки, которые TikTok добавляет позже, если вы их не разрешили.
-Unavailable on these TikTok builds. All verification challenges stay visible.	Недоступно в этих версиях TikTok. Все проверки остаются видимыми.
+Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off.	Пропускает головоломку, которую TikTok показывает, пока вы просто листаете. Головоломка сразу после лайка, подписки, комментария или репоста по-прежнему показывается, как и проверки входа, SMS и двухэтапной защиты. Если что-то перестанет работать, выключите это.
 Hide buttons in the right column	Скрывать кнопки в правой колонке
 Hide comment polls	Скрывать опросы в комментариях
 Show poll results before voting	Показывать результаты опроса до голосования
@@ -919,7 +925,7 @@ Putting the settings back to their defaults	Настройки возвраща�
 Quality	Качество
 Quality, files, subtitles and hand-off	Качество, файлы, субтитры и передача
 Quality, speed and auto-advance	Качество, скорость и автопереход
-Silence the feed while comments are open	Отключать звук ленты, пока открыты комментарии
+Pause the video while comments are open	Ставить видео на паузу, пока открыты комментарии
 Reading	Чтение
 Recorded gate reads (%1$d)	Зафиксированные обращения к переключателям (%1$d)
 Recording gate reads. Use a feature, then return here to stop.	Запись обращений к переключателям идёт. Воспользуйтесь функцией, затем вернитесь сюда, чтобы остановить.
@@ -1107,6 +1113,10 @@ Show the whole video instead of cropping it to the window. Nothing changes on a 
 Show what is left of the budget	Показывать остаток бюджета
 Show when the camera or microphone is in use	Показывать, когда используется камера или микрофон
 Show where a video was posted	Показывать, откуда опубликовано видео
+Show commenters' handles	Показывать @имена авторов комментариев
+Show each commenter's @username instead of the display name they chose. A reply to a reply names the person it answers the same way once their own comment has loaded.	Показывать @имя_пользователя каждого автора комментария вместо отображаемого имени, которое он выбрал. Ответ на ответ так же называет того, кому отвечает, когда загрузится его собственный комментарий.
+Show where commenters are from	Показывать, откуда авторы комментариев
+Show the country a commenter's account is set to after the comment's time. Comments from accounts TikTok sends no country for stay as they are.	Показывать после времени комментария страну, указанную в аккаунте его автора. Комментарии от аккаунтов, для которых TikTok не присылает страну, остаются как есть.
 Showing %1$s again	%1$s снова показывается
 Hide videos with blocked sounds	Скрывать видео с заблокированными звуками
 Skip content warnings	Пропускать предупреждения о контенте
@@ -1821,7 +1831,9 @@ Pick the popups to stop. The list holds the ones TikTok has tried to show on thi
 No popups have been seen yet	Всплывающих окон пока не было
 Use TikTok for a while. A popup shows up here after TikTok first tries to show it.	Попользуйтесь TikTok какое-то время. Окно появится здесь, когда TikTok впервые попытается его показать.
 Fade the video controls	Приглушить кнопки поверх видео
-Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. In Clear display the buttons and caption stay on screen at this level, and taps go through them to the video. At 0 the buttons and caption are hidden, and the tabs stay at 10.	Приглушает кнопки, подпись и вкладки поверх видео до этого уровня вместо того, чтобы скрывать их. При 100 всё выглядит так, как рисует TikTok. Приглушённые кнопки по-прежнему реагируют на нажатия. В чистом виде кнопки и подпись остаются на экране с этим уровнем, а нажатия проходят сквозь них к видео. При 0 кнопки и подпись скрыты, а вкладки остаются на 10.
+Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. At 0 the buttons and caption are hidden, and the tabs stay at 10.	Приглушает кнопки, подпись и вкладки поверх видео до этого уровня вместо того, чтобы скрывать их. При 100 всё выглядит так, как рисует TikTok. Приглушённые кнопки по-прежнему реагируют на нажатия. При 0 кнопки и подпись скрыты, а вкладки остаются на 10.
+Keep faded controls in Clear display	Оставлять приглушённые кнопки в чистом виде
+With the fade below 100, the buttons and caption stay on screen at that level in Clear display, and taps go through them to the video. Off, Clear display hides them the way it does at 100.	Если приглушение ниже 100, в чистом виде кнопки и подпись остаются на экране с этим уровнем, а нажатия проходят сквозь них к видео. Если выключено, чистый вид скрывает их, как при 100.
 Loop a story	Повторять историю
 Replay a story from the start when it ends instead of moving to the next one. Tap or swipe to move on.	Когда история заканчивается, она запускается заново, а не переключается на следующую. Чтобы перейти дальше, коснитесь экрана или проведите пальцем.
 Hold a photo story	Удерживать историю с фото
@@ -1889,7 +1901,7 @@ Don't start the first video	Не запускать первое видео
 When you open TikTok from its icon, the first video in the feed waits for one tap before it plays. A link, a notification or a shortcut opens as usual.	Когда вы открываете TikTok с иконки, первое видео в ленте ждёт одного касания, прежде чем начать. Ссылка, уведомление или ярлык открываются как обычно.
 Network proxy	Сетевой прокси
 Send TikTok through a proxy	Пускать TikTok через прокси
-Sends TikTok's feed, search, comments and other app traffic through the proxy below. Videos and LIVE streams still connect directly. Other apps aren't affected.	Направляет ленту, поиск, комментарии и остальной трафик TikTok через прокси ниже. Видео и эфиры LIVE по-прежнему подключаются напрямую. Другие приложения не затрагиваются.
+Sends TikTok's feed, search, comments and other app traffic through the proxy below. Videos and LIVE streams still connect directly. Saves and short-link lookups from Hushfeed also connect directly, after their own address checks. Other apps aren't affected.	Направляет ленту, поиск, комментарии и остальной трафик TikTok через прокси ниже. Видео и эфиры LIVE по-прежнему подключаются напрямую. Сохранения и раскрытие коротких ссылок в Hushfeed тоже подключаются напрямую, после собственных проверок адреса. Другие приложения не затрагиваются.
 Proxy type	Тип прокси
 HTTP	HTTP
 SOCKS5	SOCKS5
@@ -2056,7 +2068,7 @@ Liked videos	Понравившиеся видео
 Public	Открыты
 Copy	Копировать
 Copy the full link for short links	Копировать полную ссылку вместо короткой
-When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit. Links you send to another app go out as they were.	Когда «Копировать ссылку» даёт короткую ссылку vt.tiktok.com или vm.tiktok.com, Hushfeed один раз открывает её в фоне, находит полную ссылку на видео и копирует её. TikTok видит это открытие. Ссылки, которые вы отправляете в другое приложение, уходят как есть.
+When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit, and it connects directly even when a proxy is on. Links you send to another app go out as they were.	Когда «Копировать ссылку» даёт короткую ссылку vt.tiktok.com или vm.tiktok.com, Hushfeed один раз открывает её в фоне, находит полную ссылку на видео и копирует её. TikTok видит это открытие, и оно идёт напрямую, даже если включён прокси. Ссылки, которые вы отправляете в другое приложение, уходят как есть.
 Full link copied	Полная ссылка скопирована
 Mark saved videos	Отмечать сохранённые видео
 Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.	Ставит ✓ у видео, сохранённых через Hushfeed, в сетках профилей и рядом со временем в ленте. Работает только при включённом параметре «Проверять уже сохранённые видео». Фотопосты не отмечаются.
@@ -2124,3 +2136,99 @@ Allow voice comments	Разрешить голосовые комментари�
 Show TikTok's button for recording a spoken comment, on accounts that don't have it yet. It hasn't been tried on a real account, so it may not work.	Показывает кнопку TikTok для записи голосового комментария в аккаунтах, где её ещё нет. Это не проверялось на настоящем аккаунте, поэтому может не сработать.
 Sign in without a passkey	Входить без ключа доступа
 TikTok treats your phone as one without passkeys, so signing in asks for your password or a code by email or text instead. Password managers won't hand a passkey to a patched app.	TikTok считает ваш телефон устройством без ключей доступа, поэтому при входе запрашивает пароль или код по электронной почте или SMS. Менеджеры паролей не передают ключ доступа пропатченному приложению.
+# context: opens the complete published changelog from the concise release summary dialog.
+Full changelog	Все изменения
+More hashtags per post	Больше хештегов в публикации
+New comment emoji	Новые эмодзи в комментариях
+Hide root	Скрывать root
+Hide root status and details about root tools from TikTok.	Скрывать от TikTok статус root и сведения об инструментах root.
+Clear	Очистить
+Search Activity notifications already loaded on this screen. Loading more pauses while you search.	Поиск в уведомлениях раздела «Действия», уже загруженных на этом экране. Во время поиска загрузка новых уведомлений приостанавливается.
+Search is unavailable on this screen	На этом экране поиск недоступен
+Search loaded activity	Поиск в загруженных событиях
+Wait for loading to finish	Дождитесь завершения загрузки
+Choose counts for this signed-in account. Leave a field empty to use TikTok's count. Zero shows zero. Choices stay on this phone.	Выберите числа для текущего аккаунта. Оставьте поле пустым для значения TikTok. Ноль отображается как ноль. Настройки остаются на этом телефоне.
+Followers	Подписчики
+Local profile counts	Локальные счётчики профиля
+Own profile counts	Счётчики своего профиля
+Show chosen counts on your own profile on this phone. Other people see the real counts.	Показывать выбранные числа в своём профиле на этом телефоне. Другие люди видят настоящие числа.
+Sign in to edit your own profile counts	Войдите, чтобы изменить счётчики своего профиля
+Use a whole number from 0 to %1$s, or leave the field empty.	Введите целое число от 0 до %1$s или оставьте поле пустым.
+Your account changed. Open the count editor again.	Аккаунт изменился. Откройте редактор счётчиков снова.
+
+# context: local own-profile appearance
+Local verified badge	Локальный значок верификации
+Show a verified badge on your own profile on this phone. Other people see your real status.	Показывать значок верификации в вашем профиле на этом телефоне. Другие видят ваш настоящий статус.
+Hide your account warning	Скрыть предупреждение вашего аккаунта
+Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Скрывать уведомление об ограничении в вашем профиле на этом телефоне. Ограничения TikTok и возможность обжалования сохраняются.
+
+# context: received-message and outgoing-draft translation previews
+DM translation preview	Предпросмотр перевода сообщений
+Preview a translation of your draft before sending it.	Просмотрите перевод черновика перед отправкой.
+Translate draft	Перевести черновик
+Translation preview	Предпросмотр перевода
+Use translation	Использовать перевод
+Translating…	Перевод…
+Couldn't translate this draft. Try again in a moment.	Не удалось перевести этот черновик. Повторите попытку чуть позже.
+Received message translation	Перевод входящих сообщений
+Preview a translation from a received text message's menu. The original message stays unchanged.	Просмотр перевода через меню полученного текстового сообщения. Исходное сообщение не меняется.
+Preview translation	Посмотреть перевод
+Original message	Исходное сообщение
+Translated message	Переведённое сообщение
+Show original	Показать оригинал
+Show translation	Показать перевод
+Couldn't translate this message. Try again in a moment.	Не удалось перевести это сообщение. Повторите попытку чуть позже.
+Saved posts	Сохранённые публикации
+Blocked accounts	Заблокированные аккаунты
+These are posts saved by your signed-in account. Other Favorites categories aren't included.	Это публикации, сохранённые вашим аккаунтом, в который выполнен вход. Другие категории Избранного не включены.
+Read-only list. Accounts won't be opened or unblocked.	Список только для просмотра. Аккаунты не открываются и не разблокируются.
+Load more	Загрузить ещё
+%1$s items loaded	Загружено элементов: %1$s
+TikTok's total: %1$s. Filtered accounts: %2$s.	Всего по данным TikTok: %1$s. Отфильтровано аккаунтов: %2$s.
+Your account changed. Close this list and open it again.	Аккаунт изменился. Закройте этот список и откройте его снова.
+Loading cancelled. The list is incomplete.	Загрузка отменена. Список неполный.
+Loading page %1$s...	Загрузка страницы %1$s...
+TikTok reports no more items in this list.	По данным TikTok, в этом списке больше нет элементов.
+More items are available.	Доступны ещё элементы.
+Sign in to view this list	Войдите, чтобы посмотреть этот список
+This list isn't available on this TikTok build.	Этот список недоступен в этой версии TikTok.
+Couldn't read this list. Close it and try again.	Не удалось прочитать этот список. Закройте его и повторите попытку.
+TikTok refused this request (%1$s).	TikTok отклонил этот запрос (%1$s).
+The request timed out. The list may be incomplete.	Время ожидания запроса истекло. Список может быть неполным.
+The list stopped making progress. Results are incomplete.	Загрузка списка перестала продвигаться. Результаты неполные.
+The list reached its limit. More items may remain.	Список достиг предела. Могут остаться ещё элементы.
+The list changed while loading. Results are incomplete.	Список изменился во время загрузки. Результаты неполные.
+TikTok reports additional filtered accounts. This list is incomplete.	По данным TikTok, есть ещё отфильтрованные аккаунты. Этот список неполный.
+Saved post	Сохранённая публикация
+Blocked account	Заблокированный аккаунт
+Use an imported font	Использовать импортированный шрифт
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	Показывает текст TikTok шрифтом из файла, который вы импортируете ниже. Если включены оба переключателя, этот важнее, чем Использовать системный шрифт. Если файл удалён или не читается, текст снова выглядит так, как его показывает Использовать системный шрифт.
+Import a font file	Импортировать файл шрифта
+Remove the imported font	Удалить импортированный шрифт
+Pick a .ttf or .otf file of up to %1$s MB.	Выберите файл .ttf или .otf размером до %1$s МБ.
+Imported: %1$s. Pick another file to replace it.	Импортирован: %1$s. Выберите другой файл, чтобы заменить его.
+Reading the font file	Чтение файла шрифта
+Deletes %1$s from TikTok's storage.	Удаляет %1$s из хранилища TikTok.
+No font is imported	Шрифт не импортирован
+%1$s is imported. Restart TikTok to see it.	%1$s импортирован. Перезапустите TikTok, чтобы увидеть изменения.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s импортирован. Включите Использовать импортированный шрифт, чтобы увидеть его.
+%1$s is removed. Restart TikTok to see the change.	%1$s удалён. Перезапустите TikTok, чтобы увидеть изменения.
+%1$s is removed	%1$s удалён
+Couldn't remove the imported font. Try again.	Не удалось удалить импортированный шрифт. Попробуйте снова.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	Не удалось сохранить шрифт в хранилище TikTok. Освободите немного места и попробуйте снова.
+That file is larger than %1$s MB. Choose a smaller font file.	Файл больше %1$s МБ. Выберите файл шрифта меньшего размера.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	Этот файл не шрифт, который может использовать Android. Выберите файл .ttf или .otf.
+Profile background	Фон профиля
+Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet. Open Edit profile again after turning this on.	Открывает собственный редактор фона профиля TikTok в разделе Изменить профиль и показывает фоны, которые установили другие профили. Серверы TikTok всё равно могут отказаться сохранить фон для аккаунта, которому TikTok ещё не предложил эту функцию. Откройте Изменить профиль снова после включения.
+Copy the link with one press on Share	Копировать ссылку одним нажатием на «Поделиться»
+A press on Share under a video copies its link instead of opening the share sheet. Press Share again right after to open the sheet.	Нажатие на «Поделиться» под видео копирует его ссылку вместо того, чтобы открыть меню «Поделиться». Нажмите «Поделиться» ещё раз сразу после этого, чтобы открыть меню.
+Full long-press menu on a creator's videos	Полное меню долгого нажатия на видео автора
+A long press on a video you opened from someone's profile opens the same menu as on For You, not the small share sheet. It needs Long press on TikTok default.	Долгое нажатие на видео, открытое из чужого профиля, открывает то же меню, что и в «Рекомендациях», а не маленькое меню «Поделиться». Для этого в настройке «Долгое нажатие» должно быть выбрано «Стандарт TikTok».
+Ask for the quality on each save	Спрашивать качество при каждом сохранении
+Download lists the qualities this video comes in, with the size TikTok gives for each, and saves the one you pick. The quality above stays as it is for the next save.	При скачивании показываются все варианты качества этого видео с размером, который TikTok указывает для каждого, и сохраняется выбранный. Качество выше остаётся прежним для следующего сохранения.
+Save in which quality?	В каком качестве сохранить?
+Automatic (TikTok's file)	Автоматически (файл TikTok)
+%1$s, about %2$s	%1$s, около %2$s
+%1$s, size unknown	%1$s, размер неизвестен
+The quality choice is still open	Выбор качества всё ещё открыт
+Unknown resolution	Разрешение неизвестно

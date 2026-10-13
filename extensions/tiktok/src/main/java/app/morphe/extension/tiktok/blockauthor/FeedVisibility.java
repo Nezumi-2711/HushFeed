@@ -47,6 +47,11 @@ public final class FeedVisibility {
     private static final String[] FRIENDS_TAB_RESOURCE_NAMES = {"47.1.4:opg"};
     private static final String[] COMMENT_SHEET_RESOURCE_NAMES = {"47.1.4:pyf"};
     private static final String[] COMMENT_TITLE_RESOURCE_NAMES = {"47.1.4:wny"};
+    // Built once: the sheet check runs on every layout pass of the feed's window.
+    private static final String COMMENT_SHEET_DIAGNOSTIC_NAME =
+            "sheet (" + joinResourceNames(COMMENT_SHEET_RESOURCE_NAMES) + ")";
+    private static final String COMMENT_TITLE_DIAGNOSTIC_NAME =
+            "title (" + joinResourceNames(COMMENT_TITLE_RESOURCE_NAMES) + ")";
 
     /**
      * The story viewer's pager. One id rather than the comment sheet's two: this one is not
@@ -182,6 +187,18 @@ public final class FeedVisibility {
     }
 
     /**
+     * @return true while the feed's page is scrolled sideways to a creator's profile, a page of
+     *         the same pager, with the Home tab still selected on it. {@link #isOnFeed} answers
+     *         no there; this is for what rides on the feed's page and has to stay as it was
+     *         for the swipe back (#84).
+     */
+    public static boolean isFeedPageScrolledAway(Activity activity) {
+        View homeTab = homeTab(activity);
+        return homeTab != null && homeTab.isSelected() && homeTab.getVisibility() == View.VISIBLE
+                && isScrolledAway(homeTab) && !isDetailVisible() && !isStoryVisible(activity);
+    }
+
+    /**
      * @return true while TikTok's clear display has the feed's controls put away: the Home tab
      *         selected and in place, hidden by nothing but its own bar, with no detail page or
      *         story over it.
@@ -308,11 +325,20 @@ public final class FeedVisibility {
     public static boolean isCommentSheetVisible(Activity activity) {
         View sheet = namedView(activity, COMMENT_SHEET_RESOURCE_NAMES, commentSheetReference,
                 reference -> commentSheetReference = reference, "comments sheet",
-                "sheet (" + joinResourceNames(COMMENT_SHEET_RESOURCE_NAMES) + ")");
+                COMMENT_SHEET_DIAGNOSTIC_NAME);
         View title = namedView(activity, COMMENT_TITLE_RESOURCE_NAMES, commentTitleReference,
                 reference -> commentTitleReference = reference, "comments sheet",
-                "title (" + joinResourceNames(COMMENT_TITLE_RESOURCE_NAMES) + ")");
+                COMMENT_TITLE_DIAGNOSTIC_NAME);
         return sheet != null && title != null && sheet.isShown() && !isScrolledAway(sheet);
+    }
+
+    /**
+     * Whether this activity's comment sheet has been found before and is still its own, open or
+     * parked below the screen. Only the remembered view is read, so it costs no lookup.
+     */
+    public static boolean hasCommentSheet(Activity activity) {
+        View sheet = commentSheetReference.get();
+        return sheet != null && belongsTo(sheet, activity);
     }
 
     /**

@@ -1,4 +1,5 @@
 %1$s isn't a language code. Use two letters, like en, es or de.	%1$s no es un código de idioma. Usa dos letras, como en, es o de.
+Adds Save cover next to Download when you share a video, so you save the cover only when you want it. While this is on, Download saves just the video, even with Save the cover as well on.	Añade Guardar portada junto a Descargar cuando compartes un vídeo, para que guardes la portada solo cuando la quieras. Mientras esté activado, Descargar guarda solo el vídeo, aunque Guardar también la portada esté activado.
 Applies to Save the sound as well and to Save the original sound on a long press. Opus makes a smaller file, but the sound is encoded again from TikTok's copy.	Se aplica a Guardar también el sonido y a Guardar el sonido original al mantener pulsado. Opus da un archivo más pequeño, pero el sonido se vuelve a codificar a partir de la copia de TikTok.
 As TikTok sent it (M4A or MP3)	Tal como lo envía TikTok (M4A o MP3)
 Burn-in guard	Protección contra el quemado de pantalla
@@ -11,14 +12,19 @@ Importing new history ended Undo for the earlier clear. You can clear the import
 %1$d settings in that file can't be restored here and were skipped	%1$d ajustes del archivo no se pueden restaurar aquí y se omitieron
 Import watch history	Importar historial de visualización
 Keep the language picked in TikTok	Mantener el idioma elegido en TikTok
+Nothing is playing to speed up	No hay nada reproduciéndose que acelerar
 One language code, like en or es. Comments and captions TikTok translates come out in this language instead of the app's. Leave it empty to keep TikTok's choice.	Un código de idioma, como en o es. Los comentarios y descripciones que TikTok traduce salen en este idioma en vez del de la app. Déjalo vacío para mantener la elección de TikTok.
 Opus (.ogg), a smaller file	Opus (.ogg), archivo más pequeño
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.	Opus no funcionó en este teléfono. Guardando el sonido tal como lo envió TikTok.
 Opus needs Android 10 or later, so sounds save as TikTok sent them.	Opus necesita Android 10 o posterior, así que los sonidos se guardan tal como los envía TikTok.
+Playing at %1$sx	Reproduciendo a %1$sx
 Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.	Añade un botón de guardar al panel que abre el botón Compartir de una historia. Guarda la historia que estás viendo, y mantener pulsada una historia la sigue pausando.
 Save a story from its share sheet	Guardar una historia desde el panel de compartir
+Save cover	Guardar portada
+Save cover button in the share sheet	Botón Guardar portada en el panel de compartir
 Saved videos show the @username and the first line of the caption in the bottom left corner. The phone encodes the whole video again to do it, so saving takes longer. Applies to saves made by Hushfeed.	Los videos guardados muestran el @nombre de usuario y la primera línea de la descripción en la esquina inferior izquierda. Para hacerlo, el teléfono vuelve a codificar todo el video, así que guardar tarda más. Se aplica a lo que guarda Hushfeed.
 Sound format	Formato del sonido
+Speed up this video, double tap again to undo	Acelerar este vídeo, doble toque otra vez para deshacerlo
 TikTok only had its watermarked copy of this story, so that copy was saved to %1$s	TikTok solo tenía la copia con marca de agua de esta historia, así que esa copia se guardó en %1$s
 Translate button in comments	Botón de traducir en los comentarios
 Adds TikTok's translate button next to the comment count. One tap translates every comment, and another shows the originals again.	Añade el botón de traducir de TikTok junto al número de comentarios. Un toque traduce todos los comentarios y otro vuelve a mostrar los originales.
@@ -524,7 +530,7 @@ Hide activity	Ocultar la actividad
 Hide activity status	Ocultar el estado de actividad
 Hide archive	Ocultar el archivo
 Hide bottom tabs TikTok adds later unless you allow them.	Ocultar las pestañas inferiores que TikTok añada más adelante salvo que las permitas.
-Unavailable on these TikTok builds. All verification challenges stay visible.	No disponible en estas versiones de TikTok. Todas las verificaciones siguen visibles.
+Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off.	Omite el rompecabezas que TikTok muestra mientras solo navegas. Un rompecabezas justo después de dar me gusta, seguir, comentar o republicar se sigue mostrando, igual que las verificaciones de inicio de sesión, SMS y dos pasos. Si algo deja de funcionar, desactiva esto.
 Hide buttons in the right column	Ocultar botones de la columna derecha
 Hide comment polls	Ocultar las encuestas en los comentarios
 Show poll results before voting	Mostrar resultados de encuestas antes de votar
@@ -856,7 +862,7 @@ Putting the settings back to their defaults	Devolviendo los ajustes a sus valore
 Quality	Calidad
 Quality, files, subtitles and hand-off	Calidad, archivos, subtítulos y traspaso
 Quality, speed and auto-advance	Calidad, velocidad y avance automático
-Silence the feed while comments are open	Silenciar el feed mientras los comentarios están abiertos
+Pause the video while comments are open	Pausar el video mientras los comentarios están abiertos
 Reading	Lectura
 Recorded gate reads (%1$d)	Lecturas de interruptores registradas (%1$d)
 Recording gate reads. Use a feature, then return here to stop.	Registrando las lecturas de los interruptores. Usa una función y vuelve aquí para parar.
@@ -1029,6 +1035,10 @@ Show the whole video instead of cropping it to the window. Nothing changes on a 
 Show what is left of the budget	Mostrar lo que queda del límite
 Show when the camera or microphone is in use	Mostrar cuando la cámara o el micrófono estén en uso
 Show where a video was posted	Mostrar desde dónde se publicó un vídeo
+Show commenters' handles	Mostrar el nombre de usuario de quien comenta
+Show each commenter's @username instead of the display name they chose. A reply to a reply names the person it answers the same way once their own comment has loaded.	Mostrar el @usuario de cada persona que comenta en vez del nombre visible que eligió. Una respuesta a otra respuesta nombra igual a la persona a la que responde en cuanto se haya cargado su propio comentario.
+Show where commenters are from	Mostrar de dónde es quien comenta
+Show the country a commenter's account is set to after the comment's time. Comments from accounts TikTok sends no country for stay as they are.	Mostrar el país configurado en la cuenta de quien comenta después de la hora del comentario. Los comentarios de cuentas para las que TikTok no envía país se quedan como están.
 Showing %1$s again	Mostrando %1$s otra vez
 Hide videos with blocked sounds	Ocultar los vídeos con sonidos bloqueados
 Skip content warnings	Saltar los avisos de contenido
@@ -1680,7 +1690,9 @@ Pick the popups to stop. The list holds the ones TikTok has tried to show on thi
 No popups have been seen yet	Aún no se ha visto ninguna ventana emergente
 Use TikTok for a while. A popup shows up here after TikTok first tries to show it.	Usa TikTok un rato. Una ventana emergente aparece aquí cuando TikTok intenta mostrarla por primera vez.
 Fade the video controls	Atenuar los controles del vídeo
-Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. In Clear display the buttons and caption stay on screen at this level, and taps go through them to the video. At 0 the buttons and caption are hidden, and the tabs stay at 10.	Atenúa los botones, la descripción y las pestañas sobre el vídeo hasta este nivel en lugar de ocultarlos. Con 100 quedan como los dibuja TikTok. Los controles atenuados siguen respondiendo al toque. Con Controles ocultos, los botones y la descripción siguen en pantalla con este nivel, y los toques pasan a través de ellos al vídeo. Con 0 los botones y la descripción se ocultan, y las pestañas se quedan en 10.
+Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. At 0 the buttons and caption are hidden, and the tabs stay at 10.	Atenúa los botones, la descripción y las pestañas sobre el vídeo hasta este nivel en lugar de ocultarlos. Con 100 quedan como los dibuja TikTok. Los controles atenuados siguen respondiendo al toque. Con 0 los botones y la descripción se ocultan, y las pestañas se quedan en 10.
+Keep faded controls in Clear display	Mantener los controles atenuados con Controles ocultos
+With the fade below 100, the buttons and caption stay on screen at that level in Clear display, and taps go through them to the video. Off, Clear display hides them the way it does at 100.	Con la atenuación por debajo de 100, los botones y la descripción siguen en pantalla con ese nivel en Controles ocultos, y los toques pasan a través de ellos al vídeo. Desactivado, Controles ocultos los oculta como con 100.
 Loop a story	Repetir una historia
 Replay a story from the start when it ends instead of moving to the next one. Tap or swipe to move on.	Repite una historia desde el principio al terminar en lugar de pasar a la siguiente. Toca o desliza para avanzar.
 Hold a photo story	Mantener una historia con foto
@@ -1748,7 +1760,7 @@ Don't start the first video	No poner en marcha el primer video
 When you open TikTok from its icon, the first video in the feed waits for one tap before it plays. A link, a notification or a shortcut opens as usual.	Cuando abres TikTok desde su icono, el primer video del feed espera un toque antes de reproducirse. Un enlace, una notificación o un acceso directo se abren como siempre.
 Network proxy	Proxy de red
 Send TikTok through a proxy	Enviar TikTok por un proxy
-Sends TikTok's feed, search, comments and other app traffic through the proxy below. Videos and LIVE streams still connect directly. Other apps aren't affected.	Envía el feed, la búsqueda, los comentarios y el resto del tráfico de TikTok a través del proxy de abajo. Los videos y las transmisiones LIVE siguen conectándose directamente. Las demás apps no se ven afectadas.
+Sends TikTok's feed, search, comments and other app traffic through the proxy below. Videos and LIVE streams still connect directly. Saves and short-link lookups from Hushfeed also connect directly, after their own address checks. Other apps aren't affected.	Envía el feed, la búsqueda, los comentarios y el resto del tráfico de TikTok a través del proxy de abajo. Los videos y las transmisiones LIVE siguen conectándose directamente. Los guardados y las consultas de enlaces cortos de Hushfeed también se conectan directamente, tras sus propias comprobaciones de dirección. Las demás apps no se ven afectadas.
 Proxy type	Tipo de proxy
 HTTP	HTTP
 SOCKS5	SOCKS5
@@ -1888,7 +1900,7 @@ Liked videos	Vídeos que le gustaron
 Public	Públicos
 Copy	Copiar
 Copy the full link for short links	Copiar el enlace completo en los enlaces cortos
-When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit. Links you send to another app go out as they were.	Cuando Copiar enlace da un enlace corto de vt.tiktok.com o vm.tiktok.com, Hushfeed lo abre una vez en segundo plano para encontrar el enlace completo del video y copia ese. TikTok ve esa visita. Los enlaces que envías a otra app salen tal cual.
+When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit, and it connects directly even when a proxy is on. Links you send to another app go out as they were.	Cuando Copiar enlace da un enlace corto de vt.tiktok.com o vm.tiktok.com, Hushfeed lo abre una vez en segundo plano para encontrar el enlace completo del video y copia ese. TikTok ve esa visita, y se conecta directamente aunque haya un proxy activo. Los enlaces que envías a otra app salen tal cual.
 Full link copied	Enlace completo copiado
 Mark saved videos	Marcar los vídeos guardados
 Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.	Pone un ✓ en los videos que guardaste con Hushfeed, en las cuadrículas de perfil y junto a la hora en el feed. Solo funciona mientras Comprobar videos ya guardados esté activado. Las publicaciones de fotos no se marcan.
@@ -1956,3 +1968,99 @@ Allow voice comments	Permitir comentarios de voz
 Show TikTok's button for recording a spoken comment, on accounts that don't have it yet. It hasn't been tried on a real account, so it may not work.	Muestra el botón de TikTok para grabar un comentario hablado en las cuentas que aún no lo tienen. No se ha probado con una cuenta real, así que puede que no funcione.
 Sign in without a passkey	Iniciar sesión sin llave de acceso
 TikTok treats your phone as one without passkeys, so signing in asks for your password or a code by email or text instead. Password managers won't hand a passkey to a patched app.	TikTok trata tu teléfono como uno sin llaves de acceso, así que al iniciar sesión te pide tu contraseña o un código por correo o SMS. Los gestores de contraseñas no le dan una llave de acceso a una app parcheada.
+# context: opens the complete published changelog from the concise What's new dialog.
+Full changelog	Todos los cambios
+More hashtags per post	Más hashtags por publicación
+New comment emoji	Nuevos emojis en comentarios
+Hide root	Ocultar root
+Hide root status and details about root tools from TikTok.	Oculta a TikTok el estado de root y los detalles de las herramientas de root.
+Clear	Borrar
+Search Activity notifications already loaded on this screen. Loading more pauses while you search.	Busca en las notificaciones de Actividad ya cargadas en esta pantalla. No se cargan más mientras buscas.
+Search is unavailable on this screen	La búsqueda no está disponible en esta pantalla
+Search loaded activity	Buscar en la actividad cargada
+Wait for loading to finish	Espera a que termine la carga
+Choose counts for this signed-in account. Leave a field empty to use TikTok's count. Zero shows zero. Choices stay on this phone.	Elige las cifras para esta cuenta. Deja un campo vacío para usar la cifra de TikTok. El cero muestra cero. Las opciones se guardan en este teléfono.
+Followers	Seguidores
+Local profile counts	Cifras locales del perfil
+Own profile counts	Cifras de tu perfil
+Show chosen counts on your own profile on this phone. Other people see the real counts.	Muestra las cifras elegidas en tu propio perfil en este teléfono. Los demás ven las cifras reales.
+Sign in to edit your own profile counts	Inicia sesión para editar las cifras de tu perfil
+Use a whole number from 0 to %1$s, or leave the field empty.	Usa un número entero de 0 a %1$s o deja el campo vacío.
+Your account changed. Open the count editor again.	Tu cuenta ha cambiado. Abre de nuevo el editor de cifras.
+
+# context: local own-profile appearance
+Local verified badge	Insignia de verificación local
+Show a verified badge on your own profile on this phone. Other people see your real status.	Muestra una insignia de verificación en tu propio perfil en este teléfono. Los demás ven tu estado real.
+Hide your account warning	Ocultar la advertencia de tu cuenta
+Hide the restriction notice on your own profile on this phone. TikTok's restrictions and appeals still apply.	Oculta el aviso de restricción de tu propio perfil en este teléfono. Las restricciones y apelaciones de TikTok siguen vigentes.
+
+# context: received-message and outgoing-draft translation previews
+DM translation preview	Vista previa de traducción de mensajes
+Preview a translation of your draft before sending it.	Revisa una traducción de tu borrador antes de enviarlo.
+Translate draft	Traducir borrador
+Translation preview	Vista previa de la traducción
+Use translation	Usar traducción
+Translating…	Traduciendo…
+Couldn't translate this draft. Try again in a moment.	No se pudo traducir este borrador. Inténtalo de nuevo en un momento.
+Received message translation	Traducción de mensajes recibidos
+Preview a translation from a received text message's menu. The original message stays unchanged.	Consulta una traducción desde el menú de un mensaje de texto recibido. El mensaje original no cambia.
+Preview translation	Ver traducción
+Original message	Mensaje original
+Translated message	Mensaje traducido
+Show original	Mostrar original
+Show translation	Mostrar traducción
+Couldn't translate this message. Try again in a moment.	No se pudo traducir este mensaje. Inténtalo de nuevo en un momento.
+Saved posts	Publicaciones guardadas
+Blocked accounts	Cuentas bloqueadas
+These are posts saved by your signed-in account. Other Favorites categories aren't included.	Son las publicaciones que guardó tu cuenta con la sesión iniciada. No se incluyen otras categorías de Favoritos.
+Read-only list. Accounts won't be opened or unblocked.	Lista de solo lectura. Las cuentas no se abren ni se desbloquean.
+Load more	Cargar más
+%1$s items loaded	Elementos cargados: %1$s
+TikTok's total: %1$s. Filtered accounts: %2$s.	Total según TikTok: %1$s. Cuentas filtradas: %2$s.
+Your account changed. Close this list and open it again.	Tu cuenta cambió. Cierra esta lista y vuelve a abrirla.
+Loading cancelled. The list is incomplete.	Carga cancelada. La lista está incompleta.
+Loading page %1$s...	Cargando la página %1$s...
+TikTok reports no more items in this list.	TikTok indica que no hay más elementos en esta lista.
+More items are available.	Hay más elementos disponibles.
+Sign in to view this list	Inicia sesión para ver esta lista
+This list isn't available on this TikTok build.	Esta lista no está disponible en esta versión de TikTok.
+Couldn't read this list. Close it and try again.	No se pudo leer esta lista. Ciérrala e inténtalo de nuevo.
+TikTok refused this request (%1$s).	TikTok rechazó esta solicitud (%1$s).
+The request timed out. The list may be incomplete.	La solicitud tardó demasiado. Puede que la lista esté incompleta.
+The list stopped making progress. Results are incomplete.	La lista dejó de avanzar. Los resultados están incompletos.
+The list reached its limit. More items may remain.	La lista llegó a su límite. Puede que queden más elementos.
+The list changed while loading. Results are incomplete.	La lista cambió mientras se cargaba. Los resultados están incompletos.
+TikTok reports additional filtered accounts. This list is incomplete.	TikTok indica que hay más cuentas filtradas. Esta lista está incompleta.
+Saved post	Publicación guardada
+Blocked account	Cuenta bloqueada
+Use an imported font	Usar una fuente importada
+Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.	Muestra el texto de TikTok con el archivo de fuente que importes abajo. Si las dos están activadas, esta tiene prioridad sobre Usar la fuente del sistema. Si el archivo se quita o no se puede leer, el texto vuelve a verse como lo muestra Usar la fuente del sistema.
+Import a font file	Importar un archivo de fuente
+Remove the imported font	Quitar la fuente importada
+Pick a .ttf or .otf file of up to %1$s MB.	Elige un archivo .ttf u .otf de hasta %1$s MB.
+Imported: %1$s. Pick another file to replace it.	Importado: %1$s. Elige otro archivo para reemplazarlo.
+Reading the font file	Leyendo el archivo de fuente
+Deletes %1$s from TikTok's storage.	Borra %1$s del almacenamiento de TikTok.
+No font is imported	No hay ninguna fuente importada
+%1$s is imported. Restart TikTok to see it.	%1$s se importó. Reinicia TikTok para ver el cambio.
+%1$s is imported. Turn on Use an imported font to see it.	%1$s se importó. Activa Usar una fuente importada para verla.
+%1$s is removed. Restart TikTok to see the change.	%1$s se quitó. Reinicia TikTok para ver el cambio.
+%1$s is removed	%1$s se quitó
+Couldn't remove the imported font. Try again.	No se pudo quitar la fuente importada. Inténtalo de nuevo.
+Couldn't save the font in TikTok's storage. Free up some space and try again.	No se pudo guardar la fuente en el almacenamiento de TikTok. Libera algo de espacio e inténtalo de nuevo.
+That file is larger than %1$s MB. Choose a smaller font file.	El archivo supera los %1$s MB. Elige un archivo de fuente más pequeño.
+That file isn't a font Android can use. Choose a .ttf or .otf file.	El archivo no es una fuente que Android pueda usar. Elige un archivo .ttf u .otf.
+Profile background	Fondo del perfil
+Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet. Open Edit profile again after turning this on.	Abre el editor de fondo de perfil del propio TikTok en Editar perfil y muestra los fondos que han puesto otros perfiles. Los servidores de TikTok pueden negarse a guardarlo si TikTok aún no le ha ofrecido la función a tu cuenta. Vuelve a abrir Editar perfil después de activarlo.
+Copy the link with one press on Share	Copiar el enlace con un toque en Compartir
+A press on Share under a video copies its link instead of opening the share sheet. Press Share again right after to open the sheet.	Un toque en Compartir debajo de un vídeo copia su enlace en lugar de abrir el panel de compartir. Vuelve a tocar Compartir justo después para abrir el panel.
+Full long-press menu on a creator's videos	Menú completo de pulsación larga en los videos de un creador
+A long press on a video you opened from someone's profile opens the same menu as on For You, not the small share sheet. It needs Long press on TikTok default.	Una pulsación larga en un video que abriste desde el perfil de alguien abre el mismo menú que en Para ti, no el panel de compartir pequeño. Requiere Pulsación larga en Predeterminado de TikTok.
+Ask for the quality on each save	Preguntar la calidad en cada descarga
+Download lists the qualities this video comes in, with the size TikTok gives for each, and saves the one you pick. The quality above stays as it is for the next save.	Descargar muestra las calidades en las que está este video, con el tamaño que TikTok indica para cada una, y guarda la que elijas. La calidad de arriba se mantiene para la próxima descarga.
+Save in which quality?	¿En qué calidad guardar?
+Automatic (TikTok's file)	Automático (el archivo de TikTok)
+%1$s, about %2$s	%1$s, unos %2$s
+%1$s, size unknown	%1$s, tamaño desconocido
+The quality choice is still open	La elección de calidad sigue abierta
+Unknown resolution	Resolución desconocida
