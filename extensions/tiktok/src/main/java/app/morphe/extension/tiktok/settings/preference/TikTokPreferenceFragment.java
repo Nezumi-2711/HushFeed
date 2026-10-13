@@ -157,7 +157,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         }
     }
 
-    private static final class SearchResult {
+    private static final class SearchResult implements app.morphe.extension.tiktok.settings.SearchMatch.Row {
         final Section section;
         final String key;
         final String title;
@@ -170,6 +170,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         final String normalized;
         /** The title alone, folded the same way, so a hit there ranks above a description hit. */
         final String normalizedTitle;
+        /** A plain switch, which the results flip where it stands instead of opening its page. */
+        boolean flipsInPlace;
 
         SearchResult(Section section, String key, String title, String summary, String category) {
             this(section, key, title, summary, category, "");
@@ -211,6 +213,14 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 return category;
             }
             return category + " · " + summary;
+        }
+
+        @Override public String searchedText() {
+            return normalized;
+        }
+
+        @Override public String titleText() {
+            return normalizedTitle;
         }
     }
 
@@ -903,28 +913,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
             return;
         }
 
-        // A hit on a whole word comes first, each group in page order. "counts" listed Hide
-        // verified accounts and Blocked creators, where it sits inside "accounts", above the
-        // rows that are about counts. Inside each group a hit in the title comes before one only
-        // in the description: "original photos" listed Photo filename, whose description names
-        // Download original photos, above that switch.
-        List<SearchResult> matches = new ArrayList<>();
-        List<SearchResult> words = new ArrayList<>();
-        List<SearchResult> titleInsideWords = new ArrayList<>();
-        List<SearchResult> insideWords = new ArrayList<>();
-        for (SearchResult result : searchIndex) {
-            if (!result.normalized.contains(normalizedQuery)) continue;
-            if (app.morphe.extension.tiktok.settings.SearchText.containsWord(result.normalized, normalizedQuery)) {
-                (app.morphe.extension.tiktok.settings.SearchText.containsWord(result.normalizedTitle, normalizedQuery)
-                        ? matches : words).add(result);
-            } else {
-                (result.normalizedTitle.contains(normalizedQuery) ? titleInsideWords : insideWords)
-                        .add(result);
-            }
-        }
-        matches.addAll(words);
-        matches.addAll(titleInsideWords);
-        matches.addAll(insideWords);
+        // Whole-word hits first, title hits ahead of description hits: SearchMatch has the why.
+        List<SearchResult> matches = app.morphe.extension.tiktok.settings.SearchMatch.rank(searchIndex, typed);
         if (searchInput != null) searchInput.showResultCount(matches.size());
         if (matches.isEmpty()) {
             addSearchState("No matching settings", NO_MATCHES_SUMMARY);
@@ -932,7 +922,21 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         }
 
         int order = 0;
+        java.util.Set<String> flipped = new java.util.HashSet<>();
         for (SearchResult result : matches) {
+            // A plain switch is flipped right here, the way it is on its page, and the page's
+            // change handling does the rest: the restart row, availability, the saved value.
+            // One row per setting, so two pages binding the same switch can't disagree.
+            Setting<?> setting = result.flipsInPlace ? Setting.getSettingFromPath(result.key) : null;
+            if (setting instanceof app.morphe.extension.shared.settings.BooleanSetting
+                    && setting.isAvailable() && flipped.add(setting.key)) {
+                SearchTogglePreference toggle = new SearchTogglePreference(getActivity(), result.title,
+                        result.displaySummary(), (app.morphe.extension.shared.settings.BooleanSetting) setting);
+                toggle.setOrder(order++);
+                searchRows.add(toggle);
+                searchScreen.addPreference(toggle);
+                continue;
+            }
             Preference row = new Preference(getActivity());
             row.setTitle(result.title);
             row.setSummary(result.displaySummary());
@@ -1181,14 +1185,16 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 continue;
             }
             CharSequence summary = preference.getSummary();
-            results.add(new SearchResult(
+            SearchResult result = new SearchResult(
                     section,
                     preference.getKey(),
                     title.toString(),
                     summary == null ? "" : summary.toString(),
                     categoryTitle,
                     searchKeywords(preference.getContext(), preference.getKey())
-            ));
+            );
+            result.flipsInPlace = flipsInPlace(preference);
+            results.add(result);
             // The row's summary names only the boxes that are ticked, so "counts" found nothing
             // while Counts under the buttons sat unticked inside it. Every box is a result of
             // its own, in the row's place, and opening one opens the row's dialog on that box.
@@ -1199,6 +1205,19 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 }
             }
         }
+    }
+
+    /**
+     * Whether a found row can be flipped in the results. Only a plain switch: one with a handler
+     * of its own (a locked day's refusal, Ghost mode's status line, a background job to stop) or
+     * a parent switch it waits on still opens its page, where that logic lives.
+     */
+    static boolean flipsInPlace(Preference preference) {
+        return preference.getClass() == TogglePreference.class
+                && preference.getOnPreferenceChangeListener() == null
+                && preference.getDependency() == null
+                && Setting.getSettingFromPath(preference.getKey())
+                        instanceof app.morphe.extension.shared.settings.BooleanSetting;
     }
 
     /** Bug report templates ask for "debug logs", and "debug" found nothing: Log diagnostics never
