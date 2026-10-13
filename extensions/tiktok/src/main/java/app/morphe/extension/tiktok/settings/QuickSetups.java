@@ -18,9 +18,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * The three one-tap choices at the top of the settings: Quiet, Privacy and Back to defaults.
@@ -52,17 +54,29 @@ public final class QuickSetups {
 
     /** What a choice changed, for the restart row, the banner and Undo. */
     public static final class Result {
+        /**
+         * Every setting the choice changed, with the value it had before. A budget setting whose
+         * change waits for the next day is in here too, still holding that value.
+         */
         public final Map<Setting<?>, Object> previousValues;
         public final int changedCount;
         public final int restartChangedCount;
         /** Whether Undo goes through the Calm feed preset's own restore. */
         final boolean calmFeedSnapshot;
+        /** The settings in {@link #previousValues} whose change waits for the next day. */
+        final Set<Setting<?>> waiting;
 
         Result(Map<Setting<?>, Object> previousValues, boolean calmFeedSnapshot) {
+            this(previousValues, Collections.emptySet(), calmFeedSnapshot);
+        }
+
+        Result(Map<Setting<?>, Object> previousValues, Set<Setting<?>> waiting, boolean calmFeedSnapshot) {
+            this.waiting = Collections.unmodifiableSet(new LinkedHashSet<>(waiting));
             this.previousValues = Collections.unmodifiableMap(new LinkedHashMap<>(previousValues));
             int restart = 0;
             for (Setting<?> setting : previousValues.keySet()) {
-                if (setting.rebootApp) restart++;
+                // A waiting change takes hold when the day starts over, not at a restart now.
+                if (setting.rebootApp && !this.waiting.contains(setting)) restart++;
             }
             this.changedCount = previousValues.size();
             this.restartChangedCount = restart;
@@ -118,7 +132,7 @@ public final class QuickSetups {
             CalmFeedPreset.Result calm = CalmFeedPreset.apply(context);
             return new Result(changedSince(calm.previousValues), true);
         }
-        return new Result(save(changes, false), false);
+        return save(changes, false);
     }
 
     /** Puts back what {@code result} changed. */
@@ -126,23 +140,40 @@ public final class QuickSetups {
         if (result.calmFeedSnapshot && CalmFeedPreset.hasSnapshot(context)) {
             return new Result(changedSince(CalmFeedPreset.restore(context).previousValues), false);
         }
-        return new Result(save(differing(result.previousValues), true), false);
+        Map<Setting<?>, Object> changes = differing(result.previousValues);
+        // A change still waiting for the next day is taken back by writing the value the setting
+        // holds anyway: the budget reads that as a fresh choice and drops what was waiting.
+        for (Setting<?> setting : result.waiting) changes.put(setting, result.previousValues.get(setting));
+        Result undone = save(changes, true);
+        if (result.waiting.isEmpty()) return undone;
+        // Those rows show the change that was waiting, so they're redrawn with the rest.
+        Map<Setting<?>, Object> touched = new LinkedHashMap<>(undone.previousValues);
+        for (Setting<?> setting : result.waiting) {
+            if (!touched.containsKey(setting)) touched.put(setting, result.previousValues.get(setting));
+        }
+        return new Result(touched, false);
     }
 
     /**
      * Saves {@code changes} in one transaction, less what the budget keeps: a locked day holds its
-     * switches, and with Wait a day to loosen a looser one waits for the next day. Answers the
-     * values the written settings had before.
+     * switches, and with Wait a day to loosen a looser one waits for the next day. Answers what
+     * changed with the values it had before, the waiting changes included, so the banner counts
+     * them and Undo can take them back.
      */
-    private static Map<Setting<?>, Object> save(Map<Setting<?>, Object> changes, boolean deviceState)
-            throws IOException {
-        if (changes.isEmpty()) return Collections.emptyMap();
+    private static Result save(Map<Setting<?>, Object> changes, boolean deviceState) throws IOException {
+        if (changes.isEmpty()) return new Result(Collections.emptyMap(), false);
         try {
             BudgetChanges.Split split = BudgetChanges.forRestore(changes, SessionBudget.now());
             Map<Setting<?>, Object> before = new LinkedHashMap<>();
             for (Setting<?> setting : split.apply.keySet()) before.put(setting, setting.savedValue());
+            Map<Setting<?>, Object> waiting = new LinkedHashMap<>();
+            for (Setting<?> setting : changes.keySet()) {
+                if (split.waits(setting)) waiting.put(setting, setting.savedValue());
+            }
             Setting.saveAll(split.withWaiting(), deviceState);
-            return changedSince(before);
+            Map<Setting<?>, Object> changed = changedSince(before);
+            changed.putAll(waiting);
+            return new Result(changed, waiting.keySet(), false);
         } catch (IOException error) {
             throw error;
         } catch (Exception error) {
@@ -150,10 +181,12 @@ public final class QuickSetups {
         }
     }
 
+    /** The targets a setting doesn't hold yet, and isn't already waiting for the next day to take. */
     private static Map<Setting<?>, Object> differing(Map<Setting<?>, Object> targets) {
         Map<Setting<?>, Object> changes = new LinkedHashMap<>();
         for (Map.Entry<Setting<?>, Object> target : targets.entrySet()) {
-            if (!Objects.equals(target.getKey().savedValue(), target.getValue())) {
+            if (!Objects.equals(target.getKey().savedValue(), target.getValue())
+                    && !Objects.equals(BudgetChanges.waiting(target.getKey()), target.getValue())) {
                 changes.put(target.getKey(), target.getValue());
             }
         }
