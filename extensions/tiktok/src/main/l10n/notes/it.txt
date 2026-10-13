@@ -1,4 +1,4 @@
-## Unreleased
+## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).
 

@@ -1,4 +1,4 @@
-## Unreleased
+## 0.72.0 (2026-10-13)
 
 * **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).
 
