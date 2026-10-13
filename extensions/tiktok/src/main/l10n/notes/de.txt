@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** In der Einstellungssuche kannst du Schalter direkt in den Ergebnissen umlegen. Schalter, die mehr tun als ein- und ausschalten, öffnen weiter ihre Seite.
+
+* **TikTok:** Unter dem Suchfeld gibt es jetzt Schnelleinstellungen. Ruhig, Datenschutz und Standard wiederherstellen brauchen je einen Tipp, sagen, wie viele Einstellungen sich geändert haben, und bieten Rückgängig an.
+
+* **TikTok:** Die Hauptseite der Einstellungen endet mit Problem melden, das einen GitHub-Bericht mit deinen Versionen und Schaltern öffnet, und Hushfeed unterstützen, das Ko-fi öffnet.
+
+* **TikTok:** Ein Neustart von TikTok über die Neustart-Zeile oder das Banner bringt dich zurück auf die Hushfeed-Einstellungsseite, auf der du warst.
+
 * **TikTok:** Die Hushfeed-Einstellungen haben ein neues Aussehen, mit einer gruppierten Startseite und rosa Symbolen. Abgerundete Bereiche und ovale Schalter gibt es auch im Feature Gate Lab und im Editor für ausgeblendete Creator. Große Schrift und der helle Modus bleiben gut lesbar.
 
 * **TikTok:** Die Prüffälle für das Profilmenü und hohe Register sowie das Testprojekt für die Signierung funktionieren wieder. Die Signierungsprüfung akzeptiert D8-Optionen jetzt in beliebiger Reihenfolge.

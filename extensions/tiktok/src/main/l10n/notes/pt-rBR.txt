@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** A busca nas configurações deixa você ligar ou desligar uma chave direto nos resultados. Chaves que fazem mais do que ligar e desligar ainda abrem a página delas.
+
+* **TikTok:** As Configurações rápidas ficam abaixo do campo de busca. Tranquilo, Privacidade e Restaurar padrões levam um toque, dizem quantas configurações mudaram e oferecem Desfazer.
+
+* **TikTok:** A página principal das configurações termina com Relatar um problema, que abre um relatório no GitHub com suas versões e chaves já preenchidas, e Apoie o Hushfeed, que abre o Ko-fi.
+
+* **TikTok:** Reiniciar o TikTok pela linha de reinício ou pelo aviso traz você de volta à página de configurações do Hushfeed em que estava.
+
 * **TikTok:** As configurações do Hushfeed estão de cara nova, com os atalhos da página inicial no mesmo grupo e ícones rosa. Os painéis arredondados e os botões de ativação em formato de pílula também chegam ao Feature Gate Lab e ao editor de criadores ocultos. O texto grande e o modo claro continuam legíveis.
 
 * **TikTok:** Voltaram a funcionar a verificação de cobertura do menu do perfil, o caso de teste com registradores altos e o projeto de teste de assinatura. O teste de assinatura também aceita as opções do D8 em qualquer ordem.

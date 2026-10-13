@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Pencarian pengaturan kini memungkinkanmu menyalakan atau mematikan sakelar langsung di hasil. Sakelar yang melakukan lebih dari itu tetap membuka halamannya.
+
+* **TikTok:** Pengaturan cepat ada di bawah kolom pencarian. Tenang, Privasi, dan Kembalikan default cukup sekali ketuk, memberi tahu berapa pengaturan yang berubah, dan menawarkan Urungkan.
+
+* **TikTok:** Halaman utama pengaturan kini diakhiri Laporkan masalah, yang membuka laporan GitHub dengan versi dan sakelarmu sudah terisi, dan Dukung Hushfeed, yang membuka Ko-fi.
+
+* **TikTok:** Memulai ulang TikTok dari baris mulai ulang atau banner kini membawamu kembali ke halaman pengaturan Hushfeed tempatmu tadi.
+
 * **TikTok:** Pengaturan Hushfeed punya tampilan baru, dengan menu halaman utama dalam satu kelompok dan ikon merah muda. Panel membulat dan sakelar berbentuk pil juga hadir di Feature Gate Lab dan editor daftar kreator tersembunyi. Teks besar dan mode terang tetap mudah dibaca.
 
 * **TikTok:** Pemeriksaan cakupan menu profil, kasus uji register tinggi, dan proyek uji penandatanganan sudah diperbaiki. Uji penandatanganan juga menerima opsi D8 dalam urutan apa pun.

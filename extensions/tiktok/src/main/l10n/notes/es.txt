@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** La búsqueda de ajustes te deja activar o desactivar un interruptor directamente en los resultados. Los interruptores que hacen algo más siguen abriendo su página.
+
+* **TikTok:** Ajustes rápidos aparece bajo el campo de búsqueda. Tranquilo, Privacidad y Restablecer se aplican con un toque, dicen cuántos ajustes cambiaron y ofrecen Deshacer.
+
+* **TikTok:** La página principal de ajustes termina con Informar de un problema, que abre un informe en GitHub con tus versiones e interruptores ya rellenados, y Apoya Hushfeed, que abre Ko-fi.
+
+* **TikTok:** Reiniciar TikTok desde la fila de reinicio o el aviso te devuelve a la página de ajustes de Hushfeed en la que estabas.
+
 * **TikTok:** Los ajustes de Hushfeed tienen un nuevo aspecto, con una página de inicio agrupada e iconos rosas. Los paneles redondeados y los interruptores ovalados también llegan a Feature Gate Lab y al editor de creadores ocultos. El texto grande y el modo claro siguen siendo legibles.
 
 * **TikTok:** Vuelven a funcionar la comprobación de cobertura del menú del perfil, el caso de prueba con registros altos y el proyecto de prueba de firma. La prueba de firma también acepta las opciones de D8 en cualquier orden.

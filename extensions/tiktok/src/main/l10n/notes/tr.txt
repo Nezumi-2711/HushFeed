@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Ayar aramasında bir anahtarı doğrudan sonuçlarda açıp kapatabilirsin. Açıp kapatmaktan fazlasını yapan anahtarlar yine kendi sayfasını açar.
+
+* **TikTok:** Arama alanının altında Hızlı kurulumlar var. Sakin, Gizlilik ve Varsayılana dön tek dokunuşla uygulanır, kaç ayarın değiştiğini söyler ve Geri al sunar.
+
+* **TikTok:** Ana ayarlar sayfası artık Sorun bildir ve Hushfeed'i destekle satırlarıyla bitiyor. İlki sürümlerin ve anahtarların doldurulmuş bir GitHub raporu açar, ikincisi Ko-fi'yi açar.
+
+* **TikTok:** TikTok'u yeniden başlatma satırından ya da bildirimden yeniden başlatmak seni bulunduğun Hushfeed ayarlar sayfasına geri getirir.
+
 * **TikTok:** Hushfeed ayarları yenilendi. Ana sayfadaki bağlantılar tek grupta toplandı ve pembe simgeler eklendi. Yuvarlatılmış paneller ve oval anahtarlar Feature Gate Lab ile gizlenen içerik üreticilerini düzenleme ekranında da var. Büyük yazı ve açık tema okunaklı kalıyor.
 
 * **TikTok:** Profil menüsü kapsam kontrolü, yüksek numaralı yazmaçlarla çalışan test ve imzalama test projesi düzeltildi. İmzalama testi artık D8 seçeneklerini herhangi bir sırayla kabul ediyor.

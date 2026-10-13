@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Settings search lets you flip a switch right in the results. Switches that do more than turn on or off still open their page.
+
+* **TikTok:** Quick setups sits under the search field. Quiet, Privacy and Back to defaults each take one tap, say how many settings changed and offer Undo.
+
+* **TikTok:** The main settings page ends with Report a problem, which opens a GitHub report with your versions and switches filled in, and Support Hushfeed, which opens Ko-fi.
+
+* **TikTok:** Restarting TikTok from the Restart row or the banner brings you back to the Hushfeed settings page you were on.
+
 * **TikTok:** Hushfeed settings has a new look, with a grouped home page and pink icons. Rounded panels and pill switches carry through to Feature Gate Lab and the creator editor. Large text and light mode stay readable.
 
 * **TikTok:** Restored the profile-menu coverage check, the high-register hook fixture and the signing test project. The signing fixture also accepts D8 options in any order.

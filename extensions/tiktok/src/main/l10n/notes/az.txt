@@ -1,5 +1,13 @@
 ## Unreleased
 
+* **TikTok:** Ayar axtarışında açarı birbaşa nəticələrdə yandırıb söndürə bilərsiniz. Daha çox iş görən açarlar yenə öz səhifəsini açır.
+
+* **TikTok:** Axtarış sahəsinin altında Sürətli quruluşlar var. Sakit, Məxfilik və Defolta qaytarın bir toxunuşla tətbiq olunur, neçə ayarın dəyişdiyini bildirir və geri qaytarmağı təklif edir.
+
+* **TikTok:** Əsas ayarlar səhifəsi indi Problem barədə bildirin və Hushfeed-i dəstəkləyin sətirləri ilə bitir. Birincisi versiyalarınız və açarlarınız doldurulmuş GitHub hesabatını, ikincisi Ko-fi-ni açır.
+
+* **TikTok:** TikTok-u yenidən başlatma sətrindən və ya bannerdən yenidən başlatmaq sizi olduğunuz Hushfeed ayarlar səhifəsinə qaytarır.
+
 * **TikTok:** Hushfeed ayarlarının görünüşü yeniləndi. Ana səhifədəki keçidlər bir qrupda toplandı və çəhrayı ikonlar əlavə olundu. Küncləri yuvarlaq panellər və oval açarlar Feature Gate Lab və gizlədilmiş yaradıcıların siyahısında da var. Böyük mətn və işıqlı tema oxunaqlı qalır.
 
 * **TikTok:** Profil menyusunun əhatə yoxlaması, yüksək nömrəli registrlərlə sınaq və imzalama sınaq layihəsi düzəldildi. İmzalama sınağı D8 seçimlərini istənilən ardıcıllıqla qəbul edir.
