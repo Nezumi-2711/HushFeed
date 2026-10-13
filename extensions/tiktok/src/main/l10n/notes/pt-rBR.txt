@@ -146,6 +146,8 @@
 
 * **TikTok:** "Esquecer os vídeos salvos" e "Adicionar apps ao Compartilhar via" não travam mais quando o TikTok está ocupado. Eles avisam, e você pode tentar de novo.
 
+* **TikTok:** O verificador de patches se recusa a esvaziar uma pasta que ele não criou, então uma pasta de retenção digitada errado não apaga mais seus arquivos.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar a LIVE sob a barra de status agora preenche o topo de todas as salas, sem faixas pretas ou claras (#137).

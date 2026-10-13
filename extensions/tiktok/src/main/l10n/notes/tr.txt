@@ -146,6 +146,8 @@
 
 * **TikTok:** "Kaydedilen videoları unut" ve "Şununla paylaş'a uygulama ekle" artık TikTok meşgulken takılı kalmıyor. Haber veriyorlar, tekrar deneyebilirsin.
 
+* **TikTok:** Yama denetleyicisi kendi oluşturmadığı bir klasörü boşaltmayı reddediyor, böylece yanlış yazılmış bir saklama klasörü dosyalarını silemez.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).

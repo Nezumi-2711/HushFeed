@@ -150,6 +150,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Forget saved videos, its Undo and Add apps to Share via no longer get stuck when TikTok's background queue is full. The row stayed greyed out, or the app list kept saying Looking for apps, until TikTok restarted. Now they tell you and you can try again. The app list also says when it couldn't look, instead of saying no app takes shared text.
 
+* **Development:** verify-all-patches.ps1 checks the -KeepIn folder before it empties it. A mistyped path used to be deleted whole, whatever it named. Now it refuses a drive root, your profile, the repository, any folder that holds an input, a path through a junction, and a folder with files an earlier run didn't leave there.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).

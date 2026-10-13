@@ -146,6 +146,8 @@
 
 * **TikTok:** „Gespeicherte Videos vergessen“ und „Apps zu Teilen über hinzufügen“ bleiben nicht mehr hängen, wenn TikTok viel zu tun hat. Sie sagen Bescheid, und du kannst es noch einmal versuchen.
 
+* **TikTok:** Die Patch-Prüfung leert keinen Ordner mehr, den sie nicht selbst angelegt hat. Ein vertippter Aufbewahrungsordner kann so keine Dateien löschen.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).

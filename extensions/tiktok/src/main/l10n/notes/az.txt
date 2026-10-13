@@ -146,6 +146,8 @@
 
 * **TikTok:** "Saxlanılmış videoları unudun" və "Share via bölməsinə tətbiqlər əlavə edin" artıq TikTok məşğul olanda ilişib qalmır. Sizə bildirirlər və yenidən cəhd edə bilərsiniz.
 
+* **TikTok:** Yamaq yoxlayıcısı özünün yaratmadığı qovluğu boşaltmaqdan imtina edir, belə ki, səhv yazılmış saxlama qovluğu fayllarınızı silə bilməz.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

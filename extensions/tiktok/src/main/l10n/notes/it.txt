@@ -146,6 +146,8 @@
 
 * **TikTok:** "Dimentica i video salvati" e "Aggiungi app a Condividi con" non si bloccano più quando TikTok è occupato. Te lo dicono e puoi riprovare.
 
+* **TikTok:** Il controllo delle patch si rifiuta di svuotare una cartella che non ha creato, così una cartella di conservazione scritta male non può cancellare i tuoi file.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).

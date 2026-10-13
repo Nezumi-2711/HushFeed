@@ -146,6 +146,8 @@
 
 * **TikTok:** «Olvidar los vídeos guardados» y «Añadir apps a Compartir con» ya no se quedan atascados cuando TikTok está ocupado. Te avisan y puedes volver a intentarlo.
 
+* **TikTok:** El comprobador de parches se niega a vaciar una carpeta que no creó, así que una carpeta de conservación mal escrita ya no puede borrar tus archivos.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar el LIVE bajo la barra de estado ahora llena el borde superior en todas las salas, sin franjas negras ni claras (#137).

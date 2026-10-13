@@ -146,6 +146,8 @@
 
 * **TikTok:** "Lupakan video tersimpan" dan "Tambahkan aplikasi ke Bagikan via" tidak lagi macet saat TikTok sedang sibuk. Keduanya memberi tahu, dan kamu bisa mencoba lagi.
 
+* **TikTok:** Pemeriksa patch menolak mengosongkan folder yang tidak dibuatnya, jadi salah ketik nama folder simpanan tidak bisa menghapus berkasmu.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).
