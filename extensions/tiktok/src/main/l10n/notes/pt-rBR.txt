@@ -4,8 +4,6 @@
 
 * **TikTok:** Adicionada uma nota de configuração do emulador do Android 17 para ferramentas do SDK que leem errado as versões menores da API.
 
-* **TikTok:** Traduzir rascunho continua disponível enquanto o teclado compõe uma palavra ou verifica a ortografia. Um pedido de tradução que perde a conta conectada agora termina na hora, em vez de esperar o tempo limite.
-
 * **TikTok:** Todas as páginas de configurações agora ficam na página principal de configurações, sob um título curto, a um toque. Pausar o Hushfeed e o status completo ficam perto do fim, sob Hushfeed.
 
 * **TikTok:** Um novo botão em Pop-ups, Ocultar avisos de Verifique suas fontes, tira o banner Verifique suas fontes do topo de alguns vídeos e o aviso que o TikTok mostra quando você compartilha um.

@@ -4,8 +4,6 @@
 
 * **TikTok:** API-nin kiçik versiyalarını səhv oxuyan SDK alətləri üçün Android 17 emulyatorunun quraşdırılması haqqında qeyd əlavə edildi.
 
-* **TikTok:** Qaralamanı tərcümə et klaviatura sözü yığarkən və ya orfoqrafiyanı yoxlayarkən də əlçatan qalır. Daxil olunmuş hesaba çıxışını itirən tərcümə sorğusu artıq vaxt limitini gözləmədən dərhal bitir.
-
 * **TikTok:** Hər ayar səhifəsi indi əsas ayarlar səhifəsində qısa başlıq altındadır, bir toxunuş uzaqlığında. Hushfeed-i durdurun və ətraflı status sona yaxın, Hushfeed başlığı altındadır.
 
 * **TikTok:** Pop-uplar altındakı yeni Mənbələrini yoxla xəbərdarlıqlarını gizlət açarı bəzi videoların üst hissəsindəki Mənbələrini yoxla bannerini və belə videonu paylaşanda TikTok-un göstərdiyi xəbərdarlığı götürür.

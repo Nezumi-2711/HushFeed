@@ -4,8 +4,6 @@
 
 * **TikTok:** API alt sürümlerini yanlış okuyan SDK araçları için Android 17 emülatör kurulum notu eklendi.
 
-* **TikTok:** Taslağı çevir, klavye bir sözcüğü oluştururken veya yazımı denetlerken de kullanılabilir kalır. Oturum açılmış hesaba erişimini kaybeden bir çeviri isteği artık zaman aşımını beklemeden hemen sona erer.
-
 * **TikTok:** Her ayar sayfası artık ana ayarlar sayfasında kısa bir başlığın altında, tek dokunuş uzakta. Hushfeed'i duraklat ve ayrıntılı durum, sona yakın Hushfeed başlığının altında.
 
 * **TikTok:** Açılır pencereler altındaki yeni Kaynaklarını kontrol et uyarılarını gizle anahtarı, bazı videoların üst kısmındaki Kaynaklarını kontrol et bandını ve böyle bir videoyu paylaşırken TikTok'un gösterdiği uyarıyı kaldırır.

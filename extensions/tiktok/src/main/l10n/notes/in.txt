@@ -4,8 +4,6 @@
 
 * **TikTok:** Menambahkan catatan penyiapan emulator Android 17 untuk alat SDK yang salah membaca versi minor API.
 
-* **TikTok:** Terjemahkan draf tetap tersedia saat keyboard sedang menyusun kata atau memeriksa ejaan. Permintaan terjemahan yang kehilangan akun yang sedang masuk kini langsung berakhir, tidak lagi menunggu batas waktunya.
-
 * **TikTok:** Setiap halaman pengaturan kini ada langsung di halaman utama pengaturan, di bawah judul singkat, cukup satu ketukan. Jeda Hushfeed dan status lengkap ada di dekat akhir, di bawah Hushfeed.
 
 * **TikTok:** Sakelar baru di Pop-up, Sembunyikan peringatan Periksa sumbermu, menghapus spanduk Periksa sumbermu di bagian atas beberapa video dan peringatan yang ditampilkan TikTok saat kamu membagikannya.

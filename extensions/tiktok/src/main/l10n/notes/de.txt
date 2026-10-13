@@ -4,8 +4,6 @@
 
 * **TikTok:** Hinweis zur Einrichtung des Android-17-Emulators ergänzt, für SDK-Tools, die API-Unterversionen falsch lesen.
 
-* **TikTok:** Entwurf übersetzen bleibt verfügbar, während die Tastatur ein Wort zusammensetzt oder die Rechtschreibung prüft. Eine Übersetzungsanfrage, die das angemeldete Konto verliert, endet jetzt sofort, statt auf ihr Zeitlimit zu warten.
-
 * **TikTok:** Jede Einstellungsseite steht jetzt direkt auf der Hauptseite der Einstellungen unter einer kurzen Überschrift, nur einen Tipp entfernt. Hushfeed pausieren und der ausführliche Status stehen weiter unten unter Hushfeed.
 
 * **TikTok:** Ein neuer Schalter unter Pop-ups, Warnungen „Prüfe deine Quellen“ ausblenden, entfernt das Banner „Prüfe deine Quellen“ oben über manchen Videos und den Hinweis, den TikTok beim Teilen eines solchen Videos zeigt.
