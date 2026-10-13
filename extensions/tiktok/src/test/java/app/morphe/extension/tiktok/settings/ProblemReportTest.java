@@ -93,6 +93,47 @@ public class ProblemReportTest {
         assertTrue("the link's cut doesn't say how many it left out", context.matches("(?s).*\n- and \\d+ more"));
     }
 
+    /**
+     * A list that fits the link whole goes in whole, however close to the limit it is, also when
+     * its last titles have no spaces and so encode shorter than the "- and 1 more" a cut would
+     * put in their place. The cut is searched for by length, and a cut that came out longer than
+     * the whole list could stop that search short of it.
+     */
+    @Test public void aListThatJustFitsTheLinkGoesInWhole() throws Exception {
+        String empty = ProblemReport.url(facts(new ArrayList<>()));
+        String start = empty.substring(0, empty.indexOf("&additional_context=") + "&additional_context=".length());
+        int tried = 0;
+        for (int longOnes = 100; longOnes <= 160; longOnes++) {
+            for (int pad = 0; pad < 10; pad++) {
+                List<String> titles = new ArrayList<>();
+                // A first title of a different length moves where the whole list ends.
+                titles.add("Hide" + "x".repeat(pad));
+                for (int index = 1; index <= longOnes; index++) titles.add("Hide TikTok's thing number " + index);
+                // Short titles until one more would pass the limit, so the whole list fits by
+                // less than one short line.
+                for (int index = 1; wholeLinkLength(start, titles) <= ProblemReport.LINK_LIMIT; index++) {
+                    titles.add("Mute" + index);
+                }
+                titles.remove(titles.size() - 1);
+                if (wholeLinkLength(start, titles) > ProblemReport.LINK_LIMIT) continue;
+                if (ProblemReport.body(facts(titles)).contains(" more\n")) continue;
+                tried++;
+
+                String url = ProblemReport.url(facts(titles));
+                String context = URLDecoder.decode(url.substring(url.indexOf("&additional_context=")
+                        + "&additional_context=".length()), "UTF-8");
+                assertEquals("with " + longOnes + " long titles and pad " + pad + " the list that fits was cut",
+                        ProblemReport.switches(facts(titles), Integer.MAX_VALUE), context);
+            }
+        }
+        assertTrue("only " + tried + " lists fit the link, so this proves little", tried >= 100);
+    }
+
+    private static int wholeLinkLength(String start, List<String> titles) {
+        return ProblemReport.signInLength(start + ProblemReport.encode(
+                ProblemReport.switches(facts(titles), Integer.MAX_VALUE)));
+    }
+
     /** The S22's 24 switches, 2026-10-13: a short list goes into the link whole. */
     @Test public void aShortListGoesIntoTheLinkWhole() throws Exception {
         List<String> titles = new ArrayList<>();
