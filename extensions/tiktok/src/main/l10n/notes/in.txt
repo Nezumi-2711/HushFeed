@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Setiap halaman pengaturan kini ada langsung di halaman utama pengaturan, di bawah judul singkat, cukup satu ketukan. Jeda Hushfeed dan status lengkap ada di dekat akhir, di bawah Hushfeed.
+
 * **TikTok:** Sakelar baru di Pop-up, Sembunyikan peringatan Periksa sumbermu, menghapus spanduk Periksa sumbermu di bagian atas beberapa video dan peringatan yang ditampilkan TikTok saat kamu membagikannya.
 
 * **TikTok:** Pencarian pengaturan kini memungkinkanmu menyalakan atau mematikan sakelar langsung di hasil. Sakelar yang melakukan lebih dari itu tetap membuka halamannya.

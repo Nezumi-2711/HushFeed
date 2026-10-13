@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Every settings page now sits on the main settings page under a short heading, one tap away. Pause Hushfeed and the full status are near the end, under Hushfeed.
+
 * **TikTok:** A new switch under Popups, Hide Check your sources warnings, takes away the Check your sources banner across the top of some videos and the prompt TikTok shows when you share one.
 
 * **TikTok:** Settings search lets you flip a switch right in the results. Switches that do more than turn on or off still open their page.

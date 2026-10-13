@@ -44,8 +44,6 @@ public final class SettingsMenuPreference extends Preference {
         DIAGNOSTICS,
         BACKUP,
         NEWS,
-        FEED,
-        APP,
         ABOUT,
         REPORT,
         SUPPORT
@@ -543,18 +541,6 @@ public final class SettingsMenuPreference extends Preference {
                     canvas.drawLine(cx, top, cx - bounds.width() * 0.1f, top + bounds.height() * 0.1f, line);
                     canvas.drawLine(cx, top, cx + bounds.width() * 0.1f, top + bounds.height() * 0.1f, line);
                     break;
-                case FEED:
-                    float knobRadius = bounds.width() * 0.05f;
-                    float[] knobX = {left + bounds.width() * 0.1f,
-                            right - bounds.width() * 0.1f, left + bounds.width() * 0.16f};
-                    float[] knobY = {top + bounds.height() * 0.05f, cy,
-                            bottom - bounds.height() * 0.05f};
-                    for (int index = 0; index < knobX.length; index++) {
-                        canvas.drawLine(left, knobY[index], knobX[index] - knobRadius, knobY[index], line);
-                        canvas.drawLine(knobX[index] + knobRadius, knobY[index], right, knobY[index], line);
-                        canvas.drawCircle(knobX[index], knobY[index], knobRadius, line);
-                    }
-                    break;
                 case BEHAVIOR:
                     canvas.drawLine(left, top + bounds.height() * 0.05f, right, top + bounds.height() * 0.05f, line);
                     canvas.drawLine(left, cy, right, cy, line);
@@ -568,19 +554,6 @@ public final class SettingsMenuPreference extends Preference {
                     canvas.drawLine(cx, cy - bounds.height() * 0.02f,
                             cx, cy + bounds.height() * 0.12f, line);
                     canvas.drawPoint(cx, cy - bounds.height() * 0.11f, line);
-                    break;
-                case APP:
-                    path.reset();
-                    for (int point = 0; point < 32; point++) {
-                        double angle = Math.PI * 2 * point / 32;
-                        float distance = bounds.width() * (point % 4 == 0 || point % 4 == 3 ? 0.24f : 0.19f);
-                        float x = cx + (float) Math.cos(angle) * distance;
-                        float y = cy + (float) Math.sin(angle) * distance;
-                        if (point == 0) path.moveTo(x, y); else path.lineTo(x, y);
-                    }
-                    path.close();
-                    canvas.drawPath(path, line);
-                    canvas.drawCircle(cx, cy, bounds.width() * 0.075f, line);
                     break;
                 case LAB:
                     path.reset();

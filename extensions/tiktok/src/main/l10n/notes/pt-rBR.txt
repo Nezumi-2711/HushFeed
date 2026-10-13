@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Todas as páginas de configurações agora ficam na página principal de configurações, sob um título curto, a um toque. Pausar o Hushfeed e o status completo ficam perto do fim, sob Hushfeed.
+
 * **TikTok:** Um novo botão em Pop-ups, Ocultar avisos de Verifique suas fontes, tira o banner Verifique suas fontes do topo de alguns vídeos e o aviso que o TikTok mostra quando você compartilha um.
 
 * **TikTok:** A busca nas configurações deixa você ligar ou desligar uma chave direto nos resultados. Chaves que fazem mais do que ligar e desligar ainda abrem a página delas.

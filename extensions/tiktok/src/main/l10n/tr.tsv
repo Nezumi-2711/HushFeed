@@ -1936,21 +1936,11 @@ TikTok removes videos saved for offline viewing after a set time, sometimes only
 Hide Thoughts on profiles	Profillerde Thoughts'u gizle
 Hide the Thoughts bubble TikTok shows above a profile picture, and the prompt to share one on your own profile. Restart TikTok to apply this.	TikTok'un bir profil fotoğrafının üstünde gösterdiği Thoughts balonunu ve kendi profilinde bir tane paylaşma önerisini gizle. Bunu uygulamak için TikTok'u yeniden başlat.
 
-# context: Quiet Index settings categories and compact runtime status.
-Feed & layout	Akış ve düzen
-Filters, tabs and on-screen controls	Filtreler, sekmeler ve ekran kontrolleri
-Comments & inbox	Yorumlar ve gelen kutusu
-Filters, translation and inbox controls	Filtreler, çeviri ve gelen kutusu kontrolleri
-Downloads & sharing	İndirmeler ve paylaşım
-Files, subtitles and share sheet	Dosyalar, altyazılar ve paylaşım menüsü
-App & advanced	Uygulama ve gelişmiş ayarlar
-Region, backups and diagnostics	Bölge, yedekler ve tanılama
 About Hushfeed	Hushfeed hakkında
 Version, changes and licenses	Sürüm, değişiklikler ve lisanslar
 Active	Etkin
 Paused	Duraklatıldı
 Budgets and reminders	Sınırlar ve hatırlatmalar
-%1$s, %2$s	%1$s, %2$s
 Don't auto translate these languages	Bu dilleri otomatik çevirme
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Dil kodlarını virgülle ayır, örneğin es, de. TikTok senin için çevirdiğinde bu dillerdeki açıklamalar ve yorumlar yazıldığı gibi kalır. Çeviriyi gör'e dokunduğunda yine çalışır. TikTok'un kendi Çevirme listesi olduğu gibi kalır.
 Performance	Performans
@@ -2067,11 +2057,7 @@ The quality choice is still open	Kalite seçimi hâlâ açık
 Unknown resolution	Bilinmeyen çözünürlük
 Make it yours.	Kendine göre ayarla.
 Your feed. Your rules.	Senin akışın. Senin kuralların.
-Your experience	Deneyimin
-Shape your feed	Akışını düzenle
 Conversations	Sohbetler
-Save and send	Kaydet ve gönder
-App controls	Uygulama kontrolleri
 About	Hakkında
 Your settings	Ayarların
 Report a problem	Sorun bildir
@@ -2089,3 +2075,11 @@ Your settings already match	Ayarların zaten böyle
 That setup couldn't be applied. Nothing was changed.	Bu kurulum uygulanamadı. Hiçbir şey değişmedi.
 Quick setups couldn't start. Try again in a moment.	Hızlı kurulumlar başlatılamadı. Birazdan tekrar dene.
 Your earlier settings are back	Önceki ayarların geri geldi
+# context: a heading on the settings home page, over Feed filter, Feed tabs, Feed screen, Playback and Screen time
+Your feed	Akışın
+# context: a heading on the settings home page, over Downloads and Share sheet
+Saving and sharing	Kaydetme ve paylaşım
+# context: a heading on the settings home page, over Privacy, App, Region, Backup and restore and Feature Gate Lab
+Privacy and app	Gizlilik ve uygulama
+# context: a heading on the settings home page, over Hushfeed's status, Pause, Diagnostics, About, Report a problem and Support; the app's name, usually kept as is
+Hushfeed	Hushfeed

@@ -90,4 +90,16 @@ public class SettingsReturnTest {
         assertNull("a page this build doesn't have opened something",
                 TikTokPreferenceFragment.forPage("section:NO_SUCH_PAGE"));
     }
+
+    /**
+     * A marker written by the build before the home page listed every page names one of the four
+     * groups that sat in between. Those are gone, so the start opens the home page, where every
+     * page they held is now a row.
+     */
+    @Test public void aMarkerNamingARemovedGroupOpensTheHomePage() {
+        for (String group : new String[]{"hub:FEED_LAYOUT", "hub:COMMENTS_INBOX",
+                "hub:DOWNLOADS_SHARING", "hub:APP_ADVANCED"}) {
+            assertNull(group + " opened a page over the home page", TikTokPreferenceFragment.forPage(group));
+        }
+    }
 }

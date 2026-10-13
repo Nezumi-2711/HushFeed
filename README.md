@@ -65,21 +65,19 @@ The patches that take files out of TikTok do it while patching, so Pause and a s
 
 Besides the row at the top of TikTok's **Settings and privacy**, two shortcuts skip Profile and work while you're signed out: press and hold **For You** at the top of the feed, or long-press **Home** on the bottom bar. A quick tap on either still does what it always did. The Home shortcut needs **Feed tab navigation** selected along with **Settings** when you patch, and it's the one to use if you've hidden the tab names at the top of the feed.
 
-The home page has a search box, which finds any row by its title or description and flips a plain switch right in the results. Under it, Quick setups turns on Quiet or Privacy, or puts every switch back to its default, in one tap with Undo. Then come seven groups:
+The home page has a search box, which finds any row by its title or description and flips a plain switch right in the results. Under it, Quick setups turns on Quiet or Privacy, or puts every switch back to its default, in one tap with Undo. Every settings page sits right on the home page under a small heading, so nothing is more than one tap away:
 
-| Group | Pages and controls |
+| Heading | Pages |
 | --- | --- |
-| Feed & layout | Feed filter, Feed tabs and Feed screen |
-| Playback | Speed, quality and playback behavior |
-| Privacy | Tracking, device access and links |
-| Comments & inbox | Comments and Inbox |
-| Downloads & sharing | Downloads and Share sheet |
-| Screen time | Daily budgets, reminders and the hold |
-| App & advanced | App, Region, Backup and restore, Diagnostics, Feature Gate Lab and Pause Hushfeed |
+| Your feed | Feed filter, Feed tabs, Feed screen, Playback and Screen time |
+| Conversations | Comments and Inbox |
+| Saving and sharing | Downloads and Share sheet |
+| Privacy and app | Privacy, App, Region, Backup and restore, and Feature Gate Lab when it's installed |
+| Hushfeed | Status, Pause Hushfeed, Diagnostics, About Hushfeed, Report a problem and Support Hushfeed |
 
-About Hushfeed has the build details and the license notices. Below it, **Report a problem** opens a GitHub bug report with your versions and the switches you have on filled in, and **Support Hushfeed** opens Ko-fi. A few pages you'll want to know about:
+The status chip next to the Hushfeed title scrolls down to the full status card. About Hushfeed has the build details and the license notices. **Report a problem** opens a GitHub bug report with your versions and the switches you have on filled in, and **Support Hushfeed** opens Ko-fi. A few pages you'll want to know about:
 
-- **Pause Hushfeed**, under App & advanced, turns the runtime features off from the next start and keeps every choice you made. [Is it Hushfeed?](#is-it-hushfeed-pause-it-and-see) lists what it can't reach.
+- **Pause Hushfeed**, under the Hushfeed heading, turns the runtime features off from the next start and keeps every choice you made. [Is it Hushfeed?](#is-it-hushfeed-pause-it-and-see) lists what it can't reach.
 - **Backup and restore** saves your settings and Feature Gate Lab rules to a JSON file. A backup from an older Hushfeed restores what it has and leaves the rest as you set it. Restore and reset keep one undo copy inside TikTok, but clearing TikTok's data takes that copy too, so back up to a file first.
 - **Import watch history**, under Feed filter > Seen videos, reads the JSON file from [your TikTok data download](https://support.tiktok.com/en/account-and-privacy/personalized-ads-and-data/requesting-your-data) so Hide already seen videos knows what you've watched. The file's dates don't name a time zone, so they're read in your phone's zone when you pick the file. It takes up to 2 MB and 10,000 entries.
 - **Diagnostics** exports a report you can attach to a bug, and the report stays on your phone until you share it. Its **Hook status** row says whether the hooks found what they need in your TikTok build. It hears from comments, comment translation, the inbox, the share sheet, the feed overlay, the bottom navigation and the story viewer, feed models, playback quality, sensitive warnings, CAPTCHA account state, the external browser, sticker saves and story saves. A switch can read on while its hook found nothing, and this row is how you'd know.
@@ -293,7 +291,7 @@ Select Morphe's Clone app patch, with its Update permissions and Update provider
 
 ### Is it Hushfeed? Pause it and see
 
-**Hushfeed settings > App & advanced > Pause Hushfeed** turns off the runtime features from the next start. Your settings stay as they were, and turning Pause off brings them back after a restart. A diagnostic export made while paused says so at the top. If a problem stays while paused, compare with an official TikTok build before you blame any patch.
+**Hushfeed settings > Pause Hushfeed** (under the Hushfeed heading) turns off the runtime features from the next start. Your settings stay as they were, and turning Pause off brings them back after a restart. A diagnostic export made while paused says so at the top. If a problem stays while paused, compare with an official TikTok build before you blame any patch.
 
 Pausing turns off the screen-time budget as well, so with Wait a day to loosen the budget on, Pause is refused until the day starts over. App lock stays on, so pausing can't be used to get past it.
 

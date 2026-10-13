@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Hər ayar səhifəsi indi əsas ayarlar səhifəsində qısa başlıq altındadır, bir toxunuş uzaqlığında. Hushfeed-i durdurun və ətraflı status sona yaxın, Hushfeed başlığı altındadır.
+
 * **TikTok:** Pop-uplar altındakı yeni Mənbələrini yoxla xəbərdarlıqlarını gizlət açarı bəzi videoların üst hissəsindəki Mənbələrini yoxla bannerini və belə videonu paylaşanda TikTok-un göstərdiyi xəbərdarlığı götürür.
 
 * **TikTok:** Ayar axtarışında açarı birbaşa nəticələrdə yandırıb söndürə bilərsiniz. Daha çox iş görən açarlar yenə öz səhifəsini açır.

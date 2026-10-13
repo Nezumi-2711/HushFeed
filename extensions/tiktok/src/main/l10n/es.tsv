@@ -1936,21 +1936,11 @@ TikTok removes videos saved for offline viewing after a set time, sometimes only
 Hide Thoughts on profiles	Ocultar Thoughts en los perfiles
 Hide the Thoughts bubble TikTok shows above a profile picture, and the prompt to share one on your own profile. Restart TikTok to apply this.	Oculta la burbuja de Thoughts que TikTok muestra sobre la foto de un perfil y, en tu propio perfil, la invitación a compartir uno. Reinicia TikTok para que se aplique.
 
-# context: Quiet Index settings categories and compact runtime status.
-Feed & layout	Feed y diseño
-Filters, tabs and on-screen controls	Filtros, pestañas y controles en pantalla
-Comments & inbox	Comentarios y bandeja de entrada
-Filters, translation and inbox controls	Filtros, traducción y controles de la bandeja
-Downloads & sharing	Descargas y compartir
-Files, subtitles and share sheet	Archivos, subtítulos y menú para compartir
-App & advanced	App y opciones avanzadas
-Region, backups and diagnostics	Región, copias de seguridad y diagnóstico
 About Hushfeed	Acerca de Hushfeed
 Version, changes and licenses	Versión, cambios y licencias
 Active	Activo
 Paused	En pausa
 Budgets and reminders	Límites y recordatorios
-%1$s, %2$s	%1$s, %2$s
 Don't auto translate these languages	No traducir automáticamente estos idiomas
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Separa los códigos de idioma con comas, como es, de. Cuando TikTok traduce por ti, las descripciones y los comentarios en estos idiomas se quedan como se escribieron. Ver traducción sigue funcionando cuando lo tocas. La lista propia de TikTok de idiomas que no se traducen se queda como está.
 Performance	Rendimiento
@@ -2067,11 +2057,7 @@ The quality choice is still open	La elección de calidad sigue abierta
 Unknown resolution	Resolución desconocida
 Make it yours.	Hazlo tuyo.
 Your feed. Your rules.	Tu feed. Tus reglas.
-Your experience	Tu experiencia
-Shape your feed	Personaliza tu feed
 Conversations	Conversaciones
-Save and send	Guardar y enviar
-App controls	Controles de la app
 About	Acerca de
 Your settings	Tus ajustes
 Report a problem	Informar de un problema
@@ -2089,3 +2075,11 @@ Your settings already match	Tus ajustes ya coinciden
 That setup couldn't be applied. Nothing was changed.	No se pudo aplicar esa configuración. No se cambió nada.
 Quick setups couldn't start. Try again in a moment.	Los ajustes rápidos no pudieron iniciarse. Vuelve a intentarlo en un momento.
 Your earlier settings are back	Tus ajustes anteriores han vuelto
+# context: a heading on the settings home page, over Feed filter, Feed tabs, Feed screen, Playback and Screen time
+Your feed	Tu feed
+# context: a heading on the settings home page, over Downloads and Share sheet
+Saving and sharing	Guardar y compartir
+# context: a heading on the settings home page, over Privacy, App, Region, Backup and restore and Feature Gate Lab
+Privacy and app	Privacidad y aplicación
+# context: a heading on the settings home page, over Hushfeed's status, Pause, Diagnostics, About, Report a problem and Support; the app's name, usually kept as is
+Hushfeed	Hushfeed

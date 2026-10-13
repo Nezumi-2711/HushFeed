@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Every Hushfeed settings page now sits right on the main settings page, under short headings: Your feed, Conversations, Saving and sharing, Privacy and app, and Hushfeed. Nothing is tucked inside another menu any more, so any page is one tap away. The "changed" counts the group pages showed went with them. Pause Hushfeed, the full status card and Diagnostics are near the end under the Hushfeed heading, and tapping the status next to the title scrolls you there.
+
 * **TikTok:** Skip content warnings has a new switch under Feed screen > Popups, Hide Check your sources warnings, off until you turn it on. It takes away the "Check your sources before sharing" banner TikTok lays across the top of some videos, and the prompt TikTok shows when you go to share one, so the share just goes through. It's its own switch because TikTok drives this banner from different data than the Check sources banner that Hide unverified content notices covers.
 
 * **TikTok:** Settings search now lets you flip a switch right in the results, so you don't have to open its page first. Switches that do more than turn on or off, like Ghost mode or the screen time ones, still take you to their page.
@@ -14,7 +16,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Restarting TikTok from the Restart row or the banner now brings you back to the Hushfeed settings page you were on, so you can keep going where you left off. Back still takes you to the main settings page.
 
-* **TikTok:** Hushfeed settings has a new look throughout. The home page brings all eight destinations into one group, with pink icons and a clearer search field. Pages share rounded panels, quieter section headings and pill switches. Feature Gate Lab and the creator editor follow the same style, with large text and light mode kept readable.
+* **TikTok:** Hushfeed settings has a new look throughout. The home page has pink icons and a clearer search field. Pages share rounded panels, quieter section headings and pill switches. Feature Gate Lab and the creator editor follow the same style, with large text and light mode kept readable.
 
 * **Development:** Restored the profile-menu coverage check, the high-register hook fixture and the signing test project. The signing fixture also accepts D8 options in any order.
 

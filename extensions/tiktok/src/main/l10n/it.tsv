@@ -1936,21 +1936,11 @@ TikTok removes videos saved for offline viewing after a set time, sometimes only
 Hide Thoughts on profiles	Nascondi Thoughts sui profili
 Hide the Thoughts bubble TikTok shows above a profile picture, and the prompt to share one on your own profile. Restart TikTok to apply this.	Nascondi la nuvoletta Thoughts che TikTok mostra sopra l'immagine di un profilo e, sul tuo profilo, l'invito a condividerne uno. Riavvia TikTok per applicare la modifica.
 
-# context: Quiet Index settings categories and compact runtime status.
-Feed & layout	Feed e aspetto
-Filters, tabs and on-screen controls	Filtri, schede e controlli sullo schermo
-Comments & inbox	Commenti e posta in arrivo
-Filters, translation and inbox controls	Filtri, traduzione e controlli della posta
-Downloads & sharing	Download e condivisione
-Files, subtitles and share sheet	File, sottotitoli e menu di condivisione
-App & advanced	App e opzioni avanzate
-Region, backups and diagnostics	Regione, backup e diagnostica
 About Hushfeed	Informazioni su Hushfeed
 Version, changes and licenses	Versione, modifiche e licenze
 Active	Attivo
 Paused	In pausa
 Budgets and reminders	Limiti e promemoria
-%1$s, %2$s	%1$s, %2$s
 Don't auto translate these languages	Non tradurre automaticamente queste lingue
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Separa i codici lingua con virgole, come es, de. Quando TikTok traduce per te, le didascalie e i commenti in queste lingue restano come sono stati scritti. Vedi traduzione funziona ancora quando lo tocchi. L'elenco Non tradurre di TikTok resta com'è.
 Performance	Prestazioni
@@ -2067,11 +2057,7 @@ The quality choice is still open	La scelta della qualità è ancora aperta
 Unknown resolution	Risoluzione sconosciuta
 Make it yours.	Fallo tuo.
 Your feed. Your rules.	Il tuo feed. Le tue regole.
-Your experience	La tua esperienza
-Shape your feed	Personalizza il feed
 Conversations	Conversazioni
-Save and send	Salva e invia
-App controls	Controlli dell’app
 About	Informazioni
 Your settings	Le tue impostazioni
 Report a problem	Segnala un problema
@@ -2089,3 +2075,11 @@ Your settings already match	Le tue impostazioni corrispondono già
 That setup couldn't be applied. Nothing was changed.	Impossibile applicare questa configurazione. Non è stato modificato nulla.
 Quick setups couldn't start. Try again in a moment.	Impossibile avviare le configurazioni rapide. Riprova tra un momento.
 Your earlier settings are back	Le impostazioni precedenti sono tornate
+# context: a heading on the settings home page, over Feed filter, Feed tabs, Feed screen, Playback and Screen time
+Your feed	Il tuo feed
+# context: a heading on the settings home page, over Downloads and Share sheet
+Saving and sharing	Salvataggio e condivisione
+# context: a heading on the settings home page, over Privacy, App, Region, Backup and restore and Feature Gate Lab
+Privacy and app	Privacy e app
+# context: a heading on the settings home page, over Hushfeed's status, Pause, Diagnostics, About, Report a problem and Support; the app's name, usually kept as is
+Hushfeed	Hushfeed

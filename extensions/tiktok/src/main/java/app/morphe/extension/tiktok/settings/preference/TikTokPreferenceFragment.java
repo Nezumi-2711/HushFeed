@@ -116,36 +116,59 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
      * Downloads row promised quality and subtitles while its page said path and watermark.
      */
     private enum Section {
-        FEED_FILTER("Feed filter", "Choose what reaches your feed"),
-        FEED_NAVIGATION("Feed tabs", "Arrange your feed and bottom tabs"),
-        INTERFACE("Feed screen", "Captions, gestures and on-screen controls"),
-        PLAYBACK("Playback", "Quality, speed and auto-advance"),
-        SCREEN_TIME("Screen time", "Daily budgets, reminders and the hold"),
-        COMMENTS("Comments", "Filters, translation and copy options"),
-        DOWNLOADS("Downloads", "Quality, files, subtitles and hand-off"),
-        SHARE("Share sheet", "People, shortcuts and sending controls"),
-        INBOX("Inbox", "Choose which rows and controls appear"),
-        PRIVACY("Privacy", "Tracking, device access and links"),
-        REGION("Region", "Country and network preferences"),
-        BEHAVIOR("App", "Layout, search, profile and system"),
-        DIAGNOSTICS("Diagnostics", "Logging, hook status and reports"),
-        BACKUP("Backup and restore", "Save, restore, reset and undo your settings");
+        FEED_FILTER("Feed filter", "Choose what reaches your feed", SettingsMenuPreference.Icon.FILTER),
+        FEED_NAVIGATION("Feed tabs", "Arrange your feed and bottom tabs", SettingsMenuPreference.Icon.TABS),
+        INTERFACE("Feed screen", "Captions, gestures and on-screen controls", SettingsMenuPreference.Icon.LAYOUT),
+        PLAYBACK("Playback", "Quality, speed and auto-advance", SettingsMenuPreference.Icon.PLAYBACK),
+        SCREEN_TIME("Screen time", "Daily budgets, reminders and the hold", SettingsMenuPreference.Icon.SCREEN_TIME),
+        COMMENTS("Comments", "Filters, translation and copy options", SettingsMenuPreference.Icon.COMMENTS),
+        DOWNLOADS("Downloads", "Quality, files, subtitles and hand-off", SettingsMenuPreference.Icon.DOWNLOADS),
+        SHARE("Share sheet", "People, shortcuts and sending controls", SettingsMenuPreference.Icon.SHARE),
+        INBOX("Inbox", "Choose which rows and controls appear", SettingsMenuPreference.Icon.INBOX),
+        PRIVACY("Privacy", "Tracking, device access and links", SettingsMenuPreference.Icon.PRIVACY),
+        REGION("Region", "Country and network preferences", SettingsMenuPreference.Icon.REGION),
+        BEHAVIOR("App", "Layout, search, profile and system", SettingsMenuPreference.Icon.BEHAVIOR),
+        DIAGNOSTICS("Diagnostics", "Logging, hook status and reports", SettingsMenuPreference.Icon.DIAGNOSTICS),
+        BACKUP("Backup and restore", "Save, restore, reset and undo your settings", SettingsMenuPreference.Icon.BACKUP);
 
         final String title;
         final String description;
+        final SettingsMenuPreference.Icon icon;
 
-        Section(String title, String description) {
+        Section(String title, String description, SettingsMenuPreference.Icon icon) {
             this.title = title;
             this.description = description;
+            this.icon = icon;
+        }
+
+        /** Whether the bundle carries the patches behind this page. */
+        boolean isAvailable() {
+            switch (this) {
+                case FEED_FILTER: return FeedFilterPreferenceCategory.isAvailable();
+                case FEED_NAVIGATION: return FeedNavigationPreferenceCategory.isAvailable();
+                case INTERFACE: return InterfacePreferenceCategory.isAvailable();
+                case PLAYBACK: return PlaybackPreferenceCategory.isAvailable();
+                case SCREEN_TIME: return ScreenTimePreferenceCategory.isAvailable();
+                case COMMENTS: return CommentsPreferenceCategory.isAvailable();
+                case DOWNLOADS: return DownloadsPreferenceCategory.isAvailable();
+                case SHARE: return SharePreferenceCategory.isAvailable();
+                case INBOX: return InboxPreferenceCategory.isAvailable();
+                case PRIVACY: return PrivacyPreferenceCategory.isAvailable();
+                case REGION: return SimSpoofPreferenceCategory.isAvailable();
+                case BEHAVIOR: return ExtensionPreferenceCategory.isAvailable();
+                case DIAGNOSTICS: return DebugPreferenceCategory.isAvailable();
+                case BACKUP:
+                default: return true;
+            }
         }
     }
 
-    /** Navigation groups only. Leaf section names and persisted setting keys stay unchanged. */
+    /**
+     * The one page that isn't a section. Every section is a row on the home page (Matt,
+     * 2026-10-12: at most one level below it), so the four groups that used to sit between them
+     * are gone, and a restart marker naming one of those opens the home page.
+     */
     private enum Hub {
-        FEED_LAYOUT("Feed & layout", "Filters, tabs and on-screen controls"),
-        COMMENTS_INBOX("Comments & inbox", "Filters, translation and inbox controls"),
-        DOWNLOADS_SHARING("Downloads & sharing", "Files, subtitles and share sheet"),
-        APP_ADVANCED("App & advanced", "Region, backups and diagnostics"),
         ABOUT("About Hushfeed", "Version, changes and licenses");
 
         final String title;
@@ -534,8 +557,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         Hub hub = getRequestedHub();
         if (isSearchRequested()) {
             createSearchMenu(context, preferenceScreen);
-        } else if (hub != null) {
-            createHubMenu(context, preferenceScreen, hub);
+        } else if (hub == Hub.ABOUT) {
+            createAboutMenu(context, preferenceScreen);
         } else if (section == null) {
             createMasterMenu(context, preferenceScreen);
         } else {
@@ -949,7 +972,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 } else if (MorpheTikTokAboutPreference.KEY.equals(result.key)) {
                     Utils.openLink(MorpheTikTokAboutPreference.SOURCE_URL);
                 } else if (BaseSettings.PAUSED.key.equals(result.key)) {
-                    openHub(Hub.APP_ADVANCED, result.key);
+                    // The home page, scrolled to the row, the way a section opens for its rows.
+                    openSection(null, result.key, null);
                 } else if (BuildDetailsPreference.KEY.equals(result.key)
                         || ReleaseNotes.KEY.equals(result.key)) {
                     openHub(Hub.ABOUT, result.key);
@@ -974,36 +998,11 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     }
 
     /**
-     * How many settings on one section are away from their default.
-     *
-     * <p>Each badge used to read a list of settings kept by hand beside the page it described.
-     * The Feed filter list named 17 of the 34 settings that page binds, so nine of its switches
-     * moved nothing, and every list counted a switch that is on by default as "on", which is
-     * why a stock install showed "Comments and translation, 3 on". Building the section is what
-     * the search index already does two methods down, so the count and the page can no longer
-     * disagree about what is on the page.
-     */
-    private int countChangedSettings(Context context, Section section) {
-        int count = 0;
-        // A plain loop: Collection.stream arrived in API 24 and the payload runs from 23.
-        for (Setting<?> setting : settingsOn(context, section)) {
-            // A setting this build cannot reach is not on the page, so it is not something the
-            // reader has turned on.
-            if (setting.isAvailable()
-                    && !java.util.Objects.equals(setting.savedValue(), setting.defaultValue)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
      * The settings one section binds, worked out once and remembered.
      *
-     * <p>Building the page is how this knows what is on it, and building eleven pages on every
-     * return to the master menu is 184 preferences of work for a number. The pages do not gain
-     * or lose rows while the screen is open: what changes is the values, and those are read
-     * again every time.
+     * <p>Building the page is how this knows what is on it, and building every page each time
+     * Quick setups runs is about 184 preferences of work. The pages do not gain or lose rows
+     * while the screen is open: what changes is the values, and those are read again every time.
      */
     private List<Setting<?>> settingsOn(Context context, Section section) {
         List<Setting<?>> known = sectionSettings.get(section);
@@ -1103,10 +1102,12 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
             indexRows(results, category, section, categoryTitle);
             scratch.removePreference(category);
         }
-        // The rows below sit on the App & advanced and About Hushfeed pages, outside the section
-        // categories walked above, so each is indexed by hand. Their category line names the
-        // page a reader finds them on; it said "Settings" for all of them, which is no page.
-        String appAdvanced = L10n.t(context, Hub.APP_ADVANCED.title);
+        // The rows below sit on the home page and the About Hushfeed page, outside the section
+        // categories walked above, so each is indexed by hand. Their category line names where
+        // a reader finds them, the home heading or the page; it said "Settings" for all of
+        // them, which is no page.
+        String privacyAndApp = L10n.t(context, "Privacy and app");
+        String hushfeed = L10n.t(context, "Hushfeed");
         String about = L10n.t(context, Hub.ABOUT.title);
         // Without an explicit entry, the Lab's title and summary returned zero results on a
         // patched phone even though the row was visible.
@@ -1117,7 +1118,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                     L10n.t(context, "Feature Gate Lab"),
                     L10n.t(context, "Advanced. Find and force the hidden switches TikTok uses "
                             + "to test features."),
-                    appAdvanced,
+                    privacyAndApp,
                     "override gates"
             ));
         }
@@ -1127,7 +1128,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 BaseSettings.PAUSED.key,
                 L10n.t(context, "Pause Hushfeed"),
                 L10n.t(context, PAUSE_SUMMARY),
-                appAdvanced
+                hushfeed
         ));
         // Its summary carries the bundle version, which is what a reporter searches for.
         results.add(new SearchResult(
@@ -1273,6 +1274,12 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         }
     }
 
+    /** Scrolls this page to one of its rows and flashes it, as a search result arrives. */
+    private void showRow(String key) {
+        View view = getView();
+        scrollToPreference(view == null ? null : view.findViewById(android.R.id.list), key);
+    }
+
     private static void scrollToPreference(ListView list, String key) {
         if (list == null || list.getAdapter() == null) {
             return;
@@ -1320,9 +1327,21 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         });
     }
 
+    /**
+     * The home page: search and Quick setups, then every page as a row of its own under five
+     * headings, Hushfeed's own rows last with the Ko-fi row at the very end. Nothing sits behind
+     * a second menu (Matt, 2026-10-12). The status card and Pause are in the Hushfeed group
+     * rather than up top, so the first page still shows without scrolling; the header's status
+     * line takes the reader down to them.
+     */
     private void createMasterMenu(Context context, PreferenceScreen screen) {
-        masterHeader = SettingsHeaderPreference.master(context, this::closeSettings,
-                () -> openHub(Hub.APP_ADVANCED));
+        // A home page aimed at a row was opened over the search results, so its Back goes back
+        // to them. Only the home page settings opened on closes settings.
+        Bundle arguments = getArguments();
+        boolean overResults = arguments != null && arguments.getString(ARG_TARGET_KEY) != null;
+        masterHeader = SettingsHeaderPreference.master(context,
+                overResults ? this::navigateBack : this::closeSettings,
+                () -> showRow(SettingsStatusPreference.KEY));
         screen.addPreference(masterHeader);
         SettingsSearchEntryPreference search = new SettingsSearchEntryPreference(context,
                 preference -> {
@@ -1335,32 +1354,40 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         QuickSetupsPreference quickSetups = new QuickSetupsPreference(context, this::settingsOnPages);
         quickSetups.setOrder(-850);
         screen.addPreference(quickSetups);
-        screen.addPreference(SectionHeadingPreference.compact(context, "Your experience"));
 
-        if (FeedFilterPreferenceCategory.isAvailable()
-                || FeedNavigationPreferenceCategory.isAvailable()
-                || InterfacePreferenceCategory.isAvailable()) {
-            addHub(screen, Hub.FEED_LAYOUT, SettingsMenuPreference.Icon.FEED);
-        }
-        if (PlaybackPreferenceCategory.isAvailable()) {
-            addMenu(screen, Section.PLAYBACK, SettingsMenuPreference.Icon.PLAYBACK, true);
-        }
-        if (PrivacyPreferenceCategory.isAvailable()) {
-            addMenu(screen, Section.PRIVACY, SettingsMenuPreference.Icon.PRIVACY, true);
-        }
-        if (CommentsPreferenceCategory.isAvailable() || InboxPreferenceCategory.isAvailable()) {
-            addHub(screen, Hub.COMMENTS_INBOX, SettingsMenuPreference.Icon.COMMENTS);
-        }
-        if (DownloadsPreferenceCategory.isAvailable() || SharePreferenceCategory.isAvailable()) {
-            addHub(screen, Hub.DOWNLOADS_SHARING, SettingsMenuPreference.Icon.DOWNLOADS);
-        }
-        if (ScreenTimePreferenceCategory.isAvailable()) {
-            addMenu(screen, Section.SCREEN_TIME, SettingsMenuPreference.Icon.SCREEN_TIME, true);
-        }
-        addHub(screen, Hub.APP_ADVANCED, SettingsMenuPreference.Icon.APP);
-        addHub(screen, Hub.ABOUT, SettingsMenuPreference.Icon.ABOUT);
+        addGroup(context, screen, "Your feed", Section.FEED_FILTER, Section.FEED_NAVIGATION,
+                Section.INTERFACE, Section.PLAYBACK, Section.SCREEN_TIME);
+        addGroup(context, screen, "Conversations", Section.COMMENTS, Section.INBOX);
+        addGroup(context, screen, "Saving and sharing", Section.DOWNLOADS, Section.SHARE);
+        addGroup(context, screen, "Privacy and app", Section.PRIVACY, Section.BEHAVIOR,
+                Section.REGION, Section.BACKUP);
+        if (FeatureGateLabRuntime.isInstalled()) addFeatureGateLab(screen);
+
+        screen.addPreference(SectionHeadingPreference.compact(context, "Hushfeed"));
+        // Detailed state and recovery, with Turn Hushfeed back on while paused.
+        SettingsStatusPreference status = new SettingsStatusPreference(context,
+                Section.DIAGNOSTICS.isAvailable() ? () -> openSection(Section.DIAGNOSTICS) : null);
+        status.setTurnBackOnAction(this::turnHushfeedBackOn);
+        screen.addPreference(status);
+        screen.addPreference(pauseRow(context));
+        if (Section.DIAGNOSTICS.isAvailable()) addMenu(screen, Section.DIAGNOSTICS);
+        addAbout(screen);
         addReportProblem(screen);
         addSupport(screen);
+    }
+
+    /** A home heading and its pages, or nothing when the bundle left out every one of them. */
+    private void addGroup(Context context, PreferenceScreen screen, String heading,
+            Section... sections) {
+        boolean headed = false;
+        for (Section section : sections) {
+            if (!section.isAvailable()) continue;
+            if (!headed) {
+                screen.addPreference(SectionHeadingPreference.compact(context, heading));
+                headed = true;
+            }
+            addMenu(screen, section);
+        }
     }
 
     /** Report a problem, just above the Ko-fi row: a GitHub bug report with the facts filled in. */
@@ -1468,82 +1495,25 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         }
     }
 
-    private void addHub(PreferenceScreen screen, Hub hub, SettingsMenuPreference.Icon icon) {
-        String summary = hub == Hub.ABOUT ? "" : hub.description;
-        SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), hub.title,
-                summary, icon, 0, preference -> {
-                    openHub(hub);
+    private void addAbout(PreferenceScreen screen) {
+        SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), Hub.ABOUT.title,
+                "", SettingsMenuPreference.Icon.ABOUT, 0, preference -> {
+                    openHub(Hub.ABOUT);
                     return true;
                 });
-        row.setKey("hub_" + hub.name().toLowerCase(java.util.Locale.ROOT));
+        row.setKey("hub_" + Hub.ABOUT.name().toLowerCase(java.util.Locale.ROOT));
         row.setCompact(true);
         screen.addPreference(row);
     }
 
-    private void createHubMenu(Context context, PreferenceScreen screen, Hub hub) {
-        screen.addPreference(SettingsHeaderPreference.section(context, hub.title, this::navigateBack));
-        screen.addPreference(SettingsHeaderPreference.caption(context, hub.description));
-        switch (hub) {
-            case FEED_LAYOUT:
-                screen.addPreference(new SectionHeadingPreference(context, "Shape your feed"));
-                if (FeedFilterPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.FEED_FILTER, SettingsMenuPreference.Icon.FILTER);
-                }
-                if (FeedNavigationPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.FEED_NAVIGATION, SettingsMenuPreference.Icon.TABS);
-                }
-                if (InterfacePreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.INTERFACE, SettingsMenuPreference.Icon.LAYOUT);
-                }
-                break;
-            case COMMENTS_INBOX:
-                screen.addPreference(new SectionHeadingPreference(context, "Conversations"));
-                if (CommentsPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.COMMENTS, SettingsMenuPreference.Icon.COMMENTS);
-                }
-                if (InboxPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.INBOX, SettingsMenuPreference.Icon.INBOX);
-                }
-                break;
-            case DOWNLOADS_SHARING:
-                screen.addPreference(new SectionHeadingPreference(context, "Save and send"));
-                if (DownloadsPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.DOWNLOADS, SettingsMenuPreference.Icon.DOWNLOADS);
-                }
-                if (SharePreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.SHARE, SettingsMenuPreference.Icon.SHARE);
-                }
-                break;
-            case APP_ADVANCED:
-                // Detailed state and recovery belong beside maintenance controls, while the
-                // home header carries a compact state label that opens this page.
-                SettingsStatusPreference status = new SettingsStatusPreference(context,
-                        DebugPreferenceCategory.isAvailable() ? () -> openSection(Section.DIAGNOSTICS) : null);
-                status.setOrder(-850);
-                status.setTurnBackOnAction(this::turnHushfeedBackOn);
-                screen.addPreference(status);
-                screen.addPreference(new SectionHeadingPreference(context, "App controls"));
-                if (ExtensionPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.BEHAVIOR, SettingsMenuPreference.Icon.BEHAVIOR);
-                }
-                if (SimSpoofPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.REGION, SettingsMenuPreference.Icon.REGION);
-                }
-                addMenu(screen, Section.BACKUP, SettingsMenuPreference.Icon.BACKUP);
-                if (DebugPreferenceCategory.isAvailable()) {
-                    addMenu(screen, Section.DIAGNOSTICS, SettingsMenuPreference.Icon.DIAGNOSTICS);
-                }
-                if (FeatureGateLabRuntime.isInstalled()) addFeatureGateLab(screen);
-                screen.addPreference(pauseRow(context));
-                break;
-            case ABOUT:
-                screen.addPreference(new SectionHeadingPreference(context, "About"));
-                screen.addPreference(new BuildDetailsPreference(context));
-                addReleaseNotes(context, screen);
-                screen.addPreference(new MorpheTikTokAboutPreference(context));
-                screen.addPreference(new LicensesPreference(context));
-                break;
-        }
+    private void createAboutMenu(Context context, PreferenceScreen screen) {
+        screen.addPreference(SettingsHeaderPreference.section(context, Hub.ABOUT.title, this::navigateBack));
+        screen.addPreference(SettingsHeaderPreference.caption(context, Hub.ABOUT.description));
+        screen.addPreference(new SectionHeadingPreference(context, "About"));
+        screen.addPreference(new BuildDetailsPreference(context));
+        addReleaseNotes(context, screen);
+        screen.addPreference(new MorpheTikTokAboutPreference(context));
+        screen.addPreference(new LicensesPreference(context));
     }
 
     private void addFeatureGateLab(PreferenceScreen screen) {
@@ -1554,6 +1524,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                     return true;
                 });
         lab.setKey(FEATURE_GATE_LAB_KEY);
+        lab.setCompact(true);
         screen.addPreference(lab);
     }
 
@@ -1636,25 +1607,13 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         if (masterHeader != null) masterHeader.refreshStatus();
     }
 
-    /** The master menu's rows and the section each one opens, for the badge refresh. */
-    private final java.util.Map<SettingsMenuPreference, Section> menuSections =
-            new java.util.LinkedHashMap<>();
-
-    /** What each section binds, so counting a badge does not build the page again. */
+    /** What each section binds, so Quick setups does not build the pages again. */
     private final java.util.Map<Section, List<Setting<?>>> sectionSettings =
             new java.util.EnumMap<>(Section.class);
 
-    private void addMenu(
-            PreferenceScreen screen,
-            Section section,
-            SettingsMenuPreference.Icon icon
-    ) {
-        addMenu(screen, section, icon, false);
-    }
-
-    private void addMenu(PreferenceScreen screen, Section section,
-            SettingsMenuPreference.Icon icon, boolean compact) {
-        String description = L10n.t(getActivity(), compact && section == Section.SCREEN_TIME
+    /** A page's row on the home page: compact, with no changed-setting badge. */
+    private void addMenu(PreferenceScreen screen, Section section) {
+        String description = L10n.t(getActivity(), section == Section.SCREEN_TIME
                 ? "Budgets and reminders" : section.description);
         if (description.endsWith(".")) {
             description = description.substring(0, description.length() - 1);
@@ -1663,17 +1622,16 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 getActivity(),
                 section.title,
                 description,
-                icon,
-                compact ? 0 : countChangedSettings(getActivity(), section),
+                section.icon,
+                0,
                 preference -> {
                     openSection(section);
                     return true;
                 }
         );
         row.setKey("section_" + section.name().toLowerCase(java.util.Locale.ROOT));
-        row.setCompact(compact);
+        row.setCompact(true);
         screen.addPreference(row);
-        if (!compact) menuSections.put(row, section);
     }
 
     private void createSectionMenu(Context context, PreferenceScreen screen, Section section) {
@@ -1798,7 +1756,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
 
         TikTokPreferenceFragment fragment = new TikTokPreferenceFragment();
         Bundle arguments = new Bundle();
-        // Null remains the legacy master-menu route. New grouped destinations use ARG_HUB.
+        // Null is the home page, which Pause's search result opens scrolled to its row.
         if (section != null) {
             arguments.putString(ARG_SECTION, section.name());
         }
@@ -1849,7 +1807,6 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     public void onResume() {
         super.onResume();
         activeFragment = this;
-        refreshMenuBadges();
         refreshStatusCard();
         // Back from a section onto the master menu: whatever was changed there is owed here.
         refreshRestartPending();
@@ -1863,25 +1820,6 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     public void onPause() {
         budgetTicks.removeCallbacks(budgetTick);
         super.onPause();
-    }
-
-    /**
-     * Brings every badge on the master menu up to date.
-     *
-     * <p>openSection replaces this fragment and puts it on the back stack, so the master screen
-     * and every one of its rows survives a trip into a section and back. Nothing rebuilt them on
-     * the way back, which is why the numbers were the ones from whenever the screen was first
-     * opened: turning on three filters and pressing back left the old count in place.
-     */
-    private void refreshMenuBadges() {
-        Context context = getActivity();
-        PreferenceScreen screen = getPreferenceScreen();
-        if (context == null || screen == null || menuSections.isEmpty()) {
-            return;
-        }
-        for (java.util.Map.Entry<SettingsMenuPreference, Section> entry : menuSections.entrySet()) {
-            entry.getKey().setActiveCount(countChangedSettings(context, entry.getValue()));
-        }
     }
 
     @Override

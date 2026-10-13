@@ -2104,21 +2104,11 @@ TikTok removes videos saved for offline viewing after a set time, sometimes only
 Hide Thoughts on profiles	Скрывать Thoughts в профилях
 Hide the Thoughts bubble TikTok shows above a profile picture, and the prompt to share one on your own profile. Restart TikTok to apply this.	Скрывать облачко Thoughts, которое TikTok показывает над фото профиля, а в вашем профиле и предложение поделиться им. Перезапустите TikTok, чтобы это применить.
 
-# context: Quiet Index settings categories and compact runtime status.
-Feed & layout	Лента и оформление
-Filters, tabs and on-screen controls	Фильтры, вкладки и элементы на экране
-Comments & inbox	Комментарии и входящие
-Filters, translation and inbox controls	Фильтры, перевод и настройки входящих
-Downloads & sharing	Загрузки и отправка
-Files, subtitles and share sheet	Файлы, субтитры и меню «Поделиться»
-App & advanced	Приложение и дополнительные настройки
-Region, backups and diagnostics	Регион, резервные копии и диагностика
 About Hushfeed	О Hushfeed
 Version, changes and licenses	Версия, изменения и лицензии
 Active	Активен
 Paused	На паузе
 Budgets and reminders	Лимиты и напоминания
-%1$s, %2$s	%1$s, %2$s
 Don't auto translate these languages	Не переводить эти языки автоматически
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Разделяйте коды языков запятыми, например es, de. Когда TikTok переводит за вас, описания и комментарии на этих языках остаются как написаны. «Посмотреть перевод» по-прежнему работает, если нажать. Собственный список TikTok «Не переводить» остаётся как есть.
 Performance	Производительность
@@ -2235,11 +2225,7 @@ The quality choice is still open	Выбор качества всё ещё от�
 Unknown resolution	Разрешение неизвестно
 Make it yours.	Настрой под себя.
 Your feed. Your rules.	Твоя лента. Твои правила.
-Your experience	Твои настройки
-Shape your feed	Настрой ленту
 Conversations	Общение
-Save and send	Сохранение и отправка
-App controls	Настройки приложения
 About	О приложении
 Your settings	Твои настройки
 Report a problem	Сообщить о проблеме
@@ -2260,3 +2246,11 @@ Your settings already match	Ваши настройки уже совпадаю�
 That setup couldn't be applied. Nothing was changed.	Не удалось применить эту настройку. Ничего не изменено.
 Quick setups couldn't start. Try again in a moment.	Быстрые настройки не удалось запустить. Повторите попытку через момент.
 Your earlier settings are back	Ваши прежние настройки вернулись
+# context: a heading on the settings home page, over Feed filter, Feed tabs, Feed screen, Playback and Screen time
+Your feed	Твоя лента
+# context: a heading on the settings home page, over Downloads and Share sheet
+Saving and sharing	Сохранение и отправка
+# context: a heading on the settings home page, over Privacy, App, Region, Backup and restore and Feature Gate Lab
+Privacy and app	Конфиденциальность и приложение
+# context: a heading on the settings home page, over Hushfeed's status, Pause, Diagnostics, About, Report a problem and Support; the app's name, usually kept as is
+Hushfeed	Hushfeed

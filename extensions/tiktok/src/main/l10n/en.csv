@@ -90,7 +90,6 @@ source,target
 %1$s · declared by TikTok,%1$s · declared by TikTok
 "%1$s · declared by TikTok, with a current value","%1$s · declared by TikTok, with a current value"
 %1$s%%,%1$s%%
-"%1$s, %2$s","%1$s, %2$s"
 "%1$s, %2$s or %3$s","%1$s, %2$s or %3$s"
 "%1$s, %2$s, %3$s or %4$s","%1$s, %2$s, %3$s or %4$s"
 "%1$s, %2$s, %3$s, %4$s, %5$s","%1$s, %2$s, %3$s, %4$s, %5$s"
@@ -228,9 +227,7 @@ And one more save,And one more save
 Animated sticker format,Animated sticker format
 "Animated stickers and GIFs decode each frame as it's shown instead of a few ahead, so they use a little less memory. Applies to the next ones that load.","Animated stickers and GIFs decode each frame as it's shown instead of a few ahead, so they use a little less memory. Applies to the next ones that load."
 App,App
-App & advanced,App & advanced
 App AB,App AB
-App controls,App controls
 App lock,App lock
 AppGallery,AppGallery
 Appearance,Appearance
@@ -363,7 +360,6 @@ Comment media filename,Comment media filename
 Comment sort and dislike styles,Comment sort and dislike styles
 "Comment with live photos, the camera or audio","Comment with live photos, the camera or audio"
 Comments,Comments
-Comments & inbox,Comments & inbox
 Comments aren't available for this video,Comments aren't available for this video
 Comments beside the video,Comments beside the video
 Comments range,Comments range
@@ -507,7 +503,6 @@ Double tap,Double tap
 "Download lists the qualities this video comes in, with the size TikTok gives for each, and saves the one you pick. The quality above stays as it is for the next save.","Download lists the qualities this video comes in, with the size TikTok gives for each, and saves the one you pick. The quality above stays as it is for the next save."
 Download original photos,Download original photos
 Downloads,Downloads
-Downloads & sharing,Downloads & sharing
 "Drag to move, release to place","Drag to move, release to place"
 Drag up or down along the left or right edge of a video to change what that edge strip is set to below. By default that's the screen brightness on the left and the volume on the right. Swiping anywhere else still scrolls the feed.,Drag up or down along the left or right edge of a video to change what that edge strip is set to below. By default that's the screen brightness on the left and the volume on the right. Swiping anywhere else still scrolls the feed.
 Drama and Series,Drama and Series
@@ -554,7 +549,6 @@ Feature Gate Lab,Feature Gate Lab
 Feature gate override reset,Feature gate override reset
 Feature gate override saved,Feature gate override saved
 Feature gate report copied,Feature gate report copied
-Feed & layout,Feed & layout
 Feed and navigation,Feed and navigation
 Feed button size,Feed button size
 Feed capture saved to %1$s. Read it before you share it.,Feed capture saved to %1$s. Read it before you share it.
@@ -567,7 +561,6 @@ Feed tabs to keep,Feed tabs to keep
 Field edits were discarded,Field edits were discarded
 Field edits weren't saved,Field edits weren't saved
 Files,Files
-"Files, subtitles and share sheet","Files, subtitles and share sheet"
 Fill the screen with the video,Fill the screen with the video
 Filter TikTok's offline videos,Filter TikTok's offline videos
 Filter bottom tabs,Filter bottom tabs
@@ -578,9 +571,7 @@ Filter settings,Filter settings
 Filter the LIVE feed,Filter the LIVE feed
 Filter the list,Filter the list
 Filter: %1$s,Filter: %1$s
-"Filters, tabs and on-screen controls","Filters, tabs and on-screen controls"
 "Filters, translation and copy options","Filters, translation and copy options"
-"Filters, translation and inbox controls","Filters, translation and inbox controls"
 Find the sound on YouTube Music,Find the sound on YouTube Music
 First caller,First caller
 First rejection:,First rejection:
@@ -827,6 +818,7 @@ How far each edge press moves the video.,How far each edge press moves the video
 How long each photo stays on screen in a video made from a photo post.,How long each photo stays on screen in a video made from a photo post.
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.,How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.
 "How wide each edge strip is, as a percent of the screen width.","How wide each edge strip is, as a percent of the screen width."
+Hushfeed,Hushfeed
 Hushfeed blocked TikTok's reports here. It hasn't confirmed that you stay off viewer lists.,Hushfeed blocked TikTok's reports here. It hasn't confirmed that you stay off viewer lists.
 Hushfeed can't read the creator pattern %1$s,Hushfeed can't read the creator pattern %1$s
 Hushfeed hid a TikTok CAPTCHA. Turn off Hide CAPTCHA popups if something stops working.,Hushfeed hid a TikTok CAPTCHA. Turn off Hide CAPTCHA popups if something stops working.
@@ -1205,6 +1197,7 @@ Preview shortened. Save report keeps the full report.,Preview shortened. Save re
 Preview translation,Preview translation
 Preview with a made-up post:,Preview with a made-up post:
 Privacy,Privacy
+Privacy and app,Privacy and app
 Private account,Private account
 Problem detected.,Problem detected.
 Problem detected. Story views may still be reported. Check Ghost mode diagnostics. The warning stays until TikTok restarts.,Problem detected. Story views may still be reported. Check Ghost mode diagnostics. The warning stays until TikTok restarts.
@@ -1256,7 +1249,6 @@ Recovered an interrupted settings change. Restart TikTok to apply this.,Recovere
 Refresh values,Refresh values
 Refreshing TikTok's current values…,Refreshing TikTok's current values…
 Region,Region
-"Region, backups and diagnostics","Region, backups and diagnostics"
 Remember the last speed,Remember the last speed
 "Remembers up to %1$s videos you saved here. If the file is still there, you get Open or Save again instead of a second copy.","Remembers up to %1$s videos you saved here. If the file is still there, you get Open or Save again instead of a second copy."
 Remind me every,Remind me every
@@ -1326,7 +1318,6 @@ Save a profile picture on a long press,Save a profile picture on a long press
 Save a story from its share sheet,Save a story from its share sheet
 Save a story on a long press,Save a story on a long press
 Save again,Save again
-Save and send,Save and send
 Save as video,Save as video
 Save build details,Save build details
 Save cancelled. Nothing was saved.,Save cancelled. Nothing was saved.
@@ -1389,6 +1380,7 @@ Saving %1$s of %2$s,Saving %1$s of %2$s
 Saving %1$s of %2$s: %3$s,Saving %1$s of %2$s: %3$s
 Saving %1$s original photos,Saving %1$s original photos
 Saving a frame from this video needs Android 7 or newer,Saving a frame from this video needs Android 7 or newer
+Saving and sharing,Saving and sharing
 Saving one original photo,Saving one original photo
 Saving seen history,Saving seen history
 Saving settings backup,Saving settings backup
@@ -1465,7 +1457,6 @@ Settings couldn't open,Settings couldn't open
 Settings couldn't refresh completely. Reopen settings and try again.,Settings couldn't refresh completely. Reopen settings and try again.
 Settings restored. Restart TikTok to apply all changes.,Settings restored. Restart TikTok to apply all changes.
 Settings restored. The Feature Gate Lab rules were for another TikTok version and were left out. Restart TikTok to apply all changes.,Settings restored. The Feature Gate Lab rules were for another TikTok version and were left out. Restart TikTok to apply all changes.
-Shape your feed,Shape your feed
 Share,Share
 Share sheet,Share sheet
 Shares range,Shares range
@@ -2052,7 +2043,7 @@ Your account changed. Close this list and open it again.,Your account changed. C
 Your account changed. Open the count editor again.,Your account changed. Open the count editor again.
 Your current settings already match Calm feed.,Your current settings already match Calm feed.
 Your earlier settings are back,Your earlier settings are back
-Your experience,Your experience
+Your feed,Your feed
 Your feed. Your rules.,Your feed. Your rules.
 Your filters hid everything TikTok just sent. Most were %1$s.,Your filters hid everything TikTok just sent. Most were %1$s.
 "Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s.","Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s."
