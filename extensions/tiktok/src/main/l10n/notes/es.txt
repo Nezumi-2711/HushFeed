@@ -1,5 +1,9 @@
 ## Unreleased
 
+* **TikTok:** Se añadió una nota de configuración del emulador de Android 17 para las herramientas del SDK que leen mal las versiones menores de la API.
+
+* **TikTok:** Traducir borrador sigue disponible mientras el teclado compone una palabra o revisa la ortografía. Una solicitud de traducción que pierde la cuenta con sesión iniciada ahora termina enseguida en vez de esperar a que se agote el tiempo.
+
 * **TikTok:** Todas las páginas de ajustes están ahora en la página principal de ajustes, bajo un título corto y a un toque. Pausar Hushfeed y el estado completo están cerca del final, bajo Hushfeed.
 
 * **TikTok:** Un interruptor nuevo en Ventanas emergentes, Ocultar avisos de Comprueba tus fuentes, quita el banner Comprueba tus fuentes de la parte superior de algunos vídeos y el aviso que TikTok muestra al compartir uno.

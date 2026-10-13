@@ -1,5 +1,9 @@
 ## Unreleased
 
+* **TikTok:** Aggiunta una nota sulla configurazione dell'emulatore Android 17 per gli strumenti SDK che leggono male le versioni minori dell'API.
+
+* **TikTok:** Traduci bozza resta disponibile mentre la tastiera compone una parola o controlla l'ortografia. Una richiesta di traduzione che perde l'account connesso ora termina subito invece di aspettare il timeout.
+
 * **TikTok:** Ogni pagina delle impostazioni ora è nella pagina principale delle impostazioni, sotto un breve titolo, a un tocco di distanza. Metti in pausa Hushfeed e lo stato completo sono verso la fine, sotto Hushfeed.
 
 * **TikTok:** Un nuovo interruttore in Popup, Nascondi gli avvisi Controlla le tue fonti, toglie il banner Controlla le tue fonti in cima ad alcuni video e l'avviso che TikTok mostra quando ne condividi uno.
