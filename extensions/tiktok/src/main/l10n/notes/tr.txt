@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Akışın üstündeki Senin İçin'e uzun basmak Hushfeed ayarlarını açar. Kısa bir dokunuş eskisi gibi çalışır ve kısayol Hushfeed duraklatıldığında da çalışır.
+
 * **TikTok:** İndirilenler'de Video indirme kalitesi'nin altında yeni bir anahtar var: Her kaydetmede kaliteyi sor. Açıkken İndir, videonun sunulduğu kaliteleri TikTok'un her biri için verdiği boyutla listeler ve seçtiğinizi kaydeder. Otomatik, yani TikTok'un kendi dosyası, her zaman ilk sıradadır. Ayarladığınız kalite bir sonraki kayıt için olduğu gibi kalır.
 
 * **TikTok:** Uzun basma'nın yanındaki yeni Bir içerik üreticinin videolarında tam uzun basma menüsü anahtarı açıkken, birinin profilinden açtığın bir videoya uzun basmak küçük paylaşım menüsü yerine Senin İçin'deki tam menünün aynısını açar (#120).

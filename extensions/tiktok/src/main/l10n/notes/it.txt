@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tieni premuto Per te in cima al feed per aprire le impostazioni di Hushfeed. Un tocco rapido funziona come sempre, e la scorciatoia funziona anche quando Hushfeed è in pausa.
+
 * **TikTok:** Download ha un nuovo interruttore sotto Qualità di download dei video: Chiedi la qualità a ogni salvataggio. Se è attivo, Scarica elenca le qualità in cui è disponibile il video, con la dimensione che TikTok indica per ciascuna, e salva quella che scegli. Automatico, cioè il file di TikTok, è sempre il primo. La qualità impostata resta invariata per il salvataggio successivo.
 
 * **TikTok:** Un nuovo interruttore accanto a Pressione prolungata, Menu completo con pressione prolungata sui video di un creator, fa sì che una pressione prolungata su un video aperto dal profilo di qualcuno apra lo stesso menu completo di Per te invece del menu di condivisione ridotto (#120).
