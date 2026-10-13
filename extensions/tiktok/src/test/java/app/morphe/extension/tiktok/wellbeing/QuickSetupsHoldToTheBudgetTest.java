@@ -114,7 +114,10 @@ public class QuickSetupsHoldToTheBudgetTest {
         assertEquals("a second tap counted the waiting changes again", 0,
                 QuickSetups.apply(context, QuickSetups.Choice.DEFAULTS, onPages()).changedCount);
 
-        QuickSetups.undo(context, applied);
+        QuickSetups.Result undone = QuickSetups.undo(context, applied);
+        assertEquals("Undo didn't redraw both rows", 2, undone.changedCount);
+        assertEquals("cancelling a wait asked for a restart, though no saved value moved",
+                0, undone.restartChangedCount);
         assertNull("Undo left the lock to come off tomorrow", BudgetChanges.waiting(Settings.SESSION_BUDGET_LOCK));
         assertNull("Undo left Wait a day to loosen to come off tomorrow",
                 BudgetChanges.waiting(Settings.SESSION_BUDGET_WAIT_TO_LOOSEN));

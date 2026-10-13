@@ -63,7 +63,10 @@ public final class QuickSetups {
         public final int restartChangedCount;
         /** Whether Undo goes through the Calm feed preset's own restore. */
         final boolean calmFeedSnapshot;
-        /** The settings in {@link #previousValues} whose change waits for the next day. */
+        /**
+         * The settings in {@link #previousValues} whose saved value this left alone: a change that
+         * waits for the next day or, on Undo's result, a wait it cancelled.
+         */
         final Set<Setting<?>> waiting;
 
         Result(Map<Setting<?>, Object> previousValues, boolean calmFeedSnapshot) {
@@ -151,7 +154,8 @@ public final class QuickSetups {
         for (Setting<?> setting : result.waiting) {
             if (!touched.containsKey(setting)) touched.put(setting, result.previousValues.get(setting));
         }
-        return new Result(touched, false);
+        // Their saved values never moved, so cancelling the wait asks for no restart either.
+        return new Result(touched, result.waiting, false);
     }
 
     /**
