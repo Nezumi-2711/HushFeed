@@ -141,6 +141,9 @@ public class AndroidTargetChangesGuardTest {
         REVIEWED_ADDRESSES.put("https://github.com/SysAdminDoc/HushFeed/issues/new",
                 "not fetched: the bug form Report a problem fills in, opened in the reader's "
                         + "browser");
+        REVIEWED_ADDRESSES.put("https://github.com/login?return_to=",
+                "not fetched or opened: only its length is counted, so Report a problem's link "
+                        + "still fits once GitHub's sign-in page wraps it");
         REVIEWED_ADDRESSES.put("https://ko-fi.com/X8K126YVER",
                 "not fetched: the Support Hushfeed row, opened in the reader's browser");
     }
