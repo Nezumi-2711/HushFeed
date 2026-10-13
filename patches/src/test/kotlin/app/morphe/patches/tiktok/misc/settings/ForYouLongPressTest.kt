@@ -27,6 +27,7 @@ import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstructio
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction21c
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction21t
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction35c
+import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction3rc
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableTypeReference
 import org.junit.Assert.assertEquals
@@ -118,8 +119,8 @@ class ForYouLongPressTest {
     }
 
     @Test
-    fun `a factory whose registers reach past v15 is left alone`() {
-        assertNoSite(classes(factory("make", registers = 20)), "past v15")
+    fun `a factory whose tag read needs range registers is left alone`() {
+        assertNoSite(classes(factory("make", registers = 20)), "binds a top tab in 0 places, not one")
     }
 
     @Test
@@ -207,8 +208,13 @@ class ForYouLongPressTest {
         afterBind: List<Instruction> = emptyList(),
     ): Method {
         val returnAt = 11 + afterBind.sumOf { it.codeUnits }
+        val read: Instruction = if (modelRegister <= 15) {
+            ImmutableInstruction35c(Opcode.INVOKE_INTERFACE, 1, modelRegister, 0, 0, 0, 0, tagRead)
+        } else {
+            ImmutableInstruction3rc(Opcode.INVOKE_INTERFACE_RANGE, modelRegister, 1, tagRead)
+        }
         val code = listOf(
-            ImmutableInstruction35c(Opcode.INVOKE_INTERFACE, 1, modelRegister, 0, 0, 0, 0, tagRead),
+            read,
             ImmutableInstruction11x(Opcode.MOVE_RESULT_OBJECT, 0),
             ImmutableInstruction21c(Opcode.NEW_INSTANCE, 1, ImmutableTypeReference(TAB_VIEW)),
             ImmutableInstruction21t(Opcode.IF_EQZ, 1, returnAt - 6),

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.text.Editable;
 import android.text.InputType;
@@ -46,6 +47,9 @@ public class CreatorListPreference extends DialogPreference {
     private TextView emptyState;
     private TextView resultCount;
     private final List<TextView> removeButtons = new ArrayList<>();
+    /** The unsaved list, filter and typed handle a recreated screen hands back, while it reopens the dialog. */
+    private Bundle restoring;
+    private static final String TYPED = "typed";
 
     public CreatorListPreference(Context context, String title, String summary, StringSetting setting) {
         super(context);
@@ -225,8 +229,12 @@ public class CreatorListPreference extends DialogPreference {
         editor.setInputType(InputType.TYPE_CLASS_TEXT);
         editor.setSingleLine(true);
         editor.setHint(hint);
-        editor.setMinHeight(SettingsUi.dp(context, 48));
         SettingsUi.styleEditText(editor);
+        editor.setBackgroundTintList(null);
+        editor.setBackground(SettingsUi.focusableSurface(context, SettingsUi.RADIUS_SETTINGS_FIELD, false));
+        editor.setPaddingRelative(SettingsUi.dp(context, 12), SettingsUi.dp(context, 10),
+                SettingsUi.dp(context, 12), SettingsUi.dp(context, 10));
+        editor.setMinHeight(SettingsUi.dp(context, 48));
         return editor;
     }
 
@@ -307,7 +315,7 @@ public class CreatorListPreference extends DialogPreference {
         row.setGravity(Gravity.CENTER_VERTICAL);
         row.setPaddingRelative(SettingsUi.dp(context, 12), SettingsUi.dp(context, 4),
                 SettingsUi.dp(context, 4), SettingsUi.dp(context, 4));
-        row.setBackground(SettingsUi.borderedSurface(context, SettingsUi.RADIUS_FIELD, true));
+        row.setBackground(SettingsUi.borderedSurface(context, SettingsUi.RADIUS_SETTINGS_FIELD, true));
         TextView label = SettingsUi.text(context, entry, SettingsUi.TEXT_BODY, SettingsUi.textPrimary(), Typeface.NORMAL);
         label.setTextIsSelectable(true);
         label.setContentDescription(entry);
@@ -409,6 +417,13 @@ public class CreatorListPreference extends DialogPreference {
     @Override
     protected void showDialog(Bundle state) {
         super.showDialog(state);
+        Bundle draft = restoring;
+        if (draft != null) {
+            pendingEntries = new ArrayList<>(DialogDraft.picks(draft));
+            searchEditText.setText(DialogDraft.query(draft));
+            addEditText.setText(draft.getString(TYPED, ""));
+            refreshEntryRows();
+        }
         SettingsUi.styleFramedDialog(getDialog());
         // Save used to let the dialog close and then say what was wrong over whatever was
         // behind it, with the handle the reader had typed already gone. The same shape the
@@ -435,6 +450,30 @@ public class CreatorListPreference extends DialogPreference {
                 return saveTypedAndList() == null;
             }
         });
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        if (!DialogDraft.open(getDialog()) || searchEditText == null) return superState;
+        Bundle draft = DialogDraft.ofPicks(pendingEntries, searchEditText.getText());
+        draft.putString(TYPED, addEditText.getText().toString());
+        return new DialogDraft(superState, draft);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof DialogDraft)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        // DialogPreference reopens the dialog from inside this call; showDialog puts the draft back.
+        restoring = ((DialogDraft) state).values;
+        try {
+            super.onRestoreInstanceState(((DialogDraft) state).getSuperState());
+        } finally {
+            restoring = null;
+        }
     }
 
     @Override

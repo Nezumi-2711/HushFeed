@@ -189,6 +189,8 @@ public class FeedScreenCoverageTest {
         put("hide_wind_down_screens", YES, YES, NONE);
         put("hide_sensitive_warnings", YES, YES, NONE);
         put("hide_unverified_notices", YES, YES, NONE);
+        // A feed cell slot both pagers build, and a prompt every video share package goes through.
+        put("hide_check_your_sources", YES, YES, NONE);
         // The main feed's panel; whether an opened video raises the prompt through another is open.
         put("hide_share_guide", YES, UNCHECKED, NONE);
 
@@ -214,6 +216,8 @@ public class FeedScreenCoverageTest {
         put("double_tap_action", YES, UNCHECKED, NONE);
         put("swipe_left_action", YES, YES, NONE);
         put("long_press_action", YES, YES, NONE);
+        // Only the profile-opened video's compact menu changes; For You already has the full menu.
+        put("long_press_full_menu_on_profiles", NONE, YES, NONE);
         put("edge_seek", YES, YES, NONE);
         put("edge_seek_seconds", YES, YES, NONE);
         put("rail_hold_comment", YES, YES, NONE);

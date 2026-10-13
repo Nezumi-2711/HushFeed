@@ -17,6 +17,7 @@ import android.widget.TextView;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.settings.preference.AbstractPreferenceFragment;
 import app.morphe.extension.tiktok.settings.L10n;
+import app.morphe.extension.tiktok.settings.SettingsReturn;
 
 /**
  * The row pinned to the top of every settings page while a restart is owed.
@@ -71,8 +72,8 @@ public final class RestartPendingPreference extends Preference {
         int ends = SettingsUi.dp(context, 14);
         row.setPadding(side, ends, side, ends);
         row.setMinimumHeight(SettingsUi.dp(context, 48));
-        row.setBackground(SettingsUi.pressAndFocusOver(context, SettingsUi.RADIUS_CONTROL,
-                SettingsUi.borderedSurface(context, SettingsUi.RADIUS_CARD, false)));
+        row.setBackground(SettingsUi.pressAndFocusOver(context, SettingsUi.RADIUS_SETTINGS_CARD,
+                SettingsUi.borderedSurface(context, SettingsUi.RADIUS_SETTINGS_CARD, false)));
         row.setFocusable(true);
         // A TextView with a click listener is read as text; the role has to be said.
         SettingsUi.markAsButton(row);
@@ -99,7 +100,15 @@ public final class RestartPendingPreference extends Preference {
         restarter = replacement == null ? Utils::restartApp : replacement;
     }
 
+    /**
+     * Notes the page open now and how far down it was, so the next start lands back there, then
+     * relaunches. The row and the banner's Restart both come through here, and both are pressed on
+     * a settings page.
+     */
     static void restart(Context context) {
+        TikTokPreferenceFragment open = TikTokPreferenceFragment.active();
+        SettingsReturn.rememberBeforeRestart(open == null
+                ? TikTokPreferenceFragment.PAGE_HOME : open.returnMarker());
         restarter.restart(context);
     }
 }
