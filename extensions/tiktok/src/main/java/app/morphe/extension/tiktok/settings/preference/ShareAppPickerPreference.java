@@ -43,6 +43,8 @@ public final class ShareAppPickerPreference extends DialogPreference {
     private EditText search;
     private TextView resultCount;
     private boolean loaded;
+    /** The lookup threw or never started, which is not the same as finding no apps. */
+    private boolean lookupFailed;
     private boolean selectionSaved;
 
     public ShareAppPickerPreference(Context context) {
@@ -112,7 +114,6 @@ public final class ShareAppPickerPreference extends DialogPreference {
                 ViewGroup.LayoutParams.MATCH_PARENT, SettingsUi.dialogListHeight(context, 300));
         scrollParams.topMargin = SettingsUi.dp(context, 10);
         root.addView(scroll, scrollParams);
-        renderRows("");
         search.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -120,32 +121,59 @@ public final class ShareAppPickerPreference extends DialogPreference {
             }
             @Override public void afterTextChanged(android.text.Editable s) { }
         });
+        lookUpApps();
+        return root;
+    }
 
+    /** Looks for the apps that take shared text, on opening and again from the retry. */
+    private void lookUpApps() {
+        Context context = getContext();
         LinearLayout list = rows;
-        Utils.runOnBackgroundThread(() -> {
-            List<ShareTargets.App> found;
+        loaded = false;
+        lookupFailed = false;
+        renderRows(query());
+        boolean accepted = Utils.runOnBackgroundThread(() -> {
+            List<ShareTargets.App> found = null;
             try {
                 found = ShareTargets.installed(context);
             } catch (Throwable failure) {
                 Logger.printException(() -> "Could not list the apps that take shared text", failure);
-                found = new ArrayList<>();
             }
             List<ShareTargets.App> result = found;
             Utils.runOnMainThread(() -> {
                 if (rows != list) return; // The dialog was closed and opened again meanwhile.
-                apps.clear();
-                apps.addAll(result);
-                loaded = true;
-                renderRows(search.getText() == null ? "" : search.getText().toString());
+                showApps(result);
             });
         });
-        return root;
+        // A full background queue never ran the lookup; left alone, the list said "Looking for
+        // apps" for as long as the dialog stayed open.
+        if (!accepted) showApps(null);
+    }
+
+    /** The apps found, or null when the lookup failed or never started. */
+    private void showApps(List<ShareTargets.App> found) {
+        apps.clear();
+        if (found != null) apps.addAll(found);
+        loaded = true;
+        lookupFailed = found == null;
+        renderRows(query());
+    }
+
+    private String query() {
+        return search == null || search.getText() == null ? "" : search.getText().toString();
     }
 
     private void renderRows(String query) {
         rows.removeAllViews();
         if (!loaded) {
             addState("Looking for apps", "");
+            return;
+        }
+        if (lookupFailed) {
+            addState("Couldn't list your apps. Tap here to try again.", "");
+            View retry = rows.getChildAt(0);
+            retry.setTag("share_app_retry");
+            retry.setOnClickListener(view -> lookUpApps());
             return;
         }
         if (apps.isEmpty()) {

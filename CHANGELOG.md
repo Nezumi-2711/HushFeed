@@ -148,6 +148,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Hide a VPN connection now says what it really does. Android stops reporting the VPN to TikTok and its tunnel is left off the network list, but TikTok can still see the VPN's IP address, so the old "TikTok can't tell" promised too much. Block the advertising ID now compares the blank ID to deleting yours, which is what Android does, not resetting it.
 
+* **TikTok:** Forget saved videos, its Undo and Add apps to Share via no longer get stuck when TikTok's background queue is full. The row stayed greyed out, or the app list kept saying Looking for apps, until TikTok restarted. Now they tell you and you can try again. The app list also says when it couldn't look, instead of saying no app takes shared text.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).

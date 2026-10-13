@@ -144,6 +144,8 @@
 
 * **TikTok:** Hide a VPN connection now says TikTok can still see the VPN's IP address, and Block the advertising ID says delete instead of reset.
 
+* **TikTok:** Forget saved videos and Add apps to Share via no longer get stuck when TikTok is busy. They tell you, and you can try again.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Show LIVE under the status bar now fills the top edge in every room, without a black band or pale strip (#137).

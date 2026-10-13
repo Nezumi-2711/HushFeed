@@ -144,6 +144,8 @@
 
 * **TikTok:** «Ocultar una conexión VPN» ahora dice que TikTok sigue viendo la dirección IP de la VPN, y «Bloquear el ID de publicidad» habla de eliminar en lugar de restablecer.
 
+* **TikTok:** «Olvidar los vídeos guardados» y «Añadir apps a Compartir con» ya no se quedan atascados cuando TikTok está ocupado. Te avisan y puedes volver a intentarlo.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar el LIVE bajo la barra de estado ahora llena el borde superior en todas las salas, sin franjas negras ni claras (#137).

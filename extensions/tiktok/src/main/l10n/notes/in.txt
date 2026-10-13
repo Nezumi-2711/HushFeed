@@ -144,6 +144,8 @@
 
 * **TikTok:** "Sembunyikan koneksi VPN" sekarang menyebut TikTok tetap bisa melihat alamat IP VPN, dan "Blokir ID iklan" menyebut menghapus, bukan mereset.
 
+* **TikTok:** "Lupakan video tersimpan" dan "Tambahkan aplikasi ke Bagikan via" tidak lagi macet saat TikTok sedang sibuk. Keduanya memberi tahu, dan kamu bisa mencoba lagi.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).

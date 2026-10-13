@@ -144,6 +144,8 @@
 
 * **TikTok:** "VPN bağlantısını gizle" artık TikTok'un VPN'in IP adresini yine de gördüğünü söylüyor, "Reklam kimliğini engelle" de sıfırlama yerine silmeden bahsediyor.
 
+* **TikTok:** "Kaydedilen videoları unut" ve "Şununla paylaş'a uygulama ekle" artık TikTok meşgulken takılı kalmıyor. Haber veriyorlar, tekrar deneyebilirsin.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).

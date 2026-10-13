@@ -144,6 +144,8 @@
 
 * **TikTok:** „VPN-Verbindung verbergen“ sagt jetzt, dass TikTok die IP-Adresse des VPN weiterhin sieht, und „Werbe-ID blockieren“ spricht von Löschen statt Zurücksetzen.
 
+* **TikTok:** „Gespeicherte Videos vergessen“ und „Apps zu Teilen über hinzufügen“ bleiben nicht mehr hängen, wenn TikTok viel zu tun hat. Sie sagen Bescheid, und du kannst es noch einmal versuchen.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).
