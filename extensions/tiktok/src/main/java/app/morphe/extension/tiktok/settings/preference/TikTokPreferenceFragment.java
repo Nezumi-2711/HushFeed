@@ -78,6 +78,11 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private static final String ARG_TARGET_KEY = "morphe_settings_target_key";
     /** A checklist row's one box: the setting key of the member search landed on. */
     private static final String ARG_TARGET_MEMBER = "morphe_settings_target_member";
+    /** The page names a restart's return marker carries ({@link #pageKey}). */
+    public static final String PAGE_HOME = "home";
+    static final String PAGE_SEARCH = "search";
+    private static final String PAGE_HUB = "hub:";
+    private static final String PAGE_SECTION = "section:";
     // Volatile: a file read or write's worker looks it up to report in the page open now.
     private static volatile TikTokPreferenceFragment activeFragment;
     /** Pinned to the top of this page while a restart is owed; off the page otherwise. */
@@ -811,6 +816,41 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         } catch (IllegalArgumentException ignored) {
             return null;
         }
+    }
+
+    /** This page, as the restart's return marker names it, so the next start can open it again. */
+    String pageKey() {
+        if (isSearchRequested()) return PAGE_SEARCH;
+        Hub hub = getRequestedHub();
+        if (hub != null) return PAGE_HUB + hub.name();
+        Section section = getRequestedSection();
+        return section != null ? PAGE_SECTION + section.name() : PAGE_HOME;
+    }
+
+    /**
+     * The page a return marker names, built to open over the home page, or null for the home page
+     * itself and for a page this build doesn't have.
+     */
+    public static TikTokPreferenceFragment forPage(String page) {
+        if (page == null) return null;
+        Bundle arguments = new Bundle();
+        try {
+            if (PAGE_SEARCH.equals(page)) {
+                arguments.putBoolean(ARG_SEARCH, true);
+            } else if (page.startsWith(PAGE_HUB)) {
+                arguments.putString(ARG_HUB, Hub.valueOf(page.substring(PAGE_HUB.length())).name());
+            } else if (page.startsWith(PAGE_SECTION)) {
+                arguments.putString(ARG_SECTION,
+                        Section.valueOf(page.substring(PAGE_SECTION.length())).name());
+            } else {
+                return null;
+            }
+        } catch (IllegalArgumentException gone) {
+            return null;
+        }
+        TikTokPreferenceFragment fragment = new TikTokPreferenceFragment();
+        fragment.setArguments(arguments);
+        return fragment;
     }
 
     private String getTargetKey() {
