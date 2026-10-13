@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).
+
 * **TikTok:** Hinweis zur Einrichtung des Android-17-Emulators ergänzt, für SDK-Tools, die API-Unterversionen falsch lesen.
 
 * **TikTok:** Entwurf übersetzen bleibt verfügbar, während die Tastatur ein Wort zusammensetzt oder die Rechtschreibung prüft. Eine Übersetzungsanfrage, die das angemeldete Konto verliert, endet jetzt sofort, statt auf ihr Zeitlimit zu warten.

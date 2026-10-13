@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).
+
 * **Development:** Added an Android 17 emulator setup note for SDK tools that misread minor API versions.
 
 * **TikTok:** Translate draft stays available while the keyboard is composing a word or checking its spelling. A translation request that loses access to the signed-in account now ends without leaving the preview waiting for its timeout.

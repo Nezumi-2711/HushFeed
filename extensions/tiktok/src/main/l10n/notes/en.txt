@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).
+
 * **TikTok:** Added an Android 17 emulator setup note for SDK tools that misread minor API versions.
 
 * **TikTok:** Translate draft stays available while the keyboard is composing a word or checking its spelling. A translation request that loses the signed-in account now ends right away instead of waiting for its timeout.

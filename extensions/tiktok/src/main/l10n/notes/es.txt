@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).
+
 * **TikTok:** Se añadió una nota de configuración del emulador de Android 17 para las herramientas del SDK que leen mal las versiones menores de la API.
 
 * **TikTok:** Traducir borrador sigue disponible mientras el teclado compone una palabra o revisa la ortografía. Una solicitud de traducción que pierde la cuenta con sesión iniciada ahora termina enseguida en vez de esperar a que se agote el tiempo.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Laporan diagnostik punya bagian baru berisi pengaturan yang diubah. Bagian ini menyebut setiap pengaturan yang tidak lagi di nilai bawaannya, sehingga laporan menunjukkan sakelar mana yang aktif. Teks yang kamu ketik di sebuah pengaturan tidak pernah disertakan (#149).
+
 * **TikTok:** Menambahkan catatan penyiapan emulator Android 17 untuk alat SDK yang salah membaca versi minor API.
 
 * **TikTok:** Terjemahkan draf tetap tersedia saat keyboard sedang menyusun kata atau memeriksa ejaan. Permintaan terjemahan yang kehilangan akun yang sedang masuk kini langsung berakhir, tidak lagi menunggu batas waktunya.

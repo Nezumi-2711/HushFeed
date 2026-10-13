@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).
+
 * **TikTok:** Aggiunta una nota sulla configurazione dell'emulatore Android 17 per gli strumenti SDK che leggono male le versioni minori dell'API.
 
 * **TikTok:** Traduci bozza resta disponibile mentre la tastiera compone una parola o controlla l'ortografia. Una richiesta di traduzione che perde l'account connesso ora termina subito invece di aspettare il timeout.

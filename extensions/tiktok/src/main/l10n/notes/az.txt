@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).
+
 * **TikTok:** API-nin kiçik versiyalarını səhv oxuyan SDK alətləri üçün Android 17 emulyatorunun quraşdırılması haqqında qeyd əlavə edildi.
 
 * **TikTok:** Qaralamanı tərcümə et klaviatura sözü yığarkən və ya orfoqrafiyanı yoxlayarkən də əlçatan qalır. Daxil olunmuş hesaba çıxışını itirən tərcümə sorğusu artıq vaxt limitini gözləmədən dərhal bitir.

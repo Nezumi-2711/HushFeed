@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).
+
 * **TikTok:** API alt sürümlerini yanlış okuyan SDK araçları için Android 17 emülatör kurulum notu eklendi.
 
 * **TikTok:** Taslağı çevir, klavye bir sözcüğü oluştururken veya yazımı denetlerken de kullanılabilir kalır. Oturum açılmış hesaba erişimini kaybeden bir çeviri isteği artık zaman aşımını beklemeden hemen sona erer.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).
+
 * **TikTok:** Adicionada uma nota de configuração do emulador do Android 17 para ferramentas do SDK que leem errado as versões menores da API.
 
 * **TikTok:** Traduzir rascunho continua disponível enquanto o teclado compõe uma palavra ou verifica a ortografia. Um pedido de tradução que perde a conta conectada agora termina na hora, em vez de esperar o tempo limite.
