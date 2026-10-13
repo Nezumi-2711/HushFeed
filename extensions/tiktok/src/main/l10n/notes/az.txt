@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pop-uplar altındakı yeni Mənbələrini yoxla xəbərdarlıqlarını gizlət açarı bəzi videoların üst hissəsindəki Mənbələrini yoxla bannerini və belə videonu paylaşanda TikTok-un göstərdiyi xəbərdarlığı götürür.
+
 * **TikTok:** Ayar axtarışında açarı birbaşa nəticələrdə yandırıb söndürə bilərsiniz. Daha çox iş görən açarlar yenə öz səhifəsini açır.
 
 * **TikTok:** Axtarış sahəsinin altında Sürətli quruluşlar var. Sakit, Məxfilik və Defolta qaytarın bir toxunuşla tətbiq olunur, neçə ayarın dəyişdiyini bildirir və geri qaytarmağı təklif edir.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Un nuovo interruttore in Popup, Nascondi gli avvisi Controlla le tue fonti, toglie il banner Controlla le tue fonti in cima ad alcuni video e l'avviso che TikTok mostra quando ne condividi uno.
+
 * **TikTok:** La ricerca nelle impostazioni ti permette di attivare o disattivare un interruttore direttamente nei risultati. Gli interruttori che fanno di più aprono ancora la loro pagina.
 
 * **TikTok:** Sotto il campo di ricerca ci sono le Configurazioni rapide. Tranquillo, Privacy e Ripristina predefiniti richiedono un tocco, dicono quante impostazioni sono cambiate e offrono Annulla.

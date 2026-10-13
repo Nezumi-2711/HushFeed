@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Açılır pencereler altındaki yeni Kaynaklarını kontrol et uyarılarını gizle anahtarı, bazı videoların üst kısmındaki Kaynaklarını kontrol et bandını ve böyle bir videoyu paylaşırken TikTok'un gösterdiği uyarıyı kaldırır.
+
 * **TikTok:** Ayar aramasında bir anahtarı doğrudan sonuçlarda açıp kapatabilirsin. Açıp kapatmaktan fazlasını yapan anahtarlar yine kendi sayfasını açar.
 
 * **TikTok:** Arama alanının altında Hızlı kurulumlar var. Sakin, Gizlilik ve Varsayılana dön tek dokunuşla uygulanır, kaç ayarın değiştiğini söyler ve Geri al sunar.

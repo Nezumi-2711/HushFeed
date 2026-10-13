@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ein neuer Schalter unter Pop-ups, Warnungen „Prüfe deine Quellen“ ausblenden, entfernt das Banner „Prüfe deine Quellen“ oben über manchen Videos und den Hinweis, den TikTok beim Teilen eines solchen Videos zeigt.
+
 * **TikTok:** In der Einstellungssuche kannst du Schalter direkt in den Ergebnissen umlegen. Schalter, die mehr tun als ein- und ausschalten, öffnen weiter ihre Seite.
 
 * **TikTok:** Unter dem Suchfeld gibt es jetzt Schnelleinstellungen. Ruhig, Datenschutz und Standard wiederherstellen brauchen je einen Tipp, sagen, wie viele Einstellungen sich geändert haben, und bieten Rückgängig an.

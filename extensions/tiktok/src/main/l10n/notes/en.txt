@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** A new switch under Popups, Hide Check your sources warnings, takes away the Check your sources banner across the top of some videos and the prompt TikTok shows when you share one.
+
 * **TikTok:** Settings search lets you flip a switch right in the results. Switches that do more than turn on or off still open their page.
 
 * **TikTok:** Quick setups sits under the search field. Quiet, Privacy and Back to defaults each take one tap, say how many settings changed and offer Undo.

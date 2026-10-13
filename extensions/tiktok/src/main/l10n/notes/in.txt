@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sakelar baru di Pop-up, Sembunyikan peringatan Periksa sumbermu, menghapus spanduk Periksa sumbermu di bagian atas beberapa video dan peringatan yang ditampilkan TikTok saat kamu membagikannya.
+
 * **TikTok:** Pencarian pengaturan kini memungkinkanmu menyalakan atau mematikan sakelar langsung di hasil. Sakelar yang melakukan lebih dari itu tetap membuka halamannya.
 
 * **TikTok:** Pengaturan cepat ada di bawah kolom pencarian. Tenang, Privasi, dan Kembalikan default cukup sekali ketuk, memberi tahu berapa pengaturan yang berubah, dan menawarkan Urungkan.
