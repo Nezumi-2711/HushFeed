@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Skip content warnings has a new switch under Feed screen > Popups, Hide Check your sources warnings, off until you turn it on. It takes away the "Check your sources before sharing" banner TikTok lays across the top of some videos, and the prompt TikTok shows when you go to share one, so the share just goes through. It's its own switch because TikTok drives this banner from different data than the Check sources banner that Hide unverified content notices covers.
+
 * **TikTok:** Settings search now lets you flip a switch right in the results, so you don't have to open its page first. Switches that do more than turn on or off, like Ghost mode or the screen time ones, still take you to their page.
 
 * **TikTok:** Quick setups sits right under the search field on the main settings page. Quiet turns on the Calm feed switches (ads, Shop, LIVE and the rest), Privacy turns on Ghost mode and the tracking blocks that cost you nothing, and Back to defaults puts every switch back the way Hushfeed ships. Each one tells you how many settings it changed and offers Undo, and the Restart row shows up when a change needs it.
