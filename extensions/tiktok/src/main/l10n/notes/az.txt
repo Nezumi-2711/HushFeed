@@ -156,6 +156,8 @@
 
 * **TikTok:** Siyahı redaktoru açıq olanda telefonu çevirmək və ya qaranlıq rejimi dəyişmək artıq seçdiklərinizi və ya yazdıqlarınızı sıfırlamır. Ləğv edin yenə heç nəyi dəyişmir.
 
+* **TikTok:** İkon şəkli indi PNG-nin piksel məlumatını da yoxlayır, belə ki, içi zədələnmiş fayl tətbiqə düşmək əvəzinə yamaqlamanı təhlükəsiz dayandırır.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

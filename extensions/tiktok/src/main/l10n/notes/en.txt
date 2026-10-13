@@ -156,6 +156,8 @@
 
 * **TikTok:** Rotating the phone or switching dark mode while a list editor is open keeps what you picked or typed instead of starting over. Cancel still changes nothing.
 
+* **TikTok:** Icon picture now checks a PNG's pixel data too, so a file that's damaged inside stops patching safely instead of going into the app.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Show LIVE under the status bar now fills the top edge in every room, without a black band or pale strip (#137).

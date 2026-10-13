@@ -160,6 +160,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Rotating the phone, resizing the window or switching dark mode while an editor is open no longer throws away what you picked or typed in it. The share action lists, Add apps to Share via, Hide profile shortcuts, the popup list, Locally hidden creators and the count ranges keep your unsaved choices, and Cancel still changes nothing.
 
+* **TikTok:** Icon picture now checks the picture's pixel data too, not just its header and checksums. A PNG whose image data is cut short or damaged, or whose palette breaks the PNG rules, stops patching with the reason before anything in TikTok changes, instead of being copied into the app as it is.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).
