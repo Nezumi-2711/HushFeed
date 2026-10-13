@@ -13,9 +13,11 @@ import static org.junit.Assert.assertTrue;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import app.morphe.extension.tiktok.SettingsContextRule;
 import app.morphe.extension.tiktok.settings.preference.TikTokPreferenceFragment;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -30,6 +32,8 @@ import java.util.List;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 28)
 public class SettingsReturnTest {
+    @Rule public final SettingsContextRule settingsContext = new SettingsContextRule();
+
     private SharedPreferences preferences;
     private final List<String> opened = new ArrayList<>();
 
