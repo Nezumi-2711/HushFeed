@@ -79,7 +79,6 @@ That watch-history file is damaged. Nothing was imported.	Il file della cronolog
 %1$s (will be returned when requested)	%1$s (verrà restituito quando richiesto)
 %1$s and above	Da %1$s in su
 %1$s appears more than once in this file.	%1$s compare più di una volta in questo file.
-%1$s changed	%1$s modificato
 %1$s is already hidden	%1$s è già nascosto
 %1$s destinations must start with %2$s	Le destinazioni %1$s devono iniziare con %2$s
 %1$s is too long for a settings backup. Shorten it, then save the backup again.	%1$s è troppo lungo per un backup delle impostazioni. Accorcialo, poi salva di nuovo il backup.

@@ -1394,7 +1394,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private void addReportProblem(PreferenceScreen screen) {
         SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), "Report a problem",
                 "Opens a GitHub report with your versions and settings filled in. Add what happened.",
-                SettingsMenuPreference.Icon.REPORT, 0, preference -> {
+                SettingsMenuPreference.Icon.REPORT, preference -> {
                     reportProblem();
                     return true;
                 });
@@ -1406,7 +1406,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     /** The last row of the home page: the Ko-fi page, the way HushPinterest words it. */
     private void addSupport(PreferenceScreen screen) {
         SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), "Support Hushfeed",
-                "Buy me a coffee on Ko-fi", SettingsMenuPreference.Icon.SUPPORT, 0, preference -> {
+                "Buy me a coffee on Ko-fi", SettingsMenuPreference.Icon.SUPPORT, preference -> {
                     openWebPage(getActivity(), SUPPORT_URL);
                     return true;
                 });
@@ -1497,7 +1497,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
 
     private void addAbout(PreferenceScreen screen) {
         SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), Hub.ABOUT.title,
-                "", SettingsMenuPreference.Icon.ABOUT, 0, preference -> {
+                "", SettingsMenuPreference.Icon.ABOUT, preference -> {
                     openHub(Hub.ABOUT);
                     return true;
                 });
@@ -1519,7 +1519,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private void addFeatureGateLab(PreferenceScreen screen) {
         SettingsMenuPreference lab = new SettingsMenuPreference(getActivity(), "Feature Gate Lab",
                 "Advanced. Find and force the hidden switches TikTok uses to test features.",
-                SettingsMenuPreference.Icon.LAB, 0, preference -> {
+                SettingsMenuPreference.Icon.LAB, preference -> {
                     FeatureGateLabFragment.open(getActivity());
                     return true;
                 });
@@ -1533,7 +1533,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         if (!ReleaseNotes.pending(context, releaseVersion)) return;
         SettingsMenuPreference notes = new SettingsMenuPreference(context, "What's new",
                 L10n.f(context, "Changes in Hushfeed %1$s", ReleaseNotes.rowVersion(context, releaseVersion)),
-                SettingsMenuPreference.Icon.NEWS, 0, preference -> {
+                SettingsMenuPreference.Icon.NEWS, preference -> {
                     ReleaseNotes.show(context, releaseVersion, () -> screen.removePreference(preference));
                     return true;
                 });
@@ -1611,7 +1611,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private final java.util.Map<Section, List<Setting<?>>> sectionSettings =
             new java.util.EnumMap<>(Section.class);
 
-    /** A page's row on the home page: compact, with no changed-setting badge. */
+    /** A page's row on the home page, in the compact layout. */
     private void addMenu(PreferenceScreen screen, Section section) {
         String description = L10n.t(getActivity(), section == Section.SCREEN_TIME
                 ? "Budgets and reminders" : section.description);
@@ -1623,7 +1623,6 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 section.title,
                 description,
                 section.icon,
-                0,
                 preference -> {
                     openSection(section);
                     return true;

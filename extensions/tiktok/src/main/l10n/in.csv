@@ -74,7 +74,6 @@ That file has more than %1$s watch-history entries.,Berkas berisi lebih dari %1$
 %1$s (will be returned when requested),%1$s (akan dikembalikan saat diminta)
 %1$s and above,%1$s ke atas
 %1$s appears more than once in this file.,%1$s muncul lebih dari sekali dalam file ini.
-%1$s changed,%1$s diubah
 %1$s is already hidden,%1$s sudah disembunyikan
 %1$s destinations must start with %2$s,Tujuan %1$s harus diawali %2$s
 "%1$s is too long for a settings backup. Shorten it, then save the backup again.","%1$s terlalu panjang untuk cadangan pengaturan. Persingkat, lalu simpan cadangan lagi."

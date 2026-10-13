@@ -76,7 +76,6 @@ That watch-history file is damaged. Nothing was imported.	İzleme geçmişi dosy
 %1$s (will be returned when requested)	%1$s (istendiğinde döndürülecek)
 %1$s and above	%1$s ve üzeri
 %1$s appears more than once in this file.	%1$s bu dosyada birden fazla kez geçiyor.
-%1$s changed	%1$s değişti
 %1$s destinations must start with %2$s	%1$s hedefleri %2$s ile başlamalı
 %1$s is too long for a settings backup. Shorten it, then save the backup again.	%1$s bir ayar yedeği için çok uzun. Kısaltın, ardından yedeği yeniden kaydedin.
 %1$s isn't a language code, so no video would ever match it. Use two letters, like en, es or de.	%1$s bir dil kodu değil, bu yüzden hiçbir video eşleşmez. en, es veya de gibi iki harf kullan.

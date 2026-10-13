@@ -597,7 +597,6 @@ public class SettingsPagesTest {
                     positionOf(list, menuRows(home).get(0).getKey()) <= list.getLastVisiblePosition());
             for (var row : menuRows(home)) {
                 assertTrue("the root row returned to the oversized card layout", row.isCompact());
-                assertEquals("the root index grew a changed-setting badge", 0, row.activeCount());
             }
             TextView heading = home.getView().findViewWithTag("hushfeed_page_title");
             assertTextFits(heading);
@@ -766,7 +765,7 @@ public class SettingsPagesTest {
             java.util.Map<String, int[]> pictures = new java.util.LinkedHashMap<>();
             for (var icon : app.morphe.extension.tiktok.settings.preference.SettingsMenuPreference.Icon.values()) {
                 var row = new app.morphe.extension.tiktok.settings.preference.SettingsMenuPreference(
-                        activity, "row", "summary", icon, 0, preference -> true);
+                        activity, "row", "summary", icon, preference -> true);
                 pictures.put(icon.name(), render(row.getIcon(), View.LAYOUT_DIRECTION_LTR, 48));
             }
             for (var first : pictures.entrySet()) {

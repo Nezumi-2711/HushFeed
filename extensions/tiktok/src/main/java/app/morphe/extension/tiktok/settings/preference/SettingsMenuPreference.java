@@ -50,7 +50,6 @@ public final class SettingsMenuPreference extends Preference {
     }
 
     private static final int ACCESSORY_TAG = 0x4D4D454E;
-    private int activeCount;
     private final Icon menuIcon;
     private boolean compact;
 
@@ -59,12 +58,10 @@ public final class SettingsMenuPreference extends Preference {
             String title,
             String summary,
             Icon icon,
-            int activeCount,
             OnPreferenceClickListener listener
     ) {
         super(context);
         this.menuIcon = icon;
-        this.activeCount = activeCount;
         setTitle(title);
         setSummary(summary);
         setIcon(new MenuIconDrawable(context, icon));
@@ -80,7 +77,7 @@ public final class SettingsMenuPreference extends Preference {
         return new MenuIconDrawable(context, icon, true);
     }
 
-    /** Home keeps denser grouped rows and omits the changed-setting badges. */
+    /** Home's denser grouped rows; the card layout is What's new on About. */
     public void setCompact(boolean compact) {
         if (this.compact == compact) return;
         this.compact = compact;
@@ -94,25 +91,6 @@ public final class SettingsMenuPreference extends Preference {
 
     boolean isAbout() {
         return menuIcon == Icon.ABOUT;
-    }
-
-    /**
-     * How many settings on the page behind this row are away from their default.
-     *
-     * <p>Not final any more. The master menu builds its rows once and keeps them across every
-     * trip into a section and back, so a count fixed at build time was the count from whenever
-     * the screen was first opened. Changing three switches and pressing back left the old
-     * number sitting there for the rest of the session.
-     */
-    public void setActiveCount(int count) {
-        if (activeCount == count) return;
-        activeCount = count;
-        notifyChanged();
-    }
-
-    /** What the badge is showing, or zero for no badge. */
-    public int activeCount() {
-        return activeCount;
     }
 
     @Override
@@ -245,30 +223,6 @@ public final class SettingsMenuPreference extends Preference {
         accessory.setGravity(Gravity.CENTER_VERTICAL);
         accessory.setOrientation(LinearLayout.HORIZONTAL);
 
-        if (!compact && activeCount > 0) {
-            TextView badge = SettingsUi.text(
-                    getContext(),
-                    // "changed", not "on". The number is how many settings on that page
-                    // are away from their default, and two of them default to on, so
-                    // turning one of those off used to read as having turned it on.
-                    L10n.f(getContext(), "%1$s changed", activeCount),
-                    12,
-                    SettingsUi.badgeText(),
-                    1
-            );
-            badge.setGravity(Gravity.CENTER);
-            badge.setPadding(
-                    SettingsUi.dp(getContext(), 8),
-                    SettingsUi.dp(getContext(), 4),
-                    SettingsUi.dp(getContext(), 8),
-                    SettingsUi.dp(getContext(), 4)
-            );
-            android.graphics.drawable.GradientDrawable badgeBackground = SettingsUi.roundedSurface(getContext(), SettingsUi.RADIUS_BADGE, true);
-            badgeBackground.setColor(SettingsUi.badgeFill());
-            badge.setBackground(badgeBackground);
-            accessory.addView(badge);
-        }
-
         ImageView chevron = new ImageView(getContext());
         chevron.setImageDrawable(new ChevronDrawable(getContext()));
         // Decorative, like the one the list adapter adds to every other row.
@@ -277,7 +231,6 @@ public final class SettingsMenuPreference extends Preference {
                 SettingsUi.dp(getContext(), 18),
                 SettingsUi.dp(getContext(), 18)
         );
-        chevronParams.setMarginStart(SettingsUi.dp(getContext(), !compact && activeCount > 0 ? 9 : 0));
         accessory.addView(chevron, chevronParams);
         frame.addView(accessory);
     }

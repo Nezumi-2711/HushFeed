@@ -25,7 +25,6 @@ source,target
 %1$s (will be returned when requested),%1$s (will be returned when requested)
 %1$s and above,%1$s and above
 %1$s appears more than once in this file.,%1$s appears more than once in this file.
-%1$s changed,%1$s changed
 %1$s day,%1$s day
 %1$s days,%1$s days
 %1$s destinations must start with %2$s,%1$s destinations must start with %2$s
