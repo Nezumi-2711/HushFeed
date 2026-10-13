@@ -46,7 +46,9 @@ public final class SettingsMenuPreference extends Preference {
         NEWS,
         FEED,
         APP,
-        ABOUT
+        ABOUT,
+        REPORT,
+        SUPPORT
     }
 
     private static final int ACCESSORY_TAG = 0x4D4D454E;
@@ -609,6 +611,33 @@ public final class SettingsMenuPreference extends Preference {
                     canvas.drawLine(cx, cy + bounds.height() * 0.16f, cx, bottom, line);
                     canvas.drawLine(left, cy, cx - bounds.width() * 0.16f, cy, line);
                     canvas.drawLine(cx + bounds.width() * 0.16f, cy, right, cy, line);
+                    break;
+                case REPORT:
+                    // A flag on a pole: something to raise.
+                    float pole = left + bounds.width() * 0.04f;
+                    canvas.drawLine(pole, top, pole, bottom, line);
+                    path.reset();
+                    path.moveTo(pole, top);
+                    path.lineTo(right, top);
+                    path.lineTo(right - bounds.width() * 0.1f, top + bounds.height() * 0.12f);
+                    path.lineTo(right, cy);
+                    path.lineTo(pole, cy);
+                    canvas.drawPath(path, line);
+                    break;
+                case SUPPORT:
+                    // A cup with its handle, for the coffee.
+                    float rim = top + bounds.height() * 0.08f;
+                    float cupRight = right - bounds.width() * 0.12f;
+                    path.reset();
+                    path.moveTo(left, rim);
+                    path.lineTo(cupRight, rim);
+                    path.lineTo(cupRight, cy + bounds.height() * 0.06f);
+                    path.quadTo(cupRight, bottom, cx - bounds.width() * 0.06f, bottom);
+                    path.quadTo(left, bottom, left, cy + bounds.height() * 0.06f);
+                    path.close();
+                    canvas.drawPath(path, line);
+                    canvas.drawArc(new RectF(cupRight - bounds.width() * 0.06f, rim + bounds.height() * 0.06f,
+                            right + bounds.width() * 0.04f, cy + bounds.height() * 0.08f), -90, 180, false, line);
                     break;
             }
         }

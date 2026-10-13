@@ -45,9 +45,10 @@ public class SettingsPagesTest {
             "Diagnostics", "Backup and restore"};
     private static final String[] HUBS = {"FEED_LAYOUT", "COMMENTS_INBOX", "DOWNLOADS_SHARING",
             "APP_ADVANCED", "ABOUT"};
+    /** The eight destinations, then the two rows that leave settings: the report and Ko-fi. */
     private static final String[] ROOT_TITLES = {"Feed & layout", "Playback", "Privacy",
             "Comments & inbox", "Downloads & sharing", "Screen time", "App & advanced",
-            "About Hushfeed"};
+            "About Hushfeed", "Report a problem", "Support Hushfeed"};
     private final Map<Field, Boolean> statuses = new LinkedHashMap<>();
 
     public static class PageActivity extends Activity {
@@ -547,8 +548,10 @@ public class SettingsPagesTest {
             layout(home.getView(), 390, 844);
             Shadows.shadowOf(Looper.getMainLooper()).idle();
             ListView list = home.getView().findViewById(android.R.id.list);
-            assertEquals("the default index no longer fits its eight destinations on a phone",
-                    list.getAdapter().getCount() - 1, list.getLastVisiblePosition());
+            // Report a problem and the Ko-fi row come after About and may scroll; the eight
+            // destinations may not.
+            assertTrue("the default index no longer fits its eight destinations on a phone",
+                    positionOf(list, "hub_about") <= list.getLastVisiblePosition());
             for (var row : menuRows(home)) {
                 assertTrue("the root row returned to the oversized card layout", row.isCompact());
                 assertEquals("the root index grew a changed-setting badge", 0, row.activeCount());

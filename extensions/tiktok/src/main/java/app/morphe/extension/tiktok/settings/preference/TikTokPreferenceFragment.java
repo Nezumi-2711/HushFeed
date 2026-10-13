@@ -44,6 +44,7 @@ import app.morphe.extension.tiktok.captions.CaptionTools;
 import app.morphe.extension.tiktok.comment.CommentSearch;
 import app.morphe.extension.tiktok.featuregatelab.FeatureGateLabFragment;
 import app.morphe.extension.tiktok.featuregatelab.FeatureGateLabRuntime;
+import app.morphe.extension.tiktok.settings.ProblemReport;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.share.ShareUrlSanitizer;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
@@ -80,6 +81,9 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private static final String ARG_TARGET_MEMBER = "morphe_settings_target_member";
     /** The page names a restart's return marker carries ({@link #pageKey}). */
     public static final String PAGE_HOME = "home";
+    static final String REPORT_PROBLEM_KEY = "action_report_problem";
+    static final String SUPPORT_KEY = "action_support_hushfeed";
+    static final String SUPPORT_URL = "https://ko-fi.com/X8K126YVER";
     static final String PAGE_SEARCH = "search";
     private static final String PAGE_HUB = "hub:";
     private static final String PAGE_SECTION = "section:";
@@ -1312,6 +1316,113 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         }
         addHub(screen, Hub.APP_ADVANCED, SettingsMenuPreference.Icon.APP);
         addHub(screen, Hub.ABOUT, SettingsMenuPreference.Icon.ABOUT);
+        addReportProblem(screen);
+        addSupport(screen);
+    }
+
+    /** Report a problem, just above the Ko-fi row: a GitHub bug report with the facts filled in. */
+    private void addReportProblem(PreferenceScreen screen) {
+        SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), "Report a problem",
+                "Opens a GitHub report with your versions and settings filled in. Add what happened.",
+                SettingsMenuPreference.Icon.REPORT, 0, preference -> {
+                    reportProblem();
+                    return true;
+                });
+        row.setKey(REPORT_PROBLEM_KEY);
+        row.setCompact(true);
+        screen.addPreference(row);
+    }
+
+    /** The last row of the home page: the Ko-fi page, the way HushPinterest words it. */
+    private void addSupport(PreferenceScreen screen) {
+        SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), "Support Hushfeed",
+                "Buy me a coffee on Ko-fi", SettingsMenuPreference.Icon.SUPPORT, 0, preference -> {
+                    openWebPage(getActivity(), SUPPORT_URL);
+                    return true;
+                });
+        row.setKey(SUPPORT_KEY);
+        row.setCompact(true);
+        screen.addPreference(row);
+    }
+
+    private void reportProblem() {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        ProblemReport.Facts facts = ProblemReport.collect(activity, switchesOnInEnglish(activity));
+        openWebPage(activity, ProblemReport.url(facts));
+    }
+
+    /** A web page in the reader's browser, in a task of its own so it never opens inside TikTok's. */
+    static Intent webPageIntent(String url) {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    static void openWebPage(Context context, String url) {
+        if (context == null) return;
+        try {
+            context.startActivity(webPageIntent(url));
+        } catch (ActivityNotFoundException | SecurityException missing) {
+            // No browser, or none switched on. Uncaught, Android's exception would close TikTok.
+            SettingsActionBanner.showNotice(context, L10n.t(context, "No app on this phone opens web links"));
+        }
+    }
+
+    /**
+     * The title of every switch that's on, page by page, for a problem report. Read in English,
+     * which is what the tracker is written in, whatever language the phone shows.
+     */
+    private List<String> switchesOnInEnglish(Context context) {
+        Context english = context;
+        try {
+            android.content.res.Configuration configuration =
+                    new android.content.res.Configuration(context.getResources().getConfiguration());
+            configuration.setLocale(java.util.Locale.ENGLISH);
+            english = context.createConfigurationContext(configuration);
+        } catch (RuntimeException unavailable) {
+            // The phone's own language then: a report in German still says which switches are on.
+        }
+        List<String> titles = new ArrayList<>();
+        java.util.Set<String> seen = new java.util.HashSet<>();
+        PreferenceScreen scratch = getPreferenceManager().createPreferenceScreen(context);
+        for (Section section : Section.values()) {
+            try {
+                PreferenceCategory category = createCategory(english, scratch, section);
+                if (category == null) continue;
+                collectSwitchesOn(category, titles, seen);
+                scratch.removePreference(category);
+            } catch (RuntimeException unreadable) {
+                app.morphe.extension.shared.Logger.printException(
+                        () -> "Couldn't read the switches on " + section + " for the report", unreadable);
+            }
+        }
+        return titles;
+    }
+
+    private static void collectSwitchesOn(PreferenceGroup group, List<String> titles,
+            java.util.Set<String> seen) {
+        for (int index = 0; index < group.getPreferenceCount(); index++) {
+            Preference preference = group.getPreference(index);
+            if (preference instanceof PreferenceGroup) {
+                collectSwitchesOn((PreferenceGroup) preference, titles, seen);
+                continue;
+            }
+            if (preference instanceof SwitchListPreference) {
+                for (SwitchListPreference.Item item : ((SwitchListPreference) preference).items()) {
+                    if (item.setting.savedValue() && seen.add(item.setting.key)) {
+                        titles.add(preference.getTitle() + ": " + item.label);
+                    }
+                }
+                continue;
+            }
+            if (!(preference instanceof android.preference.SwitchPreference) || !preference.hasKey()) continue;
+            Setting<?> setting = Setting.getSettingFromPath(preference.getKey());
+            if (setting instanceof app.morphe.extension.shared.settings.BooleanSetting
+                    && Boolean.TRUE.equals(setting.savedValue()) && seen.add(setting.key)) {
+                titles.add(String.valueOf(preference.getTitle()));
+            }
+        }
     }
 
     private void addHub(PreferenceScreen screen, Hub hub, SettingsMenuPreference.Icon icon) {
