@@ -162,8 +162,6 @@
 
 * **TikTok:** Icon picture now checks a PNG's pixel data too, so a file that's damaged inside stops patching safely instead of going into the app.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** Show LIVE under the status bar now fills the top edge in every room, without a black band or pale strip (#137).
 
 * **TikTok:** With Show LIVE under the status bar on, Clear display no longer leaves a strip under the clock, and side panels stay below it (#137).

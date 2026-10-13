@@ -162,8 +162,6 @@
 
 * **TikTok:** İkon şəkli indi PNG-nin piksel məlumatını da yoxlayır, belə ki, içi zədələnmiş fayl tətbiqə düşmək əvəzinə yamaqlamanı təhlükəsiz dayandırır.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin açıq olanda Təmiz ekran artıq saatın altında zolaq qoymur, yan panellər də aşağıda qalır (#137).

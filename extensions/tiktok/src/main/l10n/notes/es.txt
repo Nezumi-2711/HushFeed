@@ -162,8 +162,6 @@
 
 * **TikTok:** Imagen del icono ahora también revisa los datos de píxeles del PNG, así que un archivo dañado por dentro detiene el parcheo de forma segura en vez de entrar en la app.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** Mostrar el LIVE bajo la barra de estado ahora llena el borde superior en todas las salas, sin franjas negras ni claras (#137).
 
 * **TikTok:** Con Mostrar LIVE bajo la barra de estado activado, Controles ocultos ya no deja una franja bajo el reloj y los paneles laterales quedan por debajo (#137).

@@ -162,8 +162,6 @@
 
 * **TikTok:** Gambar ikon kini juga memeriksa data piksel PNG, jadi file yang rusak di dalamnya menghentikan patching dengan aman alih-alih masuk ke aplikasi.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).
 
 * **TikTok:** Jika Tampilkan LIVE di bawah bilah status aktif, Tampilan bersih tak lagi meninggalkan garis di bawah jam dan panel samping tetap di bawahnya (#137).

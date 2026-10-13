@@ -162,8 +162,6 @@
 
 * **TikTok:** Simge resmi artık PNG'nin piksel verisini de denetliyor, böylece içi bozuk bir dosya uygulamaya girmek yerine yamalamayı güvenle durduruyor.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster açıkken Temiz ekran saatin altında şerit bırakmıyor, yan paneller de aşağıda kalıyor (#137).

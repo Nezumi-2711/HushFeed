@@ -162,8 +162,6 @@
 
 * **TikTok:** Imagem do ícone agora também verifica os dados de pixels do PNG, então um arquivo danificado por dentro interrompe a aplicação dos patches com segurança em vez de entrar no app.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** Mostrar a LIVE sob a barra de status agora preenche o topo de todas as salas, sem faixas pretas ou claras (#137).
 
 * **TikTok:** Com Mostrar LIVE sob a barra de status ligado, a tela limpa não deixa uma faixa sob o relógio, e os painéis laterais ficam abaixo dele (#137).

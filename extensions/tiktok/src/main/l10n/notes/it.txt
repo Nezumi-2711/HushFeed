@@ -162,8 +162,6 @@
 
 * **TikTok:** Immagine dell'icona ora controlla anche i dati dei pixel del PNG, quindi un file danneggiato all'interno ferma le patch in sicurezza invece di finire nell'app.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).
 
 * **TikTok:** Con Mostra LIVE sotto la barra di stato attivo, Vista pulita non lascia più una striscia sotto l'orologio e i pannelli laterali restano al di sotto (#137).

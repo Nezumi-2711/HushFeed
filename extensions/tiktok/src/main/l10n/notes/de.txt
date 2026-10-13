@@ -162,8 +162,6 @@
 
 * **TikTok:** Symbolbild prüft jetzt auch die Pixeldaten des PNG. Eine innen beschädigte Datei stoppt das Patchen sicher, statt in die App zu gelangen.
 
-## 0.71.3 (2026-10-11)
-
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).
 
 * **TikTok:** Wenn LIVE unter der Statusleiste anzeigen an ist, lässt Freie Ansicht keinen Streifen unter der Uhr stehen, und Seitenleisten bleiben darunter (#137).
