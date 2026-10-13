@@ -1475,10 +1475,10 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         screen.addPreference(row);
     }
 
-    /** The last row of the home page: the Ko-fi page, the way HushPinterest words it. */
+    /** The last row of the home page: the Ko-fi page, under its title alone. */
     private void addSupport(PreferenceScreen screen) {
         SettingsMenuPreference row = new SettingsMenuPreference(getActivity(), "Support Hushfeed",
-                "Buy me a coffee on Ko-fi", SettingsMenuPreference.Icon.SUPPORT, preference -> {
+                "", SettingsMenuPreference.Icon.SUPPORT, preference -> {
                     openWebPage(getActivity(), SUPPORT_URL);
                     return true;
                 });

@@ -47,7 +47,8 @@ public class SettingsFooterRowsTest {
             Preference report = screen.getPreference(count - 2);
             assertEquals(TikTokPreferenceFragment.SUPPORT_KEY, support.getKey());
             assertEquals("Support Hushfeed", String.valueOf(support.getTitle()));
-            assertEquals("Buy me a coffee on Ko-fi", String.valueOf(support.getSummary()));
+            assertEquals("the Support row carries its title and nothing under it",
+                    "", String.valueOf(support.getSummary()));
             assertEquals(TikTokPreferenceFragment.REPORT_PROBLEM_KEY, report.getKey());
             assertEquals("Report a problem", String.valueOf(report.getTitle()));
             assertEquals("Opens a GitHub report with your versions and settings filled in. Add what happened.",
