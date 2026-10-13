@@ -62,7 +62,56 @@ public class ProblemReportTest {
         String url = ProblemReport.url(facts(many));
         String context = URLDecoder.decode(url.substring(url.indexOf("&additional_context=")
                 + "&additional_context=".length()), "UTF-8");
-        assertTrue("the link carried more switches than the body", body.contains(context));
+        assertTrue("the link is " + ProblemReport.signInLength(url) + " characters behind GitHub's sign-in page",
+                ProblemReport.signInLength(url) <= ProblemReport.LINK_LIMIT);
+        for (String line : context.split("\n")) {
+            if (line.startsWith("- A fairly")) assertTrue("the link names a switch the body doesn't: " + line,
+                    body.contains(line + "\n"));
+        }
+        assertTrue("the link's cut doesn't say how many it left out", context.matches("(?s).*\n- and \\d+ more"));
+    }
+
+    /**
+     * Encoding grows the text, and GitHub answers 414 URI Too Long past about 8,200 characters. A
+     * body under its cap made a link GitHub refused, worse for a reporter sent through the sign-in
+     * page, which encodes the whole link again. The real switch titles are short, so this list
+     * fits the body whole and only the link has to cut it.
+     */
+    @Test public void aListThatFitsTheBodyIsStillCutForTheLink() throws Exception {
+        List<String> titles = new ArrayList<>();
+        for (int index = 1; index <= 160; index++) titles.add("Hide TikTok's thing number " + index);
+
+        String body = ProblemReport.body(facts(titles));
+        assertFalse("the body cut the list, so this proves nothing", body.contains(" more\n"));
+
+        String url = ProblemReport.url(facts(titles));
+        assertTrue("the link is " + ProblemReport.signInLength(url) + " characters behind GitHub's sign-in page",
+                ProblemReport.signInLength(url) <= ProblemReport.LINK_LIMIT);
+        String context = URLDecoder.decode(url.substring(url.indexOf("&additional_context=")
+                + "&additional_context=".length()), "UTF-8");
+        assertTrue(context, context.startsWith("Hushfeed switches that are on (160):\n- Hide TikTok's thing number 1\n"));
+        assertTrue("the link's cut doesn't say how many it left out", context.matches("(?s).*\n- and \\d+ more"));
+    }
+
+    /** The S22's 24 switches, 2026-10-13: a short list goes into the link whole. */
+    @Test public void aShortListGoesIntoTheLinkWhole() throws Exception {
+        List<String> titles = new ArrayList<>();
+        for (int index = 1; index <= 24; index++) titles.add("Show the progress bar thumbnail " + index);
+
+        String url = ProblemReport.url(facts(titles));
+        String context = URLDecoder.decode(url.substring(url.indexOf("&additional_context=")
+                + "&additional_context=".length()), "UTF-8");
+        assertTrue(context, context.endsWith("\n- Show the progress bar thumbnail 24"));
+    }
+
+    /** The update block's version code is the highest there is, which tells a reader nothing. */
+    @Test public void theRaisedVersionCodeSaysStoreUpdatesAreBlockedInstead() {
+        String body = ProblemReport.body(new ProblemReport.Facts("0.72.0", "47.1.4", Integer.MAX_VALUE,
+                "samsung", "SM-S908U1", "16", 36, null));
+
+        assertTrue(body, body.startsWith(
+                "Hushfeed and TikTok: Version 0.72.0 for TikTok 47.1.4 (store updates blocked)\n"));
+        assertFalse(body, body.contains(String.valueOf(Integer.MAX_VALUE)));
     }
 
     @Test public void noSwitchesOnSaysSoAndMissingFactsReadUnknown() {
