@@ -1922,10 +1922,21 @@ assertEquals(View.LAYOUT_DIRECTION_RTL, configuration.getLayoutDirection());
                 assertTrue("the page came back at its top", list.getFirstVisiblePosition() > 0);
                 assertTrue("the row the restart was pressed at is off screen",
                         position >= list.getFirstVisiblePosition() && position <= list.getLastVisiblePosition());
-                // Still the page settings opened on: its Back arrow closes settings.
+                // Scrolled back up by hand, the page stays there after a page opened from it is
+                // closed: Back brings this same page back with a fresh list, and the restart's row
+                // was for coming back from the restart, not for every return after it.
                 list.setSelection(0);
                 layout(home.getView(), 480, 960);
                 Shadows.shadowOf(Looper.getMainLooper()).idle();
+                openMenu(activity, home, "section_privacy");
+                assertTrue(activity.getFragmentManager().popBackStackImmediate());
+                assertSame(home, activity.getFragmentManager().findFragmentById(android.R.id.content));
+                layout(home.getView(), 480, 960);
+                Shadows.shadowOf(Looper.getMainLooper()).idle();
+                layout(home.getView(), 480, 960);
+                assertEquals("Back from a page jumped home down to the restart's row again", 0,
+                        ((ListView) home.getView().findViewById(android.R.id.list)).getFirstVisiblePosition());
+                // Still the page settings opened on: its Back arrow closes settings.
                 android.view.ViewGroup toolbar = home.getView().findViewWithTag("hushfeed_toolbar");
                 assertTrue(toolbar.getChildAt(0).performClick());
                 assertTrue("the returned home page lost its way out of settings", activity.isFinishing());

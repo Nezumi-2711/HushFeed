@@ -111,6 +111,12 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private static final String PENDING_DOWNLOAD_PATH_STATE = "morphe_pending_download_path";
     private static final String SEARCH_QUERY_STATE = "morphe_search_query";
     private SettingsListAdapter styledAdapter;
+    /**
+     * Set once this page has scrolled to where it was opened for. Back to a page another one
+     * opened over brings this same instance back with a new view and no saved state, which
+     * looks like an arrival; the page keeps where the reader left it instead.
+     */
+    private boolean arrived;
     private PreferenceScreen searchScreen;
     private List<SearchResult> searchIndex;
     private final List<Preference> searchRows = new ArrayList<>();
@@ -802,12 +808,14 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
             list.setAdapter(styledAdapter);
             String targetKey = getTargetKey();
             String returnRow = getArguments() == null ? null : getArguments().getString(ARG_RETURN_ROW);
-            if (targetKey == null && returnRow != null && state == null) {
+            boolean returning = arrived;
+            arrived = true;
+            if (!returning && targetKey == null && returnRow != null && state == null) {
                 // Only on arrival: a recreated page keeps the scroll the list saved for it.
                 scrollToPreference(list, returnRow, false);
                 list.post(() -> scrollToPreference(list, returnRow, false));
             }
-            if (targetKey != null) {
+            if (!returning && targetKey != null) {
                 scrollToPreference(list, targetKey);
                 list.post(() -> scrollToPreference(list, targetKey));
                 // Only on arrival. A recreated page brings back the dialog it had open, with the
