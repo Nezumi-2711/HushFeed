@@ -156,6 +156,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Importing a new font no longer loses the one you had when the save fails or TikTok closes halfway through. The earlier font waits under another name until the new one is in place, and comes back if it never gets there.
 
+* **TikTok:** With Hide seen videos on, switching accounts while a video plays can no longer hide that video for the account you switched to. The watch stays with the account that watched it, and the next account still marks the same video when it plays it.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** With Show a LIVE under the status bar on, every room you scroll to reaches up under the clock with the shade behind it. Some rooms kept a black band there, and after the first few LIVEs the strip could go light again (#137).

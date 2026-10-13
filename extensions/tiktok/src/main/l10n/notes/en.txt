@@ -152,6 +152,8 @@
 
 * **TikTok:** If saving a newly imported font fails or TikTok closes partway, the font you had stays instead of disappearing.
 
+* **TikTok:** Switching accounts mid-video no longer hides that video for the account you switched to. It counts as seen only for the account that watched it.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Show LIVE under the status bar now fills the top edge in every room, without a black band or pale strip (#137).

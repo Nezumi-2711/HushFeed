@@ -152,6 +152,8 @@
 
 * **TikTok:** Jika menyimpan font baru yang diimpor gagal atau TikTok tertutup di tengah jalan, font yang sebelumnya kamu pakai tetap ada dan tidak hilang.
 
+* **TikTok:** Berganti akun saat video diputar tidak lagi menyembunyikan video itu di akun tujuan. Video hanya dihitung sudah ditonton untuk akun yang menontonnya.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).

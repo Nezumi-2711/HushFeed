@@ -152,6 +152,8 @@
 
 * **TikTok:** Yeni idxal edilmiş şrifti saxlamaq alınmasa və ya TikTok yarıda bağlansa, əvvəlki şrift itmək əvəzinə yerində qalır.
 
+* **TikTok:** Video oynayarkən hesabı dəyişmək artıq həmin videonu keçdiyiniz hesabda gizlətmir. Video yalnız ona baxan hesab üçün baxılmış sayılır.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

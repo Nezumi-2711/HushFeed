@@ -152,6 +152,8 @@
 
 * **TikTok:** Yeni içe aktarılan yazı tipi kaydedilemezse veya TikTok yarıda kapanırsa, önceki yazı tipi kaybolmak yerine yerinde kalıyor.
 
+* **TikTok:** Video oynarken hesap değiştirmek artık o videoyu geçilen hesapta gizlemiyor. Video yalnızca onu izleyen hesap için izlenmiş sayılıyor.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).

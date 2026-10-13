@@ -152,6 +152,8 @@
 
 * **TikTok:** Scheitert das Speichern einer neu importierten Schrift oder schließt sich TikTok mittendrin, bleibt deine bisherige Schrift erhalten, statt zu verschwinden.
 
+* **TikTok:** Wechselst du mitten im Video das Konto, wird das Video für das neue Konto nicht mehr ausgeblendet. Es zählt nur für das Konto als gesehen, das es angeschaut hat.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).

@@ -152,6 +152,8 @@
 
 * **TikTok:** Se il salvataggio di un nuovo carattere importato non riesce o TikTok si chiude a metà, il carattere che avevi resta invece di sparire.
 
+* **TikTok:** Cambiare account a metà video non nasconde più quel video nell'account a cui passi. Conta come visto solo per l'account che l'ha guardato.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).
