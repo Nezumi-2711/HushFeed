@@ -146,7 +146,7 @@
 
 * **TikTok:** "Dimentica i video salvati" e "Aggiungi app a Condividi con" non si bloccano più quando TikTok è occupato. Te lo dicono e puoi riprovare.
 
-* **TikTok:** Il controllo delle patch si rifiuta di svuotare una cartella che non ha creato, così una cartella di conservazione scritta male non può cancellare i tuoi file.
+* **TikTok:** Il controllo delle patch ora verifica la cartella di conservazione prima di svuotarla e rifiuta una cartella che non ha creato.
 
 * **TikTok:** Con TalkBack attivo, Per te offre l'azione Apri le impostazioni di Hushfeed, così la scorciatoia con pressione prolungata funziona anche con uno screen reader.
 

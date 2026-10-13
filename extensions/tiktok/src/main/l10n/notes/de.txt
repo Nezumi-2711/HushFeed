@@ -146,7 +146,7 @@
 
 * **TikTok:** „Gespeicherte Videos vergessen“ und „Apps zu Teilen über hinzufügen“ bleiben nicht mehr hängen, wenn TikTok viel zu tun hat. Sie sagen Bescheid, und du kannst es noch einmal versuchen.
 
-* **TikTok:** Die Patch-Prüfung leert keinen Ordner mehr, den sie nicht selbst angelegt hat. Ein vertippter Aufbewahrungsordner kann so keine Dateien löschen.
+* **TikTok:** Die Patch-Prüfung prüft ihren Aufbewahrungsordner jetzt, bevor sie ihn leert, und lehnt einen Ordner ab, den sie nicht selbst angelegt hat.
 
 * **TikTok:** Mit TalkBack bietet Für dich die Aktion Hushfeed-Einstellungen öffnen an. So klappt die Abkürzung per Gedrückthalten auch mit einem Screenreader.
 

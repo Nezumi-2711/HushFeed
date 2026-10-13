@@ -146,7 +146,7 @@
 
 * **TikTok:** "Esquecer os vídeos salvos" e "Adicionar apps ao Compartilhar via" não travam mais quando o TikTok está ocupado. Eles avisam, e você pode tentar de novo.
 
-* **TikTok:** O verificador de patches se recusa a esvaziar uma pasta que ele não criou, então uma pasta de retenção digitada errado não apaga mais seus arquivos.
+* **TikTok:** O verificador de patches agora confere a pasta de retenção antes de esvaziá-la e recusa uma pasta que ele não criou.
 
 * **TikTok:** Com o TalkBack ativado, Para você oferece a ação Abrir as configurações do Hushfeed, então o atalho de tocar e segurar também funciona com um leitor de tela.
 

@@ -146,7 +146,7 @@
 
 * **TikTok:** "Kaydedilen videoları unut" ve "Şununla paylaş'a uygulama ekle" artık TikTok meşgulken takılı kalmıyor. Haber veriyorlar, tekrar deneyebilirsin.
 
-* **TikTok:** Yama denetleyicisi kendi oluşturmadığı bir klasörü boşaltmayı reddediyor, böylece yanlış yazılmış bir saklama klasörü dosyalarını silemez.
+* **TikTok:** Yama denetleyicisi artık saklama klasörünü boşaltmadan önce denetliyor ve kendi oluşturmadığı bir klasörü reddediyor.
 
 * **TikTok:** TalkBack açıkken Senin İçin, Hushfeed ayarlarını aç eylemini sunuyor. Böylece uzun basma kısayolu ekran okuyucuyla da çalışıyor.
 

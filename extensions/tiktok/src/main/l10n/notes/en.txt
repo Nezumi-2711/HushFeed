@@ -146,7 +146,7 @@
 
 * **TikTok:** Forget saved videos and Add apps to Share via no longer get stuck when TikTok is busy. They tell you, and you can try again.
 
-* **TikTok:** The patch checker refuses to empty a folder it didn't create, so a mistyped keep folder can't delete your files.
+* **TikTok:** The patch checker now checks its keep folder before emptying it, and refuses a folder it didn't create.
 
 * **TikTok:** With TalkBack on, For You lists an Open Hushfeed settings action, so the press-and-hold shortcut works with a screen reader too.
 

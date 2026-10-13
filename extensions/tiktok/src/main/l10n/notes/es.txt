@@ -146,7 +146,7 @@
 
 * **TikTok:** «Olvidar los vídeos guardados» y «Añadir apps a Compartir con» ya no se quedan atascados cuando TikTok está ocupado. Te avisan y puedes volver a intentarlo.
 
-* **TikTok:** El comprobador de parches se niega a vaciar una carpeta que no creó, así que una carpeta de conservación mal escrita ya no puede borrar tus archivos.
+* **TikTok:** El comprobador de parches ahora revisa su carpeta de conservación antes de vaciarla y rechaza una carpeta que no creó.
 
 * **TikTok:** Con TalkBack activado, Para ti ofrece la acción Abrir los ajustes de Hushfeed, así que el atajo de mantener pulsado también funciona con un lector de pantalla.
 

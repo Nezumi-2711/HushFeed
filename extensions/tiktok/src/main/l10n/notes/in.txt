@@ -146,7 +146,7 @@
 
 * **TikTok:** "Lupakan video tersimpan" dan "Tambahkan aplikasi ke Bagikan via" tidak lagi macet saat TikTok sedang sibuk. Keduanya memberi tahu, dan kamu bisa mencoba lagi.
 
-* **TikTok:** Pemeriksa patch menolak mengosongkan folder yang tidak dibuatnya, jadi salah ketik nama folder simpanan tidak bisa menghapus berkasmu.
+* **TikTok:** Pemeriksa patch kini memeriksa folder simpanannya sebelum mengosongkannya, dan menolak folder yang tidak dibuatnya.
 
 * **TikTok:** Saat TalkBack aktif, Untuk Kamu menyediakan tindakan Buka pengaturan Hushfeed, jadi pintasan tekan lama juga berfungsi dengan pembaca layar.
 

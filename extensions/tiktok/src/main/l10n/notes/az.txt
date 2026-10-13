@@ -146,7 +146,7 @@
 
 * **TikTok:** "Saxlanılmış videoları unudun" və "Share via bölməsinə tətbiqlər əlavə edin" artıq TikTok məşğul olanda ilişib qalmır. Sizə bildirirlər və yenidən cəhd edə bilərsiniz.
 
-* **TikTok:** Yamaq yoxlayıcısı özünün yaratmadığı qovluğu boşaltmaqdan imtina edir, belə ki, səhv yazılmış saxlama qovluğu fayllarınızı silə bilməz.
+* **TikTok:** Yamaq yoxlayıcısı indi saxlama qovluğunu boşaltmazdan əvvəl yoxlayır və özünün yaratmadığı qovluğu rədd edir.
 
 * **TikTok:** TalkBack açıq olanda Sənin üçün Hushfeed ayarlarını açın əməliyyatını təklif edir. Belə ki, uzun basma qısayolu ekran oxuyucusu ilə də işləyir.
 
