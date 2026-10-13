@@ -150,6 +150,8 @@
 
 * **TikTok:** Saat TalkBack aktif, Untuk Kamu menyediakan tindakan Buka pengaturan Hushfeed, jadi pintasan tekan lama juga berfungsi dengan pembaca layar.
 
+* **TikTok:** Jika menyimpan font baru yang diimpor gagal atau TikTok tertutup di tengah jalan, font yang sebelumnya kamu pakai tetap ada dan tidak hilang.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).

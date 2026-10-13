@@ -150,6 +150,8 @@
 
 * **TikTok:** TalkBack açıq olanda Sənin üçün Hushfeed ayarlarını açın əməliyyatını təklif edir. Belə ki, uzun basma qısayolu ekran oxuyucusu ilə də işləyir.
 
+* **TikTok:** Yeni idxal edilmiş şrifti saxlamaq alınmasa və ya TikTok yarıda bağlansa, əvvəlki şrift itmək əvəzinə yerində qalır.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

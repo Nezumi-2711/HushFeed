@@ -150,6 +150,8 @@
 
 * **TikTok:** Con TalkBack activado, Para ti ofrece la acción Abrir los ajustes de Hushfeed, así que el atajo de mantener pulsado también funciona con un lector de pantalla.
 
+* **TikTok:** Si falla el guardado de una fuente importada nueva o TikTok se cierra a medias, la fuente que tenías se queda en lugar de desaparecer.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar el LIVE bajo la barra de estado ahora llena el borde superior en todas las salas, sin franjas negras ni claras (#137).

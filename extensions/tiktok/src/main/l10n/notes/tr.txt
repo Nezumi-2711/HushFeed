@@ -150,6 +150,8 @@
 
 * **TikTok:** TalkBack açıkken Senin İçin, Hushfeed ayarlarını aç eylemini sunuyor. Böylece uzun basma kısayolu ekran okuyucuyla da çalışıyor.
 
+* **TikTok:** Yeni içe aktarılan yazı tipi kaydedilemezse veya TikTok yarıda kapanırsa, önceki yazı tipi kaybolmak yerine yerinde kalıyor.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).

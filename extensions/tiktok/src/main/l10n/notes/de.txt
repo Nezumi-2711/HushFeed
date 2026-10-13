@@ -150,6 +150,8 @@
 
 * **TikTok:** Mit TalkBack bietet Für dich die Aktion Hushfeed-Einstellungen öffnen an. So klappt die Abkürzung per Gedrückthalten auch mit einem Screenreader.
 
+* **TikTok:** Scheitert das Speichern einer neu importierten Schrift oder schließt sich TikTok mittendrin, bleibt deine bisherige Schrift erhalten, statt zu verschwinden.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).

@@ -150,6 +150,8 @@
 
 * **TikTok:** Com o TalkBack ativado, Para você oferece a ação Abrir as configurações do Hushfeed, então o atalho de tocar e segurar também funciona com um leitor de tela.
 
+* **TikTok:** Se salvar uma nova fonte importada falhar ou o TikTok fechar no meio, a fonte que você tinha continua lá em vez de sumir.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar a LIVE sob a barra de status agora preenche o topo de todas as salas, sem faixas pretas ou claras (#137).

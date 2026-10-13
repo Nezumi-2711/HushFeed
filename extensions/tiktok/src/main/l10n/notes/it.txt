@@ -150,6 +150,8 @@
 
 * **TikTok:** Con TalkBack attivo, Per te offre l'azione Apri le impostazioni di Hushfeed, così la scorciatoia con pressione prolungata funziona anche con uno screen reader.
 
+* **TikTok:** Se il salvataggio di un nuovo carattere importato non riesce o TikTok si chiude a metà, il carattere che avevi resta invece di sparire.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).
