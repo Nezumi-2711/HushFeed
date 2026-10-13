@@ -28,6 +28,7 @@ import android.widget.EditText;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.settings.StringSetting;
 import app.morphe.extension.tiktok.SettingsContextRule;
+import app.morphe.extension.tiktok.SettingsRegistryRule;
 import app.morphe.extension.tiktok.settings.Settings;
 
 import java.util.function.Supplier;
@@ -54,6 +55,8 @@ import org.robolectric.util.ReflectionHelpers;
 @SuppressWarnings("deprecation")
 public class EditorDraftRecreationTest {
     @Rule public final SettingsContextRule settingsContext = new SettingsContextRule();
+    // The range editor case builds a StringSetting of its own; this takes it back out.
+    @Rule public final SettingsRegistryRule settingsRegistry = new SettingsRegistryRule();
 
     public static final class TestActivity extends PreferenceActivity {
         @Override public void onCreate(Bundle state) {
