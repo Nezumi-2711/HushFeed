@@ -148,6 +148,8 @@
 
 * **TikTok:** The patch checker refuses to empty a folder it didn't create, so a mistyped keep folder can't delete your files.
 
+* **TikTok:** With TalkBack on, For You lists an Open Hushfeed settings action, so the press-and-hold shortcut works with a screen reader too.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Show LIVE under the status bar now fills the top edge in every room, without a black band or pale strip (#137).

@@ -148,6 +148,8 @@
 
 * **TikTok:** Yamaq yoxlayıcısı özünün yaratmadığı qovluğu boşaltmaqdan imtina edir, belə ki, səhv yazılmış saxlama qovluğu fayllarınızı silə bilməz.
 
+* **TikTok:** TalkBack açıq olanda Sənin üçün Hushfeed ayarlarını açın əməliyyatını təklif edir. Belə ki, uzun basma qısayolu ekran oxuyucusu ilə də işləyir.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

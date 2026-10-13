@@ -148,6 +148,8 @@
 
 * **TikTok:** El comprobador de parches se niega a vaciar una carpeta que no creó, así que una carpeta de conservación mal escrita ya no puede borrar tus archivos.
 
+* **TikTok:** Con TalkBack activado, Para ti ofrece la acción Abrir los ajustes de Hushfeed, así que el atajo de mantener pulsado también funciona con un lector de pantalla.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar el LIVE bajo la barra de estado ahora llena el borde superior en todas las salas, sin franjas negras ni claras (#137).

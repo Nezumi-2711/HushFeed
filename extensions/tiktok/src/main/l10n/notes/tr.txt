@@ -148,6 +148,8 @@
 
 * **TikTok:** Yama denetleyicisi kendi oluşturmadığı bir klasörü boşaltmayı reddediyor, böylece yanlış yazılmış bir saklama klasörü dosyalarını silemez.
 
+* **TikTok:** TalkBack açıkken Senin İçin, Hushfeed ayarlarını aç eylemini sunuyor. Böylece uzun basma kısayolu ekran okuyucuyla da çalışıyor.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).

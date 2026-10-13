@@ -148,6 +148,8 @@
 
 * **TikTok:** Il controllo delle patch si rifiuta di svuotare una cartella che non ha creato, così una cartella di conservazione scritta male non può cancellare i tuoi file.
 
+* **TikTok:** Con TalkBack attivo, Per te offre l'azione Apri le impostazioni di Hushfeed, così la scorciatoia con pressione prolungata funziona anche con uno screen reader.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).
