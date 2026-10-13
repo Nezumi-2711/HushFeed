@@ -89,8 +89,10 @@ public class TikTokActivityHook {
         base.setContentView(settingsSurface);
 
         if (restoredRoot == null) {
-            PreferenceFragment preferenceFragment = new TikTokPreferenceFragment();
             String section = intent.getStringExtra(SETTINGS_SECTION_EXTRA);
+            // A restart pressed far down the home page comes back scrolled to where it was.
+            PreferenceFragment preferenceFragment = TikTokPreferenceFragment.home(
+                    section == null || section.isEmpty() ? intent.getStringExtra(SETTINGS_PAGE_EXTRA) : null);
             if (section != null && !section.isEmpty()) {
                 Bundle arguments = new Bundle();
                 arguments.putString(SETTINGS_SECTION_EXTRA, section);

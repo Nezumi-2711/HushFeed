@@ -92,6 +92,26 @@ public class SettingsReturnTest {
     }
 
     /**
+     * The marker carries the row that was at the top of the screen after a #, and the page it
+     * opens comes back scrolled there. For the home page that's the first page itself, which a
+     * section's marker never touches. A marker with nothing after the # is just its page.
+     */
+    @Test public void aMarkerCarriesTheRowItWasScrolledTo() {
+        TikTokPreferenceFragment privacy = TikTokPreferenceFragment.forPage("section:PRIVACY#hide_root");
+        assertEquals("PRIVACY", privacy.getArguments().getString("morphe_settings_section"));
+        assertEquals("hide_root", privacy.getArguments().getString("morphe_settings_return_row"));
+        assertNull(TikTokPreferenceFragment.forPage("section:PRIVACY#").getArguments()
+                .getString("morphe_settings_return_row"));
+        assertNull("home is already under every returned page", TikTokPreferenceFragment.forPage("home#paused"));
+
+        assertEquals("paused", TikTokPreferenceFragment.home("home#paused").getArguments()
+                .getString("morphe_settings_return_row"));
+        for (String marker : new String[]{null, "home", "home#", "section:PRIVACY#hide_root", "search"}) {
+            assertNull(marker + " scrolled the home page", TikTokPreferenceFragment.home(marker).getArguments());
+        }
+    }
+
+    /**
      * A marker written by the build before the home page listed every page names one of the four
      * groups that sat in between. Those are gone, so the start opens the home page, where every
      * page they held is now a row.

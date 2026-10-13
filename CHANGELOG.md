@@ -14,7 +14,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** The main Hushfeed settings page ends with two new rows. Report a problem opens a GitHub bug report with your Hushfeed and TikTok versions, your phone and the switches you have on already filled in, so you only add what happened. With a long list of switches on, the report lists as many as GitHub takes in one link and says how many more there are. Support Hushfeed opens the Ko-fi page if you'd like to buy me a coffee.
 
-* **TikTok:** Restarting TikTok from the Restart row or the banner now brings you back to the Hushfeed settings page you were on, so you can keep going where you left off. Back still takes you to the main settings page.
+* **TikTok:** Restarting TikTok from the Restart row or the banner now brings you back to the Hushfeed settings page you were on, scrolled to where you were, so you can keep going where you left off. Back still takes you to the main settings page.
 
 * **TikTok:** Hushfeed settings has a new look throughout. The home page has pink icons and a clearer search field. Pages share rounded panels, quieter section headings and pill switches. Feature Gate Lab and the creator editor follow the same style, with large text and light mode kept readable.
 

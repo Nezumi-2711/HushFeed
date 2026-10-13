@@ -101,13 +101,14 @@ public final class RestartPendingPreference extends Preference {
     }
 
     /**
-     * Notes the page open now, so the next start lands back on it, then relaunches. The row and
-     * the banner's Restart both come through here, and both are pressed on a settings page.
+     * Notes the page open now and how far down it was, so the next start lands back there, then
+     * relaunches. The row and the banner's Restart both come through here, and both are pressed on
+     * a settings page.
      */
     static void restart(Context context) {
         TikTokPreferenceFragment open = TikTokPreferenceFragment.active();
         SettingsReturn.rememberBeforeRestart(open == null
-                ? TikTokPreferenceFragment.PAGE_HOME : open.pageKey());
+                ? TikTokPreferenceFragment.PAGE_HOME : open.returnMarker());
         restarter.restart(context);
     }
 }

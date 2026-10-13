@@ -79,6 +79,13 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private static final String ARG_TARGET_KEY = "morphe_settings_target_key";
     /** A checklist row's one box: the setting key of the member search landed on. */
     private static final String ARG_TARGET_MEMBER = "morphe_settings_target_member";
+    /**
+     * The row a restart was pressed with at the top of the screen. The page comes back scrolled
+     * to it, quietly: unlike a search result's target it isn't flashed and changes nothing else.
+     */
+    private static final String ARG_RETURN_ROW = "morphe_settings_return_row";
+    /** Between the page and the row in a return marker: "home#hushfeed_paused". */
+    private static final char ROW_MARK = '#';
     /** The page names a restart's return marker carries ({@link #pageKey}). */
     public static final String PAGE_HOME = "home";
     static final String REPORT_PROBLEM_KEY = "action_report_problem";
@@ -794,6 +801,12 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
             styledAdapter = new SettingsListAdapter(list.getAdapter());
             list.setAdapter(styledAdapter);
             String targetKey = getTargetKey();
+            String returnRow = getArguments() == null ? null : getArguments().getString(ARG_RETURN_ROW);
+            if (targetKey == null && returnRow != null && state == null) {
+                // Only on arrival: a recreated page keeps the scroll the list saved for it.
+                scrollToPreference(list, returnRow, false);
+                list.post(() -> scrollToPreference(list, returnRow, false));
+            }
             if (targetKey != null) {
                 scrollToPreference(list, targetKey);
                 list.post(() -> scrollToPreference(list, targetKey));
@@ -865,12 +878,56 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     }
 
     /**
+     * What a restart's return marker records: this page, and the row at the top of the screen
+     * when the page was scrolled, so a restart from far down the home page comes back there.
+     */
+    String returnMarker() {
+        String row = rowInView();
+        return row == null ? pageKey() : pageKey() + ROW_MARK + row;
+    }
+
+    /** The first row whole on screen, or null while the page is at its top. */
+    private String rowInView() {
+        View view = getView();
+        ListView list = view == null ? null : view.findViewById(android.R.id.list);
+        if (list == null || list.getAdapter() == null || list.getFirstVisiblePosition() == 0) return null;
+        int first = list.getFirstVisiblePosition();
+        for (int index = 0; index < list.getChildCount(); index++) {
+            Object item = list.getAdapter().getItem(first + index);
+            if (list.getChildAt(index).getTop() < 0 || !(item instanceof Preference)) continue;
+            String key = ((Preference) item).getKey();
+            if (key != null && !key.isEmpty() && key.indexOf(ROW_MARK) < 0) return key;
+        }
+        return null;
+    }
+
+    /**
+     * The settings screen's first page for a restart's return marker: the home page, scrolled to
+     * the marker's row when the restart came from home.
+     */
+    public static TikTokPreferenceFragment home(String marker) {
+        TikTokPreferenceFragment home = new TikTokPreferenceFragment();
+        int mark = marker == null ? -1 : marker.indexOf(ROW_MARK);
+        if (mark > 0 && PAGE_HOME.equals(marker.substring(0, mark)) && mark < marker.length() - 1) {
+            Bundle arguments = new Bundle();
+            arguments.putString(ARG_RETURN_ROW, marker.substring(mark + 1));
+            home.setArguments(arguments);
+        }
+        return home;
+    }
+
+    /**
      * The page a return marker names, built to open over the home page, or null for the home page
-     * itself and for a page this build doesn't have.
+     * itself and for a page this build doesn't have. A marker from an older build has no row.
      */
     public static TikTokPreferenceFragment forPage(String page) {
         if (page == null) return null;
         Bundle arguments = new Bundle();
+        int mark = page.indexOf(ROW_MARK);
+        if (mark >= 0) {
+            if (mark < page.length() - 1) arguments.putString(ARG_RETURN_ROW, page.substring(mark + 1));
+            page = page.substring(0, mark);
+        }
         try {
             if (PAGE_SEARCH.equals(page)) {
                 arguments.putBoolean(ARG_SEARCH, true);
@@ -1281,15 +1338,20 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     }
 
     private static void scrollToPreference(ListView list, String key) {
+        scrollToPreference(list, key, true);
+    }
+
+    /** A search result's row is flashed; a restart's return row comes back as it was left. */
+    private static void scrollToPreference(ListView list, String key, boolean highlight) {
         if (list == null || list.getAdapter() == null) {
             return;
         }
-        int dp24 = SettingsUi.dp(list.getContext(), 24);
+        int top = highlight ? SettingsUi.dp(list.getContext(), 24) : 0;
         for (int position = 0; position < list.getAdapter().getCount(); position++) {
             Object item = list.getAdapter().getItem(position);
             if (item instanceof Preference && key.equals(((Preference) item).getKey())) {
-                list.setSelectionFromTop(position, dp24);
-                highlightRow(list, position);
+                list.setSelectionFromTop(position, top);
+                if (highlight) highlightRow(list, position);
                 return;
             }
         }

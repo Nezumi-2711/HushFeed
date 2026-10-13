@@ -1865,6 +1865,78 @@ assertEquals(View.LAYOUT_DIRECTION_RTL, configuration.getLayoutDirection());
         }
     }
 
+    /**
+     * Pause and the status card sit near the end of the home page, so a restart pressed there,
+     * from the banner, comes back scrolled to where it was rather than at the top of the page.
+     * Pressed at the top, it comes back at the top.
+     */
+    @Test public void aRestartFromFarDownTheHomePageComesBackThere() throws Exception {
+        var restartPending = app.morphe.extension.shared.settings.preference.AbstractPreferenceFragment.restartPending;
+        restartPending.clear();
+        restartPending.add(Settings.FOLDABLE_SPLIT_VIEW.key);
+        java.util.List<android.content.Context> restarted = new java.util.ArrayList<>();
+        app.morphe.extension.tiktok.settings.preference.RestartPendingPreference
+                .setRestarterForTests(restarted::add);
+        android.content.SharedPreferences preferences =
+                app.morphe.extension.shared.settings.Setting.preferences.preferences;
+        String rowKey = app.morphe.extension.tiktok.settings.preference.RestartPendingPreference.KEY;
+        try {
+            String marker;
+            try (var owner = Robolectric.buildActivity(PageActivity.class).setup().visible()) {
+                Activity activity = owner.get();
+                Utils.setContext(activity);
+                TikTokPreferenceFragment home = attachHome(activity);
+                layout(home.getView(), 480, 960);
+                Shadows.shadowOf(Looper.getMainLooper()).idle();
+                View restart = home.findPreference(rowKey).getView(null, null)
+                        .findViewWithTag("hushfeed_restart_pending_row");
+
+                assertTrue(restart.performClick());
+                assertEquals("home", preferences.getString(SettingsReturn.PAGE_KEY, null));
+
+                ListView list = home.getView().findViewById(android.R.id.list);
+                list.setSelection(list.getAdapter().getCount() - 1);
+                layout(home.getView(), 480, 960);
+                Shadows.shadowOf(Looper.getMainLooper()).idle();
+                assertTrue(restart.performClick());
+                assertEquals(2, restarted.size());
+                marker = preferences.getString(SettingsReturn.PAGE_KEY, null);
+                assertTrue("the marker doesn't say how far down the page was: " + marker,
+                        marker != null && marker.startsWith("home#"));
+            }
+
+            String row = marker.substring("home#".length());
+            try (var owner = Robolectric.buildActivity(PageActivity.class).setup().visible()) {
+                Activity activity = owner.get();
+                Utils.setContext(activity);
+                TikTokPreferenceFragment home = TikTokPreferenceFragment.home(marker);
+                activity.getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, home).commit();
+                activity.getFragmentManager().executePendingTransactions();
+                layout(home.getView(), 480, 960);
+                Shadows.shadowOf(Looper.getMainLooper()).idle();
+                layout(home.getView(), 480, 960);
+                ListView list = home.getView().findViewById(android.R.id.list);
+                int position = positionOf(list, row);
+                assertTrue("the marker names a row this page doesn't have: " + row, position > 0);
+                assertTrue("the page came back at its top", list.getFirstVisiblePosition() > 0);
+                assertTrue("the row the restart was pressed at is off screen",
+                        position >= list.getFirstVisiblePosition() && position <= list.getLastVisiblePosition());
+                // Still the page settings opened on: its Back arrow closes settings.
+                list.setSelection(0);
+                layout(home.getView(), 480, 960);
+                Shadows.shadowOf(Looper.getMainLooper()).idle();
+                android.view.ViewGroup toolbar = home.getView().findViewWithTag("hushfeed_toolbar");
+                assertTrue(toolbar.getChildAt(0).performClick());
+                assertTrue("the returned home page lost its way out of settings", activity.isFinishing());
+            }
+        } finally {
+            app.morphe.extension.tiktok.settings.preference.RestartPendingPreference.setRestarterForTests(null);
+            restartPending.clear();
+            preferences.edit().remove(SettingsReturn.PAGE_KEY).remove(SettingsReturn.AT_KEY).commit();
+        }
+    }
+
     @Test public void tabPickerChangesJoinThePersistentRestartDebt() throws Exception {
         String original = Settings.BOTTOM_NAVIGATION_TABS.get();
         app.morphe.extension.shared.settings.preference.AbstractPreferenceFragment
