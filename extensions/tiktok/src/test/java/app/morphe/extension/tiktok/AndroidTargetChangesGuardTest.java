@@ -138,6 +138,11 @@ public class AndroidTargetChangesGuardTest {
                 "not fetched: printed inside the notice the Licenses row shows");
         REVIEWED_ADDRESSES.put("https://www.gnu.org/licenses/gpl-3.0.html",
                 "not fetched: printed inside the notice the Licenses row shows");
+        REVIEWED_ADDRESSES.put("https://github.com/SysAdminDoc/HushFeed/issues/new",
+                "not fetched: the bug form Report a problem fills in, opened in the reader's "
+                        + "browser");
+        REVIEWED_ADDRESSES.put("https://ko-fi.com/X8K126YVER",
+                "not fetched: the Support Hushfeed row, opened in the reader's browser");
     }
 
     /** Where a java.lang.reflect.Field lands in a local, a field or a parameter. */
