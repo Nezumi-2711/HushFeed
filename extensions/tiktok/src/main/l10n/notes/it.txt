@@ -140,6 +140,8 @@
 
 * **TikTok:** Un backup ripristinato con uno schema di nome file o una cartella di download molto lunghi non blocca più la pagina delle impostazioni.
 
+* **TikTok:** La freccia Indietro in una pagina delle impostazioni aperta da "Mostra l'interruttore" ora esce dalle impostazioni invece di non fare nulla.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostra il LIVE sotto la barra di stato ora riempie il bordo superiore in ogni stanza, senza fasce nere o strisce chiare (#137).

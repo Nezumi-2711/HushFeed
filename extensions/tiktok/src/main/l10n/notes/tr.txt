@@ -140,6 +140,8 @@
 
 * **TikTok:** Çok uzun bir dosya adı kalıbı veya indirme klasörü içeren geri yüklenmiş bir yedek artık ayarlar sayfasını dondurmuyor.
 
+* **TikTok:** "Ayarı göster" ile açılan bir ayarlar sayfasındaki Geri oku artık hiçbir şey yapmamak yerine ayarlardan çıkıyor.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster artık her odada üst kenarı dolduruyor, siyah veya açık renk şerit bırakmıyor (#137).

@@ -1844,8 +1844,12 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
 
     private void navigateBack() {
         FragmentManager manager = getFragmentManager();
-        if (manager != null) {
+        if (manager != null && manager.getBackStackEntryCount() > 0) {
             manager.popBackStack();
+        } else {
+            // A page TikTok opened settings straight onto, as filter feedback does, has nothing
+            // under it to go back to, so its arrow leaves settings like the phone's Back does.
+            closeSettings();
         }
     }
 

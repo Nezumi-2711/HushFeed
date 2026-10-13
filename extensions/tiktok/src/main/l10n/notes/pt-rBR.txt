@@ -140,6 +140,8 @@
 
 * **TikTok:** Um backup restaurado com um padrão de nome de arquivo ou uma pasta de downloads muito longos não trava mais a página de configurações.
 
+* **TikTok:** A seta Voltar em uma página de configurações aberta por "Mostrar a opção" agora sai das configurações em vez de não fazer nada.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar a LIVE sob a barra de status agora preenche o topo de todas as salas, sem faixas pretas ou claras (#137).

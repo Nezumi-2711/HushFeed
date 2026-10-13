@@ -140,6 +140,8 @@
 
 * **TikTok:** A restored backup with a very long filename pattern or download folder no longer freezes the settings page.
 
+* **TikTok:** The Back arrow on a settings page opened from Show the switch now leaves settings instead of doing nothing.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Show LIVE under the status bar now fills the top edge in every room, without a black band or pale strip (#137).

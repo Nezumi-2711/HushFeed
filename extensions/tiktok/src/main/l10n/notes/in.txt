@@ -140,6 +140,8 @@
 
 * **TikTok:** Cadangan yang dipulihkan dengan pola nama file atau folder unduhan yang sangat panjang tidak lagi membuat halaman pengaturan macet.
 
+* **TikTok:** Panah Kembali di halaman pengaturan yang dibuka dari "Tampilkan sakelarnya" sekarang keluar dari pengaturan, tidak lagi diam saja.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Tampilkan LIVE di bawah bilah status kini memenuhi tepi atas di setiap ruang tanpa pita hitam atau garis pucat (#137).

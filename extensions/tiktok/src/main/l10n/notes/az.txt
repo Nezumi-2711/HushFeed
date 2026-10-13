@@ -140,6 +140,8 @@
 
 * **TikTok:** Çox uzun fayl adı şablonu və ya endirmə qovluğu olan bərpa edilmiş ehtiyat nüsxə artıq ayarlar səhifəsini dondurmur.
 
+* **TikTok:** "Açarı göstərin" ilə açılan ayarlar səhifəsindəki Geri oxu artıq heç nə etməmək əvəzinə ayarlardan çıxır.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE-ı status panelinin altında göstərin indi hər otaqda yuxarı kənarı qara və ya açıq zolaqsız doldurur (#137).

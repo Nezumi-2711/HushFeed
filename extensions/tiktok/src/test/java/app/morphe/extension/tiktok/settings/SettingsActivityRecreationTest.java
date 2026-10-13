@@ -190,6 +190,47 @@ public class SettingsActivityRecreationTest {
         }
     }
 
+    /**
+     * A page TikTok opens settings straight onto, the way filter feedback opens Feed filter at a
+     * row, is the root with nothing under it. Its Back arrow leaves settings like the phone's Back
+     * does; it used to pop an empty stack and do nothing. Opened from home, the arrow still goes
+     * back one page, after a recreation too.
+     */
+    @Test public void theBackArrowLeavesAPageOpenedStraightOntoAndPopsOneOpenedFromHome() {
+        Intent direct = settingsIntent().putExtra("morphe_settings_section", "FEED_FILTER");
+        try (var owner = Robolectric.buildActivity(SettingsActivity.class, direct).setup().visible()) {
+            SettingsActivity activity = owner.get();
+            settle(activity);
+            assertEquals("FEED_FILTER", requestedSection(currentPage(activity)));
+            assertEquals(0, activity.getFragmentManager().getBackStackEntryCount());
+            assertTrue(backArrow(currentPage(activity)).performClick());
+            assertTrue("the Back arrow on the page settings opened onto did nothing", activity.isFinishing());
+        }
+        try (var owner = Robolectric.buildActivity(SettingsActivity.class, settingsIntent()).setup().visible()) {
+            SettingsActivity before = owner.get();
+            settle(before);
+            clickMenu(before, "Downloads");
+            Configuration largerText = new Configuration(before.getResources().getConfiguration());
+            largerText.fontScale = 1.5f;
+            owner.configurationChange(largerText);
+            SettingsActivity after = owner.get();
+            settle(after);
+            assertEquals("DOWNLOADS", requestedSection(currentPage(after)));
+            assertTrue(backArrow(currentPage(after)).performClick());
+            settle(after);
+            assertFalse("the Back arrow left settings from a page home opened", after.isFinishing());
+            assertEquals(0, after.getFragmentManager().getBackStackEntryCount());
+            assertNull(requestedSection(currentPage(after)));
+            assertTrue(hasMenu(currentPage(after), "Downloads"));
+        }
+    }
+
+    private static View backArrow(TikTokPreferenceFragment page) {
+        ViewGroup toolbar = page.getView().findViewWithTag("hushfeed_toolbar");
+        assertNotNull("the page has no toolbar", toolbar);
+        return toolbar.getChildAt(0);
+    }
+
     private static Intent settingsIntent() {
         return new Intent().setAction("morphe_settings").putExtra("morphe", true);
     }

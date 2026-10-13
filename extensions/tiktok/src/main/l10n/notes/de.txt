@@ -140,6 +140,8 @@
 
 * **TikTok:** Eine wiederhergestellte Sicherung mit einem sehr langen Dateinamenmuster oder Download-Ordner friert die Einstellungsseite nicht mehr ein.
 
+* **TikTok:** Der Zurück-Pfeil auf einer Einstellungsseite, die über „Schalter anzeigen“ geöffnet wurde, verlässt jetzt die Einstellungen, statt nichts zu tun.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** LIVE unter der Statusleiste zeigen füllt jetzt in jedem Raum den oberen Rand, ohne schwarzen Balken oder hellen Streifen (#137).

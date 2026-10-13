@@ -140,6 +140,8 @@
 
 * **TikTok:** Una copia de seguridad restaurada con un patrón de nombre de archivo o una carpeta de descargas muy largos ya no congela la página de ajustes.
 
+* **TikTok:** La flecha Atrás en una página de ajustes abierta desde «Mostrar el ajuste» ahora sale de los ajustes en lugar de no hacer nada.
+
 ## 0.71.3 (2026-10-11)
 
 * **TikTok:** Mostrar el LIVE bajo la barra de estado ahora llena el borde superior en todas las salas, sin franjas negras ni claras (#137).
