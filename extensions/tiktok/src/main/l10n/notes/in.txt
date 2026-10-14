@@ -21,6 +21,8 @@
 
 * **TikTok:** Jangan mulai video pertama kini menghentikannya di bingkai pertama, bukan satu atau dua detik kemudian (#83).
 
+* **TikTok:** Sakelar baru mempertahankan kualitas LIVE yang kamu pilih setelah TikTok dimulai ulang (#57).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Latar profil yang disimpan saat Latar profil aktif tidak hilang lagi setelah TikTok dimulai ulang. Sakelarnya kini menawarkan mulai ulang (#80).

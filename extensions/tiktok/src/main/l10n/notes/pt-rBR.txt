@@ -21,6 +21,8 @@
 
 * **TikTok:** Não iniciar o primeiro vídeo agora para o vídeo no primeiro quadro, não um ou dois segundos depois (#83).
 
+* **TikTok:** Uma nova chave mantém a qualidade da LIVE que você escolheu depois que o TikTok reinicia (#57).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Um fundo de perfil salvo com Fundo do perfil ligado não some mais quando o TikTok reinicia. A chave agora oferece reiniciar (#80).

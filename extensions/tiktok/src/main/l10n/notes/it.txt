@@ -21,6 +21,8 @@
 
 * **TikTok:** Non avviare il primo video ora lo ferma al primo fotogramma, non dopo un paio di secondi (#83).
 
+* **TikTok:** Un nuovo interruttore mantiene la qualità LIVE che hai scelto dopo il riavvio di TikTok (#57).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Uno sfondo del profilo salvato con Sfondo del profilo attivo resta dopo il riavvio di TikTok. L'interruttore ora propone un riavvio (#80).

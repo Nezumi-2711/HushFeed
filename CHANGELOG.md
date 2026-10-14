@@ -25,6 +25,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Don't start the first video stops that video at its first frame and keeps it stopped until you tap. It used to play for a second or two before the pause caught up with it, since TikTok's first report that it's playing comes that late, and on a cold start TikTok started it once more a moment after the pause (#83).
 
+* **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback, then pick a quality from Share > Video quality in a LIVE. A room whose stream doesn't have that quality still opens at TikTok's choice (#57).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** A profile background saved with the Profile background switch on no longer disappears after TikTok restarts. TikTok asks its servers for profiles with a value that left the background out, and the switch now sends the one that brings it back, the same one Feature Gate Lab's Profile banner preset sets. Flipping the switch now offers a restart (#80).

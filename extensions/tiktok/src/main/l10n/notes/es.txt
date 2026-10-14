@@ -21,6 +21,8 @@
 
 * **TikTok:** No poner en marcha el primer video ahora lo detiene en su primer fotograma, no uno o dos segundos después (#83).
 
+* **TikTok:** Un nuevo interruptor mantiene la calidad de LIVE que elegiste después de reiniciar TikTok (#57).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Un fondo de perfil guardado con Fondo del perfil activado ya no desaparece al reiniciar TikTok. El interruptor ahora ofrece reiniciar (#80).
