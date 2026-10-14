@@ -4,6 +4,7 @@
 * **TikTok:** Tema gelap AMOLED kini juga membuat kartu di daftar Pengaturan dan privasi itu sendiri menjadi hitam (#152).
 
 * **TikTok:** Sakelar baru Tampilkan opsi terjemahan di pengaturan Bahasa di Komentar: halaman Bahasa milik TikTok kembali menampilkan baris terjemahan di akun yang di sana hanya melihat Bahasa aplikasi (#143).
+* **TikTok:** Hushfeed kini juga bisa mem-patch PineDrama 47.1.4, aplikasi drama TikTok. 90 patch berfungsi di sana, dan Morphe Manager hanya menawarkan patch itu (#156).
 
 * **TikTok:** Tombol Rekam LIVE turun agar tidak menghalangi saat panel Jelajahi TikTok terbuka di atas ruangan, lalu kembali saat panel ditutup (#37).
 

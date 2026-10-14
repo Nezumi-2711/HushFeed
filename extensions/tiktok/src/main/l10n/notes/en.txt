@@ -4,6 +4,7 @@
 * **TikTok:** AMOLED dark theme now makes the cards on the Settings and privacy list black too (#152).
 
 * **TikTok:** New Show translation options in Language settings switch under Comments: TikTok's own Language page shows its translation rows again on accounts that only got App language there (#143).
+* **TikTok:** Hushfeed also patches PineDrama 47.1.4, TikTok's drama app. 90 of the patches work there, and Morphe Manager only offers those (#156).
 
 * **TikTok:** The LIVE Record button moves down out of the way when TikTok's Discover panel opens over the room, and goes back when it closes (#37).
 

@@ -157,12 +157,13 @@ class BuildDetailsPatchTest {
     }
 
     @Test fun `target facts match all declared builds and never capture unreviewed package names`() {
-        AppCompatibilities.tiktok().forEach { compatibility ->
+        AppCompatibilities.tiktokAndPineDrama().forEach { compatibility ->
             compatibility.targets.forEach { app ->
                 assertFalse(app.versionCodes.isNullOrEmpty())
                 app.versionCodes.orEmpty().values.distinct().forEach { code ->
-                    val output = record("target-${app.version}-$code",
+                    val output = record("target-${compatibility.packageName}-${app.version}-$code",
                         packageMetadata(checkNotNull(compatibility.packageName), checkNotNull(app.version), code.toString()))
+                    assertEquals(compatibility.packageName, output.facts()["target_package"])
                     assertEquals(app.version, output.facts()["target_version"])
                     assertEquals(code.toString(), output.facts()["target_version_code"])
                     BuildDetails.selected(output, BuildChoice.VERSION_CODE)
@@ -180,9 +181,9 @@ class BuildDetailsPatchTest {
 
     /** The extension validates targets from its own copy. This fixture ties that copy to the catalog. */
     @Test fun `runtime target fixture is exactly the declared builds`() {
-        val declared = AppCompatibilities.tiktok().flatMap { compatibility ->
+        val declared = AppCompatibilities.tiktokAndPineDrama().flatMap { compatibility ->
             compatibility.targets.flatMap { app -> app.versionCodes.orEmpty().values.distinct().map { "${app.version}=$it" } }
-        }.sorted()
+        }.distinct().sorted()
         val fixture = File("../extensions/tiktok/src/test/resources/build-details/targets.txt")
             .takeIf(File::isFile) ?: File("extensions/tiktok/src/test/resources/build-details/targets.txt")
         assertEquals(declared.joinToString("\n"), fixture.readText().replace("\r\n", "\n").trim())

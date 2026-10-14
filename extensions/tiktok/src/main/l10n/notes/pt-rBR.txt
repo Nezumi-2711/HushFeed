@@ -4,6 +4,7 @@
 * **TikTok:** O tema escuro AMOLED agora também deixa pretos os cartões da própria lista de Configurações e privacidade (#152).
 
 * **TikTok:** Novo botão Mostrar opções de tradução nas configurações de idioma em Comentários: a própria página Idioma do TikTok volta a mostrar as linhas de tradução nas contas que ali só viam Idioma do app (#143).
+* **TikTok:** O Hushfeed agora também aplica patches no PineDrama 47.1.4, o app de séries do TikTok. 90 patches funcionam nele, e o Morphe Manager só oferece esses (#156).
 
 * **TikTok:** O botão Gravar da LIVE desce para sair do caminho quando o painel Descobrir do TikTok abre sobre a sala, e volta quando ele fecha (#37).
 

@@ -4,6 +4,7 @@
 * **TikTok:** Das AMOLED-Dunkeldesign macht jetzt auch die Karten auf der Liste Einstellungen und Datenschutz selbst schwarz (#152).
 
 * **TikTok:** Neuer Schalter Übersetzungsoptionen in den Spracheinstellungen anzeigen unter Kommentare: TikToks eigene Seite Sprache zeigt ihre Übersetzungszeilen wieder auf Konten, die dort nur App-Sprache bekamen (#143).
+* **TikTok:** Hushfeed patcht jetzt auch PineDrama 47.1.4, TikToks App für Serien. 90 Patches funktionieren dort, und Morphe Manager bietet nur diese an (#156).
 
 * **TikTok:** Der LIVE-Aufnahmeknopf rutscht nach unten aus dem Weg, wenn TikToks Entdecken-Leiste über dem Raum aufgeht, und kehrt zurück, wenn sie zugeht (#37).
 
