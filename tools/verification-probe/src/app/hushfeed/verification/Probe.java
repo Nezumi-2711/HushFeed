@@ -2200,6 +2200,105 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok liveroom " + hidden.size() + " rooms");
                         break;
                     }
+                    case "livechip": {
+                        // Each check the Record button's watcher makes on the LIVE room page it
+                        // holds (#37), so a button that never stays up shows which one says no.
+                        Class<?> owner = loader.loadClass("app.morphe.extension.tiktok.live.LiveRecordChip");
+                        StringBuilder out = new StringBuilder();
+                        Object fragment = null;
+                        android.app.Activity activity = null;
+                        for (String name : new String[]{"page", "host"}) {
+                            Field field = owner.getDeclaredField(name);
+                            field.setAccessible(true);
+                            Object held = ((java.lang.ref.Reference<?>) field.get(null)).get();
+                            if ("page".equals(name)) fragment = held; else activity = (android.app.Activity) held;
+                            out.append(' ').append(name).append('=').append(held == null ? "null" : held.getClass().getName());
+                        }
+                        if (fragment != null) {
+                            for (String name : new String[]{"isResumed", "getUserVisibleHint", "isRemoving", "isDetached",
+                                    "isHidden", "isVisible", "isAdded", "getLifecycle"}) {
+                                Object value;
+                                try {
+                                    value = fragment.getClass().getMethod(name).invoke(fragment);
+                                    if (name.equals("getLifecycle") && value != null) {
+                                        value = value.getClass().getMethod("getCurrentState").invoke(value);
+                                    }
+                                } catch (NoSuchMethodException missing) {
+                                    value = "no such method";
+                                }
+                                out.append(' ').append(name).append('=').append(value);
+                            }
+                        }
+                        if (activity != null) {
+                            android.view.View decor = activity.getWindow() == null ? null : activity.getWindow().getDecorView();
+                            out.append(" finishing=").append(activity.isFinishing())
+                                    .append(" destroyed=").append(activity.isDestroyed())
+                                    .append(" decorShown=").append(decor != null && decor.isShown());
+                            // Every room page the activity's fragment managers hold, with its
+                            // lifecycle and how much of its view is on screen: whether the pager
+                            // resumes the rooms beside the one in front.
+                            // TikTok renames FragmentManager.getFragments, so the list is found by
+                            // shape: a no-argument method of the manager that returns fragments.
+                            Class<?> fragmentType = loader.loadClass("androidx.fragment.app.Fragment");
+                            Class<?> managerType = loader.loadClass("androidx.fragment.app.FragmentManager");
+                            java.util.ArrayDeque<Object> managers = new java.util.ArrayDeque<>();
+                            managers.add(activity.getClass().getMethod("getSupportFragmentManager").invoke(activity));
+                            int seen = 0;
+                            while (!managers.isEmpty() && seen < 200) {
+                                Object manager = managers.poll();
+                                java.util.List<?> children = java.util.Collections.emptyList();
+                                for (Method method : managerType.getDeclaredMethods()) {
+                                    if (method.getParameterCount() != 0 || !java.util.List.class.isAssignableFrom(method.getReturnType())
+                                            || java.lang.reflect.Modifier.isStatic(method.getModifiers())) continue;
+                                    method.setAccessible(true);
+                                    Object list = method.invoke(manager);
+                                    if (!(list instanceof java.util.List) || ((java.util.List<?>) list).isEmpty()) continue;
+                                    boolean fragments = true;
+                                    for (Object item : (java.util.List<?>) list) fragments &= fragmentType.isInstance(item);
+                                    if (fragments) {
+                                        children = (java.util.List<?>) list;
+                                        break;
+                                    }
+                                }
+                                for (Object child : children) {
+                                    seen++;
+                                    if (child == null) continue;
+                                    if (Boolean.TRUE.equals(child.getClass().getMethod("isAdded").invoke(child))) {
+                                        // The child manager is the one that isn't the manager
+                                        // holding this fragment, whatever the method is called.
+                                        for (Method method : fragmentType.getDeclaredMethods()) {
+                                            if (method.getParameterCount() != 0 || !managerType.isAssignableFrom(method.getReturnType())
+                                                    || java.lang.reflect.Modifier.isStatic(method.getModifiers())) continue;
+                                            method.setAccessible(true);
+                                            Object other;
+                                            try {
+                                                other = method.invoke(child);
+                                            } catch (java.lang.reflect.InvocationTargetException refused) {
+                                                continue;
+                                            }
+                                            if (other != null && other != manager && !managers.contains(other)) {
+                                                managers.add(other);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (!child.getClass().getName().endsWith("LivePlayFragment")) continue;
+                                    Object lifecycle = child.getClass().getMethod("getLifecycle").invoke(child);
+                                    android.view.View view = (android.view.View) child.getClass().getMethod("getView").invoke(child);
+                                    android.graphics.Rect rect = new android.graphics.Rect();
+                                    boolean onScreen = view != null && view.getGlobalVisibleRect(rect);
+                                    out.append("\n  room page ").append(Integer.toHexString(System.identityHashCode(child)))
+                                            .append(child == fragment ? " (held)" : "")
+                                            .append(" state=").append(lifecycle.getClass().getMethod("getCurrentState").invoke(lifecycle))
+                                            .append(" hint=").append(child.getClass().getMethod("getUserVisibleHint").invoke(child))
+                                            .append(" shown=").append(view != null && view.isShown())
+                                            .append(" visibleRect=").append(onScreen ? rect.toShortString() : "none");
+                                }
+                            }
+                        }
+                        Log.i(TAG, "ok livechip" + out);
+                        break;
+                    }
                     case "windowviews": {
                         // Dialogs and bottom sheets can live in a separate WindowManager root.
                         // TikTok 47.0.3's comment sheet leaves MainActivity's own content view
