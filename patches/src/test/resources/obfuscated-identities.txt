@@ -100,7 +100,6 @@ patches/src/main/kotlin/app/morphe/patches/tiktok/misc/follow/FollowDiagnosticsP
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/Fingerprints.kt|LIZ
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|LIZ
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|LX/
-patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|Lkotlin/jvm/internal/AwS
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|l0
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|l1
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AmoledThemePatch.kt|a40
