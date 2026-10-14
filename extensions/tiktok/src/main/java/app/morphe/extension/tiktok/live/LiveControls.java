@@ -40,6 +40,15 @@ public final class LiveControls {
     }
 
     /**
+     * True while every portrait LIVE room's menu should offer clear screen, which hides the room's
+     * chat, gifts and buttons and leaves the stream on its own (#57). TikTok offers the entry only
+     * when its server turns it on. Paused, the switch answers off and TikTok's setting decides.
+     */
+    public static boolean offerClearScreen() {
+        return SettingsStatus.liveControlsEnabled && Settings.OFFER_LIVE_CLEAR_SCREEN.get();
+    }
+
+    /**
      * True while a LIVE quality pick should outlive TikTok closing. It needs Offer LIVE quality in
      * more rooms as well, which is what makes TikTok carry a pick between rooms at all. Paused,
      * both switches answer off.

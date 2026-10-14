@@ -88,7 +88,26 @@ internal object LiveResolutionPersistFingerprint : Fingerprint(
     parameters = listOf(),
 )
 
-internal const val PULL_STREAM_SERVICE = "Lcom/bytedance/android/live/livepullstream/PullStreamService;"
+/** TikTok's server setting for the clear screen entry in a portrait LIVE room's menu, real-named on 47.1.4. */
+internal const val LIVE_CLEAR_SCREEN_ENTRY_SETTING =
+    "Lcom/bytedance/android/livesdk/setting/LiveClearScreenFeatureEntryCompletionSetting;"
+
+/**
+ * Whether a portrait LIVE room's menu offers clear screen, which hides the room's chat, gifts and
+ * buttons and leaves the stream on its own (#57). It answers the server's
+ * live_clear_screen_feature_entry_completion, false unless TikTok turns it on. The room's panel
+ * builder (PortraitAudienceInteractionFragment.n00 on 47.1.4) adds the entry, labeled clear or
+ * exit by IClearScreenService's state, only when this answers true, and the room's widget loader
+ * reads it the same way. The entry turns clear screen on and off through that service.
+ */
+internal object LiveClearScreenEntryFingerprint : Fingerprint(
+    definingClass = LIVE_CLEAR_SCREEN_ENTRY_SETTING,
+    name = "getValue",
+    returnType = "Z",
+    parameters = listOf(),
+)
+
+internal const val PULL_STREAM_SERVICE ="Lcom/bytedance/android/live/livepullstream/PullStreamService;"
 private const val LIVE_MODE = "Lcom/bytedance/android/livesdkapi/depend/model/live/LiveMode;"
 
 /**
@@ -340,9 +359,10 @@ private fun wrapped(instructions: List<Instruction>, at: Int, result: Int): Bool
 @Suppress("unused")
 val liveControlsPatch = bytecodePatch(
     name = "LIVE controls",
-    description = "Stops a LIVE in the feed from opening by itself after a countdown, can " +
-        "show a LIVE's exact viewer count instead of a rounded one, and can offer a quality " +
-        "choice in more LIVE rooms and keep your pick after TikTok restarts. Starts off. Turn it on in Hushfeed settings > Playback. " +
+    description = "Stops a LIVE in the feed from opening by itself after a countdown. It can " +
+        "show a LIVE's exact viewer count instead of a rounded one, offer a quality choice and " +
+        "clear screen in more LIVE rooms, and keep your quality pick after TikTok restarts. " +
+        "Starts off. Turn it on in Hushfeed settings > Playback. " +
         "It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it.",
 ) {
     category("Playback")
@@ -369,6 +389,12 @@ val liveControlsPatch = bytecodePatch(
                 "const/4 v0, 0x1\nreturn v0",
             )
         }
+        // Answers true while its switch is on, so every LIVE room's menu offers clear screen.
+        LiveClearScreenEntryFingerprint.method.guardAtEntry(
+            "LIVE controls",
+            "invoke-static {}, $EXTENSION->offerClearScreen()Z",
+            "const/4 v0, 0x1\nreturn v0",
+        )
 
         // The formatter's result lands in the upper half of the long it was given, so the count
         // can't be read back after the call and the hook needs no spare register: the count is

@@ -342,6 +342,7 @@ Clear diagnostic data,Clear diagnostic data
 Clear display,Clear display
 Clear display delay,Clear display delay
 Clear preset,Clear preset
+"Clear screen hides a LIVE's chat, gifts and buttons so only the stream shows. TikTok puts it in the menu of only some rooms. This adds it to the others.","Clear screen hides a LIVE's chat, gifts and buttons so only the stream shows. TikTok puts it in the menu of only some rooms. This adds it to the others."
 Clear search,Clear search
 Clear seen videos,Clear seen videos
 Clear the search,Clear the search
@@ -1077,6 +1078,7 @@ Off,Off
 "Off forces the value to false, on forces it to true. Reset lets TikTok decide again.","Off forces the value to false, on forces it to true. Reset lets TikTok decide again."
 Off. TikTok can report views and typing.,Off. TikTok can report views and typing.
 Offer LIVE quality in more rooms,Offer LIVE quality in more rooms
+Offer clear screen in every LIVE room,Offer clear screen in every LIVE room
 Offline videos,Offline videos
 Offline videos limit,Offline videos limit
 On,On

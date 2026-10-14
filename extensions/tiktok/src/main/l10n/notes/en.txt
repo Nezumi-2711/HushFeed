@@ -14,6 +14,8 @@
 
 * **TikTok:** A new switch keeps the LIVE quality you picked after TikTok restarts (#57).
 
+* **TikTok:** A new switch adds clear screen, which leaves only the stream, to every LIVE room's menu (#57).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).

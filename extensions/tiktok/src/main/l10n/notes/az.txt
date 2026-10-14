@@ -14,6 +14,8 @@
 
 * **TikTok:** Yeni açar seçdiyin LIVE keyfiyyətini TikTok yenidən başlayandan sonra da saxlayır (#57).
 
+* **TikTok:** Yeni açar yalnız yayımı saxlayan təmiz ekranı hər LIVE otağının menyusuna əlavə edir (#57).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).

@@ -42,7 +42,28 @@ public class LiveControlsTest {
         Settings.OFFER_LIVE_QUALITY.save(Settings.OFFER_LIVE_QUALITY.defaultValue);
         Settings.REMEMBER_LIVE_QUALITY.save(Settings.REMEMBER_LIVE_QUALITY.defaultValue);
         Settings.REMEMBERED_LIVE_QUALITY.save(Settings.REMEMBERED_LIVE_QUALITY.defaultValue);
+        Settings.OFFER_LIVE_CLEAR_SCREEN.save(Settings.OFFER_LIVE_CLEAR_SCREEN.defaultValue);
         Locale.setDefault(savedLocale);
+    }
+
+    /** #57: off, TikTok's server setting decides which rooms offer clear screen. */
+    @Test public void clearScreenIsOffByDefaultAndFollowsItsSwitch() {
+        assertFalse(Settings.OFFER_LIVE_CLEAR_SCREEN.defaultValue);
+        assertFalse(LiveControls.offerClearScreen());
+        Settings.OFFER_LIVE_CLEAR_SCREEN.save(true);
+        assertTrue(LiveControls.offerClearScreen());
+        assertFalse("clear screen turned the quality picker on", LiveControls.offerQualityEverywhere());
+        Settings.OFFER_LIVE_CLEAR_SCREEN.save(false);
+        assertFalse("read at the call, so the next menu follows", LiveControls.offerClearScreen());
+    }
+
+    @Test public void pausedOrWithoutThePatchClearScreenIsTikToks() {
+        Settings.OFFER_LIVE_CLEAR_SCREEN.save(true);
+        setPaused(true);
+        assertFalse(LiveControls.offerClearScreen());
+        setPaused(false);
+        SettingsStatus.liveControlsEnabled = false;
+        assertFalse(LiveControls.offerClearScreen());
     }
 
     /** #57: off by default, a cold start leaves the first rooms at TikTok's choice. */

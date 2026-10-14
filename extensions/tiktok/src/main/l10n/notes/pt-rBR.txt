@@ -14,6 +14,8 @@
 
 * **TikTok:** Uma nova chave mantém a qualidade da LIVE que você escolheu depois que o TikTok reinicia (#57).
 
+* **TikTok:** Uma nova chave adiciona a tela limpa, que deixa só a transmissão, ao menu de todas as salas de LIVE (#57).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).

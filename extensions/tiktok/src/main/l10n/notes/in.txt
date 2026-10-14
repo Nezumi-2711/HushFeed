@@ -14,6 +14,8 @@
 
 * **TikTok:** Sakelar baru mempertahankan kualitas LIVE yang kamu pilih setelah TikTok dimulai ulang (#57).
 
+* **TikTok:** Sakelar baru menambahkan layar bersih, yang hanya menyisakan siarannya, ke menu setiap ruang LIVE (#57).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Laporan diagnostik punya bagian baru berisi pengaturan yang diubah. Bagian ini menyebut setiap pengaturan yang tidak lagi di nilai bawaannya, sehingga laporan menunjukkan sakelar mana yang aktif. Teks yang kamu ketik di sebuah pengaturan tidak pernah disertakan (#149).

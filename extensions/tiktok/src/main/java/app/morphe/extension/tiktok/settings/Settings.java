@@ -536,6 +536,11 @@ public class Settings extends BaseSettings {
     /** TikTok's key for that pick ("hd", "origin" and so on), saved from its picker. Never shown. */
     public static final StringSetting REMEMBERED_LIVE_QUALITY = new StringSetting("remembered_live_quality", "");
     /**
+     * Offers clear screen in every LIVE room's menu (#57); the LIVE controls patch. Read as a
+     * room builds its menu, so the next menu follows a change.
+     */
+    public static final BooleanSetting OFFER_LIVE_CLEAR_SCREEN = new BooleanSetting("offer_live_clear_screen", FALSE);
+    /**
      * Plays the audio TikTok mutes on a post whose sound was pulled; the Keep pulled sounds
      * patch. Read as each video starts, so no restart.
      */
