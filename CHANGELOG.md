@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A new Full long-press menu in search results switch, under Full long-press menu on a creator's videos, does the same for search. A long press on a video you opened from search opens the full For You menu instead of the small share sheet. Like the creator one, it needs Long press on TikTok default (#120).
+
 * **TikTok:** A new Show the country as a flag switch, under Show where a video was posted, shows the country's flag in place of its two letters. It changes both places Hushfeed shows a country: by the creator's name, and after a commenter's time (#157).
 
 * **TikTok:** Don't start the first video stops that video at its first frame. It used to play for a second or two before the pause caught up with it, since TikTok's first report that it's playing comes that late (#83).

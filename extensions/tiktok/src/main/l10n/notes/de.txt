@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Neuer Schalter Volles Menü bei langem Drücken in Suchergebnissen: Langes Drücken auf ein Video aus der Suche öffnet das Menü von Für dich (#120).
+
 * **TikTok:** Neuer Schalter Land als Flagge anzeigen: Das Land neben dem Namen des Creators und nach der Zeit eines Kommentars erscheint als Flagge (#157).
 
 * **TikTok:** Erstes Video nicht starten hält das Video jetzt beim ersten Bild an statt nach ein, zwei Sekunden (#83).

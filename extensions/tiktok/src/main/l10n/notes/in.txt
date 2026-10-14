@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sakelar baru Menu tekan lama lengkap di hasil pencarian: tekan lama pada video dari pencarian membuka menu Untuk Kamu (#120).
+
 * **TikTok:** Sakelar baru Tampilkan negara sebagai bendera: negara di samping nama kreator dan setelah waktu komentar tampil sebagai benderanya (#157).
 
 * **TikTok:** Jangan mulai video pertama kini menghentikannya di bingkai pertama, bukan satu atau dua detik kemudian (#83).

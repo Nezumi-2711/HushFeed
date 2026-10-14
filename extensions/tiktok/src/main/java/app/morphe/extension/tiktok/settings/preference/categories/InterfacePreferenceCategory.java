@@ -673,6 +673,10 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "A long press on a video you opened from someone's profile opens the same menu as on For You, "
                             + "not the small share sheet. It needs Long press on TikTok default.",
                     Settings.LONG_PRESS_FULL_MENU_ON_PROFILES));
+            addPreference(new TogglePreference(context, "Full long-press menu in search results",
+                    "A long press on a video you opened from search opens the same menu as on For You. "
+                            + "It needs Long press on TikTok default.",
+                    Settings.LONG_PRESS_FULL_MENU_IN_SEARCH));
             addPreference(new TogglePreference(context, "Seek from the edges",
                     "Press and hold the left or right third of the screen to jump back or forward. "
                             + "The middle third keeps the Long press action.", Settings.EDGE_SEEK));

@@ -2324,3 +2324,5 @@ Color commenter names	Цветные имена комментаторов
 Give each commenter's name a color of its own, the same one every time you see that account, so a long thread is easier to follow.	Давать имени каждого автора комментария свой цвет, всегда один и тот же для этого аккаунта, чтобы за длинной веткой было легче следить.
 Show the country as a flag	Показывать страну флагом
 Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.	Показывает флаг страны вместо двух букв рядом с именем автора и со временем комментария.
+Full long-press menu in search results	Полное меню долгого нажатия в результатах поиска
+A long press on a video you opened from search opens the same menu as on For You. It needs Long press on TikTok default.	Долгое нажатие на видео, открытое из поиска, открывает то же меню, что и в «Рекомендациях». Для этого в настройке «Долгое нажатие» должно быть выбрано «Стандарт TikTok».

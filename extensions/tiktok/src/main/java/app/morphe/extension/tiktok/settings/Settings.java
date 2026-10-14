@@ -214,6 +214,14 @@ public class Settings extends BaseSettings {
                     return !GestureActions.takesLongPress(LONG_PRESS_ACTION.savedValue());
                 }
             });
+    /** The same For You menu for a long press on a video opened from search results (#120). */
+    public static final BooleanSetting LONG_PRESS_FULL_MENU_IN_SEARCH =
+            new BooleanSetting("long_press_full_menu_in_search", FALSE, new Setting.Availability() {
+                @Override
+                public boolean isAvailable() {
+                    return !GestureActions.takesLongPress(LONG_PRESS_ACTION.savedValue());
+                }
+            });
     /** What a left swipe on a feed video does: TikTok's creator profile, nothing, or the comments. */
     public static final StringSetting SWIPE_LEFT_ACTION = new StringSetting("swipe_left_action", "default");
     public static final BooleanSetting EDGE_SEEK = new BooleanSetting("edge_seek", FALSE);
