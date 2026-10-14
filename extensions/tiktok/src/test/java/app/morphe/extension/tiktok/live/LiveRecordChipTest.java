@@ -9,8 +9,9 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 /**
- * #37: the Record button follows the room page that is on screen. On 47.1.4 the page being
- * watched answers false to getUserVisibleHint, so the button went away a second after it showed.
+ * #37: the Record button follows the room page that is on screen. On 47.1.4 the pager resumes the
+ * next room right after the one being watched, so following the last page to resume put the button
+ * on a room nobody could see, and it went away a second after it showed.
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 28, qualifiers = "en")

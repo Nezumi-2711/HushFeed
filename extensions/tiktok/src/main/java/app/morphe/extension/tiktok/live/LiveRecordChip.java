@@ -56,8 +56,8 @@ public final class LiveRecordChip {
     // Everything below is touched on the main thread only.
     /**
      * Every room page seen resuming. The one in front is picked from these by what is on screen:
-     * on 47.1.4 the page being watched answers false to getUserVisibleHint, and a pager may resume
-     * the rooms beside it as well.
+     * on 47.1.4 the pager resumes the next room right after the one being watched, so the last
+     * page to resume is usually one that isn't shown.
      */
     private static final Map<Object, Boolean> PAGES = new WeakHashMap<>();
     private static WeakReference<Object> page = new WeakReference<>(null);
