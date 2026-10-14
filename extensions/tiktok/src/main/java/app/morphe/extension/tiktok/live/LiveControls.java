@@ -58,6 +58,12 @@ public final class LiveControls {
     }
 
     private static volatile boolean restoredLogged;
+    private static volatile String lastQualityPick;
+
+    /** The last quality TikTok carried to a room this run, or null. Used to record the quality being watched. */
+    static String lastQualityPick() {
+        return lastQualityPick;
+    }
 
     /**
      * Called right after a LIVE room's start reads TikTok's last quality pick, with that pick.
@@ -79,6 +85,7 @@ public final class LiveControls {
 
     /** Called with each quality TikTok's picker carries to the next room; saved while the switch is on. */
     public static void noteLiveQualityPick(String pick) {
+        if (pick != null && !pick.isEmpty()) lastQualityPick = pick;
         if (pick == null || pick.isEmpty() || !rememberQuality()) return;
         if (pick.equals(Settings.REMEMBERED_LIVE_QUALITY.get())) return;
         Settings.REMEMBERED_LIVE_QUALITY.save(pick);

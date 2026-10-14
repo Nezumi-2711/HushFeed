@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Le stanze LIVE possono mostrare un pulsante Registra (disattivato di default, nelle impostazioni di Riproduzione). Salva quello che guardi da quando lo tocchi finché tocchi Interrompi o esci dalla stanza (#37).
+
 * **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, la barra di avanzamento non passa più sopra la descrizione nei video che apri da un profilo o dalla ricerca. La descrizione e il disco della musica salgono quanto basta per lasciarla libera (#153).
 
 * **TikTok:** Il report diagnostico non segnala più la barra dei commenti come mancante mentre sei nel feed principale (#153).

@@ -543,6 +543,12 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting OFFER_LIVE_CLEAR_SCREEN = new BooleanSetting("offer_live_clear_screen", FALSE);
     /**
+     * Puts a Record button in LIVE rooms (#37); the LIVE controls patch. A recording starts when the
+     * button is tapped and ends at Stop or when the room is left. Read as a room resumes and on the
+     * chip's once-a-second check, so no restart.
+     */
+    public static final BooleanSetting RECORD_LIVE = new BooleanSetting("record_live", FALSE);
+    /**
      * Plays the audio TikTok mutes on a post whose sound was pulled; the Keep pulled sounds
      * patch. Read as each video starts, so no restart.
      */

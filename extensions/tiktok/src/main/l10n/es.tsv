@@ -2108,3 +2108,24 @@ Picked videos	Videos elegidos
 Pick all	Elegir todos
 Picked the first %1$s. Save them, then tap Pick all again for the rest.	Se eligieron los primeros %1$s. Guárdalos y luego toca Elegir todos otra vez para el resto.
 Everything this list has loaded is picked or saved. Scroll down to load more.	Todo lo que esta lista ha cargado ya está elegido o guardado. Desplázate hacia abajo para cargar más.
+
+Record LIVEs you watch	Grabar los LIVE que ves
+Adds a Record button to LIVE rooms. A recording starts when you tap it and ends when you tap Stop or leave the room. Nothing before that is saved.	Añade un botón Grabar a las salas LIVE. La grabación empieza cuando lo tocas y termina cuando tocas Detener o sales de la sala. Lo anterior no se guarda.
+Record	Grabar
+Stop	Detener
+Stop recording this LIVE	Detener la grabación de este LIVE
+Record this LIVE from now	Grabar este LIVE desde ahora
+Recording this LIVE from now	Grabando este LIVE desde ahora
+Saving the recording	Guardando la grabación
+Couldn't find this LIVE's stream to record	No se encontró la transmisión de este LIVE para grabarla
+Allow storage for TikTok in Android settings to record LIVEs	Permite el almacenamiento de TikTok en los ajustes de Android para grabar LIVE
+LIVE recording saved to %1$s	Grabación del LIVE guardada en %1$s
+The LIVE ended or the connection dropped. What was recorded is saved to %1$s	El LIVE terminó o se cortó la conexión. Lo grabado se guardó en %1$s
+The phone is running out of room. What was recorded is saved to %1$s	Al teléfono se le acaba el espacio. Lo grabado se guardó en %1$s
+The recording reached its size limit and was saved to %1$s	La grabación llegó a su límite de tamaño y se guardó en %1$s
+TikTok closed. What was recorded is saved to %1$s	TikTok se cerró. Lo grabado se guardó en %1$s
+Recording stopped early. What was recorded is saved to %1$s	La grabación se detuvo antes de tiempo. Lo grabado se guardó en %1$s
+This LIVE's stream can't be saved	La transmisión de este LIVE no se puede guardar
+There isn't enough room on the phone to record	No hay espacio suficiente en el teléfono para grabar
+Nothing was recorded	No se grabó nada
+The recording couldn't be saved. Try again.	No se pudo guardar la grabación. Inténtalo de nuevo.

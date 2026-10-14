@@ -2108,3 +2108,24 @@ Picked videos	Seçilen videolar
 Pick all	Tümünü seç
 Picked the first %1$s. Save them, then tap Pick all again for the rest.	İlk %1$s tanesi seçildi. Onları kaydet, sonra geri kalanı için Tümünü seç'e yeniden dokun.
 Everything this list has loaded is picked or saved. Scroll down to load more.	Bu listenin yüklediği her şey seçildi ya da kaydedildi. Daha fazlasını yüklemek için aşağı kaydır.
+
+Record LIVEs you watch	İzlediğin LIVE'ları kaydet
+Adds a Record button to LIVE rooms. A recording starts when you tap it and ends when you tap Stop or leave the room. Nothing before that is saved.	LIVE odalarına bir Kaydet düğmesi ekler. Kayıt ona dokunduğunda başlar, Durdur'a dokunduğunda veya odadan çıktığında biter. Öncesinde olanlar kaydedilmez.
+Record	Kaydet
+Stop	Durdur
+Stop recording this LIVE	Bu LIVE'ın kaydını durdur
+Record this LIVE from now	Bu LIVE'ı şimdiden kaydet
+Recording this LIVE from now	Bu LIVE şimdiden kaydediliyor
+Saving the recording	Kayıt kaydediliyor
+Couldn't find this LIVE's stream to record	Bu LIVE'ın yayını kayıt için bulunamadı
+Allow storage for TikTok in Android settings to record LIVEs	LIVE kaydetmek için Android ayarlarında TikTok'a depolama izni ver
+LIVE recording saved to %1$s	LIVE kaydı %1$s konumuna kaydedildi
+The LIVE ended or the connection dropped. What was recorded is saved to %1$s	LIVE bitti veya bağlantı koptu. Kaydedilen kısım %1$s konumuna kaydedildi
+The phone is running out of room. What was recorded is saved to %1$s	Telefonda yer azalıyor. Kaydedilen kısım %1$s konumuna kaydedildi
+The recording reached its size limit and was saved to %1$s	Kayıt boyut sınırına ulaştı ve %1$s konumuna kaydedildi
+TikTok closed. What was recorded is saved to %1$s	TikTok kapandı. Kaydedilen kısım %1$s konumuna kaydedildi
+Recording stopped early. What was recorded is saved to %1$s	Kayıt erken durdu. Kaydedilen kısım %1$s konumuna kaydedildi
+This LIVE's stream can't be saved	Bu LIVE'ın yayını kaydedilemiyor
+There isn't enough room on the phone to record	Kayıt için telefonda yeterli yer yok
+Nothing was recorded	Hiçbir şey kaydedilmedi
+The recording couldn't be saved. Try again.	Kayıt kaydedilemedi. Tekrar dene.

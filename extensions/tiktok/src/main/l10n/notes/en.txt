@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** LIVE rooms can show a Record button (off by default, in Playback settings). It saves what you watch from the moment you tap it until you tap Stop or leave the room (#37).
+
 * **TikTok:** With Hide the comment bar on opened videos on, the progress bar no longer runs across the caption on videos you open from a profile or search. The caption and the music disc move up just enough to clear it (#153).
 
 * **TikTok:** The diagnostic report no longer flags the comment bar as missing while you're on the main feed (#153).

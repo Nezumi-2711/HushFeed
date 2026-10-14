@@ -2108,3 +2108,24 @@ Picked videos	Seçilmiş videolar
 Pick all	Hamısını seç
 Picked the first %1$s. Save them, then tap Pick all again for the rest.	İlk %1$s seçildi. Onları saxlayın, qalanları üçün yenidən Hamısını seç düyməsinə toxunun.
 Everything this list has loaded is picked or saved. Scroll down to load more.	Bu siyahının yüklədiyi hər şey artıq seçilib və ya saxlanılıb. Daha çoxunu yükləmək üçün aşağı sürüşdürün.
+
+Record LIVEs you watch	Baxdığın LIVE-ları yaz
+Adds a Record button to LIVE rooms. A recording starts when you tap it and ends when you tap Stop or leave the room. Nothing before that is saved.	LIVE otaqlarına Yaz düyməsi əlavə edir. Yazı ona toxunanda başlayır, Dayandır düyməsinə toxunanda və ya otaqdan çıxanda bitir. Ondan əvvəlki heç nə saxlanmır.
+Record	Yaz
+Stop	Dayandır
+Stop recording this LIVE	Bu LIVE-ın yazısını dayandır
+Record this LIVE from now	Bu LIVE-ı indidən yaz
+Recording this LIVE from now	Bu LIVE indidən yazılır
+Saving the recording	Yazı saxlanılır
+Couldn't find this LIVE's stream to record	Bu LIVE-ın yayımını tapmaq mümkün olmadı
+Allow storage for TikTok in Android settings to record LIVEs	LIVE-ları yazmaq üçün Android ayarlarında TikTok üçün yaddaşa icazə ver
+LIVE recording saved to %1$s	LIVE yazısı %1$s qovluğuna saxlanıldı
+The LIVE ended or the connection dropped. What was recorded is saved to %1$s	LIVE bitdi və ya bağlantı kəsildi. Yazılan hissə %1$s qovluğuna saxlanıldı
+The phone is running out of room. What was recorded is saved to %1$s	Telefonda yer azalır. Yazılan hissə %1$s qovluğuna saxlanıldı
+The recording reached its size limit and was saved to %1$s	Yazı ölçü həddinə çatdı və %1$s qovluğuna saxlanıldı
+TikTok closed. What was recorded is saved to %1$s	TikTok bağlandı. Yazılan hissə %1$s qovluğuna saxlanıldı
+Recording stopped early. What was recorded is saved to %1$s	Yazı vaxtından əvvəl dayandı. Yazılan hissə %1$s qovluğuna saxlanıldı
+This LIVE's stream can't be saved	Bu LIVE-ın yayımını saxlamaq mümkün deyil
+There isn't enough room on the phone to record	Yazmaq üçün telefonda kifayət qədər yer yoxdur
+Nothing was recorded	Heç nə yazılmadı
+The recording couldn't be saved. Try again.	Yazı saxlanıla bilmədi. Yenidən cəhd et.

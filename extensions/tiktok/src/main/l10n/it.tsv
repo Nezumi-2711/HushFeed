@@ -2108,3 +2108,24 @@ Picked videos	Video scelti
 Pick all	Scegli tutti
 Picked the first %1$s. Save them, then tap Pick all again for the rest.	Scelti i primi %1$s. Salvali, poi tocca di nuovo Scegli tutti per il resto.
 Everything this list has loaded is picked or saved. Scroll down to load more.	Tutto ciò che questa lista ha caricato è già scelto o salvato. Scorri verso il basso per caricarne altri.
+
+Record LIVEs you watch	Registra i LIVE che guardi
+Adds a Record button to LIVE rooms. A recording starts when you tap it and ends when you tap Stop or leave the room. Nothing before that is saved.	Aggiunge un pulsante Registra alle stanze LIVE. La registrazione inizia quando lo tocchi e finisce quando tocchi Interrompi o esci dalla stanza. Quello che c'era prima non viene salvato.
+Record	Registra
+Stop	Interrompi
+Stop recording this LIVE	Interrompi la registrazione di questo LIVE
+Record this LIVE from now	Registra questo LIVE da ora
+Recording this LIVE from now	Registrazione di questo LIVE da ora
+Saving the recording	Salvataggio della registrazione
+Couldn't find this LIVE's stream to record	Non è stato possibile trovare lo stream di questo LIVE da registrare
+Allow storage for TikTok in Android settings to record LIVEs	Consenti l'archiviazione a TikTok nelle impostazioni di Android per registrare i LIVE
+LIVE recording saved to %1$s	Registrazione del LIVE salvata in %1$s
+The LIVE ended or the connection dropped. What was recorded is saved to %1$s	Il LIVE è finito o la connessione è caduta. Quello che è stato registrato è salvato in %1$s
+The phone is running out of room. What was recorded is saved to %1$s	Lo spazio sul telefono sta finendo. Quello che è stato registrato è salvato in %1$s
+The recording reached its size limit and was saved to %1$s	La registrazione ha raggiunto il limite di dimensioni ed è stata salvata in %1$s
+TikTok closed. What was recorded is saved to %1$s	TikTok si è chiuso. Quello che è stato registrato è salvato in %1$s
+Recording stopped early. What was recorded is saved to %1$s	La registrazione si è fermata in anticipo. Quello che è stato registrato è salvato in %1$s
+This LIVE's stream can't be saved	Lo stream di questo LIVE non può essere salvato
+There isn't enough room on the phone to record	Non c'è abbastanza spazio sul telefono per registrare
+Nothing was recorded	Non è stato registrato nulla
+The recording couldn't be saved. Try again.	Non è stato possibile salvare la registrazione. Riprova.

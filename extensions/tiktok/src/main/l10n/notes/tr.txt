@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** LIVE odaları bir Kaydet düğmesi gösterebilir (varsayılan olarak kapalı, Oynatma ayarlarında). Dokunduğun andan Durdur'a dokunana veya odadan çıkana kadar izlediklerini kaydeder (#37).
+
 * **TikTok:** Açılan videolarda yorum çubuğunu gizle açıkken, bir profilden veya aramadan açtığın videolarda ilerleme çubuğu artık açıklamanın üstünden geçmiyor. Açıklama ve müzik diski, çubuğa yer açacak kadar yukarı kayıyor (#153).
 
 * **TikTok:** Tanılama raporu, ana akıştayken yorum çubuğunu artık eksik olarak göstermiyor (#153).

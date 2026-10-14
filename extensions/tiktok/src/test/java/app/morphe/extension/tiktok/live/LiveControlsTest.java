@@ -43,7 +43,21 @@ public class LiveControlsTest {
         Settings.REMEMBER_LIVE_QUALITY.save(Settings.REMEMBER_LIVE_QUALITY.defaultValue);
         Settings.REMEMBERED_LIVE_QUALITY.save(Settings.REMEMBERED_LIVE_QUALITY.defaultValue);
         Settings.OFFER_LIVE_CLEAR_SCREEN.save(Settings.OFFER_LIVE_CLEAR_SCREEN.defaultValue);
+        Settings.RECORD_LIVE.save(Settings.RECORD_LIVE.defaultValue);
         Locale.setDefault(savedLocale);
+    }
+
+    /** #37: the Record button is off until switched on, needs the patch, and Pause turns it off. */
+    @Test public void recordButtonIsOffByDefaultAndFollowsItsSwitchAndPause() {
+        assertFalse(Settings.RECORD_LIVE.defaultValue);
+        assertFalse(LiveRecordChip.enabled());
+        Settings.RECORD_LIVE.save(true);
+        assertTrue(LiveRecordChip.enabled());
+        setPaused(true);
+        assertFalse(LiveRecordChip.enabled());
+        setPaused(false);
+        SettingsStatus.liveControlsEnabled = false;
+        assertFalse(LiveRecordChip.enabled());
     }
 
     /** #57: off, TikTok's server setting decides which rooms offer clear screen. */
