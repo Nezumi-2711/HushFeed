@@ -2145,3 +2145,5 @@ Short date	Kurzes Datum
 Writes the date before the time to the second the short way your language does, like 10/7/25.	Schreibt das Datum vor der sekundengenauen Uhrzeit so kurz, wie deine Sprache es tut, etwa 07.10.25.
 Color commenter names	Namen von Kommentierenden einfärben
 Give each commenter's name a color of its own, the same one every time you see that account, so a long thread is easier to follow.	Gibt dem Namen jeder kommentierenden Person eine eigene Farbe, für dieses Konto jedes Mal dieselbe, damit man langen Threads leichter folgen kann.
+Show the country as a flag	Land als Flagge anzeigen
+Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.	Zeigt die Flagge des Landes statt seiner zwei Buchstaben, neben dem Namen des Creators und neben der Zeit eines Kommentars.

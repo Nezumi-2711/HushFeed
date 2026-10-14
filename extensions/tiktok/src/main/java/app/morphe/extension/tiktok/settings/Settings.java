@@ -813,6 +813,8 @@ public class Settings extends BaseSettings {
     /** The Check your sources banner across the top of a video (TikTok's Know the facts), and the prompt it raises when you share one. */
     public static final BooleanSetting HIDE_CHECK_YOUR_SOURCES = new BooleanSetting("hide_check_your_sources", FALSE);
     public static final BooleanSetting SHOW_AUTHOR_REGION = new BooleanSetting("show_author_region", FALSE);
+    /** The country as its flag in place of its two letters, by the creator's name and a comment's time (#157). */
+    public static final BooleanSetting REGION_AS_FLAG = new BooleanSetting("region_as_flag", FALSE);
     public static final BooleanSetting SHOW_AUTHOR_HANDLE = new BooleanSetting("show_author_handle", FALSE);
     public static final BooleanSetting SHOW_ENGAGEMENT_RATE = new BooleanSetting("show_engagement_rate", FALSE);
     public static final BooleanSetting BLOCK_AUTHOR_BUTTON =

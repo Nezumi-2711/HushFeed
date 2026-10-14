@@ -296,6 +296,12 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             ));
             addPreference(new TogglePreference(
                     context,
+                    "Show the country as a flag",
+                    "Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.",
+                    Settings.REGION_AS_FLAG
+            ));
+            addPreference(new TogglePreference(
+                    context,
                     "Show the handle instead of the name",
                     "Show @username beside a video instead of the display name the creator chose.",
                     Settings.SHOW_AUTHOR_HANDLE
