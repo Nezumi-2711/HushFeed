@@ -754,6 +754,13 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting FADE_IN_CLEAR_DISPLAY = new BooleanSetting("fade_in_clear_display", TRUE);
     /**
+     * Lets the video draw down behind TikTok's bottom tab bar and takes the bar's own background
+     * away, so the tabs sit over the picture (#145). VideoOverlayHider collapses the spacer under
+     * each video and swaps the bar's background for a clear one, and puts both back when this goes
+     * off or Hushfeed is paused.
+     */
+    public static final BooleanSetting SEE_THROUGH_BOTTOM_BAR = new BooleanSetting("see_through_bottom_bar", FALSE);
+    /**
      * Burn-in guard for OLED screens (BurnInGuard): "dim" draws the controls the fade covers at a
      * quarter after a few seconds without a touch, "dim_shift" also moves the window's content a
      * couple of dp every two minutes. Over the feed and an opened video only.

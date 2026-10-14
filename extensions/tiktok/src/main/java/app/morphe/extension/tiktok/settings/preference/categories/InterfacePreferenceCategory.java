@@ -573,6 +573,12 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "With the fade below 100, the buttons and caption stay on screen at that level in Clear display, and taps go through them to the video. Off, Clear display hides them the way it does at 100.",
                     Settings.FADE_IN_CLEAR_DISPLAY
             ));
+            addPreference(new TogglePreference(
+                    context,
+                    "See-through bottom bar",
+                    "Let the video reach the bottom of the screen on the main feed and show the tabs over it with no bar behind them.",
+                    Settings.SEE_THROUGH_BOTTOM_BAR
+            ));
             addPreference(new ChoicePreference(context, "Burn-in guard", Settings.BURN_IN_GUARD,
                     new String[]{"Off", "Dim when idle", "Dim when idle and shift"},
                     new String[]{BurnInGuard.OFF, BurnInGuard.DIM, BurnInGuard.DIM_AND_SHIFT})

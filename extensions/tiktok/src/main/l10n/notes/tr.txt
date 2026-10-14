@@ -22,6 +22,8 @@
 
 * **TikTok:** Feature Gate Lab'de iki yeni hazır ayar var: Videoların üzerinde kayan yorumlar ve Bir yorumda birden fazla fotoğraf (#98).
 
+* **TikTok:** Feed screen sayfasındaki yeni Şeffaf alt çubuk anahtarı videonun ekranın altına kadar uzanmasını sağlar ve sekme çubuğunun arka planını kaldırır. Kapalı başlar (#145).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

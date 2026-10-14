@@ -205,6 +205,8 @@ public class FeedScreenCoverageTest {
         put("hide_clear_display_controls", YES, YES, NONE);
         put("fade_controls_opacity", YES, YES, NONE);
         put("fade_in_clear_display", YES, YES, NONE);
+        // The tab bar belongs to the main feed; an opened video has none (#145).
+        put("see_through_bottom_bar", YES, NONE, NONE);
         // The guard runs with the overlay pass, which walks both windows and no LIVE room.
         put("burn_in_guard", YES, YES, NONE);
 

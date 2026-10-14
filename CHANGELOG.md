@@ -26,6 +26,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Feature Gate Lab has two presets from TikTok's regional builds. Scrolling comments on videos turns on Korea's one-line comments that run across a video, landscape videos included. Several photos in one comment turns on Japan's photo picker that adds more than one photo to a comment. Both need the Lab's overrides switch and a TikTok restart, and Undo puts back the values you had. TikTok's servers still decide which videos carry scrolling comments and whether a comment with several photos posts (#98).
 
+* **TikTok:** A new switch on the Feed screen page, See-through bottom bar, lets the video reach the bottom of the screen and takes the background off the tab bar so the tabs sit over the picture. It starts off (#145).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).

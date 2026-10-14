@@ -22,6 +22,8 @@
 
 * **TikTok:** Feature Gate Lab ha due nuovi preset: Commenti scorrevoli sui video e Più foto in un commento (#98).
 
+* **TikTok:** Un nuovo interruttore nella pagina Feed screen, Barra inferiore trasparente, fa arrivare il video fino in fondo allo schermo e toglie lo sfondo della barra delle schede. Parte disattivato (#145).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).

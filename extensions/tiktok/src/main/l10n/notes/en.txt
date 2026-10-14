@@ -22,6 +22,8 @@
 
 * **TikTok:** Feature Gate Lab has two new presets: Scrolling comments on videos and Several photos in one comment (#98).
 
+* **TikTok:** A new switch on the Feed screen page, See-through bottom bar, lets the video reach the bottom of the screen and takes the background off the tab bar so the tabs sit over the picture. It starts off (#145).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).

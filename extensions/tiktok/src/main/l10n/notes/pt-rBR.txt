@@ -22,6 +22,8 @@
 
 * **TikTok:** O Feature Gate Lab tem duas novas predefinições: Comentários passando sobre os vídeos e Várias fotos em um comentário (#98).
 
+* **TikTok:** Um novo botão na página Feed screen, Barra inferior transparente, deixa o vídeo chegar até a parte de baixo da tela e tira o fundo da barra de abas. Começa desligado (#145).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).

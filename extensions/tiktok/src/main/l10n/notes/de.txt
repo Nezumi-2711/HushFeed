@@ -22,6 +22,8 @@
 
 * **TikTok:** Feature Gate Lab hat zwei neue Voreinstellungen: Laufende Kommentare über Videos und Mehrere Fotos in einem Kommentar (#98).
 
+* **TikTok:** Ein neuer Schalter auf der Seite Feed screen, Durchsichtige untere Leiste, lässt das Video bis zum unteren Bildschirmrand reichen und nimmt der Tab-Leiste den Hintergrund. Er ist zunächst aus (#145).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).

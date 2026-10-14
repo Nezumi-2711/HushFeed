@@ -174,6 +174,12 @@ public final class VideoOverlayHider {
      */
     private static final String[] STATUS_BAR_SPACER_IDS = {"47.1.4:dux"};
     /**
+     * The blank under the video, the height of the bottom tab bar, with a background from the
+     * theme. It is the cell's last child (dux first, the video area between), and the reason the
+     * picture stops above the bar. See-through bottom bar collapses it (#145).
+     */
+    private static final String[] BOTTOM_SPACER_IDS = {"47.1.4:duh"};
+    /**
      * The search bar across the top of a video opened from search or a profile, and the gradient
      * under it. The fade never reached them: they sit outside the cells and TikTok's Clear display
      * leaves them up (#84). Only ever faded, never hidden.
@@ -292,6 +298,7 @@ public final class VideoOverlayHider {
     private static final int LOADING_LINE_TARGET = BOTTOM_TABS_DIVIDER_TARGET + 1;
     private static final int TOP_SEARCH_BAR_TARGET = LOADING_LINE_TARGET + 1;
     private static final int TOP_SEARCH_SCRIM_TARGET = TOP_SEARCH_BAR_TARGET + 1;
+    private static final int BOTTOM_SPACER_TARGET = TOP_SEARCH_SCRIM_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -343,6 +350,9 @@ public final class VideoOverlayHider {
 
     /** The opacity the current pass fades the controls to, 100 meaning not at all. */
     private static int fadeLevel = 100;
+
+    /** Whether the current pass has See-through bottom bar on, for the main feed (#145). */
+    private static boolean seeThroughBarNow;
 
     /**
      * Whether the current pass is in Clear display with the fade between 0 and 100 (#84). The
@@ -549,6 +559,11 @@ public final class VideoOverlayHider {
             // which it shows only in Clear display; see gateClearControls.
             boolean clearControls = !HushfeedPause.isPaused() && Settings.HIDE_CLEAR_DISPLAY_CONTROLS.get();
             boolean statusBar = Settings.HIDE_STATUS_BAR.get();
+            // The bottom bar goes clear and the spacer under each video goes, on the main feed
+            // only: the opened-post pager has no tab bar (#145).
+            boolean seeThroughBar = Settings.SEE_THROUGH_BOTTOM_BAR.get() && !detailPager;
+            if (!seeThroughBar) SeeThroughBottomBar.reset();
+            seeThroughBarNow = seeThroughBar;
             boolean counts = Settings.HIDE_RAIL_COUNTS.get();
             boolean[] rail = TRAVERSAL.rail;
             updateRailButtonsWanted(rail);
@@ -568,7 +583,8 @@ public final class VideoOverlayHider {
             touchScale = Math.min(MAX_TOUCH_SCALE, Math.max(1f, touchScale));
             if (caption || music || actionBar || surveys || tabStrip || carry || detailCommentBar || anchor
                     || clearControls
-                    || statusBar || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty()
+                    || statusBar || seeThroughBar || SeeThroughBottomBar.holdsBackground()
+                    || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
                     || !CAPTIONS_LIFTED.isEmpty() || !DISCS_LIFTED.isEmpty() || touchScale != 1f || scaledLastPass) {
                 ViewGroup root = activity.findViewById(android.R.id.content);
@@ -604,6 +620,7 @@ public final class VideoOverlayHider {
                 wanted[TOP_SEARCH_BAR_TARGET] = false;
                 wanted[TOP_SEARCH_SCRIM_TARGET] = false;
                 wanted[STATUS_BAR_SPACER_TARGET] = statusBar;
+                wanted[BOTTOM_SPACER_TARGET] = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
                     wanted[RAIL_TARGET_START + i] = rail[i] || carryHides;
                 }
@@ -640,6 +657,7 @@ public final class VideoOverlayHider {
                     }
                     selectCurrentTargets(found, TRAVERSAL.selected);
                     pairDetailCommentBar(hidden, TRAVERSAL.selected, ids, detailPager);
+                    guardBottomSpacer(hidden, found, TRAVERSAL.selected, seeThroughBar);
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f, detailPager);
@@ -855,7 +873,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[TOP_SEARCH_SCRIM_TARGET + 1][];
+        String[][] targets = new String[BOTTOM_SPACER_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -884,6 +902,7 @@ public final class VideoOverlayHider {
         targets[LOADING_LINE_TARGET] = LOADING_LINE_IDS;
         targets[TOP_SEARCH_BAR_TARGET] = TOP_SEARCH_BAR_IDS;
         targets[TOP_SEARCH_SCRIM_TARGET] = TOP_SEARCH_SCRIM_IDS;
+        targets[BOTTOM_SPACER_TARGET] = BOTTOM_SPACER_IDS;
         return targets;
     }
 
@@ -1029,6 +1048,36 @@ public final class VideoOverlayHider {
         if (BAR_ROWS_MOVED.isEmpty()) return;
         for (View row : new ArrayList<>(BAR_ROWS_MOVED.keySet())) {
             if (!rows.contains(row)) moveBarRow(row, 0f);
+        }
+    }
+
+    /**
+     * Checks, with the spacer under each video collapsed, that the caption frame and the buttons'
+     * column did not move under the bar. They sit in the same cell and TikTok may anchor them to
+     * its bottom, in which case the collapse would put them behind the tabs: the spacer is then
+     * put back for good (until the switch is turned off) and only the bar's background is left
+     * clear. Before the collapse the same call notes which of them sit clear of the bar.
+     */
+    private static void guardBottomSpacer(boolean[] hidden, List<List<View>> found, int[] selected,
+            boolean seeThroughBar) {
+        int spacerAt = selected[BOTTOM_SPACER_TARGET];
+        if (!seeThroughBar || spacerAt < 0) return;
+        List<View> spacers = found.get(spacerAt);
+        boolean collapsed = false;
+        for (View spacer : spacers) {
+            collapsed |= HIDDEN_HERE.containsKey(spacer);
+        }
+        List<View> bars = selectedViews(found, selected, BOTTOM_TABS_TARGET);
+        List<View> overlays = new ArrayList<>(selectedViews(found, selected, ANCHOR_TARGET));
+        overlays.addAll(selectedViews(found, selected, ACTION_BAR_TARGET));
+        boolean refused = false;
+        for (View bar : bars) {
+            refused |= SeeThroughBottomBar.judge(bar, overlays, collapsed);
+        }
+        if (refused) {
+            // The traversal made one candidate per target, so the target's first index is it.
+            hidden[spacerAt] = false;
+            Logger.printDebug(() -> "See-through bottom bar: the collapse put the caption or buttons under the bar, spacer kept");
         }
     }
 
@@ -1324,6 +1373,17 @@ public final class VideoOverlayHider {
                         setHidden(view, gone);
                     } else if (target == TAB_STRIP_TARGET || target == BOTTOM_TABS_TARGET
                             || target == BOTTOM_TABS_DIVIDER_TARGET || target == FOLLOWING_STORY_TARGET) {
+                        // See-through bottom bar (#145): the bar's own background goes clear and
+                        // its hairline goes see-through, while the tabs keep their icons and the
+                        // fade. Clear display still takes the bar away whole.
+                        boolean clearBar = seeThroughBarNow && !wanted;
+                        if (target == BOTTOM_TABS_TARGET) SeeThroughBottomBar.setBackgroundClear(view, clearBar);
+                        if (target == BOTTOM_TABS_DIVIDER_TARGET && clearBar) {
+                            setFaded(view, 100);
+                            setTransparent(view, true);
+                            continue;
+                        }
+                        if (target == BOTTOM_TABS_DIVIDER_TARGET) setTransparent(view, false);
                         // The Following stories pill is the strip's neighbour at the top of the
                         // feed, so it fades with the tabs; it was only ever hidden (#84).
                         setFaded(view, wanted ? 100 : Math.max(NAVIGATION_FADE_FLOOR, fadeLevel));
