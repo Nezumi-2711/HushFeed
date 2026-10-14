@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Orijinal fotoların yadda saxlanması yalnız qismən alınanda indi Aç düyməsinin yanında Yenidən cəhd edin də çıxır. O, yalnız alınmayan fotoları yenidən sınayır.
+
 * **TikTok:** Sürətli quruluşları kartına uzun basaraq ayarların ana səhifəsindən gizlətmək olar. Ehtiyat nüsxə və bərpa bölməsindəki Ana səhifədə sürətli quruluşlar sətri onları geri qaytarır.
 
 * **TikTok:** LIVE otaqları Yaz düyməsi göstərə bilər (susmaya görə söndürülüb, Oynatma ayarlarında). O, toxunduğun andan Dayandır düyməsinə toxunana və ya otaqdan çıxana qədər baxdıqlarını saxlayır (#37).

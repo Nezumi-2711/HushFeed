@@ -15,7 +15,7 @@ final class L10nTranslationsIt {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4230);
+        Map<String, String> table = new HashMap<>(4232);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3885,6 +3885,8 @@ final class L10nTranslationsIt {
                 "Questo video non è disponibile come file completo. Riprova più tardi.");
         table.put("This video's sound has no title to look for",
                 "L'audio di questo video non ha un titolo da cercare");
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Ora non si può riprovare con quelle foto. Salva di nuovo il post per avere il resto.");
         table.put("Thumbs down blocks the commenter",
                 "Il pollice verso blocca chi ha commentato");
         table.put("TikTok account facts",
@@ -3987,11 +3989,11 @@ final class L10nTranslationsIt {
                 "Numero di volte in cui puoi aprire comunque il feed");
         table.put("Today can't start over while Wait a day to loosen the budget is on. The day starts over at %1$s.",
                 "Oggi non può ricominciare finché \"Aspetta un giorno prima di allentare il budget\" è attivo. La giornata ricomincia alle %1$s.");
-        table.put("Today has moved on, so there's nothing to put back",
-                "La giornata è già andata avanti, quindi non c'è nulla da ripristinare");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("Today has moved on, so there's nothing to put back",
+                "La giornata è già andata avanti, quindi non c'è nulla da ripristinare");
         table.put("Today is back where it was",
                 "La giornata è tornata com'era");
         table.put("Today started over. Tap again to put the counts back.",
@@ -4110,11 +4112,11 @@ final class L10nTranslationsIt {
                 "Annulla \"Dimentica i video salvati\"");
         table.put("Undo last Lab change",
                 "Annulla l'ultima modifica del Lab");
-        table.put("Undo last restore or reset",
-                "Annulla l'ultimo ripristino o reset");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("Undo last restore or reset",
+                "Annulla l'ultimo ripristino o reset");
         table.put("Undoing the last change",
                 "Annullamento dell'ultima modifica in corso");
         table.put("Unknown resolution",
@@ -4233,11 +4235,11 @@ final class L10nTranslationsIt {
                 "I video nei risultati di ricerca mostrano la copertina e partono quando li apri. Il feed e i video che apri si riproducono come sempre.");
         table.put("Views range",
                 "Intervallo delle visualizzazioni");
-        table.put("Visual search",
-                "Ricerca visiva");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Visual search",
+                "Ricerca visiva");
         table.put("Volume",
                 "Volume");
         table.put("Wait a day to loosen the budget",
@@ -4356,11 +4358,11 @@ final class L10nTranslationsIt {
                 "Il nome del tuo operatore, ad esempio T-Mobile.");
         table.put("Your operator's numeric code, like 310260.",
                 "Il codice numerico del tuo operatore, ad esempio 310260.");
-        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
-                "Non è stato possibile ripristinare la tua configurazione precedente del feed. Non è stato modificato nulla.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
+                "Non è stato possibile ripristinare la tua configurazione precedente del feed. Non è stato modificato nulla.");
         table.put("Your previous feed setup is back.",
                 "La tua configurazione precedente del feed è stata ripristinata.");
         table.put("Your previous feed setup is back. Restart TikTok to apply all changes.",

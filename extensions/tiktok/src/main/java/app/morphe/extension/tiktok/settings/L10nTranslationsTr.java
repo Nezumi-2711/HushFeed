@@ -15,7 +15,7 @@ final class L10nTranslationsTr {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4230);
+        Map<String, String> table = new HashMap<>(4232);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3885,6 +3885,8 @@ final class L10nTranslationsTr {
                 "Bu video tam bir dosya olarak mevcut değil. Daha sonra yeniden deneyin.");
         table.put("This video's sound has no title to look for",
                 "Bu videonun sesinin aranacak bir başlığı yok");
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Bu fotoğraflar şu an yeniden denenemez. Geri kalanını almak için gönderiyi yeniden kaydet.");
         table.put("Thumbs down blocks the commenter",
                 "Aşağı başparmak yorumu yazanı engeller");
         table.put("TikTok account facts",
@@ -3987,11 +3989,11 @@ final class L10nTranslationsTr {
                 "Akışı yine de açabileceğin sefer sayısı");
         table.put("Today can't start over while Wait a day to loosen the budget is on. The day starts over at %1$s.",
                 "Bütçeyi gevşetmek için bir gün bekle açıkken bugün baştan başlatılamaz. Gün %1$s saatinde yeniden başlar.");
-        table.put("Today has moved on, so there's nothing to put back",
-                "Bugün ilerledi, bu yüzden geri konacak bir şey yok");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("Today has moved on, so there's nothing to put back",
+                "Bugün ilerledi, bu yüzden geri konacak bir şey yok");
         table.put("Today is back where it was",
                 "Bugün eski haline döndü");
         table.put("Today started over. Tap again to put the counts back.",
@@ -4110,11 +4112,11 @@ final class L10nTranslationsTr {
                 "Kaydedilen videoları unutmayı geri al");
         table.put("Undo last Lab change",
                 "Son Lab değişikliğini geri al");
-        table.put("Undo last restore or reset",
-                "Son geri yüklemeyi veya sıfırlamayı geri al");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("Undo last restore or reset",
+                "Son geri yüklemeyi veya sıfırlamayı geri al");
         table.put("Undoing the last change",
                 "Son değişiklik geri alınıyor");
         table.put("Unknown resolution",
@@ -4233,11 +4235,11 @@ final class L10nTranslationsTr {
                 "Arama sonuçlarındaki videolar kapaklarını gösterir ve onları açtığında oynar. Akış ve açtığın videolar her zamanki gibi oynar.");
         table.put("Views range",
                 "Görüntülenme aralığı");
-        table.put("Visual search",
-                "Görsel arama");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Visual search",
+                "Görsel arama");
         table.put("Volume",
                 "Ses");
         table.put("Wait a day to loosen the budget",
@@ -4356,11 +4358,11 @@ final class L10nTranslationsTr {
                 "Operatörünün adı, örneğin T-Mobile.");
         table.put("Your operator's numeric code, like 310260.",
                 "Operatörünün sayısal kodu, örneğin 310260.");
-        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
-                "Önceki akış düzenin geri yüklenemedi. Hiçbir şey değiştirilmedi.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
+                "Önceki akış düzenin geri yüklenemedi. Hiçbir şey değiştirilmedi.");
         table.put("Your previous feed setup is back.",
                 "Önceki akış düzenin geri geldi.");
         table.put("Your previous feed setup is back. Restart TikTok to apply all changes.",

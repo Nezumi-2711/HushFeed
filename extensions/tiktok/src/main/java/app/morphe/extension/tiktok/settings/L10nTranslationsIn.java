@@ -15,7 +15,7 @@ final class L10nTranslationsIn {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4230);
+        Map<String, String> table = new HashMap<>(4232);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3885,6 +3885,8 @@ final class L10nTranslationsIn {
                 "Video ini belum tersedia sebagai file lengkap. Coba lagi nanti.");
         table.put("This video's sound has no title to look for",
                 "Suara video ini tidak punya judul untuk dicari");
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Foto itu tidak bisa dicoba lagi sekarang. Simpan postingan lagi untuk mendapatkan sisanya.");
         table.put("Thumbs down blocks the commenter",
                 "Jempol ke bawah memblokir pengomentar");
         table.put("TikTok account facts",
@@ -3987,11 +3989,11 @@ final class L10nTranslationsIn {
                 "Berapa kali kamu bisa tetap membuka feed");
         table.put("Today can't start over while Wait a day to loosen the budget is on. The day starts over at %1$s.",
                 "Hari ini tidak bisa dimulai ulang selama Tunggu sehari untuk melonggarkan anggaran aktif. Hari dimulai ulang pukul %1$s.");
-        table.put("Today has moved on, so there's nothing to put back",
-                "Hari sudah berganti, jadi tidak ada yang bisa dikembalikan");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("Today has moved on, so there's nothing to put back",
+                "Hari sudah berganti, jadi tidak ada yang bisa dikembalikan");
         table.put("Today is back where it was",
                 "Hari ini kembali seperti semula");
         table.put("Today started over. Tap again to put the counts back.",
@@ -4110,11 +4112,11 @@ final class L10nTranslationsIn {
                 "Batalkan melupakan video tersimpan");
         table.put("Undo last Lab change",
                 "Batalkan perubahan Lab terakhir");
-        table.put("Undo last restore or reset",
-                "Urungkan pemulihan atau reset terakhir");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("Undo last restore or reset",
+                "Urungkan pemulihan atau reset terakhir");
         table.put("Undoing the last change",
                 "Membatalkan perubahan terakhir");
         table.put("Unknown resolution",
@@ -4233,11 +4235,11 @@ final class L10nTranslationsIn {
                 "Video di hasil pencarian menampilkan sampulnya dan diputar saat kamu membukanya. Feed dan video yang kamu buka diputar seperti biasa.");
         table.put("Views range",
                 "Rentang tayangan");
-        table.put("Visual search",
-                "Pencarian visual");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Visual search",
+                "Pencarian visual");
         table.put("Volume",
                 "Volume");
         table.put("Wait a day to loosen the budget",
@@ -4356,11 +4358,11 @@ final class L10nTranslationsIn {
                 "Nama operatormu, misalnya T-Mobile.");
         table.put("Your operator's numeric code, like 310260.",
                 "Kode angka operatormu, misalnya 310260.");
-        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
-                "Pengaturan feed kamu sebelumnya tidak dapat dipulihkan. Tidak ada yang diubah.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
+                "Pengaturan feed kamu sebelumnya tidak dapat dipulihkan. Tidak ada yang diubah.");
         table.put("Your previous feed setup is back.",
                 "Pengaturan feed kamu sebelumnya sudah dipulihkan.");
         table.put("Your previous feed setup is back. Restart TikTok to apply all changes.",

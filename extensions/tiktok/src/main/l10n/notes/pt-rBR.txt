@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Quando só parte das fotos originais é salva, agora aparece Tentar novamente ao lado de Abrir. Ele tenta de novo só as fotos que falharam.
+
 * **TikTok:** As Configurações rápidas podem ser escondidas da página inicial das configurações com um toque longo no cartão. A linha Configurações rápidas na página inicial, em Backup e restauração, traz de volta.
 
 * **TikTok:** As salas de LIVE podem mostrar um botão Gravar (desativado por padrão, nas configurações de Reprodução). Ele salva o que você assiste desde o toque até você tocar em Parar ou sair da sala (#37).

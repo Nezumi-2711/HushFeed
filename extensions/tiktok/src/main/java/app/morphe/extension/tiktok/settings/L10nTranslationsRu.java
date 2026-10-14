@@ -15,7 +15,7 @@ final class L10nTranslationsRu {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4590);
+        Map<String, String> table = new HashMap<>(4592);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -4224,6 +4224,8 @@ final class L10nTranslationsRu {
                 "Это видео недоступно в виде полного файла. Повторите попытку позже.");
         table.put("This video's sound has no title to look for",
                 "У звука этого видео нет названия для поиска");
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Сейчас эти фото нельзя попробовать снова. Сохраните публикацию ещё раз, чтобы получить остальные.");
         table.put("Thumbs down blocks the commenter",
                 "Палец вниз блокирует автора комментария");
         table.put("TikTok account facts",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsRu {
                 "TikTok закрылся три раза в течение минуты после запуска, поэтому Hushfeed поставил себя на паузу. Ваши настройки остаются как есть.");
         table.put("TikTok closed. What was recorded is saved to %1$s",
                 "TikTok закрылся. Записанное сохранено в %1$s");
-        table.put("TikTok closes at %1$s",
-                "TikTok закроется в %1$s");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("TikTok closes at %1$s",
+                "TikTok закроется в %1$s");
         table.put("TikTok default",
                 "Стандарт TikTok");
         table.put("TikTok default (hold to speed up, quick share)",
@@ -4359,11 +4361,11 @@ final class L10nTranslationsRu {
                 "Сегодня: %1$d видео");
         table.put("Today: %1$d videos|few",
                 "Сегодня: %1$d видео");
-        table.put("Today: %1$d videos|many",
-                "Сегодня: %1$d видео");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Today: %1$d videos|many",
+                "Сегодня: %1$d видео");
         table.put("Today: %1$d videos|one",
                 "Сегодня: %1$d видео");
         table.put("Too late to put the saved videos back",
@@ -4482,11 +4484,11 @@ final class L10nTranslationsRu {
                 "Отмена последнего изменения");
         table.put("Unknown resolution",
                 "Разрешение неизвестно");
-        table.put("Unlock",
-                "Разблокировать");
     }
 
     private static void fill36(Map<String, String> table) {
+        table.put("Unlock",
+                "Разблокировать");
         table.put("Unlock TikTok",
                 "Разблокировать TikTok");
         table.put("Unpersonalized For You videos",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsRu {
                 "Громкость");
         table.put("Wait a day to loosen the budget",
                 "Ждать день перед тем, как ослабить лимит");
-        table.put("Wait a day to loosen the budget is on, so Hushfeed stays on",
-                "«Ждать день перед тем, как ослабить лимит» включено, поэтому Hushfeed остаётся включённым");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Wait a day to loosen the budget is on, so Hushfeed stays on",
+                "«Ждать день перед тем, как ослабить лимит» включено, поэтому Hushfeed остаётся включённым");
         table.put("Wait before hiding the controls.",
                 "Задержка перед скрытием элементов управления.");
         table.put("Wait for loading to finish",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsRu {
                 "Название вашего оператора, например T-Mobile.");
         table.put("Your operator's numeric code, like 310260.",
                 "Числовой код вашего оператора, например 310260.");
-        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
-                "Не удалось восстановить вашу предыдущую настройку ленты. Ничего не изменено.");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
+                "Не удалось восстановить вашу предыдущую настройку ленты. Ничего не изменено.");
         table.put("Your previous feed setup is back.",
                 "Ваша предыдущая настройка ленты восстановлена.");
         table.put("Your previous feed setup is back. Restart TikTok to apply all changes.",

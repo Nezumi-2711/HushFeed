@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Orijinal fotoğraf kaydının yalnızca bir kısmı gelirse artık Aç'ın yanında Yeniden dene çıkıyor. Yalnızca gelmeyen fotoğrafları yeniden dener.
+
 * **TikTok:** Hızlı kurulumlar, kartına uzun basılarak ayarların ana sayfasından gizlenebilir. Yedekleme ve geri yükleme'deki Ana sayfada hızlı kurulumlar satırı onları geri getirir.
 
 * **TikTok:** LIVE odaları bir Kaydet düğmesi gösterebilir (varsayılan olarak kapalı, Oynatma ayarlarında). Dokunduğun andan Durdur'a dokunana veya odadan çıkana kadar izlediklerini kaydeder (#37).

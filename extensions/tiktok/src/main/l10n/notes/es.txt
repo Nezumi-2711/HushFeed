@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Si al guardar fotos originales solo llegan algunas, ahora aparece Reintentar junto a Abrir. Solo vuelve a intentar las fotos que fallaron.
+
 * **TikTok:** Los Ajustes rápidos se pueden ocultar de la página de inicio de los ajustes con una pulsación larga en su tarjeta. La fila Ajustes rápidos en la página de inicio, en Copia de seguridad y restauración, los trae de vuelta.
 
 * **TikTok:** Las salas LIVE pueden mostrar un botón Grabar (desactivado por defecto, en los ajustes de Reproducción). Guarda lo que ves desde que lo tocas hasta que tocas Detener o sales de la sala (#37).

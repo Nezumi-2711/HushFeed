@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Se un salvataggio di foto originali riesce solo in parte, ora offre Riprova accanto ad Apri. Riprova solo le foto che non sono arrivate.
+
 * **TikTok:** Le Configurazioni rapide si possono nascondere dalla home delle impostazioni con una pressione prolungata sulla scheda. La riga Configurazioni rapide nella home in Backup e ripristino le fa tornare.
 
 * **TikTok:** Le stanze LIVE possono mostrare un pulsante Registra (disattivato di default, nelle impostazioni di Riproduzione). Salva quello che guardi da quando lo tocchi finché tocchi Interrompi o esci dalla stanza (#37).

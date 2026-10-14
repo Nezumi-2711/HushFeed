@@ -15,7 +15,7 @@ final class L10nTranslationsEs {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4230);
+        Map<String, String> table = new HashMap<>(4232);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3885,6 +3885,8 @@ final class L10nTranslationsEs {
                 "Este video no está disponible como archivo completo. Inténtalo más tarde.");
         table.put("This video's sound has no title to look for",
                 "El sonido de este video no tiene título que buscar");
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Esas fotos no se pueden reintentar ahora. Vuelve a guardar la publicación para conseguir el resto.");
         table.put("Thumbs down blocks the commenter",
                 "El pulgar hacia abajo bloquea a quien comenta");
         table.put("TikTok account facts",
@@ -3987,11 +3989,11 @@ final class L10nTranslationsEs {
                 "Veces que puedes abrir el feed de todas formas");
         table.put("Today can't start over while Wait a day to loosen the budget is on. The day starts over at %1$s.",
                 "Hoy no puede empezar de nuevo mientras Esperar un día para aflojar el presupuesto esté activado. El día vuelve a empezar a las %1$s.");
-        table.put("Today has moved on, so there's nothing to put back",
-                "El día ha avanzado, así que no hay nada que recuperar");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("Today has moved on, so there's nothing to put back",
+                "El día ha avanzado, así que no hay nada que recuperar");
         table.put("Today is back where it was",
                 "Hoy está como estaba");
         table.put("Today started over. Tap again to put the counts back.",
@@ -4110,11 +4112,11 @@ final class L10nTranslationsEs {
                 "Deshacer el olvido de los vídeos guardados");
         table.put("Undo last Lab change",
                 "Deshacer el último cambio del Lab");
-        table.put("Undo last restore or reset",
-                "Deshacer la última restauración o reinicio");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("Undo last restore or reset",
+                "Deshacer la última restauración o reinicio");
         table.put("Undoing the last change",
                 "Deshaciendo el último cambio");
         table.put("Unknown resolution",
@@ -4233,11 +4235,11 @@ final class L10nTranslationsEs {
                 "Los videos de los resultados de búsqueda muestran su portada y se reproducen cuando los abres. El feed y los videos que abres se reproducen como siempre.");
         table.put("Views range",
                 "Rango de visualizaciones");
-        table.put("Visual search",
-                "Búsqueda visual");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Visual search",
+                "Búsqueda visual");
         table.put("Volume",
                 "Volumen");
         table.put("Wait a day to loosen the budget",
@@ -4356,11 +4358,11 @@ final class L10nTranslationsEs {
                 "El nombre de tu operador, como T-Mobile.");
         table.put("Your operator's numeric code, like 310260.",
                 "El código numérico de tu operador, como 310260.");
-        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
-                "No se pudo restaurar tu configuración anterior del feed. No se cambió nada.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Your previous feed setup couldn't be restored. Nothing was changed.",
+                "No se pudo restaurar tu configuración anterior del feed. No se cambió nada.");
         table.put("Your previous feed setup is back.",
                 "Se ha recuperado tu configuración anterior del feed.");
         table.put("Your previous feed setup is back. Restart TikTok to apply all changes.",

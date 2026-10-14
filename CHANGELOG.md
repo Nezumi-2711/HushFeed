@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** When some of the original photos you save don't come through, the result now has Retry beside Open. It tries again only the photos that failed, in the post's order and under the same file names, so the ones that landed aren't saved a second time. Photos you cancelled or didn't pick are left out, and Retry keeps showing up as long as some still fail. A Retry made under another account than the one you're on now says so instead of saving.
+
 * **TikTok:** Quick setups can be hidden from the settings home with a long press on its card, and its help line now says so. The **Quick setups on the home page** row on Backup and restore brings it back. Settings backups and the Quick setups choices leave it alone.
 
 * **TikTok:** LIVE rooms can show a Record button, off by default and found in Playback settings. It saves what you watch from the moment you tap it until you tap Stop or leave the room. Nothing from before the tap is saved. If the LIVE ends, the connection drops or the phone runs low on room, you get what was recorded so far and a message that says so (#37).
