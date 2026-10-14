@@ -2157,3 +2157,5 @@ Hide Add friends	Nascondi Aggiungi amici
 Hide the Add friends button at the top of your profile. The menu button stays where it is.	Nascondi il pulsante Aggiungi amici in cima al tuo profilo. Il pulsante del menu resta al suo posto.
 See-through status bar	Barra di stato trasparente
 Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.	Nel feed principale, fai arrivare il video fino in cima allo schermo, con l'orologio e le icone di stato sopra. Le schede in alto restano dove sono.
+Floating bottom bar	Barra inferiore fluttuante
+Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.	Mostra le schede del feed principale su una pillola scura, arrotondata e trasparente che fluttua sopra il video. Richiede Barra inferiore trasparente.

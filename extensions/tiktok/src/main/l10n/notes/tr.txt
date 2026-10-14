@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** TikTok'un Keşfet paneli odanın üstünde açılınca LIVE Kaydet düğmesi aşağı kayar, panel kapanınca yerine döner (#37).
+* **TikTok:** Şeffaf alt çubuk altında yeni Yüzen alt çubuk anahtarı: sekmeler videonun üzerinde yuvarlak, şeffaf koyu bir kapsülde durur (#124).
+
 * **TikTok:** Akış ekranında yeni Şeffaf durum çubuğu anahtarı: ana akıştaki video saatin altından üst kenara kadar uzanır, üstteki sekmeler yerinde kalır (#145).
 
 * **TikTok:** LIVE'ı durum çubuğunun altında göster açıkken saatin altındaki siyah şerit artık bir oda açılırken veya sonrakine kaydırırken bir anlığına görünmüyor (#137).

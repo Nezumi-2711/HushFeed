@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** Tombol Rekam LIVE turun agar tidak menghalangi saat panel Jelajahi TikTok terbuka di atas ruangan, lalu kembali saat panel ditutup (#37).
+* **TikTok:** Sakelar baru Bilah bawah mengambang di bawah Bilah bawah transparan: tab berada di atas kapsul gelap yang membulat dan transparan di atas video (#124).
+
 * **TikTok:** Sakelar baru Bilah status transparan di Layar feed: video di feed utama menjangkau tepi atas dengan jam di atasnya, tab di atas tetap di tempatnya (#145).
 
 * **TikTok:** Saat Tampilkan LIVE di bawah bilah status aktif, pita hitam di bawah jam tidak lagi muncul sesaat ketika ruang dibuka atau saat kamu menggeser ke ruang berikutnya (#137).

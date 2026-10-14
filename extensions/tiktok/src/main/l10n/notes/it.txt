@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** Il pulsante Registra della LIVE si sposta in basso quando il pannello Esplora di TikTok si apre sopra la stanza, e torna al suo posto quando si chiude (#37).
+* **TikTok:** Nuovo interruttore Barra inferiore fluttuante sotto Barra inferiore trasparente: le schede stanno su una pillola scura, arrotondata e trasparente sopra il video (#124).
+
 * **TikTok:** Nuovo interruttore Barra di stato trasparente in Schermata del feed: il video del feed principale arriva fino al bordo in alto con l'orologio sopra, le schede in alto restano dove sono (#145).
 
 * **TikTok:** Con Mostra il LIVE sotto la barra di stato attivo, la fascia nera sotto l'orologio non compare più per un attimo quando si apre una stanza o passi alla successiva (#137).

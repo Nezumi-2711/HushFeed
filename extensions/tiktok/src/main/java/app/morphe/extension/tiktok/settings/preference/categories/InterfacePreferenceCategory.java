@@ -611,6 +611,12 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             ));
             addPreference(new TogglePreference(
                     context,
+                    "Floating bottom bar",
+                    "Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.",
+                    Settings.FLOATING_BOTTOM_BAR
+            ));
+            addPreference(new TogglePreference(
+                    context,
                     "See-through status bar",
                     "Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.",
                     Settings.SEE_THROUGH_STATUS_BAR

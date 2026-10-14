@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** El botón Grabar del LIVE baja para no estorbar cuando el panel Descubrir de TikTok se abre sobre la sala, y vuelve a su sitio al cerrarse (#37).
+* **TikTok:** Nuevo interruptor Barra inferior flotante en Barra inferior transparente: las pestañas quedan sobre una píldora oscura, redondeada y transparente encima del vídeo (#124).
+
 * **TikTok:** Nuevo interruptor Barra de estado transparente en Pantalla del feed: el vídeo del feed principal llega hasta el borde superior con el reloj encima y las pestañas de arriba no se mueven (#145).
 
 * **TikTok:** Con Mostrar el LIVE bajo la barra de estado activado, la franja negra bajo el reloj ya no aparece un momento al abrir una sala ni al deslizar a la siguiente (#137).

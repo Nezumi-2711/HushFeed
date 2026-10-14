@@ -2138,3 +2138,5 @@ Hide Add friends,Sembunyikan Tambah teman
 Hide the Add friends button at the top of your profile. The menu button stays where it is.,Sembunyikan tombol Tambah teman di bagian atas profilmu. Tombol menu tetap di tempatnya.
 See-through status bar,Bilah status transparan
 "Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.","Biarkan video di feed utama menjangkau bagian atas layar, dengan jam dan ikon status di atasnya. Tab di bagian atas tetap di tempatnya."
+Floating bottom bar,Bilah bawah mengambang
+"Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.","Tampilkan tab feed utama di atas kapsul gelap yang membulat dan transparan, yang mengambang di atas video. Perlu Bilah bawah transparan."

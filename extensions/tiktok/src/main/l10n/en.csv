@@ -587,6 +587,7 @@ Find the sound on YouTube Music,Find the sound on YouTube Music
 First caller,First caller
 First rejection:,First rejection:
 Fit the video to the screen,Fit the video to the screen
+Floating bottom bar,Floating bottom bar
 Focus,Focus
 Follow probe,Follow probe
 Followers,Followers
@@ -1564,6 +1565,7 @@ Show the current spoken caption while the other controls are hidden.,Show the cu
 Show the day each video was posted under its view count on profile grids.,Show the day each video was posted under its view count on profile grids.
 Show the handle instead of the name,Show the handle instead of the name
 Show the hide button on videos,Show the hide button on videos
+"Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.","Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar."
 Show the mute button on videos,Show the mute button on videos
 Show the progress bar,Show the progress bar
 Show the progress bar thumbnail,Show the progress bar thumbnail
