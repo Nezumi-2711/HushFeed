@@ -937,8 +937,8 @@ public final class VideoOverlayHider {
         return at;
     }
 
-    /** When each column was last laid out again here, so a column that won't settle isn't looped. */
-    private static final Map<View, Long> COLUMNS_SETTLED = new WeakHashMap<>();
+    /** When a column last failed to settle here, so a column that won't settle isn't looped. */
+    private static final Map<View, Long> COLUMNS_UNSETTLED = new WeakHashMap<>();
 
     /**
      * Gives the pager back the room of a strip this class hid. Swiping through an opened grid on
@@ -946,21 +946,28 @@ public final class VideoOverlayHider {
      * yet the column was never measured again, so its pager kept the height it had beside the
      * strip. TikTok's ScreenAdaptionComponent shows the strip and writes its height on each page
      * change, and the layout that GONE asks for went missing on the way. A column whose shown
-     * children no longer fill it is measured and laid out again at its own size on the next turn,
-     * which doesn't depend on that request; at most once every half second per column.
+     * children no longer fill it is measured and laid out again at its own size, which doesn't
+     * depend on that request.
+     *
+     * <p>It happens right here in the pass, which runs after the layout and before the frame is
+     * drawn. On photo posts TikTok shows the strip again about twice a second (S22, 2026-10-14),
+     * and a relayout posted at most once every half second left the band up most of the time. Only
+     * a column that didn't settle waits half a second before it's tried again.
      */
-    private static void settleStripColumns(List<View> strips) {
+    static void settleStripColumns(List<View> strips) {
         for (View strip : strips) {
             if (strip.getVisibility() != View.GONE || !HIDDEN_HERE.containsKey(strip)) continue;
             android.view.ViewParent parent = strip.getParent();
             if (!(parent instanceof android.widget.LinearLayout)) continue;
             android.widget.LinearLayout column = (android.widget.LinearLayout) parent;
             if (!leavesRoom(column)) continue;
-            long now = SystemClock.uptimeMillis();
-            Long last = COLUMNS_SETTLED.get(column);
-            if (last != null && now - last < 500L) continue;
-            COLUMNS_SETTLED.put(column, now);
-            column.post(() -> relayoutColumn(column));
+            Long failed = COLUMNS_UNSETTLED.get(column);
+            if (failed != null && SystemClock.uptimeMillis() - failed < 500L) continue;
+            if (column.isInLayout()) {
+                column.post(() -> relayoutColumn(column));
+            } else {
+                relayoutColumn(column);
+            }
         }
     }
 
@@ -1003,6 +1010,11 @@ public final class VideoOverlayHider {
         column.layout(column.getLeft(), column.getTop(), column.getRight(), column.getBottom());
         column.invalidate();
         boolean settled = !leavesRoom((android.widget.LinearLayout) column);
+        if (settled) {
+            COLUMNS_UNSETTLED.remove(column);
+        } else {
+            COLUMNS_UNSETTLED.put(column, SystemClock.uptimeMillis());
+        }
         Logger.printDebug(() -> settled
                 ? "Gave the pager back the hidden comment strip's room"
                 : "Laid the pager column out again, but it still leaves the strip's room empty");

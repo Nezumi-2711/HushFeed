@@ -1594,6 +1594,86 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * On photo posts TikTok shows the strip again about twice a second (S22, 2026-10-14). The
+     * relayout was posted at most once every half second, so each show left the band up until
+     * then and the photo spent most of its time over it. Every pass that hides the strip again
+     * now gives the pager its room before the frame is drawn.
+     */
+    @Test
+    public void aStripTikTokShowsAgainGoesBackOnTheSamePass() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            View strip = new View(activity);
+            LinearLayout column = pagerColumn(activity, strip);
+            FrameLayout root = new FrameLayout(activity);
+            root.addView(column);
+            activity.setContentView(root);
+            View cell = column.findViewById(CELL_ID);
+            int width = View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY);
+            int height = View.MeasureSpec.makeMeasureSpec(2181, View.MeasureSpec.EXACTLY);
+            try {
+                for (int show = 0; show < 3; show++) {
+                    strip.setVisibility(View.VISIBLE);
+                    column.measure(width, height);
+                    column.layout(0, 0, 1080, 2181);
+                    assertEquals(2043, cell.getHeight());
+
+                    VideoOverlayHider.setHidden(strip, true);
+                    VideoOverlayHider.settleStripColumns(java.util.List.of(strip));
+                    assertEquals("show " + show + " left the band", 2181, cell.getHeight());
+                }
+            } finally {
+                VideoOverlayHider.setHidden(strip, false);
+            }
+        }
+    }
+
+    /** A column that doesn't settle is measured once and then left for half a second. */
+    @Test
+    public void aColumnThatWontSettleIsTriedAgainOnlyAfterHalfASecond() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            int[] measures = {0};
+            LinearLayout column = new LinearLayout(activity) {
+                @Override
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    measures[0]++;
+                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                }
+            };
+            column.setOrientation(LinearLayout.VERTICAL);
+            // A cell of its own fixed height never grows into the strip's room.
+            column.addView(new FrameLayout(activity), new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, 2043));
+            View strip = new View(activity);
+            column.addView(strip, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, 138));
+            FrameLayout root = new FrameLayout(activity);
+            root.addView(column);
+            activity.setContentView(root);
+            column.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(2181, View.MeasureSpec.EXACTLY));
+            column.layout(0, 0, 1080, 2181);
+            try {
+                VideoOverlayHider.setHidden(strip, true);
+                measures[0] = 0;
+                VideoOverlayHider.settleStripColumns(java.util.List.of(strip));
+                assertEquals(1, measures[0]);
+                assertTrue(VideoOverlayHider.leavesRoom(column));
+
+                VideoOverlayHider.settleStripColumns(java.util.List.of(strip));
+                assertEquals("tried again inside the half second", 1, measures[0]);
+
+                org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(500));
+                VideoOverlayHider.settleStripColumns(java.util.List.of(strip));
+                assertEquals(2, measures[0]);
+            } finally {
+                VideoOverlayHider.setHidden(strip, false);
+            }
+        }
+    }
+
+    /**
      * TikTok leaves the Add comment bar up in Clear display on a photo or video opened from
      * search or a profile (#84). It goes with the other controls, with Hide the comment bar on
      * opened videos off, and comes back on Restore display.
