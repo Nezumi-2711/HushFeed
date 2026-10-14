@@ -24,8 +24,6 @@
 
 * **TikTok:** Jangan mulai video pertama kini menghentikannya di bingkai pertama, bukan satu atau dua detik kemudian (#83).
 
-* **TikTok:** Sakelar baru mempertahankan kualitas LIVE yang kamu pilih setelah TikTok dimulai ulang (#57).
-
 * **TikTok:** Patch baru Accent color mengganti merah pada tombol dan teks TikTok dengan biru, hijau, ungu, oranye, hijau toska, atau warna pilihanmu sendiri (#84).
 
 ## 0.73.0 (2026-10-14)

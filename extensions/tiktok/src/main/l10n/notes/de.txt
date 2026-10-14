@@ -24,8 +24,6 @@
 
 * **TikTok:** Erstes Video nicht starten hält das Video jetzt beim ersten Bild an statt nach ein, zwei Sekunden (#83).
 
-* **TikTok:** Ein neuer Schalter behält die gewählte LIVE-Qualität auch nach einem Neustart von TikTok (#57).
-
 * **TikTok:** Der neue Patch Accent color ersetzt das Rot von TikToks Schaltflächen und Text durch Blau, Grün, Lila, Orange, Türkis oder eine eigene Farbe (#84).
 
 ## 0.73.0 (2026-10-14)

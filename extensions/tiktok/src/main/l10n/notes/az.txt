@@ -24,8 +24,6 @@
 
 * **TikTok:** İlk videonu başlatmayın artıq videonu bir-iki saniyə sonra deyil, ilk kadrında dayandırır (#83).
 
-* **TikTok:** Yeni açar seçdiyin LIVE keyfiyyətini TikTok yenidən başlayandan sonra da saxlayır (#57).
-
 * **TikTok:** Yeni Accent color patçı TikTok-un düymələrindəki və mətnindəki qırmızını mavi, yaşıl, bənövşəyi, narıncı, firuzəyi və ya öz seçdiyin rənglə əvəz edir (#84).
 
 ## 0.73.0 (2026-10-14)

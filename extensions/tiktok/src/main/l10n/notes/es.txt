@@ -24,8 +24,6 @@
 
 * **TikTok:** No poner en marcha el primer video ahora lo detiene en su primer fotograma, no uno o dos segundos después (#83).
 
-* **TikTok:** Un nuevo interruptor mantiene la calidad de LIVE que elegiste después de reiniciar TikTok (#57).
-
 * **TikTok:** El nuevo parche Accent color cambia el rojo de los botones y textos de TikTok por azul, verde, morado, naranja, verde azulado o un color propio (#84).
 
 ## 0.73.0 (2026-10-14)

@@ -24,8 +24,6 @@
 
 * **TikTok:** Non avviare il primo video ora lo ferma al primo fotogramma, non dopo un paio di secondi (#83).
 
-* **TikTok:** Un nuovo interruttore mantiene la qualità LIVE che hai scelto dopo il riavvio di TikTok (#57).
-
 * **TikTok:** La nuova patch Accent color sostituisce il rosso dei pulsanti e dei testi di TikTok con blu, verde, viola, arancione, verde acqua o un colore a tua scelta (#84).
 
 ## 0.73.0 (2026-10-14)

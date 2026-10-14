@@ -24,8 +24,6 @@
 
 * **TikTok:** Não iniciar o primeiro vídeo agora para o vídeo no primeiro quadro, não um ou dois segundos depois (#83).
 
-* **TikTok:** Uma nova chave mantém a qualidade da LIVE que você escolheu depois que o TikTok reinicia (#57).
-
 * **TikTok:** O novo patch Accent color troca o vermelho dos botões e textos do TikTok por azul, verde, roxo, laranja, verde-azulado ou uma cor sua (#84).
 
 ## 0.73.0 (2026-10-14)

@@ -545,7 +545,8 @@ public class Settings extends BaseSettings {
      * {@link #OFFER_LIVE_QUALITY}. Read as each room picks its starting quality, so no restart.
      * A pick is saved from either of TikTok's pickers: the newer one's setter and the older
      * LiveDefinitionSelectionDialog's applied switch, which Share > Video quality opens in rooms
-     * whose stream asks for a quality button.
+     * whose stream asks for a quality button. Has no settings row yet: on the S22 the first room
+     * after a restart still opened at TikTok's own choice.
      */
     public static final BooleanSetting REMEMBER_LIVE_QUALITY = new BooleanSetting(
             "remember_live_quality", FALSE, false, Setting.parent(OFFER_LIVE_QUALITY));
