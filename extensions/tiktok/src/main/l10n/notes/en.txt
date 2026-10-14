@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Hide videos you have already seen now works on the Following tab too, without moving the video playing.
+
 * **TikTok:** A video playing on For You or Following no longer vanishes once it passes Maximum post age or Hide videos you have already seen counts it.
 
 * **TikTok:** Show the time to the second has two options of its own: Show the time zone, on as before, and Short date (#147).

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -90,10 +91,10 @@ public final class FeedItemsFilter {
      * The Following tab's rules where TikTok reads its list. On 47.1.4 the tab never loads
      * through the response hook, so this read is the only place its videos meet the feed rules,
      * the way For You's do in {@link #filterOnRead}; before, a blocked creator still showed there.
-     * Hide seen videos stays out: the list grows under the video playing, and a re-read would
-     * pull the ones already watched in it and move the pager.
+     * The list grows under the video playing, so Hide seen videos runs only on the videos a read
+     * hasn't kept yet (see {@link #drifts}); the ones watched in it stay where they are.
      */
-    private static final List<IFilter> LATE_FOLLOW_FILTERS = withoutSeen(CONTENT_FILTERS);
+    private static final List<IFilter> LATE_FOLLOW_FILTERS = CONTENT_FILTERS;
     /** The card shapes TikTok uses for a bought search result. */
     private static final String[] SEARCH_AD_FIELDS = {"multiAdCard", "aiAdCard", "brandZoneCard"};
     /** The feed type TikTok 47.0.3 gives a single TikTok Shop product card in search results. */
@@ -143,12 +144,6 @@ public final class FeedItemsFilter {
         List<IFilter> filters = new ArrayList<>(CONTENT_FILTERS);
         filters.add(UNPERSONALIZED_FILTER);
         return Collections.unmodifiableList(filters);
-    }
-
-    private static List<IFilter> withoutSeen(List<IFilter> filters) {
-        List<IFilter> kept = new ArrayList<>(filters);
-        kept.remove(SEEN_FILTER);
-        return Collections.unmodifiableList(kept);
     }
 
     private static List<IFilter> createRangeFilters() {
@@ -1347,6 +1342,10 @@ public final class FeedItemsFilter {
             recordProbeCall(listId, filterMask);
         }
 
+        // Videos an earlier read of this list kept skip the rules that drift under the player.
+        // Read before the skip below, so a list read again unchanged still counts as in use.
+        Set<String> keptBefore = keptBefore(owner, filterMask);
+
         if (allowRecentSkip && shouldSkipRecentlyProcessedList(
             listId,
             beforeFingerprint,
@@ -1366,8 +1365,6 @@ public final class FeedItemsFilter {
         int rangeRejected = 0;
         Map<String, Integer> reasonCounts = new HashMap<>();
 
-        // Videos an earlier read of this list kept skip the rules that drift under the player.
-        Set<String> keptBefore = keptBefore(owner, filterMask);
         List<IFilter> steadyContentFilters = keptBefore.isEmpty()
             ? activeContentFilters : withoutDrifting(activeContentFilters);
 
@@ -1729,9 +1726,16 @@ public final class FeedItemsFilter {
      * What each list's owner kept when its rules last ran, by the owner's identity: FollowFeedList
      * became a Kotlin class on 46.9.3, so its equals can't be trusted to mean the same list. A
      * change of rules (the filter mask) judges every video again, since that one is the reader's.
+     * Kept in the order lists were last read, so the list on screen is never the one dropped.
      */
-    private static final Map<Integer, KeptBefore> KEPT_BEFORE = new HashMap<>();
     private static final int KEPT_BEFORE_MAX_OWNERS = 256;
+    private static final Map<Integer, KeptBefore> KEPT_BEFORE =
+        new LinkedHashMap<Integer, KeptBefore>(16, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Integer, KeptBefore> eldest) {
+                return size() > KEPT_BEFORE_MAX_OWNERS;
+            }
+        };
 
     private static final class KeptBefore {
         final WeakReference<Object> owner;
@@ -1765,7 +1769,6 @@ public final class FeedItemsFilter {
             if (aid != null) aids.add(aid);
         }
         synchronized (KEPT_BEFORE) {
-            if (KEPT_BEFORE.size() > KEPT_BEFORE_MAX_OWNERS) KEPT_BEFORE.clear();
             KEPT_BEFORE.put(System.identityHashCode(owner), new KeptBefore(owner, filterMask, Collections.unmodifiableSet(aids)));
         }
     }

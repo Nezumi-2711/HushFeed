@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Bereits gesehene Videos ausblenden wirkt jetzt auch in Gefolgt, ohne das laufende Video zu verschieben.
+
 * **TikTok:** Ein Video, das in „Für dich“ oder Gefolgt läuft, verschwindet nicht mehr, sobald es das Höchstalter von Beiträgen überschreitet oder Bereits gesehene Videos ausblenden es mitzählt.
 
 * **TikTok:** Uhrzeit sekundengenau anzeigen hat zwei eigene Optionen: Zeitzone anzeigen, wie bisher an, und Kurzes Datum (#147).

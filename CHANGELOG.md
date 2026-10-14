@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Hide videos you have already seen works on the Following tab too. On TikTok 47.1.4 that tab only meets the feed rules where TikTok reads its list, and the switch was left off there. A video you watch on the tab stays put while more load under it, and one you saw earlier is taken out when it turns up.
+
 * **TikTok:** A video you're watching on For You or Following stays put when TikTok reads the list again. It used to vanish from under you once it got older than your Maximum post age, once Hide videos you have already seen counted it as watched, or when its counts moved past a range or views per like limit you set. Videos that come in after it still go through every rule, and turning a rule on checks all of them again.
 
 * **TikTok:** Show the time to the second has two options under it. Show the time zone (on, so the row reads as before) can drop the zone, and Short date writes the date the short way your language does, like 10/7/25. Each works without the other, the seconds always stay, and both use your language's own formats and your phone's 12 or 24 hour clock (#147).

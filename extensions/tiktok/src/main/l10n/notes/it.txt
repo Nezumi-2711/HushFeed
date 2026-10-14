@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Nascondi i video che hai già visto ora funziona anche in Seguiti, senza spostare il video in riproduzione.
+
 * **TikTok:** Un video in riproduzione in Per te o Seguiti non sparisce più quando supera l'Età massima dei post o quando Nascondi i video che hai già visto lo conta.
 
 * **TikTok:** Mostra l'ora al secondo ha due opzioni sue: Mostra il fuso orario, attiva come prima, e Data breve (#147).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ocultar los vídeos que ya has visto ahora también funciona en Siguiendo, sin mover el vídeo que se reproduce.
+
 * **TikTok:** Un vídeo que se reproduce en Para ti o Siguiendo ya no desaparece cuando supera la Antigüedad máxima de la publicación o cuando Ocultar los vídeos que ya has visto lo cuenta.
 
 * **TikTok:** Mostrar la hora al segundo tiene dos opciones propias: Mostrar la zona horaria, activada como antes, y Fecha corta (#147).
