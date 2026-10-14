@@ -73,6 +73,9 @@ public final class LiveControls {
      * stream's own default when it doesn't, as it does with a pick from the same session.
      */
     public static String liveQualityPick(String tiktokPick) {
+        // On the S22 a room after a restart opened at TikTok's choice with no restore line, so
+        // each read says what TikTok handed it and which start asked (#57).
+        Logger.printDebug(() -> "LIVE quality: a start read " + tiktokPick + " in " + startCaller());
         if (tiktokPick != null || !rememberQuality()) return tiktokPick;
         String saved = Settings.REMEMBERED_LIVE_QUALITY.get();
         if (saved == null || saved.isEmpty()) return null;
@@ -81,6 +84,17 @@ public final class LiveControls {
             Logger.printInfo(() -> "LIVE quality: TikTok had no pick since it started, so rooms start at the saved " + saved);
         }
         return saved;
+    }
+
+    /** The TikTok method that called the hook, for the debug log. */
+    private static String startCaller() {
+        StackTraceElement[] stack = new Throwable().getStackTrace();
+        for (StackTraceElement frame : stack) {
+            if (!frame.getClassName().startsWith("app.morphe.")) {
+                return frame.getClassName() + "." + frame.getMethodName();
+            }
+        }
+        return "?";
     }
 
     /** Called with each quality TikTok's picker carries to the next room; saved while the switch is on. */
