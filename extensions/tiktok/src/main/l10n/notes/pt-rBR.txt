@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** O botão Gravar da LIVE desce para sair do caminho quando o painel Descobrir do TikTok abre sobre a sala, e volta quando ele fecha (#37).
+
 * **TikTok:** Se o TikTok fechar no meio de uma gravação de LIVE (arrastado para fora ou parado pelo celular), a próxima abertura salva o que foi gravado e avisa você, em vez de deixar no cache (#37).
 
 * **TikTok:** Novo botão Legendas com espessura normal em Legendas: legendas faladas com espessura normal em vez do negrito do TikTok (#158).

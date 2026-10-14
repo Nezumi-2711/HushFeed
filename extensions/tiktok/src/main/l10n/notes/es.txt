@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** El botón Grabar del LIVE baja para no estorbar cuando el panel Descubrir de TikTok se abre sobre la sala, y vuelve a su sitio al cerrarse (#37).
+
 * **TikTok:** Si TikTok se cierra en medio de una grabación de LIVE (deslizado o detenido por el teléfono), al abrirlo de nuevo se guarda lo grabado y te avisa, en vez de quedarse en la caché (#37).
 
 * **TikTok:** Nuevo interruptor Subtítulos con grosor normal en Subtítulos: los subtítulos hablados con grosor normal en lugar de la negrita de TikTok (#158).

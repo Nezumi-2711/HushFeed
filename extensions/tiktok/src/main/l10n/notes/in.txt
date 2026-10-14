@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tombol Rekam LIVE turun agar tidak menghalangi saat panel Jelajahi TikTok terbuka di atas ruangan, lalu kembali saat panel ditutup (#37).
+
 * **TikTok:** Jika TikTok tertutup di tengah rekaman LIVE (diusap keluar atau dihentikan ponsel), saat dibuka lagi bagian yang terekam disimpan dan kamu diberi tahu, bukan dibiarkan di cache (#37).
 
 * **TikTok:** Sakelar baru Keterangan dengan ketebalan normal di Teks: teks ucapan dengan ketebalan biasa, bukan huruf tebal TikTok (#158).

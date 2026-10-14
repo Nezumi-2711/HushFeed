@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** TikTok-un Kəşf et paneli otağın üstündə açılanda LIVE Yazmaq düyməsi aşağı çəkilir, panel bağlananda yerinə qayıdır (#37).
+
 * **TikTok:** LIVE yazısının ortasında TikTok bağlanarsa (sürüşdürülüb bağlanıb və ya telefon dayandırıb), növbəti açılışda yazılan hissə saxlanılır və sizə bildirilir, keşdə qalmır (#37).
 
 * **TikTok:** Başlıqlar altında yeni Normal qalınlıqda başlıqlar açarı: danışılan başlıqlar TikTok-un qalın yazısı əvəzinə adi qalınlıqda (#158).

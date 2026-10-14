@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
+
 * **TikTok:** A LIVE recording that TikTok closed on (swiped out of recents, or stopped by the phone) is saved at the next start, with the same "TikTok closed" message a recording cut short gets. It used to sit in the cache, unsaved, until the day-old cleanup threw it away (#37).
 
 * **TikTok:** A new Normal-weight captions switch, under Caption text size, draws TikTok's spoken captions at regular weight instead of bold. It keeps TikTok's own font and works with any caption size (#158).
