@@ -8,6 +8,8 @@
 
 * **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, postingan foto di grid yang dibuka tidak lagi berakhir di atas pita hitam di bagian bawah (#153).
 
+* **TikTok:** Saat Tampilkan LIVE di bawah bilah status aktif, panel di atas ruang pertama feed LIVE kini dimulai di bawah jam dan tidak lagi tertutup bilah status (#137).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Laporan diagnostik punya bagian baru berisi pengaturan yang diubah. Bagian ini menyebut setiap pengaturan yang tidak lagi di nilai bawaannya, sehingga laporan menunjukkan sakelar mana yang aktif. Teks yang kamu ketik di sebuah pengaturan tidak pernah disertakan (#149).

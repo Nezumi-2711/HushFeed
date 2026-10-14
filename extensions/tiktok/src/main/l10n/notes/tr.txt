@@ -8,6 +8,8 @@
 
 * **TikTok:** Açılan videolarda yorum çubuğunu gizle açıkken, açılan bir ızgaradaki fotoğraf gönderileri artık altta siyah bir şeridin üstünde bitmiyor (#153).
 
+* **TikTok:** LIVE'ı durum çubuğunun altında göster açıkken, LIVE akışındaki ilk odanın üstündeki paneller artık durum çubuğunun arkasında kalmıyor, saatin altından başlıyor (#137).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

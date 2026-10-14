@@ -8,6 +8,8 @@
 
 * **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, las publicaciones de fotos en una cuadrícula abierta ya no terminan sobre una franja negra abajo (#153).
 
+* **TikTok:** Con Mostrar el LIVE bajo la barra de estado activado, los paneles que hay encima de la primera sala del feed de LIVE ahora empiezan debajo del reloj y no detrás de la barra de estado (#137).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).

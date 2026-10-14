@@ -8,6 +8,8 @@
 
 * **TikTok:** With Hide the comment bar on opened videos on, photo posts in an opened grid no longer end above a black band at the bottom (#153).
 
+* **TikTok:** With Show a LIVE under the status bar on, the panels above the first room of the LIVE feed now start below the clock instead of under it (#137).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).

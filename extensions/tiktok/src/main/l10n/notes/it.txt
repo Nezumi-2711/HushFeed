@@ -8,6 +8,8 @@
 
 * **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, i post con foto in una griglia aperta non finiscono più sopra una fascia nera in basso (#153).
 
+* **TikTok:** Con Mostra il LIVE sotto la barra di stato attivo, i pannelli sopra la prima stanza del feed LIVE ora iniziano sotto l'orologio e non più dietro la barra di stato (#137).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).
