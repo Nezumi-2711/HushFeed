@@ -4,6 +4,8 @@
 
 * **TikTok:** Der Diagnosebericht meldet die Kommentarleiste nicht mehr als fehlend, solange du im Hauptfeed bist (#153).
 
+* **TikTok:** Der Speicherbereich im Diagnosebericht zeigt keinen Teil deiner Konto-ID mehr als Ordnernamen (#70).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).

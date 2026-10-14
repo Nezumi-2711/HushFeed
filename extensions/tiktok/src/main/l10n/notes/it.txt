@@ -4,6 +4,8 @@
 
 * **TikTok:** Il report diagnostico non segnala più la barra dei commenti come mancante mentre sei nel feed principale (#153).
 
+* **TikTok:** La sezione archiviazione del report diagnostico non mostra più parte dell'ID del tuo account come nome di una cartella (#70).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).
