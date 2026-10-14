@@ -602,6 +602,10 @@ exit /b 19
     Assert-True ($deviceScript -match 'Get-SourcesNewerThanBundle' -and
         $deviceScript -match '\[switch\]\$AllowStaleBundle') `
         'patch-for-device.ps1 patches with a bundle without asking whether its sources are newer.'
+    # A phone check of an option-driven patch (Accent color's presets) needs the option on the
+    # CLI line, right after that patch's -e.
+    Assert-True ($deviceScript -match '\[string\[\]\]\$Option' -and $deviceScript -match "\`$enable \+= '-O'") `
+        'patch-for-device.ps1 has no way to pass a patch option to the CLI.'
 } finally {
     if ($caseRoot.StartsWith($requiredPrefix, [System.StringComparison]::OrdinalIgnoreCase) -and
         (Test-Path -LiteralPath $caseRoot)) {
