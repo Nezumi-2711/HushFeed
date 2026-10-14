@@ -995,11 +995,17 @@ public final class VideoOverlayHider {
         }
         int width = column.getWidth();
         int height = column.getHeight();
+        // A strip hidden during the column's own layout leaves no request on the column, and a
+        // measure at the size it already has is then answered from the cache (S22, 2026-10-14).
+        column.forceLayout();
         column.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
         column.layout(column.getLeft(), column.getTop(), column.getRight(), column.getBottom());
         column.invalidate();
-        Logger.printDebug(() -> "Gave the pager back the hidden comment strip's room");
+        boolean settled = !leavesRoom((android.widget.LinearLayout) column);
+        Logger.printDebug(() -> settled
+                ? "Gave the pager back the hidden comment strip's room"
+                : "Laid the pager column out again, but it still leaves the strip's room empty");
     }
 
     /** Drops every strip that isn't the pager column's own child; see {@link #PAGER_COLUMN_ID}. */

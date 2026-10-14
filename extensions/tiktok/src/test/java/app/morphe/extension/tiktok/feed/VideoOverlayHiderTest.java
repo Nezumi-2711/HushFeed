@@ -1554,6 +1554,46 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * On the S22 (2026-10-14, a video opened from search) the strip went GONE while its column
+     * was being laid out, so the request it made stopped at the column and was cleared with the
+     * column's own. Measuring the column again at the size it already had was then answered from
+     * the cache, the pager stayed 2043 over a black band, and "Gave the pager back" was logged
+     * every half second without anything moving.
+     */
+    @Test
+    public void aStripHiddenDuringItsColumnsLayoutStillGivesThePagerItsRoom() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            View strip = new View(activity);
+            LinearLayout column = pagerColumn(activity, strip);
+            FrameLayout root = new FrameLayout(activity);
+            root.addView(column);
+            activity.setContentView(root);
+            View cell = column.findViewById(CELL_ID);
+            int width = View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY);
+            int height = View.MeasureSpec.makeMeasureSpec(2181, View.MeasureSpec.EXACTLY);
+            column.measure(width, height);
+            column.layout(0, 0, 1080, 2181);
+
+            View.OnLayoutChangeListener hideStrip = (view, l, t, r, b, oldL, oldT, oldR, oldB) ->
+                    strip.setVisibility(View.GONE);
+            column.addOnLayoutChangeListener(hideStrip);
+            column.requestLayout();
+            column.measure(width, height);
+            column.layout(0, 0, 1080, 2181);
+            column.removeOnLayoutChangeListener(hideStrip);
+            assertEquals(View.GONE, strip.getVisibility());
+            assertFalse("the strip's request went out with the column's", column.isLayoutRequested());
+            assertEquals("the stale layout the phone showed", 2043, cell.getHeight());
+
+            VideoOverlayHider.relayoutColumn(column);
+            assertEquals(2181, cell.getHeight());
+            assertEquals("the column keeps its own bounds", 2181, column.getHeight());
+            assertFalse(VideoOverlayHider.leavesRoom(column));
+        }
+    }
+
+    /**
      * TikTok leaves the Add comment bar up in Clear display on a photo or video opened from
      * search or a profile (#84). It goes with the other controls, with Hide the comment bar on
      * opened videos off, and comes back on Restore display.

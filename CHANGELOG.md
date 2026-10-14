@@ -28,7 +28,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** The diagnostic report's storage section no longer shows part of your account ID as a folder name. TikTok names its offline videos folder after the account (#70).
 
-* **TikTok:** With Hide the comment bar on opened videos on, photo posts in an opened grid no longer end above a black band at the bottom. A grid that starts on photos, or runs through several, has no comment bar until a video comes along, and the room kept for it came back as that band. Swiping to the next post in the grid no longer brings the band back either (#153).
+* **TikTok:** With Hide the comment bar on opened videos on, photo posts in an opened grid no longer end above a black band at the bottom. A grid that starts on photos, or runs through several, has no comment bar until a video comes along, and the room kept for it came back as that band. Swiping to the next post in the grid no longer brings the band back either, and a video you open from search results now reaches the bottom too (#153).
 
 * **TikTok:** With Show a LIVE under the status bar on, the panels above the first room of the LIVE feed (the one the LIVE button at the top left opens, scrolled up past the first room) now start below the clock. Their top row sat under the status bar, where it was hard to tap. The rooms themselves still reach up under the clock (#137).
 
