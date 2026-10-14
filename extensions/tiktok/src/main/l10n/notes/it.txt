@@ -16,6 +16,8 @@
 
 * **TikTok:** Un nuovo interruttore aggiunge lo schermo pulito, che lascia solo la diretta, al menu di ogni stanza LIVE (#57).
 
+* **TikTok:** Il nome visualizzato di un creator che torna dopo il paese o l'@nome utente non resta più tagliato (#127).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).

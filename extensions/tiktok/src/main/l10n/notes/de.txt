@@ -16,6 +16,8 @@
 
 * **TikTok:** Ein neuer Schalter fügt Bildschirm leeren, das nur den Stream zeigt, dem Menü jedes LIVE-Raums hinzu (#57).
 
+* **TikTok:** Der Anzeigename eines Creators, der nach dem Land oder dem @Namen zurückkommt, bleibt nicht mehr abgeschnitten (#127).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).
