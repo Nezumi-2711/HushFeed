@@ -176,6 +176,13 @@ public final class VideoOverlayHider {
      */
     private static final String[] STATUS_BAR_SPACER_IDS = {"47.1.4:dux"};
     /**
+     * The black band TikTok lays over the top of each feed cell, as tall as the status bar. It
+     * sat over the spacer, so nobody saw it until the spacer went: the video then went up under
+     * it and the strip under the clock stayed black (#145, S22). It goes with the spacer,
+     * invisible rather than gone, so nothing laid out against it moves.
+     */
+    private static final String[] STATUS_BAR_SCRIM_IDS = {"47.1.4:wll"};
+    /**
      * The blank under the video, the height of the bottom tab bar, with a background from the
      * theme. It is the cell's last child (dux first, the video area between), and the reason the
      * picture stops above the bar. See-through bottom bar collapses it (#145).
@@ -310,6 +317,7 @@ public final class VideoOverlayHider {
     private static final int TOP_SEARCH_SCRIM_TARGET = TOP_SEARCH_BAR_TARGET + 1;
     private static final int BOTTOM_SPACER_TARGET = TOP_SEARCH_SCRIM_TARGET + 1;
     private static final int DETAIL_SEARCH_BOX_TARGET = BOTTOM_SPACER_TARGET + 1;
+    private static final int STATUS_BAR_SCRIM_TARGET = DETAIL_SEARCH_BOX_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -645,6 +653,7 @@ public final class VideoOverlayHider {
                 wanted[TOP_SEARCH_SCRIM_TARGET] = false;
                 wanted[DETAIL_SEARCH_BOX_TARGET] = detailSearchBox;
                 wanted[STATUS_BAR_SPACER_TARGET] = statusBar || seeThroughStatusBar;
+                wanted[STATUS_BAR_SCRIM_TARGET] = statusBar || seeThroughStatusBar;
                 wanted[BOTTOM_SPACER_TARGET] = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
                     wanted[RAIL_TARGET_START + i] = rail[i] || carryHides;
@@ -909,7 +918,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[DETAIL_SEARCH_BOX_TARGET + 1][];
+        String[][] targets = new String[STATUS_BAR_SCRIM_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -940,6 +949,7 @@ public final class VideoOverlayHider {
         targets[TOP_SEARCH_SCRIM_TARGET] = TOP_SEARCH_SCRIM_IDS;
         targets[BOTTOM_SPACER_TARGET] = BOTTOM_SPACER_IDS;
         targets[DETAIL_SEARCH_BOX_TARGET] = DETAIL_SEARCH_BOX_IDS;
+        targets[STATUS_BAR_SCRIM_TARGET] = STATUS_BAR_SCRIM_IDS;
         return targets;
     }
 
@@ -1648,8 +1658,9 @@ public final class VideoOverlayHider {
                     } else if (target == TOP_SEARCH_BAR_TARGET || target == TOP_SEARCH_SCRIM_TARGET) {
                         // The way back out of the page: faded like the tabs, never past the floor.
                         setFaded(view, Math.max(NAVIGATION_FADE_FLOOR, fadeLevel), fadedClear);
-                    } else if (target == DETAIL_SEARCH_BOX_TARGET) {
-                        // Invisible, not gone: the bar keeps its shape and Back stays put.
+                    } else if (target == DETAIL_SEARCH_BOX_TARGET || target == STATUS_BAR_SCRIM_TARGET) {
+                        // Invisible, not gone: the bar keeps its shape and Back stays put, and
+                        // the cell's band keeps its place.
                         setHidden(view, wanted, View.INVISIBLE);
                     } else if (target == DETAIL_COMMENT_BAR_TARGET) {
                         // Hidden with its strip by the switch, Clear display and a fade of 0;

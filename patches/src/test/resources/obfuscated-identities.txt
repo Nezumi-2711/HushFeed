@@ -53,6 +53,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHid
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|w_0
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|w_1
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|wct
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|wll
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|wtr
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/follow/FollowDiagnostics.java|LIZ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/follow/FollowDiagnostics.java|LIZIZ

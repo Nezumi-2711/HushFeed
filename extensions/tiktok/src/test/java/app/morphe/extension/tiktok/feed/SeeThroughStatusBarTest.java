@@ -36,6 +36,7 @@ import org.robolectric.annotation.Config;
 public class SeeThroughStatusBarTest {
     private static final int CELL_ID = 0x7f0a0211;
     private static final int SPACER_ID = 0x7f0a0d31;
+    private static final int BAND_ID = 0x7f0a0d32;
     private static final int OWN_BAR_COLOR = 0xFF121212;
 
     @Before
@@ -43,6 +44,7 @@ public class SeeThroughStatusBarTest {
         Utils.setContext(RuntimeEnvironment.getApplication());
         VideoOverlayHider.resolveForTests("view_rootview", CELL_ID);
         VideoOverlayHider.resolveForTests("47.1.4:dux", SPACER_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:wll", BAND_ID);
     }
 
     @After
@@ -52,6 +54,7 @@ public class SeeThroughStatusBarTest {
         PausedProcess.set(false);
         VideoOverlayHider.resolveForTests("view_rootview", 0);
         VideoOverlayHider.resolveForTests("47.1.4:dux", 0);
+        VideoOverlayHider.resolveForTests("47.1.4:wll", 0);
         Utils.setContext(RuntimeEnvironment.getApplication());
     }
 
@@ -116,6 +119,49 @@ public class SeeThroughStatusBarTest {
             assertFalse(SeeThroughStatusBar.isCleared(activity));
             assertEquals(flags, activity.getWindow().getAttributes().flags);
             assertEquals(systemUi, activity.getWindow().getDecorView().getSystemUiVisibility());
+        }
+    }
+
+    /**
+     * The S22 kept a black strip under the clock with the switch on: the spacer was gone and the
+     * video was up there, but TikTok's own band, as tall as the bar, lies over the top of each
+     * cell. It goes with the spacer, invisible so it keeps its place, and comes back with it.
+     */
+    @Test
+    public void theBlackBandOverTheTopOfTheCellGoesWithTheSpacer() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            View spacer = feedCell(activity, View.INVISIBLE);
+            FrameLayout cell = activity.findViewById(CELL_ID);
+            View band = new View(activity);
+            band.setId(BAND_ID);
+            band.setBackgroundColor(Color.BLACK);
+            cell.addView(band, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 75));
+
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("the switch is off by default", View.VISIBLE, band.getVisibility());
+
+            Settings.SEE_THROUGH_STATUS_BAR.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, spacer.getVisibility());
+            assertEquals("the band still covered the top of the video", View.INVISIBLE, band.getVisibility());
+
+            PausedProcess.set(true);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("Pause kept the band away", View.VISIBLE, band.getVisibility());
+            PausedProcess.set(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.INVISIBLE, band.getVisibility());
+
+            Settings.SEE_THROUGH_STATUS_BAR.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("off didn't give the band back", View.VISIBLE, band.getVisibility());
+
+            // Hide the status bar takes the band too: there's no bar left for it to sit under.
+            Settings.HIDE_STATUS_BAR.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.INVISIBLE, band.getVisibility());
         }
     }
 
