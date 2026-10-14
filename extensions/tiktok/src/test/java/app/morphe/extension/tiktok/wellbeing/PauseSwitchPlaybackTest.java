@@ -196,6 +196,99 @@ public class PauseSwitchPlaybackTest {
         }
     }
 
+    /**
+     * #83 on the S22: after the first-frame pause TikTok played the first video a second time
+     * about 1.7 s later, and it played until the next progress report paused it again. That play,
+     * through PlayerController's play method or the manager's own resume, is turned down now while
+     * the cover waits. The tap plays the video once, through the same guarded resume, and after it
+     * TikTok's plays go through as usual.
+     */
+    @Test public void aStartsSecondPlayIsTurnedDownAndTheTapPlaysTheVideoOnce() {
+        Settings.PAUSE_FIRST_VIDEO.save(true);
+        guardTheManagersResume();
+        Intent launcher = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+        try (var owner = Robolectric.buildActivity(FeedActivity.class, launcher).create()) {
+            Utils.setActivity(owner.get());
+            PausePlayback.install(owner.get());
+            NativeController player = new NativeController();
+            player.bind("cold");
+            owner.start().resume().visible();
+            View catcher = ReflectionHelpers.callStaticMethod(PausePlayback.class, "catcherForTests");
+            assertNotNull("the start was not held", catcher);
+            assertFalse("the play that starts the first video was turned down",
+                    SessionPlaybackHold.refusePlay(player, player.currentClip()));
+
+            BlockAuthorPatch.onFirstFrame(player);
+            idle();
+            assertEquals("the first video played on past its first frame", 1, player.manager.pauses);
+
+            assertTrue("TikTok's second play started the video under the cover",
+                    SessionPlaybackHold.refusePlay(player, player.currentClip()));
+            assertTrue("TikTok's own resume started the video under the cover",
+                    SessionPlaybackHold.refuseResume(player.manager));
+            NativeController other = new NativeController();
+            assertFalse("a play on another player was turned down",
+                    SessionPlaybackHold.refusePlay(other, other.currentClip()));
+            assertFalse("another player's resume was turned down",
+                    SessionPlaybackHold.refuseResume(other.manager));
+
+            assertTrue(catcher.performClick());
+            idle();
+            assertEquals("the tap did not start the first video exactly once", 1, player.manager.resumes);
+            assertTrue(player.manager.playing);
+            assertFalse("TikTok's play after the tap was turned down",
+                    SessionPlaybackHold.refusePlay(player, player.currentClip()));
+            assertFalse("TikTok's resume after the tap was turned down",
+                    SessionPlaybackHold.refuseResume(player.manager));
+        }
+    }
+
+    /** With the switch off, or on but with Hushfeed paused, nothing turns TikTok's plays down. */
+    @Test public void withTheSwitchOffOrHushfeedPausedTikTokPlaysAsUsual() {
+        Intent launcher = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+        for (boolean paused : new boolean[] {false, true}) {
+            Settings.PAUSE_FIRST_VIDEO.save(paused);
+            ReflectionHelpers.callStaticMethod(PausePlayback.class, "resetForTests");
+            ReflectionHelpers.callStaticMethod(app.morphe.extension.shared.settings.Setting.class,
+                    "setPausedForProcess", ClassParameter.from(boolean.class, paused));
+            try (var owner = Robolectric.buildActivity(FeedActivity.class, launcher).create()) {
+                Utils.setActivity(owner.get());
+                PausePlayback.install(owner.get());
+                NativeController player = new NativeController();
+                player.bind("free");
+                owner.start().resume().visible();
+                BlockAuthorPatch.onFirstFrame(player);
+                idle();
+                String state = paused ? "paused" : "off";
+                assertEquals("a first frame was stopped with the switch " + state, 0, player.manager.pauses);
+                assertFalse("TikTok's play was turned down with the switch " + state,
+                        SessionPlaybackHold.refusePlay(player, player.currentClip()));
+                assertFalse("TikTok's resume was turned down with the switch " + state,
+                        SessionPlaybackHold.refuseResume(player.manager));
+            } finally {
+                ReflectionHelpers.callStaticMethod(app.morphe.extension.shared.settings.Setting.class,
+                        "setPausedForProcess", ClassParameter.from(boolean.class, false));
+            }
+        }
+    }
+
+    /**
+     * The fakes' resume asks the hold first, the way the patched manager implementation does, so
+     * the hold's own resume is shown to pass its guard.
+     */
+    private static void guardTheManagersResume() {
+        SessionPlaybackHold.nativeForTests = new SessionPlaybackHold.NativeControls() {
+            @Override public Object currentAweme(Object controller) {
+                return ((NativeController) controller).currentClip();
+            }
+            @Override public void pause(Object manager) { ((SessionPlaybackHoldTest.NativeManager) manager).pause(); }
+            @Override public void resume(Object manager) {
+                if (SessionPlaybackHold.refuseResume(manager)) return;
+                ((SessionPlaybackHoldTest.NativeManager) manager).resume();
+            }
+        };
+    }
+
     /** With nothing holding the feed, a first frame leaves the video alone. */
     @Test public void aFirstFrameWithNoSwitchHoldingTheFeedPlays() {
         NativeController player = new NativeController();

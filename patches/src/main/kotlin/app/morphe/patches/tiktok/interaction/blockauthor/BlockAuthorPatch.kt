@@ -62,7 +62,11 @@ internal val sessionPlaybackBridgePatch = bytecodePatch {
         // The hold's pause and resume, and the video it checks it is pausing. Their names
         // change with every build, so they are read off TikTok's own pauseVideo and the For You
         // feed's space-key toggle and written into the hold's three bridge methods.
-        installNativePlayback(resolveNativePlayback())
+        val nativePlayback = resolveNativePlayback()
+        installNativePlayback(nativePlayback)
+        // And TikTok's own plays of a video they paused are turned down until they hand it back,
+        // so a cold start's second play of the first video never starts it (#83).
+        installSwitchPlayGuards(nativePlayback)
 
         // The activity, so the pause switches can follow the app going away and coming back, and
         // its saved state, which tells a screen Android built again from a first start. p0 is the

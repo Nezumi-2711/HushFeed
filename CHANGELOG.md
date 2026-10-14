@@ -23,7 +23,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** A new Show the country as a flag switch, under Show where a video was posted, shows the country's flag in place of its two letters. It changes both places Hushfeed shows a country: by the creator's name, and after a commenter's time (#157).
 
-* **TikTok:** Don't start the first video stops that video at its first frame. It used to play for a second or two before the pause caught up with it, since TikTok's first report that it's playing comes that late (#83).
+* **TikTok:** Don't start the first video stops that video at its first frame and keeps it stopped until you tap. It used to play for a second or two before the pause caught up with it, since TikTok's first report that it's playing comes that late, and on a cold start TikTok started it once more a moment after the pause (#83).
 
 ## 0.73.0 (2026-10-14)
 
