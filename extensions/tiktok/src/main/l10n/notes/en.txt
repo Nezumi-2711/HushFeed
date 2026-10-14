@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** The LIVE Record button moves down out of the way when TikTok's Discover panel opens over the room, and goes back when it closes (#37).
+* **TikTok:** New See-through status bar switch on Feed screen: the main feed's video reaches the top edge with the clock over it, the top tabs stay put (#145).
+
 * **TikTok:** With Show a LIVE under the status bar on, the black strip under the clock no longer flashes as a room opens or as you swipe to the next one (#137).
 
 * **TikTok:** New Hide profile views and Hide Add friends switches under Profile: those two buttons leave the top of your profile, the menu stays (#158).

@@ -788,6 +788,13 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting SEE_THROUGH_BOTTOM_BAR = new BooleanSetting("see_through_bottom_bar", FALSE);
     /**
+     * Lets the main feed's video draw up under the status bar, with the clock over it (#145).
+     * VideoOverlayHider collapses the spacer TikTok keeps above each video for the bar and
+     * SeeThroughStatusBar clears the bar's color while the feed is in front; both go back when
+     * this goes off or Hushfeed is paused. Read on each layout.
+     */
+    public static final BooleanSetting SEE_THROUGH_STATUS_BAR = new BooleanSetting("see_through_status_bar", FALSE);
+    /**
      * Burn-in guard for OLED screens (BurnInGuard): "dim" draws the controls the fade covers at a
      * quarter after a few seconds without a touch, "dim_shift" also moves the window's content a
      * couple of dp every two minutes. Over the feed and an opened video only.

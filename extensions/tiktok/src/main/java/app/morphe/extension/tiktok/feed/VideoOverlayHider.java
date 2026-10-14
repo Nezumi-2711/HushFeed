@@ -570,6 +570,9 @@ public final class VideoOverlayHider {
             // which it shows only in Clear display; see gateClearControls.
             boolean clearControls = !HushfeedPause.isPaused() && Settings.HIDE_CLEAR_DISPLAY_CONTROLS.get();
             boolean statusBar = Settings.HIDE_STATUS_BAR.get();
+            // The main feed's video goes up under a see-through status bar: the spacer TikTok keeps
+            // for the bar above each video goes, as it does with the bar hidden, which wins (#145).
+            boolean seeThroughStatusBar = Settings.SEE_THROUGH_STATUS_BAR.get() && !detailPager && !statusBar;
             // The bottom bar goes clear and the spacer under each video goes, on the main feed
             // only: the opened-post pager has no tab bar (#145).
             boolean seeThroughBar = Settings.SEE_THROUGH_BOTTOM_BAR.get() && !detailPager;
@@ -601,7 +604,7 @@ public final class VideoOverlayHider {
             touchScale = Math.min(MAX_TOUCH_SCALE, Math.max(1f, touchScale));
             if (caption || music || actionBar || surveys || tabStrip || carry || detailCommentBar || anchor
                     || clearControls || detailSearchBox
-                    || statusBar || seeThroughBar || SeeThroughBottomBar.holdsBackground()
+                    || statusBar || seeThroughStatusBar || seeThroughBar || SeeThroughBottomBar.holdsBackground()
                     || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty() || !WIDGETS_LIFTED.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
                     || !CAPTIONS_LIFTED.isEmpty() || !DISCS_LIFTED.isEmpty() || touchScale != 1f || scaledLastPass) {
@@ -638,7 +641,7 @@ public final class VideoOverlayHider {
                 wanted[TOP_SEARCH_BAR_TARGET] = false;
                 wanted[TOP_SEARCH_SCRIM_TARGET] = false;
                 wanted[DETAIL_SEARCH_BOX_TARGET] = detailSearchBox;
-                wanted[STATUS_BAR_SPACER_TARGET] = statusBar;
+                wanted[STATUS_BAR_SPACER_TARGET] = statusBar || seeThroughStatusBar;
                 wanted[BOTTOM_SPACER_TARGET] = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
                     wanted[RAIL_TARGET_START + i] = rail[i] || carryHides;
@@ -734,6 +737,8 @@ public final class VideoOverlayHider {
             ProfileTopBar.apply(activity.findViewById(android.R.id.content));
 
             setStatusBarHidden(activity, statusBar);
+            // Only while the feed is in front: the window's other pages keep the color TikTok gives them.
+            SeeThroughStatusBar.apply(activity, seeThroughStatusBar && FeedVisibility.isOnFeed(activity));
         } catch (Throwable ex) {
             Logger.printException(() -> "Video overlay hider failed", ex);
         }

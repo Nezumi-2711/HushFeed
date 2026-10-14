@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** O botão Gravar da LIVE desce para sair do caminho quando o painel Descobrir do TikTok abre sobre a sala, e volta quando ele fecha (#37).
+* **TikTok:** Novo botão Barra de status transparente na Tela do feed: o vídeo do feed principal chega até a borda de cima com o relógio por cima, e as abas do topo não saem do lugar (#145).
+
 * **TikTok:** Com Mostrar a LIVE sob a barra de status ligado, a faixa preta sob o relógio não aparece mais por um instante quando uma sala abre ou quando você desliza para a próxima (#137).
 
 * **TikTok:** Novos botões Esconder as visualizações do perfil e Esconder Adicionar amigos em Perfil: esses dois botões saem do topo do seu perfil, o menu continua (#158).

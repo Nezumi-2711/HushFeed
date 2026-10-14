@@ -5,6 +5,8 @@ Every Hushfeed release, newest first.
 ## Unreleased
 
 * **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
+* **TikTok:** A new See-through status bar switch on the Feed screen page lets the main feed's video reach the top edge, with the clock and status icons over it instead of a black band. The tabs at the top stay where they are, and videos you open from a profile or search are left as they were (#145).
+
 * **TikTok:** With Show a LIVE under the status bar on, the black strip under the clock no longer flashes for a moment as a LIVE room opens or as you swipe to the next room. The same goes for Hide the status bar in LIVE (#137).
 
 * **TikTok:** Two new switches under Profile, Hide profile views and Hide Add friends, take those buttons off the top of your Profile tab. The menu button keeps its place, and another person's profile is left as it is (#158).

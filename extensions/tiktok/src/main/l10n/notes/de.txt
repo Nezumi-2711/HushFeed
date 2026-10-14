@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** Der LIVE-Aufnahmeknopf rutscht nach unten aus dem Weg, wenn TikToks Entdecken-Leiste über dem Raum aufgeht, und kehrt zurück, wenn sie zugeht (#37).
+* **TikTok:** Neuer Schalter Durchsichtige Statusleiste unter Feed-Ansicht: Das Video im Haupt-Feed reicht bis zum oberen Rand, die Uhr liegt darüber, die Tabs oben bleiben (#145).
+
 * **TikTok:** Ist LIVE unter der Statusleiste zeigen an, blitzt der schwarze Balken unter der Uhr nicht mehr kurz auf, wenn ein Raum öffnet oder du zum nächsten wischst (#137).
 
 * **TikTok:** Neue Schalter Profilaufrufe ausblenden und „Freunde hinzufügen“ ausblenden unter Profil: Diese beiden Schaltflächen verschwinden oben aus deinem Profil, das Menü bleibt (#158).
