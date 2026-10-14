@@ -10,8 +10,15 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Looper;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import app.morphe.extension.shared.Utils;
@@ -362,6 +369,69 @@ public class CommenterDetailsTest {
         time.tikTokWrites("1d ago");
         CommenterDetails.onCommentTime(by("4", "river.otter", null), time);
         assertEquals("1d ago · US", time.getText().toString());
+    }
+
+    /** TikTok's setter for one bind: the name it picked through the swap, then the view's hook. */
+    private static void bindName(Remark remark, CharSequence tikTokName, TextView view) {
+        view.setText(CommenterDetails.commenterName(remark, tikTokName));
+        CommenterDetails.onCommenterName(remark, view);
+    }
+
+    private static void flip(boolean on) {
+        Settings.SHOW_COMMENTER_HANDLE.save(on);
+        Settings.SHOW_COMMENTER_REGION.save(on);
+        Settings.COLOR_COMMENTER_NAMES.save(on);
+        CommenterDetails.onSettingChanged();
+        shadowOf(Looper.getMainLooper()).idle();
+    }
+
+    @Test
+    public void aSwitchFlipRedoesTheCellsTikTokWontBindAgain() {
+        int grey = 0xFF8A8B91;
+        Remark remark = by("1", "river.otter", "US");
+        TextView name = nameIn(grey);
+        bindName(remark, "River", name);
+        // TikTok's verified badge goes after the name as an image span.
+        SpannableStringBuilder badged = new SpannableStringBuilder(name.getText()).append(" T");
+        badged.setSpan(new ImageSpan(new ColorDrawable(Color.BLUE)), badged.length() - 1, badged.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        name.setText(badged);
+        TimeView time = timeSaying("2d ago");
+        CommenterDetails.onCommentTime(remark, time);
+
+        // The list is reopened for the same video after the flip, and TikTok writes nothing.
+        flip(true);
+        assertEquals("@river.otter T", name.getText().toString());
+        Spanned shown = (Spanned) name.getText();
+        ImageSpan[] badges = shown.getSpans(0, shown.length(), ImageSpan.class);
+        assertEquals("the badge stays behind the name", 1, badges.length);
+        assertEquals(shown.length() - 1, shown.getSpanStart(badges[0]));
+        assertNotEquals(grey, name.getCurrentTextColor());
+        assertEquals("2d ago · US", time.getText().toString());
+
+        flip(false);
+        assertEquals("River T", name.getText().toString());
+        assertEquals(grey, name.getCurrentTextColor());
+        assertEquals("2d ago", time.getText().toString());
+
+        // The cell is recycled for another commenter; the flip follows the comment it holds now.
+        Remark other = by("2", "lake.heron", "GB");
+        bindName(other, "Heron", name);
+        flip(true);
+        assertEquals("@lake.heron", name.getText().toString());
+        assertEquals((int) CommenterDetails.nameColor(other, grey), name.getCurrentTextColor());
+    }
+
+    @Test
+    public void aNameTikTokRewroteSinceIsLeftAlone() {
+        Remark remark = by("1", "river.otter", "US");
+        TextView name = nameIn(0xFF8A8B91);
+        bindName(remark, "River", name);
+        name.setText("Someone else");
+
+        flip(true);
+
+        assertEquals("Someone else", name.getText().toString());
     }
 
     @Test

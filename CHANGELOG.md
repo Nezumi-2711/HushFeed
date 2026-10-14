@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Turning a commenter switch on or off under Hushfeed settings > Comments now changes the comments of a video you'd already opened. Before, reopening those comments showed the names and countries they were first drawn with until you moved to another video or restarted TikTok. A verified badge after a name stays where it is.
+
 * **TikTok:** A new Color commenter names switch under Hushfeed settings > Comments gives each commenter's name a color of its own. An account gets the same one every time it shows up, a darker shade on TikTok's light comment panel and a lighter one on its dark panel, so a long thread is easier to follow. It starts off.
 
 * **TikTok:** Hide videos you have already seen works on the Following tab too. On TikTok 47.1.4 that tab only meets the feed rules where TikTok reads its list, and the switch was left off there. A video you watch on the tab stays put while more load under it, and one you saw earlier is taken out when it turns up.

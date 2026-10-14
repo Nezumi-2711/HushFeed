@@ -8,16 +8,19 @@
 package app.morphe.extension.tiktok.comment;
 
 import android.graphics.Color;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.widget.TextView;
 
 import app.morphe.extension.shared.Logger;
+import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.diagnostics.HookStatus;
 import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.feed.AuthorRegion;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -30,7 +33,8 @@ import java.util.WeakHashMap;
  * nothing here asks which screen a name belongs to. TikTok writes the name, the reply label and
  * the time afresh on each bind, so a recycled cell never keeps another comment's text: the name
  * hooks hand back a replacement for the text TikTok is about to write, and the time hook runs
- * right after TikTok's write.
+ * right after TikTok's write. A cell bound to the comment it already shows skips those writes,
+ * so a switch change redoes the views bound before ({@link #onSettingChanged}).
  */
 public final class CommenterDetails {
     private static final String FAMILY = "commenter details";
@@ -71,6 +75,36 @@ public final class CommenterDetails {
     /** Per name view: the color written over it, and TikTok's color from under it. */
     private static final Map<TextView, int[]> COLORED = new WeakHashMap<>();
 
+    /**
+     * Per name view: the comment it was last bound to, TikTok's name and what was written. TikTok
+     * skips the name setter when a cell is bound to the same comment again (a list reopened for
+     * the same video), so a switch flipped in between is put on these views directly.
+     */
+    private static final Map<TextView, NameState> NAMES = new WeakHashMap<>();
+
+    /** Per time view: the comment it was last bound to, for the same reason. */
+    private static final Map<TextView, Object> TIMES = new WeakHashMap<>();
+
+    /**
+     * The name setter's swap, waiting for the color hook at the end of the same call, which is
+     * the first to know the view. Both run on the main thread inside one setter call.
+     */
+    private static Object pendingComment;
+    private static CharSequence pendingTikTokName;
+    private static CharSequence pendingWritten;
+
+    private static final class NameState {
+        final Object comment;
+        final CharSequence tikTokName;
+        CharSequence written;
+
+        NameState(Object comment, CharSequence tikTokName, CharSequence written) {
+            this.comment = comment;
+            this.tikTokName = tikTokName;
+            this.written = written;
+        }
+    }
+
     private CommenterDetails() {
     }
 
@@ -81,22 +115,31 @@ public final class CommenterDetails {
      */
     public static CharSequence commenterName(Object comment, CharSequence name) {
         HookStatus.bound(FAMILY, "name");
+        CharSequence written = name;
         try {
-            if (!handlesOn() || comment == null
-                    || Reflect.property(comment, "getCommerceInfo", "commerceInfo") != null) {
-                return name;
-            }
-            Object user = Reflect.property(comment, "getUser", "user");
-            String handle = handleOf(user);
-            if (handle == null) {
-                return name;
-            }
-            remember(Reflect.string(user, "getUid", "uid"), handle);
-            return "@" + handle;
+            written = handleName(comment, name);
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not show the commenter's handle", ex);
+        }
+        pendingComment = comment;
+        pendingTikTokName = name;
+        pendingWritten = written;
+        return written;
+    }
+
+    /** "@handle" for the comment's account, or TikTok's name when it gets none. */
+    private static CharSequence handleName(Object comment, CharSequence name) {
+        if (!handlesOn() || comment == null
+                || Reflect.property(comment, "getCommerceInfo", "commerceInfo") != null) {
             return name;
         }
+        Object user = Reflect.property(comment, "getUser", "user");
+        String handle = handleOf(user);
+        if (handle == null) {
+            return name;
+        }
+        remember(Reflect.string(user, "getUid", "uid"), handle);
+        return "@" + handle;
     }
 
     /**
@@ -133,6 +176,7 @@ public final class CommenterDetails {
         if (time == null) {
             return;
         }
+        TIMES.put(time, comment);
         try {
             CharSequence shown = time.getText();
             String current = shown == null ? "" : shown.toString();
@@ -178,6 +222,19 @@ public final class CommenterDetails {
         if (name == null) {
             return;
         }
+        if (pendingComment == comment && pendingWritten != null) {
+            NAMES.put(name, new NameState(comment, pendingTikTokName, pendingWritten));
+        } else {
+            NAMES.remove(name);
+        }
+        pendingComment = null;
+        pendingTikTokName = null;
+        pendingWritten = null;
+        colorName(comment, name);
+    }
+
+    /** Colors the name by its account, or puts TikTok's color back with the switch off. */
+    private static void colorName(Object comment, TextView name) {
         try {
             int current = name.getCurrentTextColor();
             int[] colored = COLORED.get(name);
@@ -198,6 +255,48 @@ public final class CommenterDetails {
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not color the commenter's name", ex);
         }
+    }
+
+    /**
+     * A commenter switch changed. Lists already drawn keep their cells, and TikTok won't write
+     * the name or time of a comment a cell already shows, so the views bound before are redone
+     * here: the name's handle and color, and the time's country.
+     */
+    public static void onSettingChanged() {
+        Utils.runOnMainThread(() -> {
+            // Keys are copied, not entries: a copied entry of Android 6's WeakHashMap can lose its
+            // key to a collection mid-loop.
+            for (TextView name : new ArrayList<>(NAMES.keySet())) {
+                NameState state = NAMES.get(name);
+                if (state != null) refreshName(name, state);
+            }
+            for (TextView time : new ArrayList<>(TIMES.keySet())) {
+                Object comment = TIMES.get(time);
+                if (comment != null) onCommentTime(comment, time);
+            }
+        });
+    }
+
+    /**
+     * Swaps the name at the front of the view's text and leaves the rest. TikTok appends a
+     * verified badge as an image span after the name, so the text isn't replaced whole. A view
+     * whose text no longer starts with what was written keeps it.
+     */
+    private static void refreshName(TextView name, NameState state) {
+        try {
+            CharSequence wanted = handleName(state.comment, state.tikTokName);
+            String written = state.written.toString();
+            CharSequence shown = name.getText();
+            if (!TextUtils.equals(wanted, written) && shown != null && shown.toString().startsWith(written)) {
+                SpannableStringBuilder text = new SpannableStringBuilder(shown);
+                text.replace(0, written.length(), wanted);
+                name.setText(text);
+                state.written = wanted;
+            }
+        } catch (Throwable ex) {
+            Logger.printException(() -> "Could not redo the commenter's handle", ex);
+        }
+        colorName(state.comment, name);
     }
 
     /**
@@ -288,6 +387,11 @@ public final class CommenterDetails {
         }
         STAMPED.clear();
         COLORED.clear();
+        NAMES.clear();
+        TIMES.clear();
+        pendingComment = null;
+        pendingTikTokName = null;
+        pendingWritten = null;
         AuthorRegion.forgetSeenRegions();
     }
 }
