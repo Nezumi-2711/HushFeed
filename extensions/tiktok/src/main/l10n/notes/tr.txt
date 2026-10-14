@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sizin İçin veya Takip edilenler'de oynayan bir video, Maksimum gönderi yaşını geçtiğinde ya da Daha önce gördüğün videoları gizle onu saydığında artık kaybolmuyor.
+
 * **TikTok:** Saati saniyesine kadar göster'in iki kendi seçeneği var: önceki gibi açık olan Saat dilimini göster ve Kısa tarih (#147).
 
 * **TikTok:** Profil ızgaralarından kaydedilecek videoları seç artık Favoriler'deki bir koleksiyonun içinde de çalışıyor, Tümünü seç dahil (#27).

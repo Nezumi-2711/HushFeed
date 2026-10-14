@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Sizin üçün və ya İzlədiklərim lentində oynayan video Maksimum paylaşım yaşını keçəndə və ya Artıq izlədiyiniz videoları gizlədin onu saydıqda artıq yox olmur.
+
 * **TikTok:** Vaxtı saniyəsinə qədər göstərin funksiyasının iki öz seçimi var: əvvəlki kimi açıq olan Saat qurşağını göstərin və Qısa tarix (#147).
 
 * **TikTok:** Profil şəbəkələrindən saxlamaq üçün videolar seçin indi Sevimlilər kolleksiyasının içində də işləyir, Hamısını seç ilə birlikdə (#27).

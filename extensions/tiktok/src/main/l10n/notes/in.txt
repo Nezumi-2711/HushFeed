@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Video yang sedang diputar di Untuk Anda atau Mengikuti tidak lagi hilang saat melewati Usia maksimum kiriman atau saat Sembunyikan video yang sudah kamu tonton menghitungnya.
+
 * **TikTok:** Tampilkan waktu hingga detik punya dua opsi sendiri: Tampilkan zona waktu, aktif seperti sebelumnya, dan Tanggal singkat (#147).
 
 * **TikTok:** Pilih video untuk disimpan dari grid profil kini juga berfungsi di dalam koleksi Favorit, termasuk Pilih semua (#27).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Um vídeo tocando em Para você ou Seguindo não some mais quando passa da Idade máxima da publicação ou quando Esconder os vídeos que você já viu o conta.
+
 * **TikTok:** Mostrar o horário com segundos ganhou duas opções próprias: Mostrar o fuso horário, ligada como antes, e Data curta (#147).
 
 * **TikTok:** Escolher vídeos para salvar nas grades de perfil agora também funciona dentro de uma coleção dos Favoritos, com Escolher todos incluído (#27).

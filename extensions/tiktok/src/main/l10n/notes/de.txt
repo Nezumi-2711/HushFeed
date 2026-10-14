@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ein Video, das in „Für dich“ oder Gefolgt läuft, verschwindet nicht mehr, sobald es das Höchstalter von Beiträgen überschreitet oder Bereits gesehene Videos ausblenden es mitzählt.
+
 * **TikTok:** Uhrzeit sekundengenau anzeigen hat zwei eigene Optionen: Zeitzone anzeigen, wie bisher an, und Kurzes Datum (#147).
 
 * **TikTok:** Videos in Profilrastern zum Speichern auswählen funktioniert jetzt auch in einer Sammlung deiner Favoriten, Alle auswählen inklusive (#27).

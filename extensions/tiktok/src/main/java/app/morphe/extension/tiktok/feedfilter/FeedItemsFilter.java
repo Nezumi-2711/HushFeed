@@ -20,6 +20,7 @@ import com.ss.android.ugc.aweme.follow.presenter.FollowFeedList;
 
 import app.morphe.extension.tiktok.blockauthor.Reflect;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,6 +178,9 @@ public final class FeedItemsFilter {
         }
         synchronized (processedListCache) {
             processedListCache.clear();
+        }
+        synchronized (KEPT_BEFORE) {
+            KEPT_BEFORE.clear();
         }
         synchronized (filterCallProbeSummaryLock) {
             filterCallProbeSummary = new ProbeSummary(System.currentTimeMillis());
@@ -1362,6 +1366,11 @@ public final class FeedItemsFilter {
         int rangeRejected = 0;
         Map<String, Integer> reasonCounts = new HashMap<>();
 
+        // Videos an earlier read of this list kept skip the rules that drift under the player.
+        Set<String> keptBefore = keptBefore(owner, filterMask);
+        List<IFilter> steadyContentFilters = keptBefore.isEmpty()
+            ? activeContentFilters : withoutDrifting(activeContentFilters);
+
         List snapshot = new ArrayList(list);
         List rangeKept = new ArrayList(snapshot.size());
         Object qualityFallback = null;
@@ -1378,8 +1387,10 @@ public final class FeedItemsFilter {
             }
             if (countDistribution) countDistribution(item);
 
-            String contentReason = getFilterReason(activeContentFilters, item);
-            String rangeReason = contentReason == null ? getFilterReason(activeRangeFilters, item) : null;
+            String aid = keptAid(item);
+            boolean wasKept = aid != null && keptBefore.contains(aid);
+            String contentReason = getFilterReason(wasKept ? steadyContentFilters : activeContentFilters, item);
+            String rangeReason = contentReason == null && !wasKept ? getFilterReason(activeRangeFilters, item) : null;
             if ((contentReason != null || rangeReason != null) && own.owns(item)) {
                 if (capture != null) {
                     capture.spared(item, contentReason != null ? contentReason : rangeReason, OWN_POST);
@@ -1528,6 +1539,7 @@ public final class FeedItemsFilter {
         FeedFilterFeedback.onBatchResult(source, initialSize, resultList.size(), reasonCounts,
                 System.currentTimeMillis());
         rememberProcessedList(listId, ListFingerprint.from(resultList, extractor), filterMask);
+        rememberKept(owner, filterMask, resultList, extractor);
 
         if (verbose && removed > 0 && shouldLogBatch()) {
             int removedFinal = removed;
@@ -1688,6 +1700,90 @@ public final class FeedItemsFilter {
                 + " promo=" + flag(item, 3)
                 + " commission=" + flag(item, 4)
                 + " playCount=" + playCountOf(item);
+    }
+
+    /**
+     * Whether a rule's answer for one video can change while it is on screen: Hide seen videos
+     * (it's seen the moment it plays), the publication age as the clock moves, and the quality
+     * ratios, which read the statistics TikTok updates in place, as the range rules do. For You
+     * and the Following tab are filtered again each time TikTok reads a list that changed, so a
+     * video one read kept could be pulled from under the player by the next one. Those videos
+     * skip these rules and the range rules from then on. The other rules still run on them,
+     * since metadata TikTok fills in late (a commission disclosure, a place) is why the reads
+     * are filtered at all.
+     */
+    private static boolean drifts(IFilter filter) {
+        return filter == SEEN_FILTER || filter instanceof AdvancedFeedRules.PublicationAgeFilter
+            || filter instanceof AdvancedFeedRules.QualityFilter;
+    }
+
+    private static List<IFilter> withoutDrifting(List<IFilter> filters) {
+        List<IFilter> steady = new ArrayList<>(filters.size());
+        for (IFilter filter : filters) {
+            if (!drifts(filter)) steady.add(filter);
+        }
+        return steady;
+    }
+
+    /**
+     * What each list's owner kept when its rules last ran, by the owner's identity: FollowFeedList
+     * became a Kotlin class on 46.9.3, so its equals can't be trusted to mean the same list. A
+     * change of rules (the filter mask) judges every video again, since that one is the reader's.
+     */
+    private static final Map<Integer, KeptBefore> KEPT_BEFORE = new HashMap<>();
+    private static final int KEPT_BEFORE_MAX_OWNERS = 256;
+
+    private static final class KeptBefore {
+        final WeakReference<Object> owner;
+        final String filterMask;
+        final Set<String> aids;
+
+        KeptBefore(Object owner, String filterMask, Set<String> aids) {
+            this.owner = new WeakReference<>(owner);
+            this.filterMask = filterMask;
+            this.aids = aids;
+        }
+    }
+
+    private static Set<String> keptBefore(Object owner, String filterMask) {
+        if (owner == null) return Collections.emptySet();
+        synchronized (KEPT_BEFORE) {
+            KeptBefore entry = KEPT_BEFORE.get(System.identityHashCode(owner));
+            if (entry == null || entry.owner.get() != owner || !entry.filterMask.equals(filterMask)) {
+                return Collections.emptySet();
+            }
+            return entry.aids;
+        }
+    }
+
+    private static void rememberKept(Object owner, String filterMask, List kept, AwemeExtractor extractor) {
+        if (owner == null) return;
+        Set<String> aids = new HashSet<>();
+        for (Object container : new ArrayList(kept)) {
+            Aweme item = extractor.extract(container);
+            String aid = item == null ? null : keptAid(item);
+            if (aid != null) aids.add(aid);
+        }
+        synchronized (KEPT_BEFORE) {
+            if (KEPT_BEFORE.size() > KEPT_BEFORE_MAX_OWNERS) KEPT_BEFORE.clear();
+            KEPT_BEFORE.put(System.identityHashCode(owner), new KeptBefore(owner, filterMask, Collections.unmodifiableSet(aids)));
+        }
+    }
+
+    static int keptBeforeOwnersForTests() {
+        synchronized (KEPT_BEFORE) {
+            return KEPT_BEFORE.size();
+        }
+    }
+
+    /** A video's id for remembering it, or null when it has none to go by. */
+    private static String keptAid(Aweme item) {
+        try {
+            String aid = item.getAid();
+            return aid == null || aid.isEmpty() ? null : aid;
+        } catch (Throwable failure) {
+            return null;
+        }
     }
 
     private static String aidOf(Aweme item) {
