@@ -661,6 +661,8 @@ public final class VideoOverlayHider {
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f, detailPager);
+                    if (detailPager) settleStripColumns(selectedViews(found, TRAVERSAL.selected,
+                            DETAIL_COMMENT_STRIP_TARGET));
                     alignBarRows(found, TRAVERSAL.selected, hidden, cellId);
                     fadeFullscreenEntries();
                     int photoExit = TRAVERSAL.selected[CLEAR_PHOTO_EXIT_TARGET];
@@ -927,6 +929,71 @@ public final class VideoOverlayHider {
         int at = 0;
         for (int i = 0; i < target; i++) at += TRAVERSAL_TARGET_IDS[i].length;
         return at;
+    }
+
+    /** When each column was last laid out again here, so a column that won't settle isn't looped. */
+    private static final Map<View, Long> COLUMNS_SETTLED = new WeakHashMap<>();
+
+    /**
+     * Gives the pager back the room of a strip this class hid. Swiping through an opened grid on
+     * the S22 left every post ending 138 px short over a black band (#153): the strip read GONE,
+     * yet the column was never measured again, so its pager kept the height it had beside the
+     * strip. TikTok's ScreenAdaptionComponent shows the strip and writes its height on each page
+     * change, and the layout that GONE asks for went missing on the way. A column whose shown
+     * children no longer fill it is measured and laid out again at its own size on the next turn,
+     * which doesn't depend on that request; at most once every half second per column.
+     */
+    private static void settleStripColumns(List<View> strips) {
+        for (View strip : strips) {
+            if (strip.getVisibility() != View.GONE || !HIDDEN_HERE.containsKey(strip)) continue;
+            android.view.ViewParent parent = strip.getParent();
+            if (!(parent instanceof android.widget.LinearLayout)) continue;
+            android.widget.LinearLayout column = (android.widget.LinearLayout) parent;
+            if (!leavesRoom(column)) continue;
+            long now = SystemClock.uptimeMillis();
+            Long last = COLUMNS_SETTLED.get(column);
+            if (last != null && now - last < 500L) continue;
+            COLUMNS_SETTLED.put(column, now);
+            column.post(() -> relayoutColumn(column));
+        }
+    }
+
+    /** Whether a laid-out vertical column's shown children leave part of its height unclaimed. */
+    static boolean leavesRoom(android.widget.LinearLayout column) {
+        if (column.getOrientation() != android.widget.LinearLayout.VERTICAL || column.getHeight() <= 0) {
+            return false;
+        }
+        int used = column.getPaddingTop() + column.getPaddingBottom();
+        for (int i = 0; i < column.getChildCount(); i++) {
+            View child = column.getChildAt(i);
+            if (child.getVisibility() == View.GONE) continue;
+            used += child.getHeight();
+            ViewGroup.LayoutParams params = child.getLayoutParams();
+            if (params instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) params;
+                used += margins.topMargin + margins.bottomMargin;
+            }
+        }
+        return column.getHeight() - used > 1;
+    }
+
+    /** Measures and lays out a column again inside the bounds it already has. */
+    static void relayoutColumn(View column) {
+        if (!column.isAttachedToWindow() || !(column instanceof android.widget.LinearLayout)
+                || !leavesRoom((android.widget.LinearLayout) column)) {
+            return;
+        }
+        if (column.isInLayout()) {
+            column.requestLayout();
+            return;
+        }
+        int width = column.getWidth();
+        int height = column.getHeight();
+        column.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+        column.layout(column.getLeft(), column.getTop(), column.getRight(), column.getBottom());
+        column.invalidate();
+        Logger.printDebug(() -> "Gave the pager back the hidden comment strip's room");
     }
 
     /** Drops every strip that isn't the pager column's own child; see {@link #PAGER_COLUMN_ID}. */

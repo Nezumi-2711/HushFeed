@@ -1521,6 +1521,39 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * Swiping through an opened grid on the S22 left each post 138 px short over a black band
+     * (#153): the strip read GONE, but the column was never laid out again, so the pager kept the
+     * height it had beside the strip. The column is measured again inside its own bounds and the
+     * pager gets the whole of it.
+     */
+    @Test
+    public void aHiddenStripsRoomGoesBackToThePagerWithoutALayoutRequest() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            View strip = new View(activity);
+            LinearLayout column = pagerColumn(activity, strip);
+            FrameLayout root = new FrameLayout(activity);
+            root.addView(column);
+            activity.setContentView(root);
+            View cell = column.findViewById(CELL_ID);
+            column.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(2181, View.MeasureSpec.EXACTLY));
+            column.layout(0, 0, 1080, 2181);
+            assertEquals(2043, cell.getHeight());
+            assertFalse("a shown strip claims its own room", VideoOverlayHider.leavesRoom(column));
+
+            strip.setVisibility(View.GONE);
+            assertEquals("the stale layout the phone showed", 2043, cell.getHeight());
+            assertTrue(VideoOverlayHider.leavesRoom(column));
+
+            VideoOverlayHider.relayoutColumn(column);
+            assertEquals(2181, cell.getHeight());
+            assertEquals("the column keeps its own bounds", 2181, column.getHeight());
+            assertFalse(VideoOverlayHider.leavesRoom(column));
+        }
+    }
+
+    /**
      * TikTok leaves the Add comment bar up in Clear display on a photo or video opened from
      * search or a profile (#84). It goes with the other controls, with Hide the comment bar on
      * opened videos off, and comes back on Restore display.
