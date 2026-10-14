@@ -10,6 +10,10 @@ import app.morphe.extension.shared.Logger;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Full long-press menu on a creator's videos and in search results (#120). TikTok picks the
  * long-press panel's shape by the page it opened on, looked up in its server's long-press panel
@@ -25,8 +29,12 @@ public final class ProfileLongPressPanel {
     static final String SEARCH_TOP = "general_search";
     static final String SEARCH_VIDEOS = "search_result";
 
-    /** The last page name logged, so a debug log names each page once rather than every lookup. */
-    private static volatile String lastLogged;
+    /**
+     * Page names already logged, so a debug log names each page once. One long press looks up
+     * the page it opened on and For You in turn, so remembering only the last name logged both
+     * of them again on every lookup (S22, 47.1.4).
+     */
+    private static final Set<String> LOGGED = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private ProfileLongPressPanel() {
     }
@@ -35,8 +43,7 @@ public final class ProfileLongPressPanel {
     @Nullable
     public static String scene(@Nullable String scene) {
         try {
-            if (scene != null && !scene.equals(lastLogged)) {
-                lastLogged = scene;
+            if (scene != null && LOGGED.add(scene)) {
                 Logger.printDebug(() -> "Long-press panel page: " + scene);
             }
             // With a Long press action of Hushfeed's the menu never opens, and the page's Share
