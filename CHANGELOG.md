@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Saving a story on Automatic quality now gets its tallest version that other players can open, not the smaller one TikTok's player happened to be streaming. A story whose own clean file is already that tall keeps it, and one with nothing better saves the way it did before (#155).
+
 * **TikTok:** Turning a commenter switch on or off under Hushfeed settings > Comments now changes the comments of a video you'd already opened. Before, reopening those comments showed the names and countries they were first drawn with until you moved to another video or restarted TikTok. A verified badge after a name stays where it is.
 
 * **TikTok:** A new Color commenter names switch under Hushfeed settings > Comments gives each commenter's name a color of its own. An account gets the same one every time it shows up, a darker shade on TikTok's light comment panel and a lighter one on its dark panel, so a long thread is easier to follow. It starts off.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Avtomatik keyfiyyətdə hekayə saxlayanda daha kiçik axın yerinə onun ən hündür oynadıla bilən versiyası götürülür (#155).
+
 * **TikTok:** Şərhlər bölməsində şərh yazanların adlarını və ya ölkələrini dəyişən açar artıq əvvəlcədən açdığınız videonun şərhlərinə də yenidən başlatmadan təsir edir.
 
 * **TikTok:** Şərhlər bölməsində yeni Şərh yazanların adlarını rənglə açarı: hər şərh yazanın adı öz rəngini alır, hər dəfə eyni rəngi.
