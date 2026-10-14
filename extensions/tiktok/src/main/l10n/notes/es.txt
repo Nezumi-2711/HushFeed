@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, la barra de progreso ya no pasa por encima de la descripción en los videos que abres desde un perfil o la búsqueda. La descripción sube lo justo para dejarla libre (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).

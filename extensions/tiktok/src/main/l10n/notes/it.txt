@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, la barra di avanzamento non passa più sopra la descrizione nei video che apri da un profilo o dalla ricerca. La descrizione sale quanto basta per lasciarla libera (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).

@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Ist Kommentarleiste bei geöffneten Videos ausblenden an, läuft die Spulleiste bei Videos, die du über ein Profil oder die Suche öffnest, nicht mehr durch die Beschreibung. Die Beschreibung rückt gerade so weit nach oben, dass sie frei bleibt (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).

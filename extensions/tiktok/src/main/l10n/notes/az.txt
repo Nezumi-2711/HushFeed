@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, profildən və ya axtarışdan açdığın videolarda irəliləyiş zolağı artıq açıqlamanın üstündən keçmir. Açıqlama zolağa yer açacaq qədər yuxarı qalxır (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).

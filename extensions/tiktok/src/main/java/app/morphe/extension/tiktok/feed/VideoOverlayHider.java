@@ -37,6 +37,8 @@ import app.morphe.extension.tiktok.settings.SettingsStatus;
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -330,6 +332,8 @@ public final class VideoOverlayHider {
 
     /** TikTok's progress bar rows this class moved down, with the offset it wrote; see alignBarRows. */
     private static final Map<View, Float> BAR_ROWS_MOVED = new WeakHashMap<>();
+    /** Caption frames and music discs this class lifted over that row, with the offset it wrote. */
+    private static final Map<View, Float> CAPTIONS_LIFTED = new WeakHashMap<>();
 
     /** The lowest opacity the tabs are faded to, so the way around the app stays findable. */
     static final int NAVIGATION_FADE_FLOOR = 10;
@@ -563,7 +567,7 @@ public final class VideoOverlayHider {
                     || clearControls
                     || statusBar || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
-                    || touchScale != 1f || scaledLastPass) {
+                    || !CAPTIONS_LIFTED.isEmpty() || touchScale != 1f || scaledLastPass) {
                 ViewGroup root = activity.findViewById(android.R.id.content);
                 int[] ids = TRAVERSAL.ids;
                 boolean[] hidden = TRAVERSAL.hidden;
@@ -636,7 +640,7 @@ public final class VideoOverlayHider {
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f);
-                    alignBarRows(found, TRAVERSAL.selected, hidden);
+                    alignBarRows(found, TRAVERSAL.selected, hidden, cellId);
                     fadeFullscreenEntries();
                     int photoExit = TRAVERSAL.selected[CLEAR_PHOTO_EXIT_TARGET];
                     TapThroughControls.photoExits(activity, !clearControls && photoExit >= 0 ? found.get(photoExit) : null);
@@ -932,27 +936,63 @@ public final class VideoOverlayHider {
     }
 
     /**
-     * Keeps the progress bar of an opened video where TikTok draws it, at the bottom of the
-     * caption's frame, while the comment bar is away (#50). The row isn't in the cell: it sits
+     * Keeps the progress bar of an opened video where TikTok draws it, along the bottom edge of the
+     * caption's frame, while the comment bar is away (#50, #153). The row isn't in the cell: it sits
      * at the top of its own slot beside the pager (S25, 2026-10-11: row 2025 to 2104 in a slot
-     * down to 2205), and the slot keeps room under it for the comment bar. With the bar and its
-     * strip gone the cell grows into that room and the caption comes down with it, so a long
-     * video's bar drew across the creator's name. The row comes down to where the caption's frame
-     * now ends, never past its own slot, and goes back up with the bar. A cell that keeps TikTok's
-     * search bar under the caption ends where the row does, so that row stays put. A row TikTok
-     * moved itself since is left to TikTok.
+     * down to 2205), and the slot keeps room under it for the comment bar. TikTok draws the line
+     * through the middle of the row, and with the bar up that middle meets the cell's bottom, where
+     * the caption's frame ends. With the bar and its strip gone the cell grows into that room and
+     * the caption comes down with it, so a long video's bar drew across the creator's name.
+     *
+     * <p>The row comes down until its middle meets the frame's bottom, never past its own slot.
+     * Matching the row's bottom instead left the line half a row up inside the caption, across its
+     * last line (#153). When the slot runs out first, as it does where the caption reaches the
+     * bottom of the screen, the frame and the music disc beside it go up by what's left, so the
+     * caption ends on the line. Every cell's frame gets its lift as it's laid out, from where it
+     * sits in its own cell, so the next video arrives already in place rather than jumping after
+     * the swipe. A cell whose caption ends higher (TikTok's search bar or a series bar under it)
+     * needs no lift. Both go back with the bar, and a row or frame TikTok moved itself since is
+     * left to TikTok.
      */
-    private static void alignBarRows(List<List<View>> found, int[] selected, boolean[] hidden) {
+    private static void alignBarRows(List<List<View>> found, int[] selected, boolean[] hidden, int cellId) {
         int rowsAt = selected[CLEAR_SEEK_BAR_TARGET];
         List<View> rows = rowsAt >= 0 ? found.get(rowsAt) : new ArrayList<>();
         boolean barGone = selected[DETAIL_COMMENT_BAR_TARGET] >= 0
                 && selected[DETAIL_COMMENT_STRIP_TARGET] >= 0
                 && hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)]
                 && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)];
-        int framesAt = selected[ANCHOR_TARGET];
-        List<View> frames = framesAt >= 0 ? found.get(framesAt) : new ArrayList<>();
+        List<View> frames = selectedViews(found, selected, ANCHOR_TARGET);
+        List<View> discs = selectedViews(found, selected, MUSIC_COVER_TARGET);
+        // Null while the lifts are left as they are: a row on screen with no frame over its slot
+        // is a cell still being bound, and putting the captions back then would make them jump.
+        Map<View, Float> lifts = barGone ? null : new HashMap<>();
+        boolean rowShown = false;
         for (View row : rows) {
-            moveBarRow(row, barGone ? barRowDrop(row, frames) : 0f);
+            float drop = 0f;
+            View frame = barGone ? overSlot(row, frames) : null;
+            boolean shown = barGone && shownUpTheTree(row);
+            rowShown |= shown;
+            if (frame != null) {
+                if (shown && lifts == null) lifts = captionLifts(row, frame, frames, discs, cellId);
+                Float lift = lifts == null ? null : lifts.get(frame);
+                drop = barRowDrop(row, frame, lift == null ? 0f : lift);
+            }
+            moveBarRow(row, drop);
+        }
+        // With no row on screen (a photo, or the progress bar turned off) nothing needs room.
+        if (lifts == null && !rowShown) lifts = new HashMap<>();
+        if (lifts != null) {
+            for (List<View> views : Arrays.asList(frames, discs)) {
+                for (View view : views) {
+                    Float lift = lifts.get(view);
+                    offsetOwned(CAPTIONS_LIFTED, view, lift == null ? 0f : -lift);
+                }
+            }
+            if (!CAPTIONS_LIFTED.isEmpty()) {
+                for (View view : new ArrayList<>(CAPTIONS_LIFTED.keySet())) {
+                    if (!frames.contains(view) && !discs.contains(view)) offsetOwned(CAPTIONS_LIFTED, view, 0f);
+                }
+            }
         }
         if (BAR_ROWS_MOVED.isEmpty()) return;
         for (View row : new ArrayList<>(BAR_ROWS_MOVED.keySet())) {
@@ -960,33 +1000,115 @@ public final class VideoOverlayHider {
         }
     }
 
+    private static List<View> selectedViews(List<List<View>> found, int[] selected, int target) {
+        int at = selected[target];
+        return at >= 0 ? found.get(at) : new ArrayList<>();
+    }
+
     /**
-     * How far {@code row} comes down to end where the caption's frame on screen ends, at most to
-     * the bottom of the row's slot. The frame is the one crossing the slot; mid-swipe, the one
-     * covering more of it. Zero without a frame there or with one that ends above the row.
+     * The frame crossing the row's slot, or mid-swipe the one covering more of it, measured where
+     * it sits without a lift of ours; null without one, or for a row that isn't laid out.
      */
-    static float barRowDrop(View row, List<View> frames) {
-        if (row.getHeight() == 0 || !(row.getParent() instanceof View)) return 0f;
+    static View overSlot(View row, List<View> frames) {
+        if (row.getHeight() == 0 || !(row.getParent() instanceof View)) return null;
         View slot = (View) row.getParent();
-        // The row's own offset is left out: it's the one being worked out.
-        float rowBottom = topInWindow(row) + row.getHeight();
         float slotTop = topInWindow(slot) + slot.getTranslationY();
         float slotBottom = slotTop + slot.getHeight();
-        if (slotBottom <= rowBottom) return 0f;
-        float frameBottom = 0f;
+        View over = null;
         float covered = 0f;
         for (View frame : frames) {
             if (frame.getHeight() == 0) continue;
-            float top = topInWindow(frame) + frame.getTranslationY();
-            float bottom = top + frame.getHeight();
-            float overlap = Math.min(slotBottom, bottom) - Math.max(slotTop, top);
+            float top = unliftedTop(frame);
+            float overlap = Math.min(slotBottom, top + frame.getHeight()) - Math.max(slotTop, top);
             if (overlap > covered) {
                 covered = overlap;
-                frameBottom = bottom;
+                over = frame;
             }
         }
-        if (covered <= 0f) return 0f;
-        return Math.max(0f, Math.min(slotBottom, frameBottom) - rowBottom);
+        return over;
+    }
+
+    /**
+     * How far {@code row} comes down so the line through its middle meets the bottom of
+     * {@code frame} once the frame is up by {@code lift}, at most to the bottom of the row's slot.
+     * Zero for a frame that already ends above that line.
+     */
+    static float barRowDrop(View row, View frame, float lift) {
+        float room = slotRoom(row);
+        if (room <= 0f) return 0f;
+        float line = topInWindow(row) + row.getHeight() / 2f;
+        float frameBottom = unliftedTop(frame) + frame.getHeight() - lift;
+        return Math.round(Math.max(0f, Math.min(room, frameBottom - line)));
+    }
+
+    /** How far the row can come down inside its slot, its own offset left out. */
+    private static float slotRoom(View row) {
+        View slot = (View) row.getParent();
+        float rowBottom = topInWindow(row) + row.getHeight();
+        return topInWindow(slot) + slot.getTranslationY() + slot.getHeight() - rowBottom;
+    }
+
+    /**
+     * How far each frame, and the music disc in the same cell, goes up so it ends no lower than
+     * the lowest place the row's line can reach. Measured from the top of each frame's own cell,
+     * which lines up with the cell over the slot once it's swiped in. Without a cell to measure
+     * from only the frame over the slot is lifted, from where it is now.
+     */
+    private static Map<View, Float> captionLifts(View row, View current, List<View> frames,
+                                                 List<View> discs, int cellId) {
+        Map<View, Float> lifts = new HashMap<>();
+        float lowestLine = topInWindow(row) + row.getHeight() / 2f + Math.max(0f, slotRoom(row));
+        View currentCell = cellOf(current, cellId);
+        if (currentCell == null) {
+            float lift = Math.round(Math.max(0f, unliftedTop(current) + current.getHeight() - lowestLine));
+            if (lift > 0f) lifts.put(current, lift);
+            return lifts;
+        }
+        float lineInCell = lowestLine - unliftedTop(currentCell);
+        for (View frame : frames) {
+            View cell = cellOf(frame, cellId);
+            if (cell == null || frame.getHeight() == 0) continue;
+            float bottomInCell = unliftedTop(frame) + frame.getHeight() - unliftedTop(cell);
+            float lift = Math.round(Math.max(0f, bottomInCell - lineInCell));
+            if (lift <= 0f) continue;
+            lifts.put(frame, lift);
+            for (View disc : discs) {
+                if (cellOf(disc, cellId) == cell) lifts.put(disc, lift);
+            }
+        }
+        return lifts;
+    }
+
+    /** The feed cell {@code view} sits in, or null outside one or without the cell's id. */
+    private static View cellOf(View view, int cellId) {
+        if (cellId == 0) return null;
+        android.view.ViewParent parent = view.getParent();
+        while (parent instanceof View) {
+            if (((View) parent).getId() == cellId) return (View) parent;
+            parent = parent.getParent();
+        }
+        return null;
+    }
+
+    /** Where {@code view} sits in its window with any lift of ours left out. */
+    private static float unliftedTop(View view) {
+        Float wrote = CAPTIONS_LIFTED.get(view);
+        float ours = wrote != null && view.getTranslationY() == wrote ? wrote : 0f;
+        return topInWindow(view) + view.getTranslationY() - ours;
+    }
+
+    /**
+     * Whether {@code view} and everything above it is VISIBLE. Unlike isShown this doesn't ask
+     * whether the window is attached yet, which a pass can run before.
+     */
+    private static boolean shownUpTheTree(View view) {
+        View at = view;
+        while (true) {
+            if (at.getVisibility() != View.VISIBLE) return false;
+            android.view.ViewParent parent = at.getParent();
+            if (!(parent instanceof View)) return true;
+            at = (View) parent;
+        }
     }
 
     /**
@@ -1005,21 +1127,30 @@ public final class VideoOverlayHider {
     }
 
     private static void moveBarRow(View row, float drop) {
-        Float wrote = BAR_ROWS_MOVED.get(row);
-        float ours = wrote == null ? 0f : wrote;
-        if (row.getTranslationY() != ours) {
-            BAR_ROWS_MOVED.remove(row);
-            return;
-        }
-        if (ours != drop) {
-            row.setTranslationY(drop);
+        if (offsetOwned(BAR_ROWS_MOVED, row, drop)) {
             Logger.printDebug(() -> "Progress bar row on an opened video moved down " + drop + " px");
         }
-        if (drop == 0f) {
-            BAR_ROWS_MOVED.remove(row);
-        } else {
-            BAR_ROWS_MOVED.put(row, drop);
+    }
+
+    /**
+     * Writes {@code offset} as {@code view}'s translationY and notes it in {@code owned}, or forgets
+     * the view once TikTok has written an offset of its own there since. True when it wrote.
+     */
+    private static boolean offsetOwned(Map<View, Float> owned, View view, float offset) {
+        Float wrote = owned.get(view);
+        float ours = wrote == null ? 0f : wrote;
+        if (view.getTranslationY() != ours) {
+            owned.remove(view);
+            return false;
         }
+        boolean writes = ours != offset;
+        if (writes) view.setTranslationY(offset);
+        if (offset == 0f) {
+            owned.remove(view);
+        } else {
+            owned.put(view, offset);
+        }
+        return writes;
     }
 
     /**

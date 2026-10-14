@@ -1606,13 +1606,153 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * Where {@code view}'s top is drawn, offsets included. The activity is never resumed, so its
+     * window isn't attached and getLocationInWindow would answer 0.
+     */
+    private static float drawnTop(View view) {
+        float top = view.getTop() + view.getTranslationY();
+        for (android.view.ViewParent parent = view.getParent(); parent instanceof View;
+                parent = parent.getParent()) {
+            View group = (View) parent;
+            top += group.getTop() - group.getScrollY() + group.getTranslationY();
+        }
+        return top;
+    }
+
+    /** Where TikTok's line runs on screen: through the middle of the row. */
+    private static float lineOf(View row) {
+        return drawnTop(row) + row.getHeight() / 2f;
+    }
+
+    private static float bottomOf(View frame) {
+        return drawnTop(frame) + frame.getHeight();
+    }
+
+    /**
      * With the comment bar and its strip gone the cell grows to the bottom and the caption comes
      * down 138 px, but TikTok's bar row keeps its place, so a long video's bar drew across the
-     * creator's name (S25, 2026-10-11). The row comes down to where the caption now ends, 101 px
-     * to the bottom of its slot, and goes back up with the comment bar.
+     * creator's name (S25, 2026-10-11). The row comes down the 101 px its slot has. TikTok's line
+     * runs through the row's middle, so that still left it 40 px inside the caption, across its last
+     * line (#153): the caption and the music disc beside it go up those 40 px, and the caption ends
+     * on the line as it does with the bar up. All of it goes back with the comment bar.
      */
     @Test
     public void theProgressBarComesDownWithTheCaptionWhenTheCommentBarGoes() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        VideoOverlayHider.resolveForTests("videomusiccoverblock", DISC_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            View row = views[1];
+            View frame = views[3];
+            View disc = discIn((FrameLayout) frame.getParent());
+            layOutAt(views[0]);
+
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.GONE, views[2].getVisibility());
+            // The cell grows into the strip's room on the next layout, and that layout's pass moves the row.
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the caption grew past the bar", 2205, frame.getBottom());
+            assertEquals("the bar stayed above the caption's new place", 101f, row.getTranslationY(), 0.5f);
+            assertEquals("the line runs across the caption", bottomOf(frame), lineOf(row), 1f);
+            assertEquals("the caption didn't make room for the line", -40f, frame.getTranslationY(), 0.5f);
+            assertEquals("the disc stayed down by the time", -40f, disc.getTranslationY(), 0.5f);
+
+            // Another layout pass changes nothing: the caption's own lift isn't measured as TikTok's.
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(-40f, frame.getTranslationY(), 0.5f);
+            assertEquals(101f, row.getTranslationY(), 0.5f);
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.VISIBLE, views[2].getVisibility());
+            assertEquals("the bar didn't go back up with the comment bar", 0f, row.getTranslationY(), 0f);
+            assertEquals("the caption didn't go back down", 0f, frame.getTranslationY(), 0f);
+            assertEquals("the disc didn't go back down", 0f, disc.getTranslationY(), 0f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+            VideoOverlayHider.resolveForTests("videomusiccoverblock", 0);
+        }
+    }
+
+    private static final int DISC_ID = 0x7f0a0215;
+
+    /** TikTok's spinning disc at the bottom right of {@code cell}, the way the cell lays it out. */
+    private static View discIn(FrameLayout cell) {
+        View disc = new View(cell.getContext());
+        disc.setId(DISC_ID);
+        cell.addView(disc, new FrameLayout.LayoutParams(126, 126,
+                android.view.Gravity.BOTTOM | android.view.Gravity.END));
+        return disc;
+    }
+
+    /**
+     * The next video's caption is lifted as its cell is laid out below the screen, from where it
+     * sits in its own cell, so it doesn't arrive low and jump up after the swipe (#153).
+     */
+    @Test
+    public void theNextVideosCaptionIsLiftedBeforeItArrives() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        VideoOverlayHider.resolveForTests("videomusiccoverblock", DISC_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            // The column's one cell becomes the pager, holding this video's cell and the next one,
+            // laid out a screen further down.
+            FrameLayout pager = (FrameLayout) views[3].getParent();
+            pager.setId(View.NO_ID);
+            pager.removeView(views[3]);
+            FrameLayout current = new FrameLayout(detail);
+            current.setId(CELL_ID);
+            current.addView(views[3], new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 161, android.view.Gravity.BOTTOM));
+            pager.addView(current, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+            FrameLayout next = new FrameLayout(detail);
+            next.setId(CELL_ID);
+            View nextFrame = new View(detail);
+            nextFrame.setId(CAPTION_FRAME_ID);
+            next.addView(nextFrame, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 161, android.view.Gravity.BOTTOM));
+            View nextDisc = discIn(next);
+            pager.addView(next, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+            next.setTranslationY(2205f);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+
+            assertEquals(-40f, views[3].getTranslationY(), 0.5f);
+            assertEquals("the next caption waits to be lifted until it's on screen",
+                    -40f, nextFrame.getTranslationY(), 0.5f);
+            assertEquals(-40f, nextDisc.getTranslationY(), 0.5f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+            VideoOverlayHider.resolveForTests("videomusiccoverblock", 0);
+        }
+    }
+
+    /**
+     * With no progress bar on screen (a photo, or the bar turned off) there's no line to make room
+     * for, so the caption goes back to the bottom (#153).
+     */
+    @Test
+    public void theCaptionStaysDownWithNoProgressBarOnScreen() {
         resolveCommentBarIds();
         VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
         VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
@@ -1621,21 +1761,15 @@ public class VideoOverlayHiderTest {
                 com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
             Activity detail = detailController.get();
             View[] views = openedVideo(detail, false);
-            View row = views[1];
-            layOutAt(views[0]);
-
-            VideoOverlayHider.applyTo(detail);
-            assertEquals(View.GONE, views[2].getVisibility());
-            // The cell grows into the strip's room on the next layout, and that layout's pass moves the row.
             layOutAt(views[0]);
             VideoOverlayHider.applyTo(detail);
-            assertEquals("the caption grew past the bar", 2205, views[3].getBottom());
-            assertEquals("the bar stayed above the caption's new place", 101f, row.getTranslationY(), 0.5f);
-
-            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            layOutAt(views[0]);
             VideoOverlayHider.applyTo(detail);
-            assertEquals(View.VISIBLE, views[2].getVisibility());
-            assertEquals("the bar didn't go back up with the comment bar", 0f, row.getTranslationY(), 0f);
+            assertEquals(-40f, views[3].getTranslationY(), 0.5f);
+
+            ((View) views[1].getParent()).setVisibility(View.GONE);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the caption kept room for a bar that isn't there", 0f, views[3].getTranslationY(), 0f);
         } finally {
             Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
             VideoOverlayHider.resolveForTests("video_seek_bar", 0);
@@ -1644,11 +1778,12 @@ public class VideoOverlayHiderTest {
     }
 
     /**
-     * A cell with TikTok's search bar under the caption already ends where the bar row does, so the
-     * row stays put; and a row TikTok moved itself is left where TikTok put it.
+     * A cell with TikTok's search bar under the caption ends higher, so the row comes down only
+     * until its line meets the caption's bottom and nothing is lifted; and a row TikTok moved
+     * itself is left where TikTok put it.
      */
     @Test
-    public void theProgressBarStaysWhereTheCaptionAlreadyClearsIt() {
+    public void theProgressBarComesDownOnlyToACaptionThatEndsHigher() {
         resolveCommentBarIds();
         VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
         VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
@@ -1662,7 +1797,9 @@ public class VideoOverlayHiderTest {
             layOutAt(views[0]);
             VideoOverlayHider.applyTo(detail);
             assertEquals(View.GONE, views[2].getVisibility());
-            assertEquals("a bar already under the caption moved", 0f, views[1].getTranslationY(), 0f);
+            assertEquals("the line stopped short of the caption's bottom",
+                    bottomOf(views[3]), lineOf(views[1]), 1f);
+            assertEquals("a caption that ends high enough moved", 0f, views[3].getTranslationY(), 0f);
 
             views = openedVideo(detail, false);
             views[1].setTranslationY(-20f);
