@@ -707,11 +707,12 @@ public final class LiveStatusBar {
          */
         private final WeakHashMap<View, int[]> loweredPages = new WeakHashMap<>();
         /**
-         * Pages without a stream that were left where TikTok put them, each logged once with why.
-         * A phone where the Discover panel still reached under the clock logged no padding at all,
-         * and the S22 account never gets that panel (#137).
+         * Pager pages already described in the log: a room's page with where its stream starts, and
+         * a page without a stream left where TikTok put it, with why. On an S23 Ultra the Discover
+         * panel still reached under the clock and no page was padded, while on the S22 it stays
+         * below the clock, so the log has to say which kind of page holds it there (#137).
          */
-        private final WeakHashMap<View, Boolean> pagesLeftAlone = new WeakHashMap<>();
+        private final WeakHashMap<View, Boolean> pagesLogged = new WeakHashMap<>();
         private int searches, relifts, coverSearches;
         /**
          * Shade searches spent on each layer held lower. One budget for the whole visit ran out
@@ -861,6 +862,7 @@ public final class LiveStatusBar {
                 if (shown == null) continue;
                 forgetPage(page);
                 liftAbove(shown, content, bars);
+                logRoomPage(page, i, shown);
             }
             if (barHidden || fought) return;
             for (int i = 0; i < rooms.getChildCount(); i++) {
@@ -915,9 +917,24 @@ public final class LiveStatusBar {
             relaid = true;
         }
 
+        /**
+         * Logs, once per page, where a room's page and its stream start on screen. A stream far
+         * below its page's top means something else, like the Discover panel, is in the page above it.
+         */
+        private void logRoomPage(View page, int index, View shown) {
+            if (page.getHeight() == 0 || pagesLogged.put(page, Boolean.TRUE) != null) return;
+            int[] pageAt = new int[2];
+            int[] streamAt = new int[2];
+            page.getLocationOnScreen(pageAt);
+            shown.getLocationOnScreen(streamAt);
+            Logger.printInfo(() -> "LIVE under the status bar: room pager page " + index + " ("
+                    + page.getClass().getName() + ", " + page.getWidth() + "x" + page.getHeight() + " at y "
+                    + pageAt[1] + ", padding " + page.getPaddingTop() + ") has its stream at y " + streamAt[1]);
+        }
+
         /** Logs, once per page, a page without a stream that stays where TikTok put it, and why. */
         private void leftAlone(View page, int index, String why, int[] bars) {
-            if (pagesLeftAlone.put(page, Boolean.TRUE) != null) return;
+            if (pagesLogged.put(page, Boolean.TRUE) != null) return;
             int padding = page.getPaddingTop(), margin = topMarginOf(page);
             int[] screen = new int[2];
             page.getLocationOnScreen(screen);
