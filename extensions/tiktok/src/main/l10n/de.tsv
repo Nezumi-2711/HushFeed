@@ -2095,3 +2095,16 @@ Scrolling comments on videos	Laufende Kommentare über Videos
 See-through bottom bar	Durchsichtige untere Leiste
 Let the video reach the bottom of the screen on the main feed and show the tabs over it with no bar behind them.	Das Video reicht im Haupt-Feed bis zum unteren Bildschirmrand, und die Tabs liegen ohne Leiste dahinter darüber.
 LIVE chat auto-translate	Automatische Übersetzung im LIVE-Chat
+
+Pick videos to save from profile grids	Videos in Profilrastern zum Speichern auswählen
+Puts a circle on each video in a profile, Liked or Favorites grid. Pick up to %1$s, then tap Save to save them one after another, with a count and Cancel.	Setzt einen Kreis auf jedes Video in einem Profil-, Gefällt-mir- oder Favoritenraster. Wähle bis zu %1$s aus und tippe dann auf Speichern, um sie nacheinander zu speichern, mit Zähler und Abbrechen.
+Pick for saving	Zum Speichern auswählen
+You can pick up to %1$s at a time	Du kannst höchstens %1$s auf einmal auswählen
+One picked	Eins ausgewählt
+%1$s picked	%1$s ausgewählt
+None of the picked videos could be saved. Try again.	Keines der ausgewählten Videos konnte gespeichert werden. Versuche es erneut.
+Saved one video	Ein Video gespeichert
+Saved %1$s videos	%1$s Videos gespeichert
+One was already saved	Eins war schon gespeichert
+%1$s were already saved	%1$s waren schon gespeichert
+Picked videos	Ausgewählte Videos

@@ -26,6 +26,8 @@
 
 * **TikTok:** Feature Gate Lab-da yeni LIVE söhbətinin avtomatik tərcüməsi hazır ayarı var. LIVE otağında Paylaşın altındakı Şərhləri tərcümə et seçimini işə salır (#98).
 
+* **TikTok:** Hushfeed ayarları > Endirmələr bölməsində Profil şəbəkələrindən saxlamaq üçün videolar seçin açarını yandırın və profil, Bəyənilənlər və ya Sevimlilər şəbəkəsindəki hər videonun üzərində dairə görünəcək. 50-yə qədər seçin, Saxla düyməsinə toxunun, onlar sayğac və Ləğv edin ilə bir-bir saxlanılacaq (#27).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).

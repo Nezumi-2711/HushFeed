@@ -26,6 +26,8 @@
 
 * **TikTok:** Feature Gate Lab ha una nuova impostazione pronta, Traduzione automatica della chat LIVE. Attiva l'opzione Traduci commenti sotto Condividi in una stanza LIVE (#98).
 
+* **TikTok:** Attiva Scegli i video da salvare dalle griglie dei profili in Impostazioni di Hushfeed > Download e ogni video di una griglia del profilo, Mi piace o Preferiti avrà un cerchio. Scegline fino a 50, tocca Salva e vengono salvati uno dopo l'altro con un contatore e Annulla (#27).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).

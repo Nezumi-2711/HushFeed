@@ -26,6 +26,8 @@
 
 * **TikTok:** Feature Gate Lab hat eine neue Voreinstellung: Automatische Übersetzung im LIVE-Chat. Sie schaltet die Option Kommentare übersetzen unter Teilen in einem LIVE-Raum frei (#98).
 
+* **TikTok:** Schalte Videos in Profilrastern zum Speichern auswählen unter Hushfeed-Einstellungen > Downloads ein, dann bekommt jedes Video in einem Profil-, Gefällt-mir- oder Favoritenraster einen Kreis. Wähle bis zu 50 aus, tippe auf Speichern, und sie werden nacheinander mit Zähler und Abbrechen gespeichert (#27).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).

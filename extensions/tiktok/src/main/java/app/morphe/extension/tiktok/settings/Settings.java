@@ -179,6 +179,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting SAVE_PROFILE_PICTURE = new BooleanSetting("save_profile_picture", FALSE);
     public static final BooleanSetting SAVE_STORY = new BooleanSetting("save_story", FALSE);
     public static final BooleanSetting SAVE_STORY_FROM_SHARE = new BooleanSetting("save_story_from_share", FALSE);
+    /** A circle on each profile, Liked or Favorites grid cell, to pick posts and save them in one run (#27). */
+    public static final BooleanSetting PICK_GRID_VIDEOS = new BooleanSetting("pick_grid_videos", FALSE);
     public static final StringSetting DOUBLE_TAP_ACTION = new StringSetting("double_tap_action", "default");
     public static final StringSetting LONG_PRESS_ACTION = new StringSetting("long_press_action", "default");
     /**

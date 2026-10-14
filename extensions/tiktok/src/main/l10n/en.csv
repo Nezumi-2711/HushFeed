@@ -57,6 +57,7 @@ source,target
 %1$s of %2$s,%1$s of %2$s
 %1$s older seen video was dropped to keep the newest %2$s.,%1$s older seen video was dropped to keep the newest %2$s.
 %1$s older seen videos were dropped to keep the newest %2$s.,%1$s older seen videos were dropped to keep the newest %2$s.
+%1$s picked,%1$s picked
 %1$s point,%1$s point
 %1$s points,%1$s points
 %1$s s,%1$s s
@@ -84,6 +85,7 @@ source,target
 %1$s was rejected. %2$s,%1$s was rejected. %2$s
 %1$s watched video added.,%1$s watched video added.
 %1$s watched videos added.,%1$s watched videos added.
+%1$s were already saved,%1$s were already saved
 %1$s · Hushfeed's list only,%1$s · Hushfeed's list only
 %1$s · current value only,%1$s · current value only
 %1$s · declared by TikTok,%1$s · declared by TikTok
@@ -1049,6 +1051,7 @@ No suggested accounts to clear,No suggested accounts to clear
 No video selected. Open a video first.,No video selected. Open a video first.
 "Nobody was signed in to TikTok. Sign in, and it tries again at %1$s.","Nobody was signed in to TikTok. Sign in, and it tries again at %1$s."
 None of the photos could be saved. Try again.,None of the photos could be saved. Try again.
+None of the picked videos could be saved. Try again.,None of the picked videos could be saved. Try again.
 None of these gates had an override to reset.,None of these gates had an override to reset.
 None of these gates takes a true or false value.,None of these gates takes a true or false value.
 None recorded,None recorded
@@ -1096,8 +1099,10 @@ One area was checked and everything it needs is here.,One area was checked and e
 One minute left,One minute left
 One more save waiting,One more save waiting
 "One of the quote marks in that list has nothing to close it, so the rest of the line reads as one phrase. Add the missing quote or take the stray one out.","One of the quote marks in that list has nothing to close it, so the rest of the line reads as one phrase. Add the missing quote or take the stray one out."
+One picked,One picked
 One value per line,One value per line
 One video was recorded before each account kept its own list. It hides nothing until you add it here.,One video was recorded before each account kept its own list. It hides nothing until you add it here.
+One was already saved,One was already saved
 Only bottom tabs TikTok has loaded on this device are shown here. This doesn't force unavailable tabs to appear.,Only bottom tabs TikTok has loaded on this device are shown here. This doesn't force unavailable tabs to appear.
 Only fields the Lab can check and copy safely are shown.,Only fields the Lab can check and copy safely are shown.
 Only from these countries,Only from these countries
@@ -1167,10 +1172,13 @@ Photos and stickers,Photos and stickers
 "Photos can't be saved to the folder in that file, so your photo folder was kept","Photos can't be saved to the folder in that file, so your photo folder was kept"
 Pick a .ttf or .otf file of up to %1$s MB.,Pick a .ttf or .otf file of up to %1$s MB.
 "Pick apps to add to the Share via row, before More. Each gets the same link the other apps get.","Pick apps to add to the Share via row, before More. Each gets the same link the other apps get."
+Pick for saving,Pick for saving
 Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.,Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.
 Pick the buttons to take off the column. The rest stay where they are.,Pick the buttons to take off the column. The rest stay where they are.
 "Pick the popups to stop. The list holds the ones TikTok has tried to show on this phone, so a popup appears here after its first showing. CAPTCHA, verification, sign-in, age, ban and legal consent screens are never listed or blocked.","Pick the popups to stop. The list holds the ones TikTok has tried to show on this phone, so a popup appears here after its first showing. CAPTCHA, verification, sign-in, age, ban and legal consent screens are never listed or blocked."
 "Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this.","Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this."
+Pick videos to save from profile grids,Pick videos to save from profile grids
+Picked videos,Picked videos
 Picks the older H.264 video format when TikTok also offers a newer one (HEVC or ByteVC2). It helps phones that stutter or run hot. Videos without an H.264 version still play.,Picks the older H.264 video format when TikTok also offers a newer one (HEVC or ByteVC2). It helps phones that stutter or run hot. Videos without an H.264 version still play.
 Play,Play
 Play SDR instead of HDR,Play SDR instead of HDR
@@ -1228,6 +1236,7 @@ Pulling down at the top of For You no longer reloads it.,Pulling down at the top
 Put %1$s in %2$s first.,Put %1$s in %2$s first.
 Put back the settings saved before the last restore or reset.,Put back the settings saved before the last restore or reset.
 Put every setting back to its default straight away. Your current settings are kept for Undo.,Put every setting back to its default straight away. Your current settings are kept for Undo.
+"Puts a circle on each video in a profile, Liked or Favorites grid. Pick up to %1$s, then tap Save to save them one after another, with a count and Cancel.","Puts a circle on each video in a profile, Liked or Favorites grid. Pick up to %1$s, then tap Save to save them one after another, with a count and Cancel."
 "Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it.","Puts a save button in the sheet a story's Share button opens. It saves the story you're watching, and holding a story still pauses it."
 "Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.","Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked."
 Putting seen videos back,Putting seen videos back
@@ -1365,8 +1374,10 @@ Saved %1$s of %2$s photos before the story failed,Saved %1$s of %2$s photos befo
 Saved %1$s of %2$s. The server asked us to wait. Try again later.,Saved %1$s of %2$s. The server asked us to wait. Try again later.
 Saved %1$s original photos,Saved %1$s original photos
 Saved %1$s seen videos to the file,Saved %1$s seen videos to the file
+Saved %1$s videos,Saved %1$s videos
 Saved 1 seen video to the file,Saved 1 seen video to the file
 Saved one original photo,Saved one original photo
+Saved one video,Saved one video
 Saved post,Saved post
 Saved posts,Saved posts
 Saved the photos as a video in %1$s,Saved the photos as a video in %1$s
@@ -2045,6 +2056,7 @@ Writing the caption on the video: %1$s,Writing the caption on the video: %1$s
 YTDLnis background mode,YTDLnis background mode
 YTDLnis download type,YTDLnis download type
 Yes,Yes
+You can pick up to %1$s at a time,You can pick up to %1$s at a time
 YouTube Music couldn't be opened. Open it yourself and search for the sound.,YouTube Music couldn't be opened. Open it yourself and search for the sound.
 YouTube Music isn't installed,YouTube Music isn't installed
 Your TikTok account changed. Choose the file again for this account.,Your TikTok account changed. Choose the file again for this account.

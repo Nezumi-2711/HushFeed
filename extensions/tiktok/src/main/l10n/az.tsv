@@ -2092,3 +2092,16 @@ Scrolling comments on videos	Videoların üzərində sürüşən şərhlər
 See-through bottom bar	Şəffaf alt panel
 Let the video reach the bottom of the screen on the main feed and show the tabs over it with no bar behind them.	Videonun əsas lentdə ekranın aşağısına qədər uzanmasına icazə verin və tabları arxasında panel olmadan onun üzərində göstərin.
 LIVE chat auto-translate	LIVE söhbətinin avtomatik tərcüməsi
+
+Pick videos to save from profile grids	Profil şəbəkələrindən saxlamaq üçün videolar seçin
+Puts a circle on each video in a profile, Liked or Favorites grid. Pick up to %1$s, then tap Save to save them one after another, with a count and Cancel.	Profil, Bəyənilənlər və ya Sevimlilər şəbəkəsindəki hər videonun üzərinə dairə qoyur. %1$s videoya qədər seçin, sonra Saxla düyməsinə toxunun: onlar sayğac və Ləğv edin ilə bir-bir saxlanılır.
+Pick for saving	Saxlamaq üçün seçin
+You can pick up to %1$s at a time	Bir dəfəyə ən çox %1$s seçə bilərsiniz
+One picked	Biri seçildi
+%1$s picked	%1$s seçildi
+None of the picked videos could be saved. Try again.	Seçilmiş videoların heç biri saxlanıla bilmədi. Yenidən cəhd edin.
+Saved one video	Bir video saxlanıldı
+Saved %1$s videos	%1$s video saxlanıldı
+One was already saved	Biri artıq saxlanılmışdı
+%1$s were already saved	%1$s artıq saxlanılmışdı
+Picked videos	Seçilmiş videolar

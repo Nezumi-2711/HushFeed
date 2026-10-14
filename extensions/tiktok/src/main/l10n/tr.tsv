@@ -2092,3 +2092,16 @@ Scrolling comments on videos	Videoların üzerinde kayan yorumlar
 See-through bottom bar	Şeffaf alt çubuk
 Let the video reach the bottom of the screen on the main feed and show the tabs over it with no bar behind them.	Ana akışta videonun ekranın altına kadar uzanmasını sağlar ve sekmeleri arkalarında çubuk olmadan videonun üzerinde gösterir.
 LIVE chat auto-translate	LIVE sohbetini otomatik çevir
+
+Pick videos to save from profile grids	Profil ızgaralarından kaydedilecek videoları seç
+Puts a circle on each video in a profile, Liked or Favorites grid. Pick up to %1$s, then tap Save to save them one after another, with a count and Cancel.	Profil, Beğenilenler veya Favoriler ızgarasındaki her videoya bir daire koyar. En fazla %1$s tane seç, sonra Kaydet'e dokun. Hepsi sayaç ve İptal ile sırayla kaydedilir.
+Pick for saving	Kaydetmek için seç
+You can pick up to %1$s at a time	Bir seferde en fazla %1$s seçebilirsin
+One picked	Bir tane seçildi
+%1$s picked	%1$s tane seçildi
+None of the picked videos could be saved. Try again.	Seçilen videoların hiçbiri kaydedilemedi. Tekrar deneyin.
+Saved one video	Bir video kaydedildi
+Saved %1$s videos	%1$s video kaydedildi
+One was already saved	Biri zaten kaydedilmişti
+%1$s were already saved	%1$s tanesi zaten kaydedilmişti
+Picked videos	Seçilen videolar

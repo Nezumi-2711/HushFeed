@@ -2092,3 +2092,16 @@ Scrolling comments on videos	Comentarios que se deslizan sobre los videos
 See-through bottom bar	Barra inferior transparente
 Let the video reach the bottom of the screen on the main feed and show the tabs over it with no bar behind them.	Deja que el vídeo llegue en el feed principal hasta el borde inferior de la pantalla y muestra las pestañas encima, sin barra detrás.
 LIVE chat auto-translate	Traducción automática del chat de LIVE
+
+Pick videos to save from profile grids	Elegir videos para guardar en las cuadrículas de perfil
+Puts a circle on each video in a profile, Liked or Favorites grid. Pick up to %1$s, then tap Save to save them one after another, with a count and Cancel.	Pone un círculo en cada video de una cuadrícula de perfil, Me gusta o Favoritos. Elige hasta %1$s y toca Guardar para guardarlos uno tras otro, con un contador y Cancelar.
+Pick for saving	Elegir para guardar
+You can pick up to %1$s at a time	Puedes elegir hasta %1$s a la vez
+One picked	Uno elegido
+%1$s picked	%1$s elegidos
+None of the picked videos could be saved. Try again.	No se pudo guardar ninguno de los videos elegidos. Inténtalo de nuevo.
+Saved one video	Se guardó un video
+Saved %1$s videos	Se guardaron %1$s videos
+One was already saved	Uno ya estaba guardado
+%1$s were already saved	%1$s ya estaban guardados
+Picked videos	Videos elegidos

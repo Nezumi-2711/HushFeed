@@ -26,6 +26,8 @@
 
 * **TikTok:** Feature Gate Lab'da yeni bir hazır ayar var: LIVE sohbetini otomatik çevir. Bir LIVE odasında Paylaş altındaki Yorumları çevir seçeneğini açar (#98).
 
+* **TikTok:** Hushfeed ayarları > İndirilenler bölümünde Profil ızgaralarından kaydedilecek videoları seç'i aç, profil, Beğenilenler veya Favoriler ızgarasındaki her videoda bir daire çıkar. En fazla 50 tane seç, Kaydet'e dokun. Hepsi sayaç ve İptal ile sırayla kaydedilir (#27).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

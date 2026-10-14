@@ -30,6 +30,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Feature Gate Lab has a new preset from Japan's builds, LIVE chat auto-translate. It turns on the Translate comments option under Share in a LIVE room. It needs the Lab's overrides switch and a TikTok restart, and Undo puts back the value you had (#98).
 
+* **TikTok:** Advanced downloads can save several posts from a profile grid in one run. Turn on Pick videos to save from profile grids in Hushfeed settings > Downloads and every video in a profile, Liked or Favorites grid gets a circle. Tap the circles of up to 50 posts, then tap Save on the bar at the bottom. They're saved one after another with a running count and Cancel. A post that fails is skipped and the next one still saves, a photo post saves its photos at full size, and with Check for already-saved videos on a video saved before is counted and left alone. Stories and ads get no circle, and TikTok's own tap and long press on a cell work as before until something is picked (#27).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).
