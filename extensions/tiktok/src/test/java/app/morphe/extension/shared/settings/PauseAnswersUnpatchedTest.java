@@ -278,14 +278,21 @@ public class PauseAnswersUnpatchedTest {
     @Test public void aClearModeToggleWhilePausedIsNotRememberedOverTheReadersChoice() {
         Settings.CLEAR_DISPLAY.save(false);
         Setting.setPausedForProcess(true);
-        RememberClearDisplayPatch.rememberClearDisplayEvent(new ClearEvent(true, 0));
-        assertFalse(Settings.CLEAR_DISPLAY.savedValue());
-        assertFalse("paused, the remembered clear mode is not applied", Settings.CLEAR_DISPLAY.get());
+        try {
+            RememberClearDisplayPatch.rememberClearDisplayEvent(new ClearEvent(true, 0));
+            assertFalse(Settings.CLEAR_DISPLAY.savedValue());
+            assertFalse("paused, the remembered clear mode is not applied", Settings.CLEAR_DISPLAY.get());
 
-        // The control: running normally, the same toggle is remembered.
-        Setting.setPausedForProcess(false);
-        RememberClearDisplayPatch.rememberClearDisplayEvent(new ClearEvent(true, 0));
-        assertTrue(Settings.CLEAR_DISPLAY.savedValue());
+            // The control: running normally, the same toggle is remembered.
+            Setting.setPausedForProcess(false);
+            RememberClearDisplayPatch.rememberClearDisplayEvent(new ClearEvent(true, 0));
+            assertTrue(Settings.CLEAR_DISPLAY.savedValue());
+        } finally {
+            // The toggle leaves the process in Clear display, and the classes run after this one
+            // share it: the overlay pass then took the bottom bar away in SeeThroughBottomBarTest.
+            Setting.setPausedForProcess(false);
+            RememberClearDisplayPatch.rememberClearDisplayEvent(new ClearEvent(false, 0));
+        }
     }
 
     /** TikTok's clear-display event, by the two field names the hook reads. */
