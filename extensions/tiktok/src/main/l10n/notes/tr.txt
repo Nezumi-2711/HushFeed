@@ -18,6 +18,8 @@
 
 * **TikTok:** Ülke veya @kullanıcı adından sonra geri gelen içerik üreticisi adı artık kesik kalmıyor (#127).
 
+* **TikTok:** AMOLED koyu tema artık TikTok'un kendi ayar sayfalarındaki kartları da siyah yapıyor (#152).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

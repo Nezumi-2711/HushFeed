@@ -18,6 +18,8 @@
 
 * **TikTok:** A creator's display name that comes back after the country or the @handle is no longer left cut short (#127).
 
+* **TikTok:** AMOLED dark theme now makes the cards on TikTok's own settings pages black too (#152).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).

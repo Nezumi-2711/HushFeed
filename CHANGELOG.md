@@ -22,6 +22,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With Show where a video was posted or Show the handle instead of the name on, a creator's display name that comes back on screen is no longer left cut short beside an empty row. Putting the name back now lets the row measure it again (#127).
 
+* **TikTok:** AMOLED dark theme now turns the cards on TikTok's own settings pages black as well, on Settings and privacy and the pages under it. TikTok's dark mode already paints those pages and search black, so the cards were the gray left over. The search field, the filter chips and the profile menu's cards keep their dark gray, so you can still see where to tap (#152).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).

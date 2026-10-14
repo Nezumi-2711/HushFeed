@@ -18,6 +18,8 @@
 
 * **TikTok:** Ölkədən və ya @istifadəçi adından sonra geri qayıdan yaradıcı adı artıq yarımçıq kəsilmiş qalmır (#127).
 
+* **TikTok:** AMOLED qaranlıq mövzu indi TikTok-un öz ayar səhifələrindəki kartları da qara edir (#152).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).
