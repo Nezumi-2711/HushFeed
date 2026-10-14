@@ -884,8 +884,8 @@ final class L10nTranslationsIn {
                 "Detail build tidak bisa disalin. Gunakan Simpan detail build.");
         table.put("Couldn't copy the report. Use Save report instead.",
                 "Laporan tidak bisa disalin. Gunakan Simpan laporan.");
-        table.put("Couldn't find this LIVE's stream to record",
-                "Siaran LIVE ini tidak ditemukan untuk direkam");
+        table.put("Couldn't find this LIVE's stream to record. Leave the room and open it again.",
+                "Siaran LIVE ini tidak ditemukan untuk direkam. Keluar dari ruang lalu buka lagi.");
         table.put("Couldn't forget the saved videos. Try again.",
                 "Video tersimpan tidak dapat dilupakan. Coba lagi.");
         table.put("Couldn't import watch history. Your saved history is unchanged.",

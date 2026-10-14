@@ -884,8 +884,8 @@ final class L10nTranslationsAz {
                 "Build təfərrüatlarını kopyalamaq alınmadı. Əvəzinə Build təfərrüatlarını saxlayın düyməsini istifadə edin.");
         table.put("Couldn't copy the report. Use Save report instead.",
                 "Hesabatı kopyalamaq alınmadı. Əvəzinə Hesabatı saxla düyməsini istifadə edin.");
-        table.put("Couldn't find this LIVE's stream to record",
-                "Bu LIVE-ın yayımını tapmaq mümkün olmadı");
+        table.put("Couldn't find this LIVE's stream to record. Leave the room and open it again.",
+                "Bu LIVE-ın yayımını tapmaq mümkün olmadı. Otaqdan çıxıb yenidən açın.");
         table.put("Couldn't forget the saved videos. Try again.",
                 "Saxlanılmış videoları unutmaq alınmadı. Yenidən cəhd edin.");
         table.put("Couldn't import watch history. Your saved history is unchanged.",

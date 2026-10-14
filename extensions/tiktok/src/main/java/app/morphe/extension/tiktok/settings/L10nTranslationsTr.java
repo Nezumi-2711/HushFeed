@@ -884,8 +884,8 @@ final class L10nTranslationsTr {
                 "Derleme ayrıntıları kopyalanamadı. Bunun yerine \"Derleme ayrıntılarını kaydet\"i kullan.");
         table.put("Couldn't copy the report. Use Save report instead.",
                 "Rapor kopyalanamadı. Bunun yerine \"Raporu kaydet\"i kullan.");
-        table.put("Couldn't find this LIVE's stream to record",
-                "Bu LIVE'ın yayını kayıt için bulunamadı");
+        table.put("Couldn't find this LIVE's stream to record. Leave the room and open it again.",
+                "Bu LIVE'ın yayını kayıt için bulunamadı. Odadan çıkıp yeniden açın.");
         table.put("Couldn't forget the saved videos. Try again.",
                 "Kaydedilen videolar unutulamadı. Tekrar dene.");
         table.put("Couldn't import watch history. Your saved history is unchanged.",

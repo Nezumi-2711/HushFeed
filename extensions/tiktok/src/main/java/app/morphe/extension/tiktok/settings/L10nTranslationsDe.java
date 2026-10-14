@@ -884,8 +884,8 @@ final class L10nTranslationsDe {
                 "Die Build-Informationen ließen sich nicht kopieren. Nutze stattdessen „Build-Informationen speichern“.");
         table.put("Couldn't copy the report. Use Save report instead.",
                 "Der Bericht ließ sich nicht kopieren. Nutze stattdessen „Bericht speichern“.");
-        table.put("Couldn't find this LIVE's stream to record",
-                "Der Stream dieses LIVE wurde nicht gefunden");
+        table.put("Couldn't find this LIVE's stream to record. Leave the room and open it again.",
+                "Der Stream dieses LIVE wurde nicht gefunden. Verlasse den Raum und öffne ihn erneut.");
         table.put("Couldn't forget the saved videos. Try again.",
                 "Die gespeicherten Videos konnten nicht vergessen werden. Versuch es erneut.");
         table.put("Couldn't import watch history. Your saved history is unchanged.",

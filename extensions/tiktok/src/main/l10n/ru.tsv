@@ -2297,7 +2297,7 @@ Stop recording this LIVE	Остановить запись этого LIVE
 Record this LIVE from now	Записать этот LIVE с этого момента
 Recording this LIVE from now	Этот LIVE записывается с этого момента
 Saving the recording	Запись сохраняется
-Couldn't find this LIVE's stream to record	Не удалось найти трансляцию этого LIVE для записи
+Couldn't find this LIVE's stream to record. Leave the room and open it again.	Не удалось найти трансляцию этого LIVE для записи. Выйдите из комнаты и откройте её снова.
 Allow storage for TikTok in Android settings to record LIVEs	Разрешите TikTok доступ к памяти в настройках Android, чтобы записывать LIVE
 LIVE recording saved to %1$s	Запись LIVE сохранена в %1$s
 The LIVE ended or the connection dropped. What was recorded is saved to %1$s	LIVE закончился или пропало соединение. Записанное сохранено в %1$s

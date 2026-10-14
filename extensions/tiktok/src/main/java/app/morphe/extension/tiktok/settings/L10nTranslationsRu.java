@@ -1127,8 +1127,8 @@ final class L10nTranslationsRu {
                 "Не удалось скопировать сведения о сборке. Используйте вместо этого «Сохранить сведения о сборке».");
         table.put("Couldn't copy the report. Use Save report instead.",
                 "Не удалось скопировать отчёт. Используйте вместо этого «Сохранить отчёт».");
-        table.put("Couldn't find this LIVE's stream to record",
-                "Не удалось найти трансляцию этого LIVE для записи");
+        table.put("Couldn't find this LIVE's stream to record. Leave the room and open it again.",
+                "Не удалось найти трансляцию этого LIVE для записи. Выйдите из комнаты и откройте её снова.");
         table.put("Couldn't forget the saved videos. Try again.",
                 "Не удалось забыть сохранённые видео. Повторите попытку.");
         table.put("Couldn't import watch history. Your saved history is unchanged.",

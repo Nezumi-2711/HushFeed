@@ -884,8 +884,8 @@ final class L10nTranslationsIt {
                 "Non è stato possibile copiare i dettagli della build. Usa invece Salva dettagli della build.");
         table.put("Couldn't copy the report. Use Save report instead.",
                 "Non è stato possibile copiare il rapporto. Usa invece Salva rapporto.");
-        table.put("Couldn't find this LIVE's stream to record",
-                "Non è stato possibile trovare lo stream di questo LIVE da registrare");
+        table.put("Couldn't find this LIVE's stream to record. Leave the room and open it again.",
+                "Non è stato possibile trovare lo stream di questo LIVE da registrare. Esci dalla stanza e riaprila.");
         table.put("Couldn't forget the saved videos. Try again.",
                 "Non è stato possibile dimenticare i video salvati. Riprova.");
         table.put("Couldn't import watch history. Your saved history is unchanged.",

@@ -2117,7 +2117,7 @@ Stop recording this LIVE	Bu LIVE'ın kaydını durdur
 Record this LIVE from now	Bu LIVE'ı şimdiden kaydet
 Recording this LIVE from now	Bu LIVE şimdiden kaydediliyor
 Saving the recording	Kayıt kaydediliyor
-Couldn't find this LIVE's stream to record	Bu LIVE'ın yayını kayıt için bulunamadı
+Couldn't find this LIVE's stream to record. Leave the room and open it again.	Bu LIVE'ın yayını kayıt için bulunamadı. Odadan çıkıp yeniden açın.
 Allow storage for TikTok in Android settings to record LIVEs	LIVE kaydetmek için Android ayarlarında TikTok'a depolama izni ver
 LIVE recording saved to %1$s	LIVE kaydı %1$s konumuna kaydedildi
 The LIVE ended or the connection dropped. What was recorded is saved to %1$s	LIVE bitti veya bağlantı koptu. Kaydedilen kısım %1$s konumuna kaydedildi

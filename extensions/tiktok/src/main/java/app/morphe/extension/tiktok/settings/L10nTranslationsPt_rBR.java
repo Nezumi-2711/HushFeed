@@ -884,8 +884,8 @@ final class L10nTranslationsPt_rBR {
                 "Não foi possível copiar os detalhes da compilação. Use “Salvar detalhes da compilação”.");
         table.put("Couldn't copy the report. Use Save report instead.",
                 "Não foi possível copiar o relatório. Use “Salvar relatório”.");
-        table.put("Couldn't find this LIVE's stream to record",
-                "Não foi possível encontrar a transmissão desta LIVE para gravar");
+        table.put("Couldn't find this LIVE's stream to record. Leave the room and open it again.",
+                "Não foi possível encontrar a transmissão desta LIVE para gravar. Saia da sala e abra de novo.");
         table.put("Couldn't forget the saved videos. Try again.",
                 "Não foi possível esquecer os vídeos salvos. Tente novamente.");
         table.put("Couldn't import watch history. Your saved history is unchanged.",
