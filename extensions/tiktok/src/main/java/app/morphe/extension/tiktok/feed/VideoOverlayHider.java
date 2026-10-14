@@ -948,7 +948,10 @@ public final class VideoOverlayHider {
      * Matching the row's bottom instead left the line half a row up inside the caption, across its
      * last line (#153). When the slot runs out first, as it does where the caption reaches the
      * bottom of the screen, the frame and the music disc beside it go up by what's left, so the
-     * caption ends on the line. Every cell's frame gets its lift as it's laid out, from where it
+     * caption ends on the line. On 47.1.4 the disc keeps an offset of TikTok's own, which is left
+     * alone, so it stays where TikTok holds it with its bottom on the line (S22, 2026-10-13: 2146
+     * before and after, against 2013 over a line at 2038 with the comment bar up). Every cell's
+     * frame gets its lift as it's laid out, from where it
      * sits in its own cell, so the next video arrives already in place rather than jumping after
      * the swipe. A cell whose caption ends higher (TikTok's search bar or a series bar under it)
      * needs no lift. Both go back with the bar, and a row or frame TikTok moved itself since is
