@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Profil ızgaralarından kaydedilecek videoları seç artık Favoriler'deki bir koleksiyonun içinde de çalışıyor, Tümünü seç dahil (#27).
+
 * **TikTok:** Orijinal fotoğraf kaydının yalnızca bir kısmı gelirse artık Aç'ın yanında Yeniden dene çıkıyor. Yalnızca gelmeyen fotoğrafları yeniden dener.
 
 * **TikTok:** Hızlı kurulumlar, kartına uzun basılarak ayarların ana sayfasından gizlenebilir. Yedekleme ve geri yükleme'deki Ana sayfada hızlı kurulumlar satırı onları geri getirir.

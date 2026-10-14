@@ -368,6 +368,8 @@ val advancedDownloadsPatch = bytecodePatch(
         // The grid cell holder's bind, which the count hook above already found, for picking
         // several posts on a profile, Liked or Favorites grid and saving them in one run (#27).
         ProfileGridHolderBindFingerprint.method.hookGridPick { classDefByOrNull(it)?.superclass }
+        // A Favorites collection folder draws its posts with a holder of its own.
+        CollectionGridHolderBindFingerprint.method.hookGridPickFromField { classDefByOrNull(it)?.superclass }
 
         SettingsStatusLoadFingerprint.method.addInstruction(0,
             "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableAdvancedDownloads()V")

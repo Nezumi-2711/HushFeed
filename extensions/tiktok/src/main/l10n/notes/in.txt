@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pilih video untuk disimpan dari grid profil kini juga berfungsi di dalam koleksi Favorit, termasuk Pilih semua (#27).
+
 * **TikTok:** Simpan foto asli yang hanya sebagian berhasil kini menawarkan Coba lagi di samping Buka. Itu hanya mencoba lagi foto yang gagal.
 
 * **TikTok:** Pengaturan cepat bisa disembunyikan dari beranda pengaturan dengan menekan lama kartunya. Baris Pengaturan cepat di Beranda pada Cadangkan dan pulihkan memunculkannya lagi.

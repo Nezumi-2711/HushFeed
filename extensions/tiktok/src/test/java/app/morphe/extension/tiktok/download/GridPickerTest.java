@@ -454,6 +454,66 @@ public class GridPickerTest {
                 SavedVideoArchive.generation());
     }
 
+    /** A Favorites collection folder's list row: its post in a field beside an int, none on the header. */
+    public static final class Row {
+        final int kind;
+        final Aweme post;
+
+        Row(int kind, Aweme post) {
+            this.kind = kind;
+            this.post = post;
+        }
+    }
+
+    @Test public void pickAllReadsThePostEachCollectionRowWraps() {
+        Settings.CHECK_SAVED_VIDEOS.save(false);
+        Post a = new Post("a");
+        Post b = new Post("b");
+        Post story = new Post("s");
+        story.story = true;
+        RecyclerView list = list(new Row(1, null), new Row(0, a), new Row(0, story), new Row(0, b), new Row(2, null));
+        FrameLayout cell = cellIn(list);
+        // The folder's holder hands over the post itself, as the profile grid's does.
+        GridPicker.bind(cell, b);
+        circle(cell).performClick();
+        assertEquals(View.VISIBLE, barText("Pick all").getVisibility());
+        barText("Pick all").performClick();
+        assertEquals("the header, the banner or the story was picked", 2, GridPicker.pickedCount());
+        barText("Save").performClick();
+        assertEquals("a run holds the posts, never the rows around them", List.of(b, a), runs.get(0));
+    }
+
+    @Test public void aCellThatIsNotAFrameLayoutGetsALayerOfOursAndGetsItBack() {
+        // A Favorites collection folder's cell is a ConstraintLayout: the circle and cover go in a
+        // full-size layer laid last in it, not loose in its top left corner.
+        android.widget.LinearLayout cell = new android.widget.LinearLayout(activity);
+        View tikTok = new View(activity);
+        cell.addView(tikTok, new android.widget.LinearLayout.LayoutParams(300, 400));
+        ViewGroup content = activity.findViewById(android.R.id.content);
+        content.addView(cell, new FrameLayout.LayoutParams(300, 400));
+        GridPicker.bind(cell, new Post("1"));
+
+        View layer = cell.getChildAt(cell.getChildCount() - 1);
+        assertTrue("no layer laid last in the cell", layer instanceof FrameLayout);
+        assertEquals(GridPicker.LAYER_TAG, layer.getTag());
+        assertEquals(ViewGroup.LayoutParams.MATCH_PARENT, layer.getLayoutParams().width);
+        assertEquals(ViewGroup.LayoutParams.MATCH_PARENT, layer.getLayoutParams().height);
+        assertSame("the circle isn't in the layer", layer, circle(cell).getParent());
+        assertFalse("the layer takes the cell's taps for itself", layer.isClickable());
+        GridPicker.bind(cell, new Post("1"));
+        assertEquals("a second bind laid another layer", 2, cell.getChildCount());
+
+        circle(cell).performClick();
+        assertTrue("a tap in the layer didn't reach the cell's post", GridPicker.isPicked("1"));
+        cover(cell).performClick();
+        assertFalse(GridPicker.isPicked("1"));
+
+        Settings.PICK_GRID_VIDEOS.save(false);
+        GridPicker.bind(cell, new Post("1"));
+        assertEquals("our layer stayed on the cell", 1, cell.getChildCount());
+        assertSame(tikTok, cell.getChildAt(0));
+    }
+
     @Test public void pickAllIsOnlyOfferedWhereTheListCanBeRead() {
         FrameLayout cell = cell();
         GridPicker.bind(cell, new Post("1"));

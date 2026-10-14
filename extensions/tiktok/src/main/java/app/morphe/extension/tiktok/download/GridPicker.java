@@ -17,6 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ss.android.ugc.aweme.feed.model.Aweme;
+
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.tiktok.blockauthor.BlockAuthorOverlay;
@@ -27,16 +29,20 @@ import app.morphe.extension.tiktok.settings.SettingsStatus;
 import app.morphe.extension.tiktok.settings.preference.SettingsUi;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * Picking several videos on a profile, Liked or Favorites grid and saving them in one run (#27).
+ * Picking several videos on a profile, Liked or Favorites grid, or in a Favorites collection
+ * folder, and saving them in one run (#27).
  *
- * <p>The grid's cell holder hands every bind to {@link #bind}: the cell's root view and the post
+ * <p>Each grid's cell holder hands every bind to {@link #bind}: the cell's root view and the post
  * TikTok is about to draw in it. RecyclerView recycles cells, so the same view shows one post and
  * then another as the grid scrolls. Nothing here keeps a post with a view beyond the latest bind:
  * {@link #BOUND} is overwritten on every bind, and a tap reads the post the cell shows at that
@@ -61,11 +67,14 @@ public final class GridPicker {
     static final String CIRCLE_TAG = "hushfeed_grid_pick";
     static final String COVER_TAG = "hushfeed_grid_pick_cover";
     static final String BAR_TAG = "hushfeed_grid_pick_bar";
+    static final String LAYER_TAG = "hushfeed_grid_pick_layer";
     private static final int CIRCLE_DP = 24;
     private static final int TARGET_DP = 48;
 
     /** The post each cell shows right now, by its root view. Rewritten on every bind. */
     private static final Map<View, Object> BOUND = new WeakHashMap<>();
+    /** The fields that hold a row's post, by the row's class. */
+    private static final Map<Class<?>, List<Field>> POST_FIELDS = new HashMap<>();
     /** The picked posts by id, in the order they were picked. */
     private static final LinkedHashMap<String, Object> PICKED = new LinkedHashMap<>();
     /** The bar counting the picks, and the activity it sits in. */
@@ -90,10 +99,10 @@ public final class GridPicker {
      */
     public static void bind(View cell, Object item) {
         try {
-            if (!(cell instanceof FrameLayout)) return;
+            if (!(cell instanceof ViewGroup)) return;
             if (!enabled()) {
                 BOUND.remove(cell);
-                strip((FrameLayout) cell);
+                strip((ViewGroup) cell);
                 if (!PICKED.isEmpty()) clear();
                 return;
             }
@@ -102,14 +111,34 @@ public final class GridPicker {
                 // A story cell, an ad or anything without an id: no circle, and a tap on it is
                 // TikTok's, even while other cells are being picked.
                 BOUND.remove(cell);
-                strip((FrameLayout) cell);
+                strip((ViewGroup) cell);
                 return;
             }
             BOUND.put(cell, item);
-            show((FrameLayout) cell, id);
+            show(cell, host((ViewGroup) cell), id);
         } catch (Throwable failure) {
             Logger.printException(() -> "Could not bind the grid picker", failure);
         }
+    }
+
+    /**
+     * Where the circle and the cover go: the cell itself when it is a FrameLayout, as a profile
+     * grid's is, or a full-size layer of ours laid last in it otherwise. A Favorites collection
+     * folder's cell is a ConstraintLayout (X/10J3 on 47.1.4), which would put both in its top
+     * left corner at their own size. The layer takes no tap of its own, so with nothing showing a
+     * tap goes through it to TikTok's views.
+     */
+    private static FrameLayout host(ViewGroup cell) {
+        if (cell instanceof FrameLayout) return (FrameLayout) cell;
+        View layer = cell.findViewWithTag(LAYER_TAG);
+        if (layer instanceof FrameLayout && layer.getParent() == cell) {
+            layer.bringToFront();
+            return (FrameLayout) layer;
+        }
+        FrameLayout created = new FrameLayout(cell.getContext());
+        created.setTag(LAYER_TAG);
+        cell.addView(created, new ViewGroup.LayoutParams(-1, -1));
+        return created;
     }
 
     /** The post's id when it can be picked; null for a story, an ad or an unreadable item. */
@@ -133,11 +162,14 @@ public final class GridPicker {
         return id != null && PICKED.containsKey(id);
     }
 
-    /** Puts the circle and the cover on the cell, or brings them up to date. */
-    private static void show(FrameLayout cell, String id) {
+    /**
+     * Puts the circle and the cover in the cell's host, or brings them up to date. A tap on
+     * either reads the cell, which is what {@link #BOUND} knows, not the host.
+     */
+    private static void show(View cell, FrameLayout host, String id) {
         Context context = cell.getContext();
-        TextView circle = cell.findViewWithTag(CIRCLE_TAG);
-        View cover = cell.findViewWithTag(COVER_TAG);
+        TextView circle = host.findViewWithTag(CIRCLE_TAG);
+        View cover = host.findViewWithTag(COVER_TAG);
         if (cover == null) {
             cover = new View(context);
             cover.setTag(COVER_TAG);
@@ -145,7 +177,7 @@ public final class GridPicker {
             // tree and doesn't read each cell twice.
             cover.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             cover.setOnClickListener(view -> toggle(cell));
-            cell.addView(cover, new FrameLayout.LayoutParams(-1, -1));
+            host.addView(cover, new FrameLayout.LayoutParams(-1, -1));
         }
         if (circle == null) {
             circle = new TextView(context);
@@ -159,18 +191,18 @@ public final class GridPicker {
             circle.setPadding(inset, inset, inset, inset);
             circle.setContentDescription(L10n.t(context, "Pick for saving"));
             circle.setAccessibilityDelegate(new View.AccessibilityDelegate() {
-                @Override public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
-                    super.onInitializeAccessibilityNodeInfo(host, info);
+                @Override public void onInitializeAccessibilityNodeInfo(View view, AccessibilityNodeInfo info) {
+                    super.onInitializeAccessibilityNodeInfo(view, info);
                     info.setClassName("android.widget.CheckBox");
                     info.setCheckable(true);
-                    info.setChecked(host.isSelected());
+                    info.setChecked(view.isSelected());
                 }
             });
             circle.setOnClickListener(view -> toggle(cell));
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(target, target, Gravity.TOP | Gravity.END);
-            cell.addView(circle, params);
+            host.addView(circle, params);
         }
-        // Last in the cell, so both sit over TikTok's own views and get the tap first.
+        // Last in the host, so both sit over TikTok's own views and get the tap first.
         cover.bringToFront();
         circle.bringToFront();
         render(cell, circle, cover, isPicked(id));
@@ -193,11 +225,11 @@ public final class GridPicker {
     }
 
     /** Takes our views off a cell, leaving TikTok's as they were. */
-    private static void strip(FrameLayout cell) {
-        View circle = cell.findViewWithTag(CIRCLE_TAG);
-        if (circle != null) cell.removeView(circle);
-        View cover = cell.findViewWithTag(COVER_TAG);
-        if (cover != null) cell.removeView(cover);
+    private static void strip(ViewGroup cell) {
+        for (String tag : new String[]{CIRCLE_TAG, COVER_TAG, LAYER_TAG}) {
+            View ours = cell.findViewWithTag(tag);
+            if (ours != null && ours.getParent() instanceof ViewGroup) ((ViewGroup) ours.getParent()).removeView(ours);
+        }
     }
 
     /** A tap on a cell's circle or cover: picks or unpicks the post the cell shows now. */
@@ -207,7 +239,7 @@ public final class GridPicker {
                 // Turned off or paused since the cell was bound: give every cell back.
                 clear();
                 for (View bound : new ArrayList<>(BOUND.keySet())) {
-                    if (bound instanceof FrameLayout) strip((FrameLayout) bound);
+                    if (bound instanceof ViewGroup) strip((ViewGroup) bound);
                 }
                 BOUND.clear();
                 return;
@@ -237,7 +269,7 @@ public final class GridPicker {
     private static void refresh() {
         for (Map.Entry<View, Object> entry : new ArrayList<>(BOUND.entrySet())) {
             View view = entry.getKey();
-            if (!(view instanceof FrameLayout)) continue;
+            if (!(view instanceof ViewGroup)) continue;
             TextView circle = view.findViewWithTag(CIRCLE_TAG);
             View cover = view.findViewWithTag(COVER_TAG);
             if (circle == null || cover == null) continue;
@@ -284,7 +316,8 @@ public final class GridPicker {
             boolean skipSaved = Settings.CHECK_SAVED_VIDEOS.get();
             boolean full = false;
             int added = 0;
-            for (Object post : new ArrayList<>(posts)) {
+            for (Object row : new ArrayList<>(posts)) {
+                Object post = postIn(row);
                 String id = pickableId(post);
                 if (id == null || PICKED.containsKey(id)) continue;
                 if (skipSaved && SavedVideoArchive.isSaved(id)) continue;
@@ -311,8 +344,49 @@ public final class GridPicker {
     }
 
     /**
-     * The posts the cell's list holds: its RecyclerView's adapter's {@code getData()}, the list the
-     * profile, Liked and Favorites grids draw from (X/0Of2 on 47.1.4). Null when there is no such list.
+     * The post a list row stands for: the row itself when it is a post, as in a profile grid's
+     * list, or the post it wraps. A Favorites collection folder's list holds rows (X/10Hq on
+     * 47.1.4) with the post in one field beside an int, and its header and banner rows have none
+     * there, so they come back null and are passed over like a story. The field is found by its
+     * type, since TikTok renames it between builds.
+     */
+    static Object postIn(Object row) {
+        if (row == null || row instanceof Aweme) return row;
+        for (Field field : postFields(row.getClass())) {
+            try {
+                Object post = field.get(row);
+                if (post != null) return post;
+            } catch (Throwable ignored) {
+                // An unreadable field holds nothing to pick.
+            }
+        }
+        return null;
+    }
+
+    private static List<Field> postFields(Class<?> type) {
+        List<Field> fields = POST_FIELDS.get(type);
+        if (fields != null) return fields;
+        fields = new ArrayList<>();
+        for (Class<?> current = type; current != null && current != Object.class; current = current.getSuperclass()) {
+            for (Field field : current.getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers()) || !Aweme.class.isAssignableFrom(field.getType())) continue;
+                try {
+                    field.setAccessible(true);
+                    fields.add(field);
+                } catch (Throwable ignored) {
+                    // Left out: a field that can't be opened can't be read either.
+                }
+            }
+        }
+        POST_FIELDS.put(type, fields);
+        return fields;
+    }
+
+    /**
+     * The rows the cell's list holds: its RecyclerView's adapter's {@code getData()}, the list the
+     * profile, Liked and Favorites grids draw from (X/0Of2 on 47.1.4), and a Favorites collection
+     * folder's (X/10J1, whose rows wrap their posts; see {@link #postIn}). Null when there is no
+     * such list.
      */
     static List<?> listOf(View cell) {
         for (android.view.ViewParent parent = cell.getParent(); parent instanceof View; parent = parent.getParent()) {

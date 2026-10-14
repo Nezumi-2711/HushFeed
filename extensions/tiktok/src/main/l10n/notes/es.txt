@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Elegir videos para guardar en las cuadrículas de perfil ahora también funciona dentro de una colección de Favoritos, con Elegir todos incluido (#27).
+
 * **TikTok:** Si al guardar fotos originales solo llegan algunas, ahora aparece Reintentar junto a Abrir. Solo vuelve a intentar las fotos que fallaron.
 
 * **TikTok:** Los Ajustes rápidos se pueden ocultar de la página de inicio de los ajustes con una pulsación larga en su tarjeta. La fila Ajustes rápidos en la página de inicio, en Copia de seguridad y restauración, los trae de vuelta.

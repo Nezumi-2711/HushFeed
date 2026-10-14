@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pick videos to save works inside a Favorites collection folder too, Pick all included (#27).
+
 * **TikTok:** A save of original photos that only partly came through now offers Retry beside Open. It tries again only the photos that failed.
 
 * **TikTok:** Quick setups can be hidden from the settings home with a long press on its card. The Quick setups on the home page row on Backup and restore brings it back.

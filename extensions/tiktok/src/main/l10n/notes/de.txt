@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Videos in Profilrastern zum Speichern auswählen funktioniert jetzt auch in einer Sammlung deiner Favoriten, Alle auswählen inklusive (#27).
+
 * **TikTok:** Kommt beim Speichern von Originalfotos nur ein Teil an, gibt es jetzt neben Öffnen auch Erneut versuchen. Das versucht nur die Fotos noch einmal, die gefehlt haben.
 
 * **TikTok:** Schnelleinstellungen lassen sich mit langem Drücken auf ihre Karte von der Startseite der Einstellungen ausblenden. Die Zeile Schnelleinstellungen auf der Startseite unter Sichern und wiederherstellen holt sie zurück.

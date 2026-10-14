@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Scegli i video da salvare dalle griglie dei profili ora funziona anche dentro una raccolta dei Preferiti, Scegli tutti compreso (#27).
+
 * **TikTok:** Se un salvataggio di foto originali riesce solo in parte, ora offre Riprova accanto ad Apri. Riprova solo le foto che non sono arrivate.
 
 * **TikTok:** Le Configurazioni rapide si possono nascondere dalla home delle impostazioni con una pressione prolungata sulla scheda. La riga Configurazioni rapide nella home in Backup e ripristino le fa tornare.
