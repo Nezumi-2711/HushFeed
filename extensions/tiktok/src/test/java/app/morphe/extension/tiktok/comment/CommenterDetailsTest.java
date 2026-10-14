@@ -18,6 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Looper;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
 
@@ -420,6 +421,71 @@ public class CommenterDetailsTest {
         flip(true);
         assertEquals("@lake.heron", name.getText().toString());
         assertEquals((int) CommenterDetails.nameColor(other, grey), name.getCurrentTextColor());
+    }
+
+    /**
+     * TikTok's helper with a translucent color and emoji in the name: the view takes the opaque
+     * color, and the translucent one goes on as spans over the text before the emoji.
+     */
+    private static void tikTokWritesEmojiName(TextView view, String name, int translucent, int opaque) {
+        view.setTextColor(opaque);
+        SpannableStringBuilder text = new SpannableStringBuilder(name);
+        int emoji = name.indexOf('\uD83D');
+        text.setSpan(new ForegroundColorSpan(translucent), 0, emoji, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        view.setText(text);
+    }
+
+    private static int shownColorAt(TextView view, int index) {
+        CharSequence text = view.getText();
+        int color = view.getCurrentTextColor();
+        if (text instanceof Spanned) {
+            for (ForegroundColorSpan span : ((Spanned) text).getSpans(index, index + 1, ForegroundColorSpan.class)) {
+                color = span.getForegroundColor(); // the last one set draws on top
+            }
+        }
+        return color;
+    }
+
+    @Test
+    public void anEmojiNameTakesOurColorOverTikToksSpansAndGetsThemBack() {
+        int translucent = 0x99161823;
+        int opaque = 0xFF161823;
+        String name = "Maddie Media 💫";
+        Remark remark = by("1", "maddie.media", null);
+        TextView view = new TextView(context);
+        CommenterDetails.commenterName(remark, name);
+        tikTokWritesEmojiName(view, name, translucent, opaque);
+        CommenterDetails.onCommenterName(remark, view);
+        assertEquals(translucent, shownColorAt(view, 0));
+
+        Settings.COLOR_COMMENTER_NAMES.save(true);
+        CommenterDetails.onSettingChanged();
+        shadowOf(Looper.getMainLooper()).idle();
+        int ours = CommenterDetails.nameColor(remark, opaque);
+        assertEquals("ours draws over TikTok's span", ours, shownColorAt(view, 0));
+
+        Settings.COLOR_COMMENTER_NAMES.save(false);
+        Settings.SHOW_COMMENTER_HANDLE.save(true);
+        CommenterDetails.onSettingChanged();
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals("@maddie.media", view.getText().toString());
+        assertEquals("the handle keeps TikTok's color", translucent, shownColorAt(view, 0));
+
+        Settings.SHOW_COMMENTER_HANDLE.save(false);
+        CommenterDetails.onSettingChanged();
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(name, view.getText().toString());
+        assertEquals("TikTok's grey, not its opaque view color", translucent, shownColorAt(view, 0));
+        assertEquals(opaque, view.getCurrentTextColor());
+        Spanned back = (Spanned) view.getText();
+        assertEquals(0, back.getSpans(0, back.length(), CommenterDetails.NameColorSpan.class).length);
+
+        // A fresh bind with the switch on colors the emoji name too.
+        Settings.COLOR_COMMENTER_NAMES.save(true);
+        CommenterDetails.commenterName(remark, name);
+        tikTokWritesEmojiName(view, name, translucent, opaque);
+        CommenterDetails.onCommenterName(remark, view);
+        assertEquals(ours, shownColorAt(view, 0));
     }
 
     @Test

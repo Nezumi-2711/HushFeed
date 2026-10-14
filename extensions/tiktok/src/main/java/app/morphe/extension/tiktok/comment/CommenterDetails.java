@@ -9,7 +9,10 @@ package app.morphe.extension.tiktok.comment;
 
 import android.graphics.Color;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
 import app.morphe.extension.shared.Logger;
@@ -96,11 +99,14 @@ public final class CommenterDetails {
     private static final class NameState {
         final Object comment;
         final CharSequence tikTokName;
+        /** TikTok's rendering of its name with its spans, or null when the bind swapped it. */
+        final CharSequence tikTokText;
         CharSequence written;
 
-        NameState(Object comment, CharSequence tikTokName, CharSequence written) {
+        NameState(Object comment, CharSequence tikTokName, CharSequence tikTokText, CharSequence written) {
             this.comment = comment;
             this.tikTokName = tikTokName;
+            this.tikTokText = tikTokText;
             this.written = written;
         }
     }
@@ -223,7 +229,13 @@ public final class CommenterDetails {
             return;
         }
         if (pendingComment == comment && pendingWritten != null) {
-            NAMES.put(name, new NameState(comment, pendingTikTokName, pendingWritten));
+            // TikTok's own rendering of its name, spans and all, for a switch that later puts the
+            // name back; only there when the name went out unswapped.
+            CharSequence shown = name.getText();
+            CharSequence tikTokText = TextUtils.equals(pendingWritten, pendingTikTokName) && shown != null
+                    ? (shown instanceof Spanned ? new SpannedString(shown) : shown.toString())
+                    : null;
+            NAMES.put(name, new NameState(comment, pendingTikTokName, tikTokText, pendingWritten));
         } else {
             NAMES.remove(name);
         }
@@ -246,14 +258,63 @@ public final class CommenterDetails {
                 if (tikTok != current) {
                     name.setTextColor(tikTok);
                 }
+                paintName(name, null);
                 return;
             }
             COLORED.put(name, new int[]{ours, tikTok});
             if (ours != current) {
                 name.setTextColor(ours);
             }
+            paintName(name, ours);
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not color the commenter's name", ex);
+        }
+    }
+
+    /**
+     * TikTok's helper (X/0HMU.LIZIZ on 47.1.4) paints a name with emoji in it through color spans
+     * over its text runs, so the emoji keep full color, and gives the view an opaque color of its
+     * own. A view color can't show through those spans, so there ours goes on as a span over the
+     * whole name, and comes off again with the switch. A name without TikTok's spans keeps its
+     * text untouched.
+     */
+    private static void paintName(TextView name, Integer ours) {
+        CharSequence text = name.getText();
+        if (!(text instanceof Spanned)) {
+            return;
+        }
+        Spanned spanned = (Spanned) text;
+        NameColorSpan[] mine = spanned.getSpans(0, spanned.length(), NameColorSpan.class);
+        boolean tikToks = false;
+        for (ForegroundColorSpan span : spanned.getSpans(0, spanned.length(), ForegroundColorSpan.class)) {
+            if (!(span instanceof NameColorSpan)) {
+                tikToks = true;
+                break;
+            }
+        }
+        boolean wanted = ours != null && tikToks;
+        if (!wanted && mine.length == 0) {
+            return;
+        }
+        if (wanted && mine.length == 1 && mine[0].getForegroundColor() == ours
+                && spanned.getSpanStart(mine[0]) == 0 && spanned.getSpanEnd(mine[0]) == spanned.length()) {
+            return;
+        }
+        SpannableStringBuilder copy = new SpannableStringBuilder(text);
+        for (NameColorSpan span : copy.getSpans(0, copy.length(), NameColorSpan.class)) {
+            copy.removeSpan(span);
+        }
+        if (wanted) {
+            // Set last, so it draws over TikTok's spans.
+            copy.setSpan(new NameColorSpan(ours), 0, copy.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        name.setText(copy);
+    }
+
+    /** The name color as a span, told apart from TikTok's own color spans. */
+    static final class NameColorSpan extends ForegroundColorSpan {
+        NameColorSpan(int color) {
+            super(color);
         }
     }
 
@@ -288,8 +349,8 @@ public final class CommenterDetails {
             String written = state.written.toString();
             CharSequence shown = name.getText();
             if (!TextUtils.equals(wanted, written) && shown != null && shown.toString().startsWith(written)) {
-                SpannableStringBuilder text = new SpannableStringBuilder(shown);
-                text.replace(0, written.length(), wanted);
+                SpannableStringBuilder text = new SpannableStringBuilder(styledName(state, wanted, shown, written.length()));
+                text.append(shown.subSequence(written.length(), shown.length()));
                 name.setText(text);
                 state.written = wanted;
             }
@@ -297,6 +358,29 @@ public final class CommenterDetails {
             Logger.printException(() -> "Could not redo the commenter's handle", ex);
         }
         colorName(state.comment, name);
+    }
+
+    /**
+     * The name as TikTok would show it: its own text from the bind when that name is the one
+     * going back, else the new name in the color TikTok's spans gave the old one. Without spans
+     * the view's color already is TikTok's.
+     */
+    private static CharSequence styledName(NameState state, CharSequence wanted, CharSequence shown, int end) {
+        if (state.tikTokText != null && TextUtils.equals(wanted, state.tikTokName)) {
+            return state.tikTokText;
+        }
+        if (shown instanceof Spanned) {
+            for (ForegroundColorSpan span : ((Spanned) shown).getSpans(0, end, ForegroundColorSpan.class)) {
+                if (span instanceof NameColorSpan) {
+                    continue;
+                }
+                SpannableStringBuilder styled = new SpannableStringBuilder(wanted);
+                styled.setSpan(new ForegroundColorSpan(span.getForegroundColor()), 0, styled.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                return styled;
+            }
+        }
+        return wanted;
     }
 
     /**
