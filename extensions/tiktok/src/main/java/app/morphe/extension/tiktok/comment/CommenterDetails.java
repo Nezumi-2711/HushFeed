@@ -85,6 +85,9 @@ public final class CommenterDetails {
      */
     private static final Map<TextView, NameState> NAMES = new WeakHashMap<>();
 
+    /** Per reply label: the same, for the "Reply to" label's name. */
+    private static final Map<TextView, NameState> LABELS = new WeakHashMap<>();
+
     /** Per time view: the comment it was last bound to, for the same reason. */
     private static final Map<TextView, Object> TIMES = new WeakHashMap<>();
 
@@ -95,6 +98,11 @@ public final class CommenterDetails {
     private static Object pendingComment;
     private static CharSequence pendingTikTokName;
     private static CharSequence pendingWritten;
+
+    /** The reply label's swap, waiting for the hook right after TikTok writes the label. */
+    private static Object pendingReplyComment;
+    private static CharSequence pendingReplyName;
+    private static CharSequence pendingReplyWritten;
 
     private static final class NameState {
         final Object comment;
@@ -156,20 +164,45 @@ public final class CommenterDetails {
      */
     public static CharSequence replyTargetName(Object comment, CharSequence name) {
         HookStatus.bound(FAMILY, "reply");
+        CharSequence written = name;
         try {
-            if (!handlesOn() || comment == null) {
-                return name;
-            }
-            String uid = Reflect.string(comment, "getReplyToUserId", "replyToUserId");
-            String handle;
-            synchronized (HANDLE_BY_UID) {
-                handle = uid == null ? null : HANDLE_BY_UID.get(uid);
-            }
-            return handle == null ? name : "@" + handle;
+            written = replyName(comment, name);
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not show the replied-to handle", ex);
+        }
+        pendingReplyComment = comment;
+        pendingReplyName = name;
+        pendingReplyWritten = written;
+        return written;
+    }
+
+    /** "@handle" for the person a reply answers, or TikTok's name until their handle is known. */
+    private static CharSequence replyName(Object comment, CharSequence name) {
+        if (!handlesOn() || comment == null) {
             return name;
         }
+        String uid = Reflect.string(comment, "getReplyToUserId", "replyToUserId");
+        String handle;
+        synchronized (HANDLE_BY_UID) {
+            handle = uid == null ? null : HANDLE_BY_UID.get(uid);
+        }
+        return handle == null ? name : "@" + handle;
+    }
+
+    /** Called right after TikTok writes the reply label, with the view it went on. */
+    public static void onReplyLabel(Object comment, TextView label) {
+        HookStatus.bound(FAMILY, "reply view");
+        if (label == null) {
+            return;
+        }
+        if (pendingReplyComment == comment && pendingReplyWritten != null) {
+            LABELS.put(label, stateOf(comment, pendingReplyName, pendingReplyWritten, label));
+        } else {
+            LABELS.remove(label);
+        }
+        pendingReplyComment = null;
+        pendingReplyName = null;
+        pendingReplyWritten = null;
     }
 
     /**
@@ -229,13 +262,7 @@ public final class CommenterDetails {
             return;
         }
         if (pendingComment == comment && pendingWritten != null) {
-            // TikTok's own rendering of its name, spans and all, for a switch that later puts the
-            // name back; only there when the name went out unswapped.
-            CharSequence shown = name.getText();
-            CharSequence tikTokText = TextUtils.equals(pendingWritten, pendingTikTokName) && shown != null
-                    ? (shown instanceof Spanned ? new SpannedString(shown) : shown.toString())
-                    : null;
-            NAMES.put(name, new NameState(comment, pendingTikTokName, tikTokText, pendingWritten));
+            NAMES.put(name, stateOf(comment, pendingTikTokName, pendingWritten, name));
         } else {
             NAMES.remove(name);
         }
@@ -243,6 +270,18 @@ public final class CommenterDetails {
         pendingTikTokName = null;
         pendingWritten = null;
         colorName(comment, name);
+    }
+
+    /**
+     * A name or label as just bound. TikTok's own rendering of its text, spans and all, is kept
+     * for a switch that later puts that text back; it only exists when the text went out unswapped.
+     */
+    private static NameState stateOf(Object comment, CharSequence tikTokName, CharSequence written, TextView view) {
+        CharSequence shown = view.getText();
+        CharSequence tikTokText = TextUtils.equals(written, tikTokName) && shown != null
+                ? (shown instanceof Spanned ? new SpannedString(shown) : shown.toString())
+                : null;
+        return new NameState(comment, tikTokName, tikTokText, written);
     }
 
     /** Colors the name by its account, or puts TikTok's color back with the switch off. */
@@ -320,16 +359,24 @@ public final class CommenterDetails {
 
     /**
      * A commenter switch changed. Lists already drawn keep their cells, and TikTok won't write
-     * the name or time of a comment a cell already shows, so the views bound before are redone
-     * here: the name's handle and color, and the time's country.
+     * the name, reply label or time of a comment a cell already shows, so the views bound before
+     * are redone here: the name's handle and color, the label's handle and the time's country.
      */
     public static void onSettingChanged() {
         Utils.runOnMainThread(() -> {
             // Keys are copied, not entries: a copied entry of Android 6's WeakHashMap can lose its
-            // key to a collection mid-loop.
+            // key to a collection mid-loop. Names go first, since they remember the handles the
+            // reply labels are named from.
             for (TextView name : new ArrayList<>(NAMES.keySet())) {
                 NameState state = NAMES.get(name);
-                if (state != null) refreshName(name, state);
+                if (state != null) {
+                    swapText(name, state, false);
+                    colorName(state.comment, name);
+                }
+            }
+            for (TextView label : new ArrayList<>(LABELS.keySet())) {
+                NameState state = LABELS.get(label);
+                if (state != null) swapText(label, state, true);
             }
             for (TextView time : new ArrayList<>(TIMES.keySet())) {
                 Object comment = TIMES.get(time);
@@ -343,21 +390,22 @@ public final class CommenterDetails {
      * verified badge as an image span after the name, so the text isn't replaced whole. A view
      * whose text no longer starts with what was written keeps it.
      */
-    private static void refreshName(TextView name, NameState state) {
+    private static void swapText(TextView view, NameState state, boolean replyLabel) {
         try {
-            CharSequence wanted = handleName(state.comment, state.tikTokName);
+            CharSequence wanted = replyLabel
+                    ? replyName(state.comment, state.tikTokName)
+                    : handleName(state.comment, state.tikTokName);
             String written = state.written.toString();
-            CharSequence shown = name.getText();
+            CharSequence shown = view.getText();
             if (!TextUtils.equals(wanted, written) && shown != null && shown.toString().startsWith(written)) {
                 SpannableStringBuilder text = new SpannableStringBuilder(styledName(state, wanted, shown, written.length()));
                 text.append(shown.subSequence(written.length(), shown.length()));
-                name.setText(text);
+                view.setText(text);
                 state.written = wanted;
             }
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not redo the commenter's handle", ex);
         }
-        colorName(state.comment, name);
     }
 
     /**
@@ -472,10 +520,14 @@ public final class CommenterDetails {
         STAMPED.clear();
         COLORED.clear();
         NAMES.clear();
+        LABELS.clear();
         TIMES.clear();
         pendingComment = null;
         pendingTikTokName = null;
         pendingWritten = null;
+        pendingReplyComment = null;
+        pendingReplyName = null;
+        pendingReplyWritten = null;
         AuthorRegion.forgetSeenRegions();
     }
 }

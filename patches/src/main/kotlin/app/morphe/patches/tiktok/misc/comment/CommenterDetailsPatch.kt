@@ -141,9 +141,22 @@ val commenterDetailsPatch = bytecodePatch(
             )
         }
 
-        // The reply label: swapped right before the write, on the label every path to it takes.
+        // The reply label: swapped right before the write, on the label every path to it takes,
+        // and its view handed over right after, so a switch change can redo a label TikTok
+        // won't bind again. The later index goes in first, so the write's index still holds.
         CommentReplyLabelFingerprint.method.apply {
             val site = replyLabelSite()
+            addInstructions(
+                site.callIndex + 1,
+                callThroughLocals(
+                    WHAT,
+                    "invoke-static",
+                    "$COMMENTER_DETAILS->onReplyLabel(Ljava/lang/Object;$TEXT_VIEW)V",
+                    false,
+                    objectIn("p1"),
+                    objectIn("v${site.viewRegister}"),
+                ),
+            )
             val swapLabel = callThroughLocals(
                 WHAT,
                 "invoke-static",
@@ -180,8 +193,11 @@ val commenterDetailsPatch = bytecodePatch(
     }
 }
 
-/** Where the reply label is written: the helper call, and the register holding the label's text. */
-internal data class ReplyLabelSite(val callIndex: Int, val textRegister: Int)
+/**
+ * Where the reply label is written: the helper call, the register holding the label's text, and
+ * the one holding the view it's written on.
+ */
+internal data class ReplyLabelSite(val callIndex: Int, val textRegister: Int, val viewRegister: Int)
 
 /**
  * Where one time view gets the comment's time: the setText at [writeIndex], on [viewRegister],
@@ -286,7 +302,8 @@ private fun Method.isReplyLabelWrite(): Boolean {
  * The reply label's one write. The hook in front of it reads the comment from p1, so nothing in
  * the method may write p1, and it replaces the text register with a CharSequence, so nothing may
  * read that register afterwards as the String it held. It sits outside any try, so a handler
- * never sees the swapped register either.
+ * never sees the swapped register either. The hook after it reads the view the write was handed,
+ * which the call leaves in its register.
  */
 internal fun Method.replyLabelSite(): ReplyLabelSite {
     val body = implementation ?: throw PatchException("$WHAT: the reply label has no code.")
@@ -296,6 +313,8 @@ internal fun Method.replyLabelSite(): ReplyLabelSite {
         ?: throw PatchException("$WHAT: expected one reply label write, found ${helpers.size}.")
     val text = instructions[call].namedRegisters().getOrNull(3)
         ?: throw PatchException("$WHAT: the reply label write names no text.")
+    val view = instructions[call].namedRegisters().getOrNull(2)
+        ?: throw PatchException("$WHAT: the reply label write names no view.")
 
     val comment = body.registerCount - 1
     if (instructions.any { writes(it, comment) }) {
@@ -309,10 +328,10 @@ internal fun Method.replyLabelSite(): ReplyLabelSite {
     if (flow.normal[call].any { text in liveness.liveInto(it) }) {
         throw PatchException("$WHAT: the reply label's text register is read after the write.")
     }
-    if (text > 15 || comment > 15) {
-        throw PatchException("$WHAT: v$text or the comment parameter doesn't fit a short invoke.")
+    if (text > 15 || view > 15 || comment > 15) {
+        throw PatchException("$WHAT: v$text, v$view or the comment parameter doesn't fit a short invoke.")
     }
-    return ReplyLabelSite(call, text)
+    return ReplyLabelSite(call, text, view)
 }
 
 /**

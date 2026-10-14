@@ -73,6 +73,8 @@ class CommenterDetailsAnchorsTest {
             val beforeWrite = reply.implementation!!.instructions.take(replySite.callIndex)
             assertTrue("$version: the reply label doesn't read the replied-to name before writing it",
                 beforeWrite.any { it.calls(COMMENT_MODEL, "getReplyToNickName") })
+            assertFalse("$version: the label's view and text share a register",
+                replySite.viewRegister == replySite.textRegister)
 
             val times = taken(CommentTimeWriteFingerprint)
             assertEquals("$version: the time fingerprint takes ${times.map(::label)}", 1, times.size)

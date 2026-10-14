@@ -423,6 +423,33 @@ public class CommenterDetailsTest {
         assertEquals((int) CommenterDetails.nameColor(other, grey), name.getCurrentTextColor());
     }
 
+    @Test
+    public void aSwitchFlipRedoesAReplyLabelTikTokWontBindAgain() {
+        // Drawn with handles off, so nothing about uid 42 is known before the flip.
+        bindName(by("42", "bob", null), "Bobby", nameIn(0xFF8A8B91));
+        Remark reply = by("9", "replier", null);
+        reply.replyToUserId = "42";
+        TextView label = new TextView(context);
+        label.setText(CommenterDetails.replyTargetName(reply, "Bobby"));
+        CommenterDetails.onReplyLabel(reply, label);
+        assertEquals("Bobby", label.getText().toString());
+
+        // The name above it is redone first and learns the handle the label is named from.
+        flip(true);
+        assertEquals("@bob", label.getText().toString());
+
+        flip(false);
+        assertEquals("Bobby", label.getText().toString());
+
+        // A label whose write didn't go through the swap isn't one this can redo.
+        TextView unswapped = new TextView(context);
+        unswapped.setText("Bobby");
+        CommenterDetails.onReplyLabel(reply, unswapped);
+        flip(true);
+        assertEquals("Bobby", unswapped.getText().toString());
+        assertEquals("@bob", label.getText().toString());
+    }
+
     /**
      * TikTok's helper with a translucent color and emoji in the name: the view takes the opaque
      * color, and the translucent one goes on as spans over the text before the emoji.
