@@ -1,9 +1,11 @@
 ## Unreleased
 
 * **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, il disco musicale non copre più la fine della barra di avanzamento né il tempo accanto (#153).
+
 * **TikTok:** Il tema scuro AMOLED ora rende nere anche le schede dell'elenco Impostazioni e privacy (#152).
 
 * **TikTok:** Nuovo interruttore Mostra le opzioni di traduzione nelle impostazioni della lingua in Commenti: la pagina Lingua di TikTok mostra di nuovo le righe di traduzione sugli account che lì vedevano solo Lingua dell'app (#143).
+
 * **TikTok:** Hushfeed ora applica le patch anche a PineDrama 47.1.4, l'app di serie di TikTok. Lì funzionano 90 patch, e Morphe Manager propone solo quelle (#156).
 
 * **TikTok:** Il pulsante Registra della LIVE si sposta in basso quando il pannello Esplora di TikTok si apre sopra la stanza, e torna al suo posto quando si chiude (#37).

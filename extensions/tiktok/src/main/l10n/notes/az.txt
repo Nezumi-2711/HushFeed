@@ -1,9 +1,11 @@
 ## Unreleased
 
 * **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda musiqi diski artıq irəliləmə zolağının sonunu və yanındakı vaxtı örtmür (#153).
+
 * **TikTok:** AMOLED qaranlıq mövzu indi Settings and privacy siyahısının özündəki kartları da qara edir (#152).
 
 * **TikTok:** Şərhlər altında yeni Dil ayarlarında tərcümə seçimlərini göstər açarı: TikTok-un öz Language səhifəsi orada yalnız App language görən hesablarda tərcümə sətirlərini yenidən göstərir (#143).
+
 * **TikTok:** Hushfeed artıq TikTok-un drama tətbiqi PineDrama 47.1.4-ü də yamaqlayır. Orada 90 yamaq işləyir və Morphe Manager yalnız onları təklif edir (#156).
 
 * **TikTok:** TikTok-un Kəşf et paneli otağın üstündə açılanda LIVE Yazmaq düyməsi aşağı çəkilir, panel bağlananda yerinə qayıdır (#37).
