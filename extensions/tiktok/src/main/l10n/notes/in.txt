@@ -1,6 +1,7 @@
 ## Unreleased
 
 * **TikTok:** Tombol Rekam LIVE turun agar tidak menghalangi saat panel Jelajahi TikTok terbuka di atas ruangan, lalu kembali saat panel ditutup (#37).
+
 * **TikTok:** Sakelar baru Bilah bawah mengambang di bawah Bilah bawah transparan: tab berada di atas kapsul gelap yang membulat dan transparan di atas video (#124).
 
 * **TikTok:** Sakelar baru Bilah status transparan di Layar feed: video di feed utama menjangkau tepi atas dengan jam di atasnya, tab di atas tetap di tempatnya (#145).
@@ -10,7 +11,7 @@
 * **TikTok:** Sakelar baru Sembunyikan tayangan profil dan Sembunyikan Tambah teman di Profil: dua tombol itu hilang dari bagian atas profilmu, menu tetap ada (#158).
 
 * **TikTok:** Jika TikTok tertutup di tengah rekaman LIVE (diusap keluar atau dihentikan ponsel), saat dibuka lagi bagian yang terekam disimpan dan kamu diberi tahu, bukan dibiarkan di cache (#37).
-* **TikTok:** Sakelar baru Sembunyikan tayangan profil dan Sembunyikan Tambah teman di Profil: dua tombol itu hilang dari bagian atas profilmu, menu tetap ada (#158).
+
 * **TikTok:** Sakelar baru Juga di video yang dibuka di bawah Sembunyikan tombol cari di feed: bilah pencarian di atas video yang dibuka ikut hilang, Kembali tetap ada (#158).
 
 * **TikTok:** Sakelar baru Keterangan dengan ketebalan normal di Teks: teks ucapan dengan ketebalan biasa, bukan huruf tebal TikTok (#158).

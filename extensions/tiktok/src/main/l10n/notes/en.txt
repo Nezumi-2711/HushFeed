@@ -1,6 +1,7 @@
 ## Unreleased
 
 * **TikTok:** The LIVE Record button moves down out of the way when TikTok's Discover panel opens over the room, and goes back when it closes (#37).
+
 * **TikTok:** New Floating bottom bar switch under See-through bottom bar: the tabs sit on a rounded, see-through dark pill over the video (#124).
 
 * **TikTok:** New See-through status bar switch on Feed screen: the main feed's video reaches the top edge with the clock over it, the top tabs stay put (#145).
@@ -10,7 +11,7 @@
 * **TikTok:** New Hide profile views and Hide Add friends switches under Profile: those two buttons leave the top of your profile, the menu stays (#158).
 
 * **TikTok:** If TikTok closes in the middle of a LIVE recording (swiped away, or stopped by the phone), the next start saves what was recorded and tells you, instead of leaving it in the cache (#37).
-* **TikTok:** New Hide profile views and Hide Add friends switches under Profile: those two buttons leave the top of your profile, the menu stays (#158).
+
 * **TikTok:** New Also on opened videos switch under Hide the search button on the feed: the search bar at the top of an opened video goes too, Back stays (#158).
 
 * **TikTok:** New Normal-weight captions switch under Captions: spoken captions at regular weight instead of TikTok's bold (#158).
