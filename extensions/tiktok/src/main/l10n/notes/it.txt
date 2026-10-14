@@ -10,6 +10,8 @@
 
 * **TikTok:** Con Mostra il LIVE sotto la barra di stato attivo, i pannelli sopra la prima stanza del feed LIVE ora iniziano sotto l'orologio e non più dietro la barra di stato (#137).
 
+* **TikTok:** Un LIVE nel feed Per te non mostra più la riga Service+ di un LIVE che hai già superato (#94).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).

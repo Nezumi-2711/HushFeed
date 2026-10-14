@@ -18,6 +18,9 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.robolectric.util.ReflectionHelpers.ClassParameter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 @RunWith(RobolectricTestRunner.class)
@@ -166,6 +169,52 @@ public class LiveControlsTest {
     private static String shown(long count, String tiktokText) {
         LiveControls.noteViewerCount(count);
         return LiveControls.viewerCountText(tiktokText);
+    }
+
+    /**
+     * #94: the For You LIVE preview's Service+ row showed under the next LIVE's name. A row still
+     * showing as it's bound to a LIVE without a Service+ item is hidden first; a row TikTok has
+     * hidden, or a LIVE that has its own Service+ item, is left to TikTok, and so is everything
+     * while Hushfeed is paused.
+     */
+    @Test public void aServicePlusRowLeftFromTheLastLiveIsHidden() {
+        Row showing = new Row(true);
+        assertTrue("a LIVE with no Service+ preview kept the last row", LiveControls.hideStaleServicePlus(showing, null));
+        assertTrue("a LIVE with no Service+ items kept the last row",
+                LiveControls.hideStaleServicePlus(showing, new Preview(null)));
+        assertTrue(LiveControls.hideStaleServicePlus(showing, new Preview(new ArrayList<>())));
+        assertFalse("a LIVE with a Service+ item of its own lost it",
+                LiveControls.hideStaleServicePlus(showing, new Preview(Collections.singletonList(new Object()))));
+        assertFalse("a hidden row was hidden again", LiveControls.hideStaleServicePlus(new Row(false), null));
+        assertFalse(LiveControls.hideStaleServicePlus(null, null));
+        assertFalse("a row without isShowing was hidden", LiveControls.hideStaleServicePlus(new Object(), null));
+
+        setPaused(true);
+        assertFalse("paused, the row was hidden", LiveControls.hideStaleServicePlus(showing, null));
+    }
+
+    /** Stands in for TikTok's Widget: only {@code isShowing} is read. */
+    @SuppressWarnings("unused")
+    private static final class Row {
+        private final boolean showing;
+
+        Row(boolean showing) {
+            this.showing = showing;
+        }
+
+        public boolean isShowing() {
+            return showing;
+        }
+    }
+
+    /** Stands in for SMBLivePreview: only {@code previewItem} is read. */
+    @SuppressWarnings("unused")
+    private static final class Preview {
+        private final List<Object> previewItem;
+
+        Preview(List<Object> items) {
+            this.previewItem = items;
+        }
     }
 
     private static void setPaused(boolean value) {

@@ -5,10 +5,12 @@
 package app.morphe.patches.tiktok.interaction.live
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
+import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.shared.compat.AppCompatibilities
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
@@ -16,6 +18,7 @@ import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.patches.tiktok.shared.guardAtEntry
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
+import app.morphe.util.addInstructionsWithLabels
 import app.morphe.util.findMutableMethodOf
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -84,6 +87,83 @@ internal object LiveResolutionPersistFingerprint : Fingerprint(
     returnType = "Z",
     parameters = listOf(),
 )
+
+/** The For You LIVE preview's Service+ row ("Service+ | Ask me anything!"), real-named on 47.1.4. */
+internal const val SERVICE_PLUS_ROW =
+    "Lcom/ss/android/ugc/aweme/feed/adapter/widget/serviceplus/PreviewServicePlusBottomInfoWidget;"
+internal const val LIVE_ROOM_STRUCT = "Lcom/ss/android/ugc/aweme/feed/model/live/LiveRoomStruct;"
+internal const val SMB_LIVE_PREVIEW = "Lcom/ss/android/ugc/aweme/feed/model/live/SMBLivePreview;"
+private const val BASE_WIDGET = "Lcom/bytedance/android/widget/Widget;"
+
+/**
+ * Where the Service+ row takes a LIVE (#94). The row's bind ([method], f0 on 47.1.4) reads the
+ * room's smbLivePreview, keeps it in a field of its own ([store] is that iput-object, [preview]
+ * the register it stores and [row] the row itself) and shows it with the next call. That show
+ * returns without hiding the row when the room has no Service+ item, and only the row's [hide]
+ * (V0, run as a preview leaves the screen) takes it away, so a preview bound to the next LIVE
+ * without leaving first kept the last LIVE's row.
+ */
+internal data class ServicePlusBind(
+    val method: Method,
+    val store: Int,
+    val preview: Int,
+    val row: Int,
+    val hide: Method,
+)
+
+private fun Method.references() = implementation?.instructions?.toList().orEmpty()
+    .mapNotNull { (it as? ReferenceInstruction)?.reference }
+
+private fun Method.calls(owner: String, name: String) = references()
+    .any { it is MethodReference && it.definingClass == owner && it.name == name }
+
+/**
+ * The row's bind and hide, matched by shape. Throws when either isn't there exactly once, or the
+ * bind no longer stores the room's Service+ preview right before a plain show and a return: the
+ * hook writes the preview's register after the store, which is only safe when nothing reads it
+ * again.
+ */
+internal fun servicePlusBind(row: ClassDef): ServicePlusBind {
+    val instance = row.methods.filter {
+        it.implementation != null && !AccessFlags.STATIC.isSet(it.accessFlags) &&
+            it.parameterTypes.isEmpty() && it.returnType == "V"
+    }
+    val binds = instance.filter { method ->
+        method.references().any { it is FieldReference && it.definingClass == LIVE_ROOM_STRUCT && it.name == "smbLivePreview" }
+    }
+    val bind = binds.singleOrNull()
+        ?: throw PatchException("LIVE controls: expected one Service+ row bind, found ${binds.map { it.name }}")
+    val instructions = bind.implementation!!.instructions.toList()
+    val stores = instructions.indices.filter { index ->
+        val field = (instructions[index] as? ReferenceInstruction)?.reference as? FieldReference
+        instructions[index].opcode == Opcode.IPUT_OBJECT && field != null &&
+            field.definingClass == row.type && field.type == SMB_LIVE_PREVIEW
+    }
+    val store = stores.singleOrNull()
+        ?: throw PatchException("LIVE controls: expected one Service+ preview store in ${bind.name}, found ${stores.size}")
+    val put = instructions[store] as TwoRegisterInstruction
+    val self = bind.implementation!!.registerCount - 1
+    val show = instructions.getOrNull(store + 1)
+    val showCall = (show as? ReferenceInstruction)?.reference as? MethodReference
+    val plainShow = show is FiveRegisterInstruction && showCall != null &&
+        show.opcode == Opcode.INVOKE_VIRTUAL && showCall.definingClass == row.type &&
+        showCall.parameterTypes.isEmpty() && showCall.returnType == "V" &&
+        show.registerCount == 1 && show.registerC == self
+    if (put.registerB != self || put.registerA == self || !plainShow ||
+        instructions.getOrNull(store + 2)?.opcode != Opcode.RETURN_VOID
+    ) {
+        throw PatchException("LIVE controls: the Service+ row bind ${bind.name} has an unexpected shape")
+    }
+    // Called with invoke-virtual, so a private one wouldn't verify.
+    val hides = instance.filter { method ->
+        method !== bind && !AccessFlags.PRIVATE.isSet(method.accessFlags) &&
+            method.calls("Landroid/os/Handler;", "removeCallbacksAndMessages") &&
+            method.calls(BASE_WIDGET, "hide") && !method.calls(BASE_WIDGET, "show")
+    }
+    val hide = hides.singleOrNull()
+        ?: throw PatchException("LIVE controls: expected one Service+ row hide, found ${hides.map { it.name }}")
+    return ServicePlusBind(bind, store, put.registerA, self, hide)
+}
 
 /** The LIVE room's top-right viewer count, real-named on 47.0.3, 47.1.3 and 47.1.4. */
 internal const val ONLINE_AUDIENCE_RANK_WIDGET = "Lcom/bytedance/android/livesdk/rank/impl/widget/OnlineAudienceRankWidget;"
@@ -190,7 +270,8 @@ val liveControlsPatch = bytecodePatch(
     name = "LIVE controls",
     description = "Stops a LIVE in the feed from opening by itself after a countdown, can " +
         "show a LIVE's exact viewer count instead of a rounded one, and can offer a quality " +
-        "choice in more LIVE rooms. Starts off. Turn it on in Hushfeed settings > Playback.",
+        "choice in more LIVE rooms. Starts off. Turn it on in Hushfeed settings > Playback. " +
+        "It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it.",
 ) {
     category("Playback")
     dependsOn(settingsPatch, sharedExtensionPatch)
@@ -242,6 +323,26 @@ val liveControlsPatch = bytecodePatch(
                 throw PatchException("LIVE controls: expected one viewer count call in $type, found ${found.size}")
             }
             hookViewerCounts(type, found)
+        }
+
+        // A LIVE preview bound to a LIVE with no Service+ item runs the row's own hide first
+        // when it's still showing the last LIVE's row (#94). Matched and checked in full before
+        // anything is written.
+        val serviceRow = classDefByOrNull(SERVICE_PLUS_ROW)
+            ?: throw PatchException("LIVE controls: $SERVICE_PLUS_ROW not found")
+        val serviceBind = servicePlusBind(serviceRow)
+        mutableClassDefBy(SERVICE_PLUS_ROW).findMutableMethodOf(serviceBind.method).apply {
+            val at = serviceBind.store + 1
+            addInstructionsWithLabels(
+                at,
+                """
+                    invoke-static {v${serviceBind.row}, v${serviceBind.preview}}, $EXTENSION->hideStaleServicePlus(Ljava/lang/Object;Ljava/lang/Object;)Z
+                    move-result v${serviceBind.preview}
+                    if-eqz v${serviceBind.preview}, :morphe_keep_service_plus_row
+                    invoke-virtual {v${serviceBind.row}}, $SERVICE_PLUS_ROW->${serviceBind.hide.name}()V
+                """,
+                ExternalLabel("morphe_keep_service_plus_row", getInstruction(at)),
+            )
         }
     }
 }

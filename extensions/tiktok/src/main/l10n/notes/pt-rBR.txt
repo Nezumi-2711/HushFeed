@@ -10,6 +10,8 @@
 
 * **TikTok:** Com Mostrar a LIVE sob a barra de status ligado, os painéis acima da primeira sala do feed de LIVE agora começam abaixo do relógio, e não mais atrás da barra de status (#137).
 
+* **TikTok:** Uma LIVE no feed Para você não mostra mais a linha Service+ de uma LIVE pela qual você já passou (#94).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).

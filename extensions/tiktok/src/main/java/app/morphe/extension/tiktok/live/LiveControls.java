@@ -4,10 +4,14 @@
  */
 package app.morphe.extension.tiktok.live;
 
+import app.morphe.extension.shared.Logger;
+import app.morphe.extension.shared.settings.Setting;
+import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 
 import java.text.NumberFormat;
+import java.util.List;
 
 /** The LIVE controls patch's switches, each read at the call it guards. */
 @SuppressWarnings("unused")
@@ -33,6 +37,29 @@ public final class LiveControls {
      */
     public static boolean offerQualityEverywhere() {
         return SettingsStatus.liveControlsEnabled && Settings.OFFER_LIVE_QUALITY.get();
+    }
+
+    /**
+     * Called as the For You LIVE preview's Service+ row ("Service+ | Ask me anything!") is bound to
+     * a LIVE, with the row and that LIVE's Service+ preview. True when the row still shows and the
+     * LIVE has no Service+ item, and the patch then runs the row's own hide before its show.
+     * TikTok's show returns without hiding when there's nothing to show, and only the hide a
+     * preview runs as it leaves the screen took the row away, so a preview bound to the next LIVE
+     * without leaving first kept the last LIVE's row under the next LIVE's name (#94). Paused, it
+     * answers false and the row is TikTok's again.
+     */
+    public static boolean hideStaleServicePlus(Object row, Object preview) {
+        if (row == null || Setting.isPaused()) return false;
+        try {
+            if (!Boolean.TRUE.equals(Reflect.invoke(row, "isShowing"))) return false;
+            Object items = preview == null ? null : Reflect.readField(preview, "previewItem");
+            if (items instanceof List && !((List<?>) items).isEmpty()) return false;
+            Logger.printDebug(() -> "LIVE preview: hid a Service+ row left from the last LIVE");
+            return true;
+        } catch (Throwable failure) {
+            Logger.printException(() -> "Could not check the LIVE preview's Service+ row", failure);
+            return false;
+        }
     }
 
     private static final long NONE = -1;
