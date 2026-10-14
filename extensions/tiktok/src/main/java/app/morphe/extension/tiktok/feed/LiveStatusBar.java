@@ -706,6 +706,12 @@ public final class LiveStatusBar {
          * sat under TikTok's cover that's hidden now, and its top row was hard to reach (#137).
          */
         private final WeakHashMap<View, int[]> loweredPages = new WeakHashMap<>();
+        /**
+         * Pages without a stream that were left where TikTok put them, each logged once with why.
+         * A phone where the Discover panel still reached under the clock logged no padding at all,
+         * and the S22 account never gets that panel (#137).
+         */
+        private final WeakHashMap<View, Boolean> pagesLeftAlone = new WeakHashMap<>();
         private int searches, relifts, coverSearches;
         /**
          * Shade searches spent on each layer held lower. One budget for the whole visit ran out
@@ -856,10 +862,15 @@ public final class LiveStatusBar {
                 forgetPage(page);
                 liftAbove(shown, content, bars);
             }
-            if (barHidden || fought || stripHeight == 0) return;
+            if (barHidden || fought) return;
             for (int i = 0; i < rooms.getChildCount(); i++) {
                 View page = rooms.getChildAt(i);
-                if (page.findViewById(videoId) == null) keepPageBelowBar(page, i, bars);
+                if (page.findViewById(videoId) != null) continue;
+                if (stripHeight > 0) {
+                    keepPageBelowBar(page, i, bars);
+                } else {
+                    leftAlone(page, i, "no room's strip taken yet", bars);
+                }
             }
         }
 
@@ -885,7 +896,10 @@ public final class LiveStatusBar {
         private void keepPageBelowBar(View page, int index, int[] bars) {
             int[] held = loweredPages.get(page);
             if (held == null) {
-                if (isBar(page.getPaddingTop(), bars) || isBar(topMarginOf(page), bars)) return;
+                if (isBar(page.getPaddingTop(), bars) || isBar(topMarginOf(page), bars)) {
+                    leftAlone(page, index, "already a bar lower", bars);
+                    return;
+                }
                 held = new int[] {page.getPaddingTop(), stripHeight};
                 loweredPages.put(page, held);
                 if (loweredPages.size() == 1) HookStatus.bound(HOOK_FAMILY, "LIVE feed panel kept below the bar");
@@ -899,6 +913,18 @@ public final class LiveStatusBar {
             }
             page.setPadding(page.getPaddingLeft(), held[0] + held[1], page.getPaddingRight(), page.getPaddingBottom());
             relaid = true;
+        }
+
+        /** Logs, once per page, a page without a stream that stays where TikTok put it, and why. */
+        private void leftAlone(View page, int index, String why, int[] bars) {
+            if (pagesLeftAlone.put(page, Boolean.TRUE) != null) return;
+            int padding = page.getPaddingTop(), margin = topMarginOf(page);
+            int[] screen = new int[2];
+            page.getLocationOnScreen(screen);
+            Logger.printInfo(() -> "LIVE under the status bar: left room pager page " + index + " ("
+                    + page.getClass().getName() + ", no stream, " + page.getWidth() + "x" + page.getHeight()
+                    + " at y " + screen[1] + ") as it was, " + why + ": padding " + padding + ", margin "
+                    + margin + ", bars " + java.util.Arrays.toString(bars));
         }
 
         /**
