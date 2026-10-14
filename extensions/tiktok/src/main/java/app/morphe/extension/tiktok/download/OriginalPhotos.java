@@ -241,16 +241,20 @@ public final class OriginalPhotos {
     /**
      * Retry on a save's result: queues the photos that didn't land, and nothing else. Refused
      * with a word when the account changed since the save, the save is too old for TikTok's
-     * addresses to still be good, or this Retry already ran.
+     * addresses to still be good, or this Retry already ran. A tap that queues nothing, because
+     * the same post is still saving or the media queue said no, leaves the Retry for later.
      */
     static void retry(Retry failed) {
+        if (ACTIVE.contains(failed.id)) {
+            Utils.showToastShort(MediaJobScheduler.busyMessage("photos " + failed.id));
+            return;
+        }
         if (!failed.stillUsable()) {
             Utils.showToastLong(L10n.t("Those photos can't be tried again now. Save the post again to get the rest."));
             return;
         }
         Context context = Utils.getContext();
-        if (context == null) return;
-        queue(context.getApplicationContext(), failed);
+        if (context == null || !queue(context.getApplicationContext(), failed)) failed.giveBack();
     }
 
     /** For the tests: stands in for fetching, converting and publishing one photo. */
@@ -310,6 +314,11 @@ public final class OriginalPhotos {
             if (SystemClock.elapsedRealtime() - madeAt > RETRY_WINDOW_MS) return false;
             if (!Objects.equals(account, SignedInUser.id())) return false;
             return used.compareAndSet(false, true);
+        }
+
+        /** Undoes {@link #stillUsable} when the run it allowed never started. */
+        void giveBack() {
+            used.set(false);
         }
     }
 
