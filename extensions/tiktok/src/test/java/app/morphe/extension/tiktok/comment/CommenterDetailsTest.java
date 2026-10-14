@@ -5,7 +5,11 @@
 package app.morphe.extension.tiktok.comment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.widget.TextView;
@@ -80,6 +84,7 @@ public class CommenterDetailsTest {
     public void tearDown() {
         Settings.SHOW_COMMENTER_HANDLE.save(false);
         Settings.SHOW_COMMENTER_REGION.save(false);
+        Settings.COLOR_COMMENTER_NAMES.save(false);
         SettingsStatus.commenterDetailsEnabled = patched;
         CommenterDetails.forget();
     }
@@ -116,6 +121,69 @@ public class CommenterDetailsTest {
 
         assertEquals("2d ago", time.getText().toString());
         assertEquals(0, time.writes);
+    }
+
+    /** A name view as TikTok's helper leaves it: its theme color, then the name. */
+    private TextView nameIn(int tikTokColor) {
+        TextView view = new TextView(context);
+        view.setTextColor(tikTokColor);
+        view.setText("River");
+        return view;
+    }
+
+    @Test
+    public void eachAccountKeepsOneNameColorAndTheSwitchOffGivesTikToksBack() {
+        int lightSheet = 0xFF161823;
+        TextView name = nameIn(lightSheet);
+        CommenterDetails.onCommenterName(by("1", "river.otter", null), name);
+        assertEquals("the switch starts off", lightSheet, name.getCurrentTextColor());
+
+        Settings.COLOR_COMMENTER_NAMES.save(true);
+        CommenterDetails.onCommenterName(by("1", "river.otter", null), name);
+        int river = name.getCurrentTextColor();
+        assertNotEquals(lightSheet, river);
+        assertEquals(river, (int) CommenterDetails.nameColor(by("1", "other.handle", null), lightSheet));
+        // The handle stands in for a payload without a uid, and nothing at all leaves TikTok's color.
+        assertEquals(CommenterDetails.nameColor(new Remark(account(null, "sam", "Sam", null)), lightSheet),
+                CommenterDetails.nameColor(new Remark(account("", "sam", "Sam", null)), lightSheet));
+        assertNull(CommenterDetails.nameColor(new Remark(account(null, null, "Sam", null)), lightSheet));
+        assertNull(CommenterDetails.nameColor(new Remark(null), lightSheet));
+
+        // Eight hues, so twenty accounts can't all land on one.
+        java.util.Set<Integer> hues = new java.util.HashSet<>();
+        for (int uid = 0; uid < 20; uid++) {
+            hues.add(CommenterDetails.nameColor(by(String.valueOf(uid), "a" + uid, null), lightSheet));
+        }
+        assertTrue(hues.size() > 3);
+
+        // TikTok's dark sheet writes light names: the same account takes the lighter shade there.
+        int darkSheet = 0xFFFFFFFF;
+        int riverOnDark = CommenterDetails.nameColor(by("1", "river.otter", null), darkSheet);
+        assertNotEquals(river, riverOnDark);
+        assertTrue("a dark sheet got a dark name", android.graphics.Color.red(riverOnDark)
+                + android.graphics.Color.green(riverOnDark) + android.graphics.Color.blue(riverOnDark) > 3 * 128);
+
+        // A recycled cell whose bind wrote no color of its own still has TikTok's under ours.
+        CommenterDetails.onCommenterName(by("2", "bob", null), name);
+        Settings.COLOR_COMMENTER_NAMES.save(false);
+        CommenterDetails.onCommenterName(by("2", "bob", null), name);
+        assertEquals(lightSheet, name.getCurrentTextColor());
+        name.setTextColor(darkSheet);
+        CommenterDetails.onCommenterName(by("2", "bob", null), name);
+        assertEquals("a color TikTok wrote was taken back", darkSheet, name.getCurrentTextColor());
+    }
+
+    @Test
+    public void aNameColorLeavesTheNameTextAsAString() {
+        // TikTok's helper casts the name to a String on one path, so the color never rides in it.
+        Settings.COLOR_COMMENTER_NAMES.save(true);
+        CharSequence name = "River";
+        assertSame(name, CommenterDetails.commenterName(by("1", "river.otter", null), name));
+        TextView view = nameIn(0xFF161823);
+        CommenterDetails.onCommenterName(by("1", "river.otter", null), view);
+        assertEquals("River", view.getText().toString());
+        assertFalse(view.getText() instanceof android.text.Spanned);
+        CommenterDetails.onCommenterName(by("1", "river.otter", null), null);
     }
 
     @Test

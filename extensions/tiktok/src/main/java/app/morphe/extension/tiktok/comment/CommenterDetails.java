@@ -7,6 +7,7 @@
  */
 package app.morphe.extension.tiktok.comment;
 
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -22,8 +23,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * A commenter's @username in place of the display name they chose, and the country their
- * account is set to after the comment's time.
+ * A commenter's @username in place of the display name they chose, the country their account
+ * is set to after the comment's time, and a color of the account's own for the name.
  *
  * <p>Every call comes from the comment cell's own bind, with the comment it's drawing, so
  * nothing here asks which screen a name belongs to. TikTok writes the name, the reply label and
@@ -51,6 +52,24 @@ public final class CommenterDetails {
 
     /** Per time view: exactly what was written over it, and the time it was built from. */
     private static final Map<TextView, String[]> STAMPED = new WeakHashMap<>();
+
+    /**
+     * The name colors, one hue per row: the darker shade for TikTok's light comment sheet and the
+     * lighter one for its dark sheet, so an account keeps its hue in either theme.
+     */
+    private static final int[][] NAME_COLORS = {
+            {0xFFC62828, 0xFFEF9A9A}, // red
+            {0xFFD84315, 0xFFFFAB91}, // deep orange
+            {0xFF6A1B9A, 0xFFCE93D8}, // purple
+            {0xFF2E7D32, 0xFFA5D6A7}, // green
+            {0xFF00838F, 0xFF80DEEA}, // cyan
+            {0xFF1565C0, 0xFF90CAF9}, // blue
+            {0xFFAD1457, 0xFFF48FB1}, // pink
+            {0xFF4527A0, 0xFFB39DDB}, // deep purple
+    };
+
+    /** Per name view: the color written over it, and TikTok's color from under it. */
+    private static final Map<TextView, int[]> COLORED = new WeakHashMap<>();
 
     private CommenterDetails() {
     }
@@ -147,6 +166,66 @@ public final class CommenterDetails {
         }
     }
 
+    /**
+     * Called right after the cell writes the commenter's name on {@code name}. Colors it by the
+     * account, or puts TikTok's color back with the switch off. The color goes on the view rather
+     * than in the name, because one of TikTok's paths casts the name to a String. That helper
+     * sets the color on most binds but leaves the old one when its theme color is missing, so
+     * TikTok's color is kept per view instead of read back from a view of ours.
+     */
+    public static void onCommenterName(Object comment, TextView name) {
+        HookStatus.bound(FAMILY, "name color");
+        if (name == null) {
+            return;
+        }
+        try {
+            int current = name.getCurrentTextColor();
+            int[] colored = COLORED.get(name);
+            // Ours still on the view means TikTok wrote no color of its own this time.
+            int tikTok = colored != null && colored[0] == current ? colored[1] : current;
+            Integer ours = colorsOn() ? nameColor(comment, tikTok) : null;
+            if (ours == null) {
+                COLORED.remove(name);
+                if (tikTok != current) {
+                    name.setTextColor(tikTok);
+                }
+                return;
+            }
+            COLORED.put(name, new int[]{ours, tikTok});
+            if (ours != current) {
+                name.setTextColor(ours);
+            }
+        } catch (Throwable ex) {
+            Logger.printException(() -> "Could not color the commenter's name", ex);
+        }
+    }
+
+    /**
+     * The account's color, by its uid or, when the payload has none, its handle. TikTok's own
+     * name color says which sheet it's on: light text means the dark one. Null without either key.
+     */
+    static Integer nameColor(Object comment, int tikTok) {
+        Object user = comment == null ? null : Reflect.property(comment, "getUser", "user");
+        if (user == null) {
+            return null;
+        }
+        String key = Reflect.string(user, "getUid", "uid");
+        if (key == null || key.isEmpty()) {
+            key = handleOf(user);
+        }
+        if (key == null) {
+            return null;
+        }
+        int[] hue = NAME_COLORS[Math.floorMod(key.hashCode(), NAME_COLORS.length)];
+        double luminance = (0.299 * Color.red(tikTok) + 0.587 * Color.green(tikTok)
+                + 0.114 * Color.blue(tikTok)) / 255;
+        return hue[luminance > 0.5 ? 1 : 0];
+    }
+
+    private static boolean colorsOn() {
+        return SettingsStatus.commenterDetailsEnabled && Settings.COLOR_COMMENTER_NAMES.get();
+    }
+
     private static boolean handlesOn() {
         return SettingsStatus.commenterDetailsEnabled && Settings.SHOW_COMMENTER_HANDLE.get();
     }
@@ -208,6 +287,7 @@ public final class CommenterDetails {
             HANDLE_BY_UID.clear();
         }
         STAMPED.clear();
+        COLORED.clear();
         AuthorRegion.forgetSeenRegions();
     }
 }

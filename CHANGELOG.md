@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A new Color commenter names switch under Hushfeed settings > Comments gives each commenter's name a color of its own. An account gets the same one every time it shows up, a darker shade on TikTok's light comment panel and a lighter one on its dark panel, so a long thread is easier to follow. It starts off.
+
 * **TikTok:** Hide videos you have already seen works on the Following tab too. On TikTok 47.1.4 that tab only meets the feed rules where TikTok reads its list, and the switch was left off there. A video you watch on the tab stays put while more load under it, and one you saw earlier is taken out when it turns up.
 
 * **TikTok:** A video you're watching on For You or Following stays put when TikTok reads the list again. It used to vanish from under you once it got older than your Maximum post age, once Hide videos you have already seen counted it as watched, or when its counts moved past a range or views per like limit you set. Videos that come in after it still go through every rule. Turning a rule on or changing one checks them all again, though Hide videos you have already seen still leaves alone the ones you watched in that list.

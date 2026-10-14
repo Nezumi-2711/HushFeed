@@ -90,9 +90,9 @@ internal object CommentTimeWriteFingerprint : Fingerprint(
 @Suppress("unused")
 val commenterDetailsPatch = bytecodePatch(
     name = "Show commenter handle and region",
-    description = "Shows a commenter's @username in place of their display name, and the country " +
-        "their account is set to after the comment's time. Both start off. Turn them on in " +
-        "Hushfeed settings > Comments.",
+    description = "Shows a commenter's @username in place of their display name and the country " +
+        "their account is set to after the comment's time. It can also give each commenter's name " +
+        "a color of its own. Each starts off. Turn them on in Hushfeed settings > Comments.",
 ) {
     category("Comments")
     dependsOn(settingsPatch, sharedExtensionPatch)
@@ -109,6 +109,18 @@ val commenterDetailsPatch = bytecodePatch(
         // Every local is free at index 0, so the comment can be read into v0.
         val getter = CommentNameWriteFingerprint.originalClassDef.commentGetter()
         CommentNameWriteFingerprint.method.apply {
+            // The name's color: right after TikTok's write, which set TikTok's own color. Put in
+            // before the swap below, so its index still holds.
+            val color = nameColorSite()
+            addInstructions(
+                color.writeIndex + 1,
+                """
+                    invoke-virtual {p0}, $COMMENT_CELL->$getter()$COMMENT_MODEL
+                    move-result-object v${color.commentRegister}
+                    invoke-static {v${color.commentRegister}, v${color.viewRegister}}, $COMMENTER_DETAILS->onCommenterName(Ljava/lang/Object;$TEXT_VIEW)V
+                """,
+            )
+
             requireLocals(WHAT, 1)
             val readComment = callThroughLocals(WHAT, "invoke-virtual", "$COMMENT_CELL->$getter()$COMMENT_MODEL", objectIn("p0"))
             val swapName = callThroughLocals(
@@ -177,6 +189,12 @@ internal data class ReplyLabelSite(val callIndex: Int, val textRegister: Int)
  */
 internal data class TimeSite(val writeIndex: Int, val commentRegister: Int, val viewRegister: Int)
 
+/**
+ * Where the name's color goes on: right after [writeIndex], the setter's one write, on
+ * [viewRegister], with [commentRegister] a local free to read the comment into.
+ */
+internal data class NameColorSite(val writeIndex: Int, val viewRegister: Int, val commentRegister: Int)
+
 private fun Instruction.calls(owner: String, name: String) =
     getReference<MethodReference>()?.let { it.definingClass == owner && it.name == name } == true
 
@@ -213,6 +231,34 @@ internal fun Method.isCommentNameWrite(): Boolean {
     val helpers = body.instructions.filter { it.isColoredTextWrite() }
     return helpers.size == 1 && helpers.single().namedRegisters().getOrNull(3) == name &&
         body.instructions.none { writes(it, name) }
+}
+
+/**
+ * The name setter's one colored text write. The hook goes right after it, so TikTok's color is
+ * on the view to read, and the write has to fall straight through to the return that ends the
+ * method: past it every local but the view's is free, and the comment is read into the lowest.
+ */
+internal fun Method.nameColorSite(): NameColorSite {
+    val body = implementation ?: throw PatchException("$WHAT: the name setter has no code.")
+    val instructions = body.instructions.toList()
+    val writes = instructions.indices.filter { instructions[it].isColoredTextWrite() }
+    val call = writes.singleOrNull()
+        ?: throw PatchException("$WHAT: expected one name write, found ${writes.size}.")
+    val view = instructions[call].namedRegisters().getOrNull(2)
+        ?: throw PatchException("$WHAT: the name write names no view.")
+    if (ControlFlow.of(this).normal[call] != listOf(call + 1) ||
+        instructions.getOrNull(call + 1)?.opcode != Opcode.RETURN_VOID
+    ) {
+        throw PatchException("$WHAT: the name write doesn't fall straight through to the setter's return.")
+    }
+    // An instance method taking one CharSequence: this and the name sit above the locals.
+    val locals = body.registerCount - (parameterTypes.size + 1)
+    val comment = (0 until locals).firstOrNull { it != view }
+        ?: throw PatchException("$WHAT: the name setter has no local to read the comment into.")
+    if (view > 15 || comment > 15 || locals > 15) {
+        throw PatchException("$WHAT: v$view, v$comment or the cell doesn't fit a short invoke.")
+    }
+    return NameColorSite(call, view, comment)
 }
 
 /**
