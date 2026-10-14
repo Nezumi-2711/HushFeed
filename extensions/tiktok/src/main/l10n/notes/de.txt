@@ -3,6 +3,8 @@
 * **TikTok:** Der LIVE-Aufnahmeknopf rutscht nach unten aus dem Weg, wenn TikToks Entdecken-Leiste über dem Raum aufgeht, und kehrt zurück, wenn sie zugeht (#37).
 
 * **TikTok:** Wenn TikTok mitten in einer LIVE-Aufnahme geschlossen wird (weggewischt oder vom Handy beendet), speichert der nächste Start das Aufgenommene und sagt dir Bescheid, statt es im Cache liegen zu lassen (#37).
+* **TikTok:** Neue Schalter Profilaufrufe ausblenden und „Freunde hinzufügen“ ausblenden unter Profil: Diese beiden Schaltflächen verschwinden oben aus deinem Profil, das Menü bleibt (#158).
+* **TikTok:** Neuer Schalter Auch bei geöffneten Videos unter Suchschaltfläche im Feed ausblenden: Auch die Suchleiste oben in einem geöffneten Video verschwindet, Zurück bleibt (#158).
 
 * **TikTok:** Neuer Schalter Untertitel in normaler Stärke unter Untertitel: gesprochene Untertitel in normaler Schriftstärke statt in TikToks Fettschrift (#158).
 

@@ -365,6 +365,15 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "Hide the magnifying glass at the top right of the feed. Search in Inbox and suggestions above comments stay unchanged.",
                     Settings.HIDE_FEED_SEARCH_BUTTON
             ));
+            // The overlay hider's layout pass takes the box away, so the row needs that patch too.
+            if (SettingsStatus.videoOverlaysEnabled) {
+                addPreference(new TogglePreference(
+                        context,
+                        "Also on opened videos",
+                        "Hide the search bar at the top of videos you open from search, a profile or your watch history. The Back button stays.",
+                        Settings.HIDE_OPENED_VIDEO_SEARCH
+                ));
+            }
         }
         if (SettingsStatus.videoOverlaysEnabled) {
             addPreference(new TogglePreference(

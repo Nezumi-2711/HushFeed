@@ -44,6 +44,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHid
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|llj
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|nh4
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|o97
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|oa1
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|opp
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|pqg
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|qqw
@@ -68,6 +69,8 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.ja
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|v1m
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|w54
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|wuh
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/profile/ProfileTopBar.java|pw1
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/profile/ProfileTopBar.java|tbi
 # 47.1.4 Retrofit response accessors used only by opt-in repost diagnostics (RepostDiagnosticsFieldsTest pins them).
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/repost/RepostDiagnostics.java|LIZ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/repost/RepostDiagnostics.java|LIZIZ

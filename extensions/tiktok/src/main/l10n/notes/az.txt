@@ -3,6 +3,8 @@
 * **TikTok:** TikTok-un Kəşf et paneli otağın üstündə açılanda LIVE Yazmaq düyməsi aşağı çəkilir, panel bağlananda yerinə qayıdır (#37).
 
 * **TikTok:** LIVE yazısının ortasında TikTok bağlanarsa (sürüşdürülüb bağlanıb və ya telefon dayandırıb), növbəti açılışda yazılan hissə saxlanılır və sizə bildirilir, keşdə qalmır (#37).
+* **TikTok:** Profil altında yeni Profil baxışlarını gizlədin və Add friends düyməsini gizlədin açarları: bu iki düymə profilinizin yuxarısından gedir, menyu qalır (#158).
+* **TikTok:** Lentdəki axtarış düyməsini gizlədin altında yeni Açılmış videolarda da açarı: açılmış videonun yuxarısındakı axtarış çubuğu da gedir, Geri qalır (#158).
 
 * **TikTok:** Başlıqlar altında yeni Normal qalınlıqda başlıqlar açarı: danışılan başlıqlar TikTok-un qalın yazısı əvəzinə adi qalınlıqda (#158).
 

@@ -3,6 +3,8 @@
 * **TikTok:** TikTok'un Keşfet paneli odanın üstünde açılınca LIVE Kaydet düğmesi aşağı kayar, panel kapanınca yerine döner (#37).
 
 * **TikTok:** TikTok bir LIVE kaydının ortasında kapanırsa (kaydırılarak kapatıldıysa ya da telefon durdurduysa), bir sonraki açılışta kaydedilen kısım kaydedilir ve size söylenir, önbellekte kalmaz (#37).
+* **TikTok:** Profil bölümünde yeni Profil görüntülemelerini gizle ve Arkadaş ekle'yi gizle anahtarları: bu iki düğme profilinin üstünden kalkar, menü kalır (#158).
+* **TikTok:** Akıştaki arama düğmesini gizle altında yeni Açılan videolarda da anahtarı: açılan bir videonun üstündeki arama çubuğu da kalkar, Geri kalır (#158).
 
 * **TikTok:** Altyazılar bölümünde yeni Normal kalınlıkta altyazılar anahtarı: konuşma altyazıları TikTok'un kalın yazısı yerine normal kalınlıkta (#158).
 

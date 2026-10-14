@@ -3077,6 +3077,70 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * Also on opened videos (#158): with the feed's search button switch and its own row on, the
+     * search box in an opened video's top bar goes invisible and Back stays. A box of the same name
+     * outside the bar is another page's and is left alone. TikTok showing it again is answered on
+     * the next pass, and either switch off puts it back.
+     */
+    @Test
+    public void theSearchBoxAtTheTopOfAnOpenedVideoHidesAndComesBack() {
+        int barId = 0x7f0a0e12;
+        int boxId = 0x7f0a0e13;
+        VideoOverlayHider.resolveForTests("47.1.4:j2g", barId);
+        VideoOverlayHider.resolveForTests("47.1.4:oa1", boxId);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            FrameLayout bar = new FrameLayout(activity);
+            bar.setId(barId);
+            View back = new View(activity);
+            back.setClickable(true);
+            LinearLayout box = new LinearLayout(activity);
+            box.setId(boxId);
+            bar.addView(back);
+            bar.addView(box);
+            LinearLayout elsewhere = new LinearLayout(activity);
+            elsewhere.setId(boxId);
+            root.addView(bar);
+            root.addView(elsewhere);
+            activity.setContentView(root);
+
+            Settings.HIDE_FEED_SEARCH_BUTTON.save(true);
+            Settings.HIDE_OPENED_VIDEO_SEARCH.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("the feed's switch alone leaves it", View.VISIBLE, box.getVisibility());
+
+            Settings.HIDE_OPENED_VIDEO_SEARCH.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.INVISIBLE, box.getVisibility());
+            assertEquals("Back stays", View.VISIBLE, back.getVisibility());
+            assertEquals("another page's box is left alone", View.VISIBLE, elsewhere.getVisibility());
+
+            box.setVisibility(View.VISIBLE);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("shown again by TikTok, taken again", View.INVISIBLE, box.getVisibility());
+
+            Settings.HIDE_FEED_SEARCH_BUTTON.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("the row rides on the feed's switch", View.VISIBLE, box.getVisibility());
+
+            Settings.HIDE_FEED_SEARCH_BUTTON.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.INVISIBLE, box.getVisibility());
+            Settings.HIDE_OPENED_VIDEO_SEARCH.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("off puts it back", View.VISIBLE, box.getVisibility());
+            assertEquals(View.VISIBLE, back.getVisibility());
+        } finally {
+            Settings.HIDE_FEED_SEARCH_BUTTON.resetToDefault();
+            Settings.HIDE_OPENED_VIDEO_SEARCH.resetToDefault();
+            VideoOverlayHider.resolveForTests("47.1.4:j2g", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:oa1", 0);
+        }
+    }
+
+    /**
      * The Full screen button has no id to look up, so the patch hands the view over as TikTok binds
      * it. It fades with the controls, lets a finger through it in the faded Clear display, goes out
      * of sight at 0 without moving what is beside it, and comes back at 100.

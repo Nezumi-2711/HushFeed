@@ -31,6 +31,7 @@ import app.morphe.extension.tiktok.blockauthor.FeedVisibility;
 import app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch;
 import app.morphe.extension.tiktok.navigation.FrontWindow;
 import app.morphe.extension.tiktok.navigation.NavigationTabsFilter;
+import app.morphe.extension.tiktok.profile.ProfileTopBar;
 import app.morphe.extension.shared.diagnostics.HookStatus;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
@@ -187,6 +188,14 @@ public final class VideoOverlayHider {
      */
     private static final String[] TOP_SEARCH_BAR_IDS = {"47.1.4:j2g"};
     private static final String[] TOP_SEARCH_SCRIM_IDS = {"47.1.4:g5p"};
+    /**
+     * The search box in that bar, beside the Back button (#158). It is the root of the layout
+     * TikTok's DetailFeedSearchHelper inflates into the bar on every page it serves: a video
+     * opened from search, a profile's posts, Favorites or Likes, watch history, a hashtag or a
+     * sound. Another page's layout reuses the name, so only a child of the bar counts. It goes
+     * invisible, so Back keeps its place.
+     */
+    private static final String[] DETAIL_SEARCH_BOX_IDS = {"47.1.4:oa1"};
     private static final String[] DETAIL_COMMENT_BAR_IDS = {"47.1.4:qqw"};
     private static final String[] DETAIL_COMMENT_STRIP_IDS = {"47.1.4:cnk"};
     /**
@@ -300,6 +309,7 @@ public final class VideoOverlayHider {
     private static final int TOP_SEARCH_BAR_TARGET = LOADING_LINE_TARGET + 1;
     private static final int TOP_SEARCH_SCRIM_TARGET = TOP_SEARCH_BAR_TARGET + 1;
     private static final int BOTTOM_SPACER_TARGET = TOP_SEARCH_SCRIM_TARGET + 1;
+    private static final int DETAIL_SEARCH_BOX_TARGET = BOTTOM_SPACER_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -569,6 +579,10 @@ public final class VideoOverlayHider {
             // opened post keeps under its comment bar; the spacer in each cell is already 0 there.
             boolean stripForBar = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
             boolean counts = Settings.HIDE_RAIL_COUNTS.get();
+            // The search box at the top of an opened video goes with the feed's search button,
+            // when its own row says so too (#158).
+            boolean detailSearchBox = Settings.HIDE_FEED_SEARCH_BUTTON.get()
+                    && Settings.HIDE_OPENED_VIDEO_SEARCH.get();
             boolean[] rail = TRAVERSAL.rail;
             updateRailButtonsWanted(rail);
             boolean anyRail = counts;
@@ -586,7 +600,7 @@ public final class VideoOverlayHider {
             }
             touchScale = Math.min(MAX_TOUCH_SCALE, Math.max(1f, touchScale));
             if (caption || music || actionBar || surveys || tabStrip || carry || detailCommentBar || anchor
-                    || clearControls
+                    || clearControls || detailSearchBox
                     || statusBar || seeThroughBar || SeeThroughBottomBar.holdsBackground()
                     || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty() || !WIDGETS_LIFTED.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
@@ -623,6 +637,7 @@ public final class VideoOverlayHider {
                 // Only ever faded, never hidden.
                 wanted[TOP_SEARCH_BAR_TARGET] = false;
                 wanted[TOP_SEARCH_SCRIM_TARGET] = false;
+                wanted[DETAIL_SEARCH_BOX_TARGET] = detailSearchBox;
                 wanted[STATUS_BAR_SPACER_TARGET] = statusBar;
                 wanted[BOTTOM_SPACER_TARGET] = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
@@ -659,6 +674,7 @@ public final class VideoOverlayHider {
                     if (detailCommentBar || stripForBar) {
                         keepColumnStrips(found, identifier(activity, activity.getPackageName(), PAGER_COLUMN_ID));
                     }
+                    keepTopBarSearchBoxes(found, ids[firstCandidate(TOP_SEARCH_BAR_TARGET)]);
                     selectCurrentTargets(found, TRAVERSAL.selected);
                     pairDetailCommentBar(hidden, TRAVERSAL.selected, ids, detailPager, stripForBar);
                     List<View> strips = selectedViews(found, TRAVERSAL.selected, DETAIL_COMMENT_STRIP_TARGET);
@@ -714,6 +730,8 @@ public final class VideoOverlayHider {
                 }
             }
             ClearDisplayShownControls.apply(fadedClear, clearOn());
+            // The Profile tab is a page of the feed's window, so its top bar rides on this pass.
+            ProfileTopBar.apply(activity.findViewById(android.R.id.content));
 
             setStatusBarHidden(activity, statusBar);
         } catch (Throwable ex) {
@@ -883,7 +901,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[BOTTOM_SPACER_TARGET + 1][];
+        String[][] targets = new String[DETAIL_SEARCH_BOX_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -913,6 +931,7 @@ public final class VideoOverlayHider {
         targets[TOP_SEARCH_BAR_TARGET] = TOP_SEARCH_BAR_IDS;
         targets[TOP_SEARCH_SCRIM_TARGET] = TOP_SEARCH_SCRIM_IDS;
         targets[BOTTOM_SPACER_TARGET] = BOTTOM_SPACER_IDS;
+        targets[DETAIL_SEARCH_BOX_TARGET] = DETAIL_SEARCH_BOX_IDS;
         return targets;
     }
 
@@ -923,7 +942,7 @@ public final class VideoOverlayHider {
     private static boolean outsideCells(int target) {
         return (target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START) || target == BOTTOM_TABS_TARGET
                 || target == BOTTOM_TABS_DIVIDER_TARGET || target == TOP_SEARCH_BAR_TARGET
-                || target == TOP_SEARCH_SCRIM_TARGET;
+                || target == TOP_SEARCH_SCRIM_TARGET || target == DETAIL_SEARCH_BOX_TARGET;
     }
 
     private static int candidateCount(String[][] targets) {
@@ -1093,6 +1112,20 @@ public final class VideoOverlayHider {
                 if (columnId == 0 || !(parent instanceof View)
                         || ((View) parent).getId() != columnId) {
                     strips.remove(j);
+                }
+            }
+        }
+    }
+
+    /** Keeps only the search boxes that sit directly in an opened video's top bar (#158). */
+    private static void keepTopBarSearchBoxes(List<List<View>> found, int barId) {
+        int at = firstCandidate(DETAIL_SEARCH_BOX_TARGET);
+        for (int i = 0; i < DETAIL_SEARCH_BOX_IDS.length; i++) {
+            List<View> boxes = found.get(at + i);
+            for (int j = boxes.size() - 1; j >= 0; j--) {
+                android.view.ViewParent parent = boxes.get(j).getParent();
+                if (barId == 0 || !(parent instanceof View) || ((View) parent).getId() != barId) {
+                    boxes.remove(j);
                 }
             }
         }
@@ -1589,6 +1622,9 @@ public final class VideoOverlayHider {
                     } else if (target == TOP_SEARCH_BAR_TARGET || target == TOP_SEARCH_SCRIM_TARGET) {
                         // The way back out of the page: faded like the tabs, never past the floor.
                         setFaded(view, Math.max(NAVIGATION_FADE_FLOOR, fadeLevel), fadedClear);
+                    } else if (target == DETAIL_SEARCH_BOX_TARGET) {
+                        // Invisible, not gone: the bar keeps its shape and Back stays put.
+                        setHidden(view, wanted, View.INVISIBLE);
                     } else if (target == DETAIL_COMMENT_BAR_TARGET) {
                         // Hidden with its strip by the switch, Clear display and a fade of 0;
                         // otherwise faded, and out of a finger's way in the faded Clear display.
@@ -1637,8 +1673,9 @@ public final class VideoOverlayHider {
             // ordinary feed cell says nothing about whether this build still has the anchor.
             // Nor does the comment bar's from the main feed, which never has one: with its switch
             // on, every pass there called the overlay hooks broken (#153). The detail pager
-            // always has it, so a rename still shows there.
-            } else if (target != SURVEY_TARGET
+            // always has it, so a rename still shows there. The search box at the top of an
+            // opened video is there only on the pages TikTok gives a search bar.
+            } else if (target != SURVEY_TARGET && target != DETAIL_SEARCH_BOX_TARGET
                     && (detailPager || (target != DETAIL_COMMENT_BAR_TARGET
                             && target != DETAIL_COMMENT_STRIP_TARGET))
                     && (wanted || (scaling
