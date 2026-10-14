@@ -1,4 +1,4 @@
-## Unreleased
+## 0.73.0 (2026-10-14)
 
 * **TikTok:** Ein mit eingeschaltetem Profilhintergrund gespeicherter Profilhintergrund bleibt nach einem Neustart von TikTok erhalten. Der Schalter bietet jetzt einen Neustart an (#80).
 

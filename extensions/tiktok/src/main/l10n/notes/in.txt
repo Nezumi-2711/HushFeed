@@ -1,4 +1,4 @@
-## Unreleased
+## 0.73.0 (2026-10-14)
 
 * **TikTok:** Latar profil yang disimpan saat Latar profil aktif tidak hilang lagi setelah TikTok dimulai ulang. Sakelarnya kini menawarkan mulai ulang (#80).
 

@@ -1,4 +1,4 @@
-## Unreleased
+## 0.73.0 (2026-10-14)
 
 * **TikTok:** Profil arka planı açıkken kaydedilen profil arka planı TikTok yeniden başlayınca artık kaybolmuyor. Anahtar artık yeniden başlatmayı öneriyor (#80).
 

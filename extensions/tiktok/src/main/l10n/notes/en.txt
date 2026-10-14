@@ -1,4 +1,4 @@
-## Unreleased
+## 0.73.0 (2026-10-14)
 
 * **TikTok:** A profile background saved with the Profile background switch on stays after TikTok restarts. The switch now offers a restart (#80).
 
