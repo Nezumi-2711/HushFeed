@@ -566,6 +566,12 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting OPEN_EXTERNAL_LINKS = new BooleanSetting("open_external_links", TRUE);
     public static final BooleanSetting ALWAYS_SHOW_PUBLISH_DATE = new BooleanSetting("always_show_publish_date", TRUE, true);
     public static final BooleanSetting PUBLISH_DATE_EXACT_TIME = new BooleanSetting("publish_date_exact_time", FALSE);
+    /** The time zone after the exact time (Discussion #147). On keeps the row as it always read. */
+    public static final BooleanSetting PUBLISH_DATE_TIME_ZONE = new BooleanSetting(
+            "publish_date_time_zone", TRUE, false, Setting.parent(PUBLISH_DATE_EXACT_TIME));
+    /** The language's short date ("10/7/25") before the exact time, in place of its medium one ("Oct 7, 2025"). */
+    public static final BooleanSetting PUBLISH_DATE_SHORT_DATE = new BooleanSetting(
+            "publish_date_short_date", FALSE, false, Setting.parent(PUBLISH_DATE_EXACT_TIME));
     public static final BooleanSetting PUBLISH_DATE_ON_GRID = new BooleanSetting("publish_date_on_grid", FALSE);
     public static final BooleanSetting SHOW_EXACT_COUNTS = new BooleanSetting("show_exact_counts", FALSE);
     public static final BooleanSetting CLEAR_DISPLAY = new BooleanSetting("clear_display", FALSE);

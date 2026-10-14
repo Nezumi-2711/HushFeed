@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Tampilkan waktu hingga detik punya dua opsi sendiri: Tampilkan zona waktu, aktif seperti sebelumnya, dan Tanggal singkat (#147).
+
 * **TikTok:** Pilih video untuk disimpan dari grid profil kini juga berfungsi di dalam koleksi Favorit, termasuk Pilih semua (#27).
 
 * **TikTok:** Simpan foto asli yang hanya sebagian berhasil kini menawarkan Coba lagi di samping Buka. Itu hanya mencoba lagi foto yang gagal.

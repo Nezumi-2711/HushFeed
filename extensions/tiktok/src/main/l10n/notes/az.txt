@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Vaxtı saniyəsinə qədər göstərin funksiyasının iki öz seçimi var: əvvəlki kimi açıq olan Saat qurşağını göstərin və Qısa tarix (#147).
+
 * **TikTok:** Profil şəbəkələrindən saxlamaq üçün videolar seçin indi Sevimlilər kolleksiyasının içində də işləyir, Hamısını seç ilə birlikdə (#27).
 
 * **TikTok:** Orijinal fotoların yadda saxlanması yalnız qismən alınanda indi Aç düyməsinin yanında Yenidən cəhd edin də çıxır. O, yalnız alınmayan fotoları yenidən sınayır.

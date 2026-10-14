@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Mostrar o horário com segundos ganhou duas opções próprias: Mostrar o fuso horário, ligada como antes, e Data curta (#147).
+
 * **TikTok:** Escolher vídeos para salvar nas grades de perfil agora também funciona dentro de uma coleção dos Favoritos, com Escolher todos incluído (#27).
 
 * **TikTok:** Quando só parte das fotos originais é salva, agora aparece Tentar novamente ao lado de Abrir. Ele tenta de novo só as fotos que falharam.

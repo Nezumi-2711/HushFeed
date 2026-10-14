@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Show the time to the second has two options of its own: Show the time zone, on as before, and Short date (#147).
+
 * **TikTok:** Pick videos to save works inside a Favorites collection folder too, Pick all included (#27).
 
 * **TikTok:** A save of original photos that only partly came through now offers Retry beside Open. It tries again only the photos that failed.

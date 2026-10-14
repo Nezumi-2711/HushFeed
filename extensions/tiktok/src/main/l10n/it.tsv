@@ -2136,3 +2136,7 @@ There isn't enough room on the phone to record	Non c'è abbastanza spazio sul te
 Nothing was recorded	Non è stato registrato nulla
 The recording couldn't be saved. Try again.	Non è stato possibile salvare la registrazione. Riprova.
 Those photos can't be tried again now. Save the post again to get the rest.	Ora non si può riprovare con quelle foto. Salva di nuovo il post per avere il resto.
+Show the time zone	Mostra il fuso orario
+Puts your time zone after the time to the second, like EDT.	Mette il tuo fuso orario dopo l'ora al secondo, come EDT.
+Short date	Data breve
+Writes the date before the time to the second the short way your language does, like 10/7/25.	Scrive la data prima dell'ora al secondo nella forma breve della tua lingua, come 07/10/25.

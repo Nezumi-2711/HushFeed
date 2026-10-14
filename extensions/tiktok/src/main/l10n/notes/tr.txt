@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Saati saniyesine kadar göster'in iki kendi seçeneği var: önceki gibi açık olan Saat dilimini göster ve Kısa tarih (#147).
+
 * **TikTok:** Profil ızgaralarından kaydedilecek videoları seç artık Favoriler'deki bir koleksiyonun içinde de çalışıyor, Tümünü seç dahil (#27).
 
 * **TikTok:** Orijinal fotoğraf kaydının yalnızca bir kısmı gelirse artık Aç'ın yanında Yeniden dene çıkıyor. Yalnızca gelmeyen fotoğrafları yeniden dener.

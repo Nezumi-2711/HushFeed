@@ -2139,3 +2139,7 @@ There isn't enough room on the phone to record	Auf dem Telefon ist nicht genug P
 Nothing was recorded	Es wurde nichts aufgenommen
 The recording couldn't be saved. Try again.	Die Aufnahme konnte nicht gespeichert werden. Versuche es erneut.
 Those photos can't be tried again now. Save the post again to get the rest.	Diese Fotos lassen sich jetzt nicht erneut versuchen. Speichere den Beitrag noch einmal, um den Rest zu bekommen.
+Show the time zone	Zeitzone anzeigen
+Puts your time zone after the time to the second, like EDT.	Setzt deine Zeitzone hinter die sekundengenaue Uhrzeit, etwa MESZ.
+Short date	Kurzes Datum
+Writes the date before the time to the second the short way your language does, like 10/7/25.	Schreibt das Datum vor der sekundengenauen Uhrzeit so kurz, wie deine Sprache es tut, etwa 07.10.25.

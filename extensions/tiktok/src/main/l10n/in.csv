@@ -2117,3 +2117,7 @@ Everything this list has loaded is picked or saved. Scroll down to load more.,Se
 "Nothing was recorded","Tidak ada yang terekam"
 "The recording couldn't be saved. Try again.","Rekaman tidak bisa disimpan. Coba lagi."
 Those photos can't be tried again now. Save the post again to get the rest.,Foto itu tidak bisa dicoba lagi sekarang. Simpan postingan lagi untuk mendapatkan sisanya.
+Show the time zone,Tampilkan zona waktu
+"Puts your time zone after the time to the second, like EDT.","Menaruh zona waktumu setelah waktu hingga detik, seperti EDT."
+Short date,Tanggal singkat
+"Writes the date before the time to the second the short way your language does, like 10/7/25.","Menulis tanggal sebelum waktu hingga detik dengan cara singkat bahasamu, seperti 07/10/25."

@@ -270,6 +270,18 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             ));
             addPreference(new TogglePreference(
                     context,
+                    "Show the time zone",
+                    "Puts your time zone after the time to the second, like EDT.",
+                    Settings.PUBLISH_DATE_TIME_ZONE
+            ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Short date",
+                    "Writes the date before the time to the second the short way your language does, like 10/7/25.",
+                    Settings.PUBLISH_DATE_SHORT_DATE
+            ));
+            addPreference(new TogglePreference(
+                    context,
                     "Show dates on profile grids",
                     "Show the day each video was posted under its view count on profile grids.",
                     Settings.PUBLISH_DATE_ON_GRID

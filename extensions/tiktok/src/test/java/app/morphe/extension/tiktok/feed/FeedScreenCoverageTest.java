@@ -150,6 +150,9 @@ public class FeedScreenCoverageTest {
         put("feed_author_text_size", YES, YES, NONE);
         put("always_show_publish_date", YES, YES, NONE);
         put("publish_date_exact_time", YES, YES, NONE);
+        // Both only shape the exact time, so they reach where it does.
+        put("publish_date_time_zone", YES, YES, NONE);
+        put("publish_date_short_date", YES, YES, NONE);
         // Profile grids only.
         put("publish_date_on_grid", NONE, NONE, NONE);
         put("show_author_region", YES, YES, NONE);

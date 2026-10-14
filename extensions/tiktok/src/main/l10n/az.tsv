@@ -2136,3 +2136,7 @@ There isn't enough room on the phone to record	Yazmaq üçün telefonda kifayət
 Nothing was recorded	Heç nə yazılmadı
 The recording couldn't be saved. Try again.	Yazı saxlanıla bilmədi. Yenidən cəhd et.
 Those photos can't be tried again now. Save the post again to get the rest.	Bu fotoları indi yenidən sınamaq olmur. Qalanını almaq üçün paylaşımı yenidən yadda saxla.
+Show the time zone	Saat qurşağını göstərin
+Puts your time zone after the time to the second, like EDT.	Saniyəsinə qədər göstərilən vaxtın ardından saat qurşağınızı yazır, məsələn EDT.
+Short date	Qısa tarix
+Writes the date before the time to the second the short way your language does, like 10/7/25.	Saniyəsinə qədər göstərilən vaxtdan əvvəlki tarixi dilinizin qısa yazılışı ilə yazır, məsələn 07.10.25.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Uhrzeit sekundengenau anzeigen hat zwei eigene Optionen: Zeitzone anzeigen, wie bisher an, und Kurzes Datum (#147).
+
 * **TikTok:** Videos in Profilrastern zum Speichern auswählen funktioniert jetzt auch in einer Sammlung deiner Favoriten, Alle auswählen inklusive (#27).
 
 * **TikTok:** Kommt beim Speichern von Originalfotos nur ein Teil an, gibt es jetzt neben Öffnen auch Erneut versuchen. Das versucht nur die Fotos noch einmal, die gefehlt haben.

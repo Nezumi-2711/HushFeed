@@ -2136,3 +2136,7 @@ There isn't enough room on the phone to record	Kayıt için telefonda yeterli ye
 Nothing was recorded	Hiçbir şey kaydedilmedi
 The recording couldn't be saved. Try again.	Kayıt kaydedilemedi. Tekrar dene.
 Those photos can't be tried again now. Save the post again to get the rest.	Bu fotoğraflar şu an yeniden denenemez. Geri kalanını almak için gönderiyi yeniden kaydet.
+Show the time zone	Saat dilimini göster
+Puts your time zone after the time to the second, like EDT.	Saniyesine kadar gösterilen saatin ardına saat dilimini ekler, örneğin EDT.
+Short date	Kısa tarih
+Writes the date before the time to the second the short way your language does, like 10/7/25.	Saniyesine kadar gösterilen saatten önceki tarihi dilinin kısa biçimiyle yazar, örneğin 7.10.2025.

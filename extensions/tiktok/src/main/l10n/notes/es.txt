@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Mostrar la hora al segundo tiene dos opciones propias: Mostrar la zona horaria, activada como antes, y Fecha corta (#147).
+
 * **TikTok:** Elegir videos para guardar en las cuadrículas de perfil ahora también funciona dentro de una colección de Favoritos, con Elegir todos incluido (#27).
 
 * **TikTok:** Si al guardar fotos originales solo llegan algunas, ahora aparece Reintentar junto a Abrir. Solo vuelve a intentar las fotos que fallaron.

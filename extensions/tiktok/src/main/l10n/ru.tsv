@@ -2316,3 +2316,7 @@ There isn't enough room on the phone to record	На телефоне не хва
 Nothing was recorded	Ничего не записано
 The recording couldn't be saved. Try again.	Не удалось сохранить запись. Попробуйте ещё раз.
 Those photos can't be tried again now. Save the post again to get the rest.	Сейчас эти фото нельзя попробовать снова. Сохраните публикацию ещё раз, чтобы получить остальные.
+Show the time zone	Показывать часовой пояс
+Puts your time zone after the time to the second, like EDT.	Добавляет ваш часовой пояс после времени до секунды, например EDT.
+Short date	Короткая дата
+Writes the date before the time to the second the short way your language does, like 10/7/25.	Пишет дату перед временем до секунды так коротко, как принято в вашем языке, например 07.10.2025.
