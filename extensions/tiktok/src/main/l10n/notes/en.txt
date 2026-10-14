@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** If TikTok closes in the middle of a LIVE recording (swiped away, or stopped by the phone), the next start saves what was recorded and tells you, instead of leaving it in the cache (#37).
+
 * **TikTok:** New Normal-weight captions switch under Captions: spoken captions at regular weight instead of TikTok's bold (#158).
 
 * **TikTok:** New Full long-press menu in search results switch: a long press on a video opened from search opens the For You menu (#120).

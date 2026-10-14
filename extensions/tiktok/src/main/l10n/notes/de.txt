@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Wenn TikTok mitten in einer LIVE-Aufnahme geschlossen wird (weggewischt oder vom Handy beendet), speichert der nächste Start das Aufgenommene und sagt dir Bescheid, statt es im Cache liegen zu lassen (#37).
+
 * **TikTok:** Neuer Schalter Untertitel in normaler Stärke unter Untertitel: gesprochene Untertitel in normaler Schriftstärke statt in TikToks Fettschrift (#158).
 
 * **TikTok:** Neuer Schalter Volles Menü bei langem Drücken in Suchergebnissen: Langes Drücken auf ein Video aus der Suche öffnet das Menü von Für dich (#120).

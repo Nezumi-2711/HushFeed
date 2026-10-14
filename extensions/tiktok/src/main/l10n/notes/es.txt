@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Si TikTok se cierra en medio de una grabación de LIVE (deslizado o detenido por el teléfono), al abrirlo de nuevo se guarda lo grabado y te avisa, en vez de quedarse en la caché (#37).
+
 * **TikTok:** Nuevo interruptor Subtítulos con grosor normal en Subtítulos: los subtítulos hablados con grosor normal en lugar de la negrita de TikTok (#158).
 
 * **TikTok:** Nuevo interruptor Menú completo de pulsación larga en los resultados de búsqueda: una pulsación larga en un video abierto desde la búsqueda abre el menú de Para ti (#120).

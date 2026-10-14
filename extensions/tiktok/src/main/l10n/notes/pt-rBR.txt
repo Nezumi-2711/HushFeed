@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Se o TikTok fechar no meio de uma gravação de LIVE (arrastado para fora ou parado pelo celular), a próxima abertura salva o que foi gravado e avisa você, em vez de deixar no cache (#37).
+
 * **TikTok:** Novo botão Legendas com espessura normal em Legendas: legendas faladas com espessura normal em vez do negrito do TikTok (#158).
 
 * **TikTok:** Novo botão Menu completo de toque longo nos resultados da pesquisa: um toque longo em um vídeo aberto pela pesquisa abre o menu de Para você (#120).

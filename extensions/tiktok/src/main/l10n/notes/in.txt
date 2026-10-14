@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Jika TikTok tertutup di tengah rekaman LIVE (diusap keluar atau dihentikan ponsel), saat dibuka lagi bagian yang terekam disimpan dan kamu diberi tahu, bukan dibiarkan di cache (#37).
+
 * **TikTok:** Sakelar baru Keterangan dengan ketebalan normal di Teks: teks ucapan dengan ketebalan biasa, bukan huruf tebal TikTok (#158).
 
 * **TikTok:** Sakelar baru Menu tekan lama lengkap di hasil pencarian: tekan lama pada video dari pencarian membuka menu Untuk Kamu (#120).

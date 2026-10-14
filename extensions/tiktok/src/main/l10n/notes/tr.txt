@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** TikTok bir LIVE kaydının ortasında kapanırsa (kaydırılarak kapatıldıysa ya da telefon durdurduysa), bir sonraki açılışta kaydedilen kısım kaydedilir ve size söylenir, önbellekte kalmaz (#37).
+
 * **TikTok:** Altyazılar bölümünde yeni Normal kalınlıkta altyazılar anahtarı: konuşma altyazıları TikTok'un kalın yazısı yerine normal kalınlıkta (#158).
 
 * **TikTok:** Yeni Arama sonuçlarında tam uzun basma menüsü anahtarı: aramadan açılan bir videoya uzun basmak Senin İçin menüsünü açar (#120).

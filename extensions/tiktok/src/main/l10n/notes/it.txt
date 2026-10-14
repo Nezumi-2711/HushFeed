@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Se TikTok si chiude a metà di una registrazione LIVE (chiuso con uno swipe o fermato dal telefono), all'avvio successivo quello che è stato registrato viene salvato e te lo dice, invece di restare nella cache (#37).
+
 * **TikTok:** Nuovo interruttore Sottotitoli con spessore normale in Sottotitoli: i sottotitoli parlati con spessore normale invece del grassetto di TikTok (#158).
 
 * **TikTok:** Nuovo interruttore Menu completo con pressione prolungata nei risultati di ricerca: una pressione prolungata su un video aperto dalla ricerca apre il menu di Per te (#120).

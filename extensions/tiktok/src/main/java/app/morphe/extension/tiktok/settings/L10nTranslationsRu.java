@@ -15,7 +15,7 @@ final class L10nTranslationsRu {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4616);
+        Map<String, String> table = new HashMap<>(4618);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3997,6 +3997,8 @@ final class L10nTranslationsRu {
     private static void fill32(Map<String, String> table) {
         table.put("The LIVE ended or the connection dropped. What was recorded is saved to %1$s",
                 "LIVE закончился или пропало соединение. Записанное сохранено в %1$s");
+        table.put("The LIVE recording TikTok closed on couldn't be saved. Its unfinished file was cleared.",
+                "Не удалось сохранить запись LIVE, прерванную закрытием TikTok. Незавершённый файл удалён.");
         table.put("The Lab can't check this. TikTok gets it exactly as typed.",
                 "Lab не может это проверить. TikTok получает именно то, что вы ввели.");
         table.put("The Lab couldn't open. Go back and open it again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsRu {
                 "Запись о прерванном изменении настроек не удалось прочитать, поэтому она отложена. Проверьте свои настройки.");
         table.put("The recording couldn't be saved. Try again.",
                 "Не удалось сохранить запись. Попробуйте ещё раз.");
-        table.put("The recording reached its size limit and was saved to %1$s",
-                "Запись достигла предела размера и сохранена в %1$s");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The recording reached its size limit and was saved to %1$s",
+                "Запись достигла предела размера и сохранена в %1$s");
         table.put("The report couldn't be saved. Try again.",
                 "Не удалось сохранить отчёт. Повторите попытку.");
         table.put("The request timed out. The list may be incomplete.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsRu {
                 "У этого видео нет ссылки для копирования");
         table.put("This video has no link to send, so TikTok's own save runs instead",
                 "У этого видео нет ссылки для отправки, поэтому вместо этого используется сохранение средствами TikTok");
-        table.put("This video has no original sound to save",
-                "У этого видео нет оригинального звука для сохранения");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("This video has no original sound to save",
+                "У этого видео нет оригинального звука для сохранения");
         table.put("This video has no sound of its own",
                 "У этого видео нет собственного звука");
         table.put("This video is already saved",
@@ -4359,11 +4361,11 @@ final class L10nTranslationsRu {
                 "Сегодняшний день возвращён в прежнее состояние");
         table.put("Today started over. Tap again to put the counts back.",
                 "Сегодняшний день начался заново. Нажмите ещё раз, чтобы вернуть счётчики.");
-        table.put("Today starts again",
-                "Сегодняшний день начинается заново");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Today starts again",
+                "Сегодняшний день начинается заново");
         table.put("Today's budget is locked. The day starts over at %1$s.",
                 "Сегодняшний лимит заблокирован. День начнётся заново в %1$s.");
         table.put("Today's budget is locked. The feed opens again at %1$s. Messages, profiles and search still work.",
@@ -4482,11 +4484,11 @@ final class L10nTranslationsRu {
                 "Недоступно");
         table.put("Unblock",
                 "Разблокировать");
-        table.put("Unblock this commenter",
-                "Снять блокировку с этого автора комментария");
     }
 
     private static void fill36(Map<String, String> table) {
+        table.put("Unblock this commenter",
+                "Снять блокировку с этого автора комментария");
         table.put("Unblocked %1$s",
                 "Блокировка снята: %1$s");
         table.put("Under the @username on a profile, say whether it follows you or doesn't follow you back. Follower and following lists mark the accounts you follow that don't follow you back.",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsRu {
                 "Кадр из видео");
         table.put("Video info",
                 "Информация о видео");
-        table.put("Video of photos",
-                "Видео из фото");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Video of photos",
+                "Видео из фото");
         table.put("Video playback quality",
                 "Качество воспроизведения видео");
         table.put("Video player settings",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsRu {
                 "За раз можно выбрать не больше %1$s");
         table.put("YouTube Music couldn't be opened. Open it yourself and search for the sound.",
                 "Не удалось открыть YouTube Music. Откройте его самостоятельно и найдите звук.");
-        table.put("YouTube Music isn't installed",
-                "YouTube Music не установлен");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("YouTube Music isn't installed",
+                "YouTube Music не установлен");
         table.put("Your TikTok account changed. Choose the file again for this account.",
                 "Аккаунт TikTok изменился. Выберите файл заново для этого аккаунта.");
         table.put("Your account changed. Close this list and open it again.",
