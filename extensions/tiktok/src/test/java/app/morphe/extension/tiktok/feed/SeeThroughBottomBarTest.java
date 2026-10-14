@@ -205,6 +205,84 @@ public class SeeThroughBottomBarTest {
         }
     }
 
+    private static final int STRIP_ID = 0x7f0a0c24;
+    private static final int COLUMN_ID = 0x7f0a0c25;
+    private static final int LAYER_ID = 0x7f0a0c26;
+
+    /**
+     * The main feed as the S22 lays it out (2026-10-13): the cell's own spacer is already gone,
+     * and the room kept for the bar is the 138 px strip under the pager in a 2181 px column, with
+     * the bar over it. The strip goes, the pager gets its room once the column is laid out again,
+     * and the cell's widget layer goes up by the same 138 so the caption stays where it was. The
+     * guard, measuring after that lift, keeps the collapse. Off puts the strip and the layer back.
+     */
+    @Test
+    public void theMainFeedStripGoesAndTheCaptionStaysAboveTheBar() {
+        VideoOverlayHider.resolveForTests("47.1.4:cnk", STRIP_ID);
+        VideoOverlayHider.resolveForTests("viewpager_container", COLUMN_ID);
+        VideoOverlayHider.resolveForTests("widget_container", LAYER_ID);
+        Settings.SEE_THROUGH_BOTTOM_BAR.save(true);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            LinearLayout column = new LinearLayout(activity);
+            column.setId(COLUMN_ID);
+            column.setOrientation(LinearLayout.VERTICAL);
+            FrameLayout cell = new FrameLayout(activity);
+            cell.setId(CELL_ID);
+            column.addView(cell, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+            View strip = new View(activity);
+            strip.setId(STRIP_ID);
+            column.addView(strip, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 138));
+            FrameLayout layer = new FrameLayout(activity);
+            layer.setId(LAYER_ID);
+            cell.addView(layer);
+            View anchor = new FrameLayout(activity);
+            anchor.setId(ANCHOR_ID);
+            layer.addView(anchor, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 161, android.view.Gravity.BOTTOM));
+            root.addView(column);
+            View bar = new FrameLayout(activity);
+            bar.setId(BAR_ID);
+            bar.setBackgroundColor(Color.BLACK);
+            root.addView(bar, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 138, android.view.Gravity.BOTTOM));
+            activity.setContentView(root);
+            layOut(root);
+            assertEquals(1882, anchor.getTop() + cell.getTop());
+
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, strip.getVisibility());
+            assertEquals("nothing moves before the pager has the room", 0f, layer.getTranslationY(), 0f);
+
+            layOut(root);
+            assertEquals(2181, cell.getHeight());
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(-138f, layer.getTranslationY(), 0f);
+            assertEquals("the caption ends where it did, on the bar's top edge",
+                    2043f, anchor.getBottom() + layer.getTranslationY(), 0f);
+            assertTrue("the guard kept the collapse", SeeThroughBottomBar.collapseAllowed());
+            assertEquals(View.GONE, strip.getVisibility());
+            assertEquals(Color.TRANSPARENT, ((ColorDrawable) bar.getBackground()).getColor());
+
+            Settings.SEE_THROUGH_BOTTOM_BAR.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.VISIBLE, strip.getVisibility());
+            assertEquals(0f, layer.getTranslationY(), 0f);
+        } finally {
+            VideoOverlayHider.resolveForTests("47.1.4:cnk", 0);
+            VideoOverlayHider.resolveForTests("viewpager_container", 0);
+            VideoOverlayHider.resolveForTests("widget_container", 0);
+        }
+    }
+
+    private static void layOut(View root) {
+        root.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(2181, View.MeasureSpec.EXACTLY));
+        root.layout(0, 0, 1080, 2181);
+    }
+
     @Test
     public void onlyAnOverlayThatWasClearBeforeTheCollapseIsBlamedAfterIt() {
         try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {

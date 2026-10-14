@@ -564,6 +564,9 @@ public final class VideoOverlayHider {
             boolean seeThroughBar = Settings.SEE_THROUGH_BOTTOM_BAR.get() && !detailPager;
             if (!seeThroughBar) SeeThroughBottomBar.reset();
             seeThroughBarNow = seeThroughBar;
+            // On the S22 the main feed's room for the bar is the pager column's strip, the one an
+            // opened post keeps under its comment bar; the spacer in each cell is already 0 there.
+            boolean stripForBar = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
             boolean counts = Settings.HIDE_RAIL_COUNTS.get();
             boolean[] rail = TRAVERSAL.rail;
             updateRailButtonsWanted(rail);
@@ -584,7 +587,7 @@ public final class VideoOverlayHider {
             if (caption || music || actionBar || surveys || tabStrip || carry || detailCommentBar || anchor
                     || clearControls
                     || statusBar || seeThroughBar || SeeThroughBottomBar.holdsBackground()
-                    || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty()
+                    || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty() || !WIDGETS_LIFTED.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
                     || !CAPTIONS_LIFTED.isEmpty() || !DISCS_LIFTED.isEmpty() || touchScale != 1f || scaledLastPass) {
                 ViewGroup root = activity.findViewById(android.R.id.content);
@@ -606,7 +609,7 @@ public final class VideoOverlayHider {
                 wanted[BOTTOM_TABS_DIVIDER_TARGET] = wanted[BOTTOM_TABS_TARGET];
                 wanted[FOLLOWING_STORY_TARGET] = tabStrip && !FeedVisibility.isStoryVisible(activity);
                 wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;
-                wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar;
+                wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar || stripForBar;
                 wanted[CLEAR_EXIT_TARGET] = clearControls;
                 wanted[CLEAR_PLAYBACK_TARGET] = clearControls;
                 wanted[CLEAR_SEEK_BAR_TARGET] = clearControls;
@@ -652,17 +655,20 @@ public final class VideoOverlayHider {
                     collect(root, ids, found, cellId, cellId == 0, needsCell);
                     // Only a strip this class hid is ever put back, and that one was the
                     // column's, so the column is looked up only while the strip is wanted.
-                    if (detailCommentBar) {
+                    if (detailCommentBar || stripForBar) {
                         keepColumnStrips(found, identifier(activity, activity.getPackageName(), PAGER_COLUMN_ID));
                     }
                     selectCurrentTargets(found, TRAVERSAL.selected);
-                    pairDetailCommentBar(hidden, TRAVERSAL.selected, ids, detailPager);
+                    pairDetailCommentBar(hidden, TRAVERSAL.selected, ids, detailPager, stripForBar);
+                    List<View> strips = selectedViews(found, TRAVERSAL.selected, DETAIL_COMMENT_STRIP_TARGET);
+                    // Before the guard, so it measures the caption where this pass leaves it.
+                    liftWidgetLayers(strips, seeThroughBar, seeThroughBar
+                            ? identifier(activity, activity.getPackageName(), WIDGET_LAYER_ID) : 0, cellId);
                     guardBottomSpacer(hidden, found, TRAVERSAL.selected, seeThroughBar);
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f, detailPager);
-                    if (detailPager) settleStripColumns(selectedViews(found, TRAVERSAL.selected,
-                            DETAIL_COMMENT_STRIP_TARGET));
+                    settleStripColumns(strips);
                     alignBarRows(found, TRAVERSAL.selected, hidden, cellId);
                     fadeFullscreenEntries();
                     int photoExit = TRAVERSAL.selected[CLEAR_PHOTO_EXIT_TARGET];
@@ -1024,11 +1030,12 @@ public final class VideoOverlayHider {
      * still keeps its strip.
      */
     private static void pairDetailCommentBar(boolean[] hidden, int[] selected, int[] ids,
-                                             boolean detailPager) {
+                                             boolean detailPager, boolean stripForBar) {
         boolean bar = selected[DETAIL_COMMENT_BAR_TARGET] >= 0;
         boolean strip = selected[DETAIL_COMMENT_STRIP_TARGET] >= 0;
         if (bar && !strip) hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)] = false;
-        if (strip && !bar && !(detailPager && resolves(ids, DETAIL_COMMENT_BAR_TARGET))) {
+        // See-through bottom bar takes the main feed's strip on its own; no comment bar there.
+        if (strip && !bar && !stripForBar && !(detailPager && resolves(ids, DETAIL_COMMENT_BAR_TARGET))) {
             hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)] = false;
         }
     }
@@ -1128,11 +1135,14 @@ public final class VideoOverlayHider {
     private static void guardBottomSpacer(boolean[] hidden, List<List<View>> found, int[] selected,
             boolean seeThroughBar) {
         int spacerAt = selected[BOTTOM_SPACER_TARGET];
-        if (!seeThroughBar || spacerAt < 0) return;
-        List<View> spacers = found.get(spacerAt);
+        int stripAt = selected[DETAIL_COMMENT_STRIP_TARGET];
+        if (!seeThroughBar || (spacerAt < 0 && stripAt < 0)) return;
         boolean collapsed = false;
-        for (View spacer : spacers) {
-            collapsed |= HIDDEN_HERE.containsKey(spacer);
+        for (int at : new int[] {spacerAt, stripAt}) {
+            if (at < 0) continue;
+            for (View spacer : found.get(at)) {
+                collapsed |= HIDDEN_HERE.containsKey(spacer);
+            }
         }
         List<View> bars = selectedViews(found, selected, BOTTOM_TABS_TARGET);
         List<View> overlays = new ArrayList<>(selectedViews(found, selected, ANCHOR_TARGET));
@@ -1142,9 +1152,78 @@ public final class VideoOverlayHider {
             refused |= SeeThroughBottomBar.judge(bar, overlays, collapsed);
         }
         if (refused) {
-            // The traversal made one candidate per target, so the target's first index is it.
-            hidden[spacerAt] = false;
+            // selected holds the candidate each target settled on, which is hidden's index too.
+            if (spacerAt >= 0) hidden[spacerAt] = false;
+            if (stripAt >= 0) hidden[stripAt] = false;
             Logger.printDebug(() -> "See-through bottom bar: the collapse put the caption or buttons under the bar, spacer kept");
+        }
+    }
+
+    /**
+     * The layer in each cell that holds the caption, the buttons and the music row, laid out
+     * against the cell's bottom (S22, 2026-10-13: 2175 tall in a 2043 cell, bottom margin -132).
+     */
+    private static final String WIDGET_LAYER_ID = "widget_container";
+    /** Widget layers lifted over the see-through bar, with the offset written. */
+    private static final Map<View, Float> WIDGETS_LIFTED = new WeakHashMap<>();
+
+    /**
+     * Keeps the caption and the buttons where TikTok had them once See-through bottom bar gives
+     * the main feed's pager the strip's room (#145). The cells grow by the strip's height and
+     * everything in them laid out against the bottom would go down behind the tabs, so each
+     * cell's widget layer goes up by the same amount while the picture fills the room. Nothing
+     * moves until the column has actually been laid out without the strip, and a layer TikTok
+     * offsets itself is left to TikTok.
+     */
+    private static void liftWidgetLayers(List<View> strips, boolean seeThroughBar, int layerId, int cellId) {
+        List<View> lifted = new ArrayList<>();
+        if (seeThroughBar && layerId != 0 && cellId != 0) {
+            for (View strip : strips) {
+                float gained = roomGained(strip);
+                if (gained <= 0f) continue;
+                List<View> layers = new ArrayList<>();
+                collectWidgetLayers((View) strip.getParent(), layerId, cellId, 0, layers);
+                for (View layer : layers) {
+                    offsetOwned(WIDGETS_LIFTED, layer, -gained);
+                    lifted.add(layer);
+                }
+            }
+        }
+        if (WIDGETS_LIFTED.isEmpty()) return;
+        for (View layer : new ArrayList<>(WIDGETS_LIFTED.keySet())) {
+            if (!lifted.contains(layer)) offsetOwned(WIDGETS_LIFTED, layer, 0f);
+        }
+    }
+
+    /**
+     * The room a strip this class hid has given its column's pager: the strip's height once the
+     * column has been laid out without it, 0 before then or while the strip shows.
+     */
+    static float roomGained(View strip) {
+        if (strip.getVisibility() != View.GONE || !HIDDEN_HERE.containsKey(strip)
+                || !(strip.getParent() instanceof android.widget.LinearLayout)) {
+            return 0f;
+        }
+        android.widget.LinearLayout column = (android.widget.LinearLayout) strip.getParent();
+        ViewGroup.LayoutParams params = strip.getLayoutParams();
+        if (column.getHeight() <= 0 || leavesRoom(column) || params == null) return 0f;
+        return Math.max(0, params.height);
+    }
+
+    /** Each cell's widget layer under {@code view}: column, wrapper, pager, cell at the most. */
+    private static void collectWidgetLayers(View view, int layerId, int cellId, int depth, List<View> out) {
+        if (!(view instanceof ViewGroup)) return;
+        ViewGroup group = (ViewGroup) view;
+        if (view.getId() == cellId) {
+            for (int i = 0; i < group.getChildCount(); i++) {
+                View child = group.getChildAt(i);
+                if (child.getId() == layerId) out.add(child);
+            }
+            return;
+        }
+        if (depth >= 4) return;
+        for (int i = 0; i < group.getChildCount(); i++) {
+            collectWidgetLayers(group.getChildAt(i), layerId, cellId, depth + 1, out);
         }
     }
 

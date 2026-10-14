@@ -11,10 +11,12 @@ import java.util.WeakHashMap;
 
 /**
  * The state behind See-through bottom bar (#145). TikTok's bottom tab bar paints its own
- * background and the cell under each video keeps a spacer the bar's height, so the picture stops
- * above the bar. VideoOverlayHider collapses that spacer through its ordinary hide path and hands
- * this class the bar: it swaps the bar's background for a clear one and puts the original back,
- * and it judges whether the collapse pushed the caption or the buttons under the bar.
+ * background, and the room under the picture is kept for it by a spacer in each cell or, on the
+ * S22, by a strip the bar's height under the main feed's pager, so the picture stops above the
+ * bar. VideoOverlayHider collapses those through its ordinary hide path, lifts each cell's widget
+ * layer by what the pager gained, and hands this class the bar: it swaps the bar's background for
+ * a clear one and puts the original back, and it judges whether the collapse still pushed the
+ * caption or the buttons under the bar.
  */
 final class SeeThroughBottomBar {
     /** How far an overlay may reach into the bar, in pixels, before it counts as under it. */
