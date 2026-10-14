@@ -184,7 +184,7 @@ public final class OriginalPhotos {
      * says so and counts as taken.
      */
     private static boolean queue(Context app, Retry run) {
-        String key = "photos " + run.id;
+        String key = jobKey(run.id);
         if (!ACTIVE.add(run.id)) {
             Utils.showToastShort(MediaJobScheduler.busyMessage(key));
             return true;
@@ -246,7 +246,8 @@ public final class OriginalPhotos {
      */
     static void retry(Retry failed) {
         if (ACTIVE.contains(failed.id)) {
-            Utils.showToastShort(MediaJobScheduler.busyMessage("photos " + failed.id));
+            String key = jobKey(failed.id);
+            Utils.showToastShort(MediaJobScheduler.busyMessage(key));
             return;
         }
         if (!failed.stillUsable()) {
@@ -255,6 +256,11 @@ public final class OriginalPhotos {
         }
         Context context = Utils.getContext();
         if (context == null || !queue(context.getApplicationContext(), failed)) failed.giveBack();
+    }
+
+    /** The media queue's key for a post's photo save. A key, never text the reader sees. */
+    private static String jobKey(String id) {
+        return "photos " + id;
     }
 
     /** For the tests: stands in for fetching, converting and publishing one photo. */
