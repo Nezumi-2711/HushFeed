@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With Hide the comment bar on opened videos on, the progress bar no longer runs across the last line of the caption on a video you open from a profile, your likes or search, and its time no longer sits on the music disc. The caption and the disc move up just enough for the bar, which runs along the caption's bottom edge the way it does with the comment bar showing (#153).
 
+* **TikTok:** The diagnostic report no longer says the overlay is missing something just because Hide the comment bar on opened videos is on while you're on the main feed, which never has that bar (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).

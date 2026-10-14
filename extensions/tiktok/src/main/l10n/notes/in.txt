@@ -2,6 +2,8 @@
 
 * **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, bilah progres tidak lagi melintasi keterangan di video yang kamu buka dari profil atau pencarian. Keterangan naik secukupnya agar tidak tertutup (#153).
 
+* **TikTok:** Laporan diagnostik tidak lagi menandai bilah komentar sebagai hilang saat kamu berada di feed utama (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Laporan diagnostik punya bagian baru berisi pengaturan yang diubah. Bagian ini menyebut setiap pengaturan yang tidak lagi di nilai bawaannya, sehingga laporan menunjukkan sakelar mana yang aktif. Teks yang kamu ketik di sebuah pengaturan tidak pernah disertakan (#149).

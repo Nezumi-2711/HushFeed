@@ -1778,6 +1778,34 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * The main feed has no comment bar, so with the switch on it isn't reported missing there, as
+     * it was on every pass of #153's report. An opened video always has one, so a rename still is.
+     */
+    @Test
+    public void theMainFeedDoesNotReportTheCommentBarMissing() {
+        resolveCommentBarIds();
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        HookStatus.clear();
+        try (var main = Robolectric.buildActivity(Activity.class).setup();
+             var detailController = Robolectric.buildActivity(
+                     com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            main.get().setContentView(pagerColumn(main.get(), new View(main.get())));
+            VideoOverlayHider.applyTo(main.get());
+            assertTrue("the main feed called the comment bar missing: " + HookStatus.missing("overlay"),
+                    HookStatus.missing("overlay").stream().noneMatch(line -> line.contains("47.1.4:qqw")));
+
+            Activity detail = detailController.get();
+            detail.setContentView(pagerColumn(detail, new View(detail)));
+            VideoOverlayHider.applyTo(detail);
+            assertTrue("an opened video without the bar went unreported",
+                    HookStatus.missing("overlay").stream().anyMatch(line -> line.contains("47.1.4:qqw")));
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            HookStatus.clear();
+        }
+    }
+
+    /**
      * A cell with TikTok's search bar under the caption ends higher, so the row comes down only
      * until its line meets the caption's bottom and nothing is lifted; and a row TikTok moved
      * itself is left where TikTok put it.

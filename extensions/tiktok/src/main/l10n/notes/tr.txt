@@ -2,6 +2,8 @@
 
 * **TikTok:** Açılan videolarda yorum çubuğunu gizle açıkken, bir profilden veya aramadan açtığın videolarda ilerleme çubuğu artık açıklamanın üstünden geçmiyor. Açıklama, çubuğa yer açacak kadar yukarı kayıyor (#153).
 
+* **TikTok:** Tanılama raporu, ana akıştayken yorum çubuğunu artık eksik olarak göstermiyor (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

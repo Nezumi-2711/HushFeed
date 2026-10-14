@@ -639,7 +639,7 @@ public final class VideoOverlayHider {
                     pairDetailCommentBar(hidden, TRAVERSAL.selected);
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
-                            touchScale != 1f);
+                            touchScale != 1f, detailPager);
                     alignBarRows(found, TRAVERSAL.selected, hidden, cellId);
                     fadeFullscreenEntries();
                     int photoExit = TRAVERSAL.selected[CLEAR_PHOTO_EXIT_TARGET];
@@ -1203,7 +1203,7 @@ public final class VideoOverlayHider {
 
     /** Applies each logical switch only to its selected version-specific candidate. */
     private static void applySelectedTargets(int[] ids, boolean[] hidden,
-            List<List<View>> found, int[] selected, boolean scaling) {
+            List<List<View>> found, int[] selected, boolean scaling, boolean detailPager) {
         int candidateAt = 0;
         for (int target = 0; target < TRAVERSAL_TARGET_IDS.length; target++) {
             String[] names = TRAVERSAL_TARGET_IDS[target];
@@ -1264,7 +1264,13 @@ public final class VideoOverlayHider {
                 }
             // A survey is content TikTok inserts only on selected posts. Its absence from an
             // ordinary feed cell says nothing about whether this build still has the anchor.
-            } else if (target != SURVEY_TARGET && (wanted || (scaling
+            // Nor does the comment bar's from the main feed, which never has one: with its switch
+            // on, every pass there called the overlay hooks broken (#153). The detail pager
+            // always has it, so a rename still shows there.
+            } else if (target != SURVEY_TARGET
+                    && (detailPager || (target != DETAIL_COMMENT_BAR_TARGET
+                            && target != DETAIL_COMMENT_STRIP_TARGET))
+                    && (wanted || (scaling
                     && target >= RAIL_TARGET_START
                     && target < COUNT_ROW_TARGET_START))) {
                 HookStatus.missingViewId("overlay", String.join("|", names));

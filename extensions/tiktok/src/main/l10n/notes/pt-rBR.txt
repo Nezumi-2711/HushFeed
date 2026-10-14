@@ -2,6 +2,8 @@
 
 * **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, a barra de progresso não passa mais por cima da legenda nos vídeos que você abre de um perfil ou da busca. A legenda sobe só o suficiente para ficar livre (#153).
 
+* **TikTok:** O relatório de diagnóstico não marca mais a barra de comentários como ausente enquanto você está no feed principal (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).
