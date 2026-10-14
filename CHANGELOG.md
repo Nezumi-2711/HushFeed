@@ -27,6 +27,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback, then pick a quality from Share > Video quality in a LIVE. A room whose stream doesn't have that quality still opens at TikTok's choice (#57).
 
+* **TikTok:** A new Accent color patch swaps the red of TikTok's main buttons and red text for blue, green, purple, orange or teal, or for a color code you type. You pick it in the patch's options when you patch. TikTok's lighter and darker reds follow your color, so text stays readable in dark and light mode, and warnings stay red. Like AMOLED dark theme it's built into the app, so only patching again without it takes it back (#84).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** A profile background saved with the Profile background switch on no longer disappears after TikTok restarts. TikTok asks its servers for profiles with a value that left the background out, and the switch now sends the one that brings it back, the same one Feature Gate Lab's Profile banner preset sets. Flipping the switch now offers a restart (#80).

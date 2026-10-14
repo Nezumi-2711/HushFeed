@@ -23,6 +23,8 @@
 
 * **TikTok:** Yeni açar seçdiyin LIVE keyfiyyətini TikTok yenidən başlayandan sonra da saxlayır (#57).
 
+* **TikTok:** Yeni Accent color patçı TikTok-un düymələrindəki və mətnindəki qırmızını mavi, yaşıl, bənövşəyi, narıncı, firuzəyi və ya öz seçdiyin rənglə əvəz edir (#84).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Profil fonu açıq olanda saxlanılan profil fonu TikTok yenidən başlayandan sonra da qalır. Açar indi yenidən başlatmağı təklif edir (#80).

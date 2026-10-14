@@ -57,6 +57,61 @@
       ]
     },
     {
+      "name": "Accent color",
+      "description": "Swaps the red of TikTok's main buttons and red text for blue, green, purple, orange, teal or a color code you type in this patch's options. Warnings stay red, and so can icons with the red drawn in. It's built in while patching, so only patching again without it undoes it.",
+      "category": "Interface",
+      "use": false,
+      "dependencies": [
+        "RawResourcePatch"
+      ],
+      "compatiblePackages": {
+        "com.zhiliaoapp.musically": [
+          "47.1.4"
+        ]
+      },
+      "compatibility": [
+        {
+          "name": "TikTok",
+          "packageName": "com.zhiliaoapp.musically",
+          "description": null,
+          "appIconColor": 16657493,
+          "signatures": [
+            "9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"
+          ],
+          "targets": [
+            {
+              "version": "47.1.4",
+              "experimental": false,
+              "versionCodes": {
+                "ARM64_V8A": 2024701040,
+                "ARMEABI_V7A": 2024701040,
+                "X86": 2024701040,
+                "X86_64": 2024701040
+              }
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "accentColor",
+          "title": "Accent color",
+          "description": "Pick a preset, or type a solid color code like #2D7FF9. TikTok original leaves the red as it is. TikTok's lighter and darker reds follow the color you pick.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": "#FE2C55",
+          "values": {
+            "TikTok original": "#FE2C55",
+            "Blue": "#2D7FF9",
+            "Green": "#1DA153",
+            "Purple": "#8B5CF6",
+            "Orange": "#F26411",
+            "Teal": "#0F9E8E"
+          }
+        }
+      ]
+    },
+    {
       "name": "Advanced downloads",
       "description": "Adds more ways to save: pick the video quality, save full-size photos, the sound on its own or a photo post as one video, hold a profile picture or story to save it, save a story or a video's cover from the share sheet, and pick videos on a profile grid to save in one run. Starts off. Turn it on in Hushfeed settings > Downloads.",
       "category": "Downloads",

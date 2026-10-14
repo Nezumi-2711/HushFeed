@@ -23,6 +23,8 @@
 
 * **TikTok:** Un nuevo interruptor mantiene la calidad de LIVE que elegiste después de reiniciar TikTok (#57).
 
+* **TikTok:** El nuevo parche Accent color cambia el rojo de los botones y textos de TikTok por azul, verde, morado, naranja, verde azulado o un color propio (#84).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Un fondo de perfil guardado con Fondo del perfil activado ya no desaparece al reiniciar TikTok. El interruptor ahora ofrece reiniciar (#80).

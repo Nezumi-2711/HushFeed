@@ -23,6 +23,8 @@
 
 * **TikTok:** A new switch keeps the LIVE quality you picked after TikTok restarts (#57).
 
+* **TikTok:** A new Accent color patch swaps the red of TikTok's buttons and text for blue, green, purple, orange, teal or a color of your own (#84).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** A profile background saved with the Profile background switch on stays after TikTok restarts. The switch now offers a restart (#80).

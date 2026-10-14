@@ -9,6 +9,7 @@ import app.morphe.patches.tiktok.misc.branding.changeAppNamePatch
 import app.morphe.patches.tiktok.misc.branding.customLauncherIconPatch
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.optimizer.*
+import app.morphe.patches.tiktok.misc.theme.accentColorPatch
 import app.morphe.patches.tiktok.misc.theme.amoledThemePatch
 import app.morphe.patches.tiktok.misc.update.hidePlayStoreUpdatePatch
 import app.morphe.patches.tiktok.privacy.trustUserCertificatesPatch
@@ -228,12 +229,12 @@ class BuildDetailsPatchTest {
         listOf(BuildChoice.P2P, BuildChoice.CORE, BuildChoice.CREATION, BuildChoice.LIVE)
             .forEach { BuildDetails.stripped(output, it, StripSummary(1, 1, true)) }
         BuildDetails.raisedVersionCode(output)
-        listOf("changeAppName", "customLauncherIcon", "trustUserCertificates").forEach { BuildDetails.applied(output, it) }
+        listOf("accentColor", "changeAppName", "customLauncherIcon", "trustUserCertificates").forEach { BuildDetails.applied(output, it) }
         assertTrue("the record is ${output.length()} bytes", output.length() <= 4096)
     }
 
     @Test fun `resource choices add only raw metadata dependencies and live retains its existing bytecode`() {
-        listOf(amoledThemePatch, p2pRelayBlockerPatch, coreAssetDebloatPatch, languagePackPurgerPatch,
+        listOf(amoledThemePatch, accentColorPatch, p2pRelayBlockerPatch, coreAssetDebloatPatch, languagePackPurgerPatch,
             studioCreationDebloatPatch, hidePlayStoreUpdatePatch, changeAppNamePatch, customLauncherIconPatch,
             trustUserCertificatesPatch).forEach { patch ->
             val closure = dependencies(patch)

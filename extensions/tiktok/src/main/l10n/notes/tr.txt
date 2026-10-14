@@ -23,6 +23,8 @@
 
 * **TikTok:** Yeni bir anahtar, seçtiğin LIVE kalitesini TikTok yeniden başladıktan sonra da korur (#57).
 
+* **TikTok:** Yeni Accent color yaması, TikTok'un düğmelerindeki ve yazılarındaki kırmızıyı mavi, yeşil, mor, turuncu, camgöbeği ya da kendi seçtiğin bir renkle değiştirir (#84).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Profil arka planı açıkken kaydedilen profil arka planı TikTok yeniden başlayınca artık kaybolmuyor. Anahtar artık yeniden başlatmayı öneriyor (#80).

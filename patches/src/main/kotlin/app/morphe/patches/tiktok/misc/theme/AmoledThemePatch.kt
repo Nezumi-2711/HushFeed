@@ -91,8 +91,8 @@ val amoledThemePatch = resourcePatch(
     }
 }
 
-internal fun renamedPathsRefusal(collisions: Int) =
-    "AMOLED dark theme: this TikTok APK was merged from a split bundle in a way that moved " +
+internal fun renamedPathsRefusal(collisions: Int, patch: String = "AMOLED dark theme") =
+    "$patch: this TikTok APK was merged from a split bundle in a way that moved " +
         "its resource files into new folders, and $collisions of their paths clash with the " +
         "names the resource rebuild gives other files. The rebuild would drop files and " +
         "TikTok would crash at launch. Nothing was changed. Patch the .apkm in Morphe Manager, " +
