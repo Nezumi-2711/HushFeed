@@ -36,8 +36,6 @@
 
 * **TikTok:** Uma LIVE no feed Para você não mostra mais a linha Service+ de uma LIVE pela qual você já passou (#94).
 
-* **TikTok:** Uma nova chave mantém a qualidade da LIVE que você escolheu depois que o TikTok reinicia (#57).
-
 * **TikTok:** Uma nova chave adiciona a tela limpa, que deixa só a transmissão, ao menu de todas as salas de LIVE (#57).
 
 * **TikTok:** O nome de exibição de um criador que volta depois do país ou do @usuário não fica mais cortado (#127).

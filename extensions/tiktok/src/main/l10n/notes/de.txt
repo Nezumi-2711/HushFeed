@@ -36,8 +36,6 @@
 
 * **TikTok:** Ein LIVE im Feed Für dich zeigt nicht mehr die Service+-Zeile eines LIVE, an dem du vorbeigescrollt hast (#94).
 
-* **TikTok:** Ein neuer Schalter behält die gewählte LIVE-Qualität auch nach einem Neustart von TikTok (#57).
-
 * **TikTok:** Ein neuer Schalter fügt Bildschirm leeren, das nur den Stream zeigt, dem Menü jedes LIVE-Raums hinzu (#57).
 
 * **TikTok:** Der Anzeigename eines Creators, der nach dem Land oder dem @Namen zurückkommt, bleibt nicht mehr abgeschnitten (#127).

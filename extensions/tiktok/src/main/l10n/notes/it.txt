@@ -36,8 +36,6 @@
 
 * **TikTok:** Un LIVE nel feed Per te non mostra più la riga Service+ di un LIVE che hai già superato (#94).
 
-* **TikTok:** Un nuovo interruttore mantiene la qualità LIVE che hai scelto dopo il riavvio di TikTok (#57).
-
 * **TikTok:** Un nuovo interruttore aggiunge lo schermo pulito, che lascia solo la diretta, al menu di ogni stanza LIVE (#57).
 
 * **TikTok:** Il nome visualizzato di un creator che torna dopo il paese o l'@nome utente non resta più tagliato (#127).

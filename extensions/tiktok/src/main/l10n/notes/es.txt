@@ -36,8 +36,6 @@
 
 * **TikTok:** Un LIVE del feed Para ti ya no muestra la fila de Service+ de un LIVE que ya pasaste (#94).
 
-* **TikTok:** Un nuevo interruptor mantiene la calidad de LIVE que elegiste después de reiniciar TikTok (#57).
-
 * **TikTok:** Un nuevo interruptor añade la pantalla limpia, que deja solo la transmisión, al menú de cada sala LIVE (#57).
 
 * **TikTok:** El nombre visible de un creador que vuelve tras el país o el @usuario ya no se queda cortado (#127).

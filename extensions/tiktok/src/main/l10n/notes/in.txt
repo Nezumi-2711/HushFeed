@@ -36,8 +36,6 @@
 
 * **TikTok:** LIVE di feed Untuk Anda tidak lagi menampilkan baris Service+ dari LIVE yang sudah kamu lewati (#94).
 
-* **TikTok:** Sakelar baru mempertahankan kualitas LIVE yang kamu pilih setelah TikTok dimulai ulang (#57).
-
 * **TikTok:** Sakelar baru menambahkan layar bersih, yang hanya menyisakan siarannya, ke menu setiap ruang LIVE (#57).
 
 * **TikTok:** Nama tampilan kreator yang kembali setelah negara atau @nama pengguna tidak lagi terpotong (#127).

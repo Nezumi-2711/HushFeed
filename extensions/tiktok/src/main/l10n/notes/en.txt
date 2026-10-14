@@ -36,8 +36,6 @@
 
 * **TikTok:** A LIVE in the For You feed no longer shows the Service+ row of a LIVE you scrolled past (#94).
 
-* **TikTok:** A new switch keeps the LIVE quality you picked after TikTok restarts (#57).
-
 * **TikTok:** A new switch adds clear screen, which leaves only the stream, to every LIVE room's menu (#57).
 
 * **TikTok:** A creator's display name that comes back after the country or the @handle is no longer left cut short (#127).
