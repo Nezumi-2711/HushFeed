@@ -516,6 +516,8 @@ public final class FeatureGateLabStore {
      * the ones those mods ship. FeatureGatePresetsTest reads every listed build's shipped catalog
      * and fails on a key the build doesn't register, a type it registers differently or a value
      * the Lab would refuse. A preset may pin the in-code default, since the server overrides it.
+     * A rule is an AB (abmock) key unless it starts with {@link #LIVE_RULE}, which names one of
+     * TikTok's LIVE settings, read through its own settings manager.
      */
     static final class Preset {
         final String id;
@@ -533,13 +535,21 @@ public final class FeatureGateLabStore {
         JSONObject toJson() throws JSONException {
             JSONArray array = new JSONArray();
             for (String rule : rules) {
+                String manager = MANAGER_ABMOCK;
+                if (rule.startsWith(LIVE_RULE)) {
+                    manager = MANAGER_LIVE;
+                    rule = rule.substring(LIVE_RULE.length());
+                }
                 String[] parts = rule.split(":", 3);
-                array.put(new JSONObject().put("manager", MANAGER_ABMOCK).put("key", parts[0])
+                array.put(new JSONObject().put("manager", manager).put("key", parts[0])
                         .put("type", parts[1]).put("value", parts[2]));
             }
             return new JSONObject().put("title", title).put("rules", array);
         }
     }
+
+    /** Marks a preset rule as a LIVE setting rather than an AB key. */
+    static final String LIVE_RULE = "live/";
 
     private static final String[] CATALOG_BUILDS = GeneratedGateCatalogBuilds.BUILDS;
 
@@ -606,6 +616,12 @@ public final class FeatureGateLabStore {
             // only counts after that. Each video still carries its own server flag for them.
             new Preset("scrolling_comments", "Scrolling comments on videos", CATALOG_BUILDS,
                     "danmaku_exp:INT:1", "landscape_support_danmaku:INT:1"),
+            // Japan's LIVE chat auto-translate (#98). The audience setting is an INT in LIVE's own
+            // settings, 0 by default. Anything above 0 counts as on for the audience, and above 1
+            // also runs the buffered automatic translation, so 2 is the one that translates by
+            // itself. The anchor's own setting is left alone: it only matters in a room you host.
+            new Preset("live_translate", "LIVE chat auto-translate", CATALOG_BUILDS,
+                    LIVE_RULE + "live_auto_translate_model_audience:INT:2"),
             // Disable the client check; changing its separate maximum to 0 would reject all tags.
             new Preset("hashtag_limit", "More hashtags per post", CATALOG_BUILDS,
                     "studio_publish_limit_hashtag_switch:BOOLEAN:false"),

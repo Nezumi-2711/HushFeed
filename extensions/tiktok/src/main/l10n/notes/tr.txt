@@ -24,6 +24,8 @@
 
 * **TikTok:** Feed screen sayfasındaki yeni Şeffaf alt çubuk anahtarı videonun ekranın altına kadar uzanmasını sağlar ve sekme çubuğunun arka planını kaldırır. Kapalı başlar (#145).
 
+* **TikTok:** Feature Gate Lab'da yeni bir hazır ayar var: LIVE sohbetini otomatik çevir. Bir LIVE odasında Paylaş altındaki Yorumları çevir seçeneğini açar (#98).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

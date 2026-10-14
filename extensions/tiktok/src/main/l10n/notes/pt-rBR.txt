@@ -24,6 +24,8 @@
 
 * **TikTok:** Um novo botão na página Feed screen, Barra inferior transparente, deixa o vídeo chegar até a parte de baixo da tela e tira o fundo da barra de abas. Começa desligado (#145).
 
+* **TikTok:** O Feature Gate Lab tem uma nova predefinição, Tradução automática do chat da LIVE. Ela liga a opção Traduzir comentários que fica em Compartilhar numa sala de LIVE (#98).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).

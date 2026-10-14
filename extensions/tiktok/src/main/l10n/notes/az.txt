@@ -24,6 +24,8 @@
 
 * **TikTok:** Feed screen səhifəsində yeni Şəffaf alt panel açarı videonun ekranın aşağısına qədər uzanmasına imkan verir və tabların arxasındakı paneli götürür. Söndürülmüş başlayır (#145).
 
+* **TikTok:** Feature Gate Lab-da yeni LIVE söhbətinin avtomatik tərcüməsi hazır ayarı var. LIVE otağında Paylaşın altındakı Şərhləri tərcümə et seçimini işə salır (#98).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).

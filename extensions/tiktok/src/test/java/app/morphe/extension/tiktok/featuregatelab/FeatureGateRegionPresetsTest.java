@@ -20,13 +20,17 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 
-/** The scrolling comments and several-photos presets from TikTok's regional builds (#98). */
+/**
+ * The scrolling comments, several-photos and LIVE auto-translate presets from TikTok's regional
+ * builds (#98).
+ */
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 28)
 public class FeatureGateRegionPresetsTest {
     private static final String DANMAKU = "danmaku_exp";
     private static final String LANDSCAPE = "landscape_support_danmaku";
     private static final String PHOTOS = "comment_multi_photo_group";
+    private static final String LIVE_TRANSLATE = "live_auto_translate_model_audience";
     @Rule public final SettingsContextRule settings = new SettingsContextRule();
     private Map<String, FeatureGateCatalog.Entry> catalog;
 
@@ -47,8 +51,11 @@ public class FeatureGateRegionPresetsTest {
                 catalog.put(entry.identity(), entry);
                 types.put(entry.key, entry.type);
             }
+            if (entry.manager.equals("live") && entry.key.equals(LIVE_TRANSLATE)) {
+                catalog.put(entry.identity(), entry);
+            }
         }
-        assertEquals("all three keys are in the shipped catalog", 3, catalog.size());
+        assertEquals("all four keys are in the shipped catalog", 4, catalog.size());
         var cachedTypes = FeatureGateCatalog.class.getDeclaredField("cachedAbTypes");
         cachedTypes.setAccessible(true);
         cachedTypes.set(null, Map.copyOf(types));
@@ -100,6 +107,40 @@ public class FeatureGateRegionPresetsTest {
 
         FeatureGateLabStore.setMasterEnabled(false);
         assertEquals(1, FeatureGateLabRuntime.overrideInt(PHOTOS, 1));
+    }
+
+    @Test public void liveTranslateWritesTheLiveSettingAndNotAnAbKey() throws Exception {
+        FeatureGateLabUndo.applyPreset("47.1.4", "live_translate", catalog);
+        assertEquals(1, FeatureGateLabStore.rules().size());
+        FeatureGateLabStore.Rule rule = FeatureGateLabStore.rule("live", LIVE_TRANSLATE, "INT");
+        assertNotNull("the rule is a LIVE one", rule);
+        assertEquals("2", rule.value);
+        assertNull(FeatureGateLabStore.rule("abmock", LIVE_TRANSLATE, "INT"));
+        assertFalse("a preset never turns the overrides switch on", FeatureGateLabStore.masterEnabled());
+        assertEquals("off leaves TikTok's value", 0, FeatureGateLabRuntime.overrideLiveInt(LIVE_TRANSLATE, 0));
+
+        FeatureGateLabStore.setMasterEnabled(true);
+        for (int stock : new int[]{0, 1}) {
+            assertEquals(2, FeatureGateLabRuntime.overrideLiveInt(LIVE_TRANSLATE, stock));
+        }
+        assertEquals("the AB reader of the same name is left alone", 0,
+                FeatureGateLabRuntime.overrideInt(LIVE_TRANSLATE, 0));
+
+        FeatureGateLabUndo.undo();
+        assertTrue(FeatureGateLabStore.rules().isEmpty());
+        assertEquals(0, FeatureGateLabRuntime.overrideLiveInt(LIVE_TRANSLATE, 0));
+    }
+
+    @Test public void liveTranslateRefusesAMissingKeyAndAnotherBuild() throws Exception {
+        Map<String, FeatureGateCatalog.Entry> missing = new LinkedHashMap<>(catalog);
+        missing.remove("live
+" + LIVE_TRANSLATE);
+        assertThrows(JSONException.class,
+                () -> FeatureGateLabUndo.applyPreset("47.1.4", "live_translate", missing));
+        BuildNames.setRunningBuildForTests("47.2.1");
+        assertThrows(JSONException.class,
+                () -> FeatureGateLabUndo.applyPreset("47.1.4", "live_translate", catalog));
+        assertTrue(FeatureGateLabStore.rules().isEmpty());
     }
 
     @Test public void eitherPresetRefusesMissingOrMistypedKeysAndOtherBuilds() throws Exception {
