@@ -6,6 +6,8 @@
 
 * **TikTok:** La sección de almacenamiento del informe de diagnóstico ya no muestra parte del ID de tu cuenta como nombre de carpeta (#70).
 
+* **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, las publicaciones de fotos en una cuadrícula abierta ya no terminan sobre una franja negra abajo (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).

@@ -6,6 +6,8 @@
 
 * **TikTok:** La sezione archiviazione del report diagnostico non mostra più parte dell'ID del tuo account come nome di una cartella (#70).
 
+* **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, i post con foto in una griglia aperta non finiscono più sopra una fascia nera in basso (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).

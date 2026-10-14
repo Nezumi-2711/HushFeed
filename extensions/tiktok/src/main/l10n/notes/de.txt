@@ -6,6 +6,8 @@
 
 * **TikTok:** Der Speicherbereich im Diagnosebericht zeigt keinen Teil deiner Konto-ID mehr als Ordnernamen (#70).
 
+* **TikTok:** Ist Kommentarleiste bei geöffneten Videos ausblenden an, enden Fotobeiträge in einem geöffneten Raster nicht mehr über einem schwarzen Streifen am unteren Rand (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).

@@ -639,7 +639,7 @@ public final class VideoOverlayHider {
                         keepColumnStrips(found, identifier(activity, activity.getPackageName(), PAGER_COLUMN_ID));
                     }
                     selectCurrentTargets(found, TRAVERSAL.selected);
-                    pairDetailCommentBar(hidden, TRAVERSAL.selected);
+                    pairDetailCommentBar(hidden, TRAVERSAL.selected, ids, detailPager);
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f, detailPager);
@@ -930,12 +930,30 @@ public final class VideoOverlayHider {
      * under a bar that still shows, which then covers the caption and the music row; the bar
      * alone leaves the black strip. When one of them can't be found, the one that was found
      * stays (or comes back) and the other is reported missing.
+     *
+     * <p>One exception: an opened video whose build still names the bar. An opened grid that
+     * starts on photos, or runs through several, has no bar in its tree on 47.1.4 until a video
+     * binds one, and putting the strip back there left the photo ending a bar's height short over
+     * a black band (#153). A bar renamed by another build doesn't resolve at all, so that case
+     * still keeps its strip.
      */
-    private static void pairDetailCommentBar(boolean[] hidden, int[] selected) {
+    private static void pairDetailCommentBar(boolean[] hidden, int[] selected, int[] ids,
+                                             boolean detailPager) {
         boolean bar = selected[DETAIL_COMMENT_BAR_TARGET] >= 0;
         boolean strip = selected[DETAIL_COMMENT_STRIP_TARGET] >= 0;
         if (bar && !strip) hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)] = false;
-        if (strip && !bar) hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)] = false;
+        if (strip && !bar && !(detailPager && resolves(ids, DETAIL_COMMENT_BAR_TARGET))) {
+            hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)] = false;
+        }
+    }
+
+    /** Whether any of a target's ids names a resource in this build. */
+    private static boolean resolves(int[] ids, int target) {
+        int at = firstCandidate(target);
+        for (int i = 0; i < TRAVERSAL_TARGET_IDS[target].length; i++) {
+            if (ids[at + i] != 0) return true;
+        }
+        return false;
     }
 
     /**

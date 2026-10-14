@@ -6,6 +6,8 @@
 
 * **TikTok:** A seção de armazenamento do relatório de diagnóstico não mostra mais parte do ID da sua conta como nome de pasta (#70).
 
+* **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, as publicações de fotos numa grade aberta não terminam mais acima de uma faixa preta embaixo (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).

@@ -6,6 +6,8 @@
 
 * **TikTok:** The diagnostic report's storage section no longer shows part of your account ID as a folder name (#70).
 
+* **TikTok:** With Hide the comment bar on opened videos on, photo posts in an opened grid no longer end above a black band at the bottom (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).

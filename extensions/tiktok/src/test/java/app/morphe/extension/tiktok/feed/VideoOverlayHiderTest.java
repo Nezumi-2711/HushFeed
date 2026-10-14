@@ -2029,13 +2029,14 @@ public class VideoOverlayHiderTest {
     }
 
     /**
-     * The bar and the strip go together. With the bar missing, a collapsed strip would grow the
-     * pager under nothing, or under a bar a build renamed, which then covers the caption. With
-     * the strip missing, hiding the bar alone leaves the black strip.
+     * The bar and the strip go together. With the bar renamed by a build its id no longer
+     * resolves, and a collapsed strip would grow the pager under that bar, which then covers the
+     * caption. With the strip missing, hiding the bar alone leaves the black strip.
      */
     @Test
     public void halfTheCommentBarIsNeverHidden() {
         resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("47.1.4:qqw", 0);
         Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
         try (var noBar = Robolectric.buildActivity(
                      com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start();
@@ -2046,6 +2047,7 @@ public class VideoOverlayHiderTest {
             noBar.resume();
             VideoOverlayHider.applyTo(noBar.get());
             assertEquals(View.VISIBLE, strip.getVisibility());
+            resolveCommentBarIds();
 
             FrameLayout root = new FrameLayout(noStrip.get());
             View bar = new View(noStrip.get());
@@ -2062,6 +2064,44 @@ public class VideoOverlayHiderTest {
             VideoOverlayHider.applyTo(noStrip.get());
             assertEquals(View.GONE, bar.getVisibility());
             assertEquals(View.GONE, lateStrip.getVisibility());
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+        }
+    }
+
+    /**
+     * An opened grid that starts on photos, or runs through several, has no comment bar in its
+     * tree on 47.1.4 until a video binds one. The bar's id still resolves there, so the strip
+     * stays away instead of coming back as a black band under the photo (#153), and the switch
+     * still gives it back.
+     */
+    @Test
+    public void anOpenedPhotoWithNoBarYetKeepsTheStripAway() {
+        resolveCommentBarIds();
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var photos = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = photos.get();
+            View strip = new View(detail);
+            FrameLayout root = new FrameLayout(detail);
+            root.addView(pagerColumn(detail, strip));
+            detail.setContentView(root);
+            photos.resume();
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the strip came back under a photo", View.GONE, strip.getVisibility());
+
+            // A video binds the bar: both stay away.
+            View bar = new View(detail);
+            bar.setId(BAR_ID);
+            root.addView(bar);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.GONE, bar.getVisibility());
+            assertEquals(View.GONE, strip.getVisibility());
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.VISIBLE, strip.getVisibility());
+            assertEquals(View.VISIBLE, bar.getVisibility());
         } finally {
             Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
         }

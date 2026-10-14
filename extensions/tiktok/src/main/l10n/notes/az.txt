@@ -6,6 +6,8 @@
 
 * **TikTok:** Diaqnostika hesabatının yaddaş bölməsi artıq hesab ID-nin bir hissəsini qovluq adı kimi göstərmir (#70).
 
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, açılmış şəbəkədəki foto paylaşımları artıq aşağıda qara zolağın üstündə bitmir (#153).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).
