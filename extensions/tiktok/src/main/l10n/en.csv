@@ -515,6 +515,7 @@ Downloads,Downloads
 Drag up or down along the left or right edge of a video to change what that edge strip is set to below. By default that's the screen brightness on the left and the volume on the right. Swiping anywhere else still scrolls the feed.,Drag up or down along the left or right edge of a video to change what that edge strip is set to below. By default that's the screen brightness on the left and the volume on the right. Swiping anywhere else still scrolls the feed.
 Drama and Series,Drama and Series
 "Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are.","Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are."
+Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.,Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.
 Each area shows how many of the things Hushfeed looks for were found in this TikTok and how many are missing.,Each area shows how many of the things Hushfeed looks for were found in this TikTok and how many are missing.
 Easier comment likes,Easier comment likes
 Edge strip width,Edge strip width
@@ -1066,6 +1067,7 @@ None of these gates had an override to reset.,None of these gates had an overrid
 None of these gates takes a true or false value.,None of these gates takes a true or false value.
 None recorded,None recorded
 Normal,Normal
+Normal-weight captions,Normal-weight captions
 "Not a handle or id, so ignored: %1$s","Not a handle or id, so ignored: %1$s"
 "Not a part Hushfeed fills in, so it's kept as typed: %1$s","Not a part Hushfeed fills in, so it's kept as typed: %1$s"
 Not blocked,Not blocked

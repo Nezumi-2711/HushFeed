@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Nuovo interruttore Sottotitoli con spessore normale in Sottotitoli: i sottotitoli parlati con spessore normale invece del grassetto di TikTok (#158).
+
 * **TikTok:** Nuovo interruttore Menu completo con pressione prolungata nei risultati di ricerca: una pressione prolungata su un video aperto dalla ricerca apre il menu di Per te (#120).
 
 * **TikTok:** Nuovo interruttore Mostra il paese come bandiera: il paese accanto al nome del creator e dopo l'ora di un commento appare come bandiera (#157).

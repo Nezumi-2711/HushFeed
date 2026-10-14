@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Neuer Schalter Untertitel in normaler Stärke unter Untertitel: gesprochene Untertitel in normaler Schriftstärke statt in TikToks Fettschrift (#158).
+
 * **TikTok:** Neuer Schalter Volles Menü bei langem Drücken in Suchergebnissen: Langes Drücken auf ein Video aus der Suche öffnet das Menü von Für dich (#120).
 
 * **TikTok:** Neuer Schalter Land als Flagge anzeigen: Das Land neben dem Namen des Creators und nach der Zeit eines Kommentars erscheint als Flagge (#157).

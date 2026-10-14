@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Başlıqlar altında yeni Normal qalınlıqda başlıqlar açarı: danışılan başlıqlar TikTok-un qalın yazısı əvəzinə adi qalınlıqda (#158).
+
 * **TikTok:** Yeni Axtarış nəticələrində tam uzun basma menyusu açarı: axtarışdan açılan videoya uzun basmaq Sənin üçün menyusunu açır (#120).
 
 * **TikTok:** Yeni Ölkəni bayraqla göstərin açarı: yaradıcının adının yanındakı və şərhin vaxtından sonrakı ölkə bayraq kimi görünür (#157).

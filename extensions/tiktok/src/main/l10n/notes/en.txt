@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** New Normal-weight captions switch under Captions: spoken captions at regular weight instead of TikTok's bold (#158).
+
 * **TikTok:** New Full long-press menu in search results switch: a long press on a video opened from search opens the For You menu (#120).
 
 * **TikTok:** New Show the country as a flag switch: the country by a creator's name and after a commenter's time shows as its flag (#157).

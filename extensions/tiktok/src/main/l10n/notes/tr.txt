@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Altyazılar bölümünde yeni Normal kalınlıkta altyazılar anahtarı: konuşma altyazıları TikTok'un kalın yazısı yerine normal kalınlıkta (#158).
+
 * **TikTok:** Yeni Arama sonuçlarında tam uzun basma menüsü anahtarı: aramadan açılan bir videoya uzun basmak Senin İçin menüsünü açar (#120).
 
 * **TikTok:** Yeni Ülkeyi bayrakla göster anahtarı: içerik üreticisinin adının yanındaki ve yorum saatinden sonraki ülke bayrağıyla görünür (#157).

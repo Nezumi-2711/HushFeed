@@ -548,6 +548,9 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             };
             captionSize.zeroMeans("TikTok's size");
             addPreference(captionSize);
+            addPreference(new TogglePreference(context, "Normal-weight captions",
+                    "Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.",
+                    Settings.CAPTION_REGULAR_WEIGHT));
             addPreference(new ChoicePreference(context, "Caption background", Settings.CAPTION_BACKGROUND,
                     new String[]{"TikTok default", "Transparent", "Dark", "Black"},
                     new String[]{"default", "transparent", "dark", "black"}));

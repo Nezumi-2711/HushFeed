@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Novo botão Legendas com espessura normal em Legendas: legendas faladas com espessura normal em vez do negrito do TikTok (#158).
+
 * **TikTok:** Novo botão Menu completo de toque longo nos resultados da pesquisa: um toque longo em um vídeo aberto pela pesquisa abre o menu de Para você (#120).
 
 * **TikTok:** Novo botão Mostrar o país como bandeira: o país ao lado do nome do criador e depois do horário de um comentário aparece como bandeira (#157).

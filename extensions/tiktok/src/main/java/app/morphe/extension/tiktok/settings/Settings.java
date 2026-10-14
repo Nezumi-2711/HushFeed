@@ -101,6 +101,7 @@ public class Settings extends BaseSettings {
             "subtitle_language", "original", false, Setting.parent(DOWNLOAD_SUBTITLES));
     public static final IntegerSetting CAPTION_TEXT_SIZE =
             new IntegerSetting("caption_text_size", 0).withRange(0, 48);
+    public static final BooleanSetting CAPTION_REGULAR_WEIGHT = new BooleanSetting("caption_regular_weight", FALSE);
     public static final StringSetting CAPTION_BACKGROUND = new StringSetting("caption_background", "default");
     public static final BooleanSetting KEEP_CAPTIONS_CLEAR_DISPLAY = new BooleanSetting("keep_captions_clear_display", FALSE);
     public static final BooleanSetting ALLOW_SCREEN_CAPTURE = new BooleanSetting("allow_screen_capture", FALSE, true);

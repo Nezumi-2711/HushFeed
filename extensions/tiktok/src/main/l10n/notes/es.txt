@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Nuevo interruptor Subtítulos con grosor normal en Subtítulos: los subtítulos hablados con grosor normal en lugar de la negrita de TikTok (#158).
+
 * **TikTok:** Nuevo interruptor Menú completo de pulsación larga en los resultados de búsqueda: una pulsación larga en un video abierto desde la búsqueda abre el menú de Para ti (#120).
 
 * **TikTok:** Nuevo interruptor Mostrar el país como bandera: el país junto al nombre del creador y tras la hora de un comentario se muestra como su bandera (#157).
