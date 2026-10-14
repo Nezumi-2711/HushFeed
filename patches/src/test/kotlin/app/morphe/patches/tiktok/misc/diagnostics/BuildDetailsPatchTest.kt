@@ -234,13 +234,21 @@ class BuildDetailsPatchTest {
     }
 
     @Test fun `resource choices add only raw metadata dependencies and live retains its existing bytecode`() {
-        listOf(amoledThemePatch, accentColorPatch, p2pRelayBlockerPatch, coreAssetDebloatPatch, languagePackPurgerPatch,
+        listOf(accentColorPatch, p2pRelayBlockerPatch, coreAssetDebloatPatch, languagePackPurgerPatch,
             studioCreationDebloatPatch, hidePlayStoreUpdatePatch, changeAppNamePatch, customLauncherIconPatch,
             trustUserCertificatesPatch).forEach { patch ->
             val closure = dependencies(patch)
             assertTrue("${patch.name} has no metadata dependency", buildDetailsPatch in closure)
             assertTrue("${patch.name} unexpectedly injects runtime hooks", closure.none { it is BytecodePatch })
         }
+        // AMOLED repaints one Compose palette builder in place (#152). That is bytecode, but it
+        // calls nothing of Hushfeed's, so the extension stays out of a build that only wants AMOLED.
+        val amoled = dependencies(amoledThemePatch)
+        assertTrue("AMOLED has no metadata dependency", buildDetailsPatch in amoled)
+        val amoledBytecode = amoled.filterIsInstance<BytecodePatch>()
+        assertEquals("AMOLED's bytecode is the palette repaint alone", 1, amoledBytecode.size)
+        assertEquals(null, amoledBytecode.single().name)
+        assertTrue("AMOLED unexpectedly injects runtime hooks", sharedExtensionPatch !in amoled)
         assertEquals(setOf(liveGiftEffectOptimizerPatch),
             dependencies(liveStreamSuiteOptimizerPatch).filterIsInstance<BytecodePatch>().toSet())
         assertTrue(buildDetailsPatch in dependencies(sharedExtensionPatch))

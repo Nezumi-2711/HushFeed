@@ -1,6 +1,8 @@
 ## Unreleased
 
 * **TikTok:** With Hide the comment bar on opened videos on, the music disc no longer covers the end of the progress bar or the time beside it (#153).
+* **TikTok:** AMOLED dark theme now makes the cards on the Settings and privacy list black too (#152).
+
 * **TikTok:** New Show translation options in Language settings switch under Comments: TikTok's own Language page shows its translation rows again on accounts that only got App language there (#143).
 
 * **TikTok:** The LIVE Record button moves down out of the way when TikTok's Discover panel opens over the room, and goes back when it closes (#37).

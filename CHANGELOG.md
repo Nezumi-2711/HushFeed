@@ -5,6 +5,8 @@ Every Hushfeed release, newest first.
 ## Unreleased
 
 * **TikTok:** With Hide the comment bar on opened videos on, the music disc at the bottom right no longer sits on the end of the progress bar or on the time beside it. A short caption used to leave it there. It now stays above the bar, the way it does with the comment bar showing (#153).
+* **TikTok:** AMOLED dark theme now reaches the cards on the Settings and privacy list itself. That list takes its colors from a palette in TikTok's code instead of its resources, so with TikTok's Display set to Dark its cards stayed gray after 0.73.0. They take the AMOLED color now. Light mode, TikTok's high contrast palette and the profile menu's cards keep their own colors (#152).
+
 * **TikTok:** A new Show translation options in Language settings switch, under Translate button in comments, brings back the translation rows (Always translate, Translate into, Don't translate) on TikTok's own Language page under Settings and privacy. TikTok hides that whole group for some accounts through two of its experiments, which is why it showed while logged out and went away after login. The switch answers those two on that page only, so the feed keeps TikTok's own translation behavior (#143).
 
 * **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
