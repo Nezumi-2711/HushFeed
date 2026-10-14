@@ -183,6 +183,12 @@ public final class VideoOverlayHider {
      */
     private static final String[] STATUS_BAR_SCRIM_IDS = {"47.1.4:wll"};
     /**
+     * The player in each feed cell, around the video's surface. With the spacer and the band gone
+     * a 9:16 video still sat centered in it with black above and below, so the see-through status
+     * bar grows the surface to fill it (#145, S22). Absent from photo and LIVE cells.
+     */
+    private static final String[] PLAYER_VIEW_IDS = {"player_view"};
+    /**
      * The blank under the video, the height of the bottom tab bar, with a background from the
      * theme. It is the cell's last child (dux first, the video area between), and the reason the
      * picture stops above the bar. See-through bottom bar collapses it (#145).
@@ -318,6 +324,7 @@ public final class VideoOverlayHider {
     private static final int BOTTOM_SPACER_TARGET = TOP_SEARCH_SCRIM_TARGET + 1;
     private static final int DETAIL_SEARCH_BOX_TARGET = BOTTOM_SPACER_TARGET + 1;
     private static final int STATUS_BAR_SCRIM_TARGET = DETAIL_SEARCH_BOX_TARGET + 1;
+    private static final int PLAYER_VIEW_TARGET = STATUS_BAR_SCRIM_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -615,7 +622,8 @@ public final class VideoOverlayHider {
             touchScale = Math.min(MAX_TOUCH_SCALE, Math.max(1f, touchScale));
             if (caption || music || actionBar || surveys || tabStrip || carry || detailCommentBar || anchor
                     || clearControls || detailSearchBox
-                    || statusBar || seeThroughStatusBar || seeThroughBar || SeeThroughBottomBar.holdsBackground()
+                    || statusBar || seeThroughStatusBar || SeeThroughStatusBar.anyFilled()
+                    || seeThroughBar || SeeThroughBottomBar.holdsBackground()
                     || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty() || !WIDGETS_LIFTED.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
                     || !CAPTIONS_LIFTED.isEmpty() || !DISCS_LIFTED.isEmpty() || touchScale != 1f || scaledLastPass) {
@@ -654,6 +662,8 @@ public final class VideoOverlayHider {
                 wanted[DETAIL_SEARCH_BOX_TARGET] = detailSearchBox;
                 wanted[STATUS_BAR_SPACER_TARGET] = statusBar || seeThroughStatusBar;
                 wanted[STATUS_BAR_SCRIM_TARGET] = statusBar || seeThroughStatusBar;
+                // Grown, not hidden: see SeeThroughStatusBar.fill.
+                wanted[PLAYER_VIEW_TARGET] = seeThroughStatusBar;
                 wanted[BOTTOM_SPACER_TARGET] = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
                     wanted[RAIL_TARGET_START + i] = rail[i] || carryHides;
@@ -918,7 +928,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[STATUS_BAR_SCRIM_TARGET + 1][];
+        String[][] targets = new String[PLAYER_VIEW_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -950,6 +960,7 @@ public final class VideoOverlayHider {
         targets[BOTTOM_SPACER_TARGET] = BOTTOM_SPACER_IDS;
         targets[DETAIL_SEARCH_BOX_TARGET] = DETAIL_SEARCH_BOX_IDS;
         targets[STATUS_BAR_SCRIM_TARGET] = STATUS_BAR_SCRIM_IDS;
+        targets[PLAYER_VIEW_TARGET] = PLAYER_VIEW_IDS;
         return targets;
     }
 
@@ -1647,7 +1658,9 @@ public final class VideoOverlayHider {
                     // still seeks while it's out of sight (#84). Otherwise it fades with the
                     // controls. A native alpha write or comments rebind can bring the row back,
                     // so the pre-draw pass keeps the transparent row out of sight too.
-                    if (target == CLEAR_SEEK_BAR_TARGET) {
+                    if (target == PLAYER_VIEW_TARGET) {
+                        SeeThroughStatusBar.fill(view, wanted);
+                    } else if (target == CLEAR_SEEK_BAR_TARGET) {
                         if (wanted) {
                             setFaded(view, 100);
                             setTransparent(view, true);
@@ -1714,8 +1727,10 @@ public final class VideoOverlayHider {
             // Nor does the comment bar's from the main feed, which never has one: with its switch
             // on, every pass there called the overlay hooks broken (#153). The detail pager
             // always has it, so a rename still shows there. The search box at the top of an
-            // opened video is there only on the pages TikTok gives a search bar.
+            // opened video is there only on the pages TikTok gives a search bar, and the player
+            // only in video cells.
             } else if (target != SURVEY_TARGET && target != DETAIL_SEARCH_BOX_TARGET
+                    && target != PLAYER_VIEW_TARGET
                     && (detailPager || (target != DETAIL_COMMENT_BAR_TARGET
                             && target != DETAIL_COMMENT_STRIP_TARGET))
                     && (wanted || (scaling

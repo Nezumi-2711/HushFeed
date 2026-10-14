@@ -16,7 +16,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** A new Floating bottom bar switch, under See-through bottom bar, puts the tabs on a rounded, see-through dark pill that floats over the video, a little in from the sides and bottom. The tabs stay exactly where they were and work as before (#124).
 
-* **TikTok:** A new See-through status bar switch on the Feed screen page lets the main feed's video reach the top edge, with the clock and status icons over it instead of a black band. The tabs at the top stay where they are, and videos you open from a profile or search are left as they were (#145).
+* **TikTok:** A new See-through status bar switch on the Feed screen page lets the main feed's video reach the top edge, with the clock and status icons over it instead of a black band. A tall video grows a little to fill the screen top to bottom, so a sliver comes off each side. Wide videos keep their bars. The tabs at the top stay where they are, and videos you open from a profile or search are left as they were (#145).
 
 * **TikTok:** With Show a LIVE under the status bar on, the black strip under the clock no longer flashes for a moment as a LIVE room opens or as you swipe to the next room. The same goes for Hide the status bar in LIVE (#137).
 
