@@ -1,6 +1,9 @@
 ## Unreleased
 
 * **TikTok:** Der LIVE-Aufnahmeknopf rutscht nach unten aus dem Weg, wenn TikToks Entdecken-Leiste über dem Raum aufgeht, und kehrt zurück, wenn sie zugeht (#37).
+* **TikTok:** Ist LIVE unter der Statusleiste zeigen an, blitzt der schwarze Balken unter der Uhr nicht mehr kurz auf, wenn ein Raum öffnet oder du zum nächsten wischst (#137).
+
+* **TikTok:** Neue Schalter Profilaufrufe ausblenden und „Freunde hinzufügen“ ausblenden unter Profil: Diese beiden Schaltflächen verschwinden oben aus deinem Profil, das Menü bleibt (#158).
 
 * **TikTok:** Wenn TikTok mitten in einer LIVE-Aufnahme geschlossen wird (weggewischt oder vom Handy beendet), speichert der nächste Start das Aufgenommene und sagt dir Bescheid, statt es im Cache liegen zu lassen (#37).
 * **TikTok:** Neue Schalter Profilaufrufe ausblenden und „Freunde hinzufügen“ ausblenden unter Profil: Diese beiden Schaltflächen verschwinden oben aus deinem Profil, das Menü bleibt (#158).

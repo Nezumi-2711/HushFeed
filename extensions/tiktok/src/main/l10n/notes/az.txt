@@ -1,6 +1,9 @@
 ## Unreleased
 
 * **TikTok:** TikTok-un Kəşf et paneli otağın üstündə açılanda LIVE Yazmaq düyməsi aşağı çəkilir, panel bağlananda yerinə qayıdır (#37).
+* **TikTok:** LIVE-ı status panelinin altında göstərin açıq olanda saatın altındakı qara zolaq artıq otaq açılarkən və ya növbəti otağa sürüşdürəndə bir anlıq görünmür (#137).
+
+* **TikTok:** Profil altında yeni Profil baxışlarını gizlədin və Add friends düyməsini gizlədin açarları: bu iki düymə profilinizin yuxarısından gedir, menyu qalır (#158).
 
 * **TikTok:** LIVE yazısının ortasında TikTok bağlanarsa (sürüşdürülüb bağlanıb və ya telefon dayandırıb), növbəti açılışda yazılan hissə saxlanılır və sizə bildirilir, keşdə qalmır (#37).
 * **TikTok:** Profil altında yeni Profil baxışlarını gizlədin və Add friends düyməsini gizlədin açarları: bu iki düymə profilinizin yuxarısından gedir, menyu qalır (#158).

@@ -5,6 +5,9 @@ Every Hushfeed release, newest first.
 ## Unreleased
 
 * **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
+* **TikTok:** With Show a LIVE under the status bar on, the black strip under the clock no longer flashes for a moment as a LIVE room opens or as you swipe to the next room. The same goes for Hide the status bar in LIVE (#137).
+
+* **TikTok:** Two new switches under Profile, Hide profile views and Hide Add friends, take those buttons off the top of your Profile tab. The menu button keeps its place, and another person's profile is left as it is (#158).
 
 * **TikTok:** A LIVE recording that TikTok closed on (swiped out of recents, or stopped by the phone) is saved at the next start, with the same "TikTok closed" message a recording cut short gets. It used to sit in the cache, unsaved, until the day-old cleanup threw it away (#37).
 * **TikTok:** Two new switches under Profile, Hide profile views and Hide Add friends, take those buttons off the top of your Profile tab. The menu button keeps its place, and another person's profile is left as it is (#158).
