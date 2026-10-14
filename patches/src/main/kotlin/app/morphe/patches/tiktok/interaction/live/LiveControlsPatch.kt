@@ -33,6 +33,36 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 private const val EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveControls;"
+private const val RECORD_EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveRecordChip;"
+
+/** A LIVE room page, one fragment per room in the room pager, real-named on 47.1.4. */
+internal const val LIVE_PLAY_FRAGMENT = "Lcom/bytedance/android/livesdk/chatroom/ui/LivePlayFragment;"
+
+/** The room model a LIVE page holds, with the creator and the stream addresses, real-named on 47.1.4. */
+internal const val LIVE_ROOM_TYPE = "Lcom/bytedance/android/livesdkapi/depend/model/live/Room;"
+
+/**
+ * A LIVE room page coming to the front (#37). The pager resumes a page as its room is shown, so the
+ * hook hands the page to the recording button, which finds the room (and with it the creator and the
+ * stream addresses) in the page's single Room field when the viewer taps Record. The page also
+ * names the room's activity, which is where the button goes. The hook only notes the page.
+ */
+internal object LivePlayFragmentResumeFingerprint : Fingerprint(
+    definingClass = LIVE_PLAY_FRAGMENT,
+    name = "onResume",
+    returnType = "V",
+    parameters = listOf(),
+)
+
+/**
+ * The one field of [fragment] that holds its room. The recording button reads the room from the
+ * page by that type, so a page with none or two would leave it recording the wrong LIVE or none.
+ */
+internal fun liveRoomField(fragment: ClassDef): String {
+    val rooms = fragment.fields.filter { it.type == LIVE_ROOM_TYPE }
+    return rooms.singleOrNull()?.name
+        ?: throw PatchException("LIVE controls: expected one Room field in ${fragment.type}, found ${rooms.map { it.name }}")
+}
 
 /** The feed LIVE preview's guide, real-named on 47.0.3, 47.1.3 and 47.1.4. */
 internal const val LIVE_PREVIEW_GUIDE_VM = "Lcom/ss/android/ugc/aweme/feed/adapter/widget/guide/LivePreviewGuideEnterVM;"
@@ -363,7 +393,8 @@ val liveControlsPatch = bytecodePatch(
         "show a LIVE's exact viewer count instead of a rounded one, offer a quality choice and " +
         "clear screen in more LIVE rooms, and keep your quality pick after TikTok restarts. " +
         "Starts off. Turn it on in Hushfeed settings > Playback. " +
-        "It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it.",
+        "It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it, " +
+        "and can add a Record button to a LIVE room that saves what you watch from when you tap it.",
 ) {
     category("Playback")
     dependsOn(settingsPatch, sharedExtensionPatch)
@@ -394,6 +425,14 @@ val liveControlsPatch = bytecodePatch(
             "LIVE controls",
             "invoke-static {}, $EXTENSION->offerClearScreen()Z",
             "const/4 v0, 0x1\nreturn v0",
+        )
+
+        // The room page coming to the front: where the Record button goes and which room it records (#37).
+        liveRoomField(classDefByOrNull(LIVE_PLAY_FRAGMENT)
+            ?: throw PatchException("LIVE controls: $LIVE_PLAY_FRAGMENT not found"))
+        LivePlayFragmentResumeFingerprint.method.addInstruction(
+            0,
+            "invoke-static/range {p0 .. p0}, $RECORD_EXTENSION->noteRoomFragment(Ljava/lang/Object;)V",
         )
 
         // The formatter's result lands in the upper half of the long it was given, so the count
