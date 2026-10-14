@@ -1079,8 +1079,8 @@ public final class VideoOverlayHider {
                 && selected[DETAIL_COMMENT_STRIP_TARGET] >= 0
                 && hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)]
                 && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)];
-        List<View> frames = selectedViews(found, selected, ANCHOR_TARGET);
-        List<View> discs = selectedViews(found, selected, MUSIC_COVER_TARGET);
+        List<View> frames = underShownParents(selectedViews(found, selected, ANCHOR_TARGET));
+        List<View> discs = underShownParents(selectedViews(found, selected, MUSIC_COVER_TARGET));
         // Null while the lifts are left as they are: a row on screen with no frame over its slot
         // is a cell still being bound, and putting the captions back then would make them jump.
         Map<View, Float> lifts = barGone ? null : new HashMap<>();
@@ -1230,6 +1230,22 @@ public final class VideoOverlayHider {
     private static List<View> selectedViews(List<List<View>> found, int[] selected, int target) {
         int at = selected[target];
         return at >= 0 ? found.get(at) : new ArrayList<>();
+    }
+
+    /**
+     * The views whose parents all show. A video opened from search plays in the main activity
+     * with the For You pager still in the tree behind it, gone, and that pager's caption ran to
+     * the bottom over more of the row's slot than the opened video's own, so the row came down
+     * into TikTok's search bar (S22, 2026-10-14). The view's own visibility is left out, so a
+     * disc TikTok hides in a cell on screen keeps its lift.
+     */
+    private static List<View> underShownParents(List<View> views) {
+        List<View> shown = new ArrayList<>(views.size());
+        for (View view : views) {
+            android.view.ViewParent parent = view.getParent();
+            if (!(parent instanceof View) || shownUpTheTree((View) parent)) shown.add(view);
+        }
+        return shown;
     }
 
     /**

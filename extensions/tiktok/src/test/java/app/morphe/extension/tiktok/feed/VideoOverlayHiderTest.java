@@ -1782,6 +1782,50 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * A video opened from search plays in the main activity, with the For You pager still in the
+     * tree behind it, gone. That feed's caption runs to the bottom and covers more of the row's
+     * slot than the opened video's caption over TikTok's search bar, so the row came down its
+     * whole slot into the search bar (S22, 2026-10-14: line through "Search · ..."). Only what's
+     * on screen counts, and the feed behind keeps its caption where it was.
+     */
+    @Test
+    public void aFeedGoneBehindAnOpenedVideoDoesNotPlaceItsProgressBar() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, true);
+            FrameLayout feed = new FrameLayout(detail);
+            FrameLayout feedCell = new FrameLayout(detail);
+            feedCell.setId(CELL_ID);
+            View feedFrame = new View(detail);
+            feedFrame.setId(CAPTION_FRAME_ID);
+            feedCell.addView(feedFrame, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 161, android.view.Gravity.BOTTOM));
+            feed.addView(feedCell);
+            ((FrameLayout) views[0]).addView(feed, 0);
+            layOutAt(views[0]);
+            // Laid out while For You showed, then gone when the search result opened over it.
+            feed.setVisibility(View.GONE);
+
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the line went past the caption into the search bar",
+                    bottomOf(views[3]), lineOf(views[1]), 1f);
+            assertEquals("the caption over the search bar moved", 0f, views[3].getTranslationY(), 0f);
+            assertEquals("the feed behind had its caption lifted", 0f, feedFrame.getTranslationY(), 0f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+        }
+    }
+
+    /**
      * TikTok 47.1.4 holds the music disc up with an offset of its own. The disc's lift goes on top
      * of it instead of skipping the disc, follows TikTok when it writes the offset again on a
      * rebind, and puts TikTok's offset back with the comment bar (#153).
