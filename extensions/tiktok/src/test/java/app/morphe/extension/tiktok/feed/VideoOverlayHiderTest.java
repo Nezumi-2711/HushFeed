@@ -3237,4 +3237,33 @@ public class VideoOverlayHiderTest {
             VideoOverlayHider.resolveForTests("47.1.4:wtr", 0);
         }
     }
+
+    /**
+     * The debug line a diagnostic export carries from an opened video (#153): the column's shown
+     * children and the strip's, so a "Message..." bar the switch leaves can be named by its id.
+     */
+    @Test
+    public void anOpenedVideosColumnIsNamedForTheDiagnosticExport() {
+        LinearLayout column = new LinearLayout(context);
+        column.setOrientation(LinearLayout.VERTICAL);
+        View pager = new FrameLayout(context);
+        pager.setId(android.R.id.content);
+        LinearLayout strip = new LinearLayout(context);
+        View gone = new View(context);
+        gone.setVisibility(View.GONE);
+        strip.addView(new TextView(context));
+        strip.addView(gone);
+        View message = new TextView(context);
+        // Not a resource, the way an id this build doesn't name reads.
+        int unnamed = View.generateViewId();
+        message.setId(unnamed);
+        column.addView(pager);
+        column.addView(strip);
+        column.addView(message);
+        strip.setVisibility(View.GONE);
+
+        assertEquals("content FrameLayout 0px, 0x" + Integer.toHexString(unnamed)
+                        + " TextView 0px; strip hidden [no id TextView 0px]",
+                VideoOverlayHider.columnNote(column, strip));
+    }
 }

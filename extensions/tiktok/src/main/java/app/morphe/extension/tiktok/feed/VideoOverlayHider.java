@@ -25,6 +25,7 @@ import app.morphe.extension.shared.GlobalLayoutHook;
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.ResourceIdCache;
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.BaseSettings;
 import app.morphe.extension.shared.settings.HushfeedPause;
 import app.morphe.extension.tiktok.blockauthor.FeedVisibility;
 import app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch;
@@ -669,6 +670,7 @@ public final class VideoOverlayHider {
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f, detailPager);
                     settleStripColumns(strips);
+                    if (detailPager && detailCommentBar) noteColumnChildren(strips);
                     alignBarRows(found, TRAVERSAL.selected, hidden, cellId);
                     fadeFullscreenEntries();
                     int photoExit = TRAVERSAL.selected[CLEAR_PHOTO_EXIT_TARGET];
@@ -969,6 +971,67 @@ public final class VideoOverlayHider {
                 relayoutColumn(column);
             }
         }
+    }
+
+    /** The last arrangement {@link #noteColumnChildren} logged, so only a new one is logged. */
+    private static volatile String lastColumnNote;
+
+    /**
+     * With debug logging on, names what an opened video's column shows beside the comment strip,
+     * once for each new arrangement. A mutual friend's video shows a "Message..." bar that Hide
+     * the comment bar on opened videos leaves (#153), and no account here has a mutual friend, so
+     * a reporter's diagnostic export is what can name it.
+     */
+    static void noteColumnChildren(List<View> strips) {
+        if (!BaseSettings.DEBUG.get()) return;
+        for (View strip : strips) {
+            if (!(strip.getParent() instanceof ViewGroup)) continue;
+            String note = columnNote((ViewGroup) strip.getParent(), strip);
+            if (note.equals(lastColumnNote)) continue;
+            lastColumnNote = note;
+            Logger.printDebug(() -> "Opened video column shows: " + note);
+        }
+    }
+
+    /** The column's shown children, the strip's own shown children in brackets after it. */
+    static String columnNote(ViewGroup column, View strip) {
+        StringBuilder note = new StringBuilder();
+        for (int i = 0; i < column.getChildCount(); i++) {
+            View child = column.getChildAt(i);
+            if (child.getVisibility() == View.GONE) continue;
+            if (note.length() > 0) note.append(", ");
+            describe(note, child);
+        }
+        if (strip instanceof ViewGroup) {
+            ViewGroup inside = (ViewGroup) strip;
+            note.append("; strip ").append(strip.getVisibility() == View.GONE ? "hidden" : "shown").append(" [");
+            boolean first = true;
+            for (int i = 0; i < inside.getChildCount(); i++) {
+                View child = inside.getChildAt(i);
+                if (child.getVisibility() == View.GONE) continue;
+                if (!first) note.append(", ");
+                first = false;
+                describe(note, child);
+            }
+            note.append(']');
+        }
+        return note.toString();
+    }
+
+    private static void describe(StringBuilder note, View view) {
+        String name;
+        int id = view.getId();
+        if (id == View.NO_ID) {
+            name = "no id";
+        } else {
+            try {
+                name = view.getResources().getResourceEntryName(id);
+            } catch (android.content.res.Resources.NotFoundException ex) {
+                name = "0x" + Integer.toHexString(id);
+            }
+        }
+        note.append(name).append(' ').append(view.getClass().getSimpleName()).append(' ')
+                .append(view.getHeight()).append("px");
     }
 
     /** Whether a laid-out vertical column's shown children leave part of its height unclaimed. */
