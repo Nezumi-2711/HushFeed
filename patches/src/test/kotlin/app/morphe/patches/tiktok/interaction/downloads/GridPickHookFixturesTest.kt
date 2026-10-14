@@ -44,7 +44,7 @@ class GridPickHookFixturesTest {
             assertNotNull("$version: ViewHolder has no itemView field",
                 holder.fields.singleOrNull { it.name == "itemView" && it.type == "Landroid/view/View;" })
             val reads = classes.getValue(bind.definingClass).methods.flatMap { method ->
-                method.implementation?.instructions.orEmpty().mapNotNull {
+                method.implementation?.instructions?.toList().orEmpty().mapNotNull {
                     ((it as? ReferenceInstruction)?.reference as? FieldReference)
                         ?.takeIf { field -> field.definingClass == VIEW_HOLDER && field.name == "itemView" }
                 }
