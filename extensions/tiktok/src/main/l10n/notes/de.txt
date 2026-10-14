@@ -1,6 +1,7 @@
 ## Unreleased
 
 * **TikTok:** Mit Kommentarleiste bei geöffneten Videos ausblenden verdeckt die Musikscheibe nicht mehr das Ende des Fortschrittsbalkens oder die Zeit daneben (#153).
+* **TikTok:** Neuer Schalter Übersetzungsoptionen in den Spracheinstellungen anzeigen unter Kommentare: TikToks eigene Seite Sprache zeigt ihre Übersetzungszeilen wieder auf Konten, die dort nur App-Sprache bekamen (#143).
 
 * **TikTok:** Der LIVE-Aufnahmeknopf rutscht nach unten aus dem Weg, wenn TikToks Entdecken-Leiste über dem Raum aufgeht, und kehrt zurück, wenn sie zugeht (#37).
 

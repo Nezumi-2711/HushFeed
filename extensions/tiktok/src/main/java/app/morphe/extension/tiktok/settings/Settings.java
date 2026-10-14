@@ -469,6 +469,11 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting COMMENT_TRANSLATE_BUTTON_TURNED_ON =
             new BooleanSetting("comment_translate_button_turned_on", FALSE, false, false);
+    /**
+     * The translation rows on TikTok's own Settings and privacy > Language page, for accounts
+     * TikTok hides them on (#143). No restart: the page asks each time it opens.
+     */
+    public static final BooleanSetting SHOW_TRANSLATION_SETTINGS = new BooleanSetting("show_translation_settings", FALSE);
     // Restart-gated: the comment keyboard builds its slot tree once per session, and the
     // trigger that adds the emoji row is asked at that moment only.
     public static final BooleanSetting HIDE_COMMENT_QUICK_REACTIONS =

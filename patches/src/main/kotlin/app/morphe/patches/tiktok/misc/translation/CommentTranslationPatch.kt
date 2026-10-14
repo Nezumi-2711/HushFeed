@@ -332,6 +332,24 @@ val commentTranslationPatch = bytecodePatch(
             )
         }
 
+        // The translation rows TikTok hides on its own Settings and privacy > Language page for
+        // some accounts (#143). Held to declared builds by LanguagePageTranslationsAnchorsTest and
+        // left out with a note on any other, the same way.
+        val languagePage = try {
+            hookLanguagePageTranslations()
+            true
+        } catch (problem: Exception) {
+            if (packageMetadata.versionName in declaredVersions()) throw problem
+            println("[Translate comments] Left out the Language page rows on ${packageMetadata.versionName}: ${problem.message}")
+            false
+        }
+        if (languagePage) {
+            SettingsStatusLoadFingerprint.method.addInstruction(
+                0,
+                "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableLanguagePageTranslations()V",
+            )
+        }
+
         // Every method carrying the anchor, not the first one a fingerprint happened to
         // match. On 46.2.3 the string sits in two bodies of the same class, both static and
         // both V(L), and `.method` takes one of them without a word about the other. A batch

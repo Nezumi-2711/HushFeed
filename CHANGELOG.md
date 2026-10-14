@@ -5,6 +5,7 @@ Every Hushfeed release, newest first.
 ## Unreleased
 
 * **TikTok:** With Hide the comment bar on opened videos on, the music disc at the bottom right no longer sits on the end of the progress bar or on the time beside it. A short caption used to leave it there. It now stays above the bar, the way it does with the comment bar showing (#153).
+* **TikTok:** A new Show translation options in Language settings switch, under Translate button in comments, brings back the translation rows (Always translate, Translate into, Don't translate) on TikTok's own Language page under Settings and privacy. TikTok hides that whole group for some accounts through two of its experiments, which is why it showed while logged out and went away after login. The switch answers those two on that page only, so the feed keeps TikTok's own translation behavior (#143).
 
 * **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
 
