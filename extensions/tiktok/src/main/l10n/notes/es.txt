@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Los Ajustes rápidos se pueden ocultar de la página de inicio de los ajustes con una pulsación larga en su tarjeta. La fila Ajustes rápidos en la página de inicio, en Copia de seguridad y restauración, los trae de vuelta.
+
 * **TikTok:** Las salas LIVE pueden mostrar un botón Grabar (desactivado por defecto, en los ajustes de Reproducción). Guarda lo que ves desde que lo tocas hasta que tocas Detener o sales de la sala (#37).
 
 * **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, la barra de progreso ya no pasa por encima de la descripción en los videos que abres desde un perfil o la búsqueda. La descripción y el disco de música suben lo justo para dejarla libre (#153).

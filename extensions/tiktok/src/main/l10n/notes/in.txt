@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Pengaturan cepat bisa disembunyikan dari beranda pengaturan dengan menekan lama kartunya. Baris Pengaturan cepat di Beranda pada Cadangkan dan pulihkan memunculkannya lagi.
+
 * **TikTok:** Ruang LIVE bisa menampilkan tombol Rekam (mati secara default, di pengaturan Pemutaran). Tombol ini menyimpan apa yang kamu tonton sejak diketuk sampai kamu mengetuk Berhenti atau keluar dari ruang (#37).
 
 * **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, bilah progres tidak lagi melintasi keterangan di video yang kamu buka dari profil atau pencarian. Keterangan dan cakram musik naik secukupnya agar tidak tertutup (#153).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** As Configurações rápidas podem ser escondidas da página inicial das configurações com um toque longo no cartão. A linha Configurações rápidas na página inicial, em Backup e restauração, traz de volta.
+
 * **TikTok:** As salas de LIVE podem mostrar um botão Gravar (desativado por padrão, nas configurações de Reprodução). Ele salva o que você assiste desde o toque até você tocar em Parar ou sair da sala (#37).
 
 * **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, a barra de progresso não passa mais por cima da legenda nos vídeos que você abre de um perfil ou da busca. A legenda e o disco de música sobem só o suficiente para ficarem livres (#153).
