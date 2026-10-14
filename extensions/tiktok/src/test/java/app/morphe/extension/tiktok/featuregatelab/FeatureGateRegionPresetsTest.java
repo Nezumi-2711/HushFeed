@@ -133,8 +133,7 @@ public class FeatureGateRegionPresetsTest {
 
     @Test public void liveTranslateRefusesAMissingKeyAndAnotherBuild() throws Exception {
         Map<String, FeatureGateCatalog.Entry> missing = new LinkedHashMap<>(catalog);
-        missing.remove("live
-" + LIVE_TRANSLATE);
+        missing.remove("live\n" + LIVE_TRANSLATE);
         assertThrows(JSONException.class,
                 () -> FeatureGateLabUndo.applyPreset("47.1.4", "live_translate", missing));
         BuildNames.setRunningBuildForTests("47.2.1");
