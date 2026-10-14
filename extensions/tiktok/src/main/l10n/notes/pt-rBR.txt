@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, o disco de música não cobre mais o fim da barra de progresso nem o tempo ao lado (#153).
+
 * **TikTok:** O botão Gravar da LIVE desce para sair do caminho quando o painel Descobrir do TikTok abre sobre a sala, e volta quando ele fecha (#37).
 
 * **TikTok:** Novo botão Barra inferior flutuante em Barra inferior transparente: as abas ficam sobre uma pílula escura, arredondada e transparente por cima do vídeo (#124).

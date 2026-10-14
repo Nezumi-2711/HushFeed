@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, el disco de música ya no tapa el final de la barra de progreso ni el tiempo a su lado (#153).
+
 * **TikTok:** El botón Grabar del LIVE baja para no estorbar cuando el panel Descubrir de TikTok se abre sobre la sala, y vuelve a su sitio al cerrarse (#37).
 
 * **TikTok:** Nuevo interruptor Barra inferior flotante en Barra inferior transparente: las pestañas quedan sobre una píldora oscura, redondeada y transparente encima del vídeo (#124).

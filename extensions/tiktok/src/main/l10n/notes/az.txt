@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda musiqi diski artıq irəliləmə zolağının sonunu və yanındakı vaxtı örtmür (#153).
+
 * **TikTok:** TikTok-un Kəşf et paneli otağın üstündə açılanda LIVE Yazmaq düyməsi aşağı çəkilir, panel bağlananda yerinə qayıdır (#37).
 
 * **TikTok:** Şəffaf alt panel altında yeni Üzən alt panel açarı: tablar videonun üzərində yuvarlaq, şəffaf tünd kapsulun üstündə durur (#124).

@@ -1183,8 +1183,9 @@ public final class VideoOverlayHider {
      * <p>The row comes down until its middle meets the frame's bottom, never past its own slot.
      * Matching the row's bottom instead left the line half a row up inside the caption, across its
      * last line (#153). When the slot runs out first, as it does where the caption reaches the
-     * bottom of the screen, the frame and the music disc beside it go up by what's left, so the
-     * caption ends on the line. On 47.1.4 TikTok holds the disc up with an offset of its own, so the
+     * bottom of the screen, the frame goes up by what's left, so the caption ends on the line, and
+     * the music disc beside it goes up to end above the row (see captionLifts). On 47.1.4 TikTok
+     * holds the disc up with an offset of its own, so the
      * disc's lift goes on top of that one (see liftDisc); before it did, the disc stayed with its
      * bottom on the line (S22, 2026-10-13: 2146 before and after, against 2013 over a line at 2038
      * with the comment bar up). Every cell's
@@ -1414,10 +1415,14 @@ public final class VideoOverlayHider {
     }
 
     /**
-     * How far each frame, and the music disc in the same cell, goes up so it ends no lower than
-     * the lowest place the row's line can reach. Measured from the top of each frame's own cell,
-     * which lines up with the cell over the slot once it's swiped in. Without a cell to measure
-     * from only the frame over the slot is lifted, from where it is now.
+     * How far each frame goes up so it ends no lower than the lowest place the row's line can
+     * reach, and how far the music disc in the same cell goes up so it ends above the row. The
+     * line runs along the caption's bottom, so a disc lifted only with its caption sat on it, and
+     * a short caption gave it no lift at all: the disc covered the end of the line and the time
+     * beside it (#153, 0.73.0). With the comment bar up TikTok keeps the disc clear of the line,
+     * and the row's top is the nearest place that clears the time too. Measured from the top of
+     * each frame's own cell, which lines up with the cell over the slot once it's swiped in.
+     * Without a cell to measure from only the frame over the slot is lifted, from where it is now.
      */
     private static Map<View, Float> captionLifts(View row, View current, List<View> frames,
                                                  List<View> discs, int cellId) {
@@ -1433,15 +1438,28 @@ public final class VideoOverlayHider {
         for (View frame : frames) {
             View cell = cellOf(frame, cellId);
             if (cell == null || frame.getHeight() == 0) continue;
-            float bottomInCell = unliftedTop(frame) + frame.getHeight() - unliftedTop(cell);
+            float cellTop = unliftedTop(cell);
+            float bottomInCell = unliftedTop(frame) + frame.getHeight() - cellTop;
             float lift = Math.round(Math.max(0f, bottomInCell - lineInCell));
-            if (lift <= 0f) continue;
-            lifts.put(frame, lift);
+            if (lift > 0f) lifts.put(frame, lift);
+            // The row comes down until its line meets the caption's bottom, never past its slot.
+            float rowTopInCell = Math.min(bottomInCell, lineInCell) - row.getHeight() / 2f;
             for (View disc : discs) {
-                if (cellOf(disc, cellId) == cell) lifts.put(disc, lift);
+                if (cellOf(disc, cellId) != cell || disc.getHeight() == 0) continue;
+                float discBottomInCell = unliftedDiscTop(disc) + disc.getHeight() - cellTop;
+                float discLift = Math.round(Math.max(lift, discBottomInCell - rowTopInCell));
+                if (discLift > 0f) lifts.put(disc, discLift);
             }
         }
         return lifts;
+    }
+
+    /** Where {@code disc} sits in its window with TikTok's own offset and without our lift. */
+    private static float unliftedDiscTop(View disc) {
+        float now = disc.getTranslationY();
+        float[] held = DISCS_LIFTED.get(disc);
+        float base = held != null && now == held[1] ? held[0] : now;
+        return topInWindow(disc) + base;
     }
 
     /** The feed cell {@code view} sits in, or null outside one or without the cell's id. */

@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** With Hide the comment bar on opened videos on, the music disc at the bottom right no longer sits on the end of the progress bar or on the time beside it. A short caption used to leave it there. It now stays above the bar, the way it does with the comment bar showing (#153).
+
 * **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
 
 * **TikTok:** A new Floating bottom bar switch, under See-through bottom bar, puts the tabs on a rounded, see-through dark pill that floats over the video, a little in from the sides and bottom. The tabs stay exactly where they were and work as before (#124).

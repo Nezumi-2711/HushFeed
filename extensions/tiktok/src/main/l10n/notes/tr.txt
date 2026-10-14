@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Açılan videolarda yorum çubuğunu gizle açıkken müzik diski artık ilerleme çubuğunun sonunu ve yanındaki süreyi kapatmıyor (#153).
+
 * **TikTok:** TikTok'un Keşfet paneli odanın üstünde açılınca LIVE Kaydet düğmesi aşağı kayar, panel kapanınca yerine döner (#37).
 
 * **TikTok:** Şeffaf alt çubuk altında yeni Yüzen alt çubuk anahtarı: sekmeler videonun üzerinde yuvarlak, şeffaf koyu bir kapsülde durur (#124).

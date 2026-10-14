@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Mit Kommentarleiste bei geöffneten Videos ausblenden verdeckt die Musikscheibe nicht mehr das Ende des Fortschrittsbalkens oder die Zeit daneben (#153).
+
 * **TikTok:** Der LIVE-Aufnahmeknopf rutscht nach unten aus dem Weg, wenn TikToks Entdecken-Leiste über dem Raum aufgeht, und kehrt zurück, wenn sie zugeht (#37).
 
 * **TikTok:** Neuer Schalter Schwebende untere Leiste unter Durchsichtige untere Leiste: Die Tabs liegen auf einer abgerundeten, durchsichtigen dunklen Pille über dem Video (#124).
