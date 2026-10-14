@@ -30,9 +30,9 @@ Most switches start off, so a freshly patched TikTok looks and works the way it 
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, version [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use that exact APK when patching. See [Supported target](#supported-target) for the build details.
 
-Hushfeed v0.71.2 contains 132 patches for TikTok 47.1.4. New in this one: a LIVE opened from the preview under a creator's card in search now gets the LIVE status bar switches too, and the caption you keep in Clear display stays at the height TikTok showed it. It needs Morphe Manager 1.34.0 or newer.
+Hushfeed v0.72.0 contains 134 patches for TikTok 47.1.4. New in this one: every Hushfeed settings page now sits on the main settings page, and holding For You at the top of the feed opens it. Settings search can flip a switch right in the results. Two patches are new, Show commenter handle and region and Profile background. It needs Morphe Manager 1.34.0 or newer.
 
-The main branch contains 134 patches, v0.71.2's 132 plus Profile background and Show commenter handle and region.
+The main branch contains 134 patches, the same set as v0.72.0.
 
 ## What it changes
 
