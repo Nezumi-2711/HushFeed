@@ -2069,7 +2069,13 @@ Opens a GitHub report with your versions and settings filled in. Add what happen
 Support Hushfeed	Hushfeed-i dəstəkləyin
 No app on this phone opens web links	Bu telefonda veb keçidləri açan tətbiq yoxdur
 Quick setups	Sürətli quruluşlar
-Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch.	Sakit reklamları, Shop və LIVE-ı gizlədir. Məxfilik baxışlarınızı və yazmağınızı gizlədir, izləməni dayandırır. Defolta qaytarın hər açarı sıfırlayır.
+Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row.	Sakit reklamları, Shop və LIVE-ı gizlədir. Məxfilik baxışlarınızı və yazmağınızı gizlədir, izləməni dayandırır. Defolta qaytarın hər açarı sıfırlayır. Bu sətri gizlətmək üçün basıb saxlayın.
+# context: toast after a long press hides the Quick setups card from the settings home page; the page name is the one holding the row that brings it back
+Quick setups hidden. Bring it back from %1$s.	Sürətli quruluşlar gizlədildi. Onları %1$s bölməsindən geri qaytara bilərsiniz.
+# context: row on the Backup and restore page; shows or hides the Quick setups card on the settings home page
+Quick setups on the home page	Ana səhifədə sürətli quruluşlar
+Shown. Tap to hide it.	Göstərilir. Gizlətmək üçün toxunun.
+Hidden. Tap to show it again.	Gizlidir. Yenidən göstərmək üçün toxunun.
 Quiet	Sakit
 Back to defaults	Defolta qaytarın
 Changed 1 setting	1 ayar dəyişdirildi

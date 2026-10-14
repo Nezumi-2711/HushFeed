@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Quick setups can be hidden from the settings home with a long press on its card, and its help line now says so. The **Quick setups on the home page** row on Backup and restore brings it back. Settings backups and the Quick setups choices leave it alone.
+
 * **TikTok:** LIVE rooms can show a Record button, off by default and found in Playback settings. It saves what you watch from the moment you tap it until you tap Stop or leave the room. Nothing from before the tap is saved. If the LIVE ends, the connection drops or the phone runs low on room, you get what was recorded so far and a message that says so (#37).
 
 * **TikTok:** With Hide the comment bar on opened videos on, the progress bar no longer runs across the last line of the caption on a video you open from a profile, your likes or search. The caption and the music disc beside it move up just enough for the bar, which runs along the caption's bottom edge the way it does with the comment bar showing (#153).

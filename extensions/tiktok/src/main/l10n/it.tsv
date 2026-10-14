@@ -2069,7 +2069,13 @@ Opens a GitHub report with your versions and settings filled in. Add what happen
 Support Hushfeed	Sostieni Hushfeed
 No app on this phone opens web links	Nessuna app su questo telefono apre i link web
 Quick setups	Configurazioni rapide
-Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch.	Tranquillo nasconde annunci, Shop e LIVE. Privacy nasconde le tue visualizzazioni e quando scrivi e ferma il tracciamento. Ripristina predefiniti riporta ogni interruttore com'era all'inizio.
+Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row.	Tranquillo nasconde annunci, Shop e LIVE. Privacy nasconde le tue visualizzazioni e quando scrivi e ferma il tracciamento. Ripristina predefiniti riporta ogni interruttore com'era all'inizio. Tieni premuto per nascondere questa riga.
+# context: toast after a long press hides the Quick setups card from the settings home page; the page name is the one holding the row that brings it back
+Quick setups hidden. Bring it back from %1$s.	Configurazioni rapide nascoste. Le ritrovi in %1$s.
+# context: row on the Backup and restore page; shows or hides the Quick setups card on the settings home page
+Quick setups on the home page	Configurazioni rapide nella home
+Shown. Tap to hide it.	Visibili. Tocca per nasconderle.
+Hidden. Tap to show it again.	Nascoste. Tocca per mostrarle di nuovo.
 Quiet	Tranquillo
 Back to defaults	Ripristina predefiniti
 Changed 1 setting	1 impostazione modificata

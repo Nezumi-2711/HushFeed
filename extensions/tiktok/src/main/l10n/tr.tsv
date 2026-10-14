@@ -2069,7 +2069,13 @@ Opens a GitHub report with your versions and settings filled in. Add what happen
 Support Hushfeed	Hushfeed'i destekle
 No app on this phone opens web links	Bu telefonda web bağlantılarını açan uygulama yok
 Quick setups	Hızlı kurulumlar
-Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch.	Sakin; reklamları, Mağaza'yı ve LIVE'ı gizler. Gizlilik; görüntülemelerini ve yazdığını gizler, izlemeyi durdurur. Varsayılana dön her anahtarı sıfırlar.
+Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row.	Sakin; reklamları, Mağaza'yı ve LIVE'ı gizler. Gizlilik; görüntülemelerini ve yazdığını gizler, izlemeyi durdurur. Varsayılana dön her anahtarı sıfırlar. Bu satırı gizlemek için basılı tut.
+# context: toast after a long press hides the Quick setups card from the settings home page; the page name is the one holding the row that brings it back
+Quick setups hidden. Bring it back from %1$s.	Hızlı kurulumlar gizlendi. %1$s bölümünden geri getirebilirsin.
+# context: row on the Backup and restore page; shows or hides the Quick setups card on the settings home page
+Quick setups on the home page	Ana sayfada hızlı kurulumlar
+Shown. Tap to hide it.	Gösteriliyor. Gizlemek için dokun.
+Hidden. Tap to show it again.	Gizli. Tekrar göstermek için dokun.
 Quiet	Sakin
 Back to defaults	Varsayılana dön
 Changed 1 setting	1 ayar değişti

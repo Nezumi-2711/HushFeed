@@ -634,6 +634,7 @@ Handle or id,Handle or id
 Hidden %1$s on this phone,Hidden %1$s on this phone
 Hidden LIVE categories,Hidden LIVE categories
 Hidden commenters,Hidden commenters
+Hidden. Tap to show it again.,Hidden. Tap to show it again.
 Hidden: %1$s,Hidden: %1$s
 Hide,Hide
 Hide AI-generated videos,Hide AI-generated videos
@@ -1256,8 +1257,10 @@ Quality,Quality
 Quick setup,Quick setup
 Quick setups,Quick setups
 Quick setups couldn't start. Try again in a moment.,Quick setups couldn't start. Try again in a moment.
+Quick setups hidden. Bring it back from %1$s.,Quick setups hidden. Bring it back from %1$s.
+Quick setups on the home page,Quick setups on the home page
 Quiet,Quiet
-"Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch.","Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch."
+"Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row.","Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row."
 Read-only list. Accounts won't be opened or unblocked.,Read-only list. Accounts won't be opened or unblocked.
 Reading,Reading
 Reading the font file,Reading the font file
@@ -1560,6 +1563,7 @@ Show when the camera or microphone is in use,Show when the camera or microphone 
 Show where a video was posted,Show where a video was posted
 Show where commenters are from,Show where commenters are from
 Showing %1$s again,Showing %1$s again
+Shown. Tap to hide it.,Shown. Tap to hide it.
 "Shows TikTok's full sort menu on every post, with hot, newest, media and creator options, instead of the shorter one your account got. Restart TikTok to see the change.","Shows TikTok's full sort menu on every post, with hot, newest, media and creator options, instead of the shorter one your account got. Restart TikTok to see the change."
 "Shows TikTok's play, pause, previous and next buttons on the feed. TikTok normally shows them only to people who use a screen reader. TikTok can see when you use them.","Shows TikTok's play, pause, previous and next buttons on the feed. TikTok normally shows them only to people who use a screen reader. TikTok can see when you use them."
 "Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.","Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows."

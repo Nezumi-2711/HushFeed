@@ -2237,7 +2237,13 @@ Opens a GitHub report with your versions and settings filled in. Add what happen
 Support Hushfeed	Поддержать Hushfeed
 No app on this phone opens web links	На этом телефоне нет приложения для веб-ссылок
 Quick setups	Быстрые настройки
-Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch.	«Тишина» скрывает рекламу, Shop и LIVE. «Конфиденциальность» скрывает ваши просмотры и набор текста и останавливает отслеживание. «По умолчанию» возвращает каждый переключатель в исходное положение.
+Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row.	«Тишина» скрывает рекламу, Shop и LIVE. «Конфиденциальность» скрывает ваши просмотры и набор текста и останавливает отслеживание. «По умолчанию» возвращает каждый переключатель в исходное положение. Нажмите и удерживайте, чтобы скрыть эту строку.
+# context: toast after a long press hides the Quick setups card from the settings home page; the page name is the one holding the row that brings it back
+Quick setups hidden. Bring it back from %1$s.	Быстрые настройки скрыты. Вернуть их можно в разделе «%1$s».
+# context: row on the Backup and restore page; shows or hides the Quick setups card on the settings home page
+Quick setups on the home page	Быстрые настройки на главной странице
+Shown. Tap to hide it.	Показаны. Нажмите, чтобы скрыть.
+Hidden. Tap to show it again.	Скрыты. Нажмите, чтобы показать снова.
 Quiet	Тишина
 Back to defaults	По умолчанию
 Changed 1 setting	Изменена 1 настройка
