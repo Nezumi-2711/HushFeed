@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Filtro do feed tem uma Duração mínima do vídeo ao lado da máxima (#154).
+
 * **TikTok:** Salvar uma história com qualidade Automático agora pega a versão reproduzível mais alta em vez da transmissão menor (#155).
 
 * **TikTok:** Uma chave em Comentários que muda os nomes ou países de quem comenta agora também muda os comentários de um vídeo que você já tinha aberto, sem reiniciar.

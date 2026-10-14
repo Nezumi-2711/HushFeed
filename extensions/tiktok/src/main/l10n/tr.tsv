@@ -744,6 +744,7 @@ Maximum post age	Maksimum gönderi yaşı
 Maximum video length	Maksimum video süresi
 Maximum views per comment	Yorum başına maksimum görüntülenme
 Maximum views per like	Beğeni başına maksimum görüntülenme
+Minimum video length	Minimum video süresi
 Media	Medya
 Media config (VE)	Medya yapılandırması (VE)
 Messages, profiles and search still work.	Mesajlar, profiller ve arama çalışmaya devam eder.
@@ -1002,6 +1003,7 @@ Search these comments	Bu yorumlarda ara
 Search translated titles and descriptions, then open the original setting.	Çevrilmiş başlık ve açıklamalarda ara, sonra asıl ayarı aç.
 Search within comments	Yorumların içinde ara
 Seconds. Zero keeps every length. If everything the feed just sent would be filtered out, the video closest to your limit is kept so the feed isn't empty.	Saniye. Sıfır, her uzunluğu tutar. Akışın az önce gönderdiği her şey filtrelenecekse akış boş kalmasın diye sınırına en yakın video tutulur.
+Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept.	Saniye. Sıfır, her uzunluğu tutar. Fotoğraf gönderileri ve uzunluğu bilinmeyen videolar kalır. Akışın az önce gönderdiği her şey filtrelenecekse sınırına en yakın video tutulur.
 Seek by	Sarma miktarı
 Seek from the edges	Kenarlardan sar
 Seen	Görüldü

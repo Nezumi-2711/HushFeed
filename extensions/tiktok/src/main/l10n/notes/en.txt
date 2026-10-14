@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Feed filter has a Minimum video length beside the maximum (#154).
+
 * **TikTok:** Saving a story on Automatic quality takes its tallest playable version instead of the smaller stream (#155).
 
 * **TikTok:** A switch under Comments that changes commenter names or countries now also changes the comments of a video you'd already opened, with no restart.

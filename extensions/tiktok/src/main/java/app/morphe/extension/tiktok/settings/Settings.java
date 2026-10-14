@@ -335,6 +335,8 @@ public class Settings extends BaseSettings {
     /** Caption languages to keep, by the video's original caption track; empty keeps every language. */
     public static final StringSetting CAPTION_LANGUAGES = new StringSetting("caption_languages", "");
     public static final StringSetting REGION_NEVER_FROM = new StringSetting("region_never_from", "", true);
+    public static final IntegerSetting MIN_VIDEO_SECONDS =
+            new IntegerSetting("min_video_seconds", 0).withRange(0, 86400);
     public static final IntegerSetting MAX_VIDEO_SECONDS =
             new IntegerSetting("max_video_seconds", 0).withRange(0, 86400);
     public static final IntegerSetting MAX_PUBLICATION_AGE_DAYS =

@@ -744,6 +744,7 @@ Maximum post age	Maksimum paylaşım yaşı
 Maximum video length	Maksimum video uzunluğu
 Maximum views per comment	Şərhə düşən maksimum baxış
 Maximum views per like	Bəyənməyə düşən maksimum baxış
+Minimum video length	Minimum video uzunluğu
 Media	Media
 Media config (VE)	Media konfiqurasiyası (VE)
 Messages, profiles and search still work.	Mesajlar, profillər və axtarış yenə də işləyir.
@@ -1002,6 +1003,7 @@ Search these comments	Bu şərhlərdə axtarın
 Search translated titles and descriptions, then open the original setting.	Tərcümə olunmuş başlıqları və təsvirləri axtarın, sonra orijinal ayarı açın.
 Search within comments	Şərhlər daxilində axtarın
 Seconds. Zero keeps every length. If everything the feed just sent would be filtered out, the video closest to your limit is kept so the feed isn't empty.	Saniyə. Sıfır bütün uzunluqları saxlayır. Lentin göndərdiyi hər şey süzüləcəksə, lent boş qalmasın deyə limitinizə ən yaxın video saxlanılır.
+Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept.	Saniyə. Sıfır bütün uzunluqları saxlayır. Foto paylaşımlar və uzunluğu bilinməyən videolar qalır. Lentin göndərdiyi hər şey süzüləcəksə, limitinizə ən yaxın video saxlanılır.
 Seek by	İrəli-geri çəkmə addımı
 Seek from the edges	Kənarlardan irəli-geri çəkmə
 Seen	İzlənib

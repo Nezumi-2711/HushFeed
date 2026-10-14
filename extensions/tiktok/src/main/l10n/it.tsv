@@ -720,6 +720,7 @@ Maximum post age	Età massima dei post
 Maximum video length	Durata massima del video
 Maximum views per comment	Visualizzazioni massime per commento
 Maximum views per like	Visualizzazioni massime per Mi piace
+Minimum video length	Durata minima del video
 Media	Media
 Media config (VE)	Configurazione media (VE)
 Messages, profiles and search still work.	Messaggi, profili e ricerca continuano a funzionare.
@@ -970,6 +971,7 @@ Search translated titles and descriptions, then open the original setting.	Cerca
 Ask TikTok for search results that aren't personalized to your account. This changes results, not search buttons or suggestions.	Chiede a TikTok risultati di ricerca non personalizzati per il tuo account. Questo cambia i risultati, non i pulsanti di ricerca o i suggerimenti.
 Search by name or gate key	Cerca per nome o chiave del gate
 Seconds. Zero keeps every length. If everything the feed just sent would be filtered out, the video closest to your limit is kept so the feed isn't empty.	Secondi. Zero mantiene ogni durata. Se tutto quello che il feed ha appena inviato verrebbe filtrato, viene mantenuto il video più vicino al tuo limite, così il feed non resta vuoto.
+Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept.	Secondi. Zero mantiene ogni durata. I post di foto e i video senza una durata nota restano. Se tutto quello che il feed ha appena inviato verrebbe filtrato, viene mantenuto il video più vicino al tuo limite.
 Seek by	Intervallo di salto
 Seek from the edges	Salta dai margini
 Seen	Visto

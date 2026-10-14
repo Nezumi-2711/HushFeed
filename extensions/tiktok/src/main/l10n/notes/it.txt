@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Filtro del feed ha una Durata minima del video accanto a quella massima (#154).
+
 * **TikTok:** Salvare una storia con qualità Automatico ora prende la sua versione riproducibile più alta invece dello stream più piccolo (#155).
 
 * **TikTok:** Un interruttore in Commenti che cambia i nomi o i paesi di chi commenta ora cambia anche i commenti di un video che avevi già aperto, senza riavviare.

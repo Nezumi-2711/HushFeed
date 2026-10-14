@@ -713,6 +713,7 @@ Maximum post age,Usia maksimum kiriman
 Maximum video length,Durasi video maksimum
 Maximum views per comment,Maksimum tayangan per komentar
 Maximum views per like,Tayangan maksimum per suka
+Minimum video length,Durasi video minimum
 Media,Media
 Media config (VE),Konfigurasi media (VE)
 "Messages, profiles and search still work.","Pesan, profil dan pencarian masih berfungsi."
@@ -963,6 +964,7 @@ Search these comments,Cari di komentar ini
 "Ask TikTok for search results that aren't personalized to your account. This changes results, not search buttons or suggestions.","Minta hasil pencarian TikTok yang tidak dipersonalisasi untuk akunmu. Ini mengubah hasil, bukan tombol atau saran pencarian."
 Search by name or gate key,Cari berdasarkan nama atau kunci gate
 "Seconds. Zero keeps every length. If everything the feed just sent would be filtered out, the video closest to your limit is kept so the feed isn't empty.","Detik. Nol menyimpan semua durasi. Kalau semua yang baru dikirim feed akan tersaring habis, video yang paling dekat dengan batasmu tetap ada agar feed tidak kosong."
+"Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept.","Detik. Nol menyimpan semua durasi. Postingan foto dan video yang durasinya tidak diketahui tetap ada. Kalau semua yang baru dikirim feed akan tersaring habis, video yang paling dekat dengan batasmu tetap ada."
 Seek by,Jarak lompatan
 Seek from the edges,Lompat dari tepi layar
 Seen,Terlihat

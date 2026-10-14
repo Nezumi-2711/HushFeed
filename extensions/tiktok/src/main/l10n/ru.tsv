@@ -780,6 +780,7 @@ Maximum post age	Максимальный возраст публикации
 Maximum video length	Максимальная длительность видео
 Maximum views per comment	Максимум просмотров на комментарий
 Maximum views per like	Максимум просмотров на лайк
+Minimum video length	Минимальная длительность видео
 Media	Медиа
 Media config (VE)	Конфигурация медиа (VE)
 Messages, profiles and search still work.	Сообщения, профили и поиск по-прежнему работают.
@@ -1045,6 +1046,7 @@ Search translated titles and descriptions, then open the original setting.	Ис�
 Ask TikTok for search results that aren't personalized to your account. This changes results, not search buttons or suggestions.	Запрашивать у TikTok результаты поиска, не персонализированные под ваш аккаунт. Это меняет результаты, а не кнопки поиска или подсказки.
 Search by name or gate key	Поиск по названию или ключу переключателя
 Seconds. Zero keeps every length. If everything the feed just sent would be filtered out, the video closest to your limit is kept so the feed isn't empty.	Секунды. Ноль сохраняет любую длину. Если бы всё, что лента только что прислала, оказалось отфильтровано, остаётся видео, ближе всего подходящее к вашему лимиту, чтобы лента не была пустой.
+Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept.	Секунды. Ноль сохраняет любую длину. Фотопосты и видео с неизвестной длительностью остаются. Если бы всё, что лента только что прислала, оказалось отфильтровано, остаётся видео, ближе всего подходящее к вашему лимиту.
 Seek by	Перемотка на
 Seek from the edges	Перематывать от краёв экрана
 Seen	Просмотрено
