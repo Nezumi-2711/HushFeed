@@ -10,7 +10,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Show the time to the second has two options under it. Show the time zone (on, so the row reads as before) can drop the zone, and Short date writes the date the short way your language does, like 10/7/25. Each works without the other, the seconds always stay, and both use your language's own formats and your phone's 12 or 24 hour clock (#147).
 
-* **TikTok:** Pick videos to save from profile grids works inside a Favorites collection folder too. Its videos get the same circle, and Pick all reads the folder's list, so a whole collection saves in runs of 50 like a Liked or Favorites list (#27).
+* **TikTok:** Pick videos to save from profile grids works inside a Favorites collection folder too. Its videos get the same circle, in the top left corner there since TikTok's own Select posts box takes the top right. Pick all reads the folder's list, so a whole collection saves in runs of 50 like a Liked or Favorites list (#27).
 
 * **TikTok:** When some of the original photos you save don't come through, the result now has Retry beside Open. It tries again only the photos that failed, in the post's order and under the same file names, so the ones that landed aren't saved a second time. Photos you cancelled or didn't pick are left out, and Retry keeps showing up as long as some still fail. A Retry made under another account than the one you're on now says so instead of saving. Tap Retry while that post is still saving and it says so, and it stays there to tap again once the save is done.
 
