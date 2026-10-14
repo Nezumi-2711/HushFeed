@@ -34,6 +34,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Pick videos to save from profile grids has a Pick all button on its bar. It picks every post the list has loaded, in the list's order and up to 50 at a time, leaving out stories, ads and, with Check for already-saved videos on, videos saved before. With that check on, a whole profile, Liked or Favorites list saves in runs: save these, tap Pick all again, and the next run starts where the last one stopped, even when TikTok closed partway through one. Only posts TikTok has already loaded are picked, so scroll to the end of a long list first (#27).
 
+* **TikTok:** With Hide videos you have already seen on and a full record of 10,000 videos, each video you watch no longer goes through the whole record to find the oldest one to drop. One pass now lines up the 256 oldest, so it happens once every 256 videos, and a record loading at start trims once at the end instead of after every row. Which videos are kept doesn't change (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).

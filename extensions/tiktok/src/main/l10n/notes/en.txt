@@ -30,6 +30,8 @@
 
 * **TikTok:** Pick videos to save from profile grids has a Pick all button. It picks up to 50 of the posts a list has loaded, skipping videos already saved when Check for already-saved videos is on, so a whole list saves in runs that pick up where the last one stopped (#27).
 
+* **TikTok:** With Hide videos you have already seen on and its record full, each video you watch no longer goes through all 10,000 rows to drop the oldest one. That now takes one pass every 256 videos (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).

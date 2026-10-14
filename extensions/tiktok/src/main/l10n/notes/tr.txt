@@ -30,6 +30,8 @@
 
 * **TikTok:** Profil ızgaralarından kaydedilecek videoları seç'e Tümünü seç düğmesi geldi. Bir listenin yüklediği gönderilerden en fazla 50 tanesini seçer, Önceden kaydedilen videoları kontrol et açıksa kaydedilmiş videoları atlar. Böylece bütün bir liste, her biri öncekinin kaldığı yerden devam eden turlarla kaydedilir (#27).
 
+* **TikTok:** Daha önce gördüğün videoları gizle açıkken ve kayıt doluyken, izlediğin her video en eskisini atmak için artık 10.000 satırın hepsini dolaşmıyor. Bu artık her 256 videoda bir kez oluyor (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

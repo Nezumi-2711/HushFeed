@@ -30,6 +30,8 @@
 
 * **TikTok:** Elegir videos para guardar en las cuadrículas de perfil tiene un botón Elegir todos. Elige hasta 50 de las publicaciones que una lista ha cargado y, con Comprobar videos ya guardados activado, se salta los que ya guardaste. Así una lista entera se guarda por tandas que siguen donde terminó la anterior (#27).
 
+* **TikTok:** Con Ocultar los vídeos que ya has visto activado y el registro lleno, cada video que ves ya no recorre las 10.000 filas para quitar la más antigua. Ahora eso pasa una vez cada 256 videos (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).

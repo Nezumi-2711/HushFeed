@@ -30,6 +30,8 @@
 
 * **TikTok:** Pilih video untuk disimpan dari grid profil kini punya tombol Pilih semua. Tombol ini memilih hingga 50 postingan yang sudah dimuat daftar, melewati video yang sudah disimpan saat Periksa video yang sudah disimpan aktif, jadi seluruh daftar tersimpan bertahap, masing-masing melanjutkan dari tempat yang sebelumnya berhenti (#27).
 
+* **TikTok:** Saat Sembunyikan video yang sudah kamu tonton aktif dan catatannya penuh, setiap video yang kamu tonton tidak lagi memeriksa semua 10.000 baris untuk membuang yang tertua. Sekarang itu hanya terjadi sekali setiap 256 video (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Laporan diagnostik punya bagian baru berisi pengaturan yang diubah. Bagian ini menyebut setiap pengaturan yang tidak lagi di nilai bawaannya, sehingga laporan menunjukkan sakelar mana yang aktif. Teks yang kamu ketik di sebuah pengaturan tidak pernah disertakan (#149).

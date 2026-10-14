@@ -30,6 +30,8 @@
 
 * **TikTok:** Scegli i video da salvare dalle griglie dei profili ha un pulsante Scegli tutti. Sceglie fino a 50 dei post che una lista ha caricato e, con Controlla i video già salvati attivo, salta quelli già salvati. Così un'intera lista si salva a turni, ognuno dei quali riprende da dove si era fermato il precedente (#27).
 
+* **TikTok:** Con Nascondi i video che hai già visto attivo e la cronologia piena, ogni video che guardi non scorre più tutte le 10.000 righe per togliere la più vecchia. Ora succede una volta ogni 256 video (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Il rapporto diagnostico ha una nuova sezione con le impostazioni modificate. Elenca ogni impostazione che non è più al valore predefinito, così un rapporto mostra quali interruttori sono attivi. Il testo che hai scritto in un'impostazione non viene mai incluso (#149).

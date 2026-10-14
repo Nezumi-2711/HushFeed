@@ -30,6 +30,8 @@
 
 * **TikTok:** Escolher vídeos para salvar nas grades de perfil ganhou um botão Escolher todos. Ele escolhe até 50 das publicações que uma lista carregou e, com Verificar vídeos já salvos ligado, pula os que você já salvou. Assim uma lista inteira é salva em rodadas, cada uma continuando de onde a anterior parou (#27).
 
+* **TikTok:** Com Esconder os vídeos que você já viu ligado e o registro cheio, cada vídeo que você assiste não percorre mais as 10.000 linhas para tirar a mais antiga. Agora isso acontece uma vez a cada 256 vídeos (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** O relatório de diagnóstico tem uma nova seção com as configurações alteradas. Ela lista cada configuração que não está mais no valor padrão, para que um relatório mostre quais chaves estão ligadas. O texto que você digitou em uma configuração nunca é incluído (#149).

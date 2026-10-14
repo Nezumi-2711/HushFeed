@@ -30,6 +30,8 @@
 
 * **TikTok:** Profil şəbəkələrindən saxlamaq üçün videolar seçin funksiyasında Hamısını seç düyməsi var. O, siyahının yüklədiyi paylaşımlardan 50-yə qədərini seçir, Artıq saxlanılmış videoları yoxlayın açıq olanda saxlanılmış videoları ötürür. Belə ki, bütün siyahı hər dəfə əvvəlkinin qaldığı yerdən davam edən mərhələlərlə saxlanılır (#27).
 
+* **TikTok:** Artıq izlədiyiniz videoları gizlədin açıq olanda və qeyd dolu olanda, izlədiyiniz hər video ən köhnəsini silmək üçün artıq 10 000 sətrin hamısını yoxlamır. İndi bu hər 256 videoda bir dəfə olur (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).
