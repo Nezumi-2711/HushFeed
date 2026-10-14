@@ -1,6 +1,6 @@
 ## Unreleased
 
-* **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, la barra di avanzamento non passa più sopra la descrizione nei video che apri da un profilo o dalla ricerca. La descrizione sale quanto basta per lasciarla libera (#153).
+* **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, la barra di avanzamento non passa più sopra la descrizione nei video che apri da un profilo o dalla ricerca. La descrizione e il disco della musica salgono quanto basta per lasciarla libera (#153).
 
 * **TikTok:** Il report diagnostico non segnala più la barra dei commenti come mancante mentre sei nel feed principale (#153).
 

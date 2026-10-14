@@ -1662,6 +1662,7 @@ public class VideoOverlayHiderTest {
             assertEquals("the line runs across the caption", bottomOf(frame), lineOf(row), 1f);
             assertEquals("the caption didn't make room for the line", -40f, frame.getTranslationY(), 0.5f);
             assertEquals("the disc stayed down by the time", -40f, disc.getTranslationY(), 0.5f);
+            assertEquals("the disc isn't level with the caption", bottomOf(frame), bottomOf(disc), 1f);
 
             // Another layout pass changes nothing: the caption's own lift isn't measured as TikTok's.
             layOutAt(views[0]);
@@ -1739,6 +1740,53 @@ public class VideoOverlayHiderTest {
             assertEquals("the next caption waits to be lifted until it's on screen",
                     -40f, nextFrame.getTranslationY(), 0.5f);
             assertEquals(-40f, nextDisc.getTranslationY(), 0.5f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+            VideoOverlayHider.resolveForTests("videomusiccoverblock", 0);
+        }
+    }
+
+    /**
+     * TikTok 47.1.4 holds the music disc up with an offset of its own. The disc's lift goes on top
+     * of it instead of skipping the disc, follows TikTok when it writes the offset again on a
+     * rebind, and puts TikTok's offset back with the comment bar (#153).
+     */
+    @Test
+    public void theDiscIsLiftedOverTikToksOwnOffset() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        VideoOverlayHider.resolveForTests("videomusiccoverblock", DISC_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            View frame = views[3];
+            View disc = discIn((FrameLayout) frame.getParent());
+            disc.setTranslationY(-25f);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(-40f, frame.getTranslationY(), 0.5f);
+            assertEquals("the disc wasn't lifted over TikTok's offset", -65f, disc.getTranslationY(), 0.5f);
+
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("a second pass lifted the disc again", -65f, disc.getTranslationY(), 0.5f);
+
+            // TikTok binds the cell again and writes its offset back.
+            disc.setTranslationY(-25f);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the disc stayed where TikTok put it back", -65f, disc.getTranslationY(), 0.5f);
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("TikTok's own offset didn't come back", -25f, disc.getTranslationY(), 0f);
         } finally {
             Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
             VideoOverlayHider.resolveForTests("video_seek_bar", 0);

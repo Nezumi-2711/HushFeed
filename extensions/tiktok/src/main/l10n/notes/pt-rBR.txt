@@ -1,6 +1,6 @@
 ## Unreleased
 
-* **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, a barra de progresso não passa mais por cima da legenda nos vídeos que você abre de um perfil ou da busca. A legenda sobe só o suficiente para ficar livre (#153).
+* **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, a barra de progresso não passa mais por cima da legenda nos vídeos que você abre de um perfil ou da busca. A legenda e o disco de música sobem só o suficiente para ficarem livres (#153).
 
 * **TikTok:** O relatório de diagnóstico não marca mais a barra de comentários como ausente enquanto você está no feed principal (#153).
 

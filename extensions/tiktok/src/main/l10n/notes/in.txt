@@ -1,6 +1,6 @@
 ## Unreleased
 
-* **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, bilah progres tidak lagi melintasi keterangan di video yang kamu buka dari profil atau pencarian. Keterangan naik secukupnya agar tidak tertutup (#153).
+* **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, bilah progres tidak lagi melintasi keterangan di video yang kamu buka dari profil atau pencarian. Keterangan dan cakram musik naik secukupnya agar tidak tertutup (#153).
 
 * **TikTok:** Laporan diagnostik tidak lagi menandai bilah komentar sebagai hilang saat kamu berada di feed utama (#153).
 

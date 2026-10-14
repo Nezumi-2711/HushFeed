@@ -1,6 +1,6 @@
 ## Unreleased
 
-* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, profildən və ya axtarışdan açdığın videolarda irəliləyiş zolağı artıq açıqlamanın üstündən keçmir. Açıqlama zolağa yer açacaq qədər yuxarı qalxır (#153).
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, profildən və ya axtarışdan açdığın videolarda irəliləyiş zolağı artıq açıqlamanın üstündən keçmir. Açıqlama və musiqi diski zolağa yer açacaq qədər yuxarı qalxır (#153).
 
 * **TikTok:** Diaqnostika hesabatı əsas lentdə olanda şərh panelini artıq çatışmayan kimi göstərmir (#153).
 

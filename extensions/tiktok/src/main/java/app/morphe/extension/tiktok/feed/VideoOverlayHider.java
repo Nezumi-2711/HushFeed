@@ -37,7 +37,6 @@ import app.morphe.extension.tiktok.settings.SettingsStatus;
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -332,8 +331,12 @@ public final class VideoOverlayHider {
 
     /** TikTok's progress bar rows this class moved down, with the offset it wrote; see alignBarRows. */
     private static final Map<View, Float> BAR_ROWS_MOVED = new WeakHashMap<>();
-    /** Caption frames and music discs this class lifted over that row, with the offset it wrote. */
+    /** Caption frames this class lifted over that row, with the offset it wrote. */
     private static final Map<View, Float> CAPTIONS_LIFTED = new WeakHashMap<>();
+    /** Music discs lifted with them: TikTok's own offset under the lift, then the offset written. */
+    private static final Map<View, float[]> DISCS_LIFTED = new WeakHashMap<>();
+    /** When a disc's offset first changed under a lift this second, how often, and a pause until. */
+    private static final Map<View, long[]> DISC_CHANGES = new WeakHashMap<>();
 
     /** The lowest opacity the tabs are faded to, so the way around the app stays findable. */
     static final int NAVIGATION_FADE_FLOOR = 10;
@@ -567,7 +570,7 @@ public final class VideoOverlayHider {
                     || clearControls
                     || statusBar || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
-                    || !CAPTIONS_LIFTED.isEmpty() || touchScale != 1f || scaledLastPass) {
+                    || !CAPTIONS_LIFTED.isEmpty() || !DISCS_LIFTED.isEmpty() || touchScale != 1f || scaledLastPass) {
                 ViewGroup root = activity.findViewById(android.R.id.content);
                 int[] ids = TRAVERSAL.ids;
                 boolean[] hidden = TRAVERSAL.hidden;
@@ -948,9 +951,10 @@ public final class VideoOverlayHider {
      * Matching the row's bottom instead left the line half a row up inside the caption, across its
      * last line (#153). When the slot runs out first, as it does where the caption reaches the
      * bottom of the screen, the frame and the music disc beside it go up by what's left, so the
-     * caption ends on the line. On 47.1.4 the disc keeps an offset of TikTok's own, which is left
-     * alone, so it stays where TikTok holds it with its bottom on the line (S22, 2026-10-13: 2146
-     * before and after, against 2013 over a line at 2038 with the comment bar up). Every cell's
+     * caption ends on the line. On 47.1.4 TikTok holds the disc up with an offset of its own, so the
+     * disc's lift goes on top of that one (see liftDisc); before it did, the disc stayed with its
+     * bottom on the line (S22, 2026-10-13: 2146 before and after, against 2013 over a line at 2038
+     * with the comment bar up). Every cell's
      * frame gets its lift as it's laid out, from where it
      * sits in its own cell, so the next video arrives already in place rather than jumping after
      * the swipe. A cell whose caption ends higher (TikTok's search bar or a series bar under it)
@@ -985,15 +989,22 @@ public final class VideoOverlayHider {
         // With no row on screen (a photo, or the progress bar turned off) nothing needs room.
         if (lifts == null && !rowShown) lifts = new HashMap<>();
         if (lifts != null) {
-            for (List<View> views : Arrays.asList(frames, discs)) {
-                for (View view : views) {
-                    Float lift = lifts.get(view);
-                    offsetOwned(CAPTIONS_LIFTED, view, lift == null ? 0f : -lift);
-                }
+            for (View frame : frames) {
+                Float lift = lifts.get(frame);
+                offsetOwned(CAPTIONS_LIFTED, frame, lift == null ? 0f : -lift);
+            }
+            for (View disc : discs) {
+                Float lift = lifts.get(disc);
+                liftDisc(disc, lift == null ? 0f : lift);
             }
             if (!CAPTIONS_LIFTED.isEmpty()) {
                 for (View view : new ArrayList<>(CAPTIONS_LIFTED.keySet())) {
-                    if (!frames.contains(view) && !discs.contains(view)) offsetOwned(CAPTIONS_LIFTED, view, 0f);
+                    if (!frames.contains(view)) offsetOwned(CAPTIONS_LIFTED, view, 0f);
+                }
+            }
+            if (!DISCS_LIFTED.isEmpty()) {
+                for (View disc : new ArrayList<>(DISCS_LIFTED.keySet())) {
+                    if (!discs.contains(disc)) liftDisc(disc, 0f);
                 }
             }
         }
@@ -1127,6 +1138,42 @@ public final class VideoOverlayHider {
             parent = group.getParent();
         }
         return top;
+    }
+
+    /**
+     * Lifts a music disc by {@code lift} over the offset TikTok holds it at, or puts it back there
+     * for a lift of zero. 47.1.4 keeps the disc about 40 px up with an offset of its own, and the
+     * caption frame's rule leaves any offset it didn't write, so the disc never moved and sat on the
+     * line (#153). An offset TikTok writes under the lift, as when it binds the cell again, becomes
+     * the one the disc is lifted from. One that keeps changing (more than three times within a
+     * second, the way an animation would) is left to TikTok for a moment rather than fought over.
+     */
+    static void liftDisc(View disc, float lift) {
+        float now = disc.getTranslationY();
+        float[] held = DISCS_LIFTED.get(disc);
+        long at = android.os.SystemClock.uptimeMillis();
+        long[] changes = DISC_CHANGES.get(disc);
+        if (held != null && now != held[1]) {
+            DISCS_LIFTED.remove(disc);
+            held = null;
+            if (changes == null || at - changes[0] > 1000L) {
+                changes = new long[] {at, 0L, 0L};
+                DISC_CHANGES.put(disc, changes);
+            }
+            if (++changes[1] > 3) changes[2] = at + 300L;
+        }
+        if (changes != null && at < changes[2]) return;
+        if (lift <= 0f) {
+            if (held != null) {
+                disc.setTranslationY(held[0]);
+                DISCS_LIFTED.remove(disc);
+            }
+            return;
+        }
+        float base = held != null ? held[0] : now;
+        float target = base - lift;
+        if (now != target) disc.setTranslationY(target);
+        DISCS_LIFTED.put(disc, new float[] {base, target});
     }
 
     private static void moveBarRow(View row, float drop) {

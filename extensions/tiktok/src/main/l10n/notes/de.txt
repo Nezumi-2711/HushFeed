@@ -1,6 +1,6 @@
 ## Unreleased
 
-* **TikTok:** Ist Kommentarleiste bei geöffneten Videos ausblenden an, läuft die Spulleiste bei Videos, die du über ein Profil oder die Suche öffnest, nicht mehr durch die Beschreibung. Die Beschreibung rückt gerade so weit nach oben, dass sie frei bleibt (#153).
+* **TikTok:** Ist Kommentarleiste bei geöffneten Videos ausblenden an, läuft die Spulleiste bei Videos, die du über ein Profil oder die Suche öffnest, nicht mehr durch die Beschreibung. Die Beschreibung und die Musikscheibe rücken gerade so weit nach oben, dass sie frei bleiben (#153).
 
 * **TikTok:** Der Diagnosebericht meldet die Kommentarleiste nicht mehr als fehlend, solange du im Hauptfeed bist (#153).
 
