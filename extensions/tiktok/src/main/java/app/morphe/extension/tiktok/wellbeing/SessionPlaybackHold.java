@@ -228,6 +228,42 @@ public final class SessionPlaybackHold {
         });
     }
 
+    /**
+     * Called with p0 from PlayerController.onRenderFirstFrame. A start's first video plays from
+     * its first frame, and its first progress report comes a second or two later (#83), so while a
+     * pause switch or the app lock wants the feed stopped, the player is stopped here rather than
+     * after that report. Only a playing player counts: a preloaded neighbour draws its first frame
+     * without playing.
+     */
+    public static void onFirstFrame(Object controller) {
+        if (controller == null || !(switchWanted || lockWanted)) return;
+        WeakReference<Object> owner = new WeakReference<>(controller);
+        // Not inside the native callback, for the reason the progress report posts its pause.
+        MAIN.post(() -> pauseAtFirstFrame(owner.get()));
+    }
+
+    private static void pauseAtFirstFrame(Object controller) {
+        if (controller == null || !(switchWanted || lockWanted) || SessionBudget.isLocked()) return;
+        if (!Boolean.TRUE.equals(Reflect.invoke(Reflect.invoke(controller, "getPlayerManager"), "isPlaying"))) {
+            return;
+        }
+        Object aid;
+        try {
+            aid = Reflect.invoke(currentAweme(controller), "getAid");
+        } catch (RuntimeException notAController) {
+            return;
+        }
+        if (!(aid instanceof String) || ((String) aid).isEmpty()) return;
+        // The player's own video, as a progress report would name it, so the tap that ends the
+        // hold finds this player still current and hands the video back.
+        Target previous = current;
+        if (previous == null || previous.controller.get() != controller
+                || !aid.equals(previous.awemeId)) {
+            current = new Target(controller, (String) aid);
+        }
+        pauseForSwitchIfPlaying();
+    }
+
     /** The video the player last reported, or null before any report. */
     public static String currentAwemeId() {
         Target target = current;

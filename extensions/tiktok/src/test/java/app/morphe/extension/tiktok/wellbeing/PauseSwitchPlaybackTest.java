@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.tiktok.blockauthor.BlockAuthorPatch;
 import app.morphe.extension.tiktok.blockauthor.CurrentVideoAuthor;
 import app.morphe.extension.tiktok.blockauthor.FeedVisibility;
 import app.morphe.extension.tiktok.playback.PausePlayback;
@@ -93,6 +95,7 @@ public class PauseSwitchPlaybackTest {
     private static void resetSettings() {
         Settings.PAUSE_ON_COMMENTS.resetToDefault();
         Settings.NO_RESUME_ON_FOREGROUND.resetToDefault();
+        Settings.PAUSE_FIRST_VIDEO.resetToDefault();
         Settings.SESSION_BUDGET_VIDEOS.resetToDefault();
         Settings.SESSION_BUDGET_MINUTES.resetToDefault();
         Settings.SESSION_BUDGET_LOCK_MINUTES.resetToDefault();
@@ -160,6 +163,46 @@ public class PauseSwitchPlaybackTest {
             player.manager.advance(1_000);
             assertEquals(stoppedAt + 1_000, player.manager.position);
         }
+    }
+
+    /**
+     * #83: opened from its icon with "Don't start the first video" on, the first video played for
+     * a second or two, because the hold only heard of its player at the first progress report.
+     * The first frame stops it now, and the tap still finds it to play.
+     */
+    @Test public void aStartsFirstVideoStopsAtItsFirstFrameAndTheTapPlaysIt() {
+        Settings.PAUSE_FIRST_VIDEO.save(true);
+        Intent launcher = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+        try (var owner = Robolectric.buildActivity(FeedActivity.class, launcher).create()) {
+            Utils.setActivity(owner.get());
+            PausePlayback.install(owner.get());
+            // Bound and starting, with no progress reported yet.
+            NativeController player = new NativeController();
+            player.bind("cold");
+            owner.start().resume().visible();
+            View catcher = ReflectionHelpers.callStaticMethod(PausePlayback.class, "catcherForTests");
+            assertNotNull("the start was not held", catcher);
+
+            BlockAuthorPatch.onFirstFrame(player);
+            idle();
+            assertEquals("the first video played on past its first frame", 1, player.manager.pauses);
+            long stoppedAt = player.manager.position;
+            player.manager.advance(2_000);
+            assertEquals(stoppedAt, player.manager.position);
+
+            assertTrue(catcher.performClick());
+            idle();
+            assertEquals("the tap did not start the first video", 1, player.manager.resumes);
+        }
+    }
+
+    /** With nothing holding the feed, a first frame leaves the video alone. */
+    @Test public void aFirstFrameWithNoSwitchHoldingTheFeedPlays() {
+        NativeController player = new NativeController();
+        player.bind("free");
+        BlockAuthorPatch.onFirstFrame(player);
+        idle();
+        assertEquals(0, player.manager.pauses);
     }
 
     @Test public void goingAwayLeavesTheVideoToTikTokAndASheetStillOpenStopsItAgain() {
