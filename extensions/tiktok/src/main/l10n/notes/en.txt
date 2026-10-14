@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** New Show the country as a flag switch: the country by a creator's name and after a commenter's time shows as its flag (#157).
+
+* **TikTok:** Don't start the first video now stops it at its first frame, not a second or two in (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** A profile background saved with the Profile background switch on stays after TikTok restarts. The switch now offers a restart (#80).

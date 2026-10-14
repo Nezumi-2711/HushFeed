@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** Neuer Schalter Land als Flagge anzeigen: Das Land neben dem Namen des Creators und nach der Zeit eines Kommentars erscheint als Flagge (#157).
+
+* **TikTok:** Erstes Video nicht starten hält das Video jetzt beim ersten Bild an statt nach ein, zwei Sekunden (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Ein mit eingeschaltetem Profilhintergrund gespeicherter Profilhintergrund bleibt nach einem Neustart von TikTok erhalten. Der Schalter bietet jetzt einen Neustart an (#80).

@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** Novo botão Mostrar o país como bandeira: o país ao lado do nome do criador e depois do horário de um comentário aparece como bandeira (#157).
+
+* **TikTok:** Não iniciar o primeiro vídeo agora para o vídeo no primeiro quadro, não um ou dois segundos depois (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Um fundo de perfil salvo com Fundo do perfil ligado não some mais quando o TikTok reinicia. A chave agora oferece reiniciar (#80).

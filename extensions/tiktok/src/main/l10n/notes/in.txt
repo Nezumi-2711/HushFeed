@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** Sakelar baru Tampilkan negara sebagai bendera: negara di samping nama kreator dan setelah waktu komentar tampil sebagai benderanya (#157).
+
+* **TikTok:** Jangan mulai video pertama kini menghentikannya di bingkai pertama, bukan satu atau dua detik kemudian (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Latar profil yang disimpan saat Latar profil aktif tidak hilang lagi setelah TikTok dimulai ulang. Sakelarnya kini menawarkan mulai ulang (#80).

@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** Nuevo interruptor Mostrar el país como bandera: el país junto al nombre del creador y tras la hora de un comentario se muestra como su bandera (#157).
+
+* **TikTok:** No poner en marcha el primer video ahora lo detiene en su primer fotograma, no uno o dos segundos después (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Un fondo de perfil guardado con Fondo del perfil activado ya no desaparece al reiniciar TikTok. El interruptor ahora ofrece reiniciar (#80).

@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** Nuovo interruttore Mostra il paese come bandiera: il paese accanto al nome del creator e dopo l'ora di un commento appare come bandiera (#157).
+
+* **TikTok:** Non avviare il primo video ora lo ferma al primo fotogramma, non dopo un paio di secondi (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Uno sfondo del profilo salvato con Sfondo del profilo attivo resta dopo il riavvio di TikTok. L'interruttore ora propone un riavvio (#80).

@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** Yeni Ölkəni bayraqla göstərin açarı: yaradıcının adının yanındakı və şərhin vaxtından sonrakı ölkə bayraq kimi görünür (#157).
+
+* **TikTok:** İlk videonu başlatmayın artıq videonu bir-iki saniyə sonra deyil, ilk kadrında dayandırır (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Profil fonu açıq olanda saxlanılan profil fonu TikTok yenidən başlayandan sonra da qalır. Açar indi yenidən başlatmağı təklif edir (#80).

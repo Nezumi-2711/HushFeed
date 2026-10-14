@@ -1,3 +1,9 @@
+## Unreleased
+
+* **TikTok:** Yeni Ülkeyi bayrakla göster anahtarı: içerik üreticisinin adının yanındaki ve yorum saatinden sonraki ülke bayrağıyla görünür (#157).
+
+* **TikTok:** İlk videoyu başlatma artık videoyu bir iki saniye sonra değil, ilk karesinde durdurur (#83).
+
 ## 0.73.0 (2026-10-14)
 
 * **TikTok:** Profil arka planı açıkken kaydedilen profil arka planı TikTok yeniden başlayınca artık kaybolmuyor. Anahtar artık yeniden başlatmayı öneriyor (#80).
