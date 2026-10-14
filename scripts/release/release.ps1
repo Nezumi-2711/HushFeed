@@ -491,8 +491,10 @@ switch ($Stage) {
         $readme = Join-Path $root 'README.md'
         $text = [IO.File]::ReadAllText($readme) -replace 'badge/version-\d+\.\d+\.\d+-', "badge/version-$Version-"
         [IO.File]::WriteAllText($readme, $text)
-        Step 'patch list and What''s new'
+        Step 'patch list, developer guide and What''s new'
         Invoke-Gradle @(':patches:generatePatchesList')
+        $guideArgs = @('guide') + $(if ($Date) { @('--date', $Date) } else { @() })
+        Invoke-Native 'developer guide' { py -3.13 (Join-Path $root 'tools/release_text.py') @guideArgs }
         Invoke-Native 'What''s new' { py -3.13 (Join-Path $root 'tools/gen-release-notes.py') }
         Invoke-Native 'translation check' { py -3.13 (Join-Path $root 'tools/release_text.py') check-translations --version $Version }
         Invoke-Native 'facts precheck' {

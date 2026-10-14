@@ -259,6 +259,10 @@ android {
             it.inputs.file(rootProject.layout.projectDirectory.file("CHANGELOG.md"))
                 .withPropertyName("releaseNotes")
                 .withPathSensitivity(PathSensitivity.RELATIVE)
+            // ReleaseNotesTest captures What's new for the version this file names.
+            it.inputs.file(rootProject.layout.projectDirectory.file("gradle.properties"))
+                .withPropertyName("sourceVersion")
+                .withPathSensitivity(PathSensitivity.RELATIVE)
             // refreshScreenshots asks for the capture itself, so it does not need the property
             // and cannot be pointed at assets/ by accident. Forcing the rerun matters because a
             // capture is not one of the task's declared outputs: an up to date test task writes
