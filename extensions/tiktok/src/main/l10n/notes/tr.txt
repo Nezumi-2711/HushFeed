@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Accent color artık akıştaki içerik üreticisinin avatarının altındaki takip artısını da senin rengine boyuyor (#84).
+
 * **TikTok:** Açılan videolarda yorum çubuğunu gizle açıkken müzik diski artık ilerleme çubuğunun sonunu ve yanındaki süreyi kapatmıyor (#153).
 
 * **TikTok:** AMOLED koyu tema artık Ayarlar ve gizlilik listesinin kendisindeki kartları da siyah yapıyor (#152).

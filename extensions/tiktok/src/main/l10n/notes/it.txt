@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Accent color ora colora anche il più per seguire sotto l'avatar del creator nel feed (#84).
+
 * **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, il disco musicale non copre più la fine della barra di avanzamento né il tempo accanto (#153).
 
 * **TikTok:** Il tema scuro AMOLED ora rende nere anche le schede dell'elenco Impostazioni e privacy (#152).

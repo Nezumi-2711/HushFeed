@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Accent color now reaches the plus under the creator's avatar on the feed rail too. That plus is a picture with TikTok's red drawn into it, so it stayed red while the buttons and text took your color. Its red and the soft edge around the white cross now follow your color, and the cross stays white (#84).
+
 * **TikTok:** With Hide the comment bar on opened videos on, the music disc at the bottom right no longer sits on the end of the progress bar or on the time beside it. A short caption used to leave it there. It now stays above the bar, the way it does with the comment bar showing (#153).
 
 * **TikTok:** AMOLED dark theme now reaches the cards on the Settings and privacy list itself. That list takes its colors from a palette in TikTok's code instead of its resources, so with TikTok's Display set to Dark its cards stayed gray after 0.73.0. They take the AMOLED color now. Light mode, TikTok's high contrast palette and the profile menu's cards keep their own colors (#152).
