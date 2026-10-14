@@ -570,6 +570,10 @@ public final class FeatureGateLabStore {
             new Preset("comment_media", "Comment with live photos, the camera or audio", CATALOG_BUILDS,
                     "comment_enable_live_photo:INT:1", "comment_by_shooting:INT:1",
                     "audio_comment_publish:INT:1"),
+            // Japan's several photos per comment (#98). Group 2 is the only one the comment
+            // keyboard and the publish path read as on; 0, 1 and anything else keep one photo.
+            new Preset("comment_photos", "Several photos in one comment", CATALOG_BUILDS,
+                    "comment_multi_photo_group:INT:2"),
             // The shared INT reader serves both the comment UI and native emoji catalog fetch.
             // Group 2 enables send and view while retaining availability and V0 fallback checks.
             new Preset("comment_emoji", "New comment emoji", CATALOG_BUILDS,
@@ -597,6 +601,11 @@ public final class FeatureGateLabStore {
                     "background_play_enable:INT:1", "fyp_auto_scroll:INT:1"),
             new Preset("feed_timestamps", "Post dates in the feed", CATALOG_BUILDS,
                     "feed_title_timestamp_trial:STRING:v3"),
+            // Korea's one-line comments that scroll across a video (#98). Group 1 or 2 turns the
+            // feature on once TikTok's own strategy switch allows it, and the landscape flag
+            // only counts after that. Each video still carries its own server flag for them.
+            new Preset("scrolling_comments", "Scrolling comments on videos", CATALOG_BUILDS,
+                    "danmaku_exp:INT:1", "landscape_support_danmaku:INT:1"),
             // Disable the client check; changing its separate maximum to 0 would reject all tags.
             new Preset("hashtag_limit", "More hashtags per post", CATALOG_BUILDS,
                     "studio_publish_limit_hashtag_switch:BOOLEAN:false"),

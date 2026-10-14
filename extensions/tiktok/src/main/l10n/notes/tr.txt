@@ -20,6 +20,8 @@
 
 * **TikTok:** AMOLED koyu tema artık TikTok'un kendi ayar sayfalarındaki kartları da siyah yapıyor (#152).
 
+* **TikTok:** Feature Gate Lab'de iki yeni hazır ayar var: Videoların üzerinde kayan yorumlar ve Bir yorumda birden fazla fotoğraf (#98).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Tanılama raporunda değiştirilen ayarları gösteren yeni bir bölüm var. Varsayılan değerinde olmayan her ayarı adıyla yazar, böylece rapor hangi anahtarların açık olduğunu gösterir. Bir ayara yazdığın metin rapora hiç eklenmez (#149).

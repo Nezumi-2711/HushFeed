@@ -20,6 +20,8 @@
 
 * **TikTok:** Das AMOLED-Dunkeldesign macht jetzt auch die Karten auf TikToks eigenen Einstellungsseiten schwarz (#152).
 
+* **TikTok:** Feature Gate Lab hat zwei neue Voreinstellungen: Laufende Kommentare über Videos und Mehrere Fotos in einem Kommentar (#98).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Der Diagnosebericht hat einen neuen Abschnitt mit den geänderten Einstellungen. Er nennt jede Einstellung, die nicht mehr auf ihrem Standardwert steht, sodass ein Bericht zeigt, welche Schalter an sind. Text, den du in eine Einstellung eingegeben hast, steht nie darin (#149).

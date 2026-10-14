@@ -20,6 +20,8 @@
 
 * **TikTok:** El tema oscuro AMOLED ahora también pone en negro las tarjetas de las páginas de ajustes de TikTok (#152).
 
+* **TikTok:** Feature Gate Lab tiene dos ajustes nuevos: Comentarios que se deslizan sobre los videos y Varias fotos en un comentario (#98).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).
