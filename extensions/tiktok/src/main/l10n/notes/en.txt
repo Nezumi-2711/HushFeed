@@ -28,6 +28,8 @@
 
 * **TikTok:** Turn on Pick videos to save from profile grids in Hushfeed settings > Downloads and every video in a profile, Liked or Favorites grid gets a circle. Pick up to 50, tap Save, and they're saved one after another with a count and Cancel (#27).
 
+* **TikTok:** Pick videos to save from profile grids has a Pick all button. It picks up to 50 of the posts a list has loaded, skipping videos already saved when Check for already-saved videos is on, so a whole list saves in runs that pick up where the last one stopped (#27).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every setting you've moved off its default, so a report shows which switches are on. Text you typed into a setting is never included (#149).

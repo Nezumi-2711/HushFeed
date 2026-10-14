@@ -322,6 +322,145 @@ public class GridPickerTest {
                 View.IMPORTANT_FOR_ACCESSIBILITY_NO, cover(cell).getImportantForAccessibility());
     }
 
+    /** A grid list the way TikTok's is read: a RecyclerView whose adapter hands its posts over by getData(). */
+    public static final class RecyclerView extends FrameLayout {
+        final List<Object> data = new ArrayList<>();
+
+        RecyclerView(android.content.Context context) {
+            super(context);
+        }
+
+        public Adapter getAdapter() {
+            return new Adapter(data);
+        }
+    }
+
+    public static final class Adapter {
+        private final List<Object> data;
+
+        Adapter(List<Object> data) {
+            this.data = data;
+        }
+
+        public List<Object> getData() {
+            return data;
+        }
+    }
+
+    private RecyclerView list(Object... posts) {
+        RecyclerView list = new RecyclerView(activity);
+        for (Object post : posts) list.data.add(post);
+        ViewGroup content = activity.findViewById(android.R.id.content);
+        content.addView(list, new FrameLayout.LayoutParams(-1, -1));
+        return list;
+    }
+
+    private FrameLayout cellIn(RecyclerView list) {
+        FrameLayout cell = new FrameLayout(activity);
+        cell.addView(new View(activity), new FrameLayout.LayoutParams(-1, -1));
+        list.addView(cell, new FrameLayout.LayoutParams(300, 400));
+        return cell;
+    }
+
+    private static Post[] posts(int from, int to) {
+        Post[] posts = new Post[to - from];
+        for (int index = from; index < to; index++) posts[index - from] = new Post("p" + index);
+        return posts;
+    }
+
+    @Test public void pickAllTakesWhatTheListHasLoadedInItsOrder() {
+        Settings.CHECK_SAVED_VIDEOS.save(false);
+        Post a = new Post("a");
+        Post story = new Post("s");
+        story.story = true;
+        Post b = new Post("b");
+        Post ad = new Post("ad");
+        ad.ad = true;
+        Post d = new Post("d");
+        RecyclerView list = list(a, story, b, "a header", ad, new Post(null), d);
+        FrameLayout cell = cellIn(list);
+        GridPicker.bind(cell, b);
+        circle(cell).performClick();
+        TextView pickAll = barText("Pick all");
+        assertNotNull("the bar has no Pick all", pickAll);
+        assertEquals(View.VISIBLE, pickAll.getVisibility());
+
+        pickAll.performClick();
+        assertEquals("stories, ads and items without an id were picked", 3, GridPicker.pickedCount());
+        assertNotNull(barText("3 picked"));
+        barText("Save").performClick();
+        assertEquals("the post picked by hand stays first, then the list's order", List.of(b, a, d), runs.get(0));
+    }
+
+    @Test public void pickAllStopsAtTheCapAndSaysHowToGetTheRest() {
+        Settings.CHECK_SAVED_VIDEOS.save(false);
+        RecyclerView list = list((Object[]) posts(0, 53));
+        FrameLayout cell = cellIn(list);
+        GridPicker.bind(cell, list.data.get(0));
+        circle(cell).performClick();
+        barText("Pick all").performClick();
+        assertEquals(GridPicker.MAX_PICKED, GridPicker.pickedCount());
+        assertTrue(GridPicker.isPicked("p49"));
+        assertFalse(GridPicker.isPicked("p50"));
+        assertEquals("Picked the first 50. Save them, then tap Pick all again for the rest.",
+                ShadowToast.getTextOfLatestToast());
+    }
+
+    @Test public void pickAllLeavesOutVideosSavedBeforeSoTheNextRunCarriesOn() throws Exception {
+        android.content.Context context = activity.getApplicationContext();
+        Utils.awaitBackgroundTasksForTests();
+        context.deleteDatabase(SavedVideoArchive.DATABASE_NAME);
+        SavedVideoArchive.resetForTests();
+        Settings.CHECK_SAVED_VIDEOS.save(true);
+        try {
+            SavedVideoArchive.readIdsLater();
+            Utils.awaitBackgroundTasksForTests();
+            // The first run saved p0 to p49.
+            for (int index = 0; index < GridPicker.MAX_PICKED; index++) remember(context, "p" + index);
+            RecyclerView list = list((Object[]) posts(0, 53));
+            FrameLayout cell = cellIn(list);
+            GridPicker.bind(cell, list.data.get(51));
+            circle(cell).performClick();
+            barText("Pick all").performClick();
+
+            assertEquals("the saved videos were picked again", 3, GridPicker.pickedCount());
+            barText("Save").performClick();
+            assertEquals(List.of(list.data.get(51), list.data.get(50), list.data.get(52)), runs.get(0));
+
+            // That run saved the rest. A post picked by hand still counts, and Pick all, with
+            // nothing left to add, says so rather than doing nothing.
+            for (int index = 50; index < 53; index++) remember(context, "p" + index);
+            GridPicker.bind(cell, list.data.get(52));
+            circle(cell).performClick();
+            ShadowToast.reset();
+            barText("Pick all").performClick();
+            assertEquals(1, GridPicker.pickedCount());
+            assertEquals("Everything this list has loaded is picked or saved. Scroll down to load more.",
+                    ShadowToast.getTextOfLatestToast());
+        } finally {
+            Utils.awaitBackgroundTasksForTests();
+            Settings.CHECK_SAVED_VIDEOS.save(false);
+            SavedVideoArchive.resetForTests();
+            context.deleteDatabase(SavedVideoArchive.DATABASE_NAME);
+        }
+    }
+
+    private static void remember(android.content.Context context, String id) throws java.io.IOException {
+        java.io.File file = new java.io.File(context.getCacheDir(), id + ".mp4");
+        try (java.io.FileOutputStream out = new java.io.FileOutputStream(file)) {
+            out.write(new byte[]{1, 2, 3, 4});
+        }
+        SavedVideoArchive.remember(context, id, new MediaFileWriter.Saved(id + ".mp4", null, file),
+                SavedVideoArchive.generation());
+    }
+
+    @Test public void pickAllIsOnlyOfferedWhereTheListCanBeRead() {
+        FrameLayout cell = cell();
+        GridPicker.bind(cell, new Post("1"));
+        circle(cell).performClick();
+        assertEquals("a cell outside a list offered Pick all", View.GONE, barText("Pick all").getVisibility());
+    }
+
     @Test public void aViewThatIsNotACellIsLeftAlone() {
         TextView view = new TextView(activity);
         GridPicker.bind(view, new Post("1"));

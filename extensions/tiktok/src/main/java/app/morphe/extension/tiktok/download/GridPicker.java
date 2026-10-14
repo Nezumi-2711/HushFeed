@@ -46,8 +46,10 @@ import java.util.WeakHashMap;
  * <p>With the switch on, each cell gets a small circle in its top corner. Tapping it picks the
  * post. While anything is picked, a clear cover sits over every cell so a tap anywhere on a cell
  * picks or unpicks it instead of opening the video, and a bar at the bottom counts the picks
- * with Save and Cancel. Save hands the picked posts to {@link BatchSave} as one run, with the
- * running count and Cancel of {@link SaveProgress}. TikTok's own tap and long press on a cell are
+ * with Pick all, Save and Cancel. Save hands the picked posts to {@link BatchSave} as one run,
+ * with the running count and Cancel of {@link SaveProgress}. Pick all takes every post the list
+ * has loaded (see {@link #pickAll}), so a whole Liked, Favorites or Reposts list saves in runs of
+ * {@link #MAX_PICKED}, each one picking up where the last stopped. TikTok's own tap and long press on a cell are
  * never replaced: the circle and the cover are views of ours laid over the cell, and they go
  * (GONE, then removed on the next bind) when the switch is off or Hushfeed is paused.
  *
@@ -69,6 +71,9 @@ public final class GridPicker {
     /** The bar counting the picks, and the activity it sits in. */
     private static WeakReference<View> bar = new WeakReference<>(null);
     private static WeakReference<TextView> barLabel = new WeakReference<>(null);
+    private static WeakReference<View> barPickAll = new WeakReference<>(null);
+    /** The cell picked from last, whose list Pick all reads. */
+    private static WeakReference<View> lastCell = new WeakReference<>(null);
     /** For the tests: what was handed to a save run. Null starts a real one. */
     static volatile List<List<Object>> runsForTests;
 
@@ -210,6 +215,7 @@ public final class GridPicker {
             Object item = BOUND.get(cell);
             String id = pickableId(item);
             if (id == null) return;
+            lastCell = new WeakReference<>(cell);
             if (PICKED.containsKey(id)) {
                 PICKED.remove(id);
             } else if (PICKED.size() >= MAX_PICKED) {
@@ -262,6 +268,68 @@ public final class GridPicker {
         BatchSave.start(context, posts);
     }
 
+    /**
+     * Pick all on the bar: every post the list has loaded, in the list's order, leaving out what
+     * is picked already and, with Check for already-saved videos on, the videos saved here before.
+     * Picking stops at {@link #MAX_PICKED}, so a long list saves in runs: save these, and the next
+     * Pick all starts where this run ended. Only posts TikTok has loaded are picked, from the
+     * adapter's own list, so nothing is requested from TikTok's servers; scrolling down loads more.
+     */
+    static void pickAll() {
+        try {
+            View cell = lastCell.get();
+            if (cell == null || !enabled()) return;
+            List<?> posts = listOf(cell);
+            if (posts == null) return;
+            boolean skipSaved = Settings.CHECK_SAVED_VIDEOS.get();
+            boolean full = false;
+            int added = 0;
+            for (Object post : new ArrayList<>(posts)) {
+                String id = pickableId(post);
+                if (id == null || PICKED.containsKey(id)) continue;
+                if (skipSaved && SavedVideoArchive.isSaved(id)) continue;
+                if (PICKED.size() >= MAX_PICKED) {
+                    full = true;
+                    break;
+                }
+                PICKED.put(id, post);
+                added++;
+            }
+            refresh();
+            showBar(cell);
+            if (full) {
+                Utils.showToastLong(L10n.f(cell.getContext(),
+                        "Picked the first %1$s. Save them, then tap Pick all again for the rest.",
+                        String.valueOf(MAX_PICKED)));
+            } else if (added == 0) {
+                Utils.showToastLong(L10n.t(cell.getContext(),
+                        "Everything this list has loaded is picked or saved. Scroll down to load more."));
+            }
+        } catch (Throwable failure) {
+            Logger.printException(() -> "Could not pick a whole grid", failure);
+        }
+    }
+
+    /**
+     * The posts the cell's list holds: its RecyclerView's adapter's {@code getData()}, the list the
+     * profile, Liked and Favorites grids draw from (X/0Of2 on 47.1.4). Null when there is no such list.
+     */
+    static List<?> listOf(View cell) {
+        for (android.view.ViewParent parent = cell.getParent(); parent instanceof View; parent = parent.getParent()) {
+            if (!isRecyclerView(parent.getClass())) continue;
+            Object data = Reflect.invoke(Reflect.invoke(parent, "getAdapter"), "getData");
+            return data instanceof List ? (List<?>) data : null;
+        }
+        return null;
+    }
+
+    private static boolean isRecyclerView(Class<?> type) {
+        for (Class<?> current = type; current != null && current != View.class; current = current.getSuperclass()) {
+            if ("RecyclerView".equals(current.getSimpleName())) return true;
+        }
+        return false;
+    }
+
     private static void showBar(View cell) {
         Activity activity = activityOf(cell);
         if (activity == null) return;
@@ -285,6 +353,9 @@ public final class GridPicker {
             label.setText(text);
             label.setContentDescription(text);
         }
+        View pickAll = barPickAll.get();
+        // Only offered where the list can be read, so the button never does nothing.
+        if (pickAll != null) pickAll.setVisibility(listOf(cell) != null ? View.VISIBLE : View.GONE);
     }
 
     private static View newBar(Activity activity, ViewGroup content) {
@@ -305,6 +376,11 @@ public final class GridPicker {
         label.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
         row.addView(label, new LinearLayout.LayoutParams(0, -2, 1f));
         barLabel = new WeakReference<>(label);
+
+        TextView pickAll = button(activity, L10n.t(activity, "Pick all"));
+        pickAll.setOnClickListener(view -> pickAll());
+        row.addView(pickAll, new LinearLayout.LayoutParams(-2, -2));
+        barPickAll = new WeakReference<>(pickAll);
 
         TextView save = button(activity, L10n.t(activity, "Save"));
         save.setOnClickListener(view -> saveAll(activity));
@@ -351,6 +427,7 @@ public final class GridPicker {
         View shown = bar.get();
         bar = new WeakReference<>(null);
         barLabel = new WeakReference<>(null);
+        barPickAll = new WeakReference<>(null);
         if (shown != null && shown.getParent() instanceof ViewGroup) ((ViewGroup) shown.getParent()).removeView(shown);
     }
 
@@ -372,6 +449,7 @@ public final class GridPicker {
         PICKED.clear();
         BOUND.clear();
         hideBar();
+        lastCell = new WeakReference<>(null);
         runsForTests = null;
     }
 }

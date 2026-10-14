@@ -28,6 +28,8 @@
 
 * **TikTok:** Aktifkan Pilih video untuk disimpan dari grid profil di setelan Hushfeed > Unduhan, dan setiap video di grid profil, Disukai, atau Favorit akan punya lingkaran. Pilih hingga 50, ketuk Simpan, dan semuanya disimpan satu per satu dengan hitungan dan Batal (#27).
 
+* **TikTok:** Pilih video untuk disimpan dari grid profil kini punya tombol Pilih semua. Tombol ini memilih hingga 50 postingan yang sudah dimuat daftar, melewati video yang sudah disimpan saat Periksa video yang sudah disimpan aktif, jadi seluruh daftar tersimpan bertahap, masing-masing melanjutkan dari tempat yang sebelumnya berhenti (#27).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Laporan diagnostik punya bagian baru berisi pengaturan yang diubah. Bagian ini menyebut setiap pengaturan yang tidak lagi di nilai bawaannya, sehingga laporan menunjukkan sakelar mana yang aktif. Teks yang kamu ketik di sebuah pengaturan tidak pernah disertakan (#149).
