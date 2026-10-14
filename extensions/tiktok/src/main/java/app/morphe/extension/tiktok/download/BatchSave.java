@@ -61,7 +61,9 @@ final class BatchSave {
             Utils.showToastLong(L10n.t("None of the picked videos could be saved. Try again."));
             return false;
         }
-        List<Object> snapshot = List.copyOf(posts.subList(0, Math.min(posts.size(), GridPicker.MAX_PICKED)));
+        // List.copyOf is API 30; the payload's floor is 23.
+        List<Object> snapshot = Collections.unmodifiableList(
+                new ArrayList<>(posts.subList(0, Math.min(posts.size(), GridPicker.MAX_PICKED))));
         Context app = context.getApplicationContext() != null ? context.getApplicationContext() : context;
         Saver saver = saverForTests != null ? saverForTests : BatchSave::saveOne;
         SaveProgress progress = SaveProgress.queuedFiles(snapshot.size());
