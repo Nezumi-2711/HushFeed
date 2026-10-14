@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Profil arka planı açıkken kaydedilen profil arka planı TikTok yeniden başlayınca artık kaybolmuyor. Anahtar artık yeniden başlatmayı öneriyor (#80).
+
 * **TikTok:** Akış filtresinde maksimumun yanında artık Minimum video süresi de var (#154).
 
 * **TikTok:** Otomatik kalitede hikâye kaydetmek artık daha küçük akış yerine oynatılabilen en yüksek sürümü alıyor (#155).

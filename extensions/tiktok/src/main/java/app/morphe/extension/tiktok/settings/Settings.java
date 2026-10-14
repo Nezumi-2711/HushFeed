@@ -961,8 +961,9 @@ public class Settings extends BaseSettings {
     // once early in each start, so a change counts from the next one, with no restart asked for.
     public static final BooleanSetting KEEP_APP_LANGUAGE = new BooleanSetting("keep_app_language", FALSE);
     // Profile background (#80), in the default selection with this off. TikTok asks its gate as
-    // Edit profile or a profile is built, so a change counts from the next one, no restart.
-    public static final BooleanSetting PROFILE_BACKGROUND = new BooleanSetting("profile_background", FALSE);
+    // Edit profile or a profile is built, but the allow-list value its profile requests send is
+    // snapshotted once per account and process, so a change takes a restart to reach the server.
+    public static final BooleanSetting PROFILE_BACKGROUND = new BooleanSetting("profile_background", FALSE, true);
     // App lock. Off until the reader turns it on, and read as each screen starts, so no restart.
     // The delay is whole minutes TikTok may spend in the background before it asks again.
     public static final BooleanSetting APP_LOCK = new BooleanSetting("app_lock", FALSE);

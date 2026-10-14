@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Profil fonu açıq olanda saxlanılan profil fonu TikTok yenidən başlayandan sonra da qalır. Açar indi yenidən başlatmağı təklif edir (#80).
+
 * **TikTok:** Lent filtri maksimumun yanında Minimum video uzunluğu da var (#154).
 
 * **TikTok:** Avtomatik keyfiyyətdə hekayə saxlayanda daha kiçik axın yerinə onun ən hündür oynadıla bilən versiyası götürülür (#155).

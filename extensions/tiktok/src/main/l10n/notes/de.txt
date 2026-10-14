@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Ein mit eingeschaltetem Profilhintergrund gespeicherter Profilhintergrund bleibt nach einem Neustart von TikTok erhalten. Der Schalter bietet jetzt einen Neustart an (#80).
+
 * **TikTok:** Der Feed-Filter hat neben der maximalen jetzt auch eine Minimale Videolänge (#154).
 
 * **TikTok:** Eine Story mit Qualität Automatisch zu speichern holt jetzt ihre höchste abspielbare Fassung statt des kleineren Streams (#155).

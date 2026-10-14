@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Uno sfondo del profilo salvato con Sfondo del profilo attivo resta dopo il riavvio di TikTok. L'interruttore ora propone un riavvio (#80).
+
 * **TikTok:** Filtro del feed ha una Durata minima del video accanto a quella massima (#154).
 
 * **TikTok:** Salvare una storia con qualità Automatico ora prende la sua versione riproducibile più alta invece dello stream più piccolo (#155).

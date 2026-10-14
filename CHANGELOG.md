@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A profile background saved with the Profile background switch on no longer disappears after TikTok restarts. TikTok asks its servers for profiles with a value that left the background out, and the switch now sends the one that brings it back, the same one Feature Gate Lab's Profile banner preset sets. Flipping the switch now offers a restart (#80).
+
 * **TikTok:** Feed filter has a Minimum video length beside the maximum, under Limits. Videos shorter than it are hidden, while photo posts and videos TikTok sent no length for stay. Like the maximum, when a whole batch would go, the video closest to your limit is kept (#154).
 
 * **TikTok:** Saving a story on Automatic quality now gets its tallest version that other players can open, not the smaller one TikTok's player happened to be streaming. A story whose own clean file is already that tall keeps it, and one with nothing better saves the way it did before (#155).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Um fundo de perfil salvo com Fundo do perfil ligado não some mais quando o TikTok reinicia. A chave agora oferece reiniciar (#80).
+
 * **TikTok:** Filtro do feed tem uma Duração mínima do vídeo ao lado da máxima (#154).
 
 * **TikTok:** Salvar uma história com qualidade Automático agora pega a versão reproduzível mais alta em vez da transmissão menor (#155).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** A profile background saved with the Profile background switch on stays after TikTok restarts. The switch now offers a restart (#80).
+
 * **TikTok:** Feed filter has a Minimum video length beside the maximum (#154).
 
 * **TikTok:** Saving a story on Automatic quality takes its tallest playable version instead of the smaller stream (#155).

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Un fondo de perfil guardado con Fondo del perfil activado ya no desaparece al reiniciar TikTok. El interruptor ahora ofrece reiniciar (#80).
+
 * **TikTok:** Filtro del feed tiene una Duración mínima del vídeo junto a la máxima (#154).
 
 * **TikTok:** Guardar una historia con calidad Automático ahora baja su versión reproducible más alta en lugar de la transmisión más pequeña (#155).
