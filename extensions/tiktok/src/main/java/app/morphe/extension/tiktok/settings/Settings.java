@@ -527,6 +527,15 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting OFFER_LIVE_QUALITY = new BooleanSetting("offer_live_quality", FALSE);
     /**
+     * Keeps the last LIVE quality picked after TikTok closes, so the first rooms after a cold
+     * start open at it when their stream has it (#57); the LIVE controls patch, under
+     * {@link #OFFER_LIVE_QUALITY}. Read as each room picks its starting quality, so no restart.
+     */
+    public static final BooleanSetting REMEMBER_LIVE_QUALITY = new BooleanSetting(
+            "remember_live_quality", FALSE, false, Setting.parent(OFFER_LIVE_QUALITY));
+    /** TikTok's key for that pick ("hd", "origin" and so on), saved from its picker. Never shown. */
+    public static final StringSetting REMEMBERED_LIVE_QUALITY = new StringSetting("remembered_live_quality", "");
+    /**
      * Plays the audio TikTok mutes on a post whose sound was pulled; the Keep pulled sounds
      * patch. Read as each video starts, so no restart.
      */

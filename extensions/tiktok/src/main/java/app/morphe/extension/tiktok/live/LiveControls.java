@@ -40,6 +40,43 @@ public final class LiveControls {
     }
 
     /**
+     * True while a LIVE quality pick should outlive TikTok closing. It needs Offer LIVE quality in
+     * more rooms as well, which is what makes TikTok carry a pick between rooms at all. Paused,
+     * both switches answer off.
+     */
+    public static boolean rememberQuality() {
+        return offerQualityEverywhere() && Settings.REMEMBER_LIVE_QUALITY.get();
+    }
+
+    private static volatile boolean restoredLogged;
+
+    /**
+     * Called right after a LIVE room's start reads TikTok's last quality pick, with that pick.
+     * TikTok keeps it only until it closes, so the first rooms after a cold start read null; while
+     * {@link #rememberQuality} is on they get the pick saved by {@link #noteLiveQualityPick}
+     * instead. The player start uses it only when the stream has that quality and starts at the
+     * stream's own default when it doesn't, as it does with a pick from the same session.
+     */
+    public static String liveQualityPick(String tiktokPick) {
+        if (tiktokPick != null || !rememberQuality()) return tiktokPick;
+        String saved = Settings.REMEMBERED_LIVE_QUALITY.get();
+        if (saved == null || saved.isEmpty()) return null;
+        if (!restoredLogged) {
+            restoredLogged = true;
+            Logger.printInfo(() -> "LIVE quality: TikTok had no pick since it started, so rooms start at the saved " + saved);
+        }
+        return saved;
+    }
+
+    /** Called with each quality TikTok's picker carries to the next room; saved while the switch is on. */
+    public static void noteLiveQualityPick(String pick) {
+        if (pick == null || pick.isEmpty() || !rememberQuality()) return;
+        if (pick.equals(Settings.REMEMBERED_LIVE_QUALITY.get())) return;
+        Settings.REMEMBERED_LIVE_QUALITY.save(pick);
+        Logger.printDebug(() -> "LIVE quality: saved the pick " + pick);
+    }
+
+    /**
      * Called as the For You LIVE preview's Service+ row ("Service+ | Ask me anything!") is bound to
      * a LIVE, with the row and that LIVE's Service+ preview. True when the row still shows and the
      * LIVE has no Service+ item, and the patch then runs the row's own hide before its show.

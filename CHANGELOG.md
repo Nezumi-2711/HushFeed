@@ -16,6 +16,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** A LIVE in the For You feed no longer carries over the Service+ row (the "Service+ | Ask me anything!" line under the name) from a LIVE you scrolled past. When the next LIVE has no Service+ row of its own, the leftover one is hidden. It's part of the LIVE controls patch and needs no switch (#94).
 
+* **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice (#57).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).

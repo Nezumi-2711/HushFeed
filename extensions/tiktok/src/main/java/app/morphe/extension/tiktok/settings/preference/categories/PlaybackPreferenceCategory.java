@@ -112,6 +112,11 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                             + "quality to the menu in most of the others, and the next room opens at the quality "
                             + "you picked last.",
                     Settings.OFFER_LIVE_QUALITY));
+            addPreference(new TogglePreference(context, "Keep the LIVE quality after TikTok restarts",
+                    "TikTok forgets the LIVE quality you picked when it closes. This starts rooms at "
+                            + "that quality again after a restart. A room whose stream doesn't have it "
+                            + "opens at TikTok's choice.",
+                    Settings.REMEMBER_LIVE_QUALITY));
         }
         if (SettingsStatus.stopVideoLoopingEnabled) {
             addPreference(new TogglePreference(

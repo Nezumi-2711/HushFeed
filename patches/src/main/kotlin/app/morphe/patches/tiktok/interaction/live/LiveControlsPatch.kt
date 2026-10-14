@@ -88,6 +88,78 @@ internal object LiveResolutionPersistFingerprint : Fingerprint(
     parameters = listOf(),
 )
 
+internal const val PULL_STREAM_SERVICE = "Lcom/bytedance/android/live/livepullstream/PullStreamService;"
+private const val LIVE_MODE = "Lcom/bytedance/android/livesdkapi/depend/model/live/LiveMode;"
+
+/**
+ * The pull stream service's starting quality for a room that's created ahead (rs2 on 47.1.4):
+ * when [LiveResolutionPersistFingerprint] answers true it hands a video room TikTok's last
+ * quality pick, a static string that lives only until TikTok closes, and the stream's default
+ * while that's still null.
+ */
+internal object LiveStartQualityFingerprint : Fingerprint(
+    definingClass = PULL_STREAM_SERVICE,
+    returnType = "Ljava/lang/String;",
+    parameters = listOf("Ljava/lang/String;", LIVE_MODE, "Z"),
+    custom = { method, _ -> method.calls(LIVE_RESOLUTION_SELECTION_SETTING, "needPersistAcrossRooms") },
+)
+
+/**
+ * The LIVE player's start (X.0K9X.LJJJZ on 47.1.4). When [LiveResolutionPersistFingerprint]
+ * answers true it lists the stream's quality keys and starts at the last pick only when the
+ * stream has it, at the stream's default otherwise.
+ */
+internal object LivePlayerStartFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf("L", "Z", "Ljava/lang/Long;"),
+    strings = listOf(" setDataSource()", "streamData is null when get video resolution"),
+)
+
+/**
+ * TikTok's last LIVE quality pick (#57): the static [field] the two starts read, and the one
+ * service method ([setter], vJ1 on 47.1.4) the picker writes it through.
+ */
+internal data class LiveQualityPick(val field: String, val setter: Method)
+
+private fun FieldReference.key() = "$definingClass->$name:$type"
+
+/** Every `sget-object` of [field] in this method. */
+internal fun Method.readsOf(field: String): List<Int> {
+    val instructions = implementation?.instructions?.toList().orEmpty()
+    return instructions.indices.filter { index ->
+        instructions[index].opcode == Opcode.SGET_OBJECT &&
+            ((instructions[index] as ReferenceInstruction).reference as FieldReference).key() == field
+    }
+}
+
+/**
+ * The pick and its setter, from the start [quality] answer's single static string read. Throws
+ * unless the service has exactly one method that only stores its argument there: the pick is
+ * saved at that call, so a second writer would leave a pick unsaved.
+ */
+internal fun liveQualityPick(service: ClassDef, quality: Method): LiveQualityPick {
+    val instructions = quality.implementation?.instructions?.toList().orEmpty()
+    val fields = instructions.filter { it.opcode == Opcode.SGET_OBJECT }
+        .map { (it as ReferenceInstruction).reference as FieldReference }
+        .filter { it.type == "Ljava/lang/String;" }
+        .map { it.key() }.distinct()
+    val field = fields.singleOrNull()
+        ?: throw PatchException("LIVE controls: expected one quality pick read in ${quality.name}, found $fields")
+    val setters = service.methods.filter { method ->
+        val body = method.implementation?.instructions?.toList().orEmpty()
+        val store = body.firstOrNull()
+        !AccessFlags.STATIC.isSet(method.accessFlags) && method.returnType == "V" &&
+            method.parameterTypes.map(CharSequence::toString) == listOf("Ljava/lang/String;") &&
+            body.size == 2 && store?.opcode == Opcode.SPUT_OBJECT &&
+            ((store as ReferenceInstruction).reference as FieldReference).key() == field &&
+            (store as OneRegisterInstruction).registerA == method.implementation!!.registerCount - 1 &&
+            body[1].opcode == Opcode.RETURN_VOID
+    }
+    val setter = setters.singleOrNull()
+        ?: throw PatchException("LIVE controls: expected one quality pick setter in ${service.type}, found ${setters.map { it.name }}")
+    return LiveQualityPick(field, setter)
+}
+
 /** The For You LIVE preview's Service+ row ("Service+ | Ask me anything!"), real-named on 47.1.4. */
 internal const val SERVICE_PLUS_ROW =
     "Lcom/ss/android/ugc/aweme/feed/adapter/widget/serviceplus/PreviewServicePlusBottomInfoWidget;"
@@ -270,7 +342,7 @@ val liveControlsPatch = bytecodePatch(
     name = "LIVE controls",
     description = "Stops a LIVE in the feed from opening by itself after a countdown, can " +
         "show a LIVE's exact viewer count instead of a rounded one, and can offer a quality " +
-        "choice in more LIVE rooms. Starts off. Turn it on in Hushfeed settings > Playback. " +
+        "choice in more LIVE rooms and keep your pick after TikTok restarts. Starts off. Turn it on in Hushfeed settings > Playback. " +
         "It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it.",
 ) {
     category("Playback")
@@ -344,6 +416,34 @@ val liveControlsPatch = bytecodePatch(
                 ExternalLabel("morphe_keep_service_plus_row", getInstruction(at)),
             )
         }
+
+        // A LIVE quality pick that outlives TikTok closing (#57): the picker's setter saves each
+        // pick, and both starts that read TikTok's last pick get the saved one while TikTok's is
+        // still null after a cold start. The player start only uses it when the stream has that
+        // quality, the same check it makes of a pick from this session. All four places are found
+        // and checked before anything is written.
+        val startQuality = LiveStartQualityFingerprint.method
+        val pick = liveQualityPick(mutableClassDefBy(PULL_STREAM_SERVICE), startQuality)
+        val playerStart = LivePlayerStartFingerprint.method
+        val readers = listOf(startQuality, playerStart).map { reader ->
+            val reads = reader.readsOf(pick.field)
+            val read = reads.singleOrNull()
+                ?: throw PatchException("LIVE controls: expected one quality pick read in ${reader.name}, found ${reads.size}")
+            Triple(reader, read, (reader.getInstruction(read) as OneRegisterInstruction).registerA)
+        }
+        readers.forEach { (reader, read, register) ->
+            reader.addInstructions(
+                read + 1,
+                """
+                    invoke-static/range {v$register .. v$register}, $EXTENSION->liveQualityPick(Ljava/lang/String;)Ljava/lang/String;
+                    move-result-object v$register
+                """,
+            )
+        }
+        mutableClassDefBy(PULL_STREAM_SERVICE).findMutableMethodOf(pick.setter).addInstruction(
+            0,
+            "invoke-static/range {p1 .. p1}, $EXTENSION->noteLiveQualityPick(Ljava/lang/String;)V",
+        )
     }
 }
 
