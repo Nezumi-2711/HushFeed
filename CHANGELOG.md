@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** Hushfeed settings can now follow TikTok in Simplified Chinese. The complete first translation covers the settings pages, dialogs and runtime messages. Traditional Chinese stays in English until it has its own translation, and corrections to this first pass are welcome.
+
 * **TikTok:** Allow screenshots and Circle to Search now covers popups that TikTok builds outside an Activity window. A controlled Android 15 check of TikTok's own Compose popup showed black with the switch off, visible content with it on, and black again while Hushfeed was paused. Naturally served popups still depend on what TikTok enables for an account.
 
 * **TikTok:** Starting with the next release, Morphe Manager shows that release's whole change list even while it is the newest one. Before, Manager showed only the short bundle summary for the release on a phone, then showed its full list after another release came out. The published 0.74.0 index stays unchanged.
