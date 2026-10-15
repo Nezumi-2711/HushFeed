@@ -258,6 +258,37 @@ public class ScreenLayoutTest {
         popup.dismiss();
     }
 
+    @Test public void aGroupClippedOutOfSightIsCountedNotWalked() {
+        // #162: the feed keeps the next video laid out under the screen, clipped by the pager,
+        // and walking it used the bounds before the views on screen were reached.
+        Activity feed = Robolectric.buildActivity(Activity.class).setup().get();
+        FrameLayout pager = new FrameLayout(feed);
+        LinearLayout next = new LinearLayout(feed);
+        next.setId(android.R.id.button1);
+        for (int index = 0; index < 50; index++) next.addView(new View(feed), 10, 10);
+        FrameLayout.LayoutParams below = new FrameLayout.LayoutParams(200, 200);
+        below.topMargin = 400;
+        pager.addView(next, below);
+        TextView shown = new TextView(feed);
+        shown.setId(android.R.id.button2);
+        pager.addView(shown, new FrameLayout.LayoutParams(100, 100));
+        FrameLayout screen = new FrameLayout(feed);
+        screen.addView(pager, new FrameLayout.LayoutParams(300, 300));
+        feed.setContentView(screen);
+        idle(0);
+        ScreenLayout.start(settings, results::add);
+        idle(ScreenLayout.DELAY_MS);
+
+        String all = String.join("\n", ScreenLayout.lines());
+        assertTrue(all, all.contains("LinearLayout #button1 ") && all.contains(" offscreen"));
+        assertTrue(all, all.contains("TextView #button2 "));
+        assertTrue(all, all.contains("\n(50 views off screen not listed)"));
+        for (String line : ScreenLayout.lines()) {
+            assertFalse("the clipped group's children are not walked: " + all,
+                    line.trim().startsWith("View ") && line.endsWith(" 10x10"));
+        }
+    }
+
     @Test public void frameworkClassesAreShortAndTikToksAreInFull() {
         assertEquals("FrameLayout", ScreenLayout.className(FrameLayout.class));
         assertEquals(TargetActivity.class.getName(), ScreenLayout.className(TargetActivity.class));
