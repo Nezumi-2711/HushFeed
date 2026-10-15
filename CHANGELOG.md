@@ -6,8 +6,6 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice. A pick from the Video quality list in a room's Share menu now carries on to the next room too (#57).
 
-* **TikTok:** LIVE controls can open LIVE panels dark while TikTok is in dark mode. TikTok keeps a LIVE room's share menu, fan club sheet, first gift dialog and similar panels light even in a dark app, so they flashed white over the stream. Turn on Dark LIVE panels in dark mode in Hushfeed settings > Playback. Light mode doesn't change (#159).
-
 * **TikTok:** With Hide the comment bar on opened videos on, a video from someone you follow who follows you back no longer has TikTok's Message bar sitting over the bottom of the caption, the progress bar and the buttons on the right. TikTok shows that bar there instead of Add comment, and the patch gave the video the bar's room without taking the bar away. It goes with the comment bar now (#153).
 
 * **TikTok:** Accent color now reaches the plus under the creator's avatar on the feed rail too. That plus is a picture with TikTok's red drawn into it, so it stayed red while the buttons and text took your color. Its red and the soft edge around the white cross now follow your color, and the cross stays white (#84).

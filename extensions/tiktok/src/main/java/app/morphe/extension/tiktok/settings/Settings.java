@@ -563,7 +563,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting OFFER_LIVE_CLEAR_SCREEN = new BooleanSetting("offer_live_clear_screen", FALSE);
     /**
      * Opens LIVE panels in TikTok's dark LIVE theme while TikTok is in dark mode (#159); the LIVE
-     * controls patch. Read as each panel opens, so the next panel follows a change.
+     * controls patch. Read as each panel opens, so the next panel follows a change. Has no
+     * settings row yet: on the S25 the Share panel, viewer rankings and the Video quality list
+     * stayed light with it on, and only their navigation bar turned dark.
      */
     public static final BooleanSetting DARK_LIVE_PANELS = new BooleanSetting("dark_live_panels", FALSE);
     /**
