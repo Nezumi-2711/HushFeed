@@ -266,6 +266,17 @@ val commentToolsPatch = bytecodePatch(
             },
             { CaptionRowFingerprint.method.resolveCaptionRow() },
             {
+                // Block this commenter in the menu a long press on a comment opens (#169). The
+                // finished rows pass through the extension on their way into the panel's adapter,
+                // and the row's icon is TikTok's own block glyph in the menu's icon style.
+                val icon = commentMenuBlockIcon(
+                    CommentMenuItemsFingerprint.originalMethod,
+                    AdReportActionKeyFingerprint.matchAll().map { it.originalClassDef },
+                    ProfileBlockActionKeyFingerprint.originalClassDef,
+                )
+                CommentMenuListFingerprint.method.resolveCommentMenuBlock(icon)
+            },
+            {
                 val settingsStatus = SettingsStatusLoadFingerprint.method
                 // Blocking a commenter goes through the same BlockApi as the block button. Fail
                 // the build rather than ship a gesture that silently does nothing.

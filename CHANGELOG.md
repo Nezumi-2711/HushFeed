@@ -12,6 +12,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With Hide search suggestions above comments on, comments no longer open with an empty white band above the comment count on some videos. On some accounts TikTok saves the banner's spot before it builds the banner, so hiding only the banner left its spot behind. The switch now answers TikTok's own "any suggestion here?" check, so no spot is saved, and the newer style of that banner goes too (#161).
 
+* **TikTok:** A comment's menu can now block the person who wrote it. Press and hold a comment and pick Block this commenter, and their comments leave the list right away, the way they do after a block from their profile. A banner names who you blocked and offers Undo. Turn on Block from a comment's menu in Hushfeed settings > Comments, under Blocking (#169).
+
 ## 0.74.0 (2026-10-14)
 
 * **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice. A pick from the Video quality list in a room's Share menu now carries on to the next room too (#57).
