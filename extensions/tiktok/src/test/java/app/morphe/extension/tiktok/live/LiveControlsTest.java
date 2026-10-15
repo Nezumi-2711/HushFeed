@@ -45,6 +45,7 @@ public class LiveControlsTest {
         Settings.REMEMBER_LIVE_QUALITY.save(Settings.REMEMBER_LIVE_QUALITY.defaultValue);
         Settings.REMEMBERED_LIVE_QUALITY.save(Settings.REMEMBERED_LIVE_QUALITY.defaultValue);
         Settings.OFFER_LIVE_CLEAR_SCREEN.save(Settings.OFFER_LIVE_CLEAR_SCREEN.defaultValue);
+        Settings.DARK_LIVE_PANELS.save(Settings.DARK_LIVE_PANELS.defaultValue);
         Settings.RECORD_LIVE.save(Settings.RECORD_LIVE.defaultValue);
         coldStart();
         Locale.setDefault(savedLocale);
@@ -77,6 +78,33 @@ public class LiveControlsTest {
         assertFalse("clear screen turned the quality picker on", LiveControls.offerQualityEverywhere());
         Settings.OFFER_LIVE_CLEAR_SCREEN.save(false);
         assertFalse("read at the call, so the next menu follows", LiveControls.offerClearScreen());
+    }
+
+    /**
+     * #159: TikTok keeps LIVE panels light in rooms even in dark mode. With the switch on a panel
+     * whose context is in dark mode takes the dark LIVE theme; light mode, the switch off, Pause and
+     * a build without the patch leave TikTok's answer.
+     */
+    @Test public void livePanelsGoDarkOnlyInDarkModeWithTheirSwitch() {
+        android.content.Context app = RuntimeEnvironment.getApplication();
+        android.content.res.Configuration night = new android.content.res.Configuration(app.getResources().getConfiguration());
+        night.uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES | android.content.res.Configuration.UI_MODE_TYPE_NORMAL;
+        android.content.Context dark = app.createConfigurationContext(night);
+        android.content.res.Configuration day = new android.content.res.Configuration(night);
+        day.uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO | android.content.res.Configuration.UI_MODE_TYPE_NORMAL;
+        android.content.Context light = app.createConfigurationContext(day);
+
+        assertFalse(Settings.DARK_LIVE_PANELS.defaultValue);
+        assertFalse(LiveControls.darkLivePanels(dark));
+        Settings.DARK_LIVE_PANELS.save(true);
+        assertTrue(LiveControls.darkLivePanels(dark));
+        assertFalse("light mode went dark", LiveControls.darkLivePanels(light));
+        assertFalse(LiveControls.darkLivePanels(null));
+        setPaused(true);
+        assertFalse(LiveControls.darkLivePanels(dark));
+        setPaused(false);
+        SettingsStatus.liveControlsEnabled = false;
+        assertFalse(LiveControls.darkLivePanels(dark));
     }
 
     @Test public void pausedOrWithoutThePatchClearScreenIsTikToks() {

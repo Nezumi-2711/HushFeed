@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Yeni açar TikTok qaranlıq rejimdə olanda Paylaş və fan klubu kimi LIVE panellərini tünd açır (#159).
+
 * **TikTok:** Hide the comment bar on opened videos indi qarşılıqlı dostların videolarında açıqlamanı və irəliləmə zolağını örtən Mesaj zolağını da gizlədir (#153).
 
 * **TikTok:** Accent color indi lentdə müəllifin avatarının altındakı izləmə artısını da sənin rənginə boyayır (#84).

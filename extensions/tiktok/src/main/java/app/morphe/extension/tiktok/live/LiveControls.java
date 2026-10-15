@@ -10,6 +10,9 @@ import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 
+import android.content.Context;
+import android.content.res.Configuration;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,6 +52,21 @@ public final class LiveControls {
      */
     public static boolean offerClearScreen() {
         return SettingsStatus.liveControlsEnabled && Settings.OFFER_LIVE_CLEAR_SCREEN.get();
+    }
+
+    /**
+     * Called as a LIVE panel asks whether to take TikTok's dark LIVE theme, with the panel's
+     * context. TikTok answers no in every LIVE room even in dark mode, so the share menu, the fan
+     * club and the first gift dialog opened white over a dark room (#159). True while the switch is
+     * on and that context is in dark mode, which gives the panel the dark theme; false leaves
+     * TikTok's answer, so light mode stays light. Paused, the switch answers off.
+     */
+    public static boolean darkLivePanels(Context context) {
+        if (context == null || !SettingsStatus.liveControlsEnabled || !Settings.DARK_LIVE_PANELS.get()) {
+            return false;
+        }
+        int night = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return night == Configuration.UI_MODE_NIGHT_YES;
     }
 
     /**

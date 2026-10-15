@@ -137,6 +137,38 @@ internal object LiveClearScreenEntryFingerprint : Fingerprint(
     parameters = listOf(),
 )
 
+/** The host side of the LIVE SDK's resources, real-named on 47.1.4. */
+internal const val LIVE_HOST_RESOURCE = "Lcom/ss/android/ugc/aweme/live/livehostimpl/LiveHostResource;"
+
+/**
+ * Whether a LIVE panel takes the LIVE design system's dark theme (X.0Jz4.LIZ on 47.1.4, in the
+ * theme provider the host hands the LIVE SDK). Every theme-aware LIVE fragment and dialog asks it
+ * before picking the dark or the light overlay. It answers TikTok's dark mode and then the page
+ * TikTok finds for the panel's context, and the LIVE room pages (LivePlayRootFragment,
+ * BaseLiveSdkSceneFragment) and LIVE activities always say no, so the share menu, the fan club and
+ * the first gift dialog opened light in a dark app (#159). The provider is the class holding a
+ * LiveHostResource; this answer is the one whose first call is the provider's own dark mode check,
+ * which tells it from the provider's other (Context)Z answer.
+ */
+internal object LiveDarkThemeFingerprint : Fingerprint(
+    returnType = "Z",
+    parameters = listOf("Landroid/content/Context;"),
+    custom = { method, classDef -> isLiveDarkThemeAnswer(method, classDef) },
+)
+
+internal fun isLiveDarkThemeAnswer(method: Method, classDef: ClassDef): Boolean {
+    if (classDef.fields.none { it.type == LIVE_HOST_RESOURCE }) return false
+    val instructions = method.implementation?.instructions?.toList() ?: return false
+    val first = instructions.firstOrNull() ?: return false
+    val own = (first as? ReferenceInstruction)?.reference as? MethodReference ?: return false
+    return first.opcode == Opcode.INVOKE_VIRTUAL && own.definingClass == classDef.type &&
+        own.returnType == "Z" && own.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;") &&
+        instructions.any {
+            it.opcode == Opcode.INVOKE_STATIC &&
+                ((it as ReferenceInstruction).reference as MethodReference).definingClass == LIVE_HOST_RESOURCE
+        }
+}
+
 internal const val PULL_STREAM_SERVICE ="Lcom/bytedance/android/live/livepullstream/PullStreamService;"
 private const val LIVE_MODE = "Lcom/bytedance/android/livesdkapi/depend/model/live/LiveMode;"
 
@@ -526,7 +558,8 @@ val liveControlsPatch = bytecodePatch(
     name = "LIVE controls",
     description = "Stops a LIVE in the feed from opening by itself after a countdown. It can " +
         "show a LIVE's exact viewer count instead of a rounded one, offer a quality choice and " +
-        "clear screen in more LIVE rooms, and keep your quality pick after TikTok restarts. " +
+        "clear screen in more LIVE rooms, open LIVE panels dark in dark mode, and keep your quality " +
+        "pick after TikTok restarts. " +
         "Starts off. Turn it on in Hushfeed settings > Playback. " +
         "It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it, " +
         "and can add a Record button to a LIVE room that saves what you watch from when you tap it.",
@@ -559,6 +592,13 @@ val liveControlsPatch = bytecodePatch(
         LiveClearScreenEntryFingerprint.method.guardAtEntry(
             "LIVE controls",
             "invoke-static {}, $EXTENSION->offerClearScreen()Z",
+            "const/4 v0, 0x1\nreturn v0",
+        )
+        // Answers true while its switch is on and the panel's context is in dark mode, so LIVE
+        // panels take TikTok's dark LIVE theme in rooms too (#159).
+        LiveDarkThemeFingerprint.method.guardAtEntry(
+            "LIVE controls",
+            "invoke-static {p1}, $EXTENSION->darkLivePanels(Landroid/content/Context;)Z",
             "const/4 v0, 0x1\nreturn v0",
         )
 
