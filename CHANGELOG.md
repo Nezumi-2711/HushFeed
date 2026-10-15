@@ -16,6 +16,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With See-through status bar on, every feed video now reaches up under the clock, not only the first one after TikTok starts. TikTok plays that first video in a surface it makes at launch, and later videos can play in another kind of player with no surface inside it, so they kept a black band above and below. That player grows now too. With Fit the video to the screen also on, Fit wins and the whole picture stays in view instead of being grown back over its sides. Fill the screen with the video already covers the screen, so it and See-through status bar don't undo each other (#164).
 
+* **TikTok:** Hide the unread badges on the bottom tabs also keeps down the bubble TikTok floats over Inbox when it opens, the one counting new likes, followers, comments and who's LIVE. It used to take only the red counts and dots off the tabs, so that bubble still came up every time (#170).
+
 ## 0.74.0 (2026-10-14)
 
 * **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice. A pick from the Video quality list in a room's Share menu now carries on to the next room too (#57).
