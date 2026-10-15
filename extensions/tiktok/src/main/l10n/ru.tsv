@@ -2348,3 +2348,5 @@ Show the main feed's tabs on a rounded, see-through dark pill that floats over t
 # context: a switch on the Comments page. Language, Settings and privacy and App language are TikTok's own labels: its language page, the menu that page sits in, and the page's first row
 Show translation options in Language settings	Показывать параметры перевода в настройках языка
 Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.	Возвращает строки перевода на страницу «Язык» в TikTok (Настройки и конфиденциальность) для аккаунтов, которые видят там только «Язык приложения».
+Only on the sides of the video	Только по бокам видео
+Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Выбранное действие для долгого нажатия работает только на левой и правой трети видео. Нажатие посередине по-прежнему открывает собственное меню TikTok. Нужен вариант долгого нажатия, отличный от стандарта TikTok.
