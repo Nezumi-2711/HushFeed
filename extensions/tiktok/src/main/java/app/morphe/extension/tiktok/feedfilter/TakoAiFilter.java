@@ -275,6 +275,24 @@ public final class TakoAiFilter {
         return shouldHideCommentTopBar();
     }
 
+    static final String CAPTION_PANEL_ASKED = "caption panel asked";
+    static final String CAPTION_PANEL_SKIPPED = "caption panel skipped";
+
+    /**
+     * Issue #162. On some For You videos a tap on the caption, or its "more", opens TikTok's
+     * search panel instead of expanding the caption: the caption again, then "Discover more with
+     * Tako" and an "Ask Tako" box. The caption handler asks one gate before it hands the tap to
+     * that panel, and on a no it expands the caption in place, the same path a video with nothing
+     * to search takes. This is the gate's answer on its way to that branch: with the switch on the
+     * panel is never asked for; with it off, or while Hushfeed is paused, TikTok's answer stands.
+     */
+    public static boolean allowCaptionSearchPanel(boolean tikTok) {
+        HookStatus.bound(HOOK_FAMILY, CAPTION_PANEL_ASKED);
+        if (!tikTok || !Settings.HIDE_TAKO_AI.get()) return tikTok;
+        HookStatus.bound(HOOK_FAMILY, CAPTION_PANEL_SKIPPED);
+        return false;
+    }
+
     /** The component key TikTok gives the "Ask · topic" banner under a feed video. */
     static final String ASK_BANNER_KEY = "bottom_banner_tako";
     private static final String SEARCH_BANNER_KEY = "bottom_banner_search_rs";

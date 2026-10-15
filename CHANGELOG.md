@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** With Hide the Tako bubble on, tapping a caption (or its "more") no longer opens a sheet with "Discover more with Tako" and an "Ask Tako" box on some videos. The caption expands in place instead, the way it already did on videos without Tako content. Turn the switch off, or pause Hushfeed, and TikTok's sheet comes back (#162).
+
 * **TikTok:** A new switch, Only on the sides of the video, sits right under Long press in the Gestures section of Feed screen. Pick any Long press choice other than TikTok default, turn it on, and the choice runs only on the left and right thirds of the video. A press in the middle opens TikTok's own menu again, with Download, Not interested, Speed and the rest. It's off by default (#136).
 
 * **TikTok:** With Hide the comment bar on opened videos on, Share and its label no longer sit over the end of the progress bar and the time beside it. On a video with no music disc, Share is the lowest button on the right, and only the disc used to move up out of the bar's way. Now the whole row of buttons goes up when it needs to (#153).

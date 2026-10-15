@@ -733,6 +733,26 @@ val feedFilterPatch = bytecodePatch(
             """,
         )
 
+        // Issue #162. A caption tap (or "more") on some videos opens TikTok's search panel, with
+        // "Discover more with Tako" and an "Ask Tako" box, instead of expanding the caption. The
+        // caption's expand asks one gate before it hands the tap to that panel and expands in
+        // place on a no, the path a video with nothing to search takes. The gate's answer goes
+        // through the Tako filter between its move and the branch; the fixture test holds that
+        // nothing jumps onto the branch past it.
+        CaptionSearchPanelFingerprint.method.apply {
+            val move = captionSearchPanelGate() ?: throw PatchException(
+                "Feed filter: $definingClass->$name no longer asks one gate before the caption's search panel.",
+            )
+            val register = getInstruction<OneRegisterInstruction>(move).registerA
+            addInstructions(
+                move + 1,
+                """
+                    invoke-static/range {v$register .. v$register}, $TAKO_AI_FILTER_CLASS_DESCRIPTOR->allowCaptionSearchPanel(Z)Z
+                    move-result v$register
+                """,
+            )
+        }
+
         // The "Ask · topic" bar issue #6's reporter still saw on 0.40.0 is none of the Tako
         // components above. It is one of TikTok's common bottom banners, keyed bottom_banner_tako
         // and drawn by the same banner view as the "Search · topic" bar, and every banner reaches
