@@ -16,7 +16,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** A new Show translation options in Language settings switch, under Translate button in comments, brings back the translation rows (Always translate, Translate into, Don't translate) on TikTok's own Language page under Settings and privacy. TikTok hides that whole group for some accounts through two of its experiments, which is why it showed while logged out and went away after login. The switch answers those two on that page only, so the feed keeps TikTok's own translation behavior (#143).
 
-* **TikTok:** Hushfeed can patch PineDrama 47.1.4 now, TikTok's app for drama series (`com.ss.android.ttmd.video`). It's built from TikTok's own code, so 90 of the 134 patches work on it and Morphe Manager offers just those. The other 44 rely on parts PineDrama changed or doesn't have, like LIVE, the inbox rows and some of the feed buttons. Look like the store app answers with PineDrama's own signature there, not TikTok's (#156).
+* **TikTok:** Hushfeed can patch PineDrama 47.1.4 now, TikTok's app for drama series (`com.ss.android.ttmd.video`). It's built from TikTok's own code, so 90 of the 134 patches work on it and Morphe Manager offers just those. The other 44 rely on parts PineDrama changed or doesn't have, like LIVE, the inbox rows and some of the feed buttons. On PineDrama, the Look like the store app patch answers with PineDrama's own signature rather than TikTok's (#156).
 
 * **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
 
