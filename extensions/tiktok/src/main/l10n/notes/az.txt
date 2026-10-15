@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Hide the comment bar on opened videos indi qarşılıqlı dostların videolarında açıqlamanı və irəliləmə zolağını örtən Mesaj zolağını da gizlədir (#153).
+
 * **TikTok:** Accent color indi lentdə müəllifin avatarının altındakı izləmə artısını da sənin rənginə boyayır (#84).
 
 * **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda musiqi diski artıq irəliləmə zolağının sonunu və yanındakı vaxtı örtmür (#153).

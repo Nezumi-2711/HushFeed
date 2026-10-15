@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** With Hide the comment bar on opened videos on, a video from someone you follow who follows you back no longer has TikTok's Message bar sitting over the bottom of the caption, the progress bar and the buttons on the right. TikTok shows that bar there instead of Add comment, and the patch gave the video the bar's room without taking the bar away. It goes with the comment bar now (#153).
+
 * **TikTok:** Accent color now reaches the plus under the creator's avatar on the feed rail too. That plus is a picture with TikTok's red drawn into it, so it stayed red while the buttons and text took your color. Its red and the soft edge around the white cross now follow your color, and the cross stays white (#84).
 
 * **TikTok:** With Hide the comment bar on opened videos on, the music disc at the bottom right no longer sits on the end of the progress bar or on the time beside it. A short caption used to leave it there. It now stays above the bar, the way it does with the comment bar showing (#153).

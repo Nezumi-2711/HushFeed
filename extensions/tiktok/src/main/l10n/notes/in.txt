@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Hide the comment bar on opened videos kini juga menyembunyikan bilah Pesan di video teman yang saling mengikuti, yang menutupi deskripsi dan bilah progres (#153).
+
 * **TikTok:** Accent color sekarang juga mewarnai tanda plus untuk mengikuti di bawah avatar kreator di feed (#84).
 
 * **TikTok:** Dengan Sembunyikan bilah komentar di video yang dibuka aktif, piringan musik tidak lagi menutupi ujung bilah progres atau waktu di sebelahnya (#153).
