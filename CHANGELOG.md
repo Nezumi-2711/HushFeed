@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** With Hide the comment bar on opened videos on, Share and its label no longer sit over the end of the progress bar and the time beside it. On a video with no music disc, Share is the lowest button on the right, and only the disc used to move up out of the bar's way. Now the whole row of buttons goes up when it needs to (#153).
+
 * **TikTok:** The LIVE chat auto-translate preset in Feature Gate Lab now says what else it needs. Its Translate comments button only shows up with a Japanese SIM too, so the preview asks you to turn on Override SIM details and pick Japan, NTT DOCOMO before you restart TikTok (#98).
 
 * **TikTok:** Hushfeed settings can now follow TikTok in Simplified Chinese. The complete first translation covers the settings pages, dialogs and runtime messages. Traditional Chinese stays in English until it has its own translation, and corrections to this first pass are welcome.
