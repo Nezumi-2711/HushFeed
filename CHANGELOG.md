@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** The Profile tab opens again on phones where it crashed or came up blank since 0.72.0. Two of Show follow status's hooks left a value typed two ways where their paths met, and some phones' Android refused the whole profile name class for it (#165, #140).
 
+* **TikTok:** Save a profile picture on a long press works again. On TikTok 47.1.4 every hold on a profile picture said "Open the profile again and try once more", because Hushfeed looked for the profile under a name an older TikTok gave it. It now finds the profile the picture belongs to however TikTok names it, and still checks it against the @name on screen before saving (#160).
+
 * **TikTok:** With Hide search suggestions above comments on, comments no longer open with an empty white band above the comment count on some videos. On some accounts TikTok saves the banner's spot before it builds the banner, so hiding only the banner left its spot behind. The switch now answers TikTok's own "any suggestion here?" check, so no spot is saved, and the newer style of that banner goes too (#161).
 
 ## 0.74.0 (2026-10-14)
