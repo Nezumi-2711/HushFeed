@@ -287,6 +287,26 @@ public class AuthorRegionTest {
         assertArrayEquals(new String[]{"samsmith", "GB"}, AuthorRegion.decoration(video));
     }
 
+    /** #157: the country as its flag, built from the two letters, and only from two letters. */
+    @Test
+    public void theCountryCanShowAsItsFlag() {
+        Settings.SHOW_AUTHOR_REGION.save(true);
+        Settings.REGION_AS_FLAG.save(true);
+        try {
+            assertArrayEquals(new String[]{null, "🇬🇧"},
+                    AuthorRegion.decoration(playing("flag", "samsmith", "Sam Smith", "gb")));
+            assertEquals("🇪🇪", AuthorRegion.shown("EE"));
+            assertEquals("a code that isn't two letters stays as it is", "419", AuthorRegion.shown("419"));
+            assertEquals("X1", AuthorRegion.shown("X1"));
+            assertNull(AuthorRegion.shown(null));
+
+            Settings.REGION_AS_FLAG.save(false);
+            assertEquals("GB", AuthorRegion.shown("GB"));
+        } finally {
+            Settings.REGION_AS_FLAG.resetToDefault();
+        }
+    }
+
     @Test
     public void aVideoWithNothingToShowAsksForNothing() {
         Settings.SHOW_AUTHOR_HANDLE.save(true);
@@ -587,6 +607,44 @@ public class AuthorRegionTest {
 
         AuthorRegion.restore();
         assertEquals("Rn Dunyasi", name.getText().toString());
+    }
+
+    /**
+     * #127: putting a long display name back over a short "@handle · US" kept the short width in
+     * the weighted row, so the name read cut beside an empty row until something else laid it out.
+     */
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    public void aNamePutBackInAWeightedRowGetsItsWidthBack() {
+        LinearLayout row = new LinearLayout(context);
+        TextView name = new TextView(context);
+        name.setId(NAME_ID);
+        name.setSingleLine(true);
+        name.setEllipsize(TextUtils.TruncateAt.END);
+        name.setText("Abdullah Al Mamun Official");
+        row.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        TextView postTime = new TextView(context);
+        postTime.setId(POST_TIME_ID);
+        postTime.setText(" · 13s ago");
+        row.addView(postTime);
+        FrameLayout root = new FrameLayout(context);
+        root.addView(row, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        layOut(root);
+        int whole = name.getWidth();
+
+        AuthorRegion.decorate(name, "ab", "US");
+        layOut(root);
+        AuthorRegion.decorate(name, "ab", "US");
+        assertEquals("@ab · US", name.getText().toString());
+        assertTrue("the short handle didn't narrow the name", name.getWidth() < whole);
+
+        AuthorRegion.restore();
+        layOut(root);
+
+        assertEquals("Abdullah Al Mamun Official", name.getText().toString());
+        assertEquals("the name came back cut to the handle's width", 0, name.getLayout().getEllipsisCount(0));
+        assertEquals(whole, name.getWidth());
     }
 
     /**

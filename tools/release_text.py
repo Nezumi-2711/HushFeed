@@ -3,6 +3,7 @@
   py -3.13 tools/release_text.py cut --version 0.70.0 [--date 2026-10-09]
   py -3.13 tools/release_text.py check-translations (--version 0.70.0 | --unreleased)
   py -3.13 tools/release_text.py github-notes --version 0.70.0 --intro FILE --checked FILE --out FILE
+  py -3.13 tools/release_text.py guide [--date 2026-10-09]
   py -3.13 tools/release_text.py index --version 0.70.0 --created 2026-10-09T17:03:42
         --readme-summary FILE --bundle-summary FILE --device-line TEXT --runtime N --patch N
 
@@ -24,6 +25,7 @@ LANGUAGES = ("az", "de", "es", "in", "it", "pt-rBR", "ru", "tr")
 SCOPE = "* **TikTok:** "
 VERSION = re.compile(r"^\d+\.\d+\.\d+$")
 DASHES = ("—", "–")
+GUIDE = "concepts/patch-development.md"
 # Letters only another table uses: a translation answered from the wrong table shows up here.
 FOREIGN = {
     "az": r"[Ѐ-ӿ]|ñ|ã|õ|ß|ä",
@@ -250,9 +252,13 @@ def github_notes(args) -> None:
     print(f"[release] notes for {args.version}: {len(stripped)} of {len(items)} CHANGELOG bullets, {len(notes)} characters")
 
 
-def catalog() -> tuple[int, list[str]]:
+def catalog_patches() -> list:
     data = json.loads(read(ROOT / "patches-list.json"))
-    patches = data["patches"] if isinstance(data, dict) else data
+    return data["patches"] if isinstance(data, dict) else data
+
+
+def catalog() -> tuple[int, list[str]]:
+    patches = catalog_patches()
     versions = set()
     for patch in patches:
         for app in patch.get("compatibility") or []:
@@ -273,12 +279,42 @@ def counted(n: int) -> str:
     return SMALL[n] if 0 <= n < len(SMALL) else str(n)
 
 
-def swap(path: Path, pattern: str, replacement: str) -> None:
-    text = read(path)
-    new, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE)
+def swap(edits: dict, path: Path, pattern: str, replacement: str) -> None:
+    """One line rewritten into `edits` (path to new text), so a later miss leaves every file as it was."""
+    text = edits.get(path)
+    new, count = re.subn(pattern, replacement, read(path) if text is None else text, count=1, flags=re.MULTILINE)
     if count != 1:
         fail(f"{path.name}: nothing matched {pattern[:60]!r}")
-    write(path, new)
+    edits[path] = new
+
+
+def source_version() -> str:
+    match = re.search(r"^version = (\d+\.\d+\.\d+)$", read(ROOT / "gradle.properties"), re.MULTILINE)
+    if not match:
+        fail("gradle.properties has no version = X.Y.Z line")
+    return match.group(1)
+
+
+def guide(args) -> None:
+    """The developer guide's Source snapshot line and category table, held to gradle.properties
+    and patches-list.json, which is what validate-release-facts.ps1 compares them with."""
+    version = source_version()
+    count, _ = catalog()
+    categories: dict[str, int] = {}
+    for patch in catalog_patches():
+        name = str(patch.get("category") or "")
+        categories[name] = categories.get(name, 0) + 1
+    rows = "".join(f"| {name} | {categories[name]} |\n" for name in sorted(categories))
+    date = args.date or datetime.datetime.now().astimezone().date().isoformat()
+    path = ROOT / GUIDE
+    edits = {}
+    swap(edits, path, r"^Source snapshot: version \d+\.\d+\.\d+, \d+ patch entries\.",
+         f"Source snapshot: version {version}, {count} patch entries.")
+    swap(edits, path, r"last synced with the source on \d{4}-\d{2}-\d{2}", f"last synced with the source on {date}")
+    swap(edits, path, r"catalog's \d+ patches are grouped as follows:\n\n(\| Manager category[^\n]*\n[^\n]*\n)(?:\|[^\n]*\n)+",
+         f"catalog's {count} patches are grouped as follows:\n\n\\g<1>{rows}")
+    write(path, edits[path])
+    print(f"[release] {GUIDE} reads source {version} with {count} patch entries")
 
 
 def index(args) -> None:
@@ -310,16 +346,21 @@ def index(args) -> None:
         "version": args.version,
     })
     readme = ROOT / "README.md"
-    swap(readme, r"^Hushfeed v\d+\.\d+\.\d+ contains \d+ patches for TikTok .*$",
+    edits = {}
+    swap(edits, readme, r"^Hushfeed v\d+\.\d+\.\d+ contains \d+ patches for TikTok .*$",
          f"Hushfeed v{args.version} contains {count} patches for TikTok {spoken(targets)}. New in this one: "
          f"{readme_summary} It needs Morphe Manager {manager} or newer.")
-    swap(readme, r"^The main branch contains \d+ patches, .*$",
+    swap(edits, readme, r"^The main branch contains \d+ patches, .*$",
          f"The main branch contains {count} patches, the same set as v{args.version}.")
-    swap(readme, r"shows all \d+ Hushfeed patches", f"shows all {count} Hushfeed patches")
-    swap(ROOT / ".github/ISSUE_TEMPLATE/bug_report.yml", r"placeholder: Version \d+\.\d+\.\d+ for TikTok",
+    swap(edits, readme, r"shows all \d+ Hushfeed patches", f"shows all {count} Hushfeed patches")
+    swap(edits, ROOT / ".github/ISSUE_TEMPLATE/bug_report.yml", r"placeholder: Version \d+\.\d+\.\d+ for TikTok",
          f"placeholder: Version {args.version} for TikTok")
+    swap(edits, ROOT / GUIDE, r"^Published bundle: version \d+\.\d+\.\d+, \d+ patches\.",
+         f"Published bundle: version {args.version}, {count} patches.")
+    for path, text in edits.items():
+        write(path, text)
     write(bundle_path, json.dumps(bundle, indent=2, ensure_ascii=False) + "\n")
-    print(f"[release] index, README and bug form point at v{args.version} ({count} patches, TikTok {spoken(targets)})")
+    print(f"[release] index, README, bug form and guide point at v{args.version} ({count} patches, TikTok {spoken(targets)})")
 
 
 def main() -> None:
@@ -338,6 +379,9 @@ def main() -> None:
     for name in ("--version", "--intro", "--checked", "--out"):
         p.add_argument(name, required=True)
     p.set_defaults(run=github_notes)
+    p = sub.add_parser("guide")
+    p.add_argument("--date")
+    p.set_defaults(run=guide)
     p = sub.add_parser("index")
     for name in ("--version", "--created", "--readme-summary", "--bundle-summary"):
         p.add_argument(name, required=True)

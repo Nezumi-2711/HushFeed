@@ -20,11 +20,13 @@ import com.ss.android.ugc.aweme.follow.presenter.FollowFeedList;
 
 import app.morphe.extension.tiktok.blockauthor.Reflect;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,10 +91,10 @@ public final class FeedItemsFilter {
      * The Following tab's rules where TikTok reads its list. On 47.1.4 the tab never loads
      * through the response hook, so this read is the only place its videos meet the feed rules,
      * the way For You's do in {@link #filterOnRead}; before, a blocked creator still showed there.
-     * Hide seen videos stays out: the list grows under the video playing, and a re-read would
-     * pull the ones already watched in it and move the pager.
+     * The list grows under the video playing, so Hide seen videos runs only on the videos a read
+     * hasn't kept yet (see {@link #drifts}); the ones watched in it stay where they are.
      */
-    private static final List<IFilter> LATE_FOLLOW_FILTERS = withoutSeen(CONTENT_FILTERS);
+    private static final List<IFilter> LATE_FOLLOW_FILTERS = CONTENT_FILTERS;
     /** The card shapes TikTok uses for a bought search result. */
     private static final String[] SEARCH_AD_FIELDS = {"multiAdCard", "aiAdCard", "brandZoneCard"};
     /** The feed type TikTok 47.0.3 gives a single TikTok Shop product card in search results. */
@@ -144,12 +146,6 @@ public final class FeedItemsFilter {
         return Collections.unmodifiableList(filters);
     }
 
-    private static List<IFilter> withoutSeen(List<IFilter> filters) {
-        List<IFilter> kept = new ArrayList<>(filters);
-        kept.remove(SEEN_FILTER);
-        return Collections.unmodifiableList(kept);
-    }
-
     private static List<IFilter> createRangeFilters() {
         return List.of(new ViewCountFilter(), new LikeCountFilter(), new CommentCountFilter(),
                 new FavouriteCountFilter(), new ShareCountFilter());
@@ -177,6 +173,9 @@ public final class FeedItemsFilter {
         }
         synchronized (processedListCache) {
             processedListCache.clear();
+        }
+        synchronized (KEPT_BEFORE) {
+            KEPT_BEFORE.clear();
         }
         synchronized (filterCallProbeSummaryLock) {
             filterCallProbeSummary = new ProbeSummary(System.currentTimeMillis());
@@ -1343,6 +1342,11 @@ public final class FeedItemsFilter {
             recordProbeCall(listId, filterMask);
         }
 
+        // Videos an earlier read of this list kept skip the rules that drift under the player.
+        // Read before the skip below, so a list read again unchanged still counts as in use.
+        String driftMask = driftMask(activeContentFilters, activeRangeFilters);
+        KeptBefore keptBefore = keptBefore(owner, driftMask);
+
         if (allowRecentSkip && shouldSkipRecentlyProcessedList(
             listId,
             beforeFingerprint,
@@ -1362,6 +1366,11 @@ public final class FeedItemsFilter {
         int rangeRejected = 0;
         Map<String, Integer> reasonCounts = new HashMap<>();
 
+        List<IFilter> steadyContentFilters = keptBefore.isEmpty()
+            ? activeContentFilters : withoutDrifting(activeContentFilters);
+        List<IFilter> watchedContentFilters = keptBefore.isEmpty()
+            ? activeContentFilters : withoutSeen(activeContentFilters);
+
         List snapshot = new ArrayList(list);
         List rangeKept = new ArrayList(snapshot.size());
         Object qualityFallback = null;
@@ -1378,8 +1387,12 @@ public final class FeedItemsFilter {
             }
             if (countDistribution) countDistribution(item);
 
-            String contentReason = getFilterReason(activeContentFilters, item);
-            String rangeReason = contentReason == null ? getFilterReason(activeRangeFilters, item) : null;
+            String aid = keptAid(item);
+            boolean steady = aid != null && keptBefore.steady.contains(aid);
+            boolean watched = steady || aid != null && keptBefore.ever.contains(aid);
+            String contentReason = getFilterReason(steady ? steadyContentFilters
+                : watched ? watchedContentFilters : activeContentFilters, item);
+            String rangeReason = contentReason == null && !steady ? getFilterReason(activeRangeFilters, item) : null;
             if ((contentReason != null || rangeReason != null) && own.owns(item)) {
                 if (capture != null) {
                     capture.spared(item, contentReason != null ? contentReason : rangeReason, OWN_POST);
@@ -1528,6 +1541,7 @@ public final class FeedItemsFilter {
         FeedFilterFeedback.onBatchResult(source, initialSize, resultList.size(), reasonCounts,
                 System.currentTimeMillis());
         rememberProcessedList(listId, ListFingerprint.from(resultList, extractor), filterMask);
+        rememberKept(owner, driftMask, resultList, extractor);
 
         if (verbose && removed > 0 && shouldLogBatch()) {
             int removedFinal = removed;
@@ -1688,6 +1702,143 @@ public final class FeedItemsFilter {
                 + " promo=" + flag(item, 3)
                 + " commission=" + flag(item, 4)
                 + " playCount=" + playCountOf(item);
+    }
+
+    /**
+     * Whether a rule's answer for one video can change while it is on screen: Hide seen videos
+     * (it's seen the moment it plays), the publication age as the clock moves, and the quality
+     * ratios, which read the statistics TikTok updates in place, as the range rules do. For You
+     * and the Following tab are filtered again each time TikTok reads a list that changed, so a
+     * video one read kept could be pulled from under the player by the next one. Those videos
+     * skip these rules and the range rules from then on. The other rules still run on them,
+     * since metadata TikTok fills in late (a commission disclosure, a place) is why the reads
+     * are filtered at all.
+     */
+    private static boolean drifts(IFilter filter) {
+        return filter == SEEN_FILTER || filter instanceof AdvancedFeedRules.PublicationAgeFilter
+            || filter instanceof AdvancedFeedRules.QualityFilter;
+    }
+
+    private static List<IFilter> withoutDrifting(List<IFilter> filters) {
+        List<IFilter> steady = new ArrayList<>(filters.size());
+        for (IFilter filter : filters) {
+            if (!drifts(filter)) steady.add(filter);
+        }
+        return steady;
+    }
+
+    private static List<IFilter> withoutSeen(List<IFilter> filters) {
+        List<IFilter> unseen = new ArrayList<>(filters);
+        unseen.remove(SEEN_FILTER);
+        return unseen;
+    }
+
+    /** Which drifting rules are on: turning one of those on or off is the reader asking for them. */
+    private static String driftMask(List<IFilter> activeContentFilters, List<IFilter> activeRangeFilters) {
+        StringBuilder builder = new StringBuilder();
+        appendFilterMask(builder, driftingOnly(activeContentFilters));
+        appendFilterMask(builder, activeRangeFilters);
+        return builder.toString();
+    }
+
+    private static List<IFilter> driftingOnly(List<IFilter> filters) {
+        List<IFilter> drifting = new ArrayList<>(filters.size());
+        for (IFilter filter : filters) {
+            if (drifts(filter)) drifting.add(filter);
+        }
+        return drifting;
+    }
+
+    /**
+     * What each list's owner kept on earlier reads, by the owner's identity: FollowFeedList became
+     * a Kotlin class on 46.9.3, so its equals can't be trusted to mean the same list. Kept in the
+     * order lists were last read, so the list on screen is never the one dropped.
+     */
+    private static final int KEPT_BEFORE_MAX_OWNERS = 256;
+    /** Past this many ids one list starts over from what its last read kept. */
+    private static final int KEPT_BEFORE_MAX_AIDS = 4096;
+    private static final Map<Integer, KeptBefore> KEPT_BEFORE =
+        new LinkedHashMap<Integer, KeptBefore>(16, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Integer, KeptBefore> eldest) {
+                return size() > KEPT_BEFORE_MAX_OWNERS;
+            }
+        };
+
+    /**
+     * Both sets only grow while the list lives, so a read that sees it half filled doesn't take a
+     * video's place back. {@code steady} holds what was kept while the same drifting rules were
+     * on, and skips all of them; turning one of those on or off judges the list again by it.
+     * {@code ever} holds everything kept under any rules and never meets Hide seen videos: hiding
+     * a creator or a sound changes the rules too, and must not take the watched videos with it.
+     */
+    private static final class KeptBefore {
+        static final KeptBefore NONE = new KeptBefore(null, "", Collections.emptySet(), Collections.emptySet());
+
+        final WeakReference<Object> owner;
+        final String driftMask;
+        final Set<String> steady;
+        final Set<String> ever;
+
+        KeptBefore(Object owner, String driftMask, Set<String> steady, Set<String> ever) {
+            this.owner = new WeakReference<>(owner);
+            this.driftMask = driftMask;
+            this.steady = steady;
+            this.ever = ever;
+        }
+
+        boolean isEmpty() {
+            return ever.isEmpty();
+        }
+    }
+
+    private static KeptBefore keptBefore(Object owner, String driftMask) {
+        if (owner == null) return KeptBefore.NONE;
+        synchronized (KEPT_BEFORE) {
+            KeptBefore entry = KEPT_BEFORE.get(System.identityHashCode(owner));
+            if (entry == null || entry.owner.get() != owner) return KeptBefore.NONE;
+            return entry.driftMask.equals(driftMask)
+                ? entry : new KeptBefore(owner, driftMask, Collections.emptySet(), entry.ever);
+        }
+    }
+
+    private static void rememberKept(Object owner, String driftMask, List kept, AwemeExtractor extractor) {
+        if (owner == null) return;
+        Set<String> now = new HashSet<>();
+        for (Object container : new ArrayList(kept)) {
+            Aweme item = extractor.extract(container);
+            String aid = item == null ? null : keptAid(item);
+            if (aid != null) now.add(aid);
+        }
+        int identity = System.identityHashCode(owner);
+        synchronized (KEPT_BEFORE) {
+            KeptBefore entry = KEPT_BEFORE.get(identity);
+            boolean same = entry != null && entry.owner.get() == owner && entry.ever.size() < KEPT_BEFORE_MAX_AIDS;
+            Set<String> steady = new HashSet<>(now);
+            Set<String> ever = new HashSet<>(now);
+            if (same) {
+                ever.addAll(entry.ever);
+                if (entry.driftMask.equals(driftMask)) steady.addAll(entry.steady);
+            }
+            KEPT_BEFORE.put(identity, new KeptBefore(owner, driftMask,
+                Collections.unmodifiableSet(steady), Collections.unmodifiableSet(ever)));
+        }
+    }
+
+    static int keptBeforeOwnersForTests() {
+        synchronized (KEPT_BEFORE) {
+            return KEPT_BEFORE.size();
+        }
+    }
+
+    /** A video's id for remembering it, or null when it has none to go by. */
+    private static String keptAid(Aweme item) {
+        try {
+            String aid = item.getAid();
+            return aid == null || aid.isEmpty() ? null : aid;
+        } catch (Throwable failure) {
+            return null;
+        }
     }
 
     private static String aidOf(Aweme item) {

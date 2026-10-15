@@ -38,6 +38,8 @@ val amoledThemePatch = resourcePatch(
             "OLED screens turn those pixels off completely.",
         values = mapOf("Black" to "#000000", "Mocha" to "#181825", "Dark gray" to "#121212"),
     )
+    // The cards on TikTok's Compose settings pages come from a palette in code, not resources (#152).
+    dependsOn(amoledComposeCardsPatch { background })
     execute {
         val packageRoot = get("res").parentFile
         val decodedRoots = decodedPackageRoots(packageRoot)
@@ -48,10 +50,7 @@ val amoledThemePatch = resourcePatch(
             isDecoded = { name -> decodedRoots.any { it.resolve(name).isFile } },
         )
         if (collisions.isNotEmpty()) throw PatchException(renamedPathsRefusal(collisions.size))
-        val color = background ?: throw PatchException("Choose a background color")
-        if (!Regex("#[0-9a-fA-F]{6}|#[fF]{2}[0-9a-fA-F]{6}").matches(color)) {
-            throw PatchException("Background color must be opaque #RRGGBB or #FFRRGGBB")
-        }
+        val color = amoledColor(background)
         // The dark token block's background grays under this build's own names. Read before any
         // file is touched: a build whose palette was never read is refused with nothing changed.
         val backgrounds = darkBackgroundColors(packageMetadata.versionName)
@@ -91,8 +90,8 @@ val amoledThemePatch = resourcePatch(
     }
 }
 
-internal fun renamedPathsRefusal(collisions: Int) =
-    "AMOLED dark theme: this TikTok APK was merged from a split bundle in a way that moved " +
+internal fun renamedPathsRefusal(collisions: Int, patch: String = "AMOLED dark theme") =
+    "$patch: this TikTok APK was merged from a split bundle in a way that moved " +
         "its resource files into new folders, and $collisions of their paths clash with the " +
         "names the resource rebuild gives other files. The rebuild would drop files and " +
         "TikTok would crash at launch. Nothing was changed. Patch the .apkm in Morphe Manager, " +
@@ -181,13 +180,18 @@ internal fun declaredVersions(): Set<String> =
  *   sheets that group their rows into cards. The cards are UISheetGrouped2 and keep their gray.
  * - bx is BGPrimary, a literal of its own in the dark themes, which the Inbox Activity page, its
  *   rows and New followers fill with.
+ * - agn is UIPageGrouped2's (attr/a0g), the cards of TikTok's own settings pages: a TuxCell off
+ *   a sheet fills with it. The pages behind them are UIPageGrouped1, black in TikTok's own dark
+ *   mode already, so those cards were the only gray left on Settings and privacy (#152). A
+ *   TuxCell on a sheet (the profile menu panel) fills with UISheetGrouped2 instead and keeps its
+ *   gray like the long-press panel's cards.
  * - agk and c3 were the comments and share sheets' own through 46.x and are dark surfaces of
  *   their own on 47.x.
  * 47.1.4 keeps every attr where 47.0.3 had it (TuxSheet's background attribute is 0x7f0609fb).
  * On 46.x aia was another surface tier, which is why only a build whose palette was read is
  * patched.
  */
-internal val SURFACE_STYLE_ITEMS = setOf("agk", "c3", "aia", "aig", "bx")
+internal val SURFACE_STYLE_ITEMS = setOf("agk", "c3", "aia", "aig", "bx", "agn")
 
 /**
  * Sets every `<item name="...">` in the named set whose value is a dark opaque colour literal

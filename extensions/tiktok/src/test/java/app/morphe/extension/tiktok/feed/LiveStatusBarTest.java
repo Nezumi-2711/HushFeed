@@ -530,6 +530,144 @@ public class LiveStatusBarTest {
     }
 
     /**
+     * #137, BynchPOP on 0.73.0: the black strip under the clock showed for a moment, then went. A
+     * strip taken on a layout pass only moves the room up on the next one, so the frame drawn in
+     * between showed it, and a page the pager binds or adds mid-swipe has no layout pass of the
+     * window to be taken on at all. No frame is drawn with a strip or with the controls under the
+     * clock now, a cover TikTok shows again is hidden before the frame, and a room TikTok fights
+     * for its strip keeps drawing.
+     */
+    @Test public void noFrameIsDrawnWithTheStripUnderTheClock() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout root = new FrameLayout(live);
+        FrameLayout pager = new FrameLayout(live);
+        root.addView(pager, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        live.setContentView(root);
+        FrameLayout first = roomPage(live, pager, bar);
+        FrameLayout second = roomPage(live, pager, bar);
+        View firstRow = shade(live, controlsOf(first));
+        View secondRow = shade(live, controlsOf(second));
+        View cover = cover(live, root, bar);
+        room.start().resume().visible();
+
+        int drawn = 0;
+        for (int i = 0; i < 4; i++) {
+            if (!frame(live)) continue;
+            drawn++;
+            assertDrawnBelowTheClock("opening", bar, first, firstRow);
+            assertDrawnBelowTheClock("opening", bar, second, secondRow);
+        }
+        assertTrue("the room never drew", drawn > 0);
+        assertEquals(View.INVISIBLE, cover.getVisibility());
+
+        // The pager binding a room to a page on a layout pass of its own.
+        first.setPadding(0, bar, 0, 0);
+        drawn = 0;
+        for (int i = 0; i < 4; i++) {
+            if (!frame(live)) continue;
+            drawn++;
+            assertDrawnBelowTheClock("a room bound on a layout pass", bar, first, firstRow);
+        }
+        assertTrue(drawn > 0);
+
+        // The pager binding a room to a page mid-swipe and laying it out itself: the window has
+        // no layout pass, so only the frame is left to take the strip before it's drawn.
+        second.setPadding(0, bar, 0, 0);
+        layOutAlone(second);
+        assertTrue("a page bound mid-swipe was drawn with its strip", preDraw(live));
+        assertEquals(0, second.getPaddingTop());
+        drawn = 0;
+        for (int i = 0; i < 4; i++) {
+            if (!frame(live)) continue;
+            drawn++;
+            assertDrawnBelowTheClock("a room bound mid-swipe", bar, second, secondRow);
+        }
+        assertTrue(drawn > 0);
+
+        // A page the pager adds mid-swipe, never seen on a layout pass.
+        FrameLayout later = roomPage(live, pager, bar);
+        View laterRow = shade(live, controlsOf(later));
+        layOutAlone(later);
+        assertTrue("a page added mid-swipe was drawn with its strip", preDraw(live));
+        assertEquals(0, later.getPaddingTop());
+        drawn = 0;
+        for (int i = 0; i < 4; i++) {
+            if (!frame(live)) continue;
+            drawn++;
+            assertDrawnBelowTheClock("a room added mid-swipe", bar, later, laterRow);
+        }
+        assertTrue(drawn > 0);
+
+        // TikTok's cover over the bar shown again with no layout pass.
+        cover.setVisibility(View.VISIBLE);
+        assertTrue("the cover shown again was drawn", preDraw(live));
+        assertEquals(View.INVISIBLE, cover.getVisibility());
+        assertTrue(frame(live) || frame(live));
+
+        // TikTok putting the strip back on every layout: the room keeps drawing.
+        int held = 0;
+        for (int i = 0; i < 16; i++) {
+            first.setPadding(0, bar, 0, 0);
+            if (frame(live)) {
+                held = 0;
+            } else {
+                held++;
+                assertTrue("a fight over the strip stopped the room drawing", held <= 3);
+            }
+        }
+        assertTrue("a lost fight still holds frames back", frame(live));
+
+        room.pause();
+        assertEquals("leaving didn't give the strip back", bar, second.getPaddingTop());
+        assertEquals(bar, later.getPaddingTop());
+        assertEquals(View.VISIBLE, cover.getVisibility());
+        room.stop().destroy();
+    }
+
+    /** The same for a strip found by the search over the window, with the bar hidden. */
+    @Test public void aStripTakenWithTheBarHiddenIsLaidOutBeforeItsDrawn() {
+        Settings.HIDE_STATUS_BAR_IN_LIVE.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        FrameLayout stream = heldStream(live, bar);
+        room.start().resume().visible();
+
+        int drawn = 0;
+        for (int i = 0; i < 4; i++) {
+            if (!frame(live)) continue;
+            drawn++;
+            assertEquals("a frame was drawn with the strip", 0, stream.getTop());
+        }
+        assertTrue(drawn > 0);
+
+        putBack(stream, bar);
+        layOutAlone((View) stream.getParent());
+        assertTrue("a strip put back with no layout pass of the window was drawn", preDraw(live));
+        assertEquals(0, topMargin(stream));
+        assertTrue(frame(live) || frame(live));
+        assertEquals(0, stream.getTop());
+        room.pause().stop().destroy();
+    }
+
+    /**
+     * The room in {@code page} as the frame draws it: its stream at the top, and the row holding
+     * {@code shade} at the top of its controls, a bar below the clock.
+     */
+    private static void assertDrawnBelowTheClock(String when, int bar, FrameLayout page, View shade) {
+        assertEquals(when + ": a frame was drawn with the strip", 0, page.getChildAt(0).getTop());
+        assertEquals(when + ": a frame was drawn with the controls under the clock", 7 + bar,
+                ((View) shade.getParent()).getTop());
+    }
+
+    /**
      * #137, seen on the S22 with 0.71.3: every room is a page of the room pager, and the pager
      * pads a page as it binds a room to it. The search over the window took the panel TikTok
      * shows while a room opens, the first view held down a bar's height, and left every page
@@ -591,6 +729,107 @@ public class LiveStatusBarTest {
         assertEquals(bar, opening.getPaddingTop());
         assertEquals(bar, side.getPaddingTop());
         room.stop().destroy();
+    }
+
+    /**
+     * #137, BynchPOP on 0.72.0: in the LIVE feed opened from the LIVE button, the Discover panel
+     * above the first room had its top row under the clock. It's a page of the room pager with no
+     * stream, so nothing held it lower while the rooms went up. It's held a strip lower now, a page
+     * already held down a bar of its own is left alone, and both go back as the room leaves.
+     */
+    @Test public void underTheBarTheLiveFeedsTopPanelStaysBelowTheClock() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout pager = new FrameLayout(live);
+        live.setContentView(pager);
+        FrameLayout panel = new FrameLayout(live);
+        panel.addView(new View(live), new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
+        pager.addView(panel, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        FrameLayout heldPanel = new FrameLayout(live);
+        heldPanel.setPadding(0, bar, 0, 0);
+        pager.addView(heldPanel, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        FrameLayout first = roomPage(live, pager, bar);
+        FrameLayout second = roomPage(live, pager, bar);
+        room.start().resume().visible();
+        layOut(live);
+        layOut(live);
+
+        assertEquals("the first room kept its strip", 0, first.getPaddingTop());
+        assertEquals(0, second.getPaddingTop());
+        assertEquals("the panel's top row stayed under the clock", bar, panel.getPaddingTop());
+        assertEquals("a panel held down a bar of its own went lower again", bar, heldPanel.getPaddingTop());
+        layOut(live);
+        assertEquals("a relayout lowered the panel twice", bar, panel.getPaddingTop());
+
+        panel.setPadding(0, 0, 0, 0);
+        layOut(live);
+        assertEquals("the panel stayed up after TikTok laid it out again", bar, panel.getPaddingTop());
+
+        room.pause();
+        assertEquals("leaving didn't give the panel back", 0, panel.getPaddingTop());
+        assertEquals(bar, heldPanel.getPaddingTop());
+        assertEquals(bar, first.getPaddingTop());
+        room.resume();
+        layOut(live);
+        assertEquals("coming back left the panel under the clock", bar, panel.getPaddingTop());
+        room.pause().stop().destroy();
+    }
+
+    /**
+     * #137: a page held lower that the pager then binds a room to gets its own padding back and is
+     * let go, so the room's strip is taken as usual. With the bar hidden there's no clock to keep
+     * clear of, so a page without a stream is left where TikTok put it.
+     */
+    @Test public void aPanelPageThatGetsARoomIsLetGoAndTheHiddenBarLeavesPanelsAlone() {
+        Settings.LIVE_UNDER_STATUS_BAR.save(true);
+        followFromTheMainActivity();
+        int bar = platformBar();
+        ActivityController<LivePlayActivity> room = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity live = room.get();
+        LiveStatusBar.videoContainerForTests = View.generateViewId();
+        FrameLayout pager = new FrameLayout(live);
+        live.setContentView(pager);
+        FrameLayout loading = new FrameLayout(live);
+        loading.setPadding(0, 7, 0, 0);
+        pager.addView(loading, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        roomPage(live, pager, bar);
+        roomPage(live, pager, bar);
+        room.start().resume().visible();
+        layOut(live);
+        layOut(live);
+        assertEquals("the page without a stream wasn't held lower", 7 + bar, loading.getPaddingTop());
+
+        page(live, loading);
+        layOut(live);
+        assertEquals("a page bound to a room kept the extra padding", 7, loading.getPaddingTop());
+        room.pause();
+        assertEquals("leaving changed a page that was let go", 7, loading.getPaddingTop());
+        room.stop().destroy();
+
+        Settings.LIVE_UNDER_STATUS_BAR.save(false);
+        Settings.HIDE_STATUS_BAR_IN_LIVE.save(true);
+        ActivityController<LivePlayActivity> hidden = Robolectric.buildActivity(LivePlayActivity.class).create();
+        LivePlayActivity hiddenLive = hidden.get();
+        FrameLayout hiddenPager = new FrameLayout(hiddenLive);
+        hiddenLive.setContentView(hiddenPager);
+        FrameLayout panel = new FrameLayout(hiddenLive);
+        hiddenPager.addView(panel, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        FrameLayout first = roomPage(hiddenLive, hiddenPager, bar);
+        roomPage(hiddenLive, hiddenPager, bar);
+        hidden.start().resume().visible();
+        layOut(hiddenLive);
+        layOut(hiddenLive);
+        assertEquals("the room kept its strip with the bar hidden", 0, first.getPaddingTop());
+        assertEquals("a panel was held lower with the bar hidden", 0, panel.getPaddingTop());
+        hidden.pause().stop().destroy();
     }
 
     /** A room page as 47.1.4 has it on the S22: held down by {@code strip}, the stream and controls inside. */
@@ -866,6 +1105,33 @@ public class LiveStatusBarTest {
                 View.MeasureSpec.makeMeasureSpec(2316, View.MeasureSpec.EXACTLY));
         decor.layout(0, 0, 1080, 2316);
         decor.getViewTreeObserver().dispatchOnGlobalLayout();
+    }
+
+    /**
+     * One frame the way the window runs it: a layout pass, its layout listeners, then the pre-draw
+     * listeners, which can hold the frame back. True when the frame is drawn.
+     */
+    private static boolean frame(Activity activity) {
+        layOut(activity);
+        return !preDraw(activity);
+    }
+
+    /** The pre-draw listeners alone, as on a frame with no layout pass; true when one held it back. */
+    private static boolean preDraw(Activity activity) {
+        return activity.getWindow().getDecorView().getViewTreeObserver().dispatchOnPreDraw();
+    }
+
+    /**
+     * Lays out one view in its place, as a pager does with a page it binds or adds as it scrolls,
+     * with no layout pass of the window. A view not laid out yet takes its parent's size.
+     */
+    private static void layOutAlone(View view) {
+        View parent = (View) view.getParent();
+        int width = view.getWidth() > 0 ? view.getWidth() : parent.getWidth();
+        int height = view.getHeight() > 0 ? view.getHeight() : parent.getHeight();
+        view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+        view.layout(view.getLeft(), view.getTop(), view.getLeft() + width, view.getTop() + height);
     }
 
     private static void followFromTheMainActivity() {

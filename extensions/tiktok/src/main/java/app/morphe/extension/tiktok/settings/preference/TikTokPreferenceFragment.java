@@ -124,6 +124,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     private final List<Preference> searchRows = new ArrayList<>();
     private SettingsSearchInputPreference searchInput;
     private SettingsHeaderPreference masterHeader;
+    /** The home page's Quick setups card, which a long press takes off the page. Null off the home page. */
+    private QuickSetupsPreference quickSetupsRow;
 
     /**
      * Each section carries one sentence, used both as the subtitle on the home row and as the
@@ -407,6 +409,11 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         }
         if (!applySettingToPreference && setting == Settings.KEEP_CAPTIONS_CLEAR_DISPLAY) {
             CaptionTools.onSettingChanged();
+        }
+        if (!applySettingToPreference && (setting == Settings.SHOW_COMMENTER_HANDLE
+                || setting == Settings.SHOW_COMMENTER_REGION || setting == Settings.COLOR_COMMENTER_NAMES
+                || setting == Settings.REGION_AS_FLAG || setting == BaseSettings.PAUSED)) {
+            app.morphe.extension.tiktok.comment.CommenterDetails.onSettingChanged();
         }
         if (!applySettingToPreference && (setting == Settings.FEED_DESCRIPTION_TEXT_SIZE
                 || setting == Settings.FEED_AUTHOR_TEXT_SIZE || setting == BaseSettings.PAUSED)) {
@@ -1423,9 +1430,9 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         search.setKey("action_search_settings");
         search.setOrder(-900);
         screen.addPreference(search);
-        QuickSetupsPreference quickSetups = new QuickSetupsPreference(context, this::settingsOnPages);
-        quickSetups.setOrder(-850);
-        screen.addPreference(quickSetups);
+        quickSetupsRow = new QuickSetupsPreference(context, this::settingsOnPages, this::hideQuickSetups);
+        quickSetupsRow.setOrder(-850);
+        if (!BaseSettings.HIDE_QUICK_SETUPS.get()) screen.addPreference(quickSetupsRow);
 
         addGroup(context, screen, "Your feed", Section.FEED_FILTER, Section.FEED_NAVIGATION,
                 Section.INTERFACE, Section.PLAYBACK, Section.SCREEN_TIME);
@@ -1446,6 +1453,26 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         addAbout(screen);
         addReportProblem(screen);
         addSupport(screen);
+    }
+
+    /** The long press on the Quick setups card: it leaves the home page now, and the banner says where it comes back. */
+    private void hideQuickSetups() {
+        BaseSettings.HIDE_QUICK_SETUPS.save(true);
+        syncQuickSetupsRow();
+        Context context = getActivity();
+        if (context == null) return;
+        SettingsActionBanner.showNotice(context, L10n.f(context,
+                "Quick setups hidden. Bring it back from %1$s.", L10n.t(context, Section.BACKUP.title)));
+    }
+
+    /** Puts the home page's Quick setups card on the page or takes it off to match the saved choice. */
+    private void syncQuickSetupsRow() {
+        PreferenceScreen screen = getPreferenceScreen();
+        if (quickSetupsRow == null || screen == null) return;
+        boolean onPage = screen.findPreference(QuickSetupsPreference.KEY) != null;
+        boolean hidden = BaseSettings.HIDE_QUICK_SETUPS.get();
+        if (hidden && onPage) screen.removePreference(quickSetupsRow);
+        else if (!hidden && !onPage) screen.addPreference(quickSetupsRow);
     }
 
     /** A home heading and its pages, or nothing when the bundle left out every one of them. */
@@ -1798,6 +1825,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     /** Reconciles a preset's batch write with the rows and the restart debt on this page. */
     static void onSettingsBatchChanged(java.util.Map<Setting<?>, Object> previousValues) {
         app.morphe.extension.tiktok.feed.FeedTextSize.onSettingChanged();
+        app.morphe.extension.tiktok.comment.CommenterDetails.onSettingChanged();
         TikTokPreferenceFragment current = activeFragment;
         if (current == null || !current.isAdded()) return;
         for (java.util.Map.Entry<Setting<?>, Object> entry : previousValues.entrySet()) {
@@ -1938,6 +1966,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     public void onResume() {
         super.onResume();
         activeFragment = this;
+        // Back from Backup and restore, where the card is shown or hidden again.
+        syncQuickSetupsRow();
         refreshStatusCard();
         // Back from a section onto the master menu: whatever was changed there is owed here.
         refreshRestartPending();

@@ -190,7 +190,8 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
         }
         if (SettingsStatus.keepFavoritesTabEnabled || SettingsStatus.promotionalBannersEnabled
                 || SettingsStatus.profileShortcutsEnabled || SettingsStatus.followStatusEnabled
-                || SettingsStatus.copyIdsEnabled || SettingsStatus.profileBackgroundEnabled) {
+                || SettingsStatus.copyIdsEnabled || SettingsStatus.profileBackgroundEnabled
+                || SettingsStatus.videoOverlaysEnabled) {
             addPreference(new SectionHeadingPreference(context, "Profile"));
         }
         if (SettingsStatus.keepFavoritesTabEnabled) {
@@ -255,6 +256,21 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                     Settings.HIDE_PROFILE_REWARDS_SHORTCUT
             ));
         }
+        // The video overlay hider's layout pass reaches the Profile tab's top bar too (#158).
+        if (SettingsStatus.videoOverlaysEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Hide profile views",
+                    "Hide the profile views button at the top of your profile. Your profile view history setting doesn't change.",
+                    Settings.HIDE_PROFILE_VIEWS_BUTTON
+            ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Hide Add friends",
+                    "Hide the Add friends button at the top of your profile. The menu button stays where it is.",
+                    Settings.HIDE_PROFILE_ADD_FRIENDS
+            ));
+        }
         if (SettingsStatus.profileShortcutsEnabled) {
             addPreference(new ProfileShortcutChecklistPreference(context));
             addPreference(new InputTextPreference(
@@ -280,8 +296,7 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                     "Profile background",
                     "Opens TikTok's own profile background editor in Edit profile, and shows the "
                             + "backgrounds other profiles have set. TikTok's servers may still refuse "
-                            + "to save one for an account TikTok hasn't offered it to yet. Open Edit "
-                            + "profile again after turning this on.",
+                            + "to save one for an account TikTok hasn't offered it to yet.",
                     Settings.PROFILE_BACKGROUND
             ));
         }

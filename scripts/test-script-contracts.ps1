@@ -365,6 +365,32 @@ $unevenVersions = [pscustomobject]@{
 }
 Assert-Throws { Get-PatchTarget -PatchList $unevenVersions } '*every patch to declare the same versions*' `
     'A catalog whose patches declare different versions was accepted.'
+$secondApp = [pscustomobject]@{
+    patches = @(
+        [pscustomobject]@{ name = 'both apps'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0'); 'com.example.drama' = @('1.0.0') } },
+        [pscustomobject]@{ name = 'main app'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0') } }
+    )
+}
+$secondTarget = Get-PatchTarget -PatchList $secondApp
+Assert-True ($secondTarget.PackageName -eq 'com.example.app' -and (@($secondTarget.OtherPackages) -join ',') -eq 'com.example.drama') `
+    'A second app declared by some patches replaced the package every patch declares.'
+$splitApps = [pscustomobject]@{
+    patches = @(
+        [pscustomobject]@{ name = 'one'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0') } },
+        [pscustomobject]@{ name = 'other'; compatiblePackages = [pscustomobject]@{ 'com.example.drama' = @('1.0.0') } }
+    )
+}
+Assert-Throws { Get-PatchTarget -PatchList $splitApps } '*one package every patch declares*' `
+    'A catalog with no package every patch declares was accepted.'
+$unevenSecond = [pscustomobject]@{
+    patches = @(
+        [pscustomobject]@{ name = 'a'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0'); 'com.example.drama' = @('1.0.0') } },
+        [pscustomobject]@{ name = 'b'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0'); 'com.example.drama' = @('2.0.0') } },
+        [pscustomobject]@{ name = 'c'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0') } }
+    )
+}
+Assert-Throws { Get-PatchTarget -PatchList $unevenSecond } '*same versions of com.example.drama*' `
+    'A second app declared at different versions was accepted.'
 $missingTarget = [pscustomobject]@{ patches = @([pscustomobject]@{ name = 'missing target' }) }
 Assert-Throws { Get-PatchTarget -PatchList $missingTarget } '*has no compatible package*' `
     'A patch without compatibility metadata was accepted.'
@@ -602,6 +628,10 @@ exit /b 19
     Assert-True ($deviceScript -match 'Get-SourcesNewerThanBundle' -and
         $deviceScript -match '\[switch\]\$AllowStaleBundle') `
         'patch-for-device.ps1 patches with a bundle without asking whether its sources are newer.'
+    # A phone check of an option-driven patch (Accent color's presets) needs the option on the
+    # CLI line, right after that patch's -e.
+    Assert-True ($deviceScript -match '\[string\[\]\]\$Option' -and $deviceScript -match "\`$enable \+= '-O'") `
+        'patch-for-device.ps1 has no way to pass a patch option to the CLI.'
 } finally {
     if ($caseRoot.StartsWith($requiredPrefix, [System.StringComparison]::OrdinalIgnoreCase) -and
         (Test-Path -LiteralPath $caseRoot)) {
@@ -1515,6 +1545,13 @@ try {
     $catalogCount = @((Get-Content -LiteralPath (Join-Path $factsRoot 'patches-list.json') -Raw | ConvertFrom-Json).patches).Count
     Assert-Throws { & $factsScript @lagging -DescriptionText "Hushfeed v$($catalogVersion): $catalogCount patches for TikTok 47.0.3 and 47.1.3." 6> $null } `
         '*does not say 90 patches*' 'While the index lags, the description was held to the catalog instead of the published index.'
+    # A description can leave the release facts out (the Hush repos' descriptions dropped them on
+    # 2026-10-14); only a fact it states is held to the release.
+    & $factsScript @lagging -DescriptionText 'Hushfeed Morphe patches for TikTok.' 6> $null
+    Assert-True ($LASTEXITCODE -eq 0 -or $null -eq $LASTEXITCODE) `
+        'A description that names no version, patch count or TikTok version was refused.'
+    Assert-Throws { & $factsScript @lagging -DescriptionText 'Hushfeed v0.1.0: Morphe patches for TikTok.' 6> $null } `
+        '*does not say v*' 'A description that names an old Hushfeed version passed.'
     Reset-FactsFile 'patches-bundle.json'
     Reset-FactsFile $bugFormRelative
     Reset-FactsFile $guideRelative

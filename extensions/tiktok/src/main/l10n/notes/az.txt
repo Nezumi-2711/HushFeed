@@ -1,3 +1,100 @@
+## Unreleased
+
+* **TikTok:** Yeni açar seçdiyin LIVE keyfiyyətini TikTok yenidən başlayandan sonra da saxlayır (#57).
+
+
+* **TikTok:** Hide the comment bar on opened videos indi qarşılıqlı dostların videolarında açıqlamanı və irəliləmə zolağını örtən Mesaj zolağını da gizlədir (#153).
+
+* **TikTok:** Accent color indi lentdə müəllifin avatarının altındakı izləmə artısını da sənin rənginə boyayır (#84).
+
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda musiqi diski artıq irəliləmə zolağının sonunu və yanındakı vaxtı örtmür (#153).
+
+* **TikTok:** AMOLED qaranlıq mövzu indi Settings and privacy siyahısının özündəki kartları da qara edir (#152).
+
+* **TikTok:** Şərhlər altında yeni Dil ayarlarında tərcümə seçimlərini göstər açarı: TikTok-un öz Language səhifəsi orada yalnız App language görən hesablarda tərcümə sətirlərini yenidən göstərir (#143).
+
+* **TikTok:** Hushfeed artıq TikTok-un drama tətbiqi PineDrama 47.1.4-ü də yamaqlayır. Orada 90 yamaq işləyir və Morphe Manager yalnız onları təklif edir (#156).
+
+* **TikTok:** TikTok-un Kəşf et paneli otağın üstündə açılanda LIVE Yazmaq düyməsi aşağı çəkilir, panel bağlananda yerinə qayıdır (#37).
+
+* **TikTok:** Şəffaf alt panel altında yeni Üzən alt panel açarı: tablar videonun üzərində yuvarlaq, şəffaf tünd kapsulun üstündə durur (#124).
+
+* **TikTok:** Lent ekranında yeni Şəffaf status paneli açarı: əsas lentdəki video saatın altından ekranın yuxarı kənarına qədər uzanır, yuxarıdakı tablar yerində qalır (#145).
+
+* **TikTok:** LIVE-ı status panelinin altında göstərin açıq olanda saatın altındakı qara zolaq artıq otaq açılarkən və ya növbəti otağa sürüşdürəndə bir anlıq görünmür (#137).
+
+* **TikTok:** Profil altında yeni Profil baxışlarını gizlədin və Add friends düyməsini gizlədin açarları: bu iki düymə profilinizin yuxarısından gedir, menyu qalır (#158).
+
+* **TikTok:** LIVE yazısının ortasında TikTok bağlanarsa (sürüşdürülüb bağlanıb və ya telefon dayandırıb), növbəti açılışda yazılan hissə saxlanılır və sizə bildirilir, keşdə qalmır (#37).
+
+* **TikTok:** Lentdəki axtarış düyməsini gizlədin altında yeni Açılmış videolarda da açarı: açılmış videonun yuxarısındakı axtarış çubuğu da gedir, Geri qalır (#158).
+
+* **TikTok:** Başlıqlar altında yeni Normal qalınlıqda başlıqlar açarı: danışılan başlıqlar TikTok-un qalın yazısı əvəzinə adi qalınlıqda (#158).
+
+* **TikTok:** Yeni Axtarış nəticələrində tam uzun basma menyusu açarı: axtarışdan açılan videoya uzun basmaq Sənin üçün menyusunu açır (#120).
+
+* **TikTok:** Yeni Ölkəni bayraqla göstərin açarı: yaradıcının adının yanındakı və şərhin vaxtından sonrakı ölkə bayraq kimi görünür (#157).
+
+* **TikTok:** İlk videonu başlatmayın artıq videonu bir-iki saniyə sonra deyil, ilk kadrında dayandırır (#83).
+
+* **TikTok:** Yeni Accent color patçı TikTok-un düymələrindəki və mətnindəki qırmızını mavi, yaşıl, bənövşəyi, narıncı, firuzəyi və ya öz seçdiyin rənglə əvəz edir (#84).
+
+## 0.73.0 (2026-10-14)
+
+* **TikTok:** Profil fonu açıq olanda saxlanılan profil fonu TikTok yenidən başlayandan sonra da qalır. Açar indi yenidən başlatmağı təklif edir (#80).
+
+* **TikTok:** Lent filtri maksimumun yanında Minimum video uzunluğu da var (#154).
+
+* **TikTok:** Avtomatik keyfiyyətdə hekayə saxlayanda daha kiçik axın yerinə onun ən hündür oynadıla bilən versiyası götürülür (#155).
+
+* **TikTok:** Şərhlər bölməsində şərh yazanların adlarını və ya ölkələrini dəyişən açar artıq əvvəlcədən açdığınız videonun şərhlərinə də yenidən başlatmadan təsir edir.
+
+* **TikTok:** Şərhlər bölməsində yeni Şərh yazanların adlarını rənglə açarı: hər şərh yazanın adı öz rəngini alır, hər dəfə eyni rəngi.
+
+* **TikTok:** Artıq izlədiyiniz videoları gizlədin indi İzlədiklərim lentində də işləyir və oynayan videonu yerindən tərpətmir.
+
+* **TikTok:** Sizin üçün və ya İzlədiklərim lentində oynayan video Maksimum paylaşım yaşını keçəndə və ya Artıq izlədiyiniz videoları gizlədin onu saydıqda artıq yox olmur.
+
+* **TikTok:** Vaxtı saniyəsinə qədər göstərin funksiyasının iki öz seçimi var: əvvəlki kimi açıq olan Saat qurşağını göstərin və Qısa tarix (#147).
+
+* **TikTok:** Profil şəbəkələrindən saxlamaq üçün videolar seçin indi Sevimlilər kolleksiyasının içində də işləyir, Hamısını seç ilə birlikdə (#27).
+
+* **TikTok:** Orijinal fotoların yadda saxlanması yalnız qismən alınanda indi Aç düyməsinin yanında Yenidən cəhd edin də çıxır. O, yalnız alınmayan fotoları yenidən sınayır.
+
+* **TikTok:** Sürətli quruluşları kartına uzun basaraq ayarların ana səhifəsindən gizlətmək olar. Ehtiyat nüsxə və bərpa bölməsindəki Ana səhifədə sürətli quruluşlar sətri onları geri qaytarır.
+
+* **TikTok:** LIVE otaqları Yaz düyməsi göstərə bilər (susmaya görə söndürülüb, Oynatma ayarlarında). O, toxunduğun andan Dayandır düyməsinə toxunana və ya otaqdan çıxana qədər baxdıqlarını saxlayır (#37).
+
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, profildən və ya axtarışdan açdığın videolarda irəliləyiş zolağı artıq açıqlamanın üstündən keçmir. Açıqlama və musiqi diski zolağa yer açacaq qədər yuxarı qalxır (#153).
+
+* **TikTok:** Diaqnostika hesabatı əsas lentdə olanda şərh panelini artıq çatışmayan kimi göstərmir (#153).
+
+* **TikTok:** Diaqnostika hesabatının yaddaş bölməsi artıq hesab ID-nin bir hissəsini qovluq adı kimi göstərmir (#70).
+
+* **TikTok:** Açılmış videolarda şərh panelini gizlədin açıq olanda, açılmış şəbəkədəki foto paylaşımları artıq aşağıda qara zolağın üstündə bitmir (#153).
+
+* **TikTok:** LIVE-ı status panelinin altında göstərin açıq olanda, LIVE lentində ilk otağın üstündəki panellər artıq status panelinin altında qalmır, saatdan aşağıda başlayır (#137).
+
+* **TikTok:** Sizin üçün lentindəki LIVE artıq keçdiyiniz LIVE-ın Service+ sətrini göstərmir (#94).
+
+* **TikTok:** Yeni açar yalnız yayımı saxlayan təmiz ekranı hər LIVE otağının menyusuna əlavə edir (#57).
+
+* **TikTok:** Ölkədən və ya @istifadəçi adından sonra geri qayıdan yaradıcı adı artıq yarımçıq kəsilmiş qalmır (#127).
+
+* **TikTok:** AMOLED qaranlıq mövzu indi TikTok-un öz ayar səhifələrindəki kartları da qara edir (#152).
+
+* **TikTok:** Feature Gate Lab-da iki yeni hazır ayar var: Videoların üzərində sürüşən şərhlər və Bir şərhdə bir neçə foto (#98).
+
+* **TikTok:** Feed screen səhifəsində yeni Şəffaf alt panel açarı videonun ekranın aşağısına qədər uzanmasına imkan verir və tabların arxasındakı paneli götürür. Söndürülmüş başlayır (#145).
+
+* **TikTok:** Feature Gate Lab-da yeni LIVE söhbətinin avtomatik tərcüməsi hazır ayarı var. LIVE otağında Paylaşın altındakı Şərhləri tərcümə et seçimini işə salır (#98).
+
+* **TikTok:** Hushfeed ayarları > Endirmələr bölməsində Profil şəbəkələrindən saxlamaq üçün videolar seçin açarını yandırın və profil, Bəyənilənlər və ya Sevimlilər şəbəkəsindəki hər videonun üzərində dairə görünəcək. 50-yə qədər seçin, Saxla düyməsinə toxunun, onlar sayğac və Ləğv edin ilə bir-bir saxlanılacaq (#27).
+
+* **TikTok:** Profil şəbəkələrindən saxlamaq üçün videolar seçin funksiyasında Hamısını seç düyməsi var. O, siyahının yüklədiyi paylaşımlardan 50-yə qədərini seçir, Artıq saxlanılmış videoları yoxlayın açıq olanda saxlanılmış videoları ötürür. Belə ki, bütün siyahı hər dəfə əvvəlkinin qaldığı yerdən davam edən mərhələlərlə saxlanılır (#27).
+
+* **TikTok:** Artıq izlədiyiniz videoları gizlədin açıq olanda və qeyd dolu olanda, izlədiyiniz hər video ən köhnəsini silmək üçün artıq 10 000 sətrin hamısını yoxlamır. İndi bu hər 256 videoda bir dəfə olur (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** Diaqnostik hesabatda dəyişdirilmiş ayarları göstərən yeni bölmə var. Standart dəyərində olmayan hər ayarın adını yazır, beləliklə hesabat hansı açarların açıq olduğunu göstərir. Ayara yazdığınız mətn hesabata heç vaxt daxil edilmir (#149).

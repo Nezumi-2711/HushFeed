@@ -31,6 +31,7 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                 || SettingsStatus.doNotAutoTranslateEnabled
                 || SettingsStatus.translateIntoEnabled
                 || SettingsStatus.commentTranslateButtonEnabled
+                || SettingsStatus.languagePageTranslationsEnabled
                 || SettingsStatus.hideCommentQuickReactionsEnabled
                 || SettingsStatus.copyCommentsWithoutUsernameEnabled
                 || SettingsStatus.hideCommentEggsEnabled
@@ -51,6 +52,7 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                 || SettingsStatus.doNotAutoTranslateEnabled
                 || SettingsStatus.translateIntoEnabled
                 || SettingsStatus.commentTranslateButtonEnabled
+                || SettingsStatus.languagePageTranslationsEnabled
                 || SettingsStatus.commentSortControlsEnabled
                 || SettingsStatus.commentToolsEnabled
                 || SettingsStatus.copyCommentsWithoutUsernameEnabled
@@ -95,6 +97,15 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                     "Adds TikTok's translate button next to the comment count. One tap translates "
                             + "every comment, and another shows the originals again.",
                     Settings.COMMENT_TRANSLATE_BUTTON
+            ));
+        }
+        if (SettingsStatus.languagePageTranslationsEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Show translation options in Language settings",
+                    "Brings back the translation rows on TikTok's Language page, under Settings and privacy, "
+                            + "for accounts that only see App language there.",
+                    Settings.SHOW_TRANSLATION_SETTINGS
             ));
         }
         if (SettingsStatus.commentSortControlsEnabled) {
@@ -178,6 +189,13 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                     "Show the country a commenter's account is set to after the comment's time. "
                             + "Comments from accounts TikTok sends no country for stay as they are.",
                     Settings.SHOW_COMMENTER_REGION
+            ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Color commenter names",
+                    "Give each commenter's name a color of its own, the same one every time you see "
+                            + "that account, so a long thread is easier to follow.",
+                    Settings.COLOR_COMMENTER_NAMES
             ));
         }
 

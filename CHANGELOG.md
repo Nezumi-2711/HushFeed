@@ -4,6 +4,100 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice. A pick from the Video quality list in a room's Share menu now carries on to the next room too (#57).
+
+* **TikTok:** With Hide the comment bar on opened videos on, a video from someone you follow who follows you back no longer has TikTok's Message bar sitting over the bottom of the caption, the progress bar and the buttons on the right. TikTok shows that bar there instead of Add comment, and the patch gave the video the bar's room without taking the bar away. It goes with the comment bar now (#153).
+
+* **TikTok:** Accent color now reaches the plus under the creator's avatar on the feed rail too. That plus is a picture with TikTok's red drawn into it, so it stayed red while the buttons and text took your color. Its red and the soft edge around the white cross now follow your color, and the cross stays white (#84).
+
+* **TikTok:** With Hide the comment bar on opened videos on, the music disc at the bottom right no longer sits on the end of the progress bar or on the time beside it. A short caption used to leave it there. It now stays above the bar, the way it does with the comment bar showing (#153).
+
+* **TikTok:** AMOLED dark theme now reaches the cards on the Settings and privacy list itself. That list takes its colors from a palette in TikTok's code instead of its resources, so with TikTok's Display set to Dark its cards stayed gray after 0.73.0. They take the AMOLED color now. Light mode, TikTok's high contrast palette and the profile menu's cards keep their own colors (#152).
+
+* **TikTok:** A new Show translation options in Language settings switch, under Translate button in comments, brings back the translation rows (Always translate, Translate into, Don't translate) on TikTok's own Language page under Settings and privacy. TikTok hides that whole group for some accounts through two of its experiments, which is why it showed while logged out and went away after login. The switch answers those two on that page only, so the feed keeps TikTok's own translation behavior (#143).
+
+* **TikTok:** Hushfeed can patch PineDrama 47.1.4 now, TikTok's app for drama series (`com.ss.android.ttmd.video`). It's built from TikTok's own code, so 90 of the 134 patches work on it and Morphe Manager offers just those. The other 44 rely on parts PineDrama changed or doesn't have, like LIVE, the inbox rows and some of the feed buttons. On PineDrama, the Look like the store app patch answers with PineDrama's own signature rather than TikTok's (#156).
+
+* **TikTok:** The LIVE Record button no longer covers the avatars of the Discover panel when that opens over a room. It moves down below them and goes back once the panel closes (#37).
+
+* **TikTok:** A new Floating bottom bar switch, under See-through bottom bar, puts the tabs on a rounded, see-through dark pill that floats over the video, a little in from the sides and bottom. The tabs stay exactly where they were and work as before (#124).
+
+* **TikTok:** A new See-through status bar switch on the Feed screen page lets the main feed's video reach the top edge, with the clock and status icons over it instead of a black band. A tall video grows a little to fill the screen top to bottom, so a sliver comes off each side. Wide videos keep their bars. The tabs at the top stay where they are, and videos you open from a profile or search are left as they were (#145).
+
+* **TikTok:** With Show a LIVE under the status bar on, the black strip under the clock no longer flashes for a moment as a LIVE room opens or as you swipe to the next room. The same goes for Hide the status bar in LIVE (#137).
+
+* **TikTok:** Two new switches under Profile, Hide profile views and Hide Add friends, take those buttons off the top of your Profile tab. The menu button keeps its place, and another person's profile is left as it is (#158).
+
+* **TikTok:** A LIVE recording that TikTok closed on (swiped out of recents, or stopped by the phone) is saved at the next start, with the same "TikTok closed" message a recording cut short gets. It used to sit in the cache, unsaved, until the day-old cleanup threw it away (#37).
+
+* **TikTok:** A new Also on opened videos switch, under Hide the search button on the feed, hides the search bar at the top of videos you open from search, from a profile's posts, Favorites or Likes, or from your watch history. The Back button stays where it is (#158).
+
+* **TikTok:** A new Normal-weight captions switch, under Caption text size, draws TikTok's spoken captions at regular weight instead of bold. It keeps TikTok's own font and works with any caption size (#158).
+
+* **TikTok:** A new Full long-press menu in search results switch, under Full long-press menu on a creator's videos, does the same for search. A long press on a video you opened from search opens the full For You menu instead of the small share sheet. Like the creator one, it needs Long press on TikTok default (#120).
+
+* **TikTok:** A new Show the country as a flag switch, under Show where a video was posted, shows the country's flag in place of its two letters. It changes both places Hushfeed shows a country: by the creator's name, and after a commenter's time (#157).
+
+* **TikTok:** Don't start the first video stops that video at its first frame and keeps it stopped until you tap. It used to play for a second or two before the pause caught up with it, since TikTok's first report that it's playing comes that late, and on a cold start TikTok started it once more a moment after the pause (#83).
+
+* **TikTok:** A new Accent color patch swaps the red of TikTok's main buttons and red text for blue, green, purple, orange or teal, or for a color code you type. You pick it in the patch's options when you patch. TikTok's lighter and darker reds follow your color, so text stays readable in dark and light mode, and warnings stay red. Like AMOLED dark theme it's built into the app, so only patching again without it takes it back (#84).
+
+## 0.73.0 (2026-10-14)
+
+* **TikTok:** A profile background saved with the Profile background switch on no longer disappears after TikTok restarts. TikTok asks its servers for profiles with a value that left the background out, and the switch now sends the one that brings it back, the same one Feature Gate Lab's Profile banner preset sets. Flipping the switch now offers a restart (#80).
+
+* **TikTok:** Feed filter has a Minimum video length beside the maximum, under Limits. Videos shorter than it are hidden, while photo posts and videos TikTok sent no length for stay. Like the maximum, when a whole batch would go, the video closest to your limit is kept (#154).
+
+* **TikTok:** Saving a story on Automatic quality now gets its tallest version that other players can open, not the smaller one TikTok's player happened to be streaming. A story whose own clean file is already that tall keeps it, and one with nothing better saves the way it did before (#155).
+
+* **TikTok:** Turning a commenter switch on or off under Hushfeed settings > Comments now changes the comments of a video you'd already opened. Before, reopening those comments showed the names and countries they were first drawn with until you moved to another video or restarted TikTok. A verified badge after a name stays where it is.
+
+* **TikTok:** A new Color commenter names switch under Hushfeed settings > Comments gives each commenter's name a color of its own. An account gets the same one every time it shows up, a darker shade on TikTok's light comment panel and a lighter one on its dark panel, so a long thread is easier to follow. It starts off.
+
+* **TikTok:** Hide videos you have already seen works on the Following tab too. On TikTok 47.1.4 that tab only meets the feed rules where TikTok reads its list, and the switch was left off there. A video you watch on the tab stays put while more load under it, and one you saw earlier is taken out when it turns up.
+
+* **TikTok:** A video you're watching on For You or Following stays put when TikTok reads the list again. It used to vanish from under you once it got older than your Maximum post age, once Hide videos you have already seen counted it as watched, or when its counts moved past a range or views per like limit you set. Videos that come in after it still go through every rule. Turning a rule on or changing one checks them all again, though Hide videos you have already seen still leaves alone the ones you watched in that list.
+
+* **TikTok:** Show the time to the second has two options under it. Show the time zone (on, so the row reads as before) can drop the zone, and Short date writes the date the short way your language does, like 10/7/25. Each works without the other, the seconds always stay, and both use your language's own formats and your phone's 12 or 24 hour clock (#147).
+
+* **TikTok:** Pick videos to save from profile grids works inside a Favorites collection folder too. Its videos get the same circle, in the top left corner there since TikTok's own Select posts box takes the top right. Pick all reads the folder's list, so a whole collection saves in runs of 50 like a Liked or Favorites list (#27).
+
+* **TikTok:** When some of the original photos you save don't come through, the result now has Retry beside Open. It tries again only the photos that failed, in the post's order and under the same file names, so the ones that landed aren't saved a second time. Photos you cancelled or didn't pick are left out, and Retry keeps showing up as long as some still fail. A Retry made under another account than the one you're on now says so instead of saving. Tap Retry while that post is still saving and it says so, and it stays there to tap again once the save is done.
+
+* **TikTok:** Quick setups can be hidden from the settings home with a long press on its card, and its help line now says so. The **Quick setups on the home page** row on Backup and restore brings it back. Settings backups and the Quick setups choices leave it alone.
+
+* **TikTok:** LIVE rooms can show a Record button, off by default and found in Playback settings. It saves what you watch from the moment you tap it until you tap Stop or leave the room. Nothing from before the tap is saved. If the LIVE ends, the connection drops or the phone runs low on room, you get what was recorded so far and a message that says so (#37).
+
+* **TikTok:** With Hide the comment bar on opened videos on, the progress bar no longer runs across the last line of the caption on a video you open from a profile, your likes or search. The caption and the music disc beside it move up just enough for the bar, which runs along the caption's bottom edge the way it does with the comment bar showing (#153).
+
+* **TikTok:** The diagnostic report no longer says the overlay is missing something just because Hide the comment bar on opened videos is on while you're on the main feed, which never has that bar (#153).
+
+* **TikTok:** The diagnostic report's storage section no longer shows part of your account ID as a folder name. TikTok names its offline videos folder after the account (#70).
+
+* **TikTok:** With Hide the comment bar on opened videos on, photo posts in an opened grid no longer end above a black band at the bottom. A grid that starts on photos, or runs through several, has no comment bar until a video comes along, and the room kept for it came back as that band. Swiping to the next post in the grid no longer brings the band back either, and a video you open from search results now reaches the bottom too (#153).
+
+* **TikTok:** With Show a LIVE under the status bar on, the panels above the first room of the LIVE feed (the one the LIVE button at the top left opens, scrolled up past the first room) now start below the clock. Their top row sat under the status bar, where it was hard to tap. The rooms themselves still reach up under the clock (#137).
+
+* **TikTok:** A LIVE in the For You feed no longer carries over the Service+ row (the "Service+ | Ask me anything!" line under the name) from a LIVE you scrolled past. When the next LIVE has no Service+ row of its own, the leftover one is hidden. It's part of the LIVE controls patch and needs no switch (#94).
+
+* **TikTok:** LIVE controls can add clear screen to every LIVE room's menu. Clear screen hides a room's chat, gifts and buttons so only the stream shows, and TikTok offered it in only some rooms. Turn on Offer clear screen in every LIVE room in Hushfeed settings > Playback (#57).
+
+* **TikTok:** With Show where a video was posted or Show the handle instead of the name on, a creator's display name that comes back on screen is no longer left cut short beside an empty row. Putting the name back now lets the row measure it again (#127).
+
+* **TikTok:** AMOLED dark theme now turns the cards on TikTok's own settings pages black as well, on the pages under Settings and privacy, like Display. TikTok's dark mode already paints those pages and search black, so the cards were the gray left over. The search field, the filter chips and the profile menu's cards keep their dark gray, so you can still see where to tap (#152).
+
+* **TikTok:** Feature Gate Lab has two presets from TikTok's regional builds. Scrolling comments on videos turns on Korea's one-line comments that run across a video, landscape videos included. Several photos in one comment turns on Japan's photo picker that adds more than one photo to a comment. Both need the Lab's overrides switch and a TikTok restart, and Undo puts back the values you had. TikTok's servers still decide which videos carry scrolling comments and whether a comment with several photos posts (#98).
+
+* **TikTok:** A new switch on the Feed screen page, See-through bottom bar, lets the video reach the bottom of the screen and takes the background off the tab bar so the tabs sit over the picture. It starts off (#145).
+
+* **TikTok:** Feature Gate Lab has a new preset from Japan's builds, LIVE chat auto-translate. It turns on the Translate comments option under Share in a LIVE room. It needs the Lab's overrides switch and a TikTok restart, and Undo puts back the value you had (#98).
+
+* **TikTok:** Advanced downloads can save several posts from a profile grid in one run. Turn on Pick videos to save from profile grids in Hushfeed settings > Downloads and every video in a profile, Liked or Favorites grid gets a circle. Tap the circles of up to 50 posts, then tap Save on the bar at the bottom. They're saved one after another with a running count and Cancel. A post that fails is skipped and the next one still saves, a photo post saves its photos at full size, and with Check for already-saved videos on a video saved before is counted and left alone. Stories and ads get no circle, and TikTok's own tap and long press on a cell work as before until something is picked (#27).
+
+* **TikTok:** Pick videos to save from profile grids has a Pick all button on its bar. It picks every post the list has loaded, in the list's order and up to 50 at a time, leaving out stories, ads and, with Check for already-saved videos on, videos saved before. With that check on, a whole profile, Liked or Favorites list saves in runs: save these, tap Pick all again, and the next run starts where the last one stopped, even when TikTok closed partway through one. Only posts TikTok has already loaded are picked, so scroll to the end of a long list first (#27).
+
+* **TikTok:** With Hide videos you have already seen on and a full record of 10,000 videos, each video you watch no longer goes through the whole record to find the oldest one to drop. One pass now lines up the 256 oldest, so it happens once every 256 videos, and a record loading at start trims once at the end instead of after every row. Which videos are kept doesn't change (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** The diagnostic report has a new Changed settings section. It names every Hushfeed setting you've moved off its default, so a report shows which switches are on without anyone having to ask. Switches say on or off and numbers show their value. A setting you typed text into, like blocked words or a proxy address, is only named, never quoted (#149).

@@ -21,6 +21,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHid
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|cnk
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|cnq
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|d4
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|duh
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|dux
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|e_5
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|ek5
@@ -43,14 +44,17 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHid
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|llj
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|nh4
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|o97
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|oa1
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|opp
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|pqg
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|qqw
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|tt3
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|uzf
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|v1c
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|w_0
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|w_1
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|wct
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|wll
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|wtr
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/follow/FollowDiagnostics.java|LIZ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/follow/FollowDiagnostics.java|LIZIZ
@@ -67,6 +71,8 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.ja
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|v1m
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|w54
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|wuh
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/profile/ProfileTopBar.java|pw1
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/profile/ProfileTopBar.java|tbi
 # 47.1.4 Retrofit response accessors used only by opt-in repost diagnostics (RepostDiagnosticsFieldsTest pins them).
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/repost/RepostDiagnostics.java|LIZ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/repost/RepostDiagnostics.java|LIZIZ
@@ -95,7 +101,6 @@ patches/src/main/kotlin/app/morphe/patches/tiktok/misc/follow/FollowDiagnosticsP
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/Fingerprints.kt|LIZ
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|LIZ
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|LX/
-patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|Lkotlin/jvm/internal/AwS
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|l0
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/settings/SettingsPatch.kt|l1
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AmoledThemePatch.kt|a40
@@ -336,3 +341,15 @@ patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslation
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LX/
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LX/03Fg;
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/DmTranslationAccountHooks.kt|LX/03Sh;
+
+# 47.1.4 palette attrs the Accent color patch recolors (#84). TikTok names its TUX tokens per build; AccentColorPaletteTest holds each declared build to these through the token table.
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ah3
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ah4
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ah5
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ah6
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ah7
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ay3
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ay4
+# The 47.1.4 drawable with TikTok's red drawn into its pixels (the follow plus, #84). Drawables are
+# renamed per build like the tokens; AccentColorPaletteTest holds each declared build to its entry.
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|bv8

@@ -1,3 +1,100 @@
+## Unreleased
+
+* **TikTok:** Un nuevo interruptor mantiene la calidad de LIVE que elegiste después de reiniciar TikTok (#57).
+
+
+* **TikTok:** Hide the comment bar on opened videos ahora también oculta la barra de Mensaje en los videos de amigos mutuos, que tapaba la descripción y la barra de progreso (#153).
+
+* **TikTok:** Accent color ahora también pinta de tu color el más para seguir bajo el avatar del creador en el feed (#84).
+
+* **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, el disco de música ya no tapa el final de la barra de progreso ni el tiempo a su lado (#153).
+
+* **TikTok:** El tema oscuro AMOLED ahora también pone en negro las tarjetas de la propia lista de Ajustes y privacidad (#152).
+
+* **TikTok:** Nuevo interruptor Mostrar opciones de traducción en los ajustes de idioma en Comentarios: la propia página Idioma de TikTok vuelve a mostrar sus filas de traducción en las cuentas que allí solo veían Idioma de la app (#143).
+
+* **TikTok:** Hushfeed ahora también parchea PineDrama 47.1.4, la app de series de TikTok. Allí funcionan 90 parches, y Morphe Manager solo ofrece esos (#156).
+
+* **TikTok:** El botón Grabar del LIVE baja para no estorbar cuando el panel Descubrir de TikTok se abre sobre la sala, y vuelve a su sitio al cerrarse (#37).
+
+* **TikTok:** Nuevo interruptor Barra inferior flotante en Barra inferior transparente: las pestañas quedan sobre una píldora oscura, redondeada y transparente encima del vídeo (#124).
+
+* **TikTok:** Nuevo interruptor Barra de estado transparente en Pantalla del feed: el vídeo del feed principal llega hasta el borde superior con el reloj encima y las pestañas de arriba no se mueven (#145).
+
+* **TikTok:** Con Mostrar el LIVE bajo la barra de estado activado, la franja negra bajo el reloj ya no aparece un momento al abrir una sala ni al deslizar a la siguiente (#137).
+
+* **TikTok:** Nuevos interruptores Ocultar las visualizaciones del perfil y Ocultar Añadir amigos en Perfil: esos dos botones desaparecen de la parte superior de tu perfil y el menú se queda (#158).
+
+* **TikTok:** Si TikTok se cierra en medio de una grabación de LIVE (deslizado o detenido por el teléfono), al abrirlo de nuevo se guarda lo grabado y te avisa, en vez de quedarse en la caché (#37).
+
+* **TikTok:** Nuevo interruptor También en los videos abiertos en Ocultar el botón de buscar del feed: también se va la barra de búsqueda de arriba de un video abierto y Atrás se mantiene (#158).
+
+* **TikTok:** Nuevo interruptor Subtítulos con grosor normal en Subtítulos: los subtítulos hablados con grosor normal en lugar de la negrita de TikTok (#158).
+
+* **TikTok:** Nuevo interruptor Menú completo de pulsación larga en los resultados de búsqueda: una pulsación larga en un video abierto desde la búsqueda abre el menú de Para ti (#120).
+
+* **TikTok:** Nuevo interruptor Mostrar el país como bandera: el país junto al nombre del creador y tras la hora de un comentario se muestra como su bandera (#157).
+
+* **TikTok:** No poner en marcha el primer video ahora lo detiene en su primer fotograma, no uno o dos segundos después (#83).
+
+* **TikTok:** El nuevo parche Accent color cambia el rojo de los botones y textos de TikTok por azul, verde, morado, naranja, verde azulado o un color propio (#84).
+
+## 0.73.0 (2026-10-14)
+
+* **TikTok:** Un fondo de perfil guardado con Fondo del perfil activado ya no desaparece al reiniciar TikTok. El interruptor ahora ofrece reiniciar (#80).
+
+* **TikTok:** Filtro del feed tiene una Duración mínima del vídeo junto a la máxima (#154).
+
+* **TikTok:** Guardar una historia con calidad Automático ahora baja su versión reproducible más alta en lugar de la transmisión más pequeña (#155).
+
+* **TikTok:** Un interruptor de Comentarios que cambia los nombres o países de quienes comentan ahora también cambia los comentarios de un video que ya habías abierto, sin reiniciar.
+
+* **TikTok:** Nuevo interruptor Colorear los nombres de quienes comentan en Comentarios: el nombre de cada persona que comenta tiene su propio color, siempre el mismo.
+
+* **TikTok:** Ocultar los vídeos que ya has visto ahora también funciona en Siguiendo, sin mover el vídeo que se reproduce.
+
+* **TikTok:** Un vídeo que se reproduce en Para ti o Siguiendo ya no desaparece cuando supera la Antigüedad máxima de la publicación o cuando Ocultar los vídeos que ya has visto lo cuenta.
+
+* **TikTok:** Mostrar la hora al segundo tiene dos opciones propias: Mostrar la zona horaria, activada como antes, y Fecha corta (#147).
+
+* **TikTok:** Elegir videos para guardar en las cuadrículas de perfil ahora también funciona dentro de una colección de Favoritos, con Elegir todos incluido (#27).
+
+* **TikTok:** Si al guardar fotos originales solo llegan algunas, ahora aparece Reintentar junto a Abrir. Solo vuelve a intentar las fotos que fallaron.
+
+* **TikTok:** Los Ajustes rápidos se pueden ocultar de la página de inicio de los ajustes con una pulsación larga en su tarjeta. La fila Ajustes rápidos en la página de inicio, en Copia de seguridad y restauración, los trae de vuelta.
+
+* **TikTok:** Las salas LIVE pueden mostrar un botón Grabar (desactivado por defecto, en los ajustes de Reproducción). Guarda lo que ves desde que lo tocas hasta que tocas Detener o sales de la sala (#37).
+
+* **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, la barra de progreso ya no pasa por encima de la descripción en los videos que abres desde un perfil o la búsqueda. La descripción y el disco de música suben lo justo para dejarla libre (#153).
+
+* **TikTok:** El informe de diagnóstico ya no marca la barra de comentarios como ausente mientras estás en el feed principal (#153).
+
+* **TikTok:** La sección de almacenamiento del informe de diagnóstico ya no muestra parte del ID de tu cuenta como nombre de carpeta (#70).
+
+* **TikTok:** Con Ocultar la barra de comentarios en los videos abiertos activado, las publicaciones de fotos en una cuadrícula abierta ya no terminan sobre una franja negra abajo (#153).
+
+* **TikTok:** Con Mostrar el LIVE bajo la barra de estado activado, los paneles que hay encima de la primera sala del feed de LIVE ahora empiezan debajo del reloj y no detrás de la barra de estado (#137).
+
+* **TikTok:** Un LIVE del feed Para ti ya no muestra la fila de Service+ de un LIVE que ya pasaste (#94).
+
+* **TikTok:** Un nuevo interruptor añade la pantalla limpia, que deja solo la transmisión, al menú de cada sala LIVE (#57).
+
+* **TikTok:** El nombre visible de un creador que vuelve tras el país o el @usuario ya no se queda cortado (#127).
+
+* **TikTok:** El tema oscuro AMOLED ahora también pone en negro las tarjetas de las páginas de ajustes de TikTok (#152).
+
+* **TikTok:** Feature Gate Lab tiene dos ajustes nuevos: Comentarios que se deslizan sobre los videos y Varias fotos en un comentario (#98).
+
+* **TikTok:** Un nuevo interruptor en la página Feed screen, Barra inferior transparente, deja que el vídeo llegue hasta el borde inferior de la pantalla y quita el fondo de la barra de pestañas. Empieza desactivado (#145).
+
+* **TikTok:** Feature Gate Lab tiene un nuevo ajuste preconfigurado, Traducción automática del chat de LIVE. Activa la opción Traducir comentarios que está bajo Compartir en una sala de LIVE (#98).
+
+* **TikTok:** Activa Elegir videos para guardar en las cuadrículas de perfil en Ajustes de Hushfeed > Descargas y cada video de una cuadrícula de perfil, Me gusta o Favoritos tendrá un círculo. Elige hasta 50, toca Guardar y se guardan uno tras otro con un contador y Cancelar (#27).
+
+* **TikTok:** Elegir videos para guardar en las cuadrículas de perfil tiene un botón Elegir todos. Elige hasta 50 de las publicaciones que una lista ha cargado y, con Comprobar videos ya guardados activado, se salta los que ya guardaste. Así una lista entera se guarda por tandas que siguen donde terminó la anterior (#27).
+
+* **TikTok:** Con Ocultar los vídeos que ya has visto activado y el registro lleno, cada video que ves ya no recorre las 10.000 filas para quitar la más antigua. Ahora eso pasa una vez cada 256 videos (#84).
+
 ## 0.72.0 (2026-10-13)
 
 * **TikTok:** El informe de diagnóstico tiene una sección nueva con los ajustes cambiados. Nombra cada ajuste que ya no está en su valor por defecto, así un informe muestra qué interruptores están activados. El texto que escribiste en un ajuste nunca se incluye (#149).
