@@ -1,7 +1,7 @@
 ![Hushfeed. Take back your feed with focused controls for filtering, gestures, playback, downloads and privacy.](assets/readme-hero.png)
 
 <p align="center">
-  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.73.0-6f42c1.svg" /></a>
+  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.74.0-6f42c1.svg" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-GPLv3-blue.svg" /></a>
   <a href="https://www.android.com/"><img alt="platform" src="https://img.shields.io/badge/platform-Android-3ddc84.svg" /></a>
   <a href="https://github.com/MorpheApp/morphe-manager"><img alt="Morphe" src="https://img.shields.io/badge/works%20with-Morphe-00b894.svg" /></a>
@@ -30,9 +30,9 @@ Most switches start off, so a freshly patched TikTok looks and works the way it 
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, version [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use that exact APK when patching. See [Supported target](#supported-target) for the build details.
 
-Hushfeed v0.73.0 contains 134 patches for TikTok 47.1.4. New in this one: you can tick posts on a profile grid and save them in one go, or record a LIVE you're watching. Feed filter has a minimum length now, and the tab bar can go see-through. It needs Morphe Manager 1.34.0 or newer.
+Hushfeed v0.74.0 contains 135 patches for TikTok 47.1.4. New in this one: TikTok's red buttons can take a color you pick, and the tab bar can float as a see-through pill. LIVEs keep the quality you chose after a restart, and Hushfeed can patch PineDrama too. It needs Morphe Manager 1.34.0 or newer.
 
-The main branch contains 135 patches, one more than v0.73.0.
+The main branch contains 135 patches, the same set as v0.74.0.
 
 ## What it changes
 
@@ -44,7 +44,7 @@ The main branch contains 135 patches, one more than v0.73.0.
 - **Privacy:** Turn off supported telemetry, hide that you viewed a story or that you're typing, keep videos out of Watch history and put TikTok behind your fingerprint or PIN.
 - **Screen time:** Set a daily budget in videos or minutes with a hold when it runs out, or lock the feed and keep TikTok for messages.
 
-The settings screen comes in English, German, Spanish, Italian, Indonesian, Brazilian Portuguese, Russian, Turkish and Azerbaijani. It follows the language TikTok runs in.
+The settings screen comes in English, German, Spanish, Italian, Indonesian, Brazilian Portuguese, Russian, Turkish, Azerbaijani and Simplified Chinese. It follows the language TikTok runs in. Simplified Chinese is a first pass, so corrections are welcome.
 
 The block, hide, sound and Not interested buttons Hushfeed can put on a video:
 
@@ -384,7 +384,7 @@ Where things live:
 - `extensions/tiktok/`: the Java code that runs inside TikTok, with its Robolectric tests. The settings translations are in `src/main/l10n/`.
 - `scripts/`: patching and checking scripts. `release/release.ps1` runs a release in five stages (`prepare`, `preflight`, `build`, `publish` and `index`), and `validate-release-facts.ps1` holds this README and the index to the catalog.
 - `tools/`: release text and What's new generation, plus the test-only verification probe a device check drives.
-- `patches-list.json` is the generated patch catalog. `patches-bundle.json` is the Morphe source index for the published bundle and only changes at release time.
+- `patches-list.json` is the generated patch catalog. `patches-bundle.json` is the Morphe source index for the published bundle and only changes at release time. Starting with the next release, its description includes that release's grouped change list so Morphe Manager can show it right away.
 - [App and patch development map](concepts/patch-development.md): the target boundary, the source modules and how to add a patch. The research lives beside it in the [TikTok app audit](concepts/tiktok-app-audit.md), the [network and power measurements](concepts/runtime-observation.md) and the [measured TikTok runtime](concepts/runtime-results-2026-10-09.md).
 
 ## Privacy

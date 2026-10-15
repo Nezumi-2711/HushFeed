@@ -4,6 +4,34 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+### Features and fixes
+
+* **TikTok:** Hushfeed settings can now follow TikTok in Simplified Chinese. The complete first translation covers the settings pages, dialogs and runtime messages. Traditional Chinese stays in English until it has its own translation, and corrections to this first pass are welcome.
+
+* **TikTok:** Allow screenshots and Circle to Search now covers popups that TikTok builds outside an Activity window. A controlled Android 15 check of TikTok's own Compose popup showed black with the switch off, visible content with it on, and black again while Hushfeed was paused. Naturally served popups still depend on what TikTok enables for an account.
+
+* **TikTok:** Starting with the next release, Morphe Manager shows that release's whole change list even while it is the newest one. Before, Manager showed only the short bundle summary for the release on a phone, then showed its full list after another release came out. The published 0.74.0 index stays unchanged.
+
+* **TikTok:** The current TikTok 47.1.4 build passed strict Android 17 16 KB-page runtime checks. It cold-started twice and played more than one feed video with compatibility mode disabled on the 16 KB emulator. The target-37 audit also covers the reflection used by Block this commenter. Static alignment results remain separate and don't claim that every bundled 32-bit file is compatible.
+
+* **TikTok:** The Profile tab opens again on phones where it crashed or came up blank since 0.72.0. Two of Show follow status's hooks left a value typed two ways where their paths met, and some phones' Android refused the whole profile name class for it (#165, #140).
+
+* **TikTok:** A Dark or Black caption background keeps the rounded corners TikTok gives the caption. Hushfeed used to put a plain color in place of TikTok's rounded shape, so the corners came out square. The color now fills TikTok's own shape (#158).
+
+* **TikTok:** Save a profile picture on a long press works again. On TikTok 47.1.4 every hold on a profile picture said "Open the profile again and try once more", because Hushfeed looked for the profile under a name an older TikTok gave it. It now finds the profile the picture belongs to however TikTok names it, and still checks it against the @name on screen before saving (#160).
+
+* **TikTok:** With Hide search suggestions above comments on, comments no longer open with an empty white band above the comment count on some videos. On some accounts TikTok saves the banner's spot before it builds the banner, so hiding only the banner left its spot behind. The switch now answers TikTok's own "any suggestion here?" check, so no spot is saved, and the newer style of that banner goes too (#161).
+
+* **TikTok:** A comment's menu can now block the person who wrote it. Press and hold a comment and pick Block this commenter, and their comments leave the list right away, the way they do after a block from their profile. A banner names who you blocked and offers Undo. Turn on Block from a comment's menu in Hushfeed settings > Comments, under Blocking (#169).
+
+* **TikTok:** With See-through status bar on, every feed video now reaches up under the clock, not only the first one after TikTok starts. TikTok plays that first video in a surface it makes at launch, and later videos can play in another kind of player with no surface inside it, so they kept a black band above and below. That player grows now too. With Fit the video to the screen also on, Fit wins and the whole picture stays in view instead of being grown back over its sides. Fill the screen with the video already covers the screen, so it and See-through status bar don't undo each other (#164).
+
+* **TikTok:** Hide the unread badges on the bottom tabs also keeps down the bubble TikTok floats over Inbox when it opens, the one counting new likes, followers, comments and who's LIVE. It used to take only the red counts and dots off the tabs, so that bubble still came up every time (#170).
+
+* **TikTok:** Saving a big pick from a profile grid no longer gives up a few videos in with "the rest ran out of time". The whole save had two minutes for all its videos, so a pick of 50 always ran out. Each video now gets its own two minutes, and one that really stalls still stops the save (#27).
+
+## 0.74.0 (2026-10-14)
+
 * **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice. A pick from the Video quality list in a room's Share menu now carries on to the next room too (#57).
 
 * **TikTok:** With Hide the comment bar on opened videos on, a video from someone you follow who follows you back no longer has TikTok's Message bar sitting over the bottom of the caption, the progress bar and the buttons on the right. TikTok shows that bar there instead of Add comment, and the patch gave the video the bar's room without taking the bar away. It goes with the comment bar now (#153).
