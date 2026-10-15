@@ -70,11 +70,13 @@ internal object CommentMenuListFingerprint : Fingerprint(
 /**
  * The coroutine that builds the comment menu's rows. Its log names the panel's
  * `loadLongPressItems`, and the Report row it builds carries the icon the block row matches.
+ * One string, not two: the log is a single literal ("CommentLongPressFragment@922.loadLongPressItems$2"
+ * on 47.1.4), and the patcher lets one string load answer one wanted string only.
  */
 internal object CommentMenuItemsFingerprint : Fingerprint(
     name = "invokeSuspend",
     returnType = "Ljava/lang/Object;",
-    strings = listOf("CommentLongPressFragment@", ".loadLongPressItems"),
+    strings = listOf(".loadLongPressItems"),
     custom = { method, _ -> method.reportRowIcon() != null },
 )
 
