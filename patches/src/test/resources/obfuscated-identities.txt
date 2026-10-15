@@ -349,3 +349,6 @@ patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ah7
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ay3
 patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|ay4
+# The 47.1.4 drawable with TikTok's red drawn into its pixels (the follow plus, #84). Drawables are
+# renamed per build like the tokens; AccentColorPaletteTest holds each declared build to its entry.
+patches/src/main/kotlin/app/morphe/patches/tiktok/misc/theme/AccentColorPatch.kt|bv8
