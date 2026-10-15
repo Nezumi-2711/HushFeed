@@ -30,9 +30,9 @@ Most switches start off, so a freshly patched TikTok looks and works the way it 
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, version [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use that exact APK when patching. See [Supported target](#supported-target) for the build details.
 
-Hushfeed v0.73.0 contains 134 patches for TikTok 47.1.4. New in this one: you can tick posts on a profile grid and save them in one go, or record a LIVE you're watching. Feed filter has a minimum length now, and the tab bar can go see-through. It needs Morphe Manager 1.34.0 or newer.
+Hushfeed v0.74.0 contains 135 patches for TikTok 47.1.4. New in this one: TikTok's red buttons can take a color you pick, and the tab bar can float as a see-through pill. LIVEs keep the quality you chose after a restart, and Hushfeed can patch PineDrama too. It needs Morphe Manager 1.34.0 or newer.
 
-The main branch contains 135 patches, one more than v0.73.0.
+The main branch contains 135 patches, the same set as v0.74.0.
 
 ## What it changes
 
