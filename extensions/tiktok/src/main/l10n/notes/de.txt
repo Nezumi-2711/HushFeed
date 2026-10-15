@@ -1,4 +1,4 @@
-## Unreleased
+## 0.74.0 (2026-10-14)
 
 * **TikTok:** Ein neuer Schalter behält die gewählte LIVE-Qualität auch nach einem Neustart von TikTok (#57).
 

@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+## 0.74.0 (2026-10-14)
+
 * **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice. A pick from the Video quality list in a room's Share menu now carries on to the next room too (#57).
 
 * **TikTok:** With Hide the comment bar on opened videos on, a video from someone you follow who follows you back no longer has TikTok's Message bar sitting over the bottom of the caption, the progress bar and the buttons on the right. TikTok shows that bar there instead of Add comment, and the patch gave the video the bar's room without taking the bar away. It goes with the comment bar now (#153).

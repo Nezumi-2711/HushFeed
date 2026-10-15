@@ -1,4 +1,4 @@
-## Unreleased
+## 0.74.0 (2026-10-14)
 
 * **TikTok:** Yeni açar seçdiyin LIVE keyfiyyətini TikTok yenidən başlayandan sonra da saxlayır (#57).
 

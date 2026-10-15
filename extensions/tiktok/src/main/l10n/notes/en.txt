@@ -1,4 +1,4 @@
-## Unreleased
+## 0.74.0 (2026-10-14)
 
 * **TikTok:** A new switch keeps the LIVE quality you picked after TikTok restarts (#57).
 

@@ -1,4 +1,4 @@
-## Unreleased
+## 0.74.0 (2026-10-14)
 
 * **TikTok:** Un nuevo interruptor mantiene la calidad de LIVE que elegiste después de reiniciar TikTok (#57).
 
