@@ -12,6 +12,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** The LIVE chat auto-translate preset in Feature Gate Lab now says what else it needs. Its Translate comments button only shows up with a Japanese SIM too, so the preview asks you to turn on Override SIM details and pick Japan, NTT DOCOMO before you restart TikTok (#98).
 
+* **TikTok:** A recorded screen layout now lists a popup's own views even when the screen behind it is very busy, and it no longer spends its space on the next video waiting under the For You feed. Before, the export could run out of room before it reached a card on screen (#162).
+
 * **TikTok:** Hushfeed settings can now follow TikTok in Simplified Chinese. The complete first translation covers the settings pages, dialogs and runtime messages. Traditional Chinese stays in English until it has its own translation, and corrections to this first pass are welcome.
 
 * **TikTok:** Allow screenshots and Circle to Search now covers popups that TikTok builds outside an Activity window. A controlled Android 15 check of TikTok's own Compose popup showed black with the switch off, visible content with it on, and black again while Hushfeed was paused. Naturally served popups still depend on what TikTok enables for an account.

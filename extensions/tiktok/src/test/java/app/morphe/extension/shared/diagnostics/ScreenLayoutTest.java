@@ -217,6 +217,47 @@ public class ScreenLayoutTest {
         behind.dismiss();
     }
 
+    @Test @Config(sdk = 35)
+    public void aPopupOverAScreenThatFillsTheBoundsIsStillListed() {
+        // #162: the feed alone used the whole bounds, so the card over it came out as a bare
+        // window line and "(478 more views not listed)".
+        Activity feed = Robolectric.buildActivity(Activity.class).setup().get();
+        LinearLayout column = new LinearLayout(feed);
+        for (int index = 0; index < ScreenLayout.MAX_VIEWS * 2; index++) {
+            column.addView(new View(feed));
+        }
+        feed.setContentView(column);
+        idle(0);
+        FrameLayout card = new FrameLayout(feed);
+        TextView cardButton = new TextView(feed);
+        cardButton.setId(android.R.id.button3);
+        cardButton.setText("Discover more");
+        card.addView(cardButton);
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(card, 600, 300);
+        popup.showAtLocation(feed.getWindow().getDecorView(), android.view.Gravity.BOTTOM, 0, 0);
+        idle(0);
+        ScreenLayout.start(settings, results::add);
+        idle(ScreenLayout.DELAY_MS);
+
+        List<String> lines = ScreenLayout.lines();
+        String all = String.join("\n", lines);
+        int popupAt = all.indexOf("\nwindow: PopupWindow$PopupDecorView");
+        assertTrue("the popup window is listed: " + all.substring(Math.max(0, all.length() - 400)),
+                popupAt > 0);
+        assertTrue("the screen comes first", all.indexOf("\nwindow: ") < popupAt);
+        assertTrue("the popup's own views are listed",
+                all.substring(popupAt).contains("TextView #button3 "));
+        assertFalse(all.contains("Discover more"));
+        int views = 0;
+        for (String line : lines) {
+            if (!line.startsWith("window: ") && !line.startsWith("activity: ")
+                    && !line.startsWith("recorded_utc: ") && !line.startsWith("(")) views++;
+        }
+        assertTrue("views: " + views, views <= ScreenLayout.MAX_VIEWS);
+        assertTrue(lines.get(lines.size() - 1).matches("\\(\\d+ more views not listed\\)"));
+        popup.dismiss();
+    }
+
     @Test public void frameworkClassesAreShortAndTikToksAreInFull() {
         assertEquals("FrameLayout", ScreenLayout.className(FrameLayout.class));
         assertEquals(TargetActivity.class.getName(), ScreenLayout.className(TargetActivity.class));
