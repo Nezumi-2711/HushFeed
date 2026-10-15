@@ -837,6 +837,10 @@ public class SettingsL10nTest {
         Context simplified = contextFor(Locale.forLanguageTag("zh-Hans-CN"));
         assertEquals(List.of("zh-hans-rcn", "zh-hans"), L10n.tags(simplified));
         assertEquals("隐藏文案", L10n.t(simplified, "Hide the caption"));
+        assertEquals("信息流过滤器", L10n.t(simplified, "Feed filter"));
+        assertEquals("信息流界面", L10n.t(simplified, "Feed screen"));
+        assertEquals("信息流标签页", L10n.t(simplified, "Feed tabs"));
+        assertEquals("你的信息流", L10n.t(simplified, "Your feed"));
         assertEquals("zh-hans", L10n.tableTag(simplified));
         assertEquals("zh-Hans", L10n.shownLocale(simplified).toLanguageTag());
 
