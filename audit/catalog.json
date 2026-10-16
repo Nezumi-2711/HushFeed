@@ -9069,7 +9069,7 @@
    },
    {
     "id": "gate-refused",
-    "what": "With the server gate favorite_reverse forced to 1 and the Favorites tab opened, TikTok reads the gate, and the switch on answers 0 and records 'refused favorite_reverse' plus the info line 'Kept the Favorites tab: favorite_reverse came back 1'.",
+    "what": "With the server gate favorite_reverse forced to 1 and the share sheet opened, TikTok reads the gate, and the switch on answers 0 and records 'refused favorite_reverse' plus the info line 'Kept the Favorites tab: favorite_reverse came back 1'.",
     "steps": [
      {
       "set": {
@@ -9097,18 +9097,27 @@
       "expect": "recording=true"
      },
      {
-      "open": "profile"
+      "open": "feed"
      },
      {
-      "wait": 2500
+      "wait": 2000
      },
      {
-      "tap": {
-       "desc": "^Favorites$"
-      }
+      "probe": "click",
+      "extras": {
+       "find": "wct"
+      },
+      "expect": "^ok click",
+      "waitMs": 2000
      },
      {
       "wait": 3000
+     },
+     {
+      "back": true
+     },
+     {
+      "wait": 1000
      },
      {
       "probe": "labreport",
@@ -9145,7 +9154,7 @@
    },
    {
     "id": "gate-left-alone",
-    "what": "With the switch off, the same forced gate is read when the Favorites tab opens and nothing refuses it.",
+    "what": "With the switch off, the same forced gate is read when the share sheet opens and nothing refuses it.",
     "steps": [
      {
       "set": {
@@ -9173,18 +9182,27 @@
       "expect": "recording=true"
      },
      {
-      "open": "profile"
+      "open": "feed"
      },
      {
-      "wait": 2500
+      "wait": 2000
      },
      {
-      "tap": {
-       "desc": "^Favorites$"
-      }
+      "probe": "click",
+      "extras": {
+       "find": "wct"
+      },
+      "expect": "^ok click",
+      "waitMs": 2000
      },
      {
       "wait": 3000
+     },
+     {
+      "back": true
+     },
+     {
+      "wait": 1000
      },
      {
       "probe": "labreport",
@@ -9240,7 +9258,7 @@
     "auto": false
    }
   ],
-  "notes": "Whether a real account is in the server experiment that empties the tab is TikTok's decision; the Feature Gate Lab forces the gate on the S22 exactly as the Roadmap's issue #4 notes did. The 'gate-left-alone' check relies on HookStatus being per process; if a future build persists hook records across restarts it can fail spuriously, so read the line order. Always finishes with labclear. The gate is read as the Favorites tab builds its pages, so the checks tap the profile's Favorites tab (content-desc 'Favorites') after a lab recording starts; opening the profile alone reads nothing on 47.1.4 (seen 2026-10-16)."
+  "notes": "Whether a real account is in the server experiment that empties the tab is TikTok's decision; the Feature Gate Lab forces the gate on the S22 exactly as the Roadmap's issue #4 notes did. The 'gate-left-alone' check relies on HookStatus being per process; if a future build persists hook records across restarts it can fail spuriously, so read the line order. Always finishes with labclear. The gate is read as the Favorites tab builds its pages, so the checks tap the profile's Favorites tab (content-desc 'Favorites') after a lab recording starts; opening the profile alone reads nothing on 47.1.4 (seen 2026-10-16). On 47.1.4 TikTok reads favorite_reverse as the share sheet opens (caller X.034M#LIZ), not on the profile or its Favorites tab, so both gate checks open the share sheet on the feed (wct) and back out; nothing on the sheet is tapped (2026-10-16)."
  },
  {
   "name": "Keep the app language",
