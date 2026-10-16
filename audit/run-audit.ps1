@@ -120,7 +120,7 @@ if ($Validate) {
     Get-ChildItem -Path (Join-Path $root 'extensions') -Recurse -Filter *.java | Where-Object { $_.FullName -match '[\\/]src[\\/]main[\\/]' } | ForEach-Object {
         foreach ($found in [regex]::Matches((Get-Content -LiteralPath $_.FullName -Raw), 'Setting\(\s*"([A-Za-z0-9_]+)"')) { [void]$keys.Add($found.Groups[1].Value) }
     }
-    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night', 'animations', 'vibrations', 'record'
+    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night', 'animations', 'theme', 'vibrations', 'record'
     $apkKinds = 'entry-empty', 'entry-absent', 'entry-present', 'manifest', 'resources', 'icon-xml', 'dex-string'
     foreach ($entry in $entries) {
         $where = "'$($entry.name)'"
@@ -146,6 +146,7 @@ if ($Validate) {
                     'swipe' { if ([string]$step.swipe -notin 'up', 'down', 'left', 'right') { & $bad "swipes '$($step.swipe)'" } }
                     'night' { if ([string]$step.night -notin 'yes', 'no') { & $bad "sets night mode '$($step.night)'" } }
                     'animations' { if ([string]$step.animations -notin 'on', 'off') { & $bad "sets animations '$($step.animations)'" } }
+                    'theme' { if ([string]$step.theme -notin 'dark', 'light') { & $bad "sets TikTok's theme '$($step.theme)'" } }
                     'vibrations' { if ([string]$step.vibrations -notin 'none', 'some') { & $bad "expects vibrations '$($step.vibrations)'" } }
                     'record' {
                         if ([string]$step.record -notin 'start', 'stop') { & $bad "records '$($step.record)'" }
@@ -655,6 +656,24 @@ function Restore-Animations {
     return $true
 }
 
+# TikTok's own Display choice, which a theme step changes through the probe's tiktoktheme. TikTok
+# reads it once at start-up, and while it says Light the phone's night mode changes nothing (the
+# S22's TikTok stayed light under `cmd uimode night yes`, 2026-10-16). 1 is Light, 2 is Dark;
+# 'unset' means the phone never had a choice stored.
+$script:themeWas = $null
+# Puts back the choice a theme step changed. Returns whether it changed anything.
+function Restore-TikTokTheme {
+    if ($null -eq $script:themeWas) { return $false }
+    try {
+        [string]$answer = Invoke-AuditProbe 'tiktoktheme' ([pscustomobject]@{ set = $script:themeWas }) 1500
+        if ([string]::IsNullOrEmpty($answer) -or $answer -notmatch 'ok tiktoktheme .* committed=true') {
+            Write-Warning "could not put TikTok's theme back to $($script:themeWas): $answer"
+        }
+    } catch { Write-Warning "could not put TikTok's theme back to $($script:themeWas): $($_.Exception.Message)" }
+    $script:themeWas = $null
+    return $true
+}
+
 function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
     $result = [ordered]@{ id = $Check.id; what = $Check.what; auto = [bool]$Check.auto; status = 'pass'; failures = @(); evidence = @(); review = @() }
     $tag = "$($Entry.name)-$($Check.id)"
@@ -749,6 +768,21 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                     $value = if ($step.animations -eq 'on') { '1.0' } else { '0.0' }
                     foreach ($scale in $script:animationScales) { Invoke-DeviceShell "settings put global $scale $value" | Out-Null }
                     Start-Sleep -Milliseconds 500
+                }
+                'theme' {
+                    # TikTok's own Light or Dark, applied at its next start, so a restart step
+                    # follows. TikTok's own choice goes back once the patch's checks are done.
+                    if ($null -eq $script:themeWas) {
+                        [string]$now = Invoke-AuditProbe 'tiktoktheme' $null 1500
+                        if ([string]::IsNullOrEmpty($now) -or $now -notmatch 'ok tiktoktheme dark_mode=(-?\d+) stored=(true|false)') {
+                            throw "could not read TikTok's theme: $now"
+                        }
+                        $script:themeWas = if ($Matches[2] -eq 'true') { $Matches[1] } else { 'unset' }
+                    }
+                    $value = if ($step.theme -eq 'dark') { '2' } else { '1' }
+                    [string]$answer = Invoke-AuditProbe 'tiktoktheme' ([pscustomobject]@{ set = $value }) 1500
+                    $result.evidence += Save-Evidence "$tag-$index-theme" $answer
+                    if ([string]::IsNullOrEmpty($answer) -or $answer -notmatch "committed=true now=$value\b") { throw "TikTok's theme didn't take $($step.theme): $answer" }
                 }
                 'vibrations' {
                     # What Android itself played for TikTok since the check started or the last
@@ -972,6 +1006,7 @@ try {
         }
         if ($deviceUp -and (Restore-NightMode)) { Start-Sleep -Seconds 2; Restart-TikTok }
         if ($deviceUp) { [void](Restore-Animations) }
+        if ($deviceUp -and (Restore-TikTokTheme)) { Restart-TikTok }
         $run.patches = @($run.patches) + [pscustomobject][ordered]@{ name = $entry.name; category = $entry.category; kind = $entry.kind
             ranUtc = [DateTime]::UtcNow.ToString('o'); apkSha256 = $run.apk.sha256; evidence = $run.evidence; checks = $checks }
         # Written after every patch, so a run cut short still leaves what it found.
@@ -996,6 +1031,10 @@ try {
     if ($deviceUp) {
         [void](Restore-NightMode)
         [void](Restore-Animations)
+        if ($null -ne $script:themeWas) {
+            try { Restart-TikTok } catch { }
+            if (Restore-TikTokTheme) { try { Restart-TikTok } catch { } }
+        }
         if ($runOriginals.Count -gt 0) {
             try {
                 Restart-TikTok

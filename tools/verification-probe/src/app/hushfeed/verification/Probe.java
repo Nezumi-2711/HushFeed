@@ -2012,6 +2012,49 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok call " + target.getName() + " -> " + shown);
                         break;
                     }
+                    case "tiktoktheme": {
+                        // TikTok's own Display choice, which it reads once at start-up and hands
+                        // to the night mode: dark_mode in its sp_dark_mode store, 1 when unset.
+                        // Without it set to dark, TikTok stays light whatever the phone's night
+                        // mode is (seen on the S22, 2026-10-16). Read through TikTok's own store
+                        // factory, the static (int, Context, String) -> SharedPreferences method
+                        // TikTok reads it with (-e store X.02s6 -e method LIZJ on 47.1.4), since
+                        // that one may route the store to Keva rather than a plain file; its
+                        // sibling LIZIZ skips that. -e set N writes N, which the next start applies;
+                        // -e set unset removes it.
+                        String storeClass = intent.getStringExtra("store");
+                        if (storeClass == null) storeClass = "X.02s6";
+                        String storeMethod = intent.getStringExtra("method");
+                        if (storeMethod == null) storeMethod = "LIZJ";
+                        Method factory = loader.loadClass(storeClass)
+                                .getDeclaredMethod(storeMethod, int.class, Context.class, String.class);
+                        if (!Modifier.isStatic(factory.getModifiers())
+                                || factory.getReturnType() != android.content.SharedPreferences.class) {
+                            throw new IllegalStateException("not a store factory: " + factory);
+                        }
+                        factory.setAccessible(true);
+                        android.content.SharedPreferences store = (android.content.SharedPreferences)
+                                factory.invoke(null, 0, app, "sp_dark_mode");
+                        boolean stored = store.contains("dark_mode");
+                        int was = store.getInt("dark_mode", 1);
+                        String set = intent.getStringExtra("set");
+                        String wrote = "";
+                        if ("unset".equals(set)) {
+                            // Back to never chosen, for undoing a check on a phone that had no choice.
+                            boolean committed = store.edit().remove("dark_mode").commit();
+                            wrote = " set=unset committed=" + committed + " now=" + store.getInt("dark_mode", 1);
+                        } else if (set != null) {
+                            int value = Integer.parseInt(set);
+                            boolean committed = store.edit().putInt("dark_mode", value).commit();
+                            wrote = " set=" + value + " committed=" + committed
+                                    + " now=" + store.getInt("dark_mode", 1);
+                        }
+                        Log.i(TAG, "ok tiktoktheme dark_mode=" + was + " stored=" + stored + wrote
+                                + " via=" + storeClass + "." + factory.getName()
+                                + " night=" + (app.getResources().getConfiguration().uiMode
+                                        & android.content.res.Configuration.UI_MODE_NIGHT_MASK));
+                        break;
+                    }
                     case "fieldswatch": {
                         // The same static fields sampled every 40 ms for a few seconds, logging
                         // each change with its time, so a value a hook writes and another wipes

@@ -28,13 +28,17 @@
    },
    {
     "id": "dark-surfaces",
-    "what": "Review: with the phone in dark mode the comment sheet and the Inbox use the chosen color (pure black by default) rather than TikTok's dark gray, and light mode stays white.",
+    "what": "Review: with TikTok's own Display set to Dark the comment sheet and the Inbox use the chosen color (pure black by default) rather than TikTok's dark gray, and with it set to Light they stay white.",
     "steps": [
      {
-      "night": "yes"
+      "theme": "dark"
      },
      {
       "restart": true
+     },
+     {
+      "probe": "tiktoktheme",
+      "expect": "^ok tiktoktheme dark_mode=2 stored=true"
      },
      {
       "open": "feed"
@@ -55,7 +59,7 @@
      },
      {
       "shot": "amoled-comments",
-      "review": "Phone in dark mode, comment sheet open: the sheet behind the comments is pure black #000000 (or the Mocha/Dark gray option the build chose), not TikTok's dark gray. Failing looks like a gray panel."
+      "review": "TikTok set to Dark, comment sheet open: the sheet behind the comments is pure black #000000 (or the Mocha/Dark gray option the build chose), not TikTok's dark gray. Failing looks like a gray panel."
      },
      {
       "back": true
@@ -68,13 +72,17 @@
      },
      {
       "shot": "amoled-inbox",
-      "review": "Inbox in dark mode: the list background is the same pure black, not dark gray."
+      "review": "Inbox with TikTok set to Dark: the list background is the same pure black, not dark gray."
      },
      {
-      "night": "no"
+      "theme": "light"
      },
      {
       "restart": true
+     },
+     {
+      "probe": "tiktoktheme",
+      "expect": "^ok tiktoktheme dark_mode=1 stored=true"
      },
      {
       "open": "inbox"
@@ -84,13 +92,13 @@
      },
      {
       "shot": "amoled-inbox-light",
-      "review": "Inbox in light mode: white as stock. The patch must not darken light mode."
+      "review": "Inbox with TikTok set to Light: white as stock. The patch must not darken light mode."
      }
     ],
     "auto": false
    }
   ],
-  "notes": "Built in at patch time, so only patching again without it undoes it. The colour option's default is #000000 (lane file lists Black, Mocha #181825 and Dark gray #121212). The patch refuses a TikTok APK whose resource paths would clash (renamedPathCollisions), so a build that exists has passed that. TikTok follows the system theme here, so the check's night steps switch the phone (the runner puts the phone's own mode back). The probe's backgrounds action (x,y) can print the painting view and colour for a spot on screen if a number is wanted."
+  "notes": "Built in at patch time, so only patching again without it undoes it. The colour option's default is #000000 (lane file lists Black, Mocha #181825 and Dark gray #121212). The patch refuses a TikTok APK whose resource paths would clash (renamedPathCollisions), so a build that exists has passed that. TikTok only follows the phone's dark mode when its own Settings and privacy > Display has Use device settings on; the S22's says Light with that off, so `cmd uimode night yes` left every shot light (discovery 10, 2026-10-16). TikTok keeps the choice as dark_mode in its sp_dark_mode store (1 Light, 2 Dark, read through X.02s6.LIZJ on 47.1.4) and applies it at start-up, so the check uses theme steps, which write it through the probe's tiktoktheme, then restarts; the runner puts TikTok's own choice back after the patch. The probe's backgrounds action (x,y) can print the painting view and colour for a spot on screen if a number is wanted."
  },
  {
   "name": "Accent color",
