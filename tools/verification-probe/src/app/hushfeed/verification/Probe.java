@@ -2008,6 +2008,37 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok call " + target.getName() + " -> " + shown);
                         break;
                     }
+                    case "countformat": {
+                        // One of TikTok's static count formatters run with a count the check
+                        // picks, and the text it wrote: -e class X.0EYv -e method LIZIZ -e count
+                        // 123456. One that takes (long) gets just the count, one that takes
+                        // (Aweme, long) the video on screen as well. A check can read what Show
+                        // exact counts makes of a big count whatever the feed serves. The class
+                        // is TikTok's obfuscated name, new with every build.
+                        Class<?> owner = loader.loadClass(required(intent, "class"));
+                        String name = required(intent, "method");
+                        Class<?> awemeClass = loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme");
+                        Method target;
+                        Object[] arguments;
+                        long count = Long.parseLong(required(intent, "count"));
+                        try {
+                            target = owner.getDeclaredMethod(name, long.class);
+                            arguments = new Object[]{count};
+                        } catch (NoSuchMethodException notCountOnly) {
+                            target = owner.getDeclaredMethod(name, awemeClass, long.class);
+                            Object aweme = loader.loadClass("app.morphe.extension.tiktok.blockauthor.CurrentVideoAuthor")
+                                    .getMethod("getAweme").invoke(null);
+                            if (aweme == null) throw new IllegalStateException("no current video");
+                            arguments = new Object[]{aweme, count};
+                        }
+                        if (!java.lang.reflect.Modifier.isStatic(target.getModifiers()) || target.getReturnType() != String.class) {
+                            throw new IllegalArgumentException("a static String count formatter only: " + target);
+                        }
+                        target.setAccessible(true);
+                        Log.i(TAG, "ok countformat " + owner.getSimpleName() + "." + target.getName() + " count=" + count
+                                + " -> " + target.invoke(null, arguments));
+                        break;
+                    }
                     case "tiktoktheme": {
                         // TikTok's own Display choice, which it reads once at start-up and hands
                         // to the night mode: dark_mode in its sp_dark_mode store, 1 when unset.
