@@ -11057,7 +11057,7 @@
     "auto": true
    }
   ],
-  "notes": "H264Playback binds the \"H.264 playback\" family on every gear list it narrows, and only then, so the check swipes up to fifteen times for a list that mixes codecs and reads hookdetails (the once-per-process log line \"H.264 playback dropped N HEVC or ByteVC2 gear(s) of M from ...\" can land before a log step's marker). A feed that serves H.264 only, or lists whose H.264 gears have no playable address (PreferredGears.narrow keeps all), read inconclusive, not a failure. The switch is on before the restart so every list in the process passes the filter. anchors-bound only shows nothing missed."
+  "notes": "H264Playback binds the \"H.264 playback\" family on every gear list it narrows, and only then, so the check swipes up to fifteen times for a list that mixes codecs and reads hookdetails (the once-per-process log line \"H.264 playback dropped N HEVC or ByteVC2 gear(s) of M from ...\" can land before a log step's marker). A feed that serves H.264 only, or lists whose H.264 gears have no playable address (PreferredGears.narrow keeps all), read inconclusive, not a failure. The switch is on before the restart so every list in the process passes the filter. anchors-bound only shows nothing missed. On 47.1.4 most lists this account gets have no H.264 gear at all (the S22 saw one of 71 on 2026-10-16), so inconclusive is the usual answer there; videoinfo's gear names carry the codec as <describe>_codec_<n>_<format>, with 0 for H.264, 1 for HEVC and 2 for ByteVC2."
  },
  {
   "name": "Profile background",
@@ -11290,8 +11290,8 @@
     "auto": true
    },
    {
-    "id": "auto-clear-lands-and-carries",
-    "what": "With Automatic Clear display on, a video clears by itself after the delay, and the next video starts cleared (the mode is remembered across the swipe).",
+    "id": "auto-clear-lands",
+    "what": "With Automatic Clear display on and a 2 second delay, a video clears by itself after the delay and the next one does too after its own delay. Nothing carries across the swipe with a delay.",
     "steps": [
      {
       "open": "feed"
@@ -11306,7 +11306,77 @@
       "swipe": "up"
      },
      {
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false live=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
       "wait": 5000
+     },
+     {
+      "probe": "call",
+      "extras": {
+       "class": "app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch",
+       "method": "isClearDisplayNow"
+      },
+      "expect": "^ok call isClearDisplayNow -> true",
+      "waitMs": 1500
+     },
+     {
+      "probe": "call",
+      "extras": {
+       "class": "app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch",
+       "method": "isCarryingClear"
+      },
+      "expect": "^ok call isCarryingClear -> false",
+      "waitMs": 1500
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false live=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
+      "wait": 5000
+     },
+     {
+      "probe": "call",
+      "extras": {
+       "class": "app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch",
+       "method": "isClearDisplayNow"
+      },
+      "expect": "^ok call isClearDisplayNow -> true",
+      "waitMs": 1500
+     }
+    ],
+    "auto": true
+   },
+   {
+    "id": "no-delay-carries",
+    "what": "With no delay, a video clears as it starts and the clear carries across the swipe, so the next video never shows its controls.",
+    "steps": [
+     {
+      "set": {
+       "automatic_clear_display": "true",
+       "automatic_clear_display_delay": "0"
+      }
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false live=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
+      "wait": 2500
      },
      {
       "probe": "call",
@@ -11346,7 +11416,7 @@
    },
    {
     "id": "auto-clear-off",
-    "what": "With Automatic Clear display off, a video is not cleared by the extension.",
+    "what": "With Automatic Clear display off, the next video isn't cleared and nothing carries.",
     "steps": [
      {
       "set": {
@@ -11367,12 +11437,21 @@
       },
       "expect": "^ok call isCarryingClear -> false",
       "waitMs": 1500
+     },
+     {
+      "probe": "call",
+      "extras": {
+       "class": "app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch",
+       "method": "isClearDisplayNow"
+      },
+      "expect": "^ok call isClearDisplayNow -> false",
+      "waitMs": 1500
      }
     ],
     "auto": true
    }
   ],
-  "notes": "The \"Following stories bubble comes back when clear display ends\" half is a debug line \"[FollowingStoriesBubble] shown again after clear display\" and needs a Following stories bubble on screen. Clear display set by hand (long press, Clear display) is the other way in and is not driven here (it would need a tap on TikTok's long-press menu). If the first swipe lands on a photo post or a LIVE, the automatic clear \"skipped, the video or its window isn't current\" appears in the debug log and the check fails: swipe once more and rerun. The feed opens before the switch goes on: with TikTok already on the feed, the clear lands inside the delay and hides the tab bar the open step presses (2026-10-16)."
+  "notes": "The \"Following stories bubble comes back when clear display ends\" half is a debug line \"[FollowingStoriesBubble] shown again after clear display\" and needs a Following stories bubble on screen. Clear display set by hand (long press, Clear display) is the other way in and is not driven here (it would need a tap on TikTok's long-press menu). A photo post or a LIVE skips the automatic clear (\"skipped, the video or its window isn't current\" in the debug log), so each clear waits for a normal video first. isCarryingClear only holds when every video clears as it starts (no delay, or the remembered choice); with a delay the next video shows its controls until its own delay ends, and the old single check that expected a carry with a 2000 ms delay failed on that (2026-10-16). The feed opens before the switch goes on: with TikTok already on the feed, the clear lands inside the delay and hides the tab bar the open step presses (2026-10-16)."
  },
  {
   "name": "Remove LIVE extras",
