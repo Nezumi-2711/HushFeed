@@ -1,5 +1,7 @@
 ## Unreleased
 
+* **TikTok:** Un nuevo interruptor abre en oscuro los paneles de LIVE como Compartir y el club de fans cuando TikTok está en modo oscuro (#159).
+
 * **TikTok:** Un nuevo interruptor limita tu elección de Pulsación larga a los lados del video, así que una pulsación en el centro sigue abriendo el menú de TikTok (#136).
 
 * **TikTok:** Un nuevo interruptor añade Bloquear a quien comenta al menú que se abre al mantener pulsado un comentario (#169).

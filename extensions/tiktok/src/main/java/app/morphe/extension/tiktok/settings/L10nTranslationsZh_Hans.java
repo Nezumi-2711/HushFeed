@@ -15,7 +15,7 @@ final class L10nTranslationsZh_Hans {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4296);
+        Map<String, String> table = new HashMap<>(4300);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -1035,11 +1035,13 @@ final class L10nTranslationsZh_Hans {
                 "黑暗");
         table.put("Dark Favorites popup",
                 "深色收藏夹弹出窗口");
-        table.put("Days to remember a video. Zero removes the age limit. History keeps at most %1$s videos.",
-                "记住视频的日子。零消除了年龄限制。历史最多保留 %1$s 个视频.");
+        table.put("Dark LIVE panels in dark mode",
+                "深色模式下的深色 LIVE 面板");
     }
 
     private static void fill8(Map<String, String> table) {
+        table.put("Days to remember a video. Zero removes the age limit. History keeps at most %1$s videos.",
+                "记住视频的日子。零消除了年龄限制。历史最多保留 %1$s 个视频.");
         table.put("Days. Zero keeps every age. Posts without a usable timestamp, including future posts, stay visible.",
                 "天。零保留着每个年龄。没有可用时间戳的帖子（包括未来的帖子）保持可见.");
         table.put("Default",
@@ -1158,11 +1160,11 @@ final class L10nTranslationsZh_Hans {
                 "输入真或假.");
         table.put("Enter up to %1$d comma-separated speeds from %2$s to %3$s",
                 "输入从 %2$s 到 %3$s 的最多 %1$d 逗号分隔速度");
-        table.put("Enter who to message below to start.",
-                "在下方输入要向谁发送消息即可开始.");
     }
 
     private static void fill9(Map<String, String> table) {
+        table.put("Enter who to message below to start.",
+                "在下方输入要向谁发送消息即可开始.");
         table.put("Entry %1$d has a field with the wrong data type.",
                 "条目 %1$d 有一个数据类型错误的字段.");
         table.put("Entry %1$d isn't an object.",
@@ -1281,11 +1283,11 @@ final class L10nTranslationsZh_Hans {
                 "为你");
         table.put("For You, Following and the other feed tabs stay behind a calm panel and won't swipe. Messages, profiles and search work as usual, a link to one video still opens that video, and the app opens on Inbox instead of the feed.",
                 "对于您来说，关注和其他信息流选项卡保留在平静的面板后面并且不会滑动。消息、个人资料和搜索照常工作，指向一个视频的链接仍然会打开该视频，并且应用程序会在收件箱而不是信息流中打开.");
-        table.put("Forced %1$d gates of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.",
-                "强制 %2$d 的 %1$d 门。其余的不采用 true 或 false 值。重新启动 TikTok 以应用此操作.");
     }
 
     private static void fill10(Map<String, String> table) {
+        table.put("Forced %1$d gates of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.",
+                "强制 %2$d 的 %1$d 门。其余的不采用 true 或 false 值。重新启动 TikTok 以应用此操作.");
         table.put("Forced %1$d gates. Restart TikTok to apply this.",
                 "强制 %1$d 门。重新启动 TikTok 以应用此操作.");
         table.put("Forced 1 gate of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.",
@@ -1404,11 +1406,11 @@ final class L10nTranslationsZh_Hans {
                 "隐藏 TikTok 标记为付费合作伙伴或促销内容的直播.");
         table.put("Hide LIVEs that TikTok tags with a game or a gaming category.",
                 "隐藏带有游戏或游戏类别标记的 TikTok 的 LIVE.");
-        table.put("Hide LIVEs that sell products or carry a TikTok Shop tag.",
-                "隐藏销售产品或带有 TikTok 商店标签的 LIVE.");
     }
 
     private static void fill11(Map<String, String> table) {
+        table.put("Hide LIVEs that sell products or carry a TikTok Shop tag.",
+                "隐藏销售产品或带有 TikTok 商店标签的 LIVE.");
         table.put("Hide Search this image prompts",
                 "隐藏搜索此图片提示");
         table.put("Hide Series",
@@ -1527,11 +1529,11 @@ final class L10nTranslationsZh_Hans {
                 "隐藏搜索奖励");
         table.put("Hide search suggestions above comments",
                 "隐藏评论上方的搜索建议");
-        table.put("Hide share actions",
-                "隐藏分享操作");
     }
 
     private static void fill12(Map<String, String> table) {
+        table.put("Hide share actions",
+                "隐藏分享操作");
         table.put("Hide sharing apps",
                 "隐藏共享应用程序");
         table.put("Hide shopping LIVEs",
@@ -1650,11 +1652,11 @@ final class L10nTranslationsZh_Hans {
                 "隐藏个人资料中“添加朋友”旁边的紫色奖励按钮.");
         table.put("Hide the question cards TikTok slides over a video near its end.",
                 "将问题卡 TikTok 隐藏在视频接近结尾处的幻灯片上.");
-        table.put("Hide the question cards TikTok sometimes puts in a comment list to ask what you think.",
-                "隐藏问题卡 TikTok 有时会放入评论列表来询问您的想法.");
     }
 
     private static void fill13(Map<String, String> table) {
+        table.put("Hide the question cards TikTok sometimes puts in a comment list to ask what you think.",
+                "隐藏问题卡 TikTok 有时会放入评论列表来询问您的想法.");
         table.put("Hide the quick emoji row and automatic sticker suggestions that appear while you type. The emoji and sticker buttons still work.",
                 "隐藏键入时出现的快速表情符号行和自动贴纸建议。表情符号和贴纸按钮仍然有效.");
         table.put("Hide the red counts and dots on every bottom tab, Inbox and Profile included, and the bubble over Inbox that counts new likes, followers, comments and who's LIVE. The inbox itself still shows what came in.",
@@ -1773,11 +1775,11 @@ final class L10nTranslationsZh_Hans {
                 "每次边缘按压会使视频移动多远.");
         table.put("How long each photo stays on screen in a video made from a photo post.",
                 "由照片帖子制作的视频中每张照片在屏幕上停留的时间.");
-        table.put("How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.",
-                "下次视频被隐藏之前您观看了多少视频。几秒钟后零开始计数.");
     }
 
     private static void fill14(Map<String, String> table) {
+        table.put("How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.",
+                "下次视频被隐藏之前您观看了多少视频。几秒钟后零开始计数.");
         table.put("How wide each edge strip is, as a percent of the screen width.",
                 "每个边缘条的宽度，以屏幕宽度的百分比表示.");
         table.put("Hushfeed",
@@ -1896,11 +1898,11 @@ final class L10nTranslationsZh_Hans {
                 "将视频排除在观看历史记录之外");
         table.put("Keep watching in a small window",
                 "继续在小窗口观看");
-        table.put("Keep what you search for out of the search history TikTok saves on this phone. Searches already there stay until you delete them, and TikTok's servers may still keep their own record.",
-                "将您搜索的内容保留在此手机上保存的搜索历史记录 TikTok 之外。已有的搜索将一直保留到您删除它们为止，并且 TikTok 的服务器可能仍保留其自己的记录.");
     }
 
     private static void fill15(Map<String, String> table) {
+        table.put("Keep what you search for out of the search history TikTok saves on this phone. Searches already there stay until you delete them, and TikTok's servers may still keep their own record.",
+                "将您搜索的内容保留在此手机上保存的搜索历史记录 TikTok 之外。已有的搜索将一直保留到您删除它们为止，并且 TikTok 的服务器可能仍保留其自己的记录.");
         table.put("Keeps logging until you turn it off, even after a restart. TikTok can feel slower while it's on.",
                 "持续记录直到您将其关闭，即使在重新启动后也是如此。 TikTok 在开启时会感觉变慢.");
         table.put("Kept to %1$s, the nearest value this row allows",
@@ -2019,11 +2021,11 @@ final class L10nTranslationsZh_Hans {
                 "加载更多");
         table.put("Loaded current values. Loading all known gates…",
                 "加载当前值。正在加载所有已知的门…");
-        table.put("Loaded values are still being read. Try again in a moment.",
-                "仍在读取加载的值。稍后再试一次.");
     }
 
     private static void fill16(Map<String, String> table) {
+        table.put("Loaded values are still being read. Try again in a moment.",
+                "仍在读取加载的值。稍后再试一次.");
         table.put("Loaded-value file export failed",
                 "加载值文件导出失败");
         table.put("Loading cancelled. The list is incomplete.",
@@ -2142,11 +2144,11 @@ final class L10nTranslationsZh_Hans {
                 "更多选择");
         table.put("More than %1$d comments were loaded, so the rest aren't in the file.",
                 "已加载超过 %1$d 注释，因此其余注释不在文件中.");
-        table.put("Move down",
-                "下移");
     }
 
     private static void fill17(Map<String, String> table) {
+        table.put("Move down",
+                "下移");
         table.put("Move left",
                 "向左移动");
         table.put("Move right",
@@ -2265,11 +2267,11 @@ final class L10nTranslationsZh_Hans {
                 "没有记录");
         table.put("Normal",
                 "正常");
-        table.put("Normal-weight captions",
-                "正常粗细的字幕");
     }
 
     private static void fill18(Map<String, String> table) {
+        table.put("Normal-weight captions",
+                "正常粗细的字幕");
         table.put("Not a handle or id, so ignored: %1$s",
                 "不是句柄或 ID，因此被忽略：%1$s");
         table.put("Not a part Hushfeed fills in, so it's kept as typed: %1$s",
@@ -2388,11 +2390,11 @@ final class L10nTranslationsZh_Hans {
                 "打开 TikTok 于");
         table.put("Open a share sheet once, then return here to choose its actions.",
                 "打开共享表一次，然后返回此处选择其操作.");
-        table.put("Open and close TikTok's screens without their slide. Swipes inside a screen still follow your finger.",
-                "打开和关闭 TikTok 的屏幕，无需滑动。在屏幕内滑动仍会跟随您的手指.");
     }
 
     private static void fill19(Map<String, String> table) {
+        table.put("Open and close TikTok's screens without their slide. Swipes inside a screen still follow your finger.",
+                "打开和关闭 TikTok 的屏幕，无需滑动。在屏幕内滑动仍会跟随您的手指.");
         table.put("Open comments",
                 "打开评论");
         table.put("Open external links directly",
@@ -2511,11 +2513,11 @@ final class L10nTranslationsZh_Hans {
                 "选择全部");
         table.put("Pick apps to add to the Share via row, before More. Each gets the same link the other apps get.",
                 "在“更多”之前选择要添加到“通过行共享”的应用程序。每个应用程序都获得与其他应用程序获得的相同链接.");
-        table.put("Pick for saving",
-                "选择保存");
     }
 
     private static void fill20(Map<String, String> table) {
+        table.put("Pick for saving",
+                "选择保存");
         table.put("Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.",
                 "选择要从共享表中删除的操作。您手动输入但 TikTok 尚未显示的姓名仍保留在上面的列表中.");
         table.put("Pick the buttons to take off the column. The rest stay where they are.",
@@ -2634,11 +2636,11 @@ final class L10nTranslationsZh_Hans {
                 "代理端口");
         table.put("Proxy type",
                 "代理类型");
-        table.put("Proxy user name",
-                "代理用户名");
     }
 
     private static void fill21(Map<String, String> table) {
+        table.put("Proxy user name",
+                "代理用户名");
         table.put("Public",
                 "公共");
         table.put("Pulling down at the top of For You no longer reloads it.",
@@ -2757,11 +2759,11 @@ final class L10nTranslationsZh_Hans {
                 "在后台重播");
         table.put("Report a problem",
                 "报告问题");
-        table.put("Report saved to %1$s",
-                "报告保存至 %1$s");
     }
 
     private static void fill22(Map<String, String> table) {
+        table.put("Report saved to %1$s",
+                "报告保存至 %1$s");
         table.put("Repost with a comment",
                 "重新发布并发表评论");
         table.put("Required",
@@ -2880,11 +2882,11 @@ final class L10nTranslationsZh_Hans {
                 "在视频旁边保存详细信息");
         table.put("Save every photo in the post at full size as a JPEG, not as the screen shows it.",
                 "将帖子中的每张照片以全尺寸保存为 JPEG，而不是屏幕显示的那样.");
-        table.put("Save field values",
-                "保存字段值");
     }
 
     private static void fill23(Map<String, String> table) {
+        table.put("Save field values",
+                "保存字段值");
         table.put("Save full report",
                 "保存完整报告");
         table.put("Save in which quality?",
@@ -3003,11 +3005,11 @@ final class L10nTranslationsZh_Hans {
                 "保存设置备份");
         table.put("Saving the cover",
                 "保存封面");
-        table.put("Saving the frame",
-                "保存框架");
     }
 
     private static void fill24(Map<String, String> table) {
+        table.put("Saving the frame",
+                "保存框架");
         table.put("Saving the live photo's clip",
                 "保存实时照片的剪辑");
         table.put("Saving the profile picture",
@@ -3126,11 +3128,11 @@ final class L10nTranslationsZh_Hans {
                 "用逗号分隔句柄或用户 ID。当帖子类型、标签、年龄、长度或计数的过滤器将隐藏它们时，他们的视频会保留。广告、被屏蔽的创作者、文字、声音、国家/地区、字幕语言和观看的视频仍然适用.");
         table.put("Separate language codes with commas, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.",
                 "用逗号分隔语言代码，例如 en、es。原始字幕为另一种语言的视频被隐藏。没有字幕或仅翻译的视频将始终保留.");
-        table.put("Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.",
-                "用逗号分隔语言代码，例如 es、de。当 TikTok 为您翻译时，这些语言的标题和注释将保持原样。当您点击它时，查看翻译仍然有效。 TikTok 自己的不翻译列表保持原样.");
     }
 
     private static void fill25(Map<String, String> table) {
+        table.put("Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.",
+                "用逗号分隔语言代码，例如 es、de。当 TikTok 为您翻译时，这些语言的标题和注释将保持原样。当您点击它时，查看翻译仍然有效。 TikTok 自己的不翻译列表保持原样.");
         table.put("Separate names with commas, exactly as the share sheet shows them. These can be friends in the Send to row, apps such as Facebook, or actions such as Create group or Repost. The words copy, save and dislike also work before the sheet has opened.",
                 "用逗号分隔名称，与共享表中显示的名称完全相同。这些可以是“发送至”行中的朋友、Facebook 等应用程序或“创建群组”或“重新发布”等操作。复制、保存和不喜欢这些词在工作表打开之前也起作用.");
         table.put("Separate the titles of any other Inbox rows you want to hide with commas, spelled exactly. Use this for anything not listed above.",
@@ -3249,11 +3251,11 @@ final class L10nTranslationsZh_Hans {
                 "仅显示具有这么多观看次数的视频.");
         table.put("Show original",
                 "显示原件");
-        table.put("Show poll results before voting",
-                "投票前显示投票结果");
     }
 
     private static void fill26(Map<String, String> table) {
+        table.put("Show poll results before voting",
+                "投票前显示投票结果");
         table.put("Show search in LIVE",
                 "在 LIVE 中显示搜索");
         table.put("Show the Not interested button",
@@ -3372,11 +3374,11 @@ final class L10nTranslationsZh_Hans {
                 "播放器声音按钮保存的声音 ID，以逗号分隔。删除一个即可解锁.");
         table.put("Sound format",
                 "声音格式");
-        table.put("Sound link copied",
-                "声音链接已复制");
     }
 
     private static void fill27(Map<String, String> table) {
+        table.put("Sound link copied",
+                "声音链接已复制");
         table.put("Sound on",
                 "声音打开");
         table.put("Sound saved to %1$s",
@@ -3495,11 +3497,11 @@ final class L10nTranslationsZh_Hans {
                 "停止等待文件应用程序。目前还没有说明备份是否已保存.");
         table.put("Stopped waiting for the file app. It hasn't said yet whether the export was saved.",
                 "停止等待文件应用程序。目前尚未透露导出是否已保存.");
-        table.put("Stopped waiting for the file app. Nothing was changed.",
-                "停止等待文件应用程序。一切都没有改变.");
     }
 
     private static void fill28(Map<String, String> table) {
+        table.put("Stopped waiting for the file app. Nothing was changed.",
+                "停止等待文件应用程序。一切都没有改变.");
         table.put("Stopped waiting for the file app. Nothing was exported.",
                 "停止等待文件应用程序。没有任何东西被出口.");
         table.put("Stopped waiting for the file app. Nothing was imported.",
@@ -3618,11 +3620,11 @@ final class L10nTranslationsZh_Hans {
                 "该文件太大，无法作为设置备份。一切都没有改变.");
         table.put("That file isn't a font Android can use. Choose a .ttf or .otf file.",
                 "该文件不是 Android 可以使用的字体。选择 .ttf 或 .otf 文件.");
-        table.put("That file isn't a loaded-values export, or it's larger than the Lab accepts",
-                "该文件不是加载值导出，或者它大于实验室接受的大小");
     }
 
     private static void fill29(Map<String, String> table) {
+        table.put("That file isn't a loaded-values export, or it's larger than the Lab accepts",
+                "该文件不是加载值导出，或者它大于实验室接受的大小");
         table.put("That file isn't readable text, so it may have been damaged in transit. Nothing was altered.",
                 "该文件不是可读文本，因此可能在传输过程中已损坏。一切都没有改变.");
         table.put("That file lists more than %1$s videos. Nothing was restored.",
@@ -3741,11 +3743,11 @@ final class L10nTranslationsZh_Hans {
                 "信息流已锁定");
         table.put("The feed is open again",
                 "信息流再次开放");
-        table.put("The feed slowly dims during the last 45 seconds before the hold, so it doesn't come as a sudden stop. Needs a time budget and a hold.",
-                "在暂停前的最后 45 秒内，信号会慢慢变暗，因此不会突然停止。需要时间预算和保留.");
     }
 
     private static void fill30(Map<String, String> table) {
+        table.put("The feed slowly dims during the last 45 seconds before the hold, so it doesn't come as a sudden stop. Needs a time budget and a hold.",
+                "在暂停前的最后 45 秒内，信号会慢慢变暗，因此不会突然停止。需要时间预算和保留.");
         table.put("The feed stops when this video ends.",
                 "当该视频结束时，信息流将停止.");
         table.put("The feed waits for one tap before it starts playing again when you come back to the app. Messages, profiles and search are still one tap away.",
@@ -3864,11 +3866,11 @@ final class L10nTranslationsZh_Hans {
                 "没有要清除的诊断数据");
         table.put("There is no diagnostic data to put back",
                 "没有可放回的诊断数据");
-        table.put("There isn't enough room on the phone to record",
-                "手机空间不足，无法录音");
     }
 
     private static void fill31(Map<String, String> table) {
+        table.put("There isn't enough room on the phone to record",
+                "手机空间不足，无法录音");
         table.put("There was nothing to put back",
                 "没有什么可以放回去的");
         table.put("There were no saved videos to forget",
@@ -3987,11 +3989,11 @@ final class L10nTranslationsZh_Hans {
                 "TikTok 未锁定，因为此手机没有屏幕锁定");
         table.put("TikTok lets you pick a LIVE's quality only in some rooms. This adds Video quality to the menu in most of the others, and the next room opens at the quality you picked last.",
                 "TikTok 允许您仅在某些房间中选择 LIVE 的品质。这会将视频质量添加到大多数其他房间的菜单中，并且下一个房间会以您上次选择的质量打开.");
-        table.put("TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today.",
-                "TikTok 可能已收到此消息。交货尚未确认，因此今天不会重试.");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today.",
+                "TikTok 可能已收到此消息。交货尚未确认，因此今天不会重试.");
         table.put("TikTok only had its watermarked copy of this story, so that copy was saved to %1$s",
                 "TikTok 只有该故事的带水印副本，因此该副本被保存到 %1$s");
         table.put("TikTok read it",
@@ -4110,11 +4112,11 @@ final class L10nTranslationsZh_Hans {
                 "关闭双击即可做出反应");
         table.put("Turn off haptics",
                 "关闭触觉");
-        table.put("Turn off push notifications",
-                "关闭推送通知");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("Turn off push notifications",
+                "关闭推送通知");
         table.put("Turn off screen transitions",
                 "关闭屏幕过渡");
         table.put("Turn off swipe to reply",
@@ -4233,11 +4235,11 @@ final class L10nTranslationsZh_Hans {
                 "使用您自己的离线视频限制");
         table.put("Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.",
                 "使用 {creator}、{date} 和 {video_id} 构建名称。以 {creator}/ 开头，将每个创建者放入一个文件夹中。文件结尾已为您添加.");
-        table.put("Use {creator}, {date}, {video_id} and {index} to build the name. {index} numbers the photos of a slideshow saved with Download original photos. TikTok's own save button numbers files by folder instead. The file ending is added for you.",
-                "使用 {creator}、{date}、{video_id} 和 {index} 来构建名称。 {index} 对使用“下载原始照片”保存的幻灯片的照片进行编号。 TikTok 自己的保存按钮按文件夹对文件进行编号。文件结尾已为您添加.");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Use {creator}, {date}, {video_id} and {index} to build the name. {index} numbers the photos of a slideshow saved with Download original photos. TikTok's own save button numbers files by folder instead. The file ending is added for you.",
+                "使用 {creator}、{date}、{video_id} 和 {index} 来构建名称。 {index} 对使用“下载原始照片”保存的幻灯片的照片进行编号。 TikTok 自己的保存按钮按文件夹对文件进行编号。文件结尾已为您添加.");
         table.put("Use {date} and {media_id} to build the name. Works for image and video stickers.",
                 "使用 {date} 和 {media_id} 构建名称。适用于图像和视频贴纸.");
         table.put("User ID copied",
@@ -4356,13 +4358,15 @@ final class L10nTranslationsZh_Hans {
                 "启用“清晰显示”时，还隐藏底部的进度条、关闭按钮以及暂停和速度按钮。您仍然可以沿着底部边缘拖动以在视频中移动。要离开清晰显示，请按住视频并点击恢复显示，或捏合屏幕.");
         table.put("While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.",
                 "当诊断日志记录打开时，一条消息会指出 Hushfeed 失败的部分。关闭仅在报告中保留失败.");
-        table.put("Who to message",
-                "给谁发消息");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Who to message",
+                "给谁发消息");
         table.put("Window width needed to enable the layout. Restart TikTok to apply this.",
                 "启用布局所需的窗口宽度。重新启动 TikTok 以应用此操作.");
+        table.put("With TikTok in dark mode, a LIVE room still opens its share menu, fan club and other panels in light colors. This opens them dark.",
+                "TikTok 处于深色模式时，LIVE 房间仍会以浅色打开分享菜单、粉丝团和其他面板。开启后它们会以深色打开.");
         table.put("With the fade below 100, the buttons and caption stay on screen at that level in Clear display, and taps go through them to the video. Off, Clear display hides them the way it does at 100.",
                 "当淡入度低于 100 时，按钮和标题会以清晰显示的方式保留在屏幕上，点击即可浏览它们并观看视频。关闭时，清除显示会像 100 时那样隐藏它们.");
         table.put("Word rules only, not every feed filter:",
