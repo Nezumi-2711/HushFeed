@@ -1431,15 +1431,22 @@
       "wait": 8000
      },
      {
+      "open": "profile"
+     },
+     {
+      "wait": 4000
+     },
+     {
       "probe": "report",
       "expect": "Installed apps blocker: blocked (getInstalledPackages|getInstalledApplications|the launcher enumeration)",
-      "waitMs": 10000
+      "waitMs": 10000,
+      "precondition": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "Reads the export (probe report) instead of logcat because TikTok scans at start-up, before the runner's log marker. The scan happens only when TikTok asks (ad SDKs, app-link checks), so a quiet session can leave no line; rerun after opening a profile or search if it is empty. The description says opening another app from TikTok still works: that is not exercised (the runner cannot leave TikTok). Logged at Logger.printInfo, buffered by LogBufferManager.appendEvent."
+  "notes": "Reads the export (probe report) instead of logcat because TikTok scans at start-up, before the runner's log marker. The scan happens only when TikTok asks (ad SDKs, app-link checks), so the check also opens the own profile, and a session that still lists nothing reads inconclusive (the patch log's intercepted site count is the proof then, 2026-10-16). The description says opening another app from TikTok still works: that is not exercised (the runner cannot leave TikTok). Logged at Logger.printInfo, buffered by LogBufferManager.appendEvent."
  },
  {
   "name": "Block popups",
