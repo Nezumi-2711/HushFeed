@@ -19,7 +19,7 @@ import java.util.List;
 import app.morphe.extension.tiktok.settings.Settings;
 
 /**
- * Where the progress bar's time goes (#173): {@link #BESIDE} the bar, or {@link #ABOVE} its left
+ * Where the progress bar's time goes (#173): {@link #BESIDE} the bar, or {@link #ABOVE} its right
  * end, and the checks that decide whether the spot above is free.
  *
  * <p>Everything here works in window coordinates built from the views' own offsets, so it gives

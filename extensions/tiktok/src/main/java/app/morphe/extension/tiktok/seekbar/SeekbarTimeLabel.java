@@ -39,7 +39,8 @@ import app.morphe.extension.shared.Logger;
  * in several places without going through the bar's progress method.
  *
  * <p>With the time set to go above the bar (#173) the label stays in the row but takes no room
- * in it, so the bar keeps the whole row, and is drawn over the bar's left end instead. That only
+ * in it, so the bar keeps the whole row, and is drawn over the bar's right end instead, under
+ * the rail, where TikTok's caption stops short. That only
  * holds while the spot is free of text; see {@link #place}.
  *
  * <p>Screen readers skip it. The seek bar already reports the progress, and a label that changes
@@ -70,7 +71,7 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
     @Nullable private Boolean drawn;
     private String sizedFor = "";
 
-    /** Whether the time sits over the bar's left end instead of at the end of the row (#173). */
+    /** Whether the time sits over the bar's right end instead of at the end of the row (#173). */
     private boolean above;
     /** When the row last asked whether the spot above is free; 0 before the first ask. */
     private long checkedAt;
@@ -275,7 +276,7 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
     }
 
     /**
-     * Puts the time where the setting says (#173). Above the bar's left end only while that spot
+     * Puts the time where the setting says (#173). Above the bar's right end only while that spot
      * is free: a laid-out row, an ancestor that holds the spot, and no text on screen reaching
      * into it. Otherwise it steps back beside the bar and asks again after {@link
      * SeekbarTimePlacement#RECHECK_MS}, or at once when the row shows another video.
@@ -308,7 +309,7 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
         return above;
     }
 
-    /** The window rectangle just over the bar's left end, or null before the row is laid out. */
+    /** The window rectangle just over the bar's right end, or null before the row is laid out. */
     @Nullable
     private Rect spotAbove() {
         ViewGroup.LayoutParams params = getLayoutParams();
@@ -320,14 +321,15 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
         SeekbarTimePlacement.positionInWindow(frame, at);
         int[] rowAt = new int[2];
         SeekbarTimePlacement.positionInWindow(row, rowAt);
-        return new Rect(at[0], rowAt[1] - row.getHeight(), at[0] + params.width, rowAt[1]);
+        int right = at[0] + frame.getWidth();
+        return new Rect(right - params.width, rowAt[1] - row.getHeight(), right, rowAt[1]);
     }
 
     /**
      * The label stays the row's last child, so the row, Clear display's fade and the removal path
      * are the ones beside the bar uses. Its start margin cancels its width, which gives the bar
      * the whole row, and a translation (set before each draw, from the row's current layout)
-     * lifts it over the bar's left end.
+     * lifts it over the bar's right end.
      */
     private void goAbove() {
         above = true;
@@ -337,8 +339,8 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
             own.setMarginStart(-own.width);
             setLayoutParams(own);
         }
-        setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-        setPaddingRelative(Math.round(EDGE_DP * density()), 0, Math.round(GAP_DP * density()), 0);
+        setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+        setPaddingRelative(Math.round(GAP_DP * density()), 0, Math.round(EDGE_DP * density()), 0);
     }
 
     /** The label back at the end of the row, as it was attached. */
@@ -358,10 +360,10 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
         setPaddingRelative(Math.round(GAP_DP * density()), 0, Math.round(EDGE_DP * density()), 0);
     }
 
-    /** Keeps the lift over the bar's left end true to the row's current layout. */
+    /** Keeps the lift over the bar's right end true to the row's current layout. */
     private void alignAbove() {
         if (!above) return;
-        float dx = frame.getLeft() - getLeft();
+        float dx = frame.getRight() - getRight();
         float dy = -getHeight();
         if (getTranslationX() != dx) setTranslationX(dx);
         if (getTranslationY() != dy) setTranslationY(dy);
