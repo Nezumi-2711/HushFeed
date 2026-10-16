@@ -1,4 +1,4 @@
-## Unreleased
+## 0.75.0 (2026-10-16)
 
 * **TikTok:** Mit „Kommentarleiste bei geöffneten Videos ausblenden“ liegt die Like-Zahl nicht mehr auf dem Fortschrittsbalken, wenn Like der unterste verbliebene Button rechts ist (#145).
 
