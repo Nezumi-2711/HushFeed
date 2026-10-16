@@ -3758,7 +3758,16 @@
       "waitMs": 2500
      },
      {
-      "wait": 2500
+      "probe": "findtext",
+      "extras": {
+       "text": "^Add comment",
+       "match": "regex",
+       "click": "true"
+      },
+      "expect": "ok findtext found .*clicked=true"
+     },
+     {
+      "wait": 1800
      },
      {
       "probe": "labreport",
@@ -3767,6 +3776,9 @@
        "key": "audio_comment_publish"
       },
       "expect": "ok labreport key audio_comment_publish read=true"
+     },
+     {
+      "back": true
      },
      {
       "back": true
@@ -3851,7 +3863,7 @@
     "auto": true
    }
   ],
-  "notes": "The patch description says it has not been tried on a real account. Roadmap_Blocked.md 'Voice comment plays for a second account' records that recording, publication, playback and deletion once worked on one account, but a second viewer is unproven. Recording needs the microphone, so the audit only checks that the gate is consulted and (by eye) that the entry shows. The labreport step asks for the one gate: read=true is the pass condition, and the value it prints is the thing to read by hand. The test account already gets the mic with the switch off (seen 2026-10-16 in the focused box's tool row), so on it the shot proves the entry still builds and the gate check is what shows the switch is asked."
+  "notes": "The patch description says it has not been tried on a real account. Roadmap_Blocked.md 'Voice comment plays for a second account' records that recording, publication, playback and deletion once worked on one account, but a second viewer is unproven. Recording needs the microphone, so the audit only checks that the gate is consulted and (by eye) that the entry shows. The labreport step asks for the one gate: read=true is the pass condition, and the value it prints is the thing to read by hand. The test account already gets the mic with the switch off (seen 2026-10-16 in the focused box's tool row), so on it the shot proves the entry still builds and the gate check is what shows the switch is asked. audio_comment_publish is read lazily when the comment box's tool row is built, so the gate check focuses Add comment before reading the record (2026-10-16)."
  },
  {
   "name": "Expand activity list",
