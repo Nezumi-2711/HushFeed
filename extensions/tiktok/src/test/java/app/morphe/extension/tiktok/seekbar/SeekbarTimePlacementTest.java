@@ -439,6 +439,51 @@ public class SeekbarTimePlacementTest {
         assertEquals(WIDTH, frame.getWidth());
     }
 
+    /**
+     * 47.1.4's row on the Login2 emulator: no padding on the row, the seek bar straight in it with
+     * 32 px side margins, which are the whole gap. Left alone, the switch changed nothing there.
+     */
+    @Test
+    public void fullWidthTakesTheSeekBarsOwnSideMarginsOff() {
+        build();
+        bar.removeAllViews();
+        SeekBar seekBar = new SeekBar(context);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+        params.leftMargin = 32;
+        params.rightMargin = 32;
+        bar.addView(seekBar, params);
+        layoutAll();
+        assertEquals(32, seekBar.getLeft());
+        Settings.SEEKBAR_FULL_WIDTH.save(true);
+
+        SeekbarTime.onBarProgress(bar, 10f);
+        layoutAll();
+        assertEquals("the bar reaches the left edge", 0, seekBar.getLeft());
+        assertEquals("and the right one", WIDTH, seekBar.getRight());
+
+        Settings.SEEKBAR_FULL_WIDTH.save(false);
+        SeekbarTime.onBarProgress(bar, 11f);
+        layoutAll();
+        assertEquals(32, ((LinearLayout.LayoutParams) seekBar.getLayoutParams()).leftMargin);
+        assertEquals(32, ((LinearLayout.LayoutParams) seekBar.getLayoutParams()).rightMargin);
+        assertEquals(WIDTH - 32, seekBar.getRight());
+
+        // The seek bar inside build()'s frame gets the same.
+        build();
+        SeekBar inner = (SeekBar) ((ViewGroup) frame).getChildAt(0);
+        FrameLayout.LayoutParams innerParams = (FrameLayout.LayoutParams) inner.getLayoutParams();
+        innerParams.leftMargin = 12;
+        innerParams.rightMargin = 14;
+        inner.setLayoutParams(innerParams);
+        Settings.SEEKBAR_FULL_WIDTH.save(true);
+        SeekbarTime.onBarProgress(bar, 12f);
+        assertEquals(0, innerParams.leftMargin);
+        Settings.SEEKBAR_FULL_WIDTH.save(false);
+        SeekbarTime.onBarProgress(bar, 13f);
+        assertEquals(12, innerParams.leftMargin);
+        assertEquals(14, innerParams.rightMargin);
+    }
+
     @Test
     public void aRowWithNoMarginsOrFrameIsWidenedAndRestoredWithoutHarm() {
         LinearLayout lone = new LinearLayout(context);

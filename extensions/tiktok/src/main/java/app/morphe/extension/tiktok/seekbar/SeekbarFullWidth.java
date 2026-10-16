@@ -6,6 +6,7 @@ package app.morphe.extension.tiktok.seekbar;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsSeekBar;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -19,11 +20,12 @@ import app.morphe.extension.tiktok.settings.Settings;
  * A progress bar that runs from screen edge to screen edge (#173).
  *
  * <p>TikTok leaves a gap of its own at each end of the bar: the row's horizontal padding and
- * margins, and the padding around the frame that holds the seek bar. This takes those to zero on
+ * margins, the padding around the frame that holds the seek bar, and on 47.1.4 the seek bar's own
+ * side margins (32 px on the Login2 emulator, the whole gap there). This takes those to zero on
  * each progress tick while the switch is on (TikTok can write them again when it lays out
  * another video), and gives the first values back the moment the switch is off or Hushfeed is
- * paused. The seek bar itself and the frame's own margins are left alone, so dragging maps the
- * finger to the bar exactly as before.
+ * paused. The seek bar's own padding, which places its thumb at the ends, is left alone, so a
+ * drag still runs from one end of the bar to the other.
  */
 final class SeekbarFullWidth {
     /** What a row had before the first tick that widened it. */
@@ -43,6 +45,8 @@ final class SeekbarFullWidth {
         final int marginLeft, marginRight, marginStart, marginEnd;
         @Nullable final View frame;
         final int framePaddingLeft, framePaddingRight;
+        @Nullable final SideMargins frameMargins;
+        @Nullable final SideMargins seekBarMargins;
 
         Saved(LinearLayout row, @Nullable View frame) {
             rowPaddingLeft = row.getPaddingLeft();
@@ -58,7 +62,72 @@ final class SeekbarFullWidth {
             this.frame = frame;
             framePaddingLeft = frame != null ? frame.getPaddingLeft() : 0;
             framePaddingRight = frame != null ? frame.getPaddingRight() : 0;
+            frameMargins = SideMargins.of(frame);
+            View seekBar = seekBarIn(frame);
+            seekBarMargins = seekBar == frame ? null : SideMargins.of(seekBar);
         }
+    }
+
+    /** A view's horizontal margins as they were, to zero and to give back. */
+    private static final class SideMargins {
+        final View view;
+        final boolean relative;
+        final int left, right, start, end;
+
+        private SideMargins(View view, ViewGroup.MarginLayoutParams margins) {
+            this.view = view;
+            relative = margins.isMarginRelative();
+            left = margins.leftMargin;
+            right = margins.rightMargin;
+            start = margins.getMarginStart();
+            end = margins.getMarginEnd();
+        }
+
+        @Nullable
+        static SideMargins of(@Nullable View view) {
+            if (view == null || !(view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)) return null;
+            return new SideMargins(view, (ViewGroup.MarginLayoutParams) view.getLayoutParams());
+        }
+
+        void zero() {
+            if (!(view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)) return;
+            ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            boolean isRelative = margins.isMarginRelative();
+            if (margins.leftMargin == 0 && margins.rightMargin == 0
+                    && (!isRelative || (margins.getMarginStart() == 0 && margins.getMarginEnd() == 0))) return;
+            margins.leftMargin = 0;
+            margins.rightMargin = 0;
+            if (isRelative) {
+                margins.setMarginStart(0);
+                margins.setMarginEnd(0);
+            }
+            view.setLayoutParams(margins);
+        }
+
+        void restore() {
+            if (!(view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)) return;
+            ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            margins.leftMargin = left;
+            margins.rightMargin = right;
+            if (relative) {
+                margins.setMarginStart(start);
+                margins.setMarginEnd(end);
+            }
+            view.setLayoutParams(margins);
+        }
+    }
+
+    /** The seek bar the frame is or holds, the first one in tree order, or null. */
+    @Nullable
+    private static View seekBarIn(@Nullable View view) {
+        if (view instanceof AbsSeekBar) return view;
+        if (!(view instanceof ViewGroup)) return null;
+        ViewGroup group = (ViewGroup) view;
+        for (int i = 0; i < group.getChildCount(); i++) {
+            View found = seekBarIn(group.getChildAt(i));
+            if (found != null) return found;
+        }
+        return null;
     }
 
     /** Whether the row is widened right now. */
@@ -123,6 +192,8 @@ final class SeekbarFullWidth {
         if (frame != null && (frame.getPaddingLeft() != 0 || frame.getPaddingRight() != 0)) {
             frame.setPadding(0, frame.getPaddingTop(), 0, frame.getPaddingBottom());
         }
+        if (saved.frameMargins != null) saved.frameMargins.zero();
+        if (saved.seekBarMargins != null) saved.seekBarMargins.zero();
     }
 
     private static void restore(LinearLayout row, Saved saved) {
@@ -146,5 +217,7 @@ final class SeekbarFullWidth {
             frame.setPadding(saved.framePaddingLeft, frame.getPaddingTop(),
                     saved.framePaddingRight, frame.getPaddingBottom());
         }
+        if (saved.frameMargins != null) saved.frameMargins.restore();
+        if (saved.seekBarMargins != null) saved.seekBarMargins.restore();
     }
 }
