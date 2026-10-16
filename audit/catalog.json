@@ -15381,7 +15381,7 @@
     "key": "show_translation_settings",
     "default": false,
     "type": "bool",
-    "row": "Show translation options in Language settings"
+    "row": "Bring back TikTok's translation"
    }
   ],
   "surface": "comments",
@@ -15491,8 +15491,41 @@
     "auto": true
    },
    {
+    "id": "video-translations-bound",
+    "what": "With Bring back TikTok's translation on, TikTok's one read of feed_translation_reverse goes through the switch once the feed shows a video: HookStatus 'video translations' records what TikTok answered. On an account TikTok took translation from it says 'took translation off videos', and a foreign-language description then shows See translation (look by eye).",
+    "steps": [
+     {
+      "set": {
+       "show_translation_settings": "true"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "wait": 4000
+     },
+     {
+      "probe": "hookdetails",
+      "extras": {
+       "family": "video translations"
+      },
+      "expect": "TikTok (took translation off|left translation on) videos"
+     },
+     {
+      "set": {
+       "show_translation_settings": "false"
+      }
+     }
+    ],
+    "auto": true
+   },
+   {
     "id": "registered",
-    "what": "The patch registered its five switches.",
+    "what": "The patch registered its six switches.",
     "steps": [
      {
       "probe": "report",
@@ -15513,12 +15546,16 @@
      {
       "probe": "report",
       "expect": "registered_switches:[^\\n]*\\blanguagePageTranslations\\b"
+     },
+     {
+      "probe": "report",
+      "expect": "registered_switches:[^\\n]*\\bfeedTranslations\\b"
      }
     ],
     "auto": true
    }
   ],
-  "notes": "Translation only has work to do when the comments on screen are in another language than the target: with a phone in English and an all-English comment list the translator reads the page and ignores it ('loaded.batch ignored items=' lines), which still satisfies the first check's loaded.batch alternative but proves less. translate_into is left blank so TikTok's own target is used. Roadmap_Blocked.md '#143' tracks missing native Language/caption options on some accounts."
+  "notes": "Translation only has work to do when the comments on screen are in another language than the target: with a phone in English and an all-English comment list the translator reads the page and ignores it ('loaded.batch ignored items=' lines), which still satisfies the first check's loaded.batch alternative but proves less. translate_into is left blank so TikTok's own target is used. #143: the server sets feed_translation_reverse=1 and/or pure_feed_reverse per account. The first takes See translation off descriptions, captions, photo titles and stickers (every CLATranslatabilityServiceImpl check on 47.1.4) and hides the Language page rows. The second only hides the rows there. Bring back TikTok's translation answers both on the Language page and the first one everywhere (a restart is needed for videos, since TikTok keeps the first answer for the process)."
  },
  {
   "name": "Trust user certificates",

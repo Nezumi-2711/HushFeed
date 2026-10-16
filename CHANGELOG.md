@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** `Show translation options in Language settings` is now `Bring back TikTok's translation`, and it brings back See translation under video descriptions and in captions as well. TikTok takes translation away from some accounts with one setting on its side, which hid the button on videos along with the Language page rows. Turning it on asks for a restart now, since TikTok checks that setting once when it starts (#143).
+
 * **TikTok:** With `Log diagnostics` on, an exported report now notes each LIVE room TikTok enters and whether a LIVE comment went to that same room. It's for comments that show for you but never reach the room (#110). Room ids and what you typed stay out of it.
 
 * **TikTok:** A long video on a slow connection saves now instead of stopping with "The video couldn't be saved". Every save had two minutes, and a big file was cut off while it was still coming in. A download that keeps moving gets up to 20 minutes, and one that goes 30 seconds without any data still stops (#179).
