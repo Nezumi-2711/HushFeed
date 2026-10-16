@@ -697,6 +697,21 @@ public final class Probe extends Instrumentation {
                             break;
                         }
                         String report = String.valueOf(learn.getMethod("stopAndBuildReport").invoke(null));
+                        // -e key <name>: only that gate's entry, or read=false when the recording
+                        // never saw it. A whole report runs to 30 parts and more.
+                        String key = intent.getStringExtra("key");
+                        if (key != null) {
+                            int at = report.indexOf("\"key\": \"" + key + "\"");
+                            if (at < 0) {
+                                Log.i(TAG, "ok labreport key " + key + " read=false");
+                            } else {
+                                int open = report.lastIndexOf('{', at);
+                                int close = report.indexOf('}', at);
+                                Log.i(TAG, "ok labreport key " + key + " read=true "
+                                        + report.substring(open, close + 1).replaceAll("\\s+", " "));
+                            }
+                            break;
+                        }
                         int size = 3000;
                         int parts = Math.max(1, (report.length() + size - 1) / size);
                         for (int part = 0; part < parts; part++) {
