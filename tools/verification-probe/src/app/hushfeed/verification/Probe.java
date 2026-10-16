@@ -1156,6 +1156,16 @@ public final class Probe extends Instrumentation {
                         // did. Logcat is not: the release extension is minified and its Log calls
                         // do not reach the buffer, so this is how a device check reads it. The
                         // log takes about 4 KB a line, so a long export goes out in pieces.
+                        // Its list of registered switches is filled in when Hushfeed's settings
+                        // open, where a person exports the log. A check asks from any screen, so
+                        // the list is filled in here the same way first.
+                        Method registered = loader.loadClass(
+                                "app.morphe.extension.tiktok.settings.SettingsStatus")
+                                .getDeclaredMethod("registered");
+                        registered.setAccessible(true);
+                        loader.loadClass("app.morphe.extension.shared.diagnostics.BuildDetails")
+                                .getMethod("setRegisteredSwitches", java.util.Collection.class)
+                                .invoke(null, registered.invoke(null));
                         String text = String.valueOf(loader.loadClass(
                                 "app.morphe.extension.shared.settings.preference.LogBufferManager")
                                 .getMethod("buildExportText").invoke(null));
