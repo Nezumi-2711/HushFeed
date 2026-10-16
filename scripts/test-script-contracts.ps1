@@ -1521,7 +1521,9 @@ try {
         $changelog = $changelog.Substring(0, $body.Index) + "`n$group`n`n" +
             $changelog.Substring($body.Index + $body.Length)
         Set-Content -LiteralPath $changelogPath -Value $changelog -Encoding UTF8 -NoNewline
-        $document.description += "`n`n$group"
+        $existing = [regex]::Match([string]$document.description, '(?m)^### ')
+        $facts = if ($existing.Success) { ([string]$document.description).Substring(0, $existing.Index).TrimEnd() } else { [string]$document.description }
+        $document.description = $facts + "`n`n$group"
         Set-Content -LiteralPath $indexPath -Value ($document | ConvertTo-Json -Depth 100) -Encoding UTF8 -NoNewline
     }
 
@@ -1545,11 +1547,22 @@ try {
     # this branch only ever ran on a real push; on 2026-09-26 it held two bugs the contracts passed:
     # one published target read as a string ("TikTok 4"), and a lookahead that refused "47.0.3." at
     # the end of a sentence.
+    $beforeLag = (Get-Content -LiteralPath (Join-Path $factsRoot 'patches-bundle.json') -Raw | ConvertFrom-Json).description
     Set-FactsFile 'patches-bundle.json' {
         param($text)
-        [regex]::Replace(($text -replace '\b\d+ patches\b', '90 patches'),
-            'TikTok\s+\d+(?:\.\d+)+(?:(?:,\s*|,?\s+and\s+)\d+(?:\.\d+)+)*', 'TikTok 47.0.3')
+        $document = $text | ConvertFrom-Json
+        $description = [string]$document.description
+        $groups = [regex]::Match($description, '(?m)^### ')
+        $facts = if ($groups.Success) { $description.Substring(0, $groups.Index) } else { $description }
+        $suffix = if ($groups.Success) { $description.Substring($groups.Index) } else { '' }
+        $document.description = [regex]::Replace(($facts -replace '\b\d+ patches\b', '90 patches'),
+            'TikTok\s+\d+(?:\.\d+)+(?:(?:,\s*|,?\s+and\s+)\d+(?:\.\d+)+)*', 'TikTok 47.0.3') + $suffix
+        $document | ConvertTo-Json -Depth 100
     }
+    $afterLag = (Get-Content -LiteralPath (Join-Path $factsRoot 'patches-bundle.json') -Raw | ConvertFrom-Json).description
+    $groupsBeforeLag = [regex]::Match($beforeLag, '(?ms)^### .*').Value
+    Assert-True ([regex]::Match($afterLag, '(?ms)^### .*').Value -ceq $groupsBeforeLag) `
+        'The lagging-index fixture changed published changelog evidence along with release facts.'
     Set-FactsFile $bugFormRelative {
         param($text) $text -replace ('Version ' + [regex]::Escape($catalogVersion) + ' for TikTok \d+(?:\.\d+)+'), "Version $catalogVersion for TikTok 47.0.3"
     }
