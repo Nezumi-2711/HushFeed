@@ -65,11 +65,11 @@ if (-not $Catalog) { $Catalog = Join-Path $PSScriptRoot 'catalog.json' }
 
 # Words on a control that reaches other people. A tap whose target starts with one of these is
 # refused. "Following" is on the list because on someone else's profile that button unfollows.
-$outwardWords = '^(follow|follows|following|followers|follow back|unfollow|add|add friend|message|send|post|repost|share to|duet|stitch|go live|buy|subscribe|request|join|like|liked|reply|gift|vote|invite|block|report)\b'
+$outwardWords = '^(follow|follows|following|followers|follow back|unfollow|add(?! comment)|add friend|message|send|post|repost|share to|duet|stitch|go live|buy|subscribe|request|join|like|liked|reply|gift|vote|invite|block|report)\b'
 
 function Write-Summary {
     param($Run)
-    $counts = [ordered]@{ pass = 0; fail = 0; review = 0; error = 0; skipped = 0 }
+    $counts = [ordered]@{ pass = 0; fail = 0; review = 0; inconclusive = 0; error = 0; skipped = 0 }
     foreach ($patch in $Run.patches) {
         foreach ($check in $patch.checks) {
             $status = [string]$check.status
@@ -117,7 +117,7 @@ if ($Validate) {
     Get-ChildItem -Path (Join-Path $root 'extensions') -Recurse -Filter *.java | Where-Object { $_.FullName -match '[\\/]src[\\/]main[\\/]' } | ForEach-Object {
         foreach ($found in [regex]::Matches((Get-Content -LiteralPath $_.FullName -Raw), 'Setting\(\s*"([A-Za-z0-9_]+)"')) { [void]$keys.Add($found.Groups[1].Value) }
     }
-    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'back', 'probe', 'log', 'logNot', 'shot', 'apk'
+    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk'
     $apkKinds = 'entry-empty', 'entry-absent', 'entry-present', 'manifest', 'resources', 'icon-xml', 'dex-string'
     foreach ($entry in $entries) {
         $where = "'$($entry.name)'"
@@ -141,7 +141,7 @@ if ($Validate) {
                         if ($surface -notin 'feed', 'profile', 'inbox', 'friends', 'settings' -and $surface -notlike 'search:*' -and $surface -notlike 'url:*') { & $bad "can't open '$surface'" }
                     }
                     'swipe' { if ([string]$step.swipe -notin 'up', 'down', 'left', 'right') { & $bad "swipes '$($step.swipe)'" } }
-                    'tap' { if (-not ($step.tap.text -or $step.tap.desc -or $step.tap.id)) { & $bad 'taps with no text, desc or id' } }
+                    { $_ -in 'tap', 'longpress' } { $target = $step.$kind; if (-not ($target.text -or $target.desc -or $target.id)) { & $bad "a $kind with no text, desc or id" } }
                     'apk' { if ([string]$step.apk -notin $apkKinds) { & $bad "unknown apk check '$($step.apk)'" } }
                     'shot' { if (-not $step.review) { & $bad 'a shot with no review text' } }
                 }
@@ -386,6 +386,7 @@ function Get-ScreenSize {
 function Get-Focus { "$(Invoke-DeviceShell 'dumpsys window' | Select-String 'mCurrentFocus' | Select-Object -Last 1)".Trim() }
 
 function Restart-TikTok {
+    $script:settingsOpen = $false
     Invoke-DeviceShell "am force-stop $package" | Out-Null
     Start-Sleep -Milliseconds 800
     $marker = Write-Marker
@@ -400,12 +401,14 @@ function Restart-TikTok {
     Start-Sleep -Seconds 7
 }
 
-# A tap on the node a fresh uiautomator dump finds. A row below the fold is scrolled to, a few
-# screens at most ("scroll": 0 in the target turns that off).
-function Invoke-DumpTap($Target) {
-    $screens = if ($null -ne $Target.scroll) { [int]$Target.scroll } else { 5 }
+# A tap on the node a fresh uiautomator dump finds. On Hushfeed's settings pages a row below the
+# fold is scrolled to, a few screens at most. Elsewhere nothing scrolls unless the target asks
+# ("scroll": n), since TikTok's lists run into suggested accounts.
+$script:settingsOpen = $false
+function Invoke-DumpTap($Target, [int]$HoldMs = 0) {
+    $screens = if ($null -ne $Target.scroll) { [int]$Target.scroll } elseif ($script:settingsOpen) { 5 } else { 0 }
     for ($attempt = 0; ; $attempt++) {
-        try { return Invoke-DumpTapOnce $Target }
+        try { return Invoke-DumpTapOnce $Target $HoldMs }
         catch {
             if ($attempt -ge $screens -or $_.Exception.Message -notlike 'nothing on screen*') { throw }
             $w, $h = Get-ScreenSize
@@ -415,8 +418,9 @@ function Invoke-DumpTap($Target) {
     }
 }
 
-# One dump and one tap, refusing anything that reaches other people.
-function Invoke-DumpTapOnce($Target) {
+# One dump and one tap (a press held for HoldMs when it is above 0), refusing anything that
+# reaches other people.
+function Invoke-DumpTapOnce($Target, [int]$HoldMs = 0) {
     Invoke-DeviceShell 'rm -f /sdcard/hushfeed-audit.xml' | Out-Null
     Invoke-DeviceShell 'uiautomator dump /sdcard/hushfeed-audit.xml' | Out-Null
     $xml = (Invoke-DeviceShell 'cat /sdcard/hushfeed-audit.xml') -join ''
@@ -433,6 +437,10 @@ function Invoke-DumpTapOnce($Target) {
         if ($node.Value -notmatch 'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"') { continue }
         $x = ([int]$Matches[1] + [int]$Matches[3]) / 2
         $y = ([int]$Matches[2] + [int]$Matches[4]) / 2
+        if ($HoldMs -gt 0) {
+            Invoke-DeviceShell "input swipe $x $y $x $y $HoldMs" | Out-Null
+            return "held $attribute ~ $pattern at $x,$y for $HoldMs ms"
+        }
         Invoke-DeviceShell "input tap $x $y" | Out-Null
         return "tapped $attribute ~ $pattern at $x,$y"
     }
@@ -440,6 +448,7 @@ function Invoke-DumpTapOnce($Target) {
 }
 
 function Open-Surface([string]$Where) {
+    $script:settingsOpen = $Where -eq 'settings'
     $tabs = @{ feed = '^Home'; friends = '^Friends'; inbox = '^Inbox'; profile = '^Profile' }
     if ($tabs.ContainsKey($Where)) {
         # The tabs live on the main screen. Anything else in front (a search page a deep link
@@ -541,16 +550,32 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                 'wait' { Start-Sleep -Milliseconds ([int]$step.wait) }
                 'back' { Invoke-DeviceShell 'input keyevent KEYCODE_BACK' | Out-Null; Start-Sleep -Milliseconds 1200 }
                 'tap' { $result.evidence += (Invoke-DumpTap $step.tap); Start-Sleep -Milliseconds 1500 }
+                'longpress' { $result.evidence += (Invoke-DumpTap $step.longpress 900); Start-Sleep -Milliseconds 1500 }
                 'probe' {
                     $wait = if ($step.waitMs) { [int]$step.waitMs } else { 3000 }
-                    $answer = Invoke-AuditProbe ([string]$step.probe) $step.extras $wait ([string]$step.until)
-                    $result.evidence += Save-Evidence "$tag-$index-$($step.probe)" $answer
-                    if (Test-Pattern $answer "^failed $([regex]::Escape([string]$step.probe))") {
-                        throw "probe $($step.probe) failed: $((($answer -split "`n") | Where-Object { $_ -match '^failed |Exception' } | Select-Object -First 2) -join ' ')"
+                    # "retrySwipe": n moves the feed on to the next video up to n times until the
+                    # answer matches, for a check that needs a certain kind of video in front.
+                    $swipesLeft = if ($step.retrySwipe) { [int]$step.retrySwipe } else { 0 }
+                    while ($true) {
+                        $answer = Invoke-AuditProbe ([string]$step.probe) $step.extras $wait ([string]$step.until)
+                        $result.evidence += Save-Evidence "$tag-$index-$($step.probe)" $answer
+                        if (Test-Pattern $answer "^failed $([regex]::Escape([string]$step.probe))") {
+                            throw "probe $($step.probe) failed: $((($answer -split "`n") | Where-Object { $_ -match '^failed |Exception' } | Select-Object -First 2) -join ' ')"
+                        }
+                        if (-not $answer) { throw "probe $($step.probe) never answered" }
+                        $miss = if ($step.expect -and -not (Test-Pattern $answer $step.expect)) { "probe $($step.probe) answer has nothing matching $($step.expect)" }
+                            elseif ($step.expectNot -and (Test-Pattern $answer $step.expectNot)) { "probe $($step.probe) answer matches $($step.expectNot)" }
+                        if (-not $miss) { break }
+                        if ($swipesLeft -le 0) {
+                            # A precondition that never held says nothing about the patch.
+                            if ($step.precondition) { throw [System.InvalidOperationException]::new("precondition: $miss") }
+                            throw $miss
+                        }
+                        $swipesLeft--
+                        $w, $h = Get-ScreenSize
+                        Invoke-DeviceShell "input swipe $([int]($w / 2)) $([int]($h * 0.72)) $([int]($w / 2)) $([int]($h * 0.28)) 220" | Out-Null
+                        Start-Sleep -Milliseconds 2200
                     }
-                    if (-not $answer) { throw "probe $($step.probe) never answered" }
-                    if ($step.expect -and -not (Test-Pattern $answer $step.expect)) { throw "probe $($step.probe) answer has nothing matching $($step.expect)" }
-                    if ($step.expectNot -and (Test-Pattern $answer $step.expectNot)) { throw "probe $($step.probe) answer matches $($step.expectNot)" }
                 }
                 { $_ -in 'log', 'logNot' } {
                     $within = if ($step.within) { [int]$step.within } else { 8000 }
@@ -575,7 +600,7 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                 default { throw "unknown step $kind" }
             }
         } catch {
-            $result.status = 'fail'
+            $result.status = if ($_.Exception.Message -like 'precondition: *') { 'inconclusive' } else { 'fail' }
             $result.failures += "step $index ($kind): $($_.Exception.Message)"
             if ($deviceUp -and $kind -ne 'apk') {
                 try { $result.evidence += Save-Shot "$tag-failed-step$index" } catch { }

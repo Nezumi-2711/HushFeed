@@ -208,6 +208,12 @@
       "wait": 2500
      },
      {
+      "probe": "videoinfo",
+      "expect": "ad=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
       "probe": "finddesc",
       "extras": {
        "desc": "Share",
@@ -241,6 +247,12 @@
       "wait": 2500
      },
      {
+      "probe": "videoinfo",
+      "expect": "ad=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
       "probe": "finddesc",
       "extras": {
        "desc": "Share",
@@ -253,18 +265,18 @@
       "wait": 1800
      },
      {
-      "probe": "findtext",
-      "extras": {
-       "text": "Save cover"
-      },
-      "expect": "ok findtext found"
-     },
-     {
       "probe": "hookdetails",
       "extras": {
        "family": "cover saves"
       },
       "expect": "share sheet button"
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "Save cover"
+      },
+      "expect": "ok findtext found"
      },
      {
       "back": true
@@ -287,10 +299,10 @@
       }
      },
      {
-      "open": "profile"
+      "open": "url:https://www.tiktok.com/@tiktok"
      },
      {
-      "wait": 2500
+      "wait": 5000
      },
      {
       "probe": "finddesc",
@@ -306,13 +318,10 @@
       }
      },
      {
-      "open": "feed"
+      "open": "url:https://www.tiktok.com/@tiktok"
      },
      {
-      "open": "profile"
-     },
-     {
-      "wait": 2500
+      "wait": 5000
      },
      {
       "probe": "finddesc",
@@ -347,6 +356,17 @@
      },
      {
       "wait": 1500
+     },
+     {
+      "tap": {
+       "text": "^Video download quality$"
+      }
+     },
+     {
+      "wait": 1200
+     },
+     {
+      "back": true
      },
      {
       "probe": "findtext",
@@ -1422,8 +1442,7 @@
     "steps": [
      {
       "set": {
-       "hide_live_bubble": "true",
-       "morphe_debug": "true"
+       "hide_live_bubble": "true"
       }
      },
      {
@@ -1447,8 +1466,7 @@
      },
      {
       "set": {
-       "hide_live_bubble": "false",
-       "morphe_debug": "false"
+       "hide_live_bubble": "false"
       }
      }
     ],
@@ -1874,8 +1892,7 @@
     "steps": [
      {
       "set": {
-       "comment_sort_controls": "false",
-       "morphe_debug": "true"
+       "comment_sort_controls": "false"
       }
      },
      {
@@ -1886,7 +1903,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -1913,7 +1932,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -1929,8 +1950,7 @@
      },
      {
       "set": {
-       "comment_sort_controls": "false",
-       "morphe_debug": "false"
+       "comment_sort_controls": "false"
       }
      }
     ],
@@ -1954,7 +1974,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -2091,7 +2113,6 @@
     "steps": [
      {
       "set": {
-       "morphe_debug": "true",
        "comment_keyword_filter": "true",
        "comment_blocked_keywords": "the,you,and,this,love,lol,for"
       }
@@ -2101,7 +2122,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -2125,7 +2148,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -2141,8 +2166,7 @@
      },
      {
       "set": {
-       "comment_blocked_keywords": "",
-       "morphe_debug": "false"
+       "comment_blocked_keywords": ""
       }
      }
     ],
@@ -2162,7 +2186,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -2199,7 +2225,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -2480,12 +2508,11 @@
    },
    {
     "id": "copy-blanks-prefix",
-    "what": "After Copy on a comment's menu, HookStatus 'comment copy' records 'menu prefix blanked'.",
+    "what": "Long-press a comment, tap Copy (the clipboard only): Hook status 'comment copy' records 'menu prefix blanked'.",
     "steps": [
      {
       "set": {
-       "copy_comments_without_username": "true",
-       "morphe_debug": "true"
+       "copy_comments_without_username": "true"
       }
      },
      {
@@ -2493,7 +2520,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -2501,8 +2530,20 @@
       "waitMs": 2500
      },
      {
-      "shot": "comment-menu",
-      "review": "Long-press a comment (do not post anything), choose Copy, then the runner's next step reads the hook status. This screenshot is only the menu proof; the pass/fail is the hookdetails line below."
+      "longpress": {
+       "text": "^(\\d+[smhdw]|\\d{1,2}-\\d{2}|\\d{4}-\\d{1,2}-\\d{1,2})( |$)"
+      }
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "tap": {
+       "text": "^Copy$"
+      }
+     },
+     {
+      "wait": 1200
      },
      {
       "probe": "hookdetails",
@@ -2516,8 +2557,7 @@
      },
      {
       "set": {
-       "copy_comments_without_username": "true",
-       "morphe_debug": "false"
+       "copy_comments_without_username": "false"
       }
      }
     ],
@@ -2927,11 +2967,6 @@
     "what": "With Log diagnostics on, debug lines reach logcat ('Inbox filter installed' when the Inbox opens); with it off they do not.",
     "steps": [
      {
-      "set": {
-       "morphe_debug": "false"
-      }
-     },
-     {
       "restart": true
      },
      {
@@ -2948,11 +2983,6 @@
       "within": 3000
      },
      {
-      "set": {
-       "morphe_debug": "true"
-      }
-     },
-     {
       "restart": true
      },
      {
@@ -2967,11 +2997,6 @@
      {
       "log": "Inbox filter installed",
       "within": 6000
-     },
-     {
-      "set": {
-       "morphe_debug": "false"
-      }
      }
     ],
     "auto": true
@@ -3383,8 +3408,7 @@
     "steps": [
      {
       "set": {
-       "down_watermark": "true",
-       "morphe_debug": "true"
+       "down_watermark": "true"
       }
      },
      {
@@ -3395,6 +3419,12 @@
      },
      {
       "wait": 2500
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "ad=false",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "finddesc",
@@ -3411,7 +3441,7 @@
      {
       "probe": "findtext",
       "extras": {
-       "text": "Save video",
+       "text": "Download",
        "click": "true"
       },
       "expect": "ok findtext found"
@@ -3422,11 +3452,6 @@
      },
      {
       "wait": 4000
-     },
-     {
-      "set": {
-       "morphe_debug": "false"
-      }
      }
     ],
     "auto": true
@@ -3437,8 +3462,7 @@
     "steps": [
      {
       "set": {
-       "down_watermark": "false",
-       "morphe_debug": "true"
+       "down_watermark": "false"
       }
      },
      {
@@ -3449,6 +3473,12 @@
      },
      {
       "wait": 2500
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "ad=false",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "finddesc",
@@ -3465,7 +3495,7 @@
      {
       "probe": "findtext",
       "extras": {
-       "text": "Save video",
+       "text": "Download",
        "click": "true"
       },
       "expect": "ok findtext found"
@@ -3479,8 +3509,7 @@
      },
      {
       "set": {
-       "down_watermark": "true",
-       "morphe_debug": "false"
+       "down_watermark": "true"
       }
      }
     ],
@@ -3600,7 +3629,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "labreport",
@@ -3652,7 +3683,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -3746,7 +3779,7 @@
      },
      {
       "tap": {
-       "text": "^Activity$"
+       "text": "^Activity( & new followers)?$"
       }
      },
      {
@@ -3775,7 +3808,7 @@
      },
      {
       "tap": {
-       "text": "^Activity$"
+       "text": "^Activity( & new followers)?$"
       }
      },
      {
@@ -5063,7 +5096,7 @@
   "checks": [
    {
     "id": "split-on-phone",
-    "what": "Review: with the minimum width lowered to 320 dp, the S22 (360 dp wide) qualifies, so comments open beside the video instead of over it.",
+    "what": "Review: with the minimum width lowered to 320 dp, the S22 (360 dp wide) qualifies, so comments open beside the video instead of over it. Hook status 'split view' says what TikTok was told when it asked.",
     "steps": [
      {
       "set": {
@@ -5079,7 +5112,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -5092,6 +5127,13 @@
      {
       "shot": "split-comments",
       "review": "The comment list sits in a column beside the playing video (video narrowed to one side), not as a sheet over the bottom of the video. Failing looks like the stock full-width sheet over the video."
+     },
+     {
+      "probe": "hookdetails",
+      "extras": {
+       "family": "split view"
+      },
+      "expect": "comments beside the video"
      },
      {
       "back": true
@@ -5109,7 +5151,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -5644,7 +5688,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -5717,7 +5763,7 @@
    },
    {
     "id": "suggestions-gone",
-    "what": "Review: typing in the comment box shows no emoji/sticker suggestion row above it with the switch on.",
+    "what": "Review: with the comment box focused, the emoji quick-reaction strip above it is gone with the switch on and back with it off.",
     "steps": [
      {
       "set": {
@@ -5732,7 +5778,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -5740,8 +5788,19 @@
       "waitMs": 2500
      },
      {
+      "tap": {
+       "text": "^Add comment"
+      }
+     },
+     {
+      "wait": 1800
+     },
+     {
       "shot": "suggestions-on",
-      "review": "Comment sheet before typing anything: no emoji or sticker suggestion strip above the box, while the emoji and sticker buttons inside the box remain. Do not send."
+      "review": "Comment box focused, keyboard up, nothing typed: no emoji quick-reaction strip above the box, while the emoji and sticker buttons inside the box remain. Do not send."
+     },
+     {
+      "back": true
      },
      {
       "back": true
@@ -5750,6 +5809,41 @@
       "set": {
        "hide_comment_quick_reactions": "false"
       }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
+      "probe": "comments",
+      "expect": "openComments\\([^)]*\\)=true",
+      "waitMs": 2500
+     },
+     {
+      "tap": {
+       "text": "^Add comment"
+      }
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "shot": "suggestions-stock",
+      "review": "Same focused box with the switch off: TikTok's emoji quick-reaction strip sits above the box."
+     },
+     {
+      "back": true
+     },
+     {
+      "back": true
      }
     ],
     "auto": false
@@ -6660,7 +6754,7 @@
    },
    {
     "id": "activity-row",
-    "what": "The Activity row (English label 'Activity') is listed with its switch off and hidden with it on; the same for New followers.",
+    "what": "47.1.4 shows one 'Activity & new followers' row: listed with both switches off, gone with Hide Activity and Hide New followers on.",
     "steps": [
      {
       "set": {
@@ -6680,14 +6774,7 @@
      {
       "probe": "findtext",
       "extras": {
-       "text": "Activity"
-      },
-      "expect": "ok findtext found"
-     },
-     {
-      "probe": "findtext",
-      "extras": {
-       "text": "New followers"
+       "text": "Activity & new followers"
       },
       "expect": "ok findtext found"
      },
@@ -6709,14 +6796,7 @@
      {
       "probe": "findtext",
       "extras": {
-       "text": "Activity"
-      },
-      "expect": "ok findtext none"
-     },
-     {
-      "probe": "findtext",
-      "extras": {
-       "text": "New followers"
+       "text": "Activity & new followers"
       },
       "expect": "ok findtext none"
      },
@@ -7031,8 +7111,7 @@
     "steps": [
      {
       "set": {
-       "hidden_profile_shortcuts": "TikTok Studio,Your orders,Shop,LIVE events,Your private videos",
-       "morphe_debug": "true"
+       "hidden_profile_shortcuts": "TikTok Studio,Your orders,Shop,LIVE events,Your private videos"
       }
      },
      {
@@ -7050,8 +7129,7 @@
      },
      {
       "set": {
-       "hidden_profile_shortcuts": "",
-       "morphe_debug": "false"
+       "hidden_profile_shortcuts": ""
       }
      }
     ],
@@ -7947,8 +8025,7 @@
      {
       "set": {
        "spin_music_disc": "true",
-       "stop_music_disc_spin": "false",
-       "morphe_debug": "true"
+       "stop_music_disc_spin": "false"
       }
      },
      {
@@ -7998,8 +8075,7 @@
      {
       "set": {
        "spin_music_disc": "false",
-       "stop_music_disc_spin": "false",
-       "morphe_debug": "false"
+       "stop_music_disc_spin": "false"
       }
      }
     ],
@@ -10699,8 +10775,7 @@
        "simspoof_op_name": "Rogers",
        "region_spoof": "true",
        "region_request_spoof": "true",
-       "region_store_spoof": "false",
-       "morphe_debug": "true"
+       "region_store_spoof": "false"
       }
      },
      {
@@ -10726,8 +10801,7 @@
       "set": {
        "simspoof": "false",
        "region_spoof": "false",
-       "region_request_spoof": "false",
-       "morphe_debug": "false"
+       "region_request_spoof": "false"
       }
      },
      {
@@ -11562,8 +11636,7 @@
        "simspoof": "true",
        "simspoof_iso": "ca",
        "simspoof_mccmnc": "302720",
-       "simspoof_op_name": "Rogers",
-       "morphe_debug": "true"
+       "simspoof_op_name": "Rogers"
       }
      },
      {
@@ -11585,8 +11658,7 @@
      },
      {
       "set": {
-       "simspoof": "false",
-       "morphe_debug": "false"
+       "simspoof": "false"
       }
      },
      {
@@ -12346,7 +12418,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -12396,7 +12470,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -12440,12 +12516,18 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
       "expect": "openComments\\([^)]*\\)=true",
       "waitMs": 2500
+     },
+     {
+      "log": "Commenter region: the comment's account carried (one|none), showing [A-Z]{2}",
+      "within": 4000
      },
      {
       "wait": 3000
@@ -12603,7 +12685,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "textwords",
@@ -12626,7 +12710,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "textwords",
@@ -14012,7 +14098,9 @@
      {
       "probe": "videoinfo",
       "expect": "durationMs=([1-9]\\d{3}|1\\d{4})\\b",
-      "waitMs": 1500
+      "waitMs": 1500,
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "startwatch",
@@ -14048,7 +14136,9 @@
      {
       "probe": "videoinfo",
       "expect": "durationMs=([1-9]\\d{3}|1\\d{4})\\b",
-      "waitMs": 1500
+      "waitMs": 1500,
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "startwatch",
@@ -14425,7 +14515,6 @@
     "steps": [
      {
       "set": {
-       "morphe_debug": "true",
        "comment_batch_translation": "true",
        "translate_into": ""
       }
@@ -14435,7 +14524,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -14459,7 +14550,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",
@@ -14472,11 +14565,6 @@
      },
      {
       "back": true
-     },
-     {
-      "set": {
-       "morphe_debug": "false"
-      }
      }
     ],
     "auto": true
@@ -14495,7 +14583,9 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000"
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "comments",

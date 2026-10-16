@@ -666,6 +666,7 @@ public final class Probe extends Instrumentation {
                                 + " following=" + (optional(creator, "getFollowStatus") instanceof Number
                                         ? ((Number) optional(creator, "getFollowStatus")).intValue() != 0 : "unknown")
                                 + " awemeType=" + awemeType
+                                + " ad=" + optional(aweme, "isAd")
                                 + " live=" + (liveId instanceof Number && ((Number) liveId).longValue() > 0)
                                 + " originalSound=" + originalSound
                                 // What the video says about duets and stitches, as its getters
