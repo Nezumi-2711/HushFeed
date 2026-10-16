@@ -18,7 +18,8 @@
 
     Settings a patch's checks change are read first and written back after its last check,
     and TikTok is restarted then if any of its checks restarted it, so each patch starts from
-    the phone's own settings. Taps come from a fresh uiautomator dump or from the probe's
+    the phone's own settings. A check that finds TikTok out of the front starts it again first.
+    Taps come from a fresh uiautomator dump or from the probe's
     click by view id or description, never from fixed coordinates, and the runner refuses to
     tap anything labeled like an action that reaches other people (Follow, Message, Send,
     Post, Repost, Duet, Stitch, Go LIVE, Buy, Request).
@@ -907,6 +908,13 @@ try {
         $restarted = $false
         $checks = @()
         foreach ($check in $entry.checks) {
+            # A check starts with TikTok in front. Behind the home screen its process may be gone or
+            # frozen, and no probe answers: on 47.1.4 that failed a patch-applied check with the
+            # home screen up (2026-10-16). A fresh start then says nothing about this check's patch.
+            if ($deviceUp -and (Get-Focus) -notmatch [regex]::Escape($package)) {
+                Write-Host "  (TikTok wasn't in front, so it starts again before $($check.id))"
+                Restart-TikTok
+            }
             $checkResult = Invoke-Check $entry $check $originals ([ref]$restarted)
             Write-Host "  $($checkResult.status.PadRight(7)) $($check.id)$(if ($checkResult.failures) { ': ' + ($checkResult.failures -join '; ') })"
             $checks += [pscustomobject]$checkResult
