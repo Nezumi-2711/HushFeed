@@ -495,9 +495,17 @@ function Open-Surface([string]$Where) {
     $tabs = @{ feed = '^Home'; friends = '^Friends'; inbox = '^Inbox'; profile = '^Profile' }
     if ($tabs.ContainsKey($Where)) {
         # The tabs live on the main screen. Anything else in front (a search page a deep link
-        # left on the back stack, a settings page, another app) costs a fresh start.
-        if ((Get-Focus) -notmatch 'com\.ss\.android\.ugc\.aweme\.main\.MainActivity') { Restart-TikTok }
+        # left on the back stack, a settings page, another app) costs a fresh start. On 47.1.4
+        # the main screen is SplashActivity's window, which stays in front after a start; reading
+        # only MainActivity restarted TikTok at every open, which threw away whatever a check had
+        # set up in the process before it (a lab recording, hook records), 2026-10-16.
+        $onMain = (Get-Focus) -match 'com\.ss\.android\.ugc\.aweme\.(main\.MainActivity|splash\.SplashActivity)\b'
+        if (-not $onMain) { Restart-TikTok }
         $answer = Invoke-AuditProbe 'click' ([pscustomobject]@{ desc = $tabs[$Where] }) 1500
+        if (-not (Test-Pattern $answer '^ok click') -and $onMain) {
+            Restart-TikTok
+            $answer = Invoke-AuditProbe 'click' ([pscustomobject]@{ desc = $tabs[$Where] }) 1500
+        }
         if (-not (Test-Pattern $answer '^ok click')) { throw "could not open $Where`: $answer" }
     } elseif ($Where -eq 'settings') {
         $answer = Invoke-AuditProbe 'settings' $null 2500
