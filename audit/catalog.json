@@ -12973,15 +12973,16 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
-      "retrySwipe": 8,
+      "expect": "likes=over10000",
+      "retrySwipe": 12,
       "precondition": true
      },
      {
       "probe": "textwords",
       "extras": {
        "id": "g86",
-       "word": ","
+       "word": ",",
+       "onscreen": "true"
       },
       "expect": "containing=0"
      },
@@ -12998,15 +12999,16 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
-      "retrySwipe": 8,
+      "expect": "likes=over10000",
+      "retrySwipe": 12,
       "precondition": true
      },
      {
       "probe": "textwords",
       "extras": {
        "id": "g86",
-       "word": ","
+       "word": ",",
+       "onscreen": "true"
       },
       "expect": "containing=[1-9]"
      },
@@ -13034,7 +13036,7 @@
     "auto": true
    }
   ],
-  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over1000' only proves 1,000+. The runner should prefer a video where the heart shows K or M with the switch off. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4."
+  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4."
  },
  {
   "name": "Show follow status",

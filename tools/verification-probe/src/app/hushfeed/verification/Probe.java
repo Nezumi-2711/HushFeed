@@ -638,7 +638,11 @@ public final class Probe extends Instrumentation {
                         Object digg = optional(optional(aweme, "getStatistics"), "getDiggCount");
                         String likes = !(digg instanceof Number) ? "unknown"
                                 : ((Number) digg).longValue() <= 100 ? "100orFewer"
-                                : ((Number) digg).longValue() <= 1000 ? "1000orFewer" : "over1000";
+                                : ((Number) digg).longValue() <= 1000 ? "1000orFewer"
+                                // Below 10,000 TikTok writes a count out whole (2,447), so a
+                                // check on abbreviated counts needs the top bucket. It still
+                                // reads as over1000 to a pattern looking for that.
+                                : ((Number) digg).longValue() < 10000 ? "over1000" : "over10000";
                         Object awemeType = optional(aweme, "getAwemeType");
                         Object liveId = optional(aweme, "getLiveId");
                         Object music = optional(aweme, "getMusic");
@@ -1173,11 +1177,15 @@ public final class Probe extends Instrumentation {
                         // Counts only; the text never leaves the phone.
                         String idName = required(intent, "id");
                         String word = required(intent, "word").toLowerCase(java.util.Locale.ROOT);
+                        // -e onscreen true: only views on the screen. The feed keeps the cells
+                        // above and below laid out, so a rail count matched the next video's too.
+                        boolean onScreenOnly = "true".equals(intent.getStringExtra("onscreen"));
                         int[] counts = new int[2];
                         java.util.ArrayDeque<android.view.View> queue = new java.util.ArrayDeque<>(windowRoots());
                         while (!queue.isEmpty()) {
                             android.view.View view = queue.removeFirst();
                             if (view instanceof android.widget.TextView && view.isShown()
+                                    && (!onScreenOnly || view.getGlobalVisibleRect(new android.graphics.Rect()))
                                     && safeResourceName(view).endsWith("/" + idName)) {
                                 counts[0]++;
                                 CharSequence text = ((android.widget.TextView) view).getText();
