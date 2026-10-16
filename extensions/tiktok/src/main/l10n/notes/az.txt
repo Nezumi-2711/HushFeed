@@ -4,6 +4,8 @@
 
 * **TikTok:** LIVE-ın Video keyfiyyəti siyahısı qaranlıq rejimdə sətirlərini artıq ağ fonda ağ göstərmir (#57).
 
+* **TikTok:** Accent color-a Android 12 və daha yenisində rəngi divar kağızından götürən yeni Divar kağızını izlə seçimi əlavə olundu (#163).
+
 * **TikTok:** İrəliləyiş paneli üçün iki yeni seçim: vaxt panelin üstündə görünə bilər və panel kənardan kənara uzana bilər (#173).
 
 * **TikTok:** Yeni açar Uzun basma seçimini videonun yanlarında saxlayır, beləliklə ortada basmaq yenə TikTok menyusunu açır (#136).
