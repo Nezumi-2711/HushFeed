@@ -1335,14 +1335,22 @@
       }
      },
      {
+      "restart": true
+     },
+     {
       "open": "feed"
      },
      {
       "open": "friends"
      },
      {
+      "wait": 8000
+     },
+     {
       "log": "Contact list blocker: blocked a query to content://com\\.android\\.contacts",
-      "within": 15000
+      "fromStep": 2,
+      "within": 3000,
+      "precondition": true
      }
     ],
     "auto": true
@@ -1367,7 +1375,7 @@
     "auto": true
    }
   ],
-  "notes": "The learned notes (2026-09-17 device audit) say the contact blocker fires when the Friends tab opens, which is why the first check opens it. It needs TikTok to actually query ContactsContract: with no contacts permission or Facebook friends consent pending, the query may not happen and the log step times out (inconclusive, not a patch failure). The log line is Logger.printInfo so it needs no debug."
+  "notes": "The 2026-09-17 device audit saw the contact blocker fire when the Friends tab opened. On TikTok 47.1.4 (2026-10-16) the Friends tab showed \"From your contacts\" cards matched on TikTok's server and made no local read in 15 seconds, so the check now turns the switch on before a restart and reads the log from the restart's marker (fromStep), which counts a read at start-up as well as one on Friends. A process that never reads the contacts provider is inconclusive, not a failure: the patch log's intercepted site count is then the proof. Never open Find friends or a contacts page to force a read, since that's where TikTok asks to upload them. The log line is Logger.printInfo so it needs no debug."
  },
  {
   "name": "Block installed app scanning",
