@@ -11140,13 +11140,13 @@
     "what": "With Automatic Clear display on, a video clears by itself after the delay, and the next video starts cleared (the mode is remembered across the swipe).",
     "steps": [
      {
+      "open": "feed"
+     },
+     {
       "set": {
        "automatic_clear_display": "true",
        "automatic_clear_display_delay": "2000"
       }
-     },
-     {
-      "open": "feed"
      },
      {
       "swipe": "up"
@@ -11218,7 +11218,7 @@
     "auto": true
    }
   ],
-  "notes": "The \"Following stories bubble comes back when clear display ends\" half is a debug line \"[FollowingStoriesBubble] shown again after clear display\" and needs a Following stories bubble on screen. Clear display set by hand (long press, Clear display) is the other way in and is not driven here (it would need a tap on TikTok's long-press menu). If the first swipe lands on a photo post or a LIVE, the automatic clear \"skipped, the video or its window isn't current\" appears in the debug log and the check fails: swipe once more and rerun."
+  "notes": "The \"Following stories bubble comes back when clear display ends\" half is a debug line \"[FollowingStoriesBubble] shown again after clear display\" and needs a Following stories bubble on screen. Clear display set by hand (long press, Clear display) is the other way in and is not driven here (it would need a tap on TikTok's long-press menu). If the first swipe lands on a photo post or a LIVE, the automatic clear \"skipped, the video or its window isn't current\" appears in the debug log and the check fails: swipe once more and rerun. The feed opens before the switch goes on: with TikTok already on the feed, the clear lands inside the delay and hides the tab bar the open step presses (2026-10-16)."
  },
  {
   "name": "Remove LIVE extras",
