@@ -897,8 +897,10 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_INBOX_SHOP = new BooleanSetting("hide_inbox_shop", FALSE);
     public static final BooleanSetting HIDE_INBOX_BULLETIN_BOARDS =
             new BooleanSetting("hide_inbox_bulletin_boards", FALSE);
+    // A restart: the Friends tab and a profile keep the suggestion cells they already drew, and
+    // only a new bind collapses one.
     public static final BooleanSetting HIDE_INBOX_SUGGESTED_ACCOUNTS =
-            new BooleanSetting("hide_inbox_suggested_accounts", FALSE);
+            new BooleanSetting("hide_inbox_suggested_accounts", FALSE, true);
     public static final BooleanSetting HIDE_INBOX_MESSAGE_REQUESTS =
             new BooleanSetting("hide_inbox_message_requests", FALSE);
     public static final BooleanSetting HIDE_INBOX_CONVERSATIONS =
