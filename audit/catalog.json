@@ -7360,7 +7360,8 @@
      },
      {
       "log": "Profile shortcuts: .* hidden",
-      "within": 12000
+      "within": 12000,
+      "fromStep": 2
      },
      {
       "set": {
