@@ -1,6 +1,8 @@
 ## Unreleased
 
-* **TikTok:** Un nuovo interruttore apre scuri i pannelli LIVE come Condividi e il fan club quando TikTok è in modalità scura (#159).
+* **TikTok:** Rimuovi i file delle credenziali dei contenuti e dello scanner di carte e Rimuovi gli strumenti di creazione non lasciano più parti di TikTok in inglese su un telefono in un'altra lingua. Rifai la patch per riavere la tua (#125).
+
+* **TikTok:** Un nuovo interruttore apre scuri i pannelli LIVE come il fan club quando TikTok è in modalità scura (#159).
 
 * **TikTok:** L'elenco Qualità video delle LIVE non mostra più le righe bianco su bianco in modalità scura (#57).
 

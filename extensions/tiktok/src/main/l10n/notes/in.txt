@@ -1,6 +1,8 @@
 ## Unreleased
 
-* **TikTok:** Sakelar baru membuka panel LIVE seperti Bagikan dan klub penggemar dalam warna gelap saat TikTok dalam mode gelap (#159).
+* **TikTok:** Hapus aset kredensial konten dan pemindai kartu serta Hapus alat kreasi tidak lagi membuat sebagian TikTok berbahasa Inggris di ponsel berbahasa lain. Patch ulang untuk mengembalikan bahasa Anda (#125).
+
+* **TikTok:** Sakelar baru membuka panel LIVE seperti klub penggemar dalam warna gelap saat TikTok dalam mode gelap (#159).
 
 * **TikTok:** Daftar Kualitas video LIVE tidak lagi menampilkan barisnya putih di atas putih dalam mode gelap (#57).
 

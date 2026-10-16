@@ -1,6 +1,8 @@
 ## Unreleased
 
-* **TikTok:** Ein neuer Schalter öffnet LIVE-Fenster wie Teilen und den Fanclub dunkel, solange TikTok im Dunkelmodus ist (#159).
+* **TikTok:** Dateien für Inhaltsnachweise und Kartenscanner entfernen und Erstellungstools entfernen lassen Teile von TikTok auf einem Handy mit anderer Sprache nicht mehr auf Englisch. Patche neu, um deine Sprache zurückzubekommen (#125).
+
+* **TikTok:** Ein neuer Schalter öffnet LIVE-Fenster wie den Fanclub dunkel, solange TikTok im Dunkelmodus ist (#159).
 
 * **TikTok:** Die LIVE-Liste Videoqualität zeigt ihre Zeilen im Dunkelmodus nicht mehr weiß auf weiß (#57).
 
