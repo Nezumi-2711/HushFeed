@@ -654,14 +654,10 @@ public final class Probe extends Instrumentation {
                                 : ((Number) followerCount).intValue() <= 5000 ? "5000orFewer" : "over5000";
                         // The feed leaves the author's follower count at zero (only the profile
                         // fills it), so the video's likes stand in for a small creator: a bucket.
-                        Object digg = optional(optional(aweme, "getStatistics"), "getDiggCount");
-                        String likes = !(digg instanceof Number) ? "unknown"
-                                : ((Number) digg).longValue() <= 100 ? "100orFewer"
-                                : ((Number) digg).longValue() <= 1000 ? "1000orFewer"
-                                // Below 10,000 TikTok writes a count out whole (2,447), so a
-                                // check on abbreviated counts needs the top bucket. It still
-                                // reads as over1000 to a pattern looking for that.
-                                : ((Number) digg).longValue() < 10000 ? "over1000" : "over10000";
+                        Object statistics = optional(aweme, "getStatistics");
+                        String likes = countBucket(optional(statistics, "getDiggCount"));
+                        // The comment sheet's title shows this one, so its check needs a big one.
+                        String comments = countBucket(optional(statistics, "getCommentCount"));
                         Object awemeType = optional(aweme, "getAwemeType");
                         Object liveId = optional(aweme, "getLiveId");
                         Object music = optional(aweme, "getMusic");
@@ -674,7 +670,7 @@ public final class Probe extends Instrumentation {
                                 + " hasDesc=" + (desc != null && String.valueOf(desc).trim().length() > 0)
                                 + " photo=" + photo + " durationMs=" + duration
                                 + " verified=" + verified + " aiLabel=" + aiLabel + " authorFollowers=" + followers
-                                + " likes=" + likes
+                                + " likes=" + likes + " comments=" + comments
                                 // The author's story status as stored, then as the getter the
                                 // story ring switch filters answers it: a ring check needs a
                                 // creator with a story and can't see the drawable.
@@ -4101,6 +4097,17 @@ public final class Probe extends Instrumentation {
 
         private static boolean blank(Object value) {
             return value == null || String.valueOf(value).trim().isEmpty();
+        }
+
+        /**
+         * A video count as a bucket. Below 10,000 TikTok writes a count out whole (2,447), so a
+         * check on abbreviated counts needs the top bucket. It still reads as over1000 to a
+         * pattern looking for that.
+         */
+        private static String countBucket(Object count) {
+            if (!(count instanceof Number)) return "unknown";
+            long value = ((Number) count).longValue();
+            return value <= 100 ? "100orFewer" : value <= 1000 ? "1000orFewer" : value < 10000 ? "over1000" : "over10000";
         }
 
         /** TikTok's caption strip shown, with the view that draws its cue visible at a height. */
