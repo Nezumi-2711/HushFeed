@@ -151,6 +151,15 @@ if ($Validate) {
                     { $_ -in 'tap', 'longpress' } { $target = $step.$kind; if (-not ($target.text -or $target.desc -or $target.id)) { & $bad "a $kind with no text, desc or id" } }
                     'apk' { if ([string]$step.apk -notin $apkKinds) { & $bad "unknown apk check '$($step.apk)'" } }
                     'shot' { if (-not $step.review) { & $bad 'a shot with no review text' } }
+                    { $_ -in 'log', 'logNot' } {
+                        if ($null -ne $step.fromStep) {
+                            $fromIndex = [int]$step.fromStep
+                            $fromStep = if ($fromIndex -ge 1) { @($check.steps)[$fromIndex - 1] }
+                            if ($fromIndex -lt 1 -or $fromIndex -ge $index -or -not $fromStep -or @($fromStep.PSObject.Properties.Name)[0] -in 'apk', 'log', 'logNot') {
+                                & $bad "reads from step $($step.fromStep), which isn't an earlier step with a marker"
+                            }
+                        }
+                    }
                 }
                 foreach ($field in 'expect', 'expectNot', 'log', 'logNot') {
                     $pattern = [string]$step.$field
@@ -159,8 +168,8 @@ if ($Validate) {
                     }
                 }
             }
-            $decides = @($check.steps | Where-Object { $_.expect -or $_.expectNot -or $_.log -or $_.logNot -or $_.apk -or $_.shot }).Count
-            if ($decides -eq 0) { $problems.Add("$at decides nothing: no expect, log, apk or shot step") }
+            $decides = @($check.steps | Where-Object { $_.expect -or $_.expectNot -or $_.log -or $_.logNot -or $_.apk -or $_.shot -or $_.vibrations -or $_.record -eq 'stop' }).Count
+            if ($decides -eq 0) { $problems.Add("$at decides nothing: no expect, log, apk, shot, vibrations or record stop step") }
             $reviews = @($check.steps | Where-Object { $_.shot }).Count
             if ($check.auto -and $reviews -gt 0) { $problems.Add("$at is marked auto but has a shot") }
         }
@@ -630,6 +639,9 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
     $tag = "$($Entry.name)-$($Check.id)"
     $index = 0
     $lastMarker = $null
+    # Each step's marker, for a log step that reads from further back ("fromStep": n): a line
+    # written once, during one of several swipes, is gone by the time the last swipe's marker is.
+    $markers = @{}
     # The phone's clock when the check starts, for a vibrations step to count from. Only read
     # for a check that has one.
     $vibrationsSince = $null
@@ -642,7 +654,7 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
         try {
             # A log step reads what was logged from the start of the step before it, so the
             # lines a swipe or a restart causes are in its window.
-            if ($deviceUp -and $kind -notin 'apk', 'log', 'logNot') { $lastMarker = Write-Marker }
+            if ($deviceUp -and $kind -notin 'apk', 'log', 'logNot') { $lastMarker = Write-Marker; $markers[$index] = $lastMarker }
             if ($kind -eq 'apk') {
                 $path = [string]$step.path
                 switch ([string]$step.apk) {
@@ -777,12 +789,17 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                 { $_ -in 'log', 'logNot' } {
                     $within = if ($step.within) { [int]$step.within } else { 8000 }
                     if (-not $lastMarker) { $lastMarker = Write-Marker }
+                    $from = $lastMarker
+                    if ($step.fromStep) {
+                        $from = $markers[[int]$step.fromStep]
+                        if (-not $from) { throw "step $($step.fromStep) left no marker to read from" }
+                    }
                     $pattern = [string]$step.$kind
                     # A log step waits until its line shows up or its window closes; logNot waits the whole window.
                     $deadline = [DateTime]::UtcNow.AddMilliseconds($within)
                     do {
                         Start-Sleep -Milliseconds 1000
-                        $hits = @(Get-LogAfter $lastMarker | Where-Object { Test-Pattern "$_" $pattern })
+                        $hits = @(Get-LogAfter $from | Where-Object { Test-Pattern "$_" $pattern })
                     } until (($kind -eq 'log' -and $hits.Count -gt 0) -or [DateTime]::UtcNow -gt $deadline)
                     if ($kind -eq 'log' -and $hits.Count -eq 0) {
                         # A line only TikTok's own event can cause (a LIVE bubble arriving) says

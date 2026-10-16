@@ -10504,7 +10504,7 @@
     "steps": [
      {
       "set": {
-       "play_sdr": "false"
+       "play_sdr": "true"
       }
      },
      {
@@ -10514,37 +10514,22 @@
       "open": "feed"
      },
      {
-      "set": {
-       "play_sdr": "true"
-      }
+      "wait": 2500
      },
      {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "log": "SDR playback dropped \\d+ HDR gear\\(s\\) of \\d+ from ",
-      "within": 12000
+      "probe": "hookdetails",
+      "extras": {
+       "family": "SDR playback"
+      },
+      "expect": "bound=\\[.+\\]",
+      "retrySwipe": 15,
+      "precondition": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "The line is written once per process and only when a video's gear list holds an HDR gear (getHdrType 1 or 2), which most videos do not, so the step swipes through six videos and can still time out on a feed with no HDR (inconclusive, not a patch failure). The switch is turned on after the restart so the first HDR video seen after it is the one that logs. The filter shares its entry with Prefer H.264 (SdrPlayback.filter calls H264Playback.keepH264 first), so an H.264-only list passes through unchanged. Needs morphe_debug? No: Logger.printInfo."
+  "notes": "Most videos have no HDR gear, so the check swipes up to fifteen times for one and reads inconclusive on a feed without (not a patch failure). It reads the \"SDR playback\" family through hookdetails, which SdrPlayback binds on every drop from SimVideo or SimVideoUrlModel setBitRate, rather than the once-per-process log line (\"SDR playback dropped N HDR gear(s) of M from ...\"), which a log step could only see if it landed after the step in front of it (2026-10-16). The switch is on before the restart so every gear list in the process passes the filter. The filter shares its entry with Prefer H.264 (SdrPlayback.filter calls H264Playback.keepH264 first), so an H.264-only list passes through unchanged."
  },
  {
   "name": "Playback quality",
@@ -10619,7 +10604,8 @@
      },
      {
       "log": "Playback quality lowest picked .* of \\d+ gears from ",
-      "within": 12000
+      "within": 12000,
+      "fromStep": 4
      }
     ],
     "auto": true
@@ -10644,13 +10630,14 @@
      },
      {
       "log": "Playback quality 720 picked .* of \\d+ gears from ",
-      "within": 12000
+      "within": 12000,
+      "fromStep": 1
      }
     ],
     "auto": true
    }
   ],
-  "notes": "PlaybackQuality.describeChoice writes one Logger.printInfo line per kind of choice (mode, source, ladder, pick), and a kind repeats across videos with the same ladder, so the checks restart first (clears the kind set) or change mode (new kind). It logs only for the feed's own picker calls, so a stalled swipe produces no line; the 12 second window covers three swipes. Mode strings are the setting values: auto, highest, lowest, 1080, 720, 540, 480, 360. \"On mobile data\" (playback_quality_metered) only matters on a metered connection and is not exercised."
+  "notes": "PlaybackQuality.describeChoice writes one Logger.printInfo line per kind of choice (mode, source, ladder, pick), and a kind repeats across videos with the same ladder, so the checks restart first (clears the kind set) or change mode (new kind). It logs only for the feed's own picker calls, so a stalled swipe produces no line; each log step reads from the set step that changed the mode (fromStep), since the line can land on any of the three swipes and a log step otherwise sees only what came after the last one began (2026-10-16). Mode strings are the setting values: auto, highest, lowest, 1080, 720, 540, 480, 360. \"On mobile data\" (playback_quality_metered) only matters on a metered connection and is not exercised."
  },
  {
   "name": "Playback speed",
@@ -10875,7 +10862,7 @@
     "steps": [
      {
       "set": {
-       "prefer_h264": "false"
+       "prefer_h264": "true"
       }
      },
      {
@@ -10885,25 +10872,16 @@
       "open": "feed"
      },
      {
-      "set": {
-       "prefer_h264": "true"
-      }
+      "wait": 2500
      },
      {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "log": "H\\.264 playback dropped \\d+ HEVC or ByteVC2 gear\\(s\\) of \\d+ from ",
-      "within": 12000
+      "probe": "hookdetails",
+      "extras": {
+       "family": "H.264 playback"
+      },
+      "expect": "bound=\\[.+\\]",
+      "retrySwipe": 15,
+      "precondition": true
      }
     ],
     "auto": true
@@ -10925,7 +10903,7 @@
     "auto": true
    }
   ],
-  "notes": "The line is written once per process and only for a gear list that mixes codecs (H264Playback.filter). A feed that serves H.264 only, or lists whose H.264 gears have no playable address (PreferredGears.narrow keeps all and logs \"Prefer H.264 video kept all N gears\"), leave it silent: inconclusive, not a failure. The switch is turned on after the restart so the first mixed list after it logs."
+  "notes": "H264Playback binds the \"H.264 playback\" family on every gear list it narrows, and only then, so the check swipes up to fifteen times for a list that mixes codecs and reads hookdetails (the once-per-process log line \"H.264 playback dropped N HEVC or ByteVC2 gear(s) of M from ...\" can land before a log step's marker). A feed that serves H.264 only, or lists whose H.264 gears have no playable address (PreferredGears.narrow keeps all), read inconclusive, not a failure. The switch is on before the restart so every list in the process passes the filter. anchors-bound only shows nothing missed."
  },
  {
   "name": "Profile background",
