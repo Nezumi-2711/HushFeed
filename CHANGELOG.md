@@ -6,7 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
-* **TikTok:** Copy the full link for short links now also works on the tiktok.com/t/ short links TikTok gives for some videos. Before, only vt.tiktok.com and vm.tiktok.com links were swapped for the full one, so those stayed short.
+* **TikTok:** Copy the full link for short links now works with Clean up shared links off. TikTok shortens a link that still has its tracking on its own servers, after Hushfeed has already seen it, so the short link reached the clipboard untouched. It also takes the tiktok.com/t/ short form now, not only vt.tiktok.com and vm.tiktok.com.
 
 * **TikTok:** Turning Default speed off now counts from the very next video. Before, the video after it still played at the old default, since TikTok hands each video the last one's speed when you swipe and Hushfeed took that for a speed you'd picked. Speeds you pick yourself work as before.
 
