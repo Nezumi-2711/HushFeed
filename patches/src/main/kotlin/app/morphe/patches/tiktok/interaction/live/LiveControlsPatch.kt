@@ -27,6 +27,7 @@ import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
+import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
@@ -203,6 +204,98 @@ internal object LiveThemedFragmentInflaterFingerprint : Fingerprint(
     returnType = "Landroid/view/LayoutInflater;",
     parameters = listOf("Landroid/os/Bundle;"),
 )
+
+/** androidx's Fragment, real-named in TikTok. */
+internal const val ANDROIDX_FRAGMENT = "Landroidx/fragment/app/Fragment;"
+
+/**
+ * Every fragment's layout inflater being made: it asks onGetLayoutInflater and keeps the answer
+ * in mLayoutInflater. A LIVE room's Share opens TikTok's general share sheet (a TuxSheet with
+ * SkeletonSharePanelFragment inside), whose pages inflate from the room activity, and LIVE
+ * activities never take TikTok's dark style, so it opened white in a dark app (#159, #168).
+ */
+internal object FragmentInflaterFingerprint : Fingerprint(
+    definingClass = ANDROIDX_FRAGMENT,
+    name = "performGetLayoutInflater",
+    returnType = "Landroid/view/LayoutInflater;",
+    parameters = listOf("Landroid/os/Bundle;"),
+)
+
+/** The warning in TikTok's own dark mode check (X.060E.LIZIZ on 47.1.4). */
+internal const val APP_DARK_MODE_WARNING = "Do not use application get them Settings, Use activity get them Settings. " +
+    "Use Application context get theme is FollowSystem not is User setting."
+
+/** TikTok's dark mode check: whether a context's resources carry the night answer. */
+internal object AppDarkModeFingerprint : Fingerprint(
+    returnType = "Z",
+    parameters = listOf("Landroid/content/Context;"),
+    strings = listOf(APP_DARK_MODE_WARNING),
+)
+
+/**
+ * The style TikTok gives its own activities in dark mode. TikTok's style picker (X.05xI on 47.1.4)
+ * has a (Context)I that asks [darkMode] and hands the answer to a (Z)I in the same class, which
+ * returns the dark style when it's true and the light one when it's false. The dark one is that
+ * (Z)I's first constant, the branch taken when the answer isn't zero. There has to be exactly one
+ * such picker.
+ */
+internal fun darkAppStyle(classes: Sequence<ClassDef>, darkMode: MethodReference): Int {
+    val picks = classes.flatMap { classDef ->
+        classDef.methods.asSequence().mapNotNull { method -> stylePick(method, classDef, darkMode)?.let { classDef to it } }
+    }.toList()
+    val (owner, pick) = picks.singleOrNull()
+        ?: throw PatchException("LIVE controls: expected one dark style picker, found ${picks.map { it.first.type }}")
+    val chooser = owner.methods.singleOrNull {
+        it.name == pick.name && it.returnType == "I" && it.parameterTypes.map(CharSequence::toString) == listOf("Z")
+    } ?: throw PatchException("LIVE controls: ${owner.type} has no ${pick.name}(Z)I")
+    val code = chooser.implementation?.instructions?.toList().orEmpty()
+    if (code.map { it.opcode } != listOf(Opcode.IF_EQZ, Opcode.CONST, Opcode.RETURN, Opcode.CONST, Opcode.RETURN)) {
+        throw PatchException("LIVE controls: ${owner.type}.${pick.name} isn't a two-style switch: ${code.map { it.opcode }}")
+    }
+    return (code[1] as NarrowLiteralInstruction).narrowLiteral
+}
+
+/** The (Z)I [method] hands [darkMode]'s answer to, when [method] is a static (Context)I doing only that. */
+private fun stylePick(method: Method, classDef: ClassDef, darkMode: MethodReference): MethodReference? {
+    if (!AccessFlags.STATIC.isSet(method.accessFlags) || method.returnType != "I" ||
+        method.parameterTypes.map(CharSequence::toString) != listOf("Landroid/content/Context;")) return null
+    val code = method.implementation?.instructions?.toList() ?: return null
+    if (code.map { it.opcode } != listOf(Opcode.INVOKE_STATIC, Opcode.MOVE_RESULT, Opcode.INVOKE_STATIC, Opcode.MOVE_RESULT, Opcode.RETURN)) return null
+    val ask = (code[0] as ReferenceInstruction).reference as MethodReference
+    val pick = (code[2] as ReferenceInstruction).reference as MethodReference
+    if (ask.definingClass != darkMode.definingClass || ask.name != darkMode.name ||
+        ask.parameterTypes.map(CharSequence::toString) != listOf("Landroid/content/Context;")) return null
+    if (pick.definingClass != classDef.type || pick.returnType != "I" ||
+        pick.parameterTypes.map(CharSequence::toString) != listOf("Z")) return null
+    return pick
+}
+
+/**
+ * Hands each fragment's new inflater to the extension, with [darkStyle], before the fragment
+ * keeps it. The Bundle parameter isn't read after onGetLayoutInflater, so it carries the style.
+ */
+internal fun hookFragmentInflater(inflater: MutableMethod, darkStyle: Int) {
+    val body = inflater.implementation ?: throw PatchException("LIVE controls: Fragment has no inflater body")
+    val code = body.instructions.toList()
+    val keep = code.indexOfFirst {
+        it.opcode == Opcode.IPUT_OBJECT && ((it as ReferenceInstruction).reference as FieldReference).name == "mLayoutInflater"
+    }
+    if (keep < 1 || code.take(keep).count { (it as? ReferenceInstruction)?.reference is MethodReference } != 1 ||
+        code[keep - 1].opcode != Opcode.MOVE_RESULT_OBJECT) {
+        throw PatchException("LIVE controls: Fragment's inflater doesn't keep onGetLayoutInflater's answer as expected")
+    }
+    val made = (code[keep] as TwoRegisterInstruction).registerA
+    val bundle = body.registerCount - 1
+    if (made > 15 || bundle > 15) throw PatchException("LIVE controls: Fragment's inflater registers don't fit the hook")
+    inflater.addInstructions(
+        keep,
+        """
+            const v$bundle, $darkStyle
+            invoke-static {p0, v$made, v$bundle}, $PANEL_THEME->darkTuxSheet(Ljava/lang/Object;Landroid/view/LayoutInflater;I)Landroid/view/LayoutInflater;
+            move-result-object v$made
+        """,
+    )
+}
 
 /** The older LIVE quality picker, Share > Video quality in rooms whose stream asks for it, real-named on 47.1.4. */
 internal const val LIVE_DEFINITION_DIALOG = "Lcom/bytedance/android/livesdk/definition/LiveDefinitionSelectionDialog;"
@@ -700,6 +793,14 @@ val liveControlsPatch = bytecodePatch(
         // The older quality list's rows can read white on white in dark mode, switch or no
         // switch; the extension gives poorly contrasted text a readable color there.
         hookQualityList(LiveDefinitionListFingerprint.method)
+        // A room's Share and other general sheets are Tux sheets, not LIVE panels, and they took
+        // the room activity's light theme in a dark app (#159, #168). Each fragment's inflater
+        // goes to the extension with TikTok's own dark style, and only a Tux sheet in a LIVE room,
+        // or a page inside one, changes, while the switch is on and the room is dark.
+        val darkMode = AppDarkModeFingerprint.method
+        val classes = mutableListOf<ClassDef>()
+        classDefForEach { classes += it }
+        hookFragmentInflater(FragmentInflaterFingerprint.method, darkAppStyle(classes.asSequence(), darkMode))
 
         // The room page coming to the front: where the Record button goes and which room it records (#37).
         liveRoomField(classDefByOrNull(LIVE_PLAY_FRAGMENT)
