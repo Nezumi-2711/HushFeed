@@ -6692,7 +6692,7 @@
      },
      {
       "shot": "rewards-off",
-      "review": "Own profile header: the purple rewards icon is beside the Add friends button (if the account is served one)."
+      "review": "Own profile header: the rewards shortcut is showing (on 47.1.4 a red gift box beside the edit pencil, top left), if the account is served one."
      },
      {
       "set": {
@@ -6710,7 +6710,7 @@
      },
      {
       "shot": "rewards-on",
-      "review": "Own profile header: no purple rewards icon, no gap where it was."
+      "review": "Own profile header: no gift box beside the edit pencil, and no gap where it was."
      },
      {
       "set": {
@@ -11805,6 +11805,15 @@
       "open": "feed"
      },
      {
+      "wait": 2500
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "photo=false durationMs=(1[5-9]\\d{3}|[2-9]\\d{4}|\\d{6,})\\b.*ad=false",
+      "retrySwipe": 10,
+      "precondition": true
+     },
+     {
       "wait": 7000
      },
      {
@@ -11833,7 +11842,7 @@
     "auto": true
    }
   ],
-  "notes": "The position check reads the player 0.9 seconds after the swipe back, so a video that resumed shows \"from\" of 3000 ms or more (7 seconds watched minus the swipe), while one that started over shows under 1500 ms. If the first video is shorter than 7 seconds it loops and the position can wrap; rerun on a longer video. The first item must be a normal video: a photo post, LIVE or ad has no player handle (\"no player\"). resume_video_after_scroll is restart-gated, hence the restart."
+  "notes": "The position check reads the player 0.9 seconds after the swipe back, so a video that resumed shows \"from\" of 3000 ms or more (7 seconds watched minus the swipe), while one that started over shows under 1500 ms. A video shorter than 7 seconds ends, and the patch clears a finished video's position on purpose, so the check first swipes to a normal video of 15 seconds or more (videoinfo photo=false and durationMs) and reads inconclusive when none comes up. A photo post, LIVE or ad has no player handle (\"no player\"). 2026-10-16 answered from=1427ms on an unmeasured video, which is why. resume_video_after_scroll is restart-gated, hence the restart."
  },
  {
   "name": "Run beside the store app",
@@ -12014,7 +12023,8 @@
     "steps": [
      {
       "set": {
-       "morphe_sanitize_sharing_links": "true"
+       "morphe_sanitize_sharing_links": "true",
+       "expand_short_share_links": "true"
       }
      },
      {
@@ -12041,13 +12051,18 @@
       "waitMs": 1500
      },
      {
-      "wait": 1500
+      "wait": 6000
      },
      {
       "probe": "video-link",
       "expect": "^ok video-link https://www\\.tiktok\\.com/[^?\\s]+/video/\\d+$",
       "expectNot": "\\?",
       "waitMs": 1500
+     },
+     {
+      "set": {
+       "expand_short_share_links": "false"
+      }
      }
     ],
     "auto": true
@@ -12058,7 +12073,8 @@
     "steps": [
      {
       "set": {
-       "morphe_sanitize_sharing_links": "false"
+       "morphe_sanitize_sharing_links": "false",
+       "expand_short_share_links": "true"
       }
      },
      {
@@ -12088,18 +12104,23 @@
       "waitMs": 1500
      },
      {
-      "wait": 1500
+      "wait": 6000
      },
      {
       "probe": "video-link",
       "expect": "^ok video-link https://www\\.tiktok\\.com/\\S+/video/\\d+\\?",
       "waitMs": 1500
+     },
+     {
+      "set": {
+       "expand_short_share_links": "false"
+      }
      }
     ],
     "auto": true
    }
   ],
-  "notes": "Copy link only writes the clipboard (no recipient is touched; the share sheet's contact row is never tapped). The Share button is clicked by its 47.1.4 view id wct (view-id-anchors.txt SHARE_BUTTON_IDS); the English \"Copy link\" label is unverified on a phone: if probe click answers \"no shown view matches\" read the rail with probe views, and note the copy happens at the sheet cell's click. video-link answers \"not-a-tiktok-video-url\" for a short vm.tiktok.com link; with expand_short_share_links on, TikTok's short link is expanded first. The setting key is the shared morphe_sanitize_sharing_links (BaseSettings), not in Settings.java. The swap domain (custom_share_domain) must be empty for the plain-URL expectation, which is its default; the checks do not touch it because the runner cannot send an empty value (an empty -e value is dropped by the shell)."
+  "notes": "Copy link only writes the clipboard (no recipient is touched; the share sheet's contact row is never tapped). The Share button is clicked by its 47.1.4 view id wct (view-id-anchors.txt SHARE_BUTTON_IDS); the English \"Copy link\" label is unverified on a phone: if probe click answers \"no shown view matches\" read the rail with probe views, and note the copy happens at the sheet cell's click. On 47.1.4 Copy link gives a short vt.tiktok.com link with no query (seen 2026-10-16), so both checks turn on expand_short_share_links (Copy the full link for short links), which swaps in the full link through the same sanitizer. A full link proves the expander, its query the sanitize switch. video-link answers \"not-a-tiktok-video-url host=... query=...\" when the swap didn't happen, and \"clip=empty\" when nothing was copied. The setting key is the shared morphe_sanitize_sharing_links (BaseSettings), not in Settings.java. The swap domain (custom_share_domain) must be empty for the plain-URL expectation, which is its default; the checks do not touch it because the runner cannot send an empty value (an empty -e value is dropped by the shell)."
  },
  {
   "name": "Settings",

@@ -427,9 +427,14 @@ public final class Probe extends Instrumentation {
                         }
                         Log.i(TAG, "ok commission-view");
                         break;
-                    case "video-link":
-                        Log.i(TAG, "ok video-link " + copiedTikTokVideoLink());
+                    case "video-link": {
+                        String link = copiedTikTokVideoLink();
+                        // What else is there, without the link itself: a short link and a
+                        // missing one need different fixes.
+                        if ("not-a-tiktok-video-url".equals(link)) link += " " + copiedLinkShape();
+                        Log.i(TAG, "ok video-link " + link);
                         break;
+                    }
                     case "clear-test-clipboard": {
                         String aid = required(intent, "aid");
                         if (!aid.matches("[0-9]+")) throw new IllegalArgumentException("invalid video id");
@@ -4371,6 +4376,19 @@ public final class Probe extends Instrumentation {
             String text = value == null ? "" : value.toString().trim();
             if (text.startsWith("https://www.tiktok.com/") && text.contains("/video/")) return text;
             return "not-a-tiktok-video-url";
+        }
+
+        /** The copied text's host and whether it has a query, or what it is when it isn't a link. */
+        private String copiedLinkShape() {
+            android.content.ClipboardManager clipboard =
+                    (android.content.ClipboardManager) app.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = clipboard == null ? null : clipboard.getPrimaryClip();
+            if (clip == null || clip.getItemCount() == 0) return "clip=empty";
+            CharSequence value = clip.getItemAt(0).coerceToText(app);
+            String text = value == null ? "" : value.toString().trim();
+            if (!text.startsWith("https://") && !text.startsWith("http://")) return "clip=not-a-link";
+            android.net.Uri uri = android.net.Uri.parse(text);
+            return "host=" + uri.getHost() + " query=" + (uri.getQuery() != null);
         }
 
         /**
