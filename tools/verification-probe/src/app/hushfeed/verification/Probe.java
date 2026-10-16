@@ -4383,7 +4383,10 @@ public final class Probe extends Instrumentation {
             return "not-a-tiktok-video-url";
         }
 
-        /** The copied text's host and whether it has a query, or what it is when it isn't a link. */
+        /**
+         * The copied text's host, whether it has a query and the kind of page its path names, or
+         * what it is when it isn't a link.
+         */
         private String copiedLinkShape() {
             android.content.ClipboardManager clipboard =
                     (android.content.ClipboardManager) app.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -4393,7 +4396,18 @@ public final class Probe extends Instrumentation {
             String text = value == null ? "" : value.toString().trim();
             if (!text.startsWith("https://") && !text.startsWith("http://")) return "clip=not-a-link";
             android.net.Uri uri = android.net.Uri.parse(text);
-            return "host=" + uri.getHost() + " query=" + (uri.getQuery() != null);
+            return "host=" + uri.getHost() + " query=" + (uri.getQuery() != null)
+                    + " path=" + linkPathShape(uri.getPath());
+        }
+
+        /** The kind of page a path names, by its shape alone: never the name or the code in it. */
+        private String linkPathShape(String path) {
+            if (path == null || path.isEmpty() || path.equals("/")) return "root";
+            if (path.matches("/@[^/]+/video/\\d+/?")) return "video";
+            if (path.matches("/@[^/]+/photo/\\d+/?")) return "photo";
+            if (path.matches("/t/[A-Za-z0-9]+/?")) return "t-short";
+            if (path.matches("/[A-Za-z0-9]{4,20}/?")) return "short";
+            return "other-" + (path.split("/", -1).length - 1) + "-segments";
         }
 
         /**
