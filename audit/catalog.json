@@ -13501,6 +13501,64 @@
     "auto": true
    },
    {
+    "id": "formatters-exact",
+    "what": "TikTok's main count formatter and a compact one, called with 123456: 123,456 with the switch on, TikTok's 123.4K style with it off.",
+    "steps": [
+     {
+      "set": {
+       "show_exact_counts": "true"
+      }
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "probe": "countformat",
+      "extras": {
+       "class": "X.0EYv",
+       "method": "LIZIZ",
+       "count": "123456"
+      },
+      "expect": "count=123456 -> 123,456(\\s|$)"
+     },
+     {
+      "probe": "countformat",
+      "extras": {
+       "class": "X.0HAE",
+       "method": "LIZ",
+       "count": "123456"
+      },
+      "expect": "count=123456 -> 123,456(\\s|$)"
+     },
+     {
+      "set": {
+       "show_exact_counts": "false"
+      }
+     },
+     {
+      "probe": "countformat",
+      "extras": {
+       "class": "X.0EYv",
+       "method": "LIZIZ",
+       "count": "123456"
+      },
+      "expect": "count=123456 -> \\d+(\\.\\d)?K(\\s|$)"
+     },
+     {
+      "probe": "countformat",
+      "extras": {
+       "class": "X.0HAE",
+       "method": "LIZ",
+       "count": "123456"
+      },
+      "expect": "count=123456 -> \\d+(\\.\\d)?K(\\s|$)"
+     }
+    ]
+   },
+   {
     "id": "comment-title-exact",
     "what": "Review: with the switch on, the comment sheet's title writes a big comment count whole (12,345 comments, not 12.3K).",
     "steps": [
@@ -13560,7 +13618,7 @@
     "auto": true
    }
   ],
-  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4. The comment sheet title, the likes list and the viewers list come from X/0HAE.LIZIZ(Aweme, long) on 47.1.4, which for someone else's video formats the count itself and never reached the compact formatter's hook; it has its own hook since 2026-10-16 (VideoCountFormatterFingerprint). comment-title-exact picks its video by videoinfo's comments bucket (probe since 2026-10-16): with likes=over10000 the a8 run opened a video with 35 comments, whose title reads the same either way. Videos with 10,000 comments are rarer than ones with 10,000 likes, hence 30 swipes. A live flip reaches only cells bound after it: the next cell is already laid out with the old text, which is why pass 3 read 69.4K right after the flip. On 2026-10-16 the comma was there both after a restart and live three swipes on, so like-count-exact restarts for its off half and swipes three times after turning it on."
+  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4. The comment sheet title, the likes list and the viewers list come from X/0HAE.LIZIZ(Aweme, long) on 47.1.4. For someone else's video it calls TikTok's general formatter with no compact style, which writes the count whole with the switch off too (123456 as 123,456 through probe countformat on the S22, 2026-10-16); your own video goes to X/0HAE.LIZ(J) and the flag-off path to X/0EYv.LIZIZ(J), both hooked. So it needs no hook of its own, and the one added that morning was reverted (a1a60d832). comment-title-exact picks its video by videoinfo's comments bucket (probe since 2026-10-16): with likes=over10000 the a8 run opened a video with 35 comments, whose title reads the same either way. Videos with 10,000 comments are rarer than ones with 10,000 likes, hence 30 swipes. A live flip reaches only cells bound after it: the next cell is already laid out with the old text, which is why pass 3 read 69.4K right after the flip. On 2026-10-16 the comma was there both after a restart and live three swipes on, so like-count-exact restarts for its off half and swipes three times after turning it on. formatters-exact calls the main formatter (CountFormatterFingerprint, X.0EYv.LIZIZ) and a compact one (CompactCountFormatterFingerprint, X.0HAE.LIZ) through probe countformat with a count of its own, so it reads the same on any feed (none of 31 videos had 10,000 comments on 2026-10-16, and like-count-exact went inconclusive once). The names are 47.1.4's obfuscated ones: on a new TikTok build put in what those two fingerprints match there (the anchors fixture test resolves them). The switch is read at each call, so the off half needs no restart."
  },
  {
   "name": "Show follow status",
