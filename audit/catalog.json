@@ -433,7 +433,7 @@
     "auto": true
    }
   ],
-  "notes": "The grid-picker check needs at least one video on the test account's own profile grid (the Pick for saving circle is drawn per cell); an empty grid fails the 'found' step, which then reads as a missing precondition. Nothing is saved: the picker is only looked at. Story saves, profile-picture saves, audio track, original photos and photo-to-video all act on a held press or a real save and need a person. Quality choice (download_video_quality) shows its effect only on a save: read the file size or the gear list from probe videoinfo (gears=) if a person does one."
+  "notes": "The grid-picker check needs at least one video on the test account's own profile grid (the Pick for saving circle is drawn per cell); an empty grid fails the 'found' step, which then reads as a missing precondition. Nothing is saved: the picker is only looked at. Story saves, profile-picture saves, audio track, original photos and photo-to-video all act on a held press or a real save and need a person. Quality choice (download_video_quality) shows its effect only on a save: read the file size or the gear list from probe videoinfo (gears=) if a person does one. The grid picker check opens @tiktok, TikTok's own account, because it needs a profile grid full of videos. TikTok reports a profile view only for creators of 5,000 followers or fewer, so nobody is told about the visit. Never point it at a person's profile."
  },
  {
   "name": "Allow Duet and Stitch",
@@ -5470,8 +5470,8 @@
     "auto": true
    },
    {
-    "id": "profile-view-held-back",
-    "what": "Swiping left to a creator's profile makes TikTok ask Ghost mode about the profile view report and the answer is blocked.",
+    "id": "switch-drives-hook",
+    "what": "The call TikTok's profile view report goes through answers true (held back) with Ghost mode on and false (sent) with it off.",
     "steps": [
      {
       "set": {
@@ -5479,68 +5479,33 @@
       }
      },
      {
-      "open": "feed"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "left"
-     },
-     {
-      "wait": 3500
-     },
-     {
-      "probe": "hookdetails",
+      "probe": "call",
       "extras": {
-       "family": "ghost mode"
+       "class": "app.morphe.extension.tiktok.ghostmode.GhostMode",
+       "method": "shouldBlockProfileView"
       },
-      "expect": "profile view blocked",
+      "expect": "^ok call shouldBlockProfileView -> true",
       "waitMs": 1500
      },
-     {
-      "back": true
-     }
-    ],
-    "auto": true
-   },
-   {
-    "id": "mode-off-sends",
-    "what": "With Ghost mode off the same call site records the report as sent.",
-    "steps": [
      {
       "set": {
        "ghost_mode": "false"
       }
      },
      {
-      "open": "feed"
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "swipe": "left"
-     },
-     {
-      "wait": 3500
-     },
-     {
-      "probe": "hookdetails",
+      "probe": "call",
       "extras": {
-       "family": "ghost mode"
+       "class": "app.morphe.extension.tiktok.ghostmode.GhostMode",
+       "method": "shouldBlockProfileView"
       },
-      "expect": "profile view sent",
+      "expect": "^ok call shouldBlockProfileView -> false",
       "waitMs": 1500
-     },
-     {
-      "back": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "The profile view call site is only reached for creators of 5,000 followers or fewer (TikTok 47.0.3 reports a profile view only then; probe profileviewgates shows the gates), so on a big creator both profile checks fail with \"no match\" and the swipe should be repeated on another video; ghost_mode on and off also leave \"typing status\", \"story view\" and \"story play stats\" untested, because those need a chat or a story and the audit never opens either. Swipe left opens the creator's profile only while Swipe-left controls is on \"TikTok default\". The profile checks leave the profile with Back; they never press Follow or Message. Hide online status (ghost_hide_online_status) is reported by TikTok's periodic activity status call, so look for \"online status blocked\" in hookdetails after a minute with both switches on; not a separate check because its timing is TikTok's."
+  "notes": "The audit never opens a stranger's profile or story, and with Ghost mode off opening one would send that person a profile view, so the profile view block is checked through the call TikTok's report goes through (GhostMode.shouldBlockProfileView) with the switch on and off, and hooks-installed shows the call sites were bound at start. The swipe-left checks that did open a creator's profile were taken out on 2026-10-16. TikTok reports a profile view only for creators of 5,000 followers or fewer (probe profileviewgates shows the gates). Typing status, story view and story play stats need a chat or a story and are not driven. Hide online status (ghost_hide_online_status) is reported by TikTok's periodic activity status call, so look for \"online status blocked\" in hookdetails after a minute with both switches on; not a separate check because its timing is TikTok's."
  },
  {
   "name": "Hide CAPTCHA popups",
@@ -14792,7 +14757,8 @@
     "steps": [
      {
       "set": {
-       "swipe_left_action": "comments"
+       "swipe_left_action": "comments",
+       "ghost_mode": "true"
       }
      },
      {
@@ -14827,7 +14793,8 @@
     "steps": [
      {
       "set": {
-       "swipe_left_action": "nothing"
+       "swipe_left_action": "nothing",
+       "ghost_mode": "true"
       }
      },
      {
@@ -14849,7 +14816,7 @@
     "auto": true
    }
   ],
-  "notes": "The default action opens the creator's profile; it is not asserted here to keep the audit off strangers' profiles. The comment sheet is only opened, never typed in. Back closes it. GestureActions registers hook status families \"swipe left\" and \"double tap\"."
+  "notes": "The default action opens the creator's profile; it is not asserted here to keep the audit off strangers' profiles. The comment sheet is only opened, never typed in. Back closes it. GestureActions registers hook status families \"swipe left\" and \"double tap\". Both swipe checks turn Ghost mode on as well: if the patch stopped working, TikTok's own swipe left would open the creator's profile, and Ghost mode keeps that from sending them a profile view (2026-10-16)."
  },
  {
   "name": "Translate comments",
