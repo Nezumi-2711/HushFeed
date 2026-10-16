@@ -9211,13 +9211,15 @@
        "names": "highest"
       },
       "expect": "highest=(60|90|120|144)\\.0",
-      "waitMs": 1500
+      "waitMs": 1500,
+      "retrySwipe": 10,
+      "precondition": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "highest stays 0.0 until preferredRefreshRate is asked for a request below the screen's best with the switch on, so a 60 Hz screen or a video already at the screen's rate leaves it at 0.0 (then swipe more). The measurable end result, the window's preferredRefreshRate staying 0, is a dumpsys window reading the runner has no step for."
+  "notes": "highest stays 0.0 until TikTok asks the window for a rate above zero with the switch on, so a feed where TikTok never caps reads inconclusive after ten swipes. On the S22 at 2026-10-16 no TikTok window asked for one: `dumpsys window windows` prints preferredRefreshRate only when it's set, and it was nowhere, so TikTok 47.1.4 may only cap some videos or none. The fingerprint check at patch time is what shows the hook is in place."
  },
  {
   "name": "LIVE controls",
