@@ -2,6 +2,8 @@
 
 * **TikTok:** Sakelar baru membuka panel LIVE seperti Bagikan dan klub penggemar dalam warna gelap saat TikTok dalam mode gelap (#159).
 
+* **TikTok:** Daftar Kualitas video LIVE tidak lagi menampilkan barisnya putih di atas putih dalam mode gelap (#57).
+
 * **TikTok:** Sakelar baru membatasi pilihan Tekan lama di sisi video, jadi tekan di tengah tetap membuka menu TikTok (#136).
 
 * **TikTok:** Sakelar baru menambahkan Blokir pengomentar ini ke menu yang terbuka saat komentar ditekan lama (#169).

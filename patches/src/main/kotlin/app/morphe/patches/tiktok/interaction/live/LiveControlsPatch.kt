@@ -36,6 +36,7 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 private const val EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveControls;"
 private const val RECORD_EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveRecordChip;"
 private const val PANEL_THEME = "Lapp/morphe/extension/tiktok/live/LivePanelTheme;"
+private const val QUALITY_LIST_COLORS = "Lapp/morphe/extension/tiktok/live/LiveQualityListColors;"
 
 /** A LIVE room page, one fragment per room in the room pager, real-named on 47.1.4. */
 internal const val LIVE_PLAY_FRAGMENT = "Lcom/bytedance/android/livesdk/chatroom/ui/LivePlayFragment;"
@@ -203,6 +204,17 @@ internal object LiveThemedFragmentInflaterFingerprint : Fingerprint(
     parameters = listOf("Landroid/os/Bundle;"),
 )
 
+/** The older LIVE quality picker, Share > Video quality in rooms whose stream asks for it, real-named on 47.1.4. */
+internal const val LIVE_DEFINITION_DIALOG = "Lcom/bytedance/android/livesdk/definition/LiveDefinitionSelectionDialog;"
+
+/** The quality list's view being set up, which the extension watches so its rows stay readable in dark mode. */
+internal object LiveDefinitionListFingerprint : Fingerprint(
+    definingClass = LIVE_DEFINITION_DIALOG,
+    name = "onViewCreated",
+    returnType = "V",
+    parameters = listOf("Landroid/view/View;", "Landroid/os/Bundle;"),
+)
+
 /**
  * Every return-object in [method], last first, with the register it returns. A return that
  * isn't a plain v0..v15 register, or a method whose `this` sits above v15, can't take the
@@ -232,6 +244,17 @@ internal fun hookPanelInflater(inflater: MutableMethod) {
             """,
         )
     }
+}
+
+/**
+ * Hands the quality list's view to the extension as the dialog sets it up. The method keeps the
+ * view above v15 on 47.1.4, so the call takes the range form.
+ */
+internal fun hookQualityList(viewCreated: MutableMethod) {
+    viewCreated.addInstruction(
+        0,
+        "invoke-static/range {p1 .. p1}, $QUALITY_LIST_COLORS->readableQualityList(Landroid/view/View;)V",
+    )
 }
 
 internal const val PULL_STREAM_SERVICE ="Lcom/bytedance/android/live/livepullstream/PullStreamService;"
@@ -674,6 +697,9 @@ val liveControlsPatch = bytecodePatch(
         listOf(LiveThemedDialogInflaterFingerprint, LiveThemedFragmentInflaterFingerprint).forEach {
             hookPanelInflater(it.method)
         }
+        // The older quality list's rows can read white on white in dark mode, switch or no
+        // switch; the extension gives poorly contrasted text a readable color there.
+        hookQualityList(LiveDefinitionListFingerprint.method)
 
         // The room page coming to the front: where the Record button goes and which room it records (#37).
         liveRoomField(classDefByOrNull(LIVE_PLAY_FRAGMENT)

@@ -20,8 +20,9 @@ import org.junit.Test
  * the dark LIVE theme to the room's theme without force. The panels' inflaters now go through
  * the extension, which wraps them in the panel's own overlay with force. These hold the anchors
  * on every declared build: both themed bases keep their inflater and their getThemeOverlay
- * (which the extension calls by name), every return takes the four-bit hook, and LIVE's sheet page
- * still extends the fragment base (the extension finds sheet pages by that name).
+ * (which the extension calls by name), every return takes the four-bit hook, LIVE's sheet page
+ * still extends the fragment base (the extension finds sheet pages by that name), and the older
+ * quality list keeps its onViewCreated for the readable-rows hook.
  */
 class LiveDarkPanelsAnchorsTest {
     private fun classes(apk: java.io.File): Map<String, ClassDef> {
@@ -67,6 +68,25 @@ class LiveDarkPanelsAnchorsTest {
                 assertEquals("${apk.name}: $type", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
             }
             assertEquals("${apk.name}: LIVE's sheet page base", LIVE_THEMED_FRAGMENT, classes[LIVE_SHEET_FRAGMENT]?.superclass)
+        }
+    }
+
+    @Test
+    fun `each declared build keeps the quality list's view setup`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val dialog = classes[LIVE_DEFINITION_DIALOG] ?: throw AssertionError("${apk.name}: $LIVE_DEFINITION_DIALOG is gone")
+            val found = dialog.methods.filter { LiveDefinitionListFingerprint.takes(it, dialog) }
+            assertEquals("${apk.name}: onViewCreated", 1, found.size)
+            // The view sits above v15 on 47.1.4, so the hook takes the range form; the inline
+            // compiler drops a four-bit call to a register that doesn't fit, silently.
+            val hooked = MutableMethod(found.single())
+            hookQualityList(hooked)
+            val first = hooked.implementation!!.instructions.first()
+            assertEquals("${apk.name}: the hook's call", Opcode.INVOKE_STATIC_RANGE, first.opcode)
+            val view = (first as com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction).startRegister
+            assertEquals("${apk.name}: the hook reads the view", found.single().implementation!!.registerCount - 2, view)
+            assertEquals("readableQualityList", ((first as ReferenceInstruction).reference as MethodReference).name)
         }
     }
 }

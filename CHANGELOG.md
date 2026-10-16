@@ -8,6 +8,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** LIVE controls can open LIVE panels dark while TikTok is in dark mode. TikTok keeps a LIVE room's share menu, fan club sheet, first gift dialog and similar panels light even in a dark app, so they flashed white over the stream. Turn on Dark LIVE panels in dark mode in Hushfeed settings > Playback. Light mode doesn't change (#159).
 
+* **TikTok:** The Video quality list in a LIVE room's Share menu no longer shows its qualities white on white in dark mode. Text in that list that can't be read against what's behind it now turns white on a dark row and dark on a light one, with or without Dark LIVE panels. Light mode doesn't change (#57).
+
 * **TikTok:** With Automatic Clear Display on and no delay, a video opened from search starts cleared. Before, it showed its buttons, its caption, the comment box and the "find related content" bar along the top for about a second before they went, every time a result was opened. TikTok now opens those videos inside its main screen rather than a page of their own, so the hold that keeps the controls away until the clear lands never started there (#84).
 
 * **TikTok:** With Hide the Tako bubble on, tapping a caption (or its "more") no longer opens a sheet with "Discover more with Tako" and an "Ask Tako" box on some videos. The caption expands in place instead, the way it already did on videos without Tako content. Turn the switch off, or pause Hushfeed, and TikTok's sheet comes back (#162).

@@ -2,6 +2,8 @@
 
 * **TikTok:** Yeni açar TikTok qaranlıq rejimdə olanda Paylaş və fan klubu kimi LIVE panellərini tünd açır (#159).
 
+* **TikTok:** LIVE-ın Video keyfiyyəti siyahısı qaranlıq rejimdə sətirlərini artıq ağ fonda ağ göstərmir (#57).
+
 * **TikTok:** Yeni açar Uzun basma seçimini videonun yanlarında saxlayır, beləliklə ortada basmaq yenə TikTok menyusunu açır (#136).
 
 * **TikTok:** Yeni açar şərhə basıb saxlayanda açılan menyuya Bu şərh yazanı bloklayın seçimini əlavə edir (#169).
