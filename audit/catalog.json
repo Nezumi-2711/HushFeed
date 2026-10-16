@@ -3956,7 +3956,7 @@
    },
    {
     "id": "gate-forced",
-    "what": "A stored override changes what TikTok reads: with favorite_reverse forced to 1 and Keep the Favorites tab on, Hushfeed's answer to the gate is recorded ('refused favorite_reverse') after the profile opens.",
+    "what": "A stored override changes what TikTok reads: with favorite_reverse forced to 1 and Keep the Favorites tab on, opening the profile's Favorites tab reads the gate as 1, which Hushfeed's answer records ('refused favorite_reverse').",
     "steps": [
      {
       "set": {
@@ -3977,10 +3977,34 @@
       "restart": true
      },
      {
+      "probe": "labreport",
+      "extras": {
+       "op": "begin"
+      },
+      "expect": "recording=true"
+     },
+     {
       "open": "profile"
      },
      {
-      "wait": 3500
+      "wait": 2500
+     },
+     {
+      "tap": {
+       "desc": "^Favorites$"
+      }
+     },
+     {
+      "wait": 3000
+     },
+     {
+      "probe": "labreport",
+      "extras": {
+       "op": "stop",
+       "key": "favorite_reverse"
+      },
+      "expect": "ok labreport key favorite_reverse read=true",
+      "precondition": true
      },
      {
       "probe": "hookdetails",
@@ -4841,11 +4865,11 @@
    },
    {
     "id": "filter-bottom-tabs",
-    "what": "Review: with Filter bottom tabs on and only some tabs ticked, the unticked tabs leave the bottom bar.",
+    "what": "With Filter bottom tabs on and Friends left out of its ticks, the Friends tab leaves the bottom bar and the ticked tabs stay; with the switch off it's back.",
     "steps": [
      {
       "set": {
-       "bottom_navigation": "true"
+       "bottom_navigation": "false"
       }
      },
      {
@@ -4858,19 +4882,55 @@
       "wait": 1500
      },
      {
-      "shot": "bottom-tabs-filtered",
-      "review": "With Filter bottom tabs on and its default ticks the bar still shows the ticked tabs (Home, Inbox, Profile and Friends if ticked); unticking Shop/Friends in the page then restarting removes them. Failing looks like an unticked tab still drawn. Restore with the switch off."
+      "probe": "findtext",
+      "extras": {
+       "text": "Friends"
+      },
+      "expect": "ok findtext found",
+      "precondition": true
+     },
+     {
+      "set": {
+       "bottom_navigation": "true",
+       "bottom_navigation_tabs": "HOME,PUBLISH,INBOX,PROFILE"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "wait": 2000
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "Friends"
+      },
+      "expect": "ok findtext none"
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "Inbox"
+      },
+      "expect": "ok findtext found"
      },
      {
       "set": {
        "bottom_navigation": "false"
       }
+     },
+     {
+      "restart": true
      }
     ],
-    "auto": false
+    "auto": true
    }
   ],
-  "notes": "The Home tap in keep-for-you is the probe's findtext click on the bottom bar's English 'Home' label (a uiautomator tap cannot be used on a playing feed); if that label is not a TextView on this build the step fails to find it, which is a probe problem rather than the patch. 'hide-top-names' relies on the English 'For You' label above the feed being a TextView TikTok draws; in 47.1.4 it may be drawn as an image, in which case findtext finds nothing even with the switch off and the baseline expect fails (read that as the label not being findable, then use the screenshot). Start page for Inbox/Profile needs a signed-in account and is not used here because the runner's restart waits for the feed. Tab filter lists (feed_navigation_tabs, bottom_navigation_tabs) are chosen by tick lists with no row title; the review check covers them."
+  "notes": "The Home tap in keep-for-you is the probe's findtext click on the bottom bar's English 'Home' label (a uiautomator tap cannot be used on a playing feed); if that label is not a TextView on this build the step fails to find it, which is a probe problem rather than the patch. 'hide-top-names' relies on the English 'For You' label above the feed being a TextView TikTok draws; in 47.1.4 it may be drawn as an image, in which case findtext finds nothing even with the switch off and the baseline expect fails (read that as the label not being findable, then use the screenshot). Start page for Inbox/Profile needs a signed-in account and is not used here because the runner's restart waits for the feed. Tab filter lists (feed_navigation_tabs, bottom_navigation_tabs) are comma-separated keys (HOME, FRIENDS, PUBLISH, INBOX, PROFILE, MALL for the bottom bar), set straight through the probe; filter-bottom-tabs leaves FRIENDS out."
  },
  {
   "name": "Feed text sizes",
@@ -12112,7 +12172,7 @@
    },
    {
     "id": "home-long-press",
-    "what": "Review: pressing and holding the Home tab opens Hushfeed settings (switch home_tab_opens_settings, on by default), and the row sits at the top of TikTok's Settings and privacy.",
+    "what": "Holding the Home tab opens Hushfeed's settings (home_tab_opens_settings, on by default), and a Hushfeed row sits in TikTok's Settings and privacy.",
     "steps": [
      {
       "set": {
@@ -12126,11 +12186,62 @@
       "wait": 1500
      },
      {
-      "shot": "home-long-press",
-      "review": "Press and hold the Home tab (the step language has no long press, so a person does it): Hushfeed's settings page opens. Then Profile > menu > Settings and privacy: a Hushfeed row sits at the top of the list. Failing looks like nothing happening on the long press, or no row in Settings and privacy."
+      "probe": "findtext",
+      "extras": {
+       "text": "Home",
+       "hold": "900"
+      },
+      "expect": "ok findtext found .*held=900ms"
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "(?i)^hushfeed$",
+       "match": "regex"
+      },
+      "expect": "ok findtext found"
+     },
+     {
+      "back": true
+     },
+     {
+      "open": "profile"
+     },
+     {
+      "tap": {
+       "desc": "^Profile menu$"
+      }
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "tap": {
+       "text": "^Settings and privacy$"
+      }
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "(?i)^hushfeed",
+       "match": "regex"
+      },
+      "expect": "ok findtext found"
+     },
+     {
+      "back": true
+     },
+     {
+      "back": true
      }
     ],
-    "auto": false
+    "auto": true
    }
   ],
   "notes": "The probe's settings action starts the same activity the row does, so the first three checks prove the page, its sections and the registration; the two entry points a person uses (the row inside Settings and privacy and the Home long press) need the real gesture. Section rows show only when their patches' status flags are set (Section.isAvailable in TikTokPreferenceFragment.java), which makes the home page a second applied-patch proof. Labels are English. 'Hide new followers' is an Inbox row title near the top of that page."
