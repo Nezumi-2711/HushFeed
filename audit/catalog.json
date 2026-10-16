@@ -11717,7 +11717,8 @@
      {
       "probe": "report",
       "expect": "Resource governor: blocked sensor registration for type \\d+",
-      "waitMs": 10000
+      "waitMs": 10000,
+      "precondition": true
      }
     ],
     "auto": true
