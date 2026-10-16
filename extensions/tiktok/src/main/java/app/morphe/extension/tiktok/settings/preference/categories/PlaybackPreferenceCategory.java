@@ -167,12 +167,8 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                             + "while it's on screen.",
                     Settings.SEEKBAR_TIME
             ));
-            addPreference(new ChoicePreference(context, "Where the time goes",
-                    Settings.SEEKBAR_TIME_PLACEMENT,
-                    new String[]{"Beside the bar", "Above the bar"},
-                    new String[]{"beside", "above"})
-                    .withNote("Above puts the time over the right end of the bar while nothing on "
-                            + "screen is in the way, and beside the bar when something is."));
+            // Where the time goes (Settings.SEEKBAR_TIME_PLACEMENT) has no row until the time is seen
+            // above the bar: on 47.1.4 the caption or the rail always sits over both ends (#173).
             addPreference(new TogglePreference(
                     context,
                     "Full-width progress bar",

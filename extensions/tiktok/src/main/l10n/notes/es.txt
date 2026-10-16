@@ -30,7 +30,7 @@
 
 * **TikTok:** Accent color tiene una opción nueva, Seguir el fondo de pantalla, que toma el color de tu fondo en Android 12 y posteriores (#163).
 
-* **TikTok:** Dos opciones nuevas para la barra de progreso: el tiempo puede ir encima de la barra y la barra puede ocupar todo el ancho (#173).
+* **TikTok:** Un nuevo interruptor, Barra de progreso a todo el ancho, lleva la barra de progreso de un borde de la pantalla al otro (#173).
 
 * **TikTok:** Con Ocultar la burbuja de Tako activado, tocar una descripción la expande en su sitio en lugar de abrir la hoja de Ask Tako (#162).
 

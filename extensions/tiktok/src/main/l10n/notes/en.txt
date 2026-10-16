@@ -30,7 +30,7 @@
 
 * **TikTok:** Accent color has a new Follow the wallpaper option that takes the color from your wallpaper on Android 12 and up (#163).
 
-* **TikTok:** Two new choices for the progress bar: the time can sit above the bar, and the bar can run edge to edge (#173).
+* **TikTok:** A new Full-width progress bar switch runs the progress bar from one screen edge to the other (#173).
 
 * **TikTok:** With Hide the Tako bubble on, tapping a caption expands it in place instead of opening the Ask Tako sheet (#162).
 

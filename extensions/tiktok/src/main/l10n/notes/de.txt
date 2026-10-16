@@ -30,7 +30,7 @@
 
 * **TikTok:** Accent color hat die neue Option „Dem Hintergrundbild folgen“, die ab Android 12 die Farbe aus deinem Hintergrundbild übernimmt (#163).
 
-* **TikTok:** Zwei neue Optionen für den Fortschrittsbalken: Die Zeit kann über dem Balken stehen, und der Balken kann von Rand zu Rand laufen (#173).
+* **TikTok:** Ein neuer Schalter „Fortschrittsbalken in voller Breite“ lässt den Fortschrittsbalken von einem Bildschirmrand zum anderen laufen (#173).
 
 * **TikTok:** Mit „Tako-Blase ausblenden“ klappt ein Tipp auf eine Beschreibung sie jetzt an Ort und Stelle auf, statt das Ask-Tako-Blatt zu öffnen (#162).
 

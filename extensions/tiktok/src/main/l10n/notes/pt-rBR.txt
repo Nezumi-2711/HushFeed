@@ -30,7 +30,7 @@
 
 * **TikTok:** Accent color tem uma nova opção, Seguir o papel de parede, que pega a cor do seu papel de parede no Android 12 ou mais novo (#163).
 
-* **TikTok:** Duas novas opções para a barra de progresso: o tempo pode ficar acima da barra e a barra pode ocupar toda a largura (#173).
+* **TikTok:** Uma nova chave, Barra de progresso em largura total, leva a barra de progresso de uma borda da tela à outra (#173).
 
 * **TikTok:** Com Esconder a bolha do Tako ligado, tocar numa legenda a expande no lugar em vez de abrir a folha Ask Tako (#162).
 

@@ -30,7 +30,7 @@
 
 * **TikTok:** Accent color ha una nuova opzione, Segui lo sfondo, che prende il colore dal tuo sfondo da Android 12 in poi (#163).
 
-* **TikTok:** Due nuove opzioni per la barra di avanzamento: il tempo può stare sopra la barra e la barra può occupare tutta la larghezza (#173).
+* **TikTok:** Un nuovo interruttore, Barra di avanzamento a tutta larghezza, porta la barra di avanzamento da un bordo dello schermo all'altro (#173).
 
 * **TikTok:** Con Nascondi la bolla di Tako attivo, toccare una didascalia la espande sul posto invece di aprire il foglio Ask Tako (#162).
 

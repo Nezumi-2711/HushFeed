@@ -30,7 +30,7 @@
 
 * **TikTok:** Accent color-a Android 12 və daha yenisində rəngi divar kağızından götürən yeni Divar kağızını izlə seçimi əlavə olundu (#163).
 
-* **TikTok:** İrəliləyiş paneli üçün iki yeni seçim: vaxt panelin üstündə görünə bilər və panel kənardan kənara uzana bilər (#173).
+* **TikTok:** Yeni Tam enli irəliləyiş paneli açarı irəliləyiş panelini ekranın bir kənarından o biri kənarına qədər uzadır (#173).
 
 * **TikTok:** Tako qabarcığını gizlədin aktiv olanda, təsvirə toxunmaq Ask Tako vərəqini açmaq əvəzinə onu yerində genişləndirir (#162).
 

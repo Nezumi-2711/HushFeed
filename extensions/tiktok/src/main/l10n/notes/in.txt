@@ -30,7 +30,7 @@
 
 * **TikTok:** Accent color punya opsi baru, Ikuti wallpaper, yang mengambil warna dari wallpaper Anda di Android 12 ke atas (#163).
 
-* **TikTok:** Dua pilihan baru untuk bilah progres: waktu bisa ditampilkan di atas bilah, dan bilah bisa membentang dari tepi ke tepi (#173).
+* **TikTok:** Sakelar baru Bilah progres selebar layar membuat bilah progres membentang dari satu tepi layar ke tepi lainnya (#173).
 
 * **TikTok:** Saat Sembunyikan gelembung Tako aktif, mengetuk keterangan kini membukanya di tempat, tidak lagi membuka lembar Ask Tako (#162).
 
