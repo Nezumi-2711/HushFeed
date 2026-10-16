@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** With `Hide the comment bar on opened videos` on and Like the lowest button left on the right, the like count no longer sits on the progress bar and the time beside it. The buttons already moved up to clear the bar, but they stopped at the heart and left its count under it (#145).
+
 * **TikTok:** `Show translation options in Language settings` is now `Bring back TikTok's translation`, and it brings back See translation under video descriptions and in captions as well. TikTok takes translation away from some accounts with one setting on its side, which hid the button on videos along with the Language page rows. Turning it on asks for a restart now, since TikTok checks that setting once when it starts (#143).
 
 * **TikTok:** With `Log diagnostics` on, an exported report now notes each LIVE room TikTok enters and whether a LIVE comment went to that same room. It's for comments that show for you but never reach the room (#110). Room ids and what you typed stay out of it.
