@@ -4879,7 +4879,7 @@
      },
      {
       "probe": "textviews",
-      "expect": "id=title [^\\n]*textSizePx=72\\b"
+      "expect": "id=title [^\\n]*textSizeSp=24\\b"
      },
      {
       "set": {
@@ -4894,8 +4894,8 @@
      },
      {
       "probe": "textviews",
-      "expect": "id=title [^\\n]*textSizePx=45\\b",
-      "expectNot": "id=title [^\\n]*textSizePx=72\\b"
+      "expect": "id=title [^\\n]*textSizeSp=15\\b",
+      "expectNot": "id=title [^\\n]*textSizeSp=24\\b"
      },
      {
       "set": {
@@ -4910,7 +4910,7 @@
      },
      {
       "probe": "textviews",
-      "expectNot": "id=title [^\\n]*textSizePx=(45|72)\\b"
+      "expectNot": "id=title [^\\n]*textSizeSp=(15|24)\\b"
      }
     ],
     "auto": true
@@ -4932,7 +4932,7 @@
      },
      {
       "probe": "layouts",
-      "expect": "textPx=60\\b"
+      "expect": "textSp=20\\b"
      },
      {
       "set": {
@@ -4947,7 +4947,7 @@
      },
      {
       "probe": "layouts",
-      "expect": "textPx=36\\b"
+      "expect": "textSp=12\\b"
      },
      {
       "set": {
@@ -4969,7 +4969,7 @@
     "auto": true
    }
   ],
-  "notes": "The expected pixel sizes assume the S22 at density 3.0 (480 dpi) and system font scale 1.0 (the size is applied in sp, TypedValue.COMPLEX_UNIT_SP); change the factors if the phone's display size or font size differs. 'textviews' prints text length and size, never the text. The author size also sizes the post date next to the name. The 'layouts' probe lists views that draw a Layout of their own (the caption); other text may show the same px by chance, so the regex is a presence test, and the off phase is the control."
+  "notes": "The expected pixel sizes assume the S22 at density 3.0 (480 dpi) and system font scale 1.0 (the size is applied in sp, TypedValue.COMPLEX_UNIT_SP); change the factors if the phone's display size or font size differs. 'textviews' prints text length and size, never the text. The author size also sizes the post date next to the name. The 'layouts' probe lists views that draw a Layout of their own (the caption); other text may show the same px by chance, so the regex is a presence test, and the off phase is the control. Sizes are matched in sp (the probe's textSizeSp and textSp): pixels depend on density, and the S22 at 450 dpi draws 24 sp as 67 px, not the 72 px a 3.0 screen gives."
  },
  {
   "name": "Fit the video to the screen",

@@ -928,6 +928,7 @@ public final class Probe extends Instrumentation {
                             out.append('\n').append(view.getClass().getName()).append(" at=").append(at[0]).append(',').append(at[1])
                                     .append(" size=").append(view.getWidth()).append('x').append(view.getHeight())
                                     .append(" textPx=").append(Math.round(layout.getPaint().getTextSize()))
+                                    .append(" textSp=").append(textSp(view, layout.getPaint().getTextSize()))
                                     .append(' ').append(layoutReport(layout));
                         }
                         // In pieces like the other reports: one line truncates near 4 KB and a
@@ -1686,6 +1687,7 @@ public final class Probe extends Instrumentation {
                                 if (view instanceof android.widget.TextView) {
                                     android.widget.TextView label = (android.widget.TextView) view;
                                     out.append(" textPx=").append(label.getTextSize())
+                                            .append(" textSp=").append(textSp(label, label.getTextSize()))
                                             .append(" lines=").append(label.getLineCount());
                                 }
                                 if (id == strip && view instanceof android.view.ViewGroup) {
@@ -2920,6 +2922,7 @@ public final class Probe extends Instrumentation {
                         .append(" size=").append(view.getWidth()).append('x').append(view.getHeight())
                         .append(" textLength=").append(((android.widget.TextView) view).getText().length())
                         .append(" textSizePx=").append((int) ((android.widget.TextView) view).getTextSize())
+                        .append(" textSizeSp=").append(textSp(view, ((android.widget.TextView) view).getTextSize()))
                         .append(" parent=").append(parentName)
                         .append('\n');
             }
@@ -3170,6 +3173,19 @@ public final class Probe extends Instrumentation {
          */
         private static String withoutFormatMarks(String text) {
             return text.replaceAll("\\p{Cf}", "");
+        }
+
+        /**
+         * A text size back in sp, the unit the size patches are set in. Pixels depend on the
+         * phone's density (24 sp is 72 px at 3.0 and 67 px on a 450 dpi S22), so a check
+         * written against pixels only passed on the screen it was written on.
+         */
+        private static long textSp(android.view.View view, float px) {
+            android.util.DisplayMetrics metrics = view.getResources().getDisplayMetrics();
+            if (android.os.Build.VERSION.SDK_INT >= 34) {
+                return Math.round(android.util.TypedValue.deriveDimension(android.util.TypedValue.COMPLEX_UNIT_SP, px, metrics));
+            }
+            return Math.round(px / metrics.scaledDensity);
         }
 
         private static java.util.List<android.view.View> windowRoots() throws Exception {
