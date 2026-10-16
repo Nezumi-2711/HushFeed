@@ -8606,7 +8606,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "photo=false.*ad=false",
+      "expect": "photo=false durationMs=(1[5-9]\\d{3}|[2-9]\\d{4}|\\d{6,})\\b.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -8705,7 +8705,7 @@
     "auto": true
    }
   ],
-  "notes": "The 2026-09-22 device notes say TikTok's pull-down lock only works past the first video (on the first one the feed's pull to refresh takes the drag), so both checks swipe up twice first. holdslide injects the hold and slide inside TikTok's own window; it presses the left third of the video, never a rail button: on 47.1.4 a hold in the middle opens TikTok's long-press menu and the 2x hold lives on the sides (seen 2026-10-16). The player handle X.037t / LJIILIIL is the 47.1.4 one from the spec. The lock distance default is 140 dp (FeatureControls.DEFAULT_LONG_PRESS_LOCK_DISTANCE_DP), so the 500 px slide is enough on a 420 dpi screen. The checks leave the video with a swipe because a locked 2x would otherwise carry into the next patch's checks (the runner also restarts after a patch that set a restart-gated key). TikTok marks the lock as a chosen speed (swipe_up_lock_persist) and Remember the last speed saves it, so both checks set remembered_speed_v2 to 1.0 first and the runner puts the phone's own value back afterwards; without that the lock check left 2.0 for every later video. Each hold waits for a normal video (photo=false, ad=false), since ads and photos have no side hold (2026-10-16)."
+  "notes": "The 2026-09-22 device notes say TikTok's pull-down lock only works past the first video (on the first one the feed's pull to refresh takes the drag), so both checks swipe up twice first. holdslide injects the hold and slide inside TikTok's own window; it presses the left third of the video, never a rail button: on 47.1.4 a hold in the middle opens TikTok's long-press menu and the 2x hold lives on the sides (seen 2026-10-16). The player handle X.037t / LJIILIIL is the 47.1.4 one from the spec. The lock distance default is 140 dp (FeatureControls.DEFAULT_LONG_PRESS_LOCK_DISTANCE_DP), so the 500 px slide is enough on a 420 dpi screen. The checks leave the video with a swipe because a locked 2x would otherwise carry into the next patch's checks (the runner also restarts after a patch that set a restart-gated key). TikTok marks the lock as a chosen speed (swipe_up_lock_persist) and Remember the last speed saves it, so both checks set remembered_speed_v2 to 1.0 first and the runner puts the phone's own value back afterwards; without that the lock check left 2.0 for every later video. Each hold waits for a normal video (photo=false, ad=false), since ads and photos have no side hold (2026-10-16). The video picked before a rate reading is 15 s or longer: pass 3 (2026-10-16) read 'speed=2.0 then 2.0 moved=-3580ms' on a 6 s video that looped while the player ran at 2x, so the lock held but the rate came out negative."
  },
  {
   "name": "In-app browser privacy guard",
