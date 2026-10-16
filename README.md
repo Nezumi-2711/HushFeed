@@ -1,7 +1,7 @@
 ![Hushfeed. Take back your feed with focused controls for filtering, gestures, playback, downloads and privacy.](assets/readme-hero.png)
 
 <p align="center">
-  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.74.0-6f42c1.svg" /></a>
+  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.75.0-6f42c1.svg" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-GPLv3-blue.svg" /></a>
   <a href="https://www.android.com/"><img alt="platform" src="https://img.shields.io/badge/platform-Android-3ddc84.svg" /></a>
   <a href="https://github.com/MorpheApp/morphe-manager"><img alt="Morphe" src="https://img.shields.io/badge/works%20with-Morphe-00b894.svg" /></a>
@@ -30,9 +30,9 @@ Most switches start off, so a freshly patched TikTok looks and works the way it 
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, version [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use that exact APK when patching. See [Supported target](#supported-target) for the build details.
 
-Hushfeed v0.74.0 contains 135 patches for TikTok 47.1.4. New in this one: TikTok's red buttons can take a color you pick, and the tab bar can float as a see-through pill. LIVEs keep the quality you chose after a restart, and Hushfeed can patch PineDrama too. It needs Morphe Manager 1.34.0 or newer.
+Hushfeed v0.75.0 contains 135 patches for TikTok 47.1.4. New in this one: the Profile tab opens again on the phones where it crashed, phones set to another language stay in it after patching, and See translation is back on videos. A comment's menu can block whoever wrote it, and Accent color can follow your wallpaper. It needs Morphe Manager 1.34.0 or newer.
 
-The main branch contains 135 patches, the same set as v0.74.0.
+The main branch contains 135 patches, the same set as v0.75.0.
 
 ## What it changes
 
@@ -129,7 +129,7 @@ Simple mode in Morphe Manager selects 117 of these patches. Each row says what t
 
 | Patch | Description |
 |---|---|
-| `Accent color` | Swaps the red of TikTok's main buttons and red text for blue, green, purple, orange, teal or a color code you type in this patch's options. Warnings stay red, and so can icons with the red drawn in. It's built in while patching, so only patching again without it undoes it. |
+| `Accent color` | Swaps the red of TikTok's main buttons and red text for blue, green, purple, orange, teal or a color code you type in this patch's options, or for the color of the phone's wallpaper theme on Android 12 and up. Warnings stay red, and so can icons with the red drawn in. It's built in while patching, so only patching again without it undoes it. |
 | `Advanced downloads` | Adds more ways to save: pick the video quality, save full-size photos, the sound on its own or a photo post as one video, hold a profile picture or story to save it, save a story or a video's cover from the share sheet, and pick videos on a profile grid to save in one run. Starts off. Turn it on in Hushfeed settings > Downloads. |
 | `Allow Duet and Stitch` | Shows the Duet and Stitch buttons on videos whose creator turned them off, so you can still make one. TikTok may still refuse some videos or the upload. Starts off. Turn it on in Hushfeed settings > Share sheet. |
 | `Allow screenshots and Circle to Search` | Lets screenshots, screen recordings and Circle to Search work on TikTok screens that would otherwise come out black. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok. |
@@ -205,7 +205,7 @@ Simple mode in Morphe Manager selects 117 of these patches. Each row says what t
 | `Keep the screen's refresh rate` | Stops TikTok slowing your screen down to the video's frame rate, so scrolling stays smooth on 90 or 120 Hz phones. Starts off. Turn it on in Hushfeed settings > App. |
 | `Lift text length limits` | Lets you write longer comments, repost notes and bios than the app normally allows. TikTok can still refuse one that's too long. Starts off. Turn it on in Hushfeed settings > Comments. |
 | `Limit background traffic` | Lets you stop TikTok loading upcoming videos ahead of time, which uses less data in the background, but videos may take a moment longer to start. Starts off. Turn it on in Hushfeed settings > App. |
-| `LIVE controls` | Stops a LIVE in the feed from opening by itself after a countdown. It can show a LIVE's exact viewer count instead of a rounded one, offer a quality choice and clear screen in more LIVE rooms, and keep your quality pick after TikTok restarts. Starts off. Turn it on in Hushfeed settings > Playback. It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it, and can add a Record button to a LIVE room that saves what you watch from when you tap it. |
+| `LIVE controls` | Stops a LIVE in the feed from opening by itself after a countdown. It can show a LIVE's exact viewer count instead of a rounded one, offer a quality choice and clear screen in more LIVE rooms, open LIVE panels dark in dark mode, and keep your quality pick after TikTok restarts. Starts off. Turn it on in Hushfeed settings > Playback. It also keeps a LIVE in the feed from showing the Service+ row of the LIVE before it, and can add a Record button to a LIVE room that saves what you watch from when you tap it. |
 | `Location access governor` | Gives TikTok no location when it asks, so it can't see where you are from your phone's location services. Starts off. Turn it on in Hushfeed settings > Privacy. |
 | `Long-press controls` | Lets a long press on a video like it, open the comments, copy the link, save the sound or the frame on screen, or set a sleep timer, and can give a creator's videos For You's full long-press menu. Starts off. Pick an action in Hushfeed settings > Feed screen. |
 | `Look like the store app` | Makes the patched app answer TikTok's checks as if it came from the Play Store, which can help when follows or likes undo themselves. TikTok has other checks, so it may not be enough. On once picked. Turn it off in Hushfeed settings > App. |
@@ -224,8 +224,8 @@ Simple mode in Morphe Manager selects 117 of these patches. Each row says what t
 | `Region spoof` | Makes TikTok's region and time zone match the country you set for SIM spoof. It changes every region check, sign-in included, and its store region switch is experimental, so it isn't picked for you. Starts off. Turn it on in Hushfeed settings > Region. |
 | `Remember clear display` | Keeps clear display, TikTok's mode that hides the buttons over a video, on as you swipe to the next video. It can also turn on by itself after a delay you pick, which starts off in Hushfeed settings > Feed screen. When clear display ends, the Following stories bubble TikTok hid comes back too. |
 | `Remove avatar rings` | Takes the story and LIVE rings off profile pictures, so tapping a picture opens the profile instead of a story or LIVE. Starts off. Turn it on in Hushfeed settings > Feed screen. |
-| `Remove content credential and card scanner assets` | Removes TikTok's built-in AI model files, payment card scanner and content credential files, saving about 19 MB of storage. Anything in TikTok that needs them may stop working. Only patching again without it brings them back. |
-| `Remove creation tools` | Removes TikTok's camera, editing and effects files, saving about 40 MB of storage. The catch: the Create tab and every recording, editing and effects tool stop working, and opening one, like effect search, can close TikTok. Leave it out if you make videos. |
+| `Remove content credential and card scanner assets` | Removes TikTok's payment card scanner and content credential files, saving about 11 MB of storage. Anything in TikTok that needs them may stop working. Only patching again without it brings them back. |
+| `Remove creation tools` | Removes TikTok's camera, editing and effects files, saving about 38 MB of storage. The catch: the Create tab and every recording, editing and effects tool stop working, and opening one, like effect search, can close TikTok. Leave it out if you make videos. |
 | `Remove LIVE extras` | Removes the files for LIVE co-hosting, joining a LIVE as a guest, matches, games and gift effects, so the app gets about 3 MB smaller. The catch: in LIVEs, battle scores and guest names can go missing, and joining someone's LIVE by voice or video, co-hosting, games or animated gifts may stop working. |
 | `Remove unused language packs` | Removes the app languages you don't list in this patch's options, saving up to about 26 MB of storage. English is always kept. With no list it keeps them all. Only patching again brings removed ones back. |
 | `Repost diagnostics` | With diagnostic logging on, notes when you repost a video and what TikTok answered, to help track down reposts that don't stick. Works as soon as you patch it in, with no switch. |
@@ -384,6 +384,7 @@ Where things live:
 - `extensions/tiktok/`: the Java code that runs inside TikTok, with its Robolectric tests. The settings translations are in `src/main/l10n/`.
 - `scripts/`: patching and checking scripts. `release/release.ps1` runs a release in five stages (`prepare`, `preflight`, `build`, `publish` and `index`), and `validate-release-facts.ps1` holds this README and the index to the catalog.
 - `tools/`: release text and What's new generation, plus the test-only verification probe a device check drives.
+- `audit/`: the patch audit. `catalog.json` says how to prove each patch works on a phone, `run-audit.ps1` runs those checks, and `results/` keeps what each TikTok version showed. The steps for a new version are in the [development map](concepts/patch-development.md#patch-audit).
 - `patches-list.json` is the generated patch catalog. `patches-bundle.json` is the Morphe source index for the published bundle and only changes at release time. Starting with the next release, its description includes that release's grouped change list so Morphe Manager can show it right away.
 - [App and patch development map](concepts/patch-development.md): the target boundary, the source modules and how to add a patch. The research lives beside it in the [TikTok app audit](concepts/tiktok-app-audit.md), the [network and power measurements](concepts/runtime-observation.md) and the [measured TikTok runtime](concepts/runtime-results-2026-10-09.md).
 
@@ -391,7 +392,7 @@ Where things live:
 
 Hushfeed has no server of its own and collects nothing. Everything it adds runs inside TikTok on your phone.
 
-It goes online by itself for one job. When you save a video, a photo, a sound, subtitles, a sticker or a profile picture, it downloads that file over HTTPS from the address TikTok's own data holds for it. It won't fetch from an address on your own network, and those downloads connect directly even when Network proxy is on. Copy the full link for short links, which is off unless you turn it on, uses the same path to see where a vt.tiktok.com or vm.tiktok.com link leads. Network proxy, once you turn it on, also checks that your proxy answers when TikTok starts and when it comes back to the screen. Anything else, like translating a comment or blocking a creator, goes through TikTok's own code to TikTok's servers.
+It goes online by itself for one job. When you save a video, a photo, a sound, subtitles, a sticker or a profile picture, it downloads that file over HTTPS from the address TikTok's own data holds for it. It won't fetch from an address on your own network, and those downloads connect directly even when Network proxy is on. Copy the full link for short links, which is off unless you turn it on, uses the same path to see where a vt.tiktok.com, vm.tiktok.com or tiktok.com/t/ link leads. Network proxy, once you turn it on, also checks that your proxy answers when TikTok starts and when it comes back to the screen. Anything else, like translating a comment or blocking a creator, goes through TikTok's own code to TikTok's servers.
 
 The only web addresses written into Hushfeed's code are github.com for this project, ko-fi.com for the Support Hushfeed row, which opens in your browser only when you tap it, gitlab.com and gnu.org for licence texts, tiktok.com for the share links TikTok itself uses, and music.youtube.com for the Find the sound on YouTube Music gesture. A test fails the build if another one turns up.
 

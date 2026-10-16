@@ -302,6 +302,8 @@ Blocking,阻塞
 Bottom tabs to keep,要保留的底部选项卡
 Brightness,亮度
 "Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.",对于仅在那里看到应用程序语言的帐户，在 TikTok 的语言页面上的“设置和隐私”下返回翻译行.
+For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions. Restart TikTok to see the change.,适用于被 TikTok 取消翻译的帐户。恢复视频描述下方和字幕中的“查看翻译”。重新启动 TikTok 以查看更改.
+"For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions, and the translation rows on the Language page in Settings and privacy. Restart TikTok to see it on videos.",适用于被 TikTok 取消翻译的帐户。恢复视频描述下方和字幕中的“查看翻译”，以及“设置和隐私”下语言页面上的翻译行。重新启动 TikTok 以在视频中查看.
 Browse,浏览
 Budgets and reminders,预算和提醒
 Build details,构建细节
@@ -904,6 +906,7 @@ Keep watching in a small window,继续在小窗口观看
 Kinds of post,帖子种类
 LIVE,LIVE
 LIVE chat auto-translate,LIVE 聊天自动翻译
+"The Translate comments button in a LIVE room also needs a Japanese SIM. Turn on Override SIM details in Hushfeed settings > Region, set SIM country preset to Japan, NTT DOCOMO (44010), then restart TikTok.","LIVE 直播间里的“翻译评论”按钮还需要日本 SIM 卡。在 Hushfeed 设置 > 地区中开启“覆盖 SIM 卡详细信息”，将“SIM 卡国家/地区预设”设为 Japan, NTT DOCOMO (44010)，然后重启 TikTok."
 LIVE feed,LIVE 信息流
 LIVE followers range,LIVE 关注者范围
 LIVE recording saved to %1$s,LIVE 录音已保存到 %1$s
@@ -1582,7 +1585,7 @@ Show the time zone,显示时区
 Show the whole Activity and New followers lists instead of stopping at a View all button.,显示整个活动和新关注者列表，而不是停在“查看全部”按钮上.
 "Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.",显示整个视频而不是将其裁剪到窗口。对于已经适合的高手机来说，没有任何变化。在打开的折叠手机上，方形屏幕或分屏视图的侧面或末端不再被切断.
 Show translation,显示翻译
-Show translation options in Language settings,在语言设置中显示翻译选项
+Bring back TikTok's translation,恢复 TikTok 的翻译
 Show what is left of the budget,显示预算的剩余金额
 "Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name.",显示视频发布时间，精确到秒，并用您的时区代替 TikTok 的短日期，并用创建者的姓名表示.
 Show when the camera or microphone is in use,显示何时使用摄像头或麦克风
@@ -2144,3 +2147,7 @@ collapsed,崩溃了
 debug debugging logs logging,调试调试日志记录
 expanded,扩大
 this creator,这位创造者
+Only on the sides of the video,仅在视频两侧
+Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.,长按所选的操作只在视频的左侧和右侧三分之一生效。在中间长按仍会打开 TikTok 自带的菜单。需要把长按设为 TikTok 默认以外的选项.
+Full-width progress bar,全宽进度条
+"Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.",进度条从屏幕一侧延伸到另一侧，去掉 TikTok 在两端留下的空隙.

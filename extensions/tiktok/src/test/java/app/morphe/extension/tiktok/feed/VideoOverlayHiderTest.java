@@ -1995,6 +1995,128 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * A video with no disc leaves Share as the rail's lowest button. With the comment bar gone the
+     * cell grows to the bottom and Share's label sat over the end of the line and the time beside
+     * it (#153, BynchPOP on 0.74.0, videos opened from search). The rail's column goes up until
+     * Share ends above the row, the buttons keep their spacing, and it all comes back down with the
+     * comment bar.
+     */
+    @Test
+    public void theRailClearsTheRowWhenShareIsItsLowestButton() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:g85", 0x7f0a0216);
+        VideoOverlayHider.resolveForTests("47.1.4:wct", 0x7f0a0217);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            View row = views[1];
+            View frame = views[3];
+            FrameLayout cell = (FrameLayout) frame.getParent();
+            LinearLayout column = new LinearLayout(detail);
+            column.setOrientation(LinearLayout.VERTICAL);
+            View like = new View(detail);
+            like.setId(0x7f0a0216);
+            View share = new View(detail);
+            share.setId(0x7f0a0217);
+            column.addView(like, new LinearLayout.LayoutParams(180, 169));
+            column.addView(share, new LinearLayout.LayoutParams(180, 169));
+            cell.addView(column, new FrameLayout.LayoutParams(180, FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.view.Gravity.BOTTOM | android.view.Gravity.END));
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+
+            assertTrue("Share runs into the row: " + bottomOf(share) + " under " + drawnTop(row),
+                    bottomOf(share) <= drawnTop(row) + 1f);
+            assertTrue("the column wasn't lifted", column.getTranslationY() < 0f);
+            assertEquals("the buttons lost their spacing", bottomOf(like), drawnTop(share), 0.5f);
+            float lifted = column.getTranslationY();
+
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("a second pass lifted the column again", lifted, column.getTranslationY(), 0.5f);
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the column didn't go back down", 0f, column.getTranslationY(), 0f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:g85", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:wct", 0);
+        }
+    }
+
+    /**
+     * Comment, Save and Share carry their counts inside the button, but the heart's count is a
+     * row of its own under the heart (S22, 2026-10-16: the heart 126 px tall, its count the 24 px
+     * under it). With the other buttons hidden the heart was the lowest, the column went up until
+     * the heart ended on the row, and its count sat on the time (#145, FBI-PRC on 0.74.0).
+     */
+    @Test
+    public void theRailClearsTheRowWithTheLikeCountWhenLikeIsItsLowestButton() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:bqv", CAPTION_FRAME_ID);
+        VideoOverlayHider.resolveForTests("47.1.4:g85", 0x7f0a0216);
+        VideoOverlayHider.resolveForTests("47.1.4:wct", 0x7f0a0217);
+        VideoOverlayHider.resolveForTests("47.1.4:g87", 0x7f0a0218);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            View row = views[1];
+            View frame = views[3];
+            FrameLayout cell = (FrameLayout) frame.getParent();
+            LinearLayout column = new LinearLayout(detail);
+            column.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout likeSlot = new LinearLayout(detail);
+            likeSlot.setOrientation(LinearLayout.VERTICAL);
+            View like = new View(detail);
+            like.setId(0x7f0a0216);
+            View count = new View(detail);
+            count.setId(0x7f0a0218);
+            likeSlot.addView(like, new LinearLayout.LayoutParams(180, 126));
+            likeSlot.addView(count, new LinearLayout.LayoutParams(180, 24));
+            // Hidden by its rail switch, as the reporter had Share, Save and Comment.
+            View share = new View(detail);
+            share.setId(0x7f0a0217);
+            share.setVisibility(View.GONE);
+            column.addView(likeSlot, new LinearLayout.LayoutParams(180, LinearLayout.LayoutParams.WRAP_CONTENT));
+            column.addView(share, new LinearLayout.LayoutParams(180, 169));
+            cell.addView(column, new FrameLayout.LayoutParams(180, FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.view.Gravity.BOTTOM | android.view.Gravity.END));
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+
+            assertTrue("the like count runs into the row: " + bottomOf(count) + " under " + drawnTop(row),
+                    bottomOf(count) <= drawnTop(row) + 1f);
+            assertTrue("the column wasn't lifted", column.getTranslationY() < 0f);
+            assertEquals("the count left the heart", bottomOf(like), drawnTop(count), 0.5f);
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the column didn't go back down", 0f, column.getTranslationY(), 0f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:bqv", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:g85", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:wct", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:g87", 0);
+        }
+    }
+
+    /**
      * A short caption ends above the lowest line, so it needs no lift and the line comes down to
      * meet it. The disc only ever took the caption's lift, so it got none and sat across the end of
      * the line and the time beside it (#153, a video opened from search on 0.73.0). It now goes up
@@ -3177,6 +3299,61 @@ public class VideoOverlayHiderTest {
             Settings.CLEAR_DISPLAY.save(false);
             Settings.FADE_CONTROLS_OPACITY.save(100);
             app.morphe.extension.tiktok.settings.SettingsStatus.videoOverlaysEnabled = overlays;
+            VideoOverlayHider.resolveForTests("47.1.4:j2g", 0);
+            VideoOverlayHider.resolveForTests("47.1.4:g5p", 0);
+        }
+    }
+
+    /**
+     * A video opened from search with Automatic Clear Display at no delay: until its clear lands,
+     * the top bar and its "find related content" box showed over the held-away controls (#84,
+     * Login2 emulator). They're out of sight while the page's window holds, and TikTok's own
+     * value comes back once the clear is TikTok's.
+     */
+    @Test
+    public void theTopBarOfAnOpenedVideoWaitsForItsClear() {
+        int barId = 0x7f0a0e22;
+        int scrimId = 0x7f0a0e23;
+        VideoOverlayHider.resolveForTests("47.1.4:j2g", barId);
+        VideoOverlayHider.resolveForTests("47.1.4:g5p", scrimId);
+        boolean overlays = app.morphe.extension.tiktok.settings.SettingsStatus.videoOverlaysEnabled;
+        boolean automatic = app.morphe.extension.tiktok.settings.SettingsStatus.automaticClearDisplayEnabled;
+        app.morphe.extension.tiktok.settings.SettingsStatus.videoOverlaysEnabled = true;
+        app.morphe.extension.tiktok.settings.SettingsStatus.automaticClearDisplayEnabled = true;
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            View scrim = new View(activity);
+            scrim.setId(scrimId);
+            View bar = new FrameLayout(activity);
+            bar.setId(barId);
+            root.addView(scrim);
+            root.addView(bar);
+            activity.setContentView(root);
+            Settings.AUTOMATIC_CLEAR_DISPLAY.save(true);
+            Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(0);
+
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch.onPageOpened(new Object());
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("the bar showed before the page's clear", 0f, bar.getAlpha(), 0f);
+            assertEquals(0f, scrim.getAlpha(), 0f);
+
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(true, 0));
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("TikTok's own value didn't come back", 1f, bar.getAlpha(), 0f);
+            assertEquals(1f, scrim.getAlpha(), 0f);
+        } finally {
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(false, 2));
+            org.robolectric.util.ReflectionHelpers.callStaticMethod(
+                    app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch.class, "resetForTests");
+            Settings.CLEAR_DISPLAY.save(false);
+            Settings.AUTOMATIC_CLEAR_DISPLAY.save(false);
+            Settings.AUTOMATIC_CLEAR_DISPLAY_DELAY.save(1000);
+            app.morphe.extension.tiktok.settings.SettingsStatus.videoOverlaysEnabled = overlays;
+            app.morphe.extension.tiktok.settings.SettingsStatus.automaticClearDisplayEnabled = automatic;
             VideoOverlayHider.resolveForTests("47.1.4:j2g", 0);
             VideoOverlayHider.resolveForTests("47.1.4:g5p", 0);
         }

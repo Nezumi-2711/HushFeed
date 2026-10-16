@@ -2106,6 +2106,8 @@ See-through bottom bar	Durchsichtige untere Leiste
 Let the video reach the bottom of the screen on the main feed and show the tabs over it with no bar behind them.	Das Video reicht im Haupt-Feed bis zum unteren Bildschirmrand, und die Tabs liegen ohne Leiste dahinter darüber.
 LIVE chat auto-translate	Automatische Übersetzung im LIVE-Chat
 
+The Translate comments button in a LIVE room also needs a Japanese SIM. Turn on Override SIM details in Hushfeed settings > Region, set SIM country preset to Japan, NTT DOCOMO (44010), then restart TikTok.	Die Schaltfläche „Kommentare übersetzen“ in einem LIVE-Raum braucht zusätzlich eine japanische SIM. Schalte in den Hushfeed-Einstellungen > Region „SIM-Angaben überschreiben“ ein, stelle die SIM-Ländervorgabe auf Japan, NTT DOCOMO (44010) und starte TikTok neu.
+
 Pick videos to save from profile grids	Videos in Profilrastern zum Speichern auswählen
 Puts a circle on each video in a profile, Liked or Favorites grid. Pick up to %1$s, then tap Save to save them one after another, with a count and Cancel.	Setzt einen Kreis auf jedes Video in einem Profil-, Gefällt-mir- oder Favoritenraster. Wähle bis zu %1$s aus und tippe dann auf Speichern, um sie nacheinander zu speichern, mit Zähler und Abbrechen.
 Pick for saving	Zum Speichern auswählen
@@ -2167,5 +2169,11 @@ Let the video reach the top of the screen on the main feed, with the clock and s
 Floating bottom bar	Schwebende untere Leiste
 Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.	Die Tabs im Haupt-Feed liegen auf einer abgerundeten, durchsichtigen dunklen Pille, die über dem Video schwebt. Braucht Durchsichtige untere Leiste.
 # context: a switch on the Comments page. Language, Settings and privacy and App language are TikTok's own labels: its language page, the menu that page sits in, and the page's first row
-Show translation options in Language settings	Übersetzungsoptionen in den Spracheinstellungen anzeigen
+Bring back TikTok's translation	TikToks Übersetzung zurückholen
 Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.	Holt die Übersetzungszeilen auf TikToks Seite Sprache unter Einstellungen und Datenschutz zurück, für Konten, die dort nur App-Sprache sehen.
+For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions. Restart TikTok to see the change.	Für Konten, denen TikTok die Übersetzung weggenommen hat. Holt „Übersetzung anzeigen“ unter Videobeschreibungen und in Untertiteln zurück. Starte TikTok neu, um die Änderung zu sehen.
+For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions, and the translation rows on the Language page in Settings and privacy. Restart TikTok to see it on videos.	Für Konten, denen TikTok die Übersetzung weggenommen hat. Holt „Übersetzung anzeigen“ unter Videobeschreibungen und in Untertiteln zurück, dazu die Übersetzungszeilen auf der Seite Sprache unter Einstellungen und Datenschutz. Starte TikTok neu, um es bei Videos zu sehen.
+Only on the sides of the video	Nur an den Seiten des Videos
+Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Deine Auswahl bei Langes Drücken gilt nur im linken und rechten Drittel des Videos. Ein Druck in der Mitte öffnet weiterhin TikToks eigenes Menü. Dafür muss Langes Drücken auf etwas anderes als TikTok-Standard gestellt sein.
+Full-width progress bar	Fortschrittsbalken in voller Breite
+Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	Der Fortschrittsbalken läuft von einem Bildschirmrand zum anderen, ohne die Lücke, die TikTok an beiden Enden lässt.

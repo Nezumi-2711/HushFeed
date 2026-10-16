@@ -185,6 +185,18 @@ public class Settings extends BaseSettings {
     public static final StringSetting DOUBLE_TAP_ACTION = new StringSetting("double_tap_action", "default");
     public static final StringSetting LONG_PRESS_ACTION = new StringSetting("long_press_action", "default");
     /**
+     * The Long press choice runs only on the left and right thirds of the video, so a press in the
+     * middle still opens TikTok's own menu (#136). It means something only while the choice is one
+     * Hushfeed takes.
+     */
+    public static final BooleanSetting LONG_PRESS_SIDES_ONLY =
+            new BooleanSetting("long_press_sides_only", FALSE, new Setting.Availability() {
+                @Override
+                public boolean isAvailable() {
+                    return GestureActions.takesLongPress(LONG_PRESS_ACTION.savedValue());
+                }
+            });
+    /**
      * A long press on a side button plays at the hold speed only while TikTok's hold can start
      * there: the Long press row leaves the press to TikTok, and Seek from the edges isn't seeking
      * the right third, where the buttons sit. GestureActions.allowNativeEdgeSpeedup decides each
@@ -375,8 +387,10 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting HIDE_CAPTCHA_POPUPS = new BooleanSetting("hide_browsing_captcha_popups", FALSE, true);
     public static final BooleanSetting HIDE_HOMEPAGE_COIN = new BooleanSetting("hide_homepage_coin", FALSE, true);
+    // A restart: the gift box is hidden when the profile header binds it, and a profile already
+    // drawn keeps it until TikTok starts again.
     public static final BooleanSetting HIDE_PROFILE_REWARDS_SHORTCUT =
-            new BooleanSetting("hide_profile_rewards_shortcut", FALSE);
+            new BooleanSetting("hide_profile_rewards_shortcut", FALSE, true);
     public static final StringSetting MIN_MAX_VIEWS = new StringSetting("min_max_views", "0-" + Long.MAX_VALUE, true);
     public static final StringSetting MIN_MAX_LIKES = new StringSetting("min_max_likes", "0-" + Long.MAX_VALUE, true);
     public static final StringSetting MIN_MAX_COMMENTS = new StringSetting("min_max_comments", "0-" + Long.MAX_VALUE, true);
@@ -470,10 +484,11 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting COMMENT_TRANSLATE_BUTTON_TURNED_ON =
             new BooleanSetting("comment_translate_button_turned_on", FALSE, false, false);
     /**
-     * The translation rows on TikTok's own Settings and privacy > Language page, for accounts
-     * TikTok hides them on (#143). No restart: the page asks each time it opens.
+     * TikTok's translation for accounts it takes it away from (#143): the rows on its own Settings
+     * and privacy > Language page, and See translation on videos. Restart-gated: the Language page
+     * asks each time it opens, but the videos' answer is read once per process.
      */
-    public static final BooleanSetting SHOW_TRANSLATION_SETTINGS = new BooleanSetting("show_translation_settings", FALSE);
+    public static final BooleanSetting SHOW_TRANSLATION_SETTINGS = new BooleanSetting("show_translation_settings", FALSE, true);
     // Restart-gated: the comment keyboard builds its slot tree once per session, and the
     // trigger that adds the emoji row is asked at that moment only.
     public static final BooleanSetting HIDE_COMMENT_QUICK_REACTIONS =
@@ -513,6 +528,14 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting SHOW_SEEKBAR = new BooleanSetting("show_seekbar", TRUE);
     /** The time played and the video's length at the end of the progress bar (#90). */
     public static final BooleanSetting SEEKBAR_TIME = new BooleanSetting("seekbar_time", FALSE);
+    /**
+     * Where that time goes: "beside" (the end of the bar's row, the default) or "above" (over the
+     * bar's right end, falling back to beside while text on screen reaches into that spot) (#173).
+     */
+    public static final StringSetting SEEKBAR_TIME_PLACEMENT = new StringSetting(
+            "seekbar_time_placement", "beside", Setting.parent(SEEKBAR_TIME));
+    /** The progress bar runs from screen edge to screen edge instead of stopping at TikTok's side gap (#173). */
+    public static final BooleanSetting SEEKBAR_FULL_WIDTH = new BooleanSetting("seekbar_full_width", FALSE);
     /** A larger handle and a slightly thicker line on the progress bar at rest (#90). */
     public static final BooleanSetting SEEKBAR_BIG_HANDLE = new BooleanSetting("seekbar_big_handle", FALSE);
     /** A line along the bottom of a video story that can be dragged to seek (#72). */
@@ -563,9 +586,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting OFFER_LIVE_CLEAR_SCREEN = new BooleanSetting("offer_live_clear_screen", FALSE);
     /**
      * Opens LIVE panels in TikTok's dark LIVE theme while TikTok is in dark mode (#159); the LIVE
-     * controls patch. Read as each panel opens, so the next panel follows a change. Has no
-     * settings row yet: on the S25 the Share panel, viewer rankings and the Video quality list
-     * stayed light with it on, and only their navigation bar turned dark.
+     * controls patch. Read as each panel opens, so the next panel follows a change. The provider
+     * answer alone only turned the panels' navigation bar dark on the S25, so each themed
+     * dialog and sheet page also inflates through the dark overlay with force (LivePanelTheme).
      */
     public static final BooleanSetting DARK_LIVE_PANELS = new BooleanSetting("dark_live_panels", FALSE);
     /**
@@ -877,8 +900,10 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_INBOX_SHOP = new BooleanSetting("hide_inbox_shop", FALSE);
     public static final BooleanSetting HIDE_INBOX_BULLETIN_BOARDS =
             new BooleanSetting("hide_inbox_bulletin_boards", FALSE);
+    // A restart: the Friends tab and a profile keep the suggestion cells they already drew, and
+    // only a new bind collapses one.
     public static final BooleanSetting HIDE_INBOX_SUGGESTED_ACCOUNTS =
-            new BooleanSetting("hide_inbox_suggested_accounts", FALSE);
+            new BooleanSetting("hide_inbox_suggested_accounts", FALSE, true);
     public static final BooleanSetting HIDE_INBOX_MESSAGE_REQUESTS =
             new BooleanSetting("hide_inbox_message_requests", FALSE);
     public static final BooleanSetting HIDE_INBOX_CONVERSATIONS =
