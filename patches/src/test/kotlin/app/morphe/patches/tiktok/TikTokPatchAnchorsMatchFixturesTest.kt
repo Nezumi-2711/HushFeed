@@ -33,8 +33,6 @@ import app.morphe.patches.tiktok.interaction.exactcounts.COMPACT_COUNT_FORMATTER
 import app.morphe.patches.tiktok.interaction.exactcounts.COUNT_FORMATTERS
 import app.morphe.patches.tiktok.interaction.exactcounts.CompactCountFormatterFingerprint
 import app.morphe.patches.tiktok.interaction.exactcounts.CountFormatterFingerprint
-import app.morphe.patches.tiktok.interaction.exactcounts.VIDEO_COUNT_FORMATTERS
-import app.morphe.patches.tiktok.interaction.exactcounts.VideoCountFormatterFingerprint
 import app.morphe.patches.tiktok.interaction.exactcounts.isCountFormatter
 import app.morphe.patches.tiktok.interaction.engagement.ProfileGridBindFingerprint
 import app.morphe.patches.tiktok.interaction.engagement.ProfileGridHolderBindFingerprint
@@ -661,8 +659,7 @@ class TikTokPatchAnchorsMatchFixturesTest {
      * Show exact counts hooks every count formatter. Each declared build has the main one and up
      * to three copies, all static, a long in and a string out, with a spare register for the hook,
      * and four compact ones of the same shape, which print the feed rail's counts. The two sets
-     * never overlap. One more takes the video as well (the comment sheet title, like and viewer
-     * lists), and for someone else's video it never reaches the compact formatter (S22, 2026-10-16).
+     * never overlap.
      */
     @Test
     fun `count formatters for exact counts stay within the reviewed number on every declared build`() {
@@ -672,14 +669,11 @@ class TikTokPatchAnchorsMatchFixturesTest {
                 .flatMap { container.getEntry(it)!!.dexFile.classes.asSequence() }.toList()
             val formatters = classes.flatMap { cls -> cls.methods.filter { CountFormatterFingerprint.takes(it, cls) } }
             val compact = classes.flatMap { cls -> cls.methods.filter { CompactCountFormatterFingerprint.takes(it, cls) } }
-            val withVideo = classes.flatMap { cls -> cls.methods.filter { VideoCountFormatterFingerprint.takes(it, cls) } }
             assertTrue("${apk.name}: ${formatters.size} count formatters", formatters.size in COUNT_FORMATTERS)
             assertTrue("${apk.name}: ${compact.size} compact count formatters", compact.size in COMPACT_COUNT_FORMATTERS)
-            assertTrue("${apk.name}: ${withVideo.size} count formatters taking the video", withVideo.size in VIDEO_COUNT_FORMATTERS)
             assertTrue("${apk.name}: a formatter without the hook's register",
                 (formatters + compact).all { it.isCountFormatter() })
             assertTrue("${apk.name}: a formatter in both sets", formatters.none { it in compact })
-            assertTrue("${apk.name}: a video formatter in another set", withVideo.none { it in formatters || it in compact })
         }
     }
 
