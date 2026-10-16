@@ -72,6 +72,9 @@ public final class Probe extends Instrumentation {
     private static final String SETTING = "app.morphe.extension.shared.settings.Setting";
     private static final String SETTINGS = "app.morphe.extension.tiktok.settings.Settings";
     private static final String UTILS = "app.morphe.extension.shared.Utils";
+    private static final java.util.Set<String> OVERLAY_KEYS = new java.util.HashSet<>(java.util.Arrays.asList(
+            "block_author_button", "local_hide_button", "block_sound_button",
+            "not_interested_button", "feed_mute_button"));
     private static final String SETTINGS_ACTIVITY =
             "com.bytedance.ies.ugc.aweme.commercialize.compliance.personalization."
                     + "AdPersonalizationActivity";
@@ -1266,7 +1269,10 @@ public final class Probe extends Instrumentation {
                         String value = required(intent, "value");
                         String before = valueOf(find(key));
                         write(key, value);
-                        if ("block_author_button".equals(key)) {
+                        // The same five the settings page refreshes the feed controls for. A set
+                        // step writes several keys in turn, so refreshing on only the first one
+                        // left the others' buttons up until the next creator.
+                        if (OVERLAY_KEYS.contains(key)) {
                             loader.loadClass("app.morphe.extension.tiktok.blockauthor.BlockAuthorOverlay")
                                     .getMethod("refresh").invoke(null);
                         }

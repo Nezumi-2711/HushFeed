@@ -2500,10 +2500,31 @@
      {
       "probe": "findtext",
       "extras": {
-       "text": "Copy user ID"
+       "text": "^Copy (user ID|username)$",
+       "match": "regex"
       },
-      "expect": "^ok findtext found",
+      "expect": "^ok findtext none",
       "waitMs": 1500
+     },
+     {
+      "back": true
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "open": "profile"
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "tap": {
+       "text": "^Share profile$"
+      }
+     },
+     {
+      "wait": 2500
      },
      {
       "probe": "findtext",
@@ -2514,13 +2535,29 @@
       "waitMs": 1500
      },
      {
+      "probe": "findtext",
+      "extras": {
+       "text": "Copy user ID"
+      },
+      "expect": "^ok findtext found",
+      "waitMs": 1500
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "Copy video ID"
+      },
+      "expect": "^ok findtext none",
+      "waitMs": 1500
+     },
+     {
       "back": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). The English labels of the three buttons are unverified on a phone. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile."
+  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). A video's sheet gets only Copy video ID (seen 2026-10-16), and a profile's sheet gets Copy username and Copy user ID (CopyIds.targetsOf, itemType user), so the second half opens the own profile's Share profile button. Nothing on either sheet is tapped. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile."
  },
  {
   "name": "Copy comments without username",
@@ -13498,7 +13535,9 @@
       "extras": {
        "family": "sensitive warnings"
       },
-      "expect": "bound=\\[.+\\]"
+      "expect": "bound=\\[.+\\]",
+      "precondition": true,
+      "retrySwipe": 15
      },
      {
       "set": {
@@ -13511,7 +13550,7 @@
     "auto": true
    }
   ],
-  "notes": "Content warnings, unverified notices and Check sources banners are naturally served only (Roadmap_Blocked.md lists them under served-content acceptance), so the 'warning-skipped' check is opportunistic: it passes only when one of the first six videos carried a mask, and a failure of it alone means 'not served', not 'broken'. The extension emits no logcat line for the other two switches."
+  "notes": "Content warnings, unverified notices and Check sources banners are naturally served only (Roadmap_Blocked.md lists them under served-content acceptance), so the 'warning-skipped' check is opportunistic: it passes only when a video carrying a mask turns up within about twenty swipes, and otherwise reads inconclusive ('not served', not 'broken'). The family registers only when a mask object is bound, so a feed with no masked video answers 'ok hookdetails 0' (seen 2026-10-16). The extension emits no logcat line for the other two switches."
  },
  {
   "name": "Skip first-launch setup",
