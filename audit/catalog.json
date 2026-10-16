@@ -1958,7 +1958,7 @@
    },
    {
     "id": "sheet-entry",
-    "what": "Review: the sort entry beside the comment count opens a sheet with Top, Newest, With media, From creator.",
+    "what": "The sort glyph beside the comment count opens a menu with all four orders: Top, Newest, With media and From creator.",
     "steps": [
      {
       "set": {
@@ -1974,7 +1974,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
+      "expect": "likes=over1000.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -1984,8 +1984,26 @@
       "waitMs": 2500
      },
      {
-      "shot": "sort-sheet-entry",
-      "review": "Comment sheet header shows the sort glyph beside the comment count; tapping it (do not post anything) lists four options: Top, Newest, With media, From creator. Failing looks like only two options or no entry."
+      "probe": "findtext",
+      "extras": {
+       "text": "^\\d[\\d,.KM]* comments",
+       "match": "regex",
+       "sibling": "next",
+       "hold": "80"
+      },
+      "expect": "ok findtext found .*sibling=.*held=80ms",
+      "waitMs": 2500
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "^(Top|Newest|With media|From creator)$",
+       "match": "regex"
+      },
+      "expect": "ok findtext found .*\\(4 matches"
      },
      {
       "back": true
@@ -1996,7 +2014,7 @@
       }
      }
     ],
-    "auto": false
+    "auto": true
    },
    {
     "id": "registered",
@@ -2520,7 +2538,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
+      "expect": "likes=over1000.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -2530,17 +2548,25 @@
       "waitMs": 2500
      },
      {
-      "longpress": {
-       "text": "^(\\d+[smhdw]|\\d{1,2}-\\d{2}|\\d{4}-\\d{1,2}-\\d{1,2})( |$)"
-      }
+      "probe": "findtext",
+      "extras": {
+       "text": "^(\\d+[smhdw]|\\d{1,2}-\\d{2}|\\d{4}-\\d{1,2}-\\d{1,2})( |$)",
+       "match": "regex",
+       "hold": "900"
+      },
+      "expect": "ok findtext found .*held=900ms",
+      "waitMs": 2500
      },
      {
       "wait": 1500
      },
      {
-      "tap": {
-       "text": "^Copy$"
-      }
+      "probe": "findtext",
+      "extras": {
+       "text": "Copy",
+       "click": "true"
+      },
+      "expect": "ok findtext found .*clicked=true"
      },
      {
       "wait": 1200
@@ -5778,7 +5804,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
+      "expect": "likes=over1000.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -5788,9 +5814,13 @@
       "waitMs": 2500
      },
      {
-      "tap": {
-       "text": "^Add comment"
-      }
+      "probe": "findtext",
+      "extras": {
+       "text": "^Add comment",
+       "match": "regex",
+       "click": "true"
+      },
+      "expect": "ok findtext found .*clicked=true"
      },
      {
       "wait": 1800
@@ -5818,7 +5848,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
+      "expect": "likes=over1000.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -5828,9 +5858,13 @@
       "waitMs": 2500
      },
      {
-      "tap": {
-       "text": "^Add comment"
-      }
+      "probe": "findtext",
+      "extras": {
+       "text": "^Add comment",
+       "match": "regex",
+       "click": "true"
+      },
+      "expect": "ok findtext found .*clicked=true"
      },
      {
       "wait": 1800
@@ -6845,7 +6879,7 @@
    },
    {
     "id": "group-banner",
-    "what": "With Hide the group chat prompt on, the Inbox banner's update is skipped (HookStatus 'group chat banner' records 'update skipped').",
+    "what": "With Hide the group chat prompt on, the Inbox banner's update is skipped (HookStatus 'group chat banner' records 'update skipped'). TikTok calls the hook only when it has one to show, so an account without one is inconclusive.",
     "steps": [
      {
       "set": {
@@ -6863,6 +6897,14 @@
      },
      {
       "wait": 1800
+     },
+     {
+      "probe": "hookdetails",
+      "extras": {
+       "family": "group chat banner"
+      },
+      "expect": "^hookdetail group chat banner ",
+      "precondition": true
      },
      {
       "probe": "hookdetails",
@@ -7238,8 +7280,45 @@
    },
    {
     "id": "search-page",
-    "what": "Review: opening the search box shows no suggested searches (history, if any, stays).",
+    "what": "Search page before typing: TikTok's own 'You may like' list shows with the switch off (47.1.4 draws it natively for some accounts) and is gone with it on; history stays.",
     "steps": [
+     {
+      "set": {
+       "hide_search_suggestions": "false"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "probe": "finddesc",
+      "extras": {
+       "desc": "Search",
+       "match": "prefix",
+       "click": "true"
+      },
+      "expect": "ok finddesc found"
+     },
+     {
+      "wait": 3000
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "You may like"
+      },
+      "expect": "ok findtext found",
+      "precondition": true
+     },
+     {
+      "back": true
+     },
      {
       "set": {
        "hide_search_suggestions": "true"
@@ -7264,7 +7343,14 @@
       "expect": "ok finddesc found"
      },
      {
-      "wait": 2500
+      "wait": 3000
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "You may like"
+      },
+      "expect": "ok findtext none"
      },
      {
       "shot": "search-no-suggestions",
@@ -9089,7 +9175,7 @@
    },
    {
     "id": "bio-counter",
-    "what": "Review: the profile Edit bio counter reads x/10000 with the switch on and x/160 with it off. Nothing is saved; leave the editor with Back.",
+    "what": "Review: the bio editor's counter (profile bio > Edit profile > Bio) reads x/10000 with the switch on and x/160 with it off. Nothing is typed or saved; Back leaves the editor.",
     "steps": [
      {
       "set": {
@@ -9097,30 +9183,33 @@
       }
      },
      {
+      "restart": true
+     },
+     {
       "open": "profile"
      },
      {
-      "wait": 2000
+      "wait": 2500
      },
      {
       "tap": {
-       "text": "Edit profile"
+       "text": "^(Hushfeed test account|\\+ Add bio)$"
+      }
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "tap": {
+       "text": "^Bio$"
       }
      },
      {
       "wait": 2000
-     },
-     {
-      "tap": {
-       "text": "Bio"
-      }
-     },
-     {
-      "wait": 1500
      },
      {
       "shot": "bio-off",
-      "review": "Bio editor: the counter reads something over 160, e.g. 0/160."
+      "review": "Bio editor: the counter reads x/160 (TikTok's own limit)."
      },
      {
       "back": true
@@ -9140,27 +9229,27 @@
       "open": "profile"
      },
      {
-      "wait": 2000
+      "wait": 2500
      },
      {
       "tap": {
-       "text": "Edit profile"
+       "text": "^(Hushfeed test account|\\+ Add bio)$"
+      }
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "tap": {
+       "text": "^Bio$"
       }
      },
      {
       "wait": 2000
-     },
-     {
-      "tap": {
-       "text": "Bio"
-      }
-     },
-     {
-      "wait": 1500
      },
      {
       "shot": "bio-on",
-      "review": "Bio editor: the counter reads x/10000 instead of x/160. Do not type or save. Failing looks like 0/160 again."
+      "review": "Bio editor: the counter reads x/10000 instead of x/160. Failing looks like x/160 again."
      },
      {
       "back": true
@@ -12163,7 +12252,7 @@
    },
    {
     "id": "search-in-live",
-    "what": "With the switch on, the LIVE drawer's search setting is answered yes (Hook status) and the LIVE section shows TikTok's search button where TikTok supports it.",
+    "what": "With the switch on, TikTok's LIVE search setting is answered yes (Hook status 'LIVE search' says 'search shown'). The audit never opens a LIVE room, since the host sees who watches; a session where TikTok never asks is inconclusive.",
     "steps": [
      {
       "set": {
@@ -12174,24 +12263,18 @@
       "restart": true
      },
      {
-      "open": "feed"
+      "open": "search:cats"
      },
      {
-      "wait": 1500
+      "wait": 4000
      },
      {
-      "probe": "findtext",
+      "probe": "hookdetails",
       "extras": {
-       "text": "LIVE",
-       "click": "true"
-      }
-     },
-     {
-      "wait": 3000
-     },
-     {
-      "shot": "live-search-button",
-      "review": "LIVE section (viewing only; never join, send or gift): a search magnifier at the top. With the switch off it is absent. If the account's region has no LIVE section the button cannot show and the check is inconclusive."
+       "family": "LIVE search"
+      },
+      "expect": "^hookdetail LIVE search ",
+      "precondition": true
      },
      {
       "probe": "hookdetails",

@@ -428,9 +428,11 @@ function Invoke-DumpTapOnce($Target, [int]$HoldMs = 0) {
     if ($xml -notlike '*<hierarchy*') { throw 'uiautomator could not dump the screen (a playing video blocks it)' }
     $attribute, $pattern = if ($Target.text) { 'text', $Target.text } elseif ($Target.desc) { 'content-desc', $Target.desc } else { 'resource-id', $Target.id }
     foreach ($node in [regex]::Matches($xml, '<node [^>]*>')) {
-        $value = if ($node.Value -match " $attribute=`"([^`"]*)`"") { [Net.WebUtility]::HtmlDecode($Matches[1]) } else { '' }
+        # Without invisible format characters: TikTok wraps numbers in direction marks, so a
+        # pattern anchored at a digit ("^3d") never matched its text.
+        $value = if ($node.Value -match " $attribute=`"([^`"]*)`"") { [Net.WebUtility]::HtmlDecode($Matches[1]) -replace '\p{Cf}', '' } else { '' }
         if ($value -notmatch $pattern) { continue }
-        $label = @('text', 'content-desc') | ForEach-Object { if ($node.Value -match " $_=`"([^`"]*)`"") { $Matches[1] } }
+        $label = @('text', 'content-desc') | ForEach-Object { if ($node.Value -match " $_=`"([^`"]*)`"") { [Net.WebUtility]::HtmlDecode($Matches[1]) -replace '\p{Cf}', '' } }
         if (@($label | Where-Object { $_ -and $_.Trim().ToLowerInvariant() -match $outwardWords }).Count -gt 0) {
             throw "refused to tap '$($label -join ' / ')': it reaches other people"
         }
@@ -470,18 +472,25 @@ function Open-Surface([string]$Where) {
     Start-Sleep -Seconds 3
 }
 
+# The results file is committed, so it names evidence by file name inside -OutDir and never by
+# a path on the machine that ran it.
 function Save-Shot([string]$Name) {
-    $file = Join-Path $OutDir "$($Name -replace '[^\w.-]', '_').png"
+    $file = "$($Name -replace '[^\w.-]', '_').png"
     Invoke-DeviceShell 'screencap -p /sdcard/hushfeed-audit.png' | Out-Null
-    Invoke-AuditAdb pull /sdcard/hushfeed-audit.png $file 2>&1 | Out-Null
+    Invoke-AuditAdb pull /sdcard/hushfeed-audit.png (Join-Path $OutDir $file) 2>&1 | Out-Null
     Invoke-DeviceShell 'rm -f /sdcard/hushfeed-audit.png' | Out-Null
     return $file
 }
 
 function Save-Evidence([string]$Name, [string]$Text) {
-    $file = Join-Path $OutDir "$($Name -replace '[^\w.-]', '_').txt"
-    Set-Content -LiteralPath $file -Value $Text -Encoding utf8
+    $file = "$($Name -replace '[^\w.-]', '_').txt"
+    Set-Content -LiteralPath (Join-Path $OutDir $file) -Value $Text -Encoding utf8
     return $file
+}
+
+function ConvertTo-LeafName([string]$Value) {
+    if ($Value -match '^[A-Za-z]:\\') { return Split-Path -Leaf $Value }
+    return $Value
 }
 
 # One check: every step in order, the first failed expectation ends it.
@@ -556,25 +565,32 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                     # "retrySwipe": n moves the feed on to the next video up to n times until the
                     # answer matches, for a check that needs a certain kind of video in front.
                     $swipesLeft = if ($step.retrySwipe) { [int]$step.retrySwipe } else { 0 }
-                    while ($true) {
-                        $answer = Invoke-AuditProbe ([string]$step.probe) $step.extras $wait ([string]$step.until)
-                        $result.evidence += Save-Evidence "$tag-$index-$($step.probe)" $answer
-                        if (Test-Pattern $answer "^failed $([regex]::Escape([string]$step.probe))") {
-                            throw "probe $($step.probe) failed: $((($answer -split "`n") | Where-Object { $_ -match '^failed |Exception' } | Select-Object -First 2) -join ' ')"
+                    # Every attempt's answer goes into the one evidence file, so a precondition
+                    # that never held shows each video it looked at.
+                    $attempts = @()
+                    try {
+                        while ($true) {
+                            $answer = Invoke-AuditProbe ([string]$step.probe) $step.extras $wait ([string]$step.until)
+                            $attempts += $answer
+                            if (Test-Pattern $answer "^failed $([regex]::Escape([string]$step.probe))") {
+                                throw "probe $($step.probe) failed: $((($answer -split "`n") | Where-Object { $_ -match '^failed |Exception' } | Select-Object -First 2) -join ' ')"
+                            }
+                            if (-not $answer) { throw "probe $($step.probe) never answered" }
+                            $miss = if ($step.expect -and -not (Test-Pattern $answer $step.expect)) { "probe $($step.probe) answer has nothing matching $($step.expect)" }
+                                elseif ($step.expectNot -and (Test-Pattern $answer $step.expectNot)) { "probe $($step.probe) answer matches $($step.expectNot)" }
+                            if (-not $miss) { break }
+                            if ($swipesLeft -le 0) {
+                                # A precondition that never held says nothing about the patch.
+                                if ($step.precondition) { throw [System.InvalidOperationException]::new("precondition: $miss") }
+                                throw $miss
+                            }
+                            $swipesLeft--
+                            $w, $h = Get-ScreenSize
+                            Invoke-DeviceShell "input swipe $([int]($w / 2)) $([int]($h * 0.72)) $([int]($w / 2)) $([int]($h * 0.28)) 220" | Out-Null
+                            Start-Sleep -Milliseconds 2200
                         }
-                        if (-not $answer) { throw "probe $($step.probe) never answered" }
-                        $miss = if ($step.expect -and -not (Test-Pattern $answer $step.expect)) { "probe $($step.probe) answer has nothing matching $($step.expect)" }
-                            elseif ($step.expectNot -and (Test-Pattern $answer $step.expectNot)) { "probe $($step.probe) answer matches $($step.expectNot)" }
-                        if (-not $miss) { break }
-                        if ($swipesLeft -le 0) {
-                            # A precondition that never held says nothing about the patch.
-                            if ($step.precondition) { throw [System.InvalidOperationException]::new("precondition: $miss") }
-                            throw $miss
-                        }
-                        $swipesLeft--
-                        $w, $h = Get-ScreenSize
-                        Invoke-DeviceShell "input swipe $([int]($w / 2)) $([int]($h * 0.72)) $([int]($w / 2)) $([int]($h * 0.28)) 220" | Out-Null
-                        Start-Sleep -Milliseconds 2200
+                    } finally {
+                        $result.evidence += Save-Evidence "$tag-$index-$($step.probe)" ($attempts -join "`n--- next video`n")
                     }
                 }
                 { $_ -in 'log', 'logNot' } {
@@ -616,12 +632,12 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
 
 $run = [ordered]@{
     app = [ordered]@{ package = $package; version = $versionName; versionCode = $versionCode }
-    apk = [ordered]@{ path = $Apk; sha256 = (Get-FileHash -LiteralPath $Apk -Algorithm SHA256).Hash.ToLowerInvariant() }
+    apk = [ordered]@{ file = (Split-Path -Leaf $Apk); sha256 = (Get-FileHash -LiteralPath $Apk -Algorithm SHA256).Hash.ToLowerInvariant() }
     hushfeed = [ordered]@{ commit = "$(git -C $root rev-parse --short HEAD 2>$null)"; catalog = (Get-FileHash -LiteralPath $Catalog -Algorithm SHA256).Hash.Substring(0, 16).ToLowerInvariant() }
     device = $null
     startedUtc = [DateTime]::UtcNow.ToString('o')
     finishedUtc = $null
-    evidence = $OutDir
+    evidence = (Split-Path -Leaf $OutDir)
     summary = $null
     hooks = $null
     patches = @()
@@ -632,6 +648,13 @@ if ($Only -and (Test-Path -LiteralPath $Results)) {
     $previous = Get-Content -LiteralPath $Results -Raw | ConvertFrom-Json
     $rerun = @($catalogEntries | ForEach-Object { [string]$_.name })
     $run.patches = @($previous.patches | Where-Object { $rerun -notcontains $_.name })
+    foreach ($kept in $run.patches) {
+        $kept.evidence = ConvertTo-LeafName $kept.evidence
+        foreach ($keptCheck in $kept.checks) {
+            $keptCheck.evidence = @($keptCheck.evidence | ForEach-Object { ConvertTo-LeafName $_ })
+            foreach ($shot in $keptCheck.review) { $shot.shot = ConvertTo-LeafName $shot.shot }
+        }
+    }
     $run.startedUtc = $previous.startedUtc
     $run.hooks = $previous.hooks
 }
@@ -695,7 +718,7 @@ try {
             if ($restarted) { Restart-TikTok }
         }
         $run.patches = @($run.patches) + [pscustomobject][ordered]@{ name = $entry.name; category = $entry.category; kind = $entry.kind
-            ranUtc = [DateTime]::UtcNow.ToString('o'); apkSha256 = $run.apk.sha256; evidence = $OutDir; checks = $checks }
+            ranUtc = [DateTime]::UtcNow.ToString('o'); apkSha256 = $run.apk.sha256; evidence = $run.evidence; checks = $checks }
         # Written after every patch, so a run cut short still leaves what it found.
         Save-Results
     }
