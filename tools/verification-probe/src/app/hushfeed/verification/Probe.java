@@ -2482,6 +2482,51 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok livestream" + out);
                         break;
                     }
+                    case "click": {
+                        // Clicks one shown view by its id name (-e find bottom_tab_home), or by a
+                        // content description regex (-e desc "^Profile$"), through performClick on
+                        // its nearest clickable ancestor, so a scripted check moves between TikTok's
+                        // tabs and sheets without a coordinate guess. More than one match is
+                        // refused unless -e index picks one, and so is a match off screen.
+                        String find = intent.getStringExtra("find");
+                        String desc = intent.getStringExtra("desc");
+                        if (find == null && desc == null) throw new IllegalArgumentException("-e find or -e desc is required");
+                        java.util.regex.Pattern descPattern = desc == null ? null : java.util.regex.Pattern.compile(desc);
+                        android.content.res.Resources resources = app.getResources();
+                        List<android.view.View> matches = new ArrayList<>();
+                        java.util.ArrayDeque<android.view.View> queue = new java.util.ArrayDeque<>(windowRoots());
+                        while (!queue.isEmpty()) {
+                            android.view.View view = queue.removeFirst();
+                            if (!view.isShown()) continue;
+                            boolean match = find != null ? find.equals(idName(view, resources))
+                                    : view.getContentDescription() != null
+                                            && descPattern.matcher(view.getContentDescription()).find();
+                            android.graphics.Rect onScreen = new android.graphics.Rect();
+                            if (match && view.getGlobalVisibleRect(onScreen) && !onScreen.isEmpty()) matches.add(view);
+                            if (view instanceof android.view.ViewGroup) {
+                                android.view.ViewGroup group = (android.view.ViewGroup) view;
+                                for (int i = 0; i < group.getChildCount(); i++) queue.add(group.getChildAt(i));
+                            }
+                        }
+                        String indexText = intent.getStringExtra("index");
+                        if (matches.isEmpty()) throw new IllegalStateException("no shown view matches");
+                        if (indexText == null && matches.size() > 1) {
+                            throw new IllegalStateException(matches.size() + " shown views match; pass -e index");
+                        }
+                        android.view.View target = matches.get(indexText == null ? 0 : Integer.parseInt(indexText));
+                        android.view.View clickable = target;
+                        while (clickable != null && !clickable.isClickable()) {
+                            clickable = clickable.getParent() instanceof android.view.View
+                                    ? (android.view.View) clickable.getParent() : null;
+                        }
+                        if (clickable == null) throw new IllegalStateException("nothing clickable holds the match");
+                        int[] where = new int[2];
+                        clickable.getLocationOnScreen(where);
+                        boolean handled = clickable.performClick();
+                        Log.i(TAG, "ok click " + idName(clickable, resources) + " at " + where[0] + ',' + where[1]
+                                + " size " + clickable.getWidth() + 'x' + clickable.getHeight() + " handled=" + handled);
+                        break;
+                    }
                     case "windowviews": {
                         // Dialogs and bottom sheets can live in a separate WindowManager root.
                         // TikTok 47.0.3's comment sheet leaves MainActivity's own content view
