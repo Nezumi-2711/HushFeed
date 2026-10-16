@@ -2596,7 +2596,7 @@
     "auto": true
    }
   ],
-  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). A video's sheet gets only Copy video ID (seen 2026-10-16), and a profile's sheet gets Copy username and Copy user ID (CopyIds.targetsOf, itemType user), so the second half opens Share profile. On 47.1.4 the own profile has no Share profile button; the row is in Settings and privacy under Account, so the check goes Profile menu > Settings and privacy > Share profile (2026-10-16). Nothing on either sheet is tapped. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile. Settings and privacy is a Compose page whose rows carry their words in the content description with an empty text, so its rows are tapped by label, which matches either (2026-10-16)."
+  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). A video's sheet gets only Copy video ID (seen 2026-10-16), and a profile's sheet gets Copy username and Copy user ID (CopyIds.targetsOf, itemType user), so the second half opens Share profile. On 47.1.4 the own profile has no Share profile button; the row is in Settings and privacy under Account, so the check goes Profile menu > Settings and privacy > Share profile (2026-10-16). That sheet has only Send to and the apps row, no action panel, so the row goes at the bottom of the apps panel (0IQ2 on 47.1.4, found by share_panel_channel); before 2026-10-16 it never showed there. Nothing on either sheet is tapped. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile. Settings and privacy is a Compose page whose rows carry their words in the content description with an empty text, so its rows are tapped by label, which matches either (2026-10-16)."
  },
  {
   "name": "Copy comments without username",
@@ -6762,7 +6762,8 @@
     "key": "hide_profile_rewards_shortcut",
     "default": false,
     "type": "bool",
-    "row": "Hide the rewards shortcut"
+    "row": "Hide the rewards shortcut",
+    "restart": true
    }
   ],
   "surface": "feed",
@@ -6844,6 +6845,9 @@
       }
      },
      {
+      "restart": true
+     },
+     {
       "open": "profile"
      },
      {
@@ -6859,7 +6863,7 @@
       }
      },
      {
-      "open": "feed"
+      "restart": true
      },
      {
       "open": "profile"
@@ -6880,7 +6884,7 @@
     "auto": false
    }
   ],
-  "notes": "What is on screen depends on what the server serves to the test account (promotions and the rewards shortcut are account and region features), so there is no automatic view id check. The patch filters TikTok's TouchPoint model objects (NormalPendant, TimerPendant, SunshinePendant, CoinBottomTab, BottomTabBubble) before the UI binds them and nulls them, which leaves nothing to find in the view tree either way. hide_homepage_coin is restart-flagged; hide_profile_rewards_shortcut is read at bind time."
+  "notes": "What is on screen depends on what the server serves to the test account (promotions and the rewards shortcut are account and region features), so there is no automatic view id check. The patch filters TikTok's TouchPoint model objects (NormalPendant, TimerPendant, SunshinePendant, CoinBottomTab, BottomTabBubble) before the UI binds them and nulls them, which leaves nothing to find in the view tree either way. Both switches are restart-flagged. hide_profile_rewards_shortcut hides the gift box when the profile header binds it, so on 47.1.4 a live flip left it on a profile TikTok had already drawn, even after opening the profile again; after a restart it is gone (2026-10-16), and the check restarts TikTok after each set."
  },
  {
   "name": "Hide inbox items",
@@ -13427,6 +13431,9 @@
       }
      },
      {
+      "restart": true
+     },
+     {
       "open": "feed"
      },
      {
@@ -13451,6 +13458,18 @@
       "set": {
        "show_exact_counts": "true"
       }
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1500
      },
      {
       "swipe": "up"
@@ -13541,7 +13560,7 @@
     "auto": true
    }
   ],
-  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4. The comment sheet title, the likes list and the viewers list come from X/0HAE.LIZIZ(Aweme, long) on 47.1.4, which for someone else's video formats the count itself and never reached the compact formatter's hook; it has its own hook since 2026-10-16 (VideoCountFormatterFingerprint). like-count-exact flips the switch live, and the next cell may already be laid out with the old text, the likely reason pass 3 read 69.4K on a photo post (to be checked after a restart)."
+  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4. The comment sheet title, the likes list and the viewers list come from X/0HAE.LIZIZ(Aweme, long) on 47.1.4, which for someone else's video formats the count itself and never reached the compact formatter's hook; it has its own hook since 2026-10-16 (VideoCountFormatterFingerprint). A live flip reaches only cells bound after it: the next cell is already laid out with the old text, which is why pass 3 read 69.4K right after the flip. On 2026-10-16 the comma was there both after a restart and live three swipes on, so like-count-exact restarts for its off half and swipes three times after turning it on."
  },
  {
   "name": "Show follow status",
