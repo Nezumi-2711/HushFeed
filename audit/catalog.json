@@ -3725,8 +3725,70 @@
   "surface": "comments",
   "checks": [
    {
-    "id": "gate-answers-yes",
-    "what": "With the switch on, TikTok's lazily read audio_comment_publish gate is read and answered by Hushfeed (Feature Gate Recorder report lists it).",
+    "id": "gate-read-when-off",
+    "what": "With the switch off, focusing the comment box makes TikTok read audio_comment_publish, so the gate the patch hooks is the one the entry asks.",
+    "steps": [
+     {
+      "set": {
+       "enable_voice_comments": "false"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "likes=over1000.*ad=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
+      "probe": "labreport",
+      "extras": {
+       "op": "begin"
+      },
+      "expect": "recording=true"
+     },
+     {
+      "probe": "comments",
+      "expect": "openComments\\([^)]*\\)=true",
+      "waitMs": 2500
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "^Add comment",
+       "match": "regex",
+       "click": "true"
+      },
+      "expect": "ok findtext found .*clicked=true"
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "probe": "labreport",
+      "extras": {
+       "op": "stop",
+       "key": "audio_comment_publish"
+      },
+      "expect": "ok labreport key audio_comment_publish read=true"
+     },
+     {
+      "back": true
+     },
+     {
+      "back": true
+     }
+    ],
+    "auto": true
+   },
+   {
+    "id": "gate-answered-when-on",
+    "what": "With the switch on, the same steps leave no read of audio_comment_publish: the hook answered yes before TikTok's own read.",
     "steps": [
      {
       "set": {
@@ -3775,7 +3837,7 @@
        "op": "stop",
        "key": "audio_comment_publish"
       },
-      "expect": "ok labreport key audio_comment_publish read=true"
+      "expect": "ok labreport key audio_comment_publish read=false"
      },
      {
       "back": true
@@ -3863,7 +3925,7 @@
     "auto": true
    }
   ],
-  "notes": "The patch description says it has not been tried on a real account. Roadmap_Blocked.md 'Voice comment plays for a second account' records that recording, publication, playback and deletion once worked on one account, but a second viewer is unproven. Recording needs the microphone, so the audit only checks that the gate is consulted and (by eye) that the entry shows. The labreport step asks for the one gate: read=true is the pass condition, and the value it prints is the thing to read by hand. The test account already gets the mic with the switch off (seen 2026-10-16 in the focused box's tool row), so on it the shot proves the entry still builds and the gate check is what shows the switch is asked. audio_comment_publish is read lazily when the comment box's tool row is built, so the gate check focuses Add comment before reading the record (2026-10-16)."
+  "notes": "The patch description says it has not been tried on a real account. Roadmap_Blocked.md 'Voice comment plays for a second account' records that recording, publication, playback and deletion once worked on one account, but a second viewer is unproven. Recording needs the microphone, so the audit only checks that the gate is consulted and (by eye) that the entry shows. The patch answers at the top of TikTok's lazy gate, so with the switch on TikTok's own settings read never runs: the gate checks are an A/B on that read (read=true with the switch off, read=false with it on), each after a restart so the lazy value is fresh. The test account already gets the mic with the switch off (seen 2026-10-16 in the focused box's tool row), so on it the shot proves the entry still builds and the gate check is what shows the switch is asked. audio_comment_publish is read lazily when the comment box's tool row is built, so the gate check focuses Add comment before reading the record (2026-10-16)."
  },
  {
   "name": "Expand activity list",
