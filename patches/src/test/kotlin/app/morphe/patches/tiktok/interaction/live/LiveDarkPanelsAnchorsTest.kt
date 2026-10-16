@@ -72,33 +72,6 @@ class LiveDarkPanelsAnchorsTest {
     }
 
     @Test
-    fun `each declared build keeps the fragment inflater and TikTok's dark style the sheet hook needs`() {
-        Fixtures.forEachDeclared { apk ->
-            val classes = classes(apk)
-            val darkModes = classes.values.flatMap { owner -> owner.methods.filter { AppDarkModeFingerprint.takes(it, owner) } }
-            assertEquals("${apk.name}: TikTok's dark mode check", 1, darkModes.size)
-            val style = darkAppStyle(classes.values.asSequence(), darkModes.single())
-            assertEquals("${apk.name}: a style id", 0x7f, style ushr 24)
-            if (apk.name.contains("47.1.4")) assertEquals("${apk.name}: style/y9", 0x7f120372, style)
-
-            val fragment = classes[ANDROIDX_FRAGMENT] ?: throw AssertionError("${apk.name}: $ANDROIDX_FRAGMENT is gone")
-            val found = fragment.methods.filter { FragmentInflaterFingerprint.takes(it, fragment) }
-            assertEquals("${apk.name}: performGetLayoutInflater", 1, found.size)
-            val hooked = MutableMethod(found.single())
-            hookFragmentInflater(hooked, style)
-            val code = hooked.implementation!!.instructions.toList()
-            val call = code.withIndex().single {
-                ((it.value as? ReferenceInstruction)?.reference as? MethodReference)?.name == "darkTuxSheet"
-            }
-            assertEquals("${apk.name}: the inflater is kept after the hook", Opcode.IPUT_OBJECT, code[call.index + 2].opcode)
-            assertEquals("${apk.name}: the hook's answer is what's kept",
-                (code[call.index + 1] as OneRegisterInstruction).registerA,
-                (code[call.index + 2] as com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction).registerA)
-            assertEquals("${apk.name}: Fragment", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
-        }
-    }
-
-    @Test
     fun `each declared build keeps the quality list's view setup`() {
         Fixtures.forEachDeclared { apk ->
             val classes = classes(apk)

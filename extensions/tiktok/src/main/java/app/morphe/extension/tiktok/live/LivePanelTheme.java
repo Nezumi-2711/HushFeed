@@ -5,11 +5,8 @@
 package app.morphe.extension.tiktok.live;
 
 import app.morphe.extension.shared.Logger;
-import app.morphe.extension.tiktok.settings.Settings;
-import app.morphe.extension.tiktok.settings.SettingsStatus;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 
@@ -25,17 +22,8 @@ public final class LivePanelTheme {
     /** The base of LIVE's sheet pages: the fan club sheets and most newer LIVE panels. */
     static final String SHEET = "com.bytedance.android.live.design.view.sheet.LiveSheetFragment";
 
-    /** The base of TikTok's Tux sheets: the share sheet and the other general bottom sheets. */
-    static final String TUX_SHEET = "com.bytedance.tux.sheet.BaseSheet";
-    static final String FRAGMENT = "androidx.fragment.app.Fragment";
-    /** A LIVE room's activity. */
-    static final String LIVE_ROOM = "com.ss.android.ugc.aweme.live.LivePlayActivity";
-
     private static final Map<Class<?>, Boolean> PANEL_TYPES = new ConcurrentHashMap<>();
-    private static final Map<Class<?>, Boolean> SHEET_TYPES = new ConcurrentHashMap<>();
-    private static final Map<String, Method> FRAGMENT_METHODS = new ConcurrentHashMap<>();
     private static volatile boolean overlayFailureLogged;
-    private static volatile boolean tuxFailureLogged;
 
     private LivePanelTheme() {
     }
@@ -70,113 +58,6 @@ public final class LivePanelTheme {
             Logger.printException(() -> "Could not darken a LIVE panel", failure);
             return inflater;
         }
-    }
-
-    /**
-     * Called with every fragment's layout inflater as the fragment makes it, with TikTok's own dark
-     * app style. The room's Share button and others open TikTok's general sheets (a TuxSheet with
-     * SkeletonSharePanelFragment inside), not LIVE dialogs, and those inflate from the room
-     * activity, whose theme stays light because LIVE activities say they don't support dark mode,
-     * so they open white in a dark app (#159, #168). The room's own context doesn't say dark mode
-     * either (Login2 emulator, TikTok's Display set to Dark), so whether TikTok is dark comes from
-     * its own pages: every fragment outside a room notes whether it inflates in night mode. While
-     * Dark LIVE panels is on and TikTok is dark, a Tux sheet in a LIVE room, and every fragment
-     * inside one, inflates through the style TikTok gives its own activities in dark mode.
-     * Everything else keeps its inflater.
-     */
-    public static LayoutInflater darkTuxSheet(Object fragment, LayoutInflater inflater, int darkStyle) {
-        if (fragment == null || inflater == null || darkStyle == 0
-                || !SettingsStatus.liveControlsEnabled || !Settings.DARK_LIVE_PANELS.get()) {
-            return inflater;
-        }
-        try {
-            Context context = inflater.getContext();
-            if (!inLiveRoom(fragment)) {
-                appDark = isNight(context);
-                return inflater;
-            }
-            if (!(appDark || isNight(context)) || !inTuxSheet(fragment)) {
-                return inflater;
-            }
-            Logger.printDebug(() -> "Dark LIVE panels: a sheet in a LIVE room takes TikTok's dark style, "
-                    + fragment.getClass().getName());
-            return inflater.cloneInContext(nightContext(context, darkStyle));
-        } catch (Throwable failure) {
-            if (!tuxFailureLogged) {
-                tuxFailureLogged = true;
-                Logger.printException(() -> "Could not darken a sheet in a LIVE room", failure);
-            }
-            return inflater;
-        }
-    }
-
-    /** Whether TikTok's own pages last inflated in night mode. */
-    static volatile boolean appDark;
-
-    /**
-     * [context] with TikTok's dark style and its resources in night mode. The style alone left the
-     * share sheet white (Login2 emulator): TikTok's sheet colors are night-qualified resources, so
-     * they follow the configuration. The wrapper keeps the room activity as its base, so code that
-     * looks for the activity behind a view's context still finds it.
-     */
-    static Context nightContext(Context context, int darkStyle) {
-        ContextThemeWrapper wrapper = new ContextThemeWrapper(context, darkStyle);
-        if (!isNight(context)) {
-            Configuration night = new Configuration(context.getResources().getConfiguration());
-            night.uiMode = (night.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | Configuration.UI_MODE_NIGHT_YES;
-            wrapper.applyOverrideConfiguration(night);
-        }
-        return wrapper;
-    }
-
-    private static boolean isNight(Context context) {
-        int night = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        return night == Configuration.UI_MODE_NIGHT_YES;
-    }
-
-    /** Whether [fragment] sits in a LIVE room's activity. */
-    static boolean inLiveRoom(Object fragment) throws ReflectiveOperationException {
-        Object activity = fragmentMethod(fragment, "getActivity").invoke(fragment);
-        return activity != null && LIVE_ROOM.equals(activity.getClass().getName());
-    }
-
-    /** Whether [fragment] is a Tux sheet or sits inside one, through its parent fragments. */
-    static boolean inTuxSheet(Object fragment) throws ReflectiveOperationException {
-        Method parent = fragmentMethod(fragment, "getParentFragment");
-        for (Object current = fragment; current != null; current = parent.invoke(current)) {
-            if (isTuxSheet(current.getClass())) return true;
-        }
-        return false;
-    }
-
-    static boolean isTuxSheet(Class<?> type) {
-        Boolean known = SHEET_TYPES.get(type);
-        if (known != null) {
-            return known;
-        }
-        boolean sheet = false;
-        for (Class<?> current = type; current != null; current = current.getSuperclass()) {
-            if (TUX_SHEET.equals(current.getName())) {
-                sheet = true;
-                break;
-            }
-        }
-        SHEET_TYPES.put(type, sheet);
-        return sheet;
-    }
-
-    /** [name], a public no-argument method every fragment has, looked up once on androidx's Fragment. */
-    private static Method fragmentMethod(Object fragment, String name) throws ReflectiveOperationException {
-        Method known = FRAGMENT_METHODS.get(name);
-        if (known != null) {
-            return known;
-        }
-        Class<?> base = fragment.getClass();
-        while (base != null && !FRAGMENT.equals(base.getName())) base = base.getSuperclass();
-        if (base == null) throw new NoSuchMethodException(fragment.getClass().getName() + " isn't a fragment");
-        Method method = base.getMethod(name);
-        FRAGMENT_METHODS.put(name, method);
-        return method;
     }
 
     /** True for a themed LIVE dialog or a LIVE sheet page, by TikTok's own class names. */

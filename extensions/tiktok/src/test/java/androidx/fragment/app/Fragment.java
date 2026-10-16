@@ -16,15 +16,4 @@ public class Fragment {
     public final Activity getActivity() {
         return activity;
     }
-
-    private Fragment parent;
-
-    /** Puts this fragment inside [parent], the way a child fragment manager would. */
-    public final void setParentForTest(Fragment parent) {
-        this.parent = parent;
-    }
-
-    public final Fragment getParentFragment() {
-        return parent;
-    }
 }
