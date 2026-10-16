@@ -117,7 +117,7 @@ if ($Validate) {
     Get-ChildItem -Path (Join-Path $root 'extensions') -Recurse -Filter *.java | Where-Object { $_.FullName -match '[\\/]src[\\/]main[\\/]' } | ForEach-Object {
         foreach ($found in [regex]::Matches((Get-Content -LiteralPath $_.FullName -Raw), 'Setting\(\s*"([A-Za-z0-9_]+)"')) { [void]$keys.Add($found.Groups[1].Value) }
     }
-    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk'
+    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night'
     $apkKinds = 'entry-empty', 'entry-absent', 'entry-present', 'manifest', 'resources', 'icon-xml', 'dex-string'
     foreach ($entry in $entries) {
         $where = "'$($entry.name)'"
@@ -138,9 +138,10 @@ if ($Validate) {
                     'probe' { if ($actions -notcontains [string]$step.probe) { & $bad "the probe has no action '$($step.probe)'" } }
                     'open' {
                         $surface = [string]$step.open
-                        if ($surface -notin 'feed', 'profile', 'inbox', 'friends', 'settings' -and $surface -notlike 'search:*' -and $surface -notlike 'url:*') { & $bad "can't open '$surface'" }
+                        if ($surface -notin 'feed', 'profile', 'inbox', 'friends', 'settings', 'appinfo' -and $surface -notlike 'search:*' -and $surface -notlike 'url:*') { & $bad "can't open '$surface'" }
                     }
                     'swipe' { if ([string]$step.swipe -notin 'up', 'down', 'left', 'right') { & $bad "swipes '$($step.swipe)'" } }
+                    'night' { if ([string]$step.night -notin 'yes', 'no') { & $bad "sets night mode '$($step.night)'" } }
                     { $_ -in 'tap', 'longpress' } { $target = $step.$kind; if (-not ($target.text -or $target.desc -or $target.id)) { & $bad "a $kind with no text, desc or id" } }
                     'apk' { if ([string]$step.apk -notin $apkKinds) { & $bad "unknown apk check '$($step.apk)'" } }
                     'shot' { if (-not $step.review) { & $bad 'a shot with no review text' } }
@@ -466,6 +467,10 @@ function Open-Surface([string]$Where) {
         Invoke-DeviceShell "am start -a android.intent.action.VIEW -d $(ConvertTo-DeviceQuoted "snssdk1233://search?keyword=$keyword") -p $package" | Out-Null
     } elseif ($Where -like 'url:*') {
         Invoke-DeviceShell "am start -a android.intent.action.VIEW -d $(ConvertTo-DeviceQuoted $Where.Substring(4)) -p $package" | Out-Null
+    } elseif ($Where -eq 'appinfo') {
+        # Android's App info page for TikTok: the name and icon the launcher shows, on a page that
+        # is the same on every phone, where the home screen's layout isn't.
+        Invoke-DeviceShell "am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:$package" | Out-Null
     } else {
         throw "unknown surface $Where"
     }
@@ -494,6 +499,16 @@ function ConvertTo-LeafName([string]$Value) {
 }
 
 # One check: every step in order, the first failed expectation ends it.
+$script:nightWas = $null
+# Puts back the phone's night mode a night step changed. Returns whether it changed anything.
+function Restore-NightMode {
+    if ($null -eq $script:nightWas) { return $false }
+    try { Invoke-DeviceShell "cmd uimode night $($script:nightWas)" | Out-Null }
+    catch { Write-Warning "could not put the phone's night mode back to $($script:nightWas): $($_.Exception.Message)" }
+    $script:nightWas = $null
+    return $true
+}
+
 function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
     $result = [ordered]@{ id = $Check.id; what = $Check.what; auto = [bool]$Check.auto; status = 'pass'; failures = @(); evidence = @(); review = @() }
     $tag = "$($Entry.name)-$($Check.id)"
@@ -557,6 +572,17 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                     Start-Sleep -Milliseconds 1800
                 }
                 'wait' { Start-Sleep -Milliseconds ([int]$step.wait) }
+                'night' {
+                    # The phone's dark theme, which TikTok follows. The phone's own mode goes back
+                    # once the patch's checks are done.
+                    if ($null -eq $script:nightWas) {
+                        [string]$now = Invoke-DeviceShell 'cmd uimode night'
+                        if ([string]::IsNullOrEmpty($now) -or $now -notmatch 'Night mode:\s*(\w+)') { throw "could not read the phone's night mode: $now" }
+                        $script:nightWas = $Matches[1]
+                    }
+                    Invoke-DeviceShell "cmd uimode night $($step.night)" | Out-Null
+                    Start-Sleep -Milliseconds 1500
+                }
                 'back' { Invoke-DeviceShell 'input keyevent KEYCODE_BACK' | Out-Null; Start-Sleep -Milliseconds 1200 }
                 'tap' { $result.evidence += (Invoke-DumpTap $step.tap); Start-Sleep -Milliseconds 1500 }
                 'longpress' { $result.evidence += (Invoke-DumpTap $step.longpress 900); Start-Sleep -Milliseconds 1500 }
@@ -717,6 +743,7 @@ try {
             Start-Sleep -Seconds 3
             if ($restarted) { Restart-TikTok }
         }
+        if ($deviceUp -and (Restore-NightMode)) { Start-Sleep -Seconds 2; Restart-TikTok }
         $run.patches = @($run.patches) + [pscustomobject][ordered]@{ name = $entry.name; category = $entry.category; kind = $entry.kind
             ranUtc = [DateTime]::UtcNow.ToString('o'); apkSha256 = $run.apk.sha256; evidence = $run.evidence; checks = $checks }
         # Written after every patch, so a run cut short still leaves what it found.
@@ -739,6 +766,7 @@ try {
 } finally {
     $apkZip.Dispose()
     if ($deviceUp) {
+        [void](Restore-NightMode)
         if ($runOriginals.Count -gt 0) {
             try {
                 Restart-TikTok

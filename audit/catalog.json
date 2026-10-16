@@ -28,17 +28,37 @@
    },
    {
     "id": "dark-surfaces",
-    "what": "Review: in dark mode the comment sheet, the Inbox and the long-press panel use the chosen color (pure black by default) rather than TikTok's dark gray.",
+    "what": "Review: with the phone in dark mode the comment sheet and the Inbox use the chosen color (pure black by default) rather than TikTok's dark gray, and light mode stays white.",
     "steps": [
+     {
+      "night": "yes"
+     },
+     {
+      "restart": true
+     },
      {
       "open": "feed"
      },
      {
-      "wait": 1500
+      "probe": "videoinfo",
+      "expect": "likes=over1000.*ad=false",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
-      "shot": "amoled-feed",
-      "review": "Phone set to dark theme. Open comments: the sheet background is #000000 (or the Mocha/Dark gray option if the build chose one), not TikTok's #161823-style gray. Then the Inbox tab and Settings and privacy. Failing looks like dark gray panels."
+      "probe": "comments",
+      "expect": "openComments\\([^)]*\\)=true",
+      "waitMs": 2500
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "shot": "amoled-comments",
+      "review": "Phone in dark mode, comment sheet open: the sheet behind the comments is pure black #000000 (or the Mocha/Dark gray option the build chose), not TikTok's dark gray. Failing looks like a gray panel."
+     },
+     {
+      "back": true
      },
      {
       "open": "inbox"
@@ -48,13 +68,29 @@
      },
      {
       "shot": "amoled-inbox",
-      "review": "Inbox background is the same pure black. Light theme must be unchanged (white)."
+      "review": "Inbox in dark mode: the list background is the same pure black, not dark gray."
+     },
+     {
+      "night": "no"
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "inbox"
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "shot": "amoled-inbox-light",
+      "review": "Inbox in light mode: white as stock. The patch must not darken light mode."
      }
     ],
     "auto": false
    }
   ],
-  "notes": "Built in at patch time, so only patching again without it undoes it. The colour option's default is #000000 (lane file lists Black, Mocha #181825 and Dark gray #121212). The patch refuses a TikTok APK whose resource paths would clash (renamedPathCollisions), so a build that exists has passed that. TikTok follows the system theme here; put the phone in dark mode before the review shots. The probe's backgrounds action (x,y) can print the painting view and colour for a spot on screen if a number is wanted."
+  "notes": "Built in at patch time, so only patching again without it undoes it. The colour option's default is #000000 (lane file lists Black, Mocha #181825 and Dark gray #121212). The patch refuses a TikTok APK whose resource paths would clash (renamedPathCollisions), so a build that exists has passed that. TikTok follows the system theme here, so the check's night steps switch the phone (the runner puts the phone's own mode back). The probe's backgrounds action (x,y) can print the painting view and colour for a spot on screen if a number is wanted."
  },
  {
   "name": "Accent color",
@@ -90,7 +126,7 @@
      },
      {
       "shot": "accent-feed",
-      "review": "Feed: red-tinted controls (the Follow button text on a profile, the unread badge, Log in buttons) show the chosen color instead of TikTok red #FE2C55. Warnings stay red. Failing looks like the stock red on primary buttons."
+      "review": "Feed: red buttons and red text show the chosen color instead of TikTok red #FE2C55. Warnings stay red, and the patch leaves the follow plus under the avatar red; the patch doesn't claim the Inbox unread badge either. Failing looks like the stock red on primary buttons."
      },
      {
       "open": "profile"
@@ -100,7 +136,7 @@
      },
      {
       "shot": "accent-profile",
-      "review": "Own profile: Edit profile / Follow style buttons and links use the accent."
+      "review": "Own profile: the Upload / Follow style buttons and links use the accent, not TikTok red."
      }
     ],
     "auto": false
@@ -373,7 +409,8 @@
       "extras": {
        "text": "Video download quality"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "back": true
@@ -1777,17 +1814,20 @@
    },
    {
     "id": "home-label",
-    "what": "Review: the launcher icon on the home screen is labelled with the chosen name, and inside the app it still says TikTok.",
+    "what": "Review: Android's App info page names the app with the chosen name, and inside the app it still says TikTok.",
     "steps": [
      {
-      "open": "feed"
+      "open": "appinfo"
      },
      {
-      "wait": 1000
+      "wait": 2000
      },
      {
-      "shot": "launcher-label",
-      "review": "Phone home screen / app drawer: the TikTok icon is labelled with the patch option's name (default Hushfeed). TikTok's own screens still say TikTok."
+      "shot": "app-info-label",
+      "review": "App info page: the title under the icon is the patch option's name (default Hushfeed), not TikTok. Nothing on the page is tapped."
+     },
+     {
+      "back": true
      }
     ],
     "auto": false
@@ -2627,23 +2667,26 @@
    },
    {
     "id": "icon-visible",
-    "what": "Review: the home screen icon is the chosen style (TikTok colors, black, white on black or black on white, or the picture) and, on Android 13+ with themed icons on, takes the wallpaper color.",
+    "what": "Review: Android's App info page shows the icon in the chosen style (TikTok colors, black, white on black or black on white, or the picture).",
     "steps": [
      {
-      "open": "feed"
+      "open": "appinfo"
      },
      {
-      "wait": 1000
+      "wait": 2000
      },
      {
-      "shot": "launcher-icon",
-      "review": "App drawer / home screen: TikTok's icon in the chosen style. With Themed icons on in the launcher it is tinted to the wallpaper. Failing looks like the stock red-and-cyan note."
+      "shot": "app-info-icon",
+      "review": "App info page: the icon at the top is the chosen style, not the stock red-and-cyan note unless the build kept TikTok colors. Nothing on the page is tapped."
+     },
+     {
+      "back": true
      }
     ],
     "auto": false
    }
   ],
-  "notes": "Options: iconStyle tiktok (default), black, white-on-black, black-on-white; iconPicture an optional 432-1024 pixel square PNG (then no themed icon). The resources dump only proves an icon resource exists; which style the build used is visible by eye. Themed icons need Android 13+ and the launcher's themed-icons switch on (Samsung One UI has it under Wallpaper and style)."
+  "notes": "Options: iconStyle tiktok (default), black, white-on-black, black-on-white; iconPicture an optional 432-1024 pixel square PNG (then no themed icon). The resources dump only proves an icon resource exists; which style the build used is visible by eye. Themed icons need Android 13+ and the launcher's themed-icons switch on (Samsung One UI has it under Wallpaper and style). The App info page shows the full-color icon; the themed (wallpaper-tinted) look only shows on the home screen with the launcher's themed icons on, and the monochrome layer check covers what it draws."
  },
  {
   "name": "Custom offline videos limit",
@@ -2970,21 +3013,24 @@
       "extras": {
        "text": "Log diagnostics"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "probe": "findtext",
       "extras": {
        "text": "Export diagnostic report"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "probe": "findtext",
       "extras": {
        "text": "Clear diagnostic data"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "back": true
@@ -2997,39 +3043,31 @@
    },
    {
     "id": "debug-lines",
-    "what": "With Log diagnostics on, debug lines reach logcat ('Inbox filter installed' when the Inbox opens); with it off they do not.",
+    "what": "With Log diagnostics on, debug lines reach logcat ('Inbox filter installed', which TikTok's main screen logs as it starts); with it off they do not.",
     "steps": [
      {
+      "set": {
+       "morphe_debug": "false"
+      }
+     },
+     {
       "restart": true
-     },
-     {
-      "open": "feed"
-     },
-     {
-      "open": "inbox"
-     },
-     {
-      "wait": 2000
      },
      {
       "logNot": "Inbox filter installed",
-      "within": 3000
+      "within": 6000
+     },
+     {
+      "set": {
+       "morphe_debug": "true"
+      }
      },
      {
       "restart": true
      },
      {
-      "open": "feed"
-     },
-     {
-      "open": "inbox"
-     },
-     {
-      "wait": 2000
-     },
-     {
       "log": "Inbox filter installed",
-      "within": 6000
+      "within": 8000
      }
     ],
     "auto": true
@@ -4060,7 +4098,8 @@
       "extras": {
        "text": "Start feature gate recording"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "back": true
@@ -11956,14 +11995,16 @@
       "extras": {
        "text": "Feed filter"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "probe": "findtext",
       "extras": {
        "text": "Feed tabs"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "back": true
@@ -11994,7 +12035,8 @@
       "extras": {
        "text": "Hide new followers"
       },
-      "expect": "ok findtext found"
+      "expect": "ok findtext found",
+      "retrySwipe": 4
      },
      {
       "back": true
