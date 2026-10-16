@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** Turn off screen transitions works again. TikTok asks for its own slide after the screen has opened, later than Hushfeed used to ask for none, so pages kept sliding in with the switch on. Hushfeed asks again after TikTok now, and pages like Hushfeed's settings open with a plain cut.
+
 * **TikTok:** Show exact counts now also reaches the comment count at the top of the comment sheet and the counts on the likes and viewers lists. On someone else's video TikTok wrote those with a formatter of its own, so they still read 12.3K with the switch on.
 
 * **TikTok:** Hide suggested accounts shows a restart button now when you flip it. The Friends tab and profiles keep the suggestion cards they've already drawn until TikTok restarts, so turning it on while TikTok was open seemed to do nothing there. The Inbox still changes right away.
