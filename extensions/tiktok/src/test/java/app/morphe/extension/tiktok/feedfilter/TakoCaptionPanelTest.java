@@ -55,6 +55,32 @@ public class TakoCaptionPanelTest {
         assertTrue("the ask was not named: " + report, report.contains("tako AI: 1 found"));
     }
 
+    @Test public void theSwitchOffLeavesTheCaptionASmartSearchOne() {
+        assertTrue("the flag was refused with the switch off", TakoAiFilter.allowSmartSearchCaption(true));
+        assertFalse("a video without smart search info gained some", TakoAiFilter.allowSmartSearchCaption(false));
+        String report = HookStatus.report().toString();
+        assertTrue("the ask was not named: " + report, report.contains("tako AI: 1 found"));
+    }
+
+    @Test public void theSwitchOnMakesTheCaptionOneWithNoSmartSearchInfo() {
+        Settings.HIDE_TAKO_AI.save(true);
+        assertFalse("a smart search caption kept its forced more", TakoAiFilter.allowSmartSearchCaption(true));
+        assertFalse(TakoAiFilter.allowSmartSearchCaption(false));
+        String report = HookStatus.report().toString();
+        assertTrue("the drop was not named: " + report, report.contains("tako AI: 2 found"));
+    }
+
+    @Test public void aPausedProcessKeepsTikToksSmartSearchCaption() {
+        Settings.HIDE_TAKO_AI.save(true);
+        PausedProcess.set(true);
+        try {
+            assertTrue("the flag was refused while paused", TakoAiFilter.allowSmartSearchCaption(true));
+        } finally {
+            PausedProcess.set(false);
+        }
+        assertFalse("the switch did not come back after the pause", TakoAiFilter.allowSmartSearchCaption(true));
+    }
+
     @Test public void aPausedProcessGetsTikToksPanel() {
         Settings.HIDE_TAKO_AI.save(true);
         PausedProcess.set(true);

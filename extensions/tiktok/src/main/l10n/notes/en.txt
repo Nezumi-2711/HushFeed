@@ -4,6 +4,8 @@
 
 * **TikTok:** The LIVE Video quality list no longer shows its rows white on white in dark mode (#57).
 
+* **TikTok:** With Hide the Tako bubble on, a caption that fits no longer shows a "more" on videos with Tako content (#162).
+
 * **TikTok:** Accent color has a new Follow the wallpaper option that takes the color from your wallpaper on Android 12 and up (#163).
 
 * **TikTok:** Two new choices for the progress bar: the time can sit above the bar, and the bar can run edge to edge (#173).

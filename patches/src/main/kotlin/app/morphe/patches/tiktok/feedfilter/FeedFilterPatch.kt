@@ -753,6 +753,21 @@ val feedFilterPatch = bytecodePatch(
             )
         }
 
+        // Issue #162, the other half. On a video with smart search info the caption builder always
+        // draws its "more" tail, the one that leads into the search panel, even when the caption
+        // fits, so with the panel skipped a tap on "more" did nothing. Whether a caption counts as
+        // a smart search one is the third argument of this helper (the video has smart search
+        // info), which it returns when the video can show the entrance at all. Answering that
+        // argument at the helper's entry turns the caption into the one a video without smart
+        // search info gets: "more" only where the text is cut, and an expand in place.
+        SmartSearchCaptionFingerprint.method.addInstructions(
+            0,
+            """
+                invoke-static/range {p2 .. p2}, $TAKO_AI_FILTER_CLASS_DESCRIPTOR->allowSmartSearchCaption(Z)Z
+                move-result p2
+            """,
+        )
+
         // The "Ask · topic" bar issue #6's reporter still saw on 0.40.0 is none of the Tako
         // components above. It is one of TikTok's common bottom banners, keyed bottom_banner_tako
         // and drawn by the same banner view as the "Search · topic" bar, and every banner reaches

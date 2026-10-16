@@ -293,6 +293,25 @@ public final class TakoAiFilter {
         return false;
     }
 
+    static final String SMART_SEARCH_CAPTION_ASKED = "smart search caption asked";
+    static final String SMART_SEARCH_CAPTION_DROPPED = "smart search caption dropped";
+
+    /**
+     * Issue #162. On a video with smart search info the caption always shows a "more" that leads
+     * into the search panel, even when the whole caption fits, so with the panel skipped (see
+     * {@link #allowCaptionSearchPanel}) it led nowhere. TikTok's helper decides that from a flag
+     * that says the video has smart search info; this is that flag on its way in. With the switch
+     * on it says no, which gives the caption the layout of a video without Tako content: "more"
+     * only where the text is cut, and an expand in place. With it off, or while Hushfeed is
+     * paused, the flag is TikTok's own.
+     */
+    public static boolean allowSmartSearchCaption(boolean hasSmartSearchInfo) {
+        HookStatus.bound(HOOK_FAMILY, SMART_SEARCH_CAPTION_ASKED);
+        if (!hasSmartSearchInfo || !Settings.HIDE_TAKO_AI.get()) return hasSmartSearchInfo;
+        HookStatus.bound(HOOK_FAMILY, SMART_SEARCH_CAPTION_DROPPED);
+        return false;
+    }
+
     /** The component key TikTok gives the "Ask · topic" banner under a feed video. */
     static final String ASK_BANNER_KEY = "bottom_banner_tako";
     private static final String SEARCH_BANNER_KEY = "bottom_banner_search_rs";

@@ -4,6 +4,8 @@
 
 * **TikTok:** Die LIVE-Liste Videoqualität zeigt ihre Zeilen im Dunkelmodus nicht mehr weiß auf weiß (#57).
 
+* **TikTok:** Bei eingeschaltetem „Tako-Blase ausblenden“ zeigt eine Beschreibung, die komplett passt, bei Videos mit Tako-Inhalt kein „mehr“ mehr (#162).
+
 * **TikTok:** Accent color hat die neue Option „Dem Hintergrundbild folgen“, die ab Android 12 die Farbe aus deinem Hintergrundbild übernimmt (#163).
 
 * **TikTok:** Zwei neue Optionen für den Fortschrittsbalken: Die Zeit kann über dem Balken stehen, und der Balken kann von Rand zu Rand laufen (#173).

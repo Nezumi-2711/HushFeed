@@ -8,6 +8,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OffsetInstruction
@@ -942,6 +943,46 @@ internal object CaptionSearchPanelFingerprint : Fingerprint(
     returnType = "V",
     parameters = listOf("Z", "Ljava/lang/String;", POST_MODE_ENTRANCE),
     custom = { method, _ -> method.captionSearchPanelGate() != null },
+)
+
+internal const val TITLE_PANEL_STYLE = "Lcom/ss/android/ugc/aweme/experiment/TitlePanelStyle;"
+
+/**
+ * Issue #162 follow-up. Whether the title panel helper treats a video's caption as a smart
+ * search one: a public static (Aweme, String, boolean)boolean in the class that reads
+ * TitlePanelStyle's DESC_AND_SEARCH and DESC_AND_COMMENT_AND_SEARCH, which asks that class's own
+ * static (Aweme)boolean (whether the video can show the search entrance at all). The caption
+ * builder calls it with "this video has smart search info" as the boolean and, on a yes, always
+ * draws the "more" tail that leads into the search panel, whether the caption fits or not. Its
+ * sibling with the same parameters asks a (Aweme, boolean)boolean instead, which is what keeps
+ * the two apart.
+ */
+internal fun Method.asksSmartSearchCaption(classDef: ClassDef): Boolean {
+    val own = implementation?.instructions?.toList() ?: return false
+    val asksOwnGate = own.any { instruction ->
+        (instruction.opcode == Opcode.INVOKE_STATIC || instruction.opcode == Opcode.INVOKE_STATIC_RANGE) &&
+            instruction.getReference<MethodReference>()?.let { call ->
+                call.definingClass == definingClass && call.returnType == "Z" &&
+                    call.parameterTypes.map(CharSequence::toString) == listOf(AWEME_DESCRIPTOR)
+            } == true
+    }
+    if (!asksOwnGate) return false
+    val styles = mutableSetOf<String>()
+    for (sibling in classDef.methods) {
+        val body = sibling.implementation ?: continue
+        for (instruction in body.instructions) {
+            val field = instruction.getReference<FieldReference>() ?: continue
+            if (field.definingClass == TITLE_PANEL_STYLE) styles.add(field.name)
+        }
+    }
+    return "DESC_AND_SEARCH" in styles && "DESC_AND_COMMENT_AND_SEARCH" in styles
+}
+
+internal object SmartSearchCaptionFingerprint : Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "Z",
+    parameters = listOf(AWEME_DESCRIPTOR, "Ljava/lang/String;", "Z"),
+    custom = { method, classDef -> method.asksSmartSearchCaption(classDef) },
 )
 
 internal const val SEARCH_DYNAMIC_TAB_LIST_DESCRIPTOR =
