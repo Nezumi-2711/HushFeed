@@ -16,6 +16,8 @@
 
 * **TikTok:** Un nuovo interruttore aggiunge Blocca l'autore del commento al menu che si apre tenendo premuto un commento (#169).
 
+* **TikTok:** Nascondi i suggerimenti nella pagina di ricerca ora nasconde anche l'elenco delle ricerche consigliate che alcuni account vedevano ancora.
+
 ## 0.74.0 (2026-10-14)
 
 * **TikTok:** Un nuovo interruttore mantiene la qualità LIVE che hai scelto dopo il riavvio di TikTok (#57).

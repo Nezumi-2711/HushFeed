@@ -16,6 +16,8 @@
 
 * **TikTok:** Yeni açar şərhə basıb saxlayanda açılan menyuya Bu şərh yazanı bloklayın seçimini əlavə edir (#169).
 
+* **TikTok:** Axtarış səhifəsindəki təklifləri gizlədin indi bəzi hesabların hələ də gördüyü tövsiyə olunan axtarışlar siyahısını da gizlədir.
+
 ## 0.74.0 (2026-10-14)
 
 * **TikTok:** Yeni açar seçdiyin LIVE keyfiyyətini TikTok yenidən başlayandan sonra da saxlayır (#57).

@@ -16,6 +16,8 @@
 
 * **TikTok:** Sakelar baru menambahkan Blokir pengomentar ini ke menu yang terbuka saat komentar ditekan lama (#169).
 
+* **TikTok:** Sembunyikan saran di halaman pencarian kini juga menyembunyikan daftar pencarian yang disarankan yang masih terlihat di beberapa akun.
+
 ## 0.74.0 (2026-10-14)
 
 * **TikTok:** Sakelar baru mempertahankan kualitas LIVE yang kamu pilih setelah TikTok dimulai ulang (#57).

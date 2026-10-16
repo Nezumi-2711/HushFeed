@@ -54,6 +54,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Saving a big pick from a profile grid no longer gives up a few videos in with "the rest ran out of time". The whole save had two minutes for all its videos, so a pick of 50 always ran out. Each video now gets its own two minutes, and one that really stalls still stops the save (#27).
 
+* **TikTok:** Hide suggestions on the search page also hides the "You may like" list on accounts where TikTok 47.1.4 draws that list itself. On those accounts the list and its Refresh button stayed on the search page with the switch on, because none of the switch's hooks reached it. Your search history still shows, and turning the switch off brings the list back.
+
 ## 0.74.0 (2026-10-14)
 
 * **TikTok:** LIVE controls can keep the LIVE quality you picked after TikTok restarts. TikTok forgets the pick whenever it closes, so the first rooms after a restart went back to its own choice. Turn on Keep the LIVE quality after TikTok restarts, under Offer LIVE quality in more rooms in Hushfeed settings > Playback. A room whose stream doesn't have that quality still opens at TikTok's choice. A pick from the Video quality list in a room's Share menu now carries on to the next room too (#57).

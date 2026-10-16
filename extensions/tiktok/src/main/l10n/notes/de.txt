@@ -16,6 +16,8 @@
 
 * **TikTok:** Ein neuer Schalter fügt „Diesen Kommentierenden blockieren“ zum Menü hinzu, das sich beim langen Drücken auf einen Kommentar öffnet (#169).
 
+* **TikTok:** „Vorschläge auf der Suchseite ausblenden“ blendet jetzt auch die Liste empfohlener Suchen aus, die manche Konten noch sahen.
+
 ## 0.74.0 (2026-10-14)
 
 * **TikTok:** Ein neuer Schalter behält die gewählte LIVE-Qualität auch nach einem Neustart von TikTok (#57).
