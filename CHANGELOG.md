@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** Copy bio and IDs puts Copy username and Copy user ID on the Share profile sheet in Settings and privacy too. That sheet only has Send to and the apps row, so the buttons never showed up there. They now sit under the apps.
+
 * **TikTok:** Turn off screen transitions works again. TikTok asks for its own slide after the screen has opened, later than Hushfeed used to ask for none, so pages kept sliding in with the switch on. Hushfeed asks again after TikTok now, and pages like Hushfeed's settings open with a plain cut.
 
 * **TikTok:** Show exact counts now also reaches the comment count at the top of the comment sheet and the counts on the likes and viewers lists. On someone else's video TikTok wrote those with a formatter of its own, so they still read 12.3K with the switch on.
