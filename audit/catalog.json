@@ -14050,11 +14050,11 @@
       "open": "feed"
      },
      {
-      "wait": 6000
+      "wait": 14000
      },
      {
       "probe": "pitaya",
-      "expect": "^ok pitaya libs=\\[\\]",
+      "expect": "^ok pitaya libs=\\[(libdex_[^,\\]]*(, )?)*\\] .*\\brealProvider=null\\b",
       "waitMs": 2500
      },
      {
@@ -14081,18 +14081,19 @@
       "open": "feed"
      },
      {
-      "wait": 6000
+      "wait": 14000
      },
      {
       "probe": "pitaya",
-      "expect": "^ok pitaya libs=\\[[^\\]]+\\]",
-      "waitMs": 2500
+      "expect": "libs=\\[[^\\]]*\\blib(?!dex_)[A-Za-z0-9_]*[Pp]itaya|\\brealProvider=(?!null\\b)\\S",
+      "waitMs": 2500,
+      "precondition": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "The CHANGELOG says the switch keeps Pitaya's plugin from starting so \"Pitaya's native engine doesn't load\"; the probe reads the Pitaya libraries mapped in /proc/self/maps. The core asset strip keeps them (ResourceOptimizerPatches.kt:69-71), so the switch-off run should list libraries and makes the on/off pair meaningful. If the off case also shows libs=[] the libraries load lazily on this build and only the hook check remains. stop_ai_profiling is restart-gated. With the plugin stopped TikTok carries on as if it were not installed, so reaching the feed in both restarts is also the proof that nothing breaks."
+  "notes": "The CHANGELOG says the switch keeps Pitaya's plugin from starting so \"Pitaya's native engine doesn't load\". The probe lists the files with pitaya in their name mapped in /proc/self/maps and DelegateCoreProvider's realProvider, which stays null while every core is TikTok's \"host not ready\" stand-in. libdex_df_pitaya.so is one of the libdex_*.so code packages TikTok injects at every start (kept by the asset strip since #125), so it is mapped either way and both checks leave libdex_ files out. PitayaBootLoader delays its boot task by 8 s (delayBootTasks=[8000=BootTask] on 47.1.4), so both read after 14 s. With the switch off, no engine library and a null provider means Pitaya loads lazily on this build: inconclusive, and only the hook check remains. stop_ai_profiling is restart-gated. With the plugin stopped TikTok carries on as if it were not installed, so reaching the feed in both restarts is also the proof that nothing breaks (2026-10-16)."
  },
  {
   "name": "Stop recording watch history",
