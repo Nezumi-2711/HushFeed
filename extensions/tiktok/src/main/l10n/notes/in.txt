@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Pemeriksa penyelarasan native kini mendeteksi tumpang tindih RELRO yang tidak aman pada halaman 16 KB dan menerima segmen terpisah.
+
 ## 0.75.0 (2026-10-16)
 
 * **TikTok:** Saat Sembunyikan bilah komentar di video yang dibuka aktif, jumlah suka tidak lagi menimpa bilah progres saat Suka adalah tombol terbawah yang tersisa di kanan (#145).

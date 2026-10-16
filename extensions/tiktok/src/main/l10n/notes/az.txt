@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Yerli kodun hizalanma yoxlayıcısı indi 16 KB səhifələrdə təhlükəli RELRO paylaşımını aşkarlayır və ayrı seqmentləri qəbul edir.
+
 ## 0.75.0 (2026-10-16)
 
 * **TikTok:** Açılmış videolarda şərh panelini gizlədin aktiv olanda, sağda qalan ən aşağı düymə Bəyən olduqda bəyənmə sayı artıq irəliləmə zolağının üstündə qalmır (#145).

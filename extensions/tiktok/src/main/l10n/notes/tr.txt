@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Yerel hizalama denetimi artık 16 KB sayfalardaki güvensiz RELRO çakışmalarını yakalıyor ve yalıtılmış bölümleri kabul ediyor.
+
 ## 0.75.0 (2026-10-16)
 
 * **TikTok:** Açılan videolarda yorum çubuğunu gizle açıkken, sağda kalan en alttaki düğme Beğen olduğunda beğeni sayısı artık ilerleme çubuğunun üstünde durmuyor (#145).

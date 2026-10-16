@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** Il controllo dell'allineamento nativo ora rileva le sovrapposizioni RELRO non sicure nelle pagine da 16 KB e accetta i segmenti isolati.
+
 ## 0.75.0 (2026-10-16)
 
 * **TikTok:** Con Nascondi la barra dei commenti nei video aperti attivo, il numero di Mi piace non sta più sopra la barra di avanzamento quando Mi piace è l'ultimo pulsante rimasto in basso a destra (#145).

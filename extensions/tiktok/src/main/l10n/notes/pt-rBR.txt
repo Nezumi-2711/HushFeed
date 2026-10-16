@@ -1,3 +1,7 @@
+## Unreleased
+
+* **TikTok:** A verificação de alinhamento nativo agora detecta sobreposições RELRO inseguras em páginas de 16 KB e aceita segmentos isolados.
+
 ## 0.75.0 (2026-10-16)
 
 * **TikTok:** Com Esconder a barra de comentários nos vídeos abertos ligado, o número de curtidas não fica mais sobre a barra de progresso quando Curtir é o botão mais baixo que sobrou à direita (#145).
