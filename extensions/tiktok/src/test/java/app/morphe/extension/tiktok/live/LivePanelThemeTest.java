@@ -138,6 +138,8 @@ public class LivePanelThemeTest {
         assertSame("the feed's own page", feed, LivePanelTheme.darkTuxSheet(feedPage, feed, OVERLAY));
         LayoutInflater wrapped = LivePanelTheme.darkTuxSheet(page, room, OVERLAY);
         assertNotSame("the share panel inside the sheet", room, wrapped);
+        assertEquals("its resources read night", Configuration.UI_MODE_NIGHT_YES,
+                wrapped.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK);
         assertEquals(textColor(new ContextThemeWrapper(light, OVERLAY)), textColor(wrapped.getContext()));
         assertNotSame("the sheet itself", room, LivePanelTheme.darkTuxSheet(sheet, room, OVERLAY));
 

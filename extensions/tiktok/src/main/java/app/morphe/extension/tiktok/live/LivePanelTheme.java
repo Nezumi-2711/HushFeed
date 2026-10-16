@@ -100,7 +100,7 @@ public final class LivePanelTheme {
             }
             Logger.printDebug(() -> "Dark LIVE panels: a sheet in a LIVE room takes TikTok's dark style, "
                     + fragment.getClass().getName());
-            return inflater.cloneInContext(new ContextThemeWrapper(context, darkStyle));
+            return inflater.cloneInContext(nightContext(context, darkStyle));
         } catch (Throwable failure) {
             if (!tuxFailureLogged) {
                 tuxFailureLogged = true;
@@ -112,6 +112,22 @@ public final class LivePanelTheme {
 
     /** Whether TikTok's own pages last inflated in night mode. */
     static volatile boolean appDark;
+
+    /**
+     * [context] with TikTok's dark style and its resources in night mode. The style alone left the
+     * share sheet white (Login2 emulator): TikTok's sheet colors are night-qualified resources, so
+     * they follow the configuration. The wrapper keeps the room activity as its base, so code that
+     * looks for the activity behind a view's context still finds it.
+     */
+    static Context nightContext(Context context, int darkStyle) {
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(context, darkStyle);
+        if (!isNight(context)) {
+            Configuration night = new Configuration(context.getResources().getConfiguration());
+            night.uiMode = (night.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | Configuration.UI_MODE_NIGHT_YES;
+            wrapper.applyOverrideConfiguration(night);
+        }
+        return wrapper;
+    }
 
     private static boolean isNight(Context context) {
         int night = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
