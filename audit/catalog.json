@@ -4087,7 +4087,7 @@
    },
    {
     "id": "gate-forced",
-    "what": "A stored override changes what TikTok reads: with favorite_reverse forced to 1 and Keep the Favorites tab on, opening the profile's Favorites tab reads the gate as 1, which Hushfeed's answer records ('refused favorite_reverse').",
+    "what": "A stored override changes what TikTok reads: with favorite_reverse forced to 1 and Keep the Favorites tab on, opening the share sheet reads the gate as 1, which Hushfeed's answer records ('refused favorite_reverse').",
     "steps": [
      {
       "set": {
@@ -4115,18 +4115,27 @@
       "expect": "recording=true"
      },
      {
-      "open": "profile"
+      "open": "feed"
      },
      {
-      "wait": 2500
+      "wait": 2000
      },
      {
-      "tap": {
-       "desc": "^Favorites$"
-      }
+      "probe": "click",
+      "extras": {
+       "find": "wct"
+      },
+      "expect": "^ok click",
+      "waitMs": 2000
      },
      {
       "wait": 3000
+     },
+     {
+      "back": true
+     },
+     {
+      "wait": 1000
      },
      {
       "probe": "labreport",
@@ -4169,7 +4178,7 @@
     "auto": true
    }
   ],
-  "notes": "The Lab is a power-user page; its screens are not driven here. The two checks use the same path issue #4 was traced with (Roadmap and FavoritesTab.java): forcing the server gate favorite_reverse to 1 makes TikTok skip building the Favorites pages, and Keep the Favorites tab answers 0 and says so. Always run labclear afterwards (the check does) or the test account's Favorites tab stays empty. Rules are stored per TikTok version (FeatureGateLabStore.targetVersion), 47.1.4 here."
+  "notes": "The Lab is a power-user page; its screens are not driven here. The two checks use the same path issue #4 was traced with (Roadmap and FavoritesTab.java): forcing the server gate favorite_reverse to 1 makes TikTok skip building the Favorites pages, and Keep the Favorites tab answers 0 and says so. Always run labclear afterwards (the check does) or the test account's Favorites tab stays empty. Rules are stored per TikTok version (FeatureGateLabStore.targetVersion), 47.1.4 here. On 47.1.4 TikTok reads favorite_reverse as the share sheet opens (caller X.034M#LIZ), so gate-forced opens the share sheet on the feed and backs out, tapping nothing on it (2026-10-16)."
  },
  {
   "name": "Feature Gate Recorder",
