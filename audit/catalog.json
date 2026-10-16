@@ -7788,7 +7788,7 @@
    },
    {
     "id": "friends-tab",
-    "what": "Review: the Friends tab and a profile show no People you may like strip with the switch on.",
+    "what": "Review: after the switch goes on and TikTok restarts (the row's restart button), the Friends tab and a profile show no People you may like strip.",
     "steps": [
      {
       "set": {
@@ -7811,7 +7811,7 @@
       }
      },
      {
-      "open": "feed"
+      "restart": true
      },
      {
       "open": "friends"
@@ -7843,7 +7843,7 @@
     "auto": true
    }
   ],
-  "notes": "Suggestions come from several sources (Inbox, Activity, New followers, profile header, Friends tab, feed account cards); the Inbox ones are handled by InboxFilter's row matching, the others by SuggestedAccountCells.onBind collapsing the cell. Whether any suggestion is served at all depends on the account, so the inbox check compares a baseline with the hidden state and can pass vacuously when nothing was served; read the baseline lines. Never tap Follow, Message, the wave or a person's row. The Clear all control InboxFilter adds to the Suggested accounts heading dismisses suggestions through TikTok's API and is not exercised."
+  "notes": "Suggestions come from several sources (Inbox, Activity, New followers, profile header, Friends tab, feed account cards); the Inbox ones are handled by InboxFilter's row matching, the others by SuggestedAccountCells.onBind collapsing the cell. Whether any suggestion is served at all depends on the account, so the inbox check compares a baseline with the hidden state and can pass vacuously when nothing was served; read the baseline lines. Never tap Follow, Message, the wave or a person's row. The Clear all control InboxFilter adds to the Suggested accounts heading dismisses suggestions through TikTok's API and is not exercised. The switch is a restart switch since 2026-10-16: the Friends tab keeps the suggestion cells it already drew (only a new bind collapses one), so on the S22 the strip stayed after a live flip and a tab change. The friends-tab check restarts TikTok after setting it, the way a person presses the row's restart button."
  },
  {
   "name": "Hide the launcher shortcuts",
