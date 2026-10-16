@@ -9583,8 +9583,7 @@
    {
     "key": "dark_live_panels",
     "default": false,
-    "type": "bool",
-    "row": "Dark LIVE panels in dark mode"
+    "type": "bool"
    },
    {
     "key": "remember_live_quality",

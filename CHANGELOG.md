@@ -28,9 +28,7 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Remove content credential and card scanner assets and Remove creation tools no longer leave parts of TikTok in English on a phone set to another language. Both emptied small code packages that TikTok loads every time it starts, and when one was empty, buttons and other text of TikTok's own came up in English. Those packages now stay. Remove content credential and card scanner assets no longer takes out TikTok's on-device AI files either (Stop on-device AI profiling still keeps that AI from starting), so it now saves about 11 MB, and Remove creation tools about 38 MB. Patch again to get your language back (#125).
 
-* **TikTok:** LIVE controls can open LIVE panels dark while TikTok is in dark mode. TikTok keeps a LIVE room's fan club sheet, first gift dialog and similar panels light even in a dark app, so they flashed white over the stream. Turn on Dark LIVE panels in dark mode in Hushfeed settings > Playback. Light mode doesn't change (#159).
-
-* **TikTok:** The Video quality list in a LIVE room's Share menu no longer shows its qualities white on white in dark mode. Text in that list that can't be read against what's behind it now turns white on a dark row and dark on a light one, with or without Dark LIVE panels. Light mode doesn't change (#57).
+* **TikTok:** The Video quality list in a LIVE room's Share menu no longer shows its qualities white on white in dark mode. Text in that list that can't be read against what's behind it now turns white on a dark row and dark on a light one. Light mode doesn't change (#57).
 
 * **TikTok:** With Automatic Clear Display on and no delay, a video opened from search starts cleared. Before, it showed its buttons, its caption, the comment box and the "find related content" bar along the top for about a second before they went, every time a result was opened. TikTok now opens those videos inside its main screen rather than a page of their own, so the hold that keeps the controls away until the clear lands never started there (#84).
 
