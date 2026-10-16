@@ -52,6 +52,7 @@ param(
     [string]$Results,
     [string]$Adb,
     [string]$Aapt2,
+    [string]$Ffmpeg,
     [string]$LeaseDir = $env:HUSHFEED_DEVICE_LEASE_DIR,
     [switch]$NoDevice,
     [string]$ApplyVerdicts,
@@ -117,7 +118,7 @@ if ($Validate) {
     Get-ChildItem -Path (Join-Path $root 'extensions') -Recurse -Filter *.java | Where-Object { $_.FullName -match '[\\/]src[\\/]main[\\/]' } | ForEach-Object {
         foreach ($found in [regex]::Matches((Get-Content -LiteralPath $_.FullName -Raw), 'Setting\(\s*"([A-Za-z0-9_]+)"')) { [void]$keys.Add($found.Groups[1].Value) }
     }
-    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night', 'vibrations'
+    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night', 'vibrations', 'record'
     $apkKinds = 'entry-empty', 'entry-absent', 'entry-present', 'manifest', 'resources', 'icon-xml', 'dex-string'
     foreach ($entry in $entries) {
         $where = "'$($entry.name)'"
@@ -143,6 +144,10 @@ if ($Validate) {
                     'swipe' { if ([string]$step.swipe -notin 'up', 'down', 'left', 'right') { & $bad "swipes '$($step.swipe)'" } }
                     'night' { if ([string]$step.night -notin 'yes', 'no') { & $bad "sets night mode '$($step.night)'" } }
                     'vibrations' { if ([string]$step.vibrations -notin 'none', 'some') { & $bad "expects vibrations '$($step.vibrations)'" } }
+                    'record' {
+                        if ([string]$step.record -notin 'start', 'stop') { & $bad "records '$($step.record)'" }
+                        elseif ($step.record -eq 'stop' -and [string]$step.transition -notin 'still', 'animated') { & $bad "expects a transition '$($step.transition)'" }
+                    }
                     { $_ -in 'tap', 'longpress' } { $target = $step.$kind; if (-not ($target.text -or $target.desc -or $target.id)) { & $bad "a $kind with no text, desc or id" } }
                     'apk' { if ([string]$step.apk -notin $apkKinds) { & $bad "unknown apk check '$($step.apk)'" } }
                     'shot' { if (-not $step.review) { & $bad 'a shot with no review text' } }
@@ -177,6 +182,21 @@ function Resolve-AuditAdb {
     $sdkAdb = Join-Path $env:LOCALAPPDATA 'Android\Sdk\platform-tools\adb.exe'
     if (Test-Path -LiteralPath $sdkAdb) { return $sdkAdb }
     throw 'No adb found. Pass -Adb or set HUSHFEED_ADB.'
+}
+
+# Only a record step needs it, so a missing ffmpeg fails that step and nothing else.
+function Resolve-AuditFfmpeg {
+    if ($Ffmpeg) { return $Ffmpeg }
+    if ($env:HUSHFEED_FFMPEG) { return $env:HUSHFEED_FFMPEG }
+    $onPath = Get-Command ffmpeg -ErrorAction SilentlyContinue
+    if ($onPath) { return $onPath.Source }
+    # winget's Gyan.FFmpeg package doesn't always reach PATH.
+    $packages = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages'
+    $found = Get-ChildItem $packages -Directory -Filter 'Gyan.FFmpeg*' -ErrorAction SilentlyContinue |
+        ForEach-Object { Get-ChildItem $_.FullName -Recurse -Filter ffmpeg.exe -ErrorAction SilentlyContinue } |
+        Select-Object -First 1
+    if ($found) { return $found.FullName }
+    return $null
 }
 
 function Resolve-AuditAapt2 {
@@ -524,6 +544,76 @@ function Get-TikTokVibrations([string]$Since) {
     }
 }
 
+# A screen recording over the steps between a record start and a record stop.
+$script:recorder = $null
+$script:ffmpegExe = $null
+function Start-ScreenRecord([int]$Seconds) {
+    Invoke-DeviceShell 'rm -f /sdcard/hushfeed-audit.mp4' | Out-Null
+    $start = [Diagnostics.ProcessStartInfo]::new($adbExe)
+    $start.Arguments = "-s $Serial shell screenrecord --time-limit $Seconds /sdcard/hushfeed-audit.mp4"
+    $start.UseShellExecute = $false
+    $start.CreateNoWindow = $true
+    $script:recorder = [Diagnostics.Process]::Start($start)
+    # screenrecord takes a moment before its first frame.
+    Start-Sleep -Milliseconds 1000
+}
+
+function Stop-ScreenRecord([string]$Local) {
+    if (-not $script:recorder) { throw 'a record stop with no record start before it' }
+    $finished = $script:recorder.WaitForExit(30000)
+    if (-not $finished) { $script:recorder.Kill() }
+    $script:recorder = $null
+    if (-not $finished) { throw 'screenrecord never finished' }
+    Start-Sleep -Milliseconds 500
+    Invoke-AuditAdb pull /sdcard/hushfeed-audit.mp4 $Local 2>&1 | Out-Null
+    Invoke-DeviceShell 'rm -f /sdcard/hushfeed-audit.mp4' | Out-Null
+    if (-not (Test-Path -LiteralPath $Local)) { throw 'the screen recording could not be pulled' }
+}
+
+# How each frame of a clip stands against its last one, the screen it settled on: a slide or a
+# fade passes through frames part way between the first screen and the last, and a screen that
+# opens still jumps from one to the other. screenrecord writes a frame only when the screen
+# changes, so a frame in between is the animation itself.
+function Measure-ScreenChange([string]$Clip) {
+    if (-not ('HushfeedFrameDiff' -as [type])) {
+        Add-Type -TypeDefinition @'
+public static class HushfeedFrameDiff {
+    public static double[] FromLast(byte[] data, int size) {
+        int count = data.Length / size;
+        double[] distance = new double[count];
+        int last = (count - 1) * size;
+        for (int frame = 0; frame < count; frame++) {
+            long sum = 0;
+            int at = frame * size;
+            for (int k = 0; k < size; k++) sum += System.Math.Abs(data[at + k] - data[last + k]);
+            distance[frame] = sum / (size * 255.0);
+        }
+        return distance;
+    }
+}
+'@
+    }
+    $width = 54; $height = 116
+    $raw = [IO.Path]::ChangeExtension($Clip, '.gray')
+    & $script:ffmpegExe -hide_banner -loglevel error -y -i $Clip -fps_mode passthrough -vf "scale=${width}:${height},format=gray" -f rawvideo $raw
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $raw)) { throw 'ffmpeg could not read the screen recording' }
+    $data = [IO.File]::ReadAllBytes($raw)
+    Remove-Item -LiteralPath $raw
+    if ($data.Length -lt 2 * $width * $height) { throw 'the screen recording has fewer than two frames' }
+    $distance = [HushfeedFrameDiff]::FromLast($data, $width * $height)
+    $first = $distance[0]
+    $between = 0
+    $moving = $false
+    foreach ($value in $distance) {
+        if ($value -lt 0.85 * $first) { $moving = $true }
+        if ($moving -and $value -gt 0.1 * $first -and $value -lt 0.85 * $first) { $between++ }
+    }
+    return [pscustomobject]@{
+        frames = $distance.Count; first = $first; between = $between
+        distances = ($distance | ForEach-Object { '{0:0.000}' -f $_ }) -join ' '
+    }
+}
+
 # One check: every step in order, the first failed expectation ends it.
 $script:nightWas = $null
 # Puts back the phone's night mode a night step changed. Returns whether it changed anything.
@@ -629,6 +719,25 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                         throw 'the phone did not vibrate for TikTok'
                     }
                 }
+                'record' {
+                    if ($step.record -eq 'start') {
+                        Start-ScreenRecord $(if ($step.seconds) { [int]$step.seconds } else { 4 })
+                    } else {
+                        if (-not $script:ffmpegExe) { $script:ffmpegExe = Resolve-AuditFfmpeg }
+                        if (-not $script:ffmpegExe) { throw 'a record step needs ffmpeg: pass -Ffmpeg or set HUSHFEED_FFMPEG' }
+                        $clipName = "$("$tag-$index-screen" -replace '[^\w.-]', '_').mp4"
+                        Stop-ScreenRecord (Join-Path $OutDir $clipName)
+                        $result.evidence += $clipName
+                        $change = Measure-ScreenChange (Join-Path $OutDir $clipName)
+                        $result.evidence += Save-Evidence "$tag-$index-frames" ("frames=$($change.frames) first={0:0.000} between=$($change.between)`n$($change.distances)" -f $change.first)
+                        if ($change.first -lt 0.05) { throw [System.InvalidOperationException]::new('precondition: the screen barely changed, so nothing opened while it recorded') }
+                        if ($step.transition -eq 'still' -and $change.between -gt 3) { throw "the screen passed through $($change.between) frames on its way, an animation" }
+                        if ($step.transition -eq 'animated' -and $change.between -lt 6) {
+                            if ($step.precondition) { throw [System.InvalidOperationException]::new("precondition: only $($change.between) frames in between, no animation to compare with") }
+                            throw "only $($change.between) frames in between: no animation"
+                        }
+                    }
+                }
                 'back' { Invoke-DeviceShell 'input keyevent KEYCODE_BACK' | Out-Null; Start-Sleep -Milliseconds 1200 }
                 'tap' { $result.evidence += (Invoke-DumpTap $step.tap); Start-Sleep -Milliseconds 1500 }
                 'longpress' { $result.evidence += (Invoke-DumpTap $step.longpress 900); Start-Sleep -Milliseconds 1500 }
@@ -695,6 +804,7 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
         } catch {
             $result.status = if ($_.Exception.Message -like 'precondition: *') { 'inconclusive' } else { 'fail' }
             $result.failures += "step $index ($kind): $($_.Exception.Message)"
+            if ($script:recorder) { try { $script:recorder.Kill() } catch { }; $script:recorder = $null }
             if ($deviceUp -and $kind -ne 'apk') {
                 try { $result.evidence += Save-Shot "$tag-failed-step$index" } catch { }
                 # A check that stopped halfway leaves a sheet, a page or a settings screen open.

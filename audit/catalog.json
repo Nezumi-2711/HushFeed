@@ -15266,33 +15266,100 @@
    },
    {
     "id": "slide-gone",
-    "what": "Review: opening a video from a profile (or Hushfeed's settings) appears at once with the switch on and slides with it off.",
+    "what": "Hushfeed's settings open over a paused feed video while the screen is filmed: with the switch off the clip passes through a run of frames between the two screens (TikTok's slide), with it on it jumps straight to the settings page.",
     "steps": [
+     {
+      "set": {
+       "turn_off_screen_transitions": "false"
+      }
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
+      "probe": "holdslide",
+      "extras": {
+       "x": "540",
+       "y": "1000",
+       "dy": "0",
+       "hold": "50",
+       "slide": "50"
+      },
+      "expect": "^ok holdslide",
+      "waitMs": 1500
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "record": "start",
+      "seconds": 4
+     },
+     {
+      "open": "settings"
+     },
+     {
+      "record": "stop",
+      "transition": "animated",
+      "precondition": true
+     },
+     {
+      "back": true
+     },
      {
       "set": {
        "turn_off_screen_transitions": "true"
       }
      },
      {
-      "open": "profile"
+      "open": "feed"
      },
      {
-      "wait": 2000
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
-      "shot": "transition-off",
-      "review": "Tap a video on the profile grid (do not like, comment or follow): the player appears without a slide animation; back closes it the same way. A screenshot cannot show animation, so a person compares by eye against the switch off."
+      "probe": "holdslide",
+      "extras": {
+       "x": "540",
+       "y": "1000",
+       "dy": "0",
+       "hold": "50",
+       "slide": "50"
+      },
+      "expect": "^ok holdslide",
+      "waitMs": 1500
      },
      {
-      "set": {
-       "turn_off_screen_transitions": "false"
-      }
+      "wait": 1500
+     },
+     {
+      "record": "start",
+      "seconds": 4
+     },
+     {
+      "open": "settings"
+     },
+     {
+      "record": "stop",
+      "transition": "still"
+     },
+     {
+      "back": true
      }
     ],
-    "auto": false
+    "auto": true
    }
   ],
-  "notes": "There is no log line or state to read; the setting is read each time a screen is created or paused, so no restart is needed. Swipes inside one screen follow the finger and are not touched."
+  "notes": "There is no log line or state to read, since Android plays the slide, not TikTok's views. slide-gone films it instead: the runner's record step (screenrecord, then ffmpeg shrinks each frame to 54x116 grey) measures each frame against the last and counts the ones part way between the first screen and the last. A synthetic 0.3 s slide counted 14, a jump 0; the check wants 6 or more with the switch off (else inconclusive) and 3 or fewer with it on. The feed video is paused with one short press first (only on a plain video, since a tap on an ad opens it), so its own frames don't count. The setting is read each time a screen is created or paused, so no restart is needed. Swipes inside one screen follow the finger and are not touched."
  },
  {
   "name": "Use non-personalized search",
