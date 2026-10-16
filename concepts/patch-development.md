@@ -235,7 +235,7 @@ For traffic, background work and battery checks, follow the [runtime observation
 
 The verifier above proves each patch applies. The audit proves each one still works once TikTok runs. audit/catalog.json has one entry per patch: its settings with their defaults, where it shows, and the checks that prove it. A check is a list of steps the runner carries out in order. Some read the patched APK (an emptied library, a manifest line, a string in the dex). Others drive the phone through the verification probe: flip a Hushfeed setting, open the feed or a search, ask the probe what's on screen and hold the answer to a regex, wait for a log line, or save a screenshot with the exact thing a person should look for. Most checks compare the switch off with the switch on, so a hider that hides nothing fails instead of passing quietly.
 
-Results go to `audit/results/tiktok-<version>.json`, one file per TikTok version, with the APK hash, the Hushfeed commit, the phone, and each check's status (pass, fail, review or skipped), why it failed and where its evidence is. The evidence (screenshots and probe answers) goes to a temp folder that the results file names.
+Results go to `audit/results/tiktok-<version>.json`, one file per TikTok version, with the APK hash, the Hushfeed commit, the phone, and each check's status (pass, fail, review, inconclusive, error or skipped), why it failed and which evidence it left. Inconclusive means a precondition never held, like no video with comments turning up in eight swipes, so it says nothing about the patch. The evidence (screenshots and probe answers) goes to `-OutDir`, a temp folder unless you pass one. The results file names each piece by its file name in that folder and never by a path on your machine, since it gets committed.
 
 To audit a new TikTok version:
 
@@ -247,6 +247,8 @@ To audit a new TikTok version:
 6. Diff the new results file against the previous version's. A check that passed before and fails now is the first thing to look at.
 
 A patch whose screen moved or whose setting changed needs its catalog entry changed in the same commit as the fix. The runner restores every setting a patch's checks touched and turns Log diagnostics on only for the run. It never taps anything labeled Follow, Message, Send, Post or the like, so checks can't reach other people. Keep new checks inside the same limits: no posting, liking, following, messaging or going LIVE, and no strangers' stories.
+
+A `tap` step needs a uiautomator dump, and uiautomator can't dump a screen while a video plays behind it, which includes the comment sheet. Inside the sheet, press through the probe instead: a `findtext` probe step with `"match": "regex"` finds a label by pattern, `"click": "true"` clicks it, `"hold": "900"` holds a finger on it for a long-press menu, and `"sibling": "next"` moves to the view right after the label for an icon with no text (the sort glyph beside "189 comments"). An empty field matches by its hint. The probe drops the invisible direction marks TikTok puts around numbers, so a pattern can start at a digit. Ids are renamed every build, so a route by id is a last resort.
 
 The test commands and their required order are maintained in [README.md](../README.md#building-from-source). The release procedure and fixture setup live in [CONTRIBUTING.md](../CONTRIBUTING.md). Update those instructions when the Gradle task graph or release gates change.
 
