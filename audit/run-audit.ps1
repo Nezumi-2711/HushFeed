@@ -19,7 +19,8 @@
     Settings a patch's checks change are read first and written back after its last check,
     and TikTok is restarted then if any of its checks restarted it, so each patch starts from
     the phone's own settings. A check that finds TikTok out of the front starts it again first.
-    Taps come from a fresh uiautomator dump or from the probe's
+    A check that stops early clears the lab rules it forced, since its own labclear step never
+    runs and the rules outlive the restart. Taps come from a fresh uiautomator dump or from the probe's
     click by view id or description, never from fixed coordinates, and the runner refuses to
     tap anything labeled like an action that reaches other people (Follow, Message, Send,
     Post, Repost, Duet, Stitch, Go LIVE, Buy, Request).
@@ -825,6 +826,15 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
             if ($script:recorder) { try { $script:recorder.Kill() } catch { }; $script:recorder = $null }
             if ($deviceUp -and $kind -ne 'apk') {
                 try { $result.evidence += Save-Shot "$tag-failed-step$index" } catch { }
+                # A lab rule outlives a restart, and the check's own labclear step comes after the
+                # one that stopped it: a forced favorite_reverse answered for every patch after Keep
+                # the Favorites tab went inconclusive (2026-10-16).
+                if (@($Check.steps | Where-Object { $_.probe -eq 'labrule' }).Count -gt 0) {
+                    try {
+                        $cleared = Invoke-AuditProbe 'labclear' $null 1500
+                        if ($cleared -notmatch '^ok labclear') { $result.failures += "labclear after the failure: $cleared" }
+                    } catch { $result.failures += "labclear after the failure: $($_.Exception.Message)" }
+                }
                 # A check that stopped halfway leaves a sheet, a page or a settings screen open.
                 # The next check starts from the feed of a fresh TikTok instead.
                 try { Restart-TikTok; $Restarted.Value = $true } catch { $result.failures += "restart after the failure: $($_.Exception.Message)" }
