@@ -11347,6 +11347,50 @@
     "auto": true
    },
    {
+    "id": "story-status-answer",
+    "what": "With a creator who has a story in front, User.getStoryStatus passes the stored status through with Hide story rings off and answers 0 with it on, which is what keeps the ring and its story tap off the avatar.",
+    "steps": [
+     {
+      "set": {
+       "hide_story_rings": "false"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "storyStatus=([1-9]\\d*)/\\1\\b",
+      "retrySwipe": 20,
+      "precondition": true
+     },
+     {
+      "set": {
+       "hide_story_rings": "true"
+      }
+     },
+     {
+      "wait": 1000
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "storyStatus=[1-9]\\d*/0\\b",
+      "waitMs": 1500
+     },
+     {
+      "set": {
+       "hide_story_rings": "false"
+      }
+     }
+    ]
+   },
+   {
     "id": "ring-gone",
     "what": "A creator who has a story or is live has a ring on the avatar with the switches off and none with them on.",
     "steps": [
@@ -11398,7 +11442,7 @@
     "auto": false
    }
   ],
-  "notes": "Whether a ring exists to remove depends on whether the creator in the feed has a story or is live right then, which the test account cannot cause, so the runtime effect is review only. The Probe 'finddesc' / 'views' actions have no stable id for the ring (it is a drawable on the avatar). The hook returns 0 from User.getStoryStatus and filters the author-live and User.isLive reads, so it is mostly proved by the injected calls plus the diagnostic registration."
+  "notes": "Whether a ring exists to remove depends on whether the creator in the feed has a story or is live right then, which the test account cannot cause, so the runtime effect is review only. The Probe 'finddesc' / 'views' actions have no stable id for the ring (it is a drawable on the avatar). The hook returns 0 from User.getStoryStatus and filters the author-live and User.isLive reads, so it is mostly proved by the injected calls plus the diagnostic registration. 'story-status-answer' reads the hook itself: videoinfo's storyStatus=<stored>/<getter> on a creator with a story (a cyan ring was served on 2026-10-16). If it answers storyStatus=null/..., the stored field was renamed: find User's int field behind getStoryStatus in the dex and update the probe."
  },
  {
   "name": "Remove content credential and card scanner assets",
@@ -13159,11 +13203,11 @@
       "wait": 2500
      },
      {
-      "probe": "findtext",
+      "probe": "finddesc",
       "extras": {
-       "text": "Edit profile"
+       "desc": "Profile menu"
       },
-      "expect": "^ok findtext found",
+      "expect": "^ok finddesc found",
       "waitMs": 1500
      },
      {
@@ -13208,11 +13252,11 @@
       "wait": 2500
      },
      {
-      "probe": "findtext",
+      "probe": "finddesc",
       "extras": {
-       "text": "Edit profile"
+       "desc": "Profile menu"
       },
-      "expect": "^ok findtext found",
+      "expect": "^ok finddesc found",
       "waitMs": 1500
      },
      {
@@ -13247,7 +13291,7 @@
     "auto": true
    }
   ],
-  "notes": "Needs the audit account to follow at least one account that does not follow it back (the labels are drawn from followStatus 1 and followerStatus != 1 on each list cell, FollowStatus.listLabel); if the list has none, the first check fails for want of data, not a bad patch. The runner's own tap step refuses any target that starts with \"Following\" (run-audit.ps1 $outwardWords: on someone else's profile that button unfollows), so the stat is opened with the probe findtext click instead. That is safe only on the account's own profile, which is why the steps first require the text \"Edit profile\" (present only there) and stop if it is missing. Nothing in the list is tapped. The label is a TextView of ours tagged hushfeed_follow_status, so findtext sees it. The profile-header labels \"Follows you\" and \"Doesn't follow you back\" on another creator's profile need a creator who follows or does not follow back, and are not exercised. The row's English \"Edit profile\" label is unverified on a phone."
+  "notes": "Needs the audit account to follow at least one account that does not follow it back (the labels are drawn from followStatus 1 and followerStatus != 1 on each list cell, FollowStatus.listLabel); if the list has none, the first check fails for want of data, not a bad patch. The runner's own tap step refuses any target that starts with \"Following\" (run-audit.ps1 $outwardWords: on someone else's profile that button unfollows), so the stat is opened with the probe findtext click instead. That is safe only on the account's own profile, which is why the steps first require the \"Profile menu\" button (present only there; 47.1.4's own profile has a pencil icon and no \"Edit profile\" button, seen 2026-10-16) and stop if it is missing. Nothing in the list is tapped. The label is a TextView of ours tagged hushfeed_follow_status, so findtext sees it. The profile-header labels \"Follows you\" and \"Doesn't follow you back\" on another creator's profile need a creator who follows or does not follow back, and are not exercised."
  },
  {
   "name": "Show the progress bar",

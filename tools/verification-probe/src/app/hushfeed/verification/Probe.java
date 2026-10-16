@@ -664,6 +664,11 @@ public final class Probe extends Instrumentation {
                                 + " photo=" + photo + " durationMs=" + duration
                                 + " verified=" + verified + " aiLabel=" + aiLabel + " authorFollowers=" + followers
                                 + " likes=" + likes
+                                // The author's story status as stored, then as the getter the
+                                // story ring switch filters answers it: a ring check needs a
+                                // creator with a story and can't see the drawable.
+                                + " storyStatus=" + (creator == null ? null : fieldValue(creator, "storyStatus"))
+                                + "/" + optional(creator, "getStoryStatus")
                                 // Whether TikTok serves it as separate video and audio (DASH),
                                 // the case a chosen-quality download muxes itself.
                                 + " dash=" + optional(video, "hasDashBitrate")
