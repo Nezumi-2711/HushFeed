@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** A long video on a slow connection saves now instead of stopping with "The video couldn't be saved". Every save had two minutes, and a big file was cut off while it was still coming in. A download that keeps moving gets up to 20 minutes, and one that goes 30 seconds without any data still stops (#179).
+
 * **TikTok:** Hide the rewards shortcut shows a restart button now when you flip it. Hushfeed hides the gift box as TikTok draws the profile, so a profile that was already open kept it until TikTok restarted.
 
 * **TikTok:** Copy bio and IDs puts Copy username and Copy user ID on the Share profile sheet in Settings and privacy too. That sheet only has Send to and the apps row, so the buttons never showed up there. They now sit under the apps.
