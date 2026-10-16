@@ -8436,7 +8436,7 @@
      {
       "probe": "holdslide",
       "extras": {
-       "x": "540",
+       "x": "180",
        "y": "1000",
        "dy": "500",
        "hold": "1500",
@@ -8492,7 +8492,7 @@
      {
       "probe": "holdslide",
       "extras": {
-       "x": "540",
+       "x": "180",
        "y": "1000",
        "dy": "500",
        "hold": "1500",
@@ -8521,7 +8521,7 @@
     "auto": true
    }
   ],
-  "notes": "The 2026-09-22 device notes say TikTok's pull-down lock only works past the first video (on the first one the feed's pull to refresh takes the drag), so both checks swipe up twice first. holdslide injects the hold and slide inside TikTok's own window; it presses the middle of the video, never a rail button. The player handle X.037t / LJIILIIL is the 47.1.4 one from the spec. The lock distance default is 140 dp (FeatureControls.DEFAULT_LONG_PRESS_LOCK_DISTANCE_DP), so the 500 px slide is enough on a 420 dpi screen. The checks leave the video with a swipe because a locked 2x would otherwise carry into the next patch's checks (the runner also restarts after a patch that set a restart-gated key)."
+  "notes": "The 2026-09-22 device notes say TikTok's pull-down lock only works past the first video (on the first one the feed's pull to refresh takes the drag), so both checks swipe up twice first. holdslide injects the hold and slide inside TikTok's own window; it presses the left third of the video, never a rail button: on 47.1.4 a hold in the middle opens TikTok's long-press menu and the 2x hold lives on the sides (seen 2026-10-16). The player handle X.037t / LJIILIIL is the 47.1.4 one from the spec. The lock distance default is 140 dp (FeatureControls.DEFAULT_LONG_PRESS_LOCK_DISTANCE_DP), so the 500 px slide is enough on a 420 dpi screen. The checks leave the video with a swipe because a locked 2x would otherwise carry into the next patch's checks (the runner also restarts after a patch that set a restart-gated key)."
  },
  {
   "name": "In-app browser privacy guard",
@@ -10809,7 +10809,7 @@
      {
       "probe": "holdslide",
       "extras": {
-       "x": "540",
+       "x": "180",
        "y": "1000",
        "dy": "0",
        "hold": "1500",
