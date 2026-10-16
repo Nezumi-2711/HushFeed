@@ -120,7 +120,7 @@ if ($Validate) {
     Get-ChildItem -Path (Join-Path $root 'extensions') -Recurse -Filter *.java | Where-Object { $_.FullName -match '[\\/]src[\\/]main[\\/]' } | ForEach-Object {
         foreach ($found in [regex]::Matches((Get-Content -LiteralPath $_.FullName -Raw), 'Setting\(\s*"([A-Za-z0-9_]+)"')) { [void]$keys.Add($found.Groups[1].Value) }
     }
-    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night', 'vibrations', 'record'
+    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night', 'animations', 'vibrations', 'record'
     $apkKinds = 'entry-empty', 'entry-absent', 'entry-present', 'manifest', 'resources', 'icon-xml', 'dex-string'
     foreach ($entry in $entries) {
         $where = "'$($entry.name)'"
@@ -145,6 +145,7 @@ if ($Validate) {
                     }
                     'swipe' { if ([string]$step.swipe -notin 'up', 'down', 'left', 'right') { & $bad "swipes '$($step.swipe)'" } }
                     'night' { if ([string]$step.night -notin 'yes', 'no') { & $bad "sets night mode '$($step.night)'" } }
+                    'animations' { if ([string]$step.animations -notin 'on', 'off') { & $bad "sets animations '$($step.animations)'" } }
                     'vibrations' { if ([string]$step.vibrations -notin 'none', 'some') { & $bad "expects vibrations '$($step.vibrations)'" } }
                     'record' {
                         if ([string]$step.record -notin 'start', 'stop') { & $bad "records '$($step.record)'" }
@@ -636,6 +637,24 @@ function Restore-NightMode {
     return $true
 }
 
+# Android's three animation scales, which an animations step changes. The S22 keeps them at 0,
+# where no screen slides at all, so a transitions check turns them on first.
+$script:animationScales = 'window_animation_scale', 'transition_animation_scale', 'animator_duration_scale'
+$script:animationsWere = $null
+# Puts back the scales an animations step changed. Returns whether it changed anything.
+function Restore-Animations {
+    if ($null -eq $script:animationsWere) { return $false }
+    foreach ($scale in $script:animationScales) {
+        $was = $script:animationsWere[$scale]
+        try {
+            if ([string]::IsNullOrEmpty($was) -or $was -eq 'null') { Invoke-DeviceShell "settings delete global $scale" | Out-Null }
+            else { Invoke-DeviceShell "settings put global $scale $was" | Out-Null }
+        } catch { Write-Warning "could not put $scale back to ${was}: $($_.Exception.Message)" }
+    }
+    $script:animationsWere = $null
+    return $true
+}
+
 function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
     $result = [ordered]@{ id = $Check.id; what = $Check.what; auto = [bool]$Check.auto; status = 'pass'; failures = @(); evidence = @(); review = @() }
     $tag = "$($Entry.name)-$($Check.id)"
@@ -718,6 +737,18 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                     }
                     Invoke-DeviceShell "cmd uimode night $($step.night)" | Out-Null
                     Start-Sleep -Milliseconds 1500
+                }
+                'animations' {
+                    # All three scales at 1 or 0. The phone's own values go back once the patch's
+                    # checks are done.
+                    if ($null -eq $script:animationsWere) {
+                        $were = @{}
+                        foreach ($scale in $script:animationScales) { $were[$scale] = "$(Invoke-DeviceShell "settings get global $scale")".Trim() }
+                        $script:animationsWere = $were
+                    }
+                    $value = if ($step.animations -eq 'on') { '1.0' } else { '0.0' }
+                    foreach ($scale in $script:animationScales) { Invoke-DeviceShell "settings put global $scale $value" | Out-Null }
+                    Start-Sleep -Milliseconds 500
                 }
                 'vibrations' {
                     # What Android itself played for TikTok since the check started or the last
@@ -940,6 +971,7 @@ try {
             if ($restarted) { Restart-TikTok }
         }
         if ($deviceUp -and (Restore-NightMode)) { Start-Sleep -Seconds 2; Restart-TikTok }
+        if ($deviceUp) { [void](Restore-Animations) }
         $run.patches = @($run.patches) + [pscustomobject][ordered]@{ name = $entry.name; category = $entry.category; kind = $entry.kind
             ranUtc = [DateTime]::UtcNow.ToString('o'); apkSha256 = $run.apk.sha256; evidence = $run.evidence; checks = $checks }
         # Written after every patch, so a run cut short still leaves what it found.
@@ -963,6 +995,7 @@ try {
     $apkZip.Dispose()
     if ($deviceUp) {
         [void](Restore-NightMode)
+        [void](Restore-Animations)
         if ($runOriginals.Count -gt 0) {
             try {
                 Restart-TikTok

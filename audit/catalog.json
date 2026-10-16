@@ -15388,7 +15388,7 @@
    },
    {
     "id": "nothing-held-back-when-off",
-    "what": "With the switch off the hook lets the vibrations through (no new \"held back\" line while the same gesture runs).",
+    "what": "With the switch off, TikTok's side 2x hold plays its vibration and the hook holds nothing back.",
     "steps": [
      {
       "set": {
@@ -15400,24 +15400,21 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000.*ad=false",
+      "expect": "photo=false.*ad=false live=false",
       "retrySwipe": 8,
       "precondition": true
      },
      {
-      "probe": "comments",
-      "expect": "openComments\\([^)]*\\)=true",
-      "waitMs": 2500
-     },
-     {
-      "probe": "findtext",
+      "probe": "holdslide",
       "extras": {
-       "text": "^(\\d+[smhdw]|\\d{1,2}-\\d{2}|\\d{4}-\\d{1,2}-\\d{1,2})( |$)",
-       "match": "regex",
-       "hold": "900"
+       "x": "180",
+       "y": "1000",
+       "dy": "0",
+       "hold": "1500",
+       "slide": "200"
       },
-      "expect": "ok findtext found .*held=900ms",
-      "waitMs": 2500
+      "expect": "^ok holdslide",
+      "waitMs": 3500
      },
      {
       "logNot": "Turn off haptics: held back",
@@ -15426,19 +15423,13 @@
      {
       "vibrations": "some",
       "precondition": true
-     },
-     {
-      "back": true
-     },
-     {
-      "back": true
      }
     ],
     "auto": true
    },
    {
-    "id": "long-press-haptic-held-back",
-    "what": "With the switch on, holding a video makes TikTok ask for a vibration and the hook holds it back.",
+    "id": "hold-haptic-held-back",
+    "what": "With the switch on, the same side 2x hold plays no vibration, and the hook's log says it held one back.",
     "steps": [
      {
       "set": {
@@ -15450,24 +15441,21 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000.*ad=false",
+      "expect": "photo=false.*ad=false live=false",
       "retrySwipe": 8,
       "precondition": true
      },
      {
-      "probe": "comments",
-      "expect": "openComments\\([^)]*\\)=true",
-      "waitMs": 2500
-     },
-     {
-      "probe": "findtext",
+      "probe": "holdslide",
       "extras": {
-       "text": "^(\\d+[smhdw]|\\d{1,2}-\\d{2}|\\d{4}-\\d{1,2}-\\d{1,2})( |$)",
-       "match": "regex",
-       "hold": "900"
+       "x": "180",
+       "y": "1000",
+       "dy": "0",
+       "hold": "1500",
+       "slide": "200"
       },
-      "expect": "ok findtext found .*held=900ms",
-      "waitMs": 2500
+      "expect": "^ok holdslide",
+      "waitMs": 3500
      },
      {
       "wait": 1500
@@ -15478,19 +15466,14 @@
      {
       "probe": "report",
       "expect": "Turn off haptics: held back a (long press|view haptic|timed vibration|vibration)",
-      "waitMs": 10000
-     },
-     {
-      "back": true
-     },
-     {
-      "back": true
+      "waitMs": 10000,
+      "precondition": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "Both checks long-press a comment's timestamp (the Copy comments route; nothing in the menu is pressed, two Backs close it and the sheet) and read Android's own record of what it played for TikTok (the runner's vibrations step, dumpsys vibrator_manager's Recent vibrations since the check started). The off check runs first and must see a buzz, or it reads inconclusive: on 47.1.4 a hold on the middle of a video opens the long-press panel and asks for no haptic at all (seen 2026-10-16, nothing recorded switch on or off). The held back line is written at debug level with the buffer on (the runner turns Log diagnostics on for the run) and is read from the export because it lands mid-hold, before the runner's log marker."
+  "notes": "Both checks hold the left side of a normal video for 1.5 s, TikTok's side 2x hold (the Playback speed check's gesture), and read Android's own record of what it played for TikTok (the runner's vibrations step, dumpsys vibrator_manager's Recent vibrations since the check started). Ads, photos and LIVE have no side hold and open the long-press panel instead, so each waits for a normal video; nothing on the panel would be pressed anyway. The off check runs first and must see a buzz, or it reads inconclusive. The on check fails when a vibration plays, and reads inconclusive when nothing played and nothing was held back, which means TikTok asked for none. On 47.1.4 a hold on the middle of a video, and a long press on a comment's timestamp (the old route), asked for no haptic at all (2026-10-16); the side hold did (TOUCH, 53 ms). The held back line is written at debug level with the buffer on (the runner turns Log diagnostics on for the run) and is read from the export because it lands mid-hold, before the runner's log marker."
  },
  {
   "name": "Turn off screen transitions",
@@ -15530,6 +15513,9 @@
     "id": "slide-gone",
     "what": "Hushfeed's settings open over a paused feed video while the screen is filmed: with the switch off the clip passes through a run of frames between the two screens (TikTok's slide), with it on it jumps straight to the settings page.",
     "steps": [
+     {
+      "animations": "on"
+     },
      {
       "set": {
        "turn_off_screen_transitions": "false"
@@ -15621,7 +15607,7 @@
     "auto": true
    }
   ],
-  "notes": "There is no log line or state to read, since Android plays the slide, not TikTok's views. slide-gone films it instead: the runner's record step (screenrecord, then ffmpeg shrinks each frame to 54x116 grey) measures each frame against the last and counts the ones part way between the first screen and the last. A synthetic 0.3 s slide counted 14, a jump 0; the check wants 6 or more with the switch off (else inconclusive) and 3 or fewer with it on. The feed video is paused with one short press first (only on a plain video, since a tap on an ad opens it), so its own frames don't count. The setting is read each time a screen is created or paused, so no restart is needed. Swipes inside one screen follow the finger and are not touched."
+  "notes": "There is no log line or state to read, since Android plays the slide, not TikTok's views. slide-gone films it instead: the runner's record step (screenrecord, then ffmpeg shrinks each frame to 54x116 grey) measures each frame against the last and counts the ones part way between the first screen and the last. A synthetic 0.3 s slide counted 14, a jump 0; the check wants 6 or more with the switch off (else inconclusive) and 3 or fewer with it on. The feed video is paused with one short press first (only on a plain video, since a tap on an ad opens it), so its own frames don't count. The setting is read each time a screen is created or paused, so no restart is needed. Swipes inside one screen follow the finger and are not touched. A phone with its animation scales at 0 (the S22's baseline) slides nothing, so the check turns them on first with an animations step and the runner puts the phone's values back afterwards; with them at 0 the switch-off half found no frames in between (2026-10-16)."
  },
  {
   "name": "Use non-personalized search",
