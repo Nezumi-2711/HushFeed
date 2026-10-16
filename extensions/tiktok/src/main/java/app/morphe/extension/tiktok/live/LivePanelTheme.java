@@ -5,8 +5,11 @@
 package app.morphe.extension.tiktok.live;
 
 import app.morphe.extension.shared.Logger;
+import app.morphe.extension.tiktok.settings.Settings;
+import app.morphe.extension.tiktok.settings.SettingsStatus;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 
@@ -74,19 +77,29 @@ public final class LivePanelTheme {
      * app style. The room's Share button and others open TikTok's general sheets (a TuxSheet with
      * SkeletonSharePanelFragment inside), not LIVE dialogs, and those inflate from the room
      * activity, whose theme stays light because LIVE activities say they don't support dark mode,
-     * so they open white in a dark app (#159, #168). While Dark LIVE panels is on and the room is in
-     * dark mode, a Tux sheet in a LIVE room, and every fragment inside one, inflates through the
-     * style TikTok gives its own activities in dark mode. Everything else keeps its inflater.
+     * so they open white in a dark app (#159, #168). The room's own context doesn't say dark mode
+     * either (Login2 emulator, TikTok's Display set to Dark), so whether TikTok is dark comes from
+     * its own pages: every fragment outside a room notes whether it inflates in night mode. While
+     * Dark LIVE panels is on and TikTok is dark, a Tux sheet in a LIVE room, and every fragment
+     * inside one, inflates through the style TikTok gives its own activities in dark mode.
+     * Everything else keeps its inflater.
      */
     public static LayoutInflater darkTuxSheet(Object fragment, LayoutInflater inflater, int darkStyle) {
-        if (fragment == null || inflater == null || darkStyle == 0) {
+        if (fragment == null || inflater == null || darkStyle == 0
+                || !SettingsStatus.liveControlsEnabled || !Settings.DARK_LIVE_PANELS.get()) {
             return inflater;
         }
         try {
             Context context = inflater.getContext();
-            if (!LiveControls.darkLivePanels(context) || !inLiveRoom(fragment) || !inTuxSheet(fragment)) {
+            if (!inLiveRoom(fragment)) {
+                appDark = isNight(context);
                 return inflater;
             }
+            if (!(appDark || isNight(context)) || !inTuxSheet(fragment)) {
+                return inflater;
+            }
+            Logger.printDebug(() -> "Dark LIVE panels: a sheet in a LIVE room takes TikTok's dark style, "
+                    + fragment.getClass().getName());
             return inflater.cloneInContext(new ContextThemeWrapper(context, darkStyle));
         } catch (Throwable failure) {
             if (!tuxFailureLogged) {
@@ -95,6 +108,14 @@ public final class LivePanelTheme {
             }
             return inflater;
         }
+    }
+
+    /** Whether TikTok's own pages last inflated in night mode. */
+    static volatile boolean appDark;
+
+    private static boolean isNight(Context context) {
+        int night = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return night == Configuration.UI_MODE_NIGHT_YES;
     }
 
     /** Whether [fragment] sits in a LIVE room's activity. */

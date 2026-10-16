@@ -60,6 +60,7 @@ public class LivePanelThemeTest {
         Context app = RuntimeEnvironment.getApplication();
         Utils.setContext(app);
         SettingsStatus.liveControlsEnabled = true;
+        LivePanelTheme.appDark = false;
         Configuration night = new Configuration(app.getResources().getConfiguration());
         night.uiMode = Configuration.UI_MODE_NIGHT_YES | Configuration.UI_MODE_TYPE_NORMAL;
         dark = new ContextThemeWrapper(app.createConfigurationContext(night), android.R.style.Theme_Black);
@@ -122,18 +123,27 @@ public class LivePanelThemeTest {
     }
 
     @Test public void aTuxSheetInALiveRoomAndThePagesInsideItTakeTikToksDarkStyle() {
-        LivePlayActivity room = new LivePlayActivity();
-        BaseSheet sheet = new BaseSheet(room);
-        Fragment page = new Fragment(room);
+        LivePlayActivity liveRoom = new LivePlayActivity();
+        BaseSheet sheet = new BaseSheet(liveRoom);
+        Fragment page = new Fragment(liveRoom);
         page.setParentForTest(sheet);
-        LayoutInflater tiktok = LayoutInflater.from(dark);
-        assertSame("the switch starts off", tiktok, LivePanelTheme.darkTuxSheet(page, tiktok, OVERLAY));
+        // The room's context isn't in night mode even when TikTok is dark; TikTok's own pages are.
+        LayoutInflater room = LayoutInflater.from(light);
+        LayoutInflater feed = LayoutInflater.from(dark);
+        Fragment feedPage = new Fragment(new Activity());
+        LivePanelTheme.darkTuxSheet(feedPage, feed, OVERLAY);
+        assertSame("the switch starts off", room, LivePanelTheme.darkTuxSheet(page, room, OVERLAY));
 
         Settings.DARK_LIVE_PANELS.save(true);
-        LayoutInflater wrapped = LivePanelTheme.darkTuxSheet(page, tiktok, OVERLAY);
-        assertNotSame("the share panel inside the sheet", tiktok, wrapped);
-        assertEquals(textColor(new ContextThemeWrapper(dark, OVERLAY)), textColor(wrapped.getContext()));
-        assertNotSame("the sheet itself", tiktok, LivePanelTheme.darkTuxSheet(sheet, tiktok, OVERLAY));
+        assertSame("the feed's own page", feed, LivePanelTheme.darkTuxSheet(feedPage, feed, OVERLAY));
+        LayoutInflater wrapped = LivePanelTheme.darkTuxSheet(page, room, OVERLAY);
+        assertNotSame("the share panel inside the sheet", room, wrapped);
+        assertEquals(textColor(new ContextThemeWrapper(light, OVERLAY)), textColor(wrapped.getContext()));
+        assertNotSame("the sheet itself", room, LivePanelTheme.darkTuxSheet(sheet, room, OVERLAY));
+
+        LivePanelTheme.appDark = false;
+        LayoutInflater nightRoom = LayoutInflater.from(dark);
+        assertNotSame("a room that says night itself", nightRoom, LivePanelTheme.darkTuxSheet(sheet, nightRoom, OVERLAY));
     }
 
     @Test public void sheetsOutsideARoomOtherFragmentsLightModeAndPauseKeepTikToksInflater() {
@@ -143,7 +153,8 @@ public class LivePanelThemeTest {
         assertSame("the feed's share sheet", tiktok, LivePanelTheme.darkTuxSheet(new BaseSheet(new Activity()), tiktok, OVERLAY));
         assertSame("a room's own fragment", tiktok, LivePanelTheme.darkTuxSheet(new Fragment(room), tiktok, OVERLAY));
         LayoutInflater day = LayoutInflater.from(light);
-        assertSame("light mode", day, LivePanelTheme.darkTuxSheet(new BaseSheet(room), day, OVERLAY));
+        LivePanelTheme.darkTuxSheet(new Fragment(new Activity()), day, OVERLAY);
+        assertSame("TikTok in light mode", day, LivePanelTheme.darkTuxSheet(new BaseSheet(room), day, OVERLAY));
         assertSame("no style", tiktok, LivePanelTheme.darkTuxSheet(new BaseSheet(room), tiktok, 0));
         assertSame("not a fragment", tiktok, LivePanelTheme.darkTuxSheet(new Object(), tiktok, OVERLAY));
 
