@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** With Automatic Clear Display on and no delay, a video opened from search starts cleared. Before, it showed its buttons, its caption, the comment box and the "find related content" bar along the top for about a second before they went, every time a result was opened. TikTok now opens those videos inside its main screen rather than a page of their own, so the hold that keeps the controls away until the clear lands never started there (#84).
+
 * **TikTok:** With Hide the Tako bubble on, tapping a caption (or its "more") no longer opens a sheet with "Discover more with Tako" and an "Ask Tako" box on some videos. The caption expands in place instead, the way it already did on videos without Tako content. Turn the switch off, or pause Hushfeed, and TikTok's sheet comes back (#162).
 
 * **TikTok:** A new switch, Only on the sides of the video, sits right under Long press in the Gestures section of Feed screen. Pick any Long press choice other than TikTok default, turn it on, and the choice runs only on the left and right thirds of the video. A press in the middle opens TikTok's own menu again, with Download, Not interested, Speed and the rest. It's off by default (#136).
