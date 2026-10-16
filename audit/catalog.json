@@ -7454,7 +7454,7 @@
     "steps": [
      {
       "set": {
-       "hidden_profile_shortcuts": "TikTok Studio,Your orders,Shop,LIVE events,Your private videos"
+       "hidden_profile_shortcuts": "Watch history,TikTok Studio,Your orders,Shop,LIVE events,Your private videos"
       }
      },
      {
@@ -7464,8 +7464,14 @@
       "open": "profile"
      },
      {
-      "log": "Profile shortcuts: .* hidden",
+      "log": "Profile shortcuts: \\S+ #\\d+ ",
       "within": 12000,
+      "fromStep": 2,
+      "precondition": true
+     },
+     {
+      "log": "Profile shortcuts: .* hidden",
+      "within": 1000,
       "fromStep": 2
      },
      {
@@ -7492,7 +7498,7 @@
     "auto": true
    }
   ],
-  "notes": "Which shortcuts exist depends on the account: the test account shows whatever the server sends (often TikTok Studio, sometimes Your orders). If it has none, the catalog is empty and both checks fail for lack of a precondition rather than a bug. The shortcut titles typed here are English; the checklist normally stores a kind or feature id, and typed titles hide alike (ProfileShortcuts.canonical). Thoughts (hide_profile_thoughts, restart-required) removes the Thoughts bubble; it is a visual check only. On 47.1.4 the test account is served Watch history, LIVE (live events), Showcase, Subscription (live subscription) and Shop (seen 2026-10-16), so Shop and LIVE events in the typed list match by kind."
+  "notes": "Which shortcuts exist depends on the account: the test account shows whatever the server sends (often TikTok Studio, sometimes Your orders). If it has none, the catalog is empty and both checks fail for lack of a precondition rather than a bug. The shortcut titles typed here are English; the checklist normally stores a kind or feature id, and typed titles hide alike (ProfileShortcuts.canonical). Thoughts (hide_profile_thoughts, restart-required) removes the Thoughts bubble; it is a visual check only. On 47.1.4 the test account is served Watch history, LIVE (live events), Showcase, Subscription (live subscription) and Shop (seen 2026-10-16), so Shop and LIVE events in the typed list match by kind. The served set changes within a day: by 08:44 EDT on 2026-10-16 the account got only Watch history (watch_history #32), so shortcut-hidden types Watch history too and first waits for any shortcut line (inconclusive when none is served)."
  },
  {
   "name": "Hide search suggestions",
