@@ -8729,8 +8729,8 @@
     "auto": true
    },
    {
-    "id": "bridges-withheld-or-restored",
-    "what": "Opening a web page in TikTok's browser with the switch on makes the guard decide about the page's JavaScript bridges and log it.",
+    "id": "bridges-withheld-external",
+    "what": "With the switch on, an external link opened in TikTok's browser (TikTok's link-safety page for example.com) gets no Java bridge: the guard logs that it withheld them, and none of the page's bridge names reaches its Java object.",
     "steps": [
      {
       "set": {
@@ -8739,12 +8739,65 @@
       }
      },
      {
-      "open": "url:snssdk1233://webview?url=https%3A%2F%2Fwww.tiktok.com%2Flegal%2Fterms-of-service"
+      "open": "url:snssdk1233://webview?url=https%3A%2F%2Fexample.com%2F"
      },
      {
-      "log": "Browser privacy guard: JavaScript bridge (withheld from|restored for) ",
-      "within": 12000,
-      "precondition": true
+      "wait": 4000
+     },
+     {
+      "probe": "webview-bridges",
+      "expect": "^ok webview-bridges scheduled=[1-9]",
+      "waitMs": 3000
+     },
+     {
+      "log": "bridge-exposure webview=\\d+ origin=https://www\\.tiktoklinksafety\\.\\w+/link/ tracked=[1-9]\\d* java=0 ",
+      "within": 6000
+     },
+     {
+      "logNot": "bridge-exposure webview=\\d+ origin=https://www\\.tiktoklinksafety\\.\\w+/link/ tracked=\\d+ java=(-|[1-9])",
+      "within": 1000,
+      "fromStep": 4
+     },
+     {
+      "log": "Browser privacy guard: JavaScript bridge withheld from www\\.tiktoklinksafety\\.",
+      "within": 1000,
+      "fromStep": 2
+     },
+     {
+      "back": true
+     }
+    ],
+    "auto": true
+   },
+   {
+    "id": "bridges-left-alone",
+    "what": "With the switch off, the same page keeps TikTok's Java bridges (at least one bridge name reaches its Java object) and the guard withholds nothing. This is the control that shows the probe can see a bridge.",
+    "steps": [
+     {
+      "set": {
+       "block_webview_js_interfaces": "false",
+       "open_external_links": "false"
+      }
+     },
+     {
+      "open": "url:snssdk1233://webview?url=https%3A%2F%2Fexample.com%2F"
+     },
+     {
+      "wait": 4000
+     },
+     {
+      "probe": "webview-bridges",
+      "expect": "^ok webview-bridges scheduled=[1-9]",
+      "waitMs": 3000
+     },
+     {
+      "log": "bridge-exposure webview=\\d+ origin=https://www\\.tiktoklinksafety\\.\\w+/link/ tracked=[1-9]\\d* java=[1-9]",
+      "within": 6000
+     },
+     {
+      "logNot": "Browser privacy guard: JavaScript bridge withheld",
+      "within": 1000,
+      "fromStep": 2
      },
      {
       "back": true
@@ -8753,7 +8806,7 @@
     "auto": true
    }
   ],
-  "notes": "The guard logs only when it changes a WebView's bridge state (BrowserPrivacyGuard.prepareForPage), so it needs a page that is not already in the state the switch asks for. A tiktok.com legal page is a trusted host, which restores or leaves the bridges (the line may then not appear); a stronger proof is to load an untrusted page and run the probe webview-bridges (async answer \"bridge-exposure webview=N origin=... tracked=T exposed=[]\"). The repo records no deep link that loads an arbitrary external page in TikTok's browser, so that half stays manual: from a profile with a bio link or a shop link, open it, then run probe webview-bridges and expect exposed=[]. TikTok 47.1.4 resolves no activity for a plain https://www.tiktok.com link, so the page opens through snssdk1233://webview?url=<encoded page> (DeepLinkActivityV2), with Open external links directly off so it stays in TikTok's browser (2026-10-16)."
+  "notes": "The guard logs only when it changes a WebView's bridge state (BrowserPrivacyGuard.prepareForPage), so a trusted tiktok.com page proves nothing: the bridges stay as they are and no line appears. TikTok 47.1.4 opens an external address passed to snssdk1233://webview?url=<encoded page> (DeepLinkActivityV2) on its link-safety interstitial, www.tiktoklinksafety.us/link/ (\"This link may be unsafe\"), in SparkActivity, and that host is deliberately outside the trusted list, so example.com gives an untrusted page without tapping anything (discovery 8, 2026-10-16). Open external links directly is set off so the page stays in TikTok's browser. The probe's webview-bridges answers asynchronously with \"bridge-exposure webview=N origin=... tracked=T java=J exposed=...\": tracked is how many bridge names the guard holds for that WebView, and java is how many of them reach their Java object (a name counts when one of its @JavascriptInterface methods resolves as a function). exposed alone misleads: TikTok's JS SDK defines its own window.ToutiaoJSBridge (members _handleMessageFromApp and _handleMessageFromToutiao), which shows up even while the Java object is withheld. bridges-left-alone is the control with the switch off. The guard's \"withheld\" line is read from the open step on, since the probe step moves the log marker."
  },
  {
   "name": "Keep a streak going",

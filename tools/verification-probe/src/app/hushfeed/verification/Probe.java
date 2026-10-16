@@ -333,7 +333,11 @@ public final class Probe extends Instrumentation {
                                 android.view.View view = queue.poll();
                                 if (view instanceof android.webkit.WebView) {
                                     android.webkit.WebView web = (android.webkit.WebView) view;
-                                    List<String> names = new ArrayList<>();
+                                    // Each tracked name with its object's @JavascriptInterface
+                                    // methods. A page script may define a same-named object of
+                                    // its own (TikTok's JS SDK does, ToutiaoJSBridge), so only a
+                                    // name whose Java methods resolve counts as the bridge itself.
+                                    JSONArray tracked = new JSONArray();
                                     Object state = null;
                                     synchronized (states) {
                                         Object reference = states.get(web);
@@ -346,31 +350,38 @@ public final class Probe extends Instrumentation {
                                         interfacesField.setAccessible(true);
                                         synchronized (state) {
                                             Map<?, ?> interfaces = (Map<?, ?>) interfacesField.get(state);
-                                            for (Object name : interfaces.keySet()) {
-                                                if (name instanceof String) names.add((String) name);
+                                            for (Map.Entry<?, ?> binding : interfaces.entrySet()) {
+                                                if (!(binding.getKey() instanceof String)) continue;
+                                                JSONArray methods = new JSONArray();
+                                                if (binding.getValue() != null) {
+                                                    for (Method method : binding.getValue().getClass().getMethods()) {
+                                                        if (method.isAnnotationPresent(
+                                                                android.webkit.JavascriptInterface.class)) {
+                                                            methods.put(method.getName());
+                                                        }
+                                                    }
+                                                }
+                                                tracked.put(new JSONArray().put(binding.getKey()).put(methods));
                                             }
                                         }
                                     }
 
-                                    StringBuilder script = new StringBuilder(
-                                            "(function(){var n=[");
-                                    for (int i = 0; i < names.size(); i++) {
-                                        if (i > 0) script.append(',');
-                                        script.append(JSONObject.quote(names.get(i)));
-                                    }
-                                    script.append("];var exposed=[];for(var i=0;i<n.length;i++){"
-                                            + "if(typeof window[n[i]]!=='undefined'){var v=window[n[i]],k=[];"
+                                    String script = "(function(){var n=" + tracked
+                                            + ";var exposed=[];for(var i=0;i<n.length;i++){var name=n[i][0];"
+                                            + "if(typeof window[name]!=='undefined'){var v=window[name],k=[],j=[];"
                                             + "try{k=Object.getOwnPropertyNames(v).sort();}catch(e){}"
-                                            + "exposed.push([n[i],typeof v,Object.prototype.toString.call(v),k]);}}"
-                                            + "return JSON.stringify(exposed);})()");
+                                            + "for(var m=0;m<n[i][1].length;m++){try{if(typeof v[n[i][1][m]]==='function')"
+                                            + "j.push(n[i][1][m]);}catch(e){}}"
+                                            + "exposed.push([name,typeof v,Object.prototype.toString.call(v),k,j]);}}"
+                                            + "return JSON.stringify(exposed);})()";
                                     final int index = ++scheduled;
-                                    final int tracked = names.size();
+                                    final int trackedCount = tracked.length();
                                     final String origin = hostAndPath(web.getUrl() == null
                                             ? null : android.net.Uri.parse(web.getUrl()));
-                                    final String javascript = script.toString();
-                                    web.post(() -> web.evaluateJavascript(javascript, value ->
+                                    web.post(() -> web.evaluateJavascript(script, value ->
                                             Log.i(TAG, "bridge-exposure webview=" + index
-                                                    + " origin=" + origin + " tracked=" + tracked
+                                                    + " origin=" + origin + " tracked=" + trackedCount
+                                                    + " java=" + javaBridgesExposed(value)
                                                     + " exposed=" + value)));
                                 }
                                 if (view instanceof android.view.ViewGroup) {
@@ -3587,6 +3598,27 @@ public final class Probe extends Instrumentation {
         private static String hostAndPath(android.net.Uri uri) {
             if (uri == null) return "null";
             return uri.getScheme() + "://" + uri.getHost() + uri.getPath();
+        }
+
+        /**
+         * How many webview-bridges entries reach their Java object, read from the page's answer:
+         * a JSON string holding the array, whose fifth element per entry lists the Java methods
+         * that resolve. -1 when the answer can't be read.
+         */
+        private static int javaBridgesExposed(String value) {
+            try {
+                Object decoded = new org.json.JSONTokener(value).nextValue();
+                if (!(decoded instanceof String)) return -1;
+                JSONArray entries = new JSONArray((String) decoded);
+                int count = 0;
+                for (int i = 0; i < entries.length(); i++) {
+                    JSONArray methods = entries.getJSONArray(i).optJSONArray(4);
+                    if (methods != null && methods.length() > 0) count++;
+                }
+                return count;
+            } catch (Exception unreadable) {
+                return -1;
+            }
         }
 
         /**
