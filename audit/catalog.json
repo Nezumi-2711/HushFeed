@@ -209,7 +209,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "ad=false",
+      "expect": "photo=false.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -248,7 +248,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "ad=false",
+      "expect": "photo=false.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -1958,7 +1958,7 @@
    },
    {
     "id": "sheet-entry",
-    "what": "The sort glyph beside the comment count opens a menu with all four orders: Top, Newest, With media and From creator.",
+    "what": "The sort glyph beside the comment count opens TikTok's full sort menu: Top, Newest and With media, plus From creator on a video whose creator commented. The cut-down menu has no With media.",
     "steps": [
      {
       "set": {
@@ -2003,7 +2003,14 @@
        "text": "^(Top|Newest|With media|From creator)$",
        "match": "regex"
       },
-      "expect": "ok findtext found .*\\(4 matches"
+      "expect": "ok findtext found .*\\(([3-9]) matches"
+     },
+     {
+      "probe": "findtext",
+      "extras": {
+       "text": "With media"
+      },
+      "expect": "ok findtext found"
      },
      {
       "back": true
@@ -3448,7 +3455,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "ad=false",
+      "expect": "photo=false.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -3502,7 +3509,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "ad=false",
+      "expect": "photo=false.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -3655,7 +3662,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
+      "expect": "likes=over1000.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -3677,9 +3684,10 @@
      {
       "probe": "labreport",
       "extras": {
-       "op": "stop"
+       "op": "stop",
+       "key": "audio_comment_publish"
       },
-      "expect": "audio_comment_publish"
+      "expect": "ok labreport key audio_comment_publish read=true"
      },
      {
       "back": true
@@ -3694,7 +3702,7 @@
    },
    {
     "id": "mic-entry",
-    "what": "Review: the comment box shows TikTok's voice comment microphone with the switch on.",
+    "what": "Review: the focused comment box's tool row shows TikTok's voice comment microphone with the switch on.",
     "steps": [
      {
       "set": {
@@ -3709,7 +3717,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
+      "expect": "likes=over1000.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -3719,8 +3727,23 @@
       "waitMs": 2500
      },
      {
+      "probe": "findtext",
+      "extras": {
+       "text": "^Add comment",
+       "match": "regex",
+       "click": "true"
+      },
+      "expect": "ok findtext found .*clicked=true"
+     },
+     {
+      "wait": 1800
+     },
+     {
       "shot": "voice-entry",
-      "review": "Bottom of the comment sheet, beside the comment box: a microphone entry for voice comments. Do not tap it or record anything. If the account is not served the feature the mic may still be absent."
+      "review": "Comment box focused, keyboard up, nothing typed: the tool row under the box (image, sticker, @) has a microphone. Do not tap it or record anything."
+     },
+     {
+      "back": true
      },
      {
       "back": true
@@ -3749,7 +3772,7 @@
     "auto": true
    }
   ],
-  "notes": "The patch description says it has not been tried on a real account. Roadmap_Blocked.md 'Voice comment plays for a second account' records that recording, publication, playback and deletion once worked on one account, but a second viewer is unproven. Recording needs the microphone, so the audit only checks that the gate is consulted and (by eye) that the entry shows. The labreport answer lists gate names, the 'audio_comment_publish' name appearing is the pass condition, its value in the report is the thing to read by hand."
+  "notes": "The patch description says it has not been tried on a real account. Roadmap_Blocked.md 'Voice comment plays for a second account' records that recording, publication, playback and deletion once worked on one account, but a second viewer is unproven. Recording needs the microphone, so the audit only checks that the gate is consulted and (by eye) that the entry shows. The labreport step asks for the one gate: read=true is the pass condition, and the value it prints is the thing to read by hand. The test account already gets the mic with the switch off (seen 2026-10-16 in the focused box's tool row), so on it the shot proves the entry still builds and the gate check is what shows the switch is asked."
  },
  {
   "name": "Expand activity list",
@@ -5122,7 +5145,7 @@
   "checks": [
    {
     "id": "split-on-phone",
-    "what": "Review: with the minimum width lowered to 320 dp, the S22 (360 dp wide) qualifies, so comments open beside the video instead of over it. Hook status 'split view' says what TikTok was told when it asked.",
+    "what": "With the minimum width lowered to 320 dp, TikTok asks both split view questions while the comment sheet opens and is told yes (Hook status 'split view': split container, comments beside the video). On a 360 dp portrait phone TikTok's own layout still draws the sheet; the side-by-side view needs a wide window.",
     "steps": [
      {
       "set": {
@@ -5138,7 +5161,7 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over1000",
+      "expect": "likes=over1000.*ad=false",
       "retrySwipe": 8,
       "precondition": true
      },
@@ -5149,55 +5172,32 @@
      },
      {
       "wait": 2500
-     },
-     {
-      "shot": "split-comments",
-      "review": "The comment list sits in a column beside the playing video (video narrowed to one side), not as a sheet over the bottom of the video. Failing looks like the stock full-width sheet over the video."
      },
      {
       "probe": "hookdetails",
       "extras": {
        "family": "split view"
       },
-      "expect": "comments beside the video"
+      "expect": "^hookdetail split view bound=\\[[^\\]]*comments beside the video"
+     },
+     {
+      "probe": "hookdetails",
+      "extras": {
+       "family": "split view"
+      },
+      "expect": "^hookdetail split view bound=\\[[^\\]]*split container"
      },
      {
       "back": true
      },
      {
       "set": {
-       "foldable_split_view": "false"
+       "foldable_split_view": "false",
+       "foldable_split_view_min_width_dp": "600"
       }
-     },
-     {
-      "restart": true
-     },
-     {
-      "open": "feed"
-     },
-     {
-      "probe": "videoinfo",
-      "expect": "likes=over1000",
-      "retrySwipe": 8,
-      "precondition": true
-     },
-     {
-      "probe": "comments",
-      "expect": "openComments\\([^)]*\\)=true",
-      "waitMs": 2500
-     },
-     {
-      "wait": 2500
-     },
-     {
-      "shot": "stock-comments",
-      "review": "Stock comment sheet over the bottom of the video."
-     },
-     {
-      "back": true
      }
     ],
-    "auto": false
+    "auto": true
    },
    {
     "id": "injected",
@@ -5215,7 +5215,7 @@
     "auto": true
    }
   ],
-  "notes": "A foldable is not needed: the setting 'Split comment minimum width' (320 to 1600 dp, default 600) decides what counts as wide enough and the S22's configuration width is about 360 dp, so 320 makes the phone qualify. Roadmap_Blocked.md 'Fold/reopen acceptance' keeps the true unfold/refold check, which needs a foldable. The debug line 'Split view: the window crossed the width threshold, so the feed is built again' only appears on a size change."
+  "notes": "A foldable is not needed: the setting 'Split comment minimum width' (320 to 1600 dp, default 600) decides what counts as wide enough and the S22's configuration width is about 360 dp, so 320 makes the phone qualify. Roadmap_Blocked.md 'Fold/reopen acceptance' keeps the true unfold/refold check, which needs a foldable. The debug line 'Split view: the window crossed the width threshold, so the feed is built again' only appears on a size change. Seen 2026-10-16 on the S22 (47.1.4): both hooks asked and answered yes at 320 dp, and the sheet still opened over the video, so the visual check belongs on a window 600 dp or wider (a tablet or foldable, or a lean tablet emulator)."
  },
  {
   "name": "Follow diagnostics",
@@ -5702,7 +5702,7 @@
    },
    {
     "id": "struct-seen",
-    "what": "When TikTok builds a comment surprise struct while the comment page loads, the hook binds and, with the switch on, hands back null (HookStatus 'comment popup ads').",
+    "what": "When TikTok builds a comment surprise struct while the comment page loads, the hook binds and, with the switch on, hands back null (HookStatus 'comment popup ads'). Inconclusive on a video with no campaign.",
     "steps": [
      {
       "set": {
@@ -5725,6 +5725,14 @@
      },
      {
       "wait": 2500
+     },
+     {
+      "probe": "hookdetails",
+      "extras": {
+       "family": "comment popup ads"
+      },
+      "expect": "^hookdetail comment popup ads ",
+      "precondition": true
      },
      {
       "probe": "hookdetails",
