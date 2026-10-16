@@ -117,7 +117,7 @@ if ($Validate) {
     Get-ChildItem -Path (Join-Path $root 'extensions') -Recurse -Filter *.java | Where-Object { $_.FullName -match '[\\/]src[\\/]main[\\/]' } | ForEach-Object {
         foreach ($found in [regex]::Matches((Get-Content -LiteralPath $_.FullName -Raw), 'Setting\(\s*"([A-Za-z0-9_]+)"')) { [void]$keys.Add($found.Groups[1].Value) }
     }
-    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night'
+    $stepKinds = 'set', 'restart', 'open', 'swipe', 'wait', 'tap', 'longpress', 'back', 'probe', 'log', 'logNot', 'shot', 'apk', 'night', 'vibrations'
     $apkKinds = 'entry-empty', 'entry-absent', 'entry-present', 'manifest', 'resources', 'icon-xml', 'dex-string'
     foreach ($entry in $entries) {
         $where = "'$($entry.name)'"
@@ -142,6 +142,7 @@ if ($Validate) {
                     }
                     'swipe' { if ([string]$step.swipe -notin 'up', 'down', 'left', 'right') { & $bad "swipes '$($step.swipe)'" } }
                     'night' { if ([string]$step.night -notin 'yes', 'no') { & $bad "sets night mode '$($step.night)'" } }
+                    'vibrations' { if ([string]$step.vibrations -notin 'none', 'some') { & $bad "expects vibrations '$($step.vibrations)'" } }
                     { $_ -in 'tap', 'longpress' } { $target = $step.$kind; if (-not ($target.text -or $target.desc -or $target.id)) { & $bad "a $kind with no text, desc or id" } }
                     'apk' { if ([string]$step.apk -notin $apkKinds) { & $bad "unknown apk check '$($step.apk)'" } }
                     'shot' { if (-not $step.review) { & $bad 'a shot with no review text' } }
@@ -498,6 +499,31 @@ function ConvertTo-LeafName([string]$Value) {
     return $Value
 }
 
+# The phone's clock to the second, in the form its vibration record uses ("10-16 04:41:32").
+function Get-DeviceClock {
+    [string]$now = (Invoke-DeviceShell 'date "+%m-%d %H:%M:%S"') -join ''
+    if ($now.Trim() -notmatch '^\d\d-\d\d \d\d:\d\d:\d\d$') { throw "could not read the phone clock: $now" }
+    return $now.Trim()
+}
+
+# The vibrations Android lists under "Recent vibrations" for TikTok from $Since on. The year
+# isn't in the record, so a check across New Year's Eve would miss some.
+function Get-TikTokVibrations([string]$Since) {
+    $recent = $false
+    $indent = 0
+    foreach ($line in @(Invoke-DeviceShell 'dumpsys vibrator_manager')) {
+        $text = "$line"
+        if ($text -match '^( *)Recent vibrations:') { $recent = $true; $indent = $Matches[1].Length; continue }
+        # Its entries sit under one heading per usage (TOUCH:, UNKNOWN:), indented deeper; the
+        # next section ("Aggregated vibration history:") is back at its own level.
+        if ($recent -and $text -match '^( *)\S[^|]*:\s*$' -and $Matches[1].Length -le $indent) { $recent = $false }
+        if ($recent -and $text -match "^\s*(\d\d-\d\d \d\d:\d\d:\d\d)\.\d+ \|.*\| $([regex]::Escape($package)) \(uid=" `
+                -and [string]::CompareOrdinal($Matches[1], $Since) -ge 0) {
+            $text.Trim()
+        }
+    }
+}
+
 # One check: every step in order, the first failed expectation ends it.
 $script:nightWas = $null
 # Puts back the phone's night mode a night step changed. Returns whether it changed anything.
@@ -514,6 +540,12 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
     $tag = "$($Entry.name)-$($Check.id)"
     $index = 0
     $lastMarker = $null
+    # The phone's clock when the check starts, for a vibrations step to count from. Only read
+    # for a check that has one.
+    $vibrationsSince = $null
+    if ($deviceUp -and @($Check.steps | Where-Object { $_.PSObject.Properties.Name -contains 'vibrations' }).Count -gt 0) {
+        $vibrationsSince = Get-DeviceClock
+    }
     foreach ($step in $Check.steps) {
         $index++
         $kind = @($step.PSObject.Properties.Name)[0]
@@ -582,6 +614,20 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                     }
                     Invoke-DeviceShell "cmd uimode night $($step.night)" | Out-Null
                     Start-Sleep -Milliseconds 1500
+                }
+                'vibrations' {
+                    # What Android itself played for TikTok since the check started or the last
+                    # vibrations step: the phone's own record, so a haptic the patch never saw
+                    # still counts.
+                    if (-not $vibrationsSince) { throw 'could not read the phone clock at the start of the check' }
+                    $hits = @(Get-TikTokVibrations $vibrationsSince)
+                    $result.evidence += Save-Evidence "$tag-$index-vibrations" $(if ($hits.Count) { $hits -join "`n" } else { "no vibration for $package since $vibrationsSince" })
+                    $vibrationsSince = Get-DeviceClock
+                    if ($step.vibrations -eq 'none' -and $hits.Count -gt 0) { throw "the phone vibrated for TikTok $($hits.Count) time(s): $($hits[0])" }
+                    if ($step.vibrations -eq 'some' -and $hits.Count -eq 0) {
+                        if ($step.precondition) { throw [System.InvalidOperationException]::new('precondition: TikTok asked for no vibration') }
+                        throw 'the phone did not vibrate for TikTok'
+                    }
                 }
                 'back' { Invoke-DeviceShell 'input keyevent KEYCODE_BACK' | Out-Null; Start-Sleep -Milliseconds 1200 }
                 'tap' { $result.evidence += (Invoke-DumpTap $step.tap); Start-Sleep -Milliseconds 1500 }
