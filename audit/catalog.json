@@ -15599,7 +15599,7 @@
    },
    {
     "id": "slide-gone",
-    "what": "Hushfeed's settings open over a paused feed video while the screen is filmed: with the switch off the clip passes through a run of frames between the two screens (TikTok's slide), with it on it jumps straight to the settings page.",
+    "what": "Hushfeed's row on TikTok's Settings and privacy is tapped while the screen is filmed: with the switch off the clip passes through a run of frames between the two screens (the slide), with it on it jumps straight to Hushfeed's page.",
     "steps": [
      {
       "animations": "on"
@@ -15610,35 +15610,35 @@
       }
      },
      {
-      "open": "feed"
+      "open": "profile"
      },
      {
-      "probe": "videoinfo",
-      "expect": "photo=false.*ad=false",
-      "retrySwipe": 8,
-      "precondition": true
+      "wait": 2000
      },
      {
-      "probe": "holdslide",
-      "extras": {
-       "x": "540",
-       "y": "1000",
-       "dy": "0",
-       "hold": "50",
-       "slide": "50"
-      },
-      "expect": "^ok holdslide",
-      "waitMs": 1500
+      "tap": {
+       "desc": "^Profile menu$"
+      }
      },
      {
       "wait": 1500
      },
      {
-      "record": "start",
-      "seconds": 4
+      "tap": {
+       "text": "^Settings and privacy$"
+      }
      },
      {
-      "open": "settings"
+      "wait": 3000
+     },
+     {
+      "record": "start",
+      "seconds": 7
+     },
+     {
+      "tap": {
+       "label": "^Hushfeed$"
+      }
      },
      {
       "record": "stop",
@@ -15649,44 +15649,50 @@
       "back": true
      },
      {
+      "back": true
+     },
+     {
       "set": {
        "turn_off_screen_transitions": "true"
       }
      },
      {
-      "open": "feed"
+      "open": "profile"
      },
      {
-      "probe": "videoinfo",
-      "expect": "photo=false.*ad=false",
-      "retrySwipe": 8,
-      "precondition": true
+      "wait": 2000
      },
      {
-      "probe": "holdslide",
-      "extras": {
-       "x": "540",
-       "y": "1000",
-       "dy": "0",
-       "hold": "50",
-       "slide": "50"
-      },
-      "expect": "^ok holdslide",
-      "waitMs": 1500
+      "tap": {
+       "desc": "^Profile menu$"
+      }
      },
      {
       "wait": 1500
      },
      {
-      "record": "start",
-      "seconds": 4
+      "tap": {
+       "text": "^Settings and privacy$"
+      }
      },
      {
-      "open": "settings"
+      "wait": 3000
+     },
+     {
+      "record": "start",
+      "seconds": 7
+     },
+     {
+      "tap": {
+       "label": "^Hushfeed$"
+      }
      },
      {
       "record": "stop",
       "transition": "still"
+     },
+     {
+      "back": true
      },
      {
       "back": true
@@ -15695,7 +15701,7 @@
     "auto": true
    }
   ],
-  "notes": "There is no log line or state to read, since Android plays the slide, not TikTok's views. slide-gone films it instead: the runner's record step (screenrecord, then ffmpeg shrinks each frame to 54x116 grey) measures each frame against the last and counts the ones part way between the first screen and the last. A synthetic 0.3 s slide counted 14, a jump 0; the check wants 6 or more with the switch off (else inconclusive) and 3 or fewer with it on. The feed video is paused with one short press first (only on a plain video, since a tap on an ad opens it), so its own frames don't count. The setting is read each time a screen is created or paused, so no restart is needed. Swipes inside one screen follow the finger and are not touched. A phone with its animation scales at 0 (the S22's baseline) slides nothing, so the check turns them on first with an animations step and the runner puts the phone's values back afterwards; with them at 0 the switch-off half found no frames in between (2026-10-16)."
+  "notes": "There is no log line or state to read, since Android plays the slide, not TikTok's views. slide-gone films it instead: the runner's record step (screenrecord, then ffmpeg shrinks each frame to 54x116 grey) measures each frame against the last and counts the ones part way between the first screen and the last. A synthetic 0.3 s slide counted 14, a jump 0; the check wants 6 or more with the switch off (else inconclusive) and 3 or fewer with it on. The filmed step is the tap on Hushfeed's row in Settings and privacy, one screen of TikTok's opening another, which is the case the patch covers; the probe's settings action starts the page from the application context as a new task instead, and that launch faded the same way with the switch on and off (17 and 18 frames in between, 2026-10-16), so it isn't filmed. The setting is read each time a screen is created or paused, so no restart is needed. Swipes inside one screen follow the finger and are not touched. A phone with its animation scales at 0 (the S22's baseline) slides nothing, so the check turns them on first with an animations step and the runner puts the phone's values back afterwards; with them at 0 the switch-off half found no frames in between (2026-10-16)."
  },
  {
   "name": "Use non-personalized search",
