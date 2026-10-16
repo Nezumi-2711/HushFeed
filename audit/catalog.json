@@ -13520,8 +13520,8 @@
      },
      {
       "probe": "videoinfo",
-      "expect": "likes=over10000",
-      "retrySwipe": 12,
+      "expect": "comments=over10000.*ad=false",
+      "retrySwipe": 30,
       "precondition": true
      },
      {
@@ -13560,7 +13560,7 @@
     "auto": true
    }
   ],
-  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4. The comment sheet title, the likes list and the viewers list come from X/0HAE.LIZIZ(Aweme, long) on 47.1.4, which for someone else's video formats the count itself and never reached the compact formatter's hook; it has its own hook since 2026-10-16 (VideoCountFormatterFingerprint). A live flip reaches only cells bound after it: the next cell is already laid out with the old text, which is why pass 3 read 69.4K right after the flip. On 2026-10-16 the comma was there both after a restart and live three swipes on, so like-count-exact restarts for its off half and swipes three times after turning it on."
+  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4. The comment sheet title, the likes list and the viewers list come from X/0HAE.LIZIZ(Aweme, long) on 47.1.4, which for someone else's video formats the count itself and never reached the compact formatter's hook; it has its own hook since 2026-10-16 (VideoCountFormatterFingerprint). comment-title-exact picks its video by videoinfo's comments bucket (probe since 2026-10-16): with likes=over10000 the a8 run opened a video with 35 comments, whose title reads the same either way. Videos with 10,000 comments are rarer than ones with 10,000 likes, hence 30 swipes. A live flip reaches only cells bound after it: the next cell is already laid out with the old text, which is why pass 3 read 69.4K right after the flip. On 2026-10-16 the comma was there both after a restart and live three swipes on, so like-count-exact restarts for its off half and swipes three times after turning it on."
  },
  {
   "name": "Show follow status",
