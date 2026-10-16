@@ -110,11 +110,16 @@ class AccentColorWallpaperTest {
         val res = File.createTempFile("res", "").apply { delete(); mkdirs() }
         try {
             val (plain, system) = wallpaperColorPaths(res)
-            assertEquals("values/hushfeed_accent.xml", plain.relativeTo(res).invariantSeparatorsPath)
-            assertEquals("values-v31/hushfeed_accent.xml", system.relativeTo(res).invariantSeparatorsPath)
+            assertEquals("values/colors.xml", plain.relativeTo(res).invariantSeparatorsPath)
+            assertEquals("values-v31/colors.xml", system.relativeTo(res).invariantSeparatorsPath)
+            plain.parentFile.mkdirs()
+            plain.writeText("<resources>\n    <color name=\"white\">#ffffffff</color>\n</resources>\n")
             writeWallpaperColors(plain to system, listOf("#fffe2c55"))
-            assertTrue(plain.readText().contains("#fffe2c55"))
+            val joined = plain.readText()
+            assertTrue("the entry went in beside the APK's own: $joined", joined.contains("<color name=\"white\">#ffffffff</color>\n    <color name=\"hushfeed_accent_fe2c55\">#fffe2c55</color>\n</resources>"))
+            assertEquals("one closing tag", 1, Regex("</resources>").findAll(joined).count())
             assertTrue(system.readText().contains("system_accent1_500"))
+            assertTrue("a new file for v31 is a whole document", system.readText().startsWith("<?xml"))
             try {
                 wallpaperColorPaths(res)
                 fail("accepted a second table")

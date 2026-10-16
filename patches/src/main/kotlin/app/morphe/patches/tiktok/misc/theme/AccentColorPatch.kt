@@ -269,8 +269,15 @@ internal fun accentRecolor(wallpaper: Boolean, target: String, literals: Mutable
     if (wallpaper) { literal -> wallpaperReference(literal)?.also { literals.add(literal) } }
     else { literal -> accentShade(literal, target) }
 
-/** The file both wallpaper color tables are written to, in `values` and in `values-v31`. */
-internal const val WALLPAPER_COLORS_FILE = "hushfeed_accent.xml"
+/**
+ * The file both wallpaper color tables go into, in `values` and in `values-v31`. The patcher takes
+ * a values file's resource type from its name, so a file of our own name fails to encode: the
+ * entries join the APK's `colors.xml`, or start one in `values-v31`, which the name makes a color file.
+ */
+internal const val WALLPAPER_COLORS_FILE = "colors.xml"
+
+/** What every color the wallpaper choice adds is named from. */
+internal const val WALLPAPER_COLOR_PREFIX = "hushfeed_accent_"
 
 /**
  * Android's system accent ramp as (tone, step) pairs: `system_accent1_<step>` has a tone (the L*
@@ -299,7 +306,7 @@ internal fun isOpaqueLiteral(literal: String): Boolean {
 
 /** The color resource name for an opaque literal, one per red, however many items hold it. */
 internal fun wallpaperColorName(literal: String): String =
-    "hushfeed_accent_" + String.format(Locale.ROOT, "%06x", literalRgb(literal) ?: throw IllegalArgumentException("not a color literal: $literal"))
+    WALLPAPER_COLOR_PREFIX + String.format(Locale.ROOT, "%06x", literalRgb(literal) ?: throw IllegalArgumentException("not a color literal: $literal"))
 
 /**
  * What an item holding [literal] becomes with the wallpaper choice: a reference to a color that
@@ -310,13 +317,13 @@ internal fun wallpaperColorName(literal: String): String =
 internal fun wallpaperReference(literal: String): String? =
     if (isOpaqueLiteral(literal)) "@color/" + wallpaperColorName(literal) else null
 
-/** The two files the wallpaper choice adds, or a refusal when the APK already holds one at that path. */
+/** The two color files the wallpaper choice adds to, or a refusal when either already holds one of its names. */
 internal fun wallpaperColorPaths(res: File): Pair<File, File> {
     val files = res.resolve("values").resolve(WALLPAPER_COLORS_FILE) to res.resolve("values-v31").resolve(WALLPAPER_COLORS_FILE)
-    if (files.first.exists() || files.second.exists()) {
+    if (listOf(files.first, files.second).any { it.isFile && it.readText(Charsets.UTF_8).contains("name=\"$WALLPAPER_COLOR_PREFIX") }) {
         throw PatchException(
-            "Accent color: this TikTok already has a $WALLPAPER_COLORS_FILE in its resources, so the " +
-                "wallpaper choice would write over it. Nothing was changed.",
+            "Accent color: this TikTok already has colors named $WALLPAPER_COLOR_PREFIX* in its resources, so the " +
+                "wallpaper choice would write over them. Nothing was changed.",
         )
     }
     return files
@@ -328,20 +335,35 @@ internal fun wallpaperColorPaths(res: File): Pair<File, File> {
  * up pick them up and older versions never meet a resource they don't have.
  */
 internal fun wallpaperColorTables(literals: Collection<String>): Pair<String, String> {
-    val reds = literals.filter(::isOpaqueLiteral).associateBy(::wallpaperColorName).toSortedMap()
-    fun table(value: (String) -> String) = buildString {
-        append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n")
-        for ((name, literal) in reds) append("    <color name=\"$name\">${value(literal)}</color>\n")
-        append("</resources>\n")
-    }
-    return table { it.trim().lowercase(Locale.ROOT) } to table { "@android:color/system_accent1_${wallpaperStep(it)}" }
+    val (plain, system) = wallpaperColorEntries(literals)
+    return newColorsFile(plain) to newColorsFile(system)
 }
 
+private fun newColorsFile(entries: String) = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n$entries</resources>\n"
+
+/** The `<color>` lines of each table, one per opaque red, in name order. */
+internal fun wallpaperColorEntries(literals: Collection<String>): Pair<String, String> {
+    val reds = literals.filter(::isOpaqueLiteral).associateBy(::wallpaperColorName).toSortedMap()
+    fun lines(value: (String) -> String) = buildString {
+        for ((name, literal) in reds) append("    <color name=\"$name\">${value(literal)}</color>\n")
+    }
+    return lines { it.trim().lowercase(Locale.ROOT) } to lines { "@android:color/system_accent1_${wallpaperStep(it)}" }
+}
+
+/** Adds each table's entries to the end of its file's `resources`, or writes a new file where there is none. */
 internal fun writeWallpaperColors(files: Pair<File, File>, literals: Collection<String>) {
-    val (plain, system) = wallpaperColorTables(literals)
-    for ((file, text) in listOf(files.first to plain, files.second to system)) {
+    val (plain, system) = wallpaperColorEntries(literals)
+    for ((file, entries) in listOf(files.first to plain, files.second to system)) {
         file.parentFile.mkdirs()
-        file.writeText(text, Charsets.UTF_8)
+        if (!file.isFile) {
+            file.writeText(newColorsFile(entries), Charsets.UTF_8)
+            continue
+        }
+        val text = file.readText(Charsets.UTF_8)
+        val end = text.lastIndexOf("</resources>")
+        if (end < 0) throw PatchException("Accent color: ${file.name} has no closing resources tag. Nothing was changed.")
+        val lead = if (text.substring(0, end).endsWith("\n")) "" else "\n"
+        file.writeText(text.substring(0, end) + lead + entries + text.substring(end), Charsets.UTF_8)
     }
 }
 
