@@ -1026,7 +1026,7 @@ public final class Probe extends Instrumentation {
                             // the feed keeps the cells either side of the current one laid out, and
                             // the first match was the previous post's button.
                             CharSequence raw = view.getContentDescription();
-                            String described = raw == null ? null : raw.toString();
+                            String described = raw == null ? null : withoutFormatMarks(raw.toString());
                             if (described != null && view.isShown()
                                     && view.getGlobalVisibleRect(new android.graphics.Rect())
                                     && (contains ? described.contains(desc)
@@ -1054,23 +1054,48 @@ public final class Probe extends Instrumentation {
                         // printed.
                         String wanted = required(intent, "text");
                         boolean click = "true".equals(intent.getStringExtra("click"));
+                        // -e match regex: -e text is a pattern found anywhere in the text, for a
+                        // label that varies (a comment's time, "3d" or "10-07").
+                        java.util.regex.Pattern pattern = "regex".equals(intent.getStringExtra("match"))
+                                ? java.util.regex.Pattern.compile(wanted) : null;
+                        // -e hold N: a finger held N ms on the match, through its own window, for
+                        // a long-press menu. The comment sheet is a dialog with a window of its
+                        // own, and uiautomator can't dump it while the video plays behind it.
+                        String holdExtra = intent.getStringExtra("hold");
+                        long holdMs = holdExtra == null ? 0L : Long.parseLong(holdExtra);
                         // -e index N: the Nth match in tree order, for a label that repeats (a tab
                         // and the badges below it); every match's place is printed either way.
                         String indexExtra = intent.getStringExtra("index");
                         int index = indexExtra == null ? 1 : Integer.parseInt(indexExtra);
+                        // A click or a hold only goes to a match on the screen: the comment list
+                        // keeps rows laid out above and below what shows. Counting still takes
+                        // every match, so a "none" check can't pass on a row scrolled out of view.
+                        boolean pressing = click || holdMs > 0;
                         int matches = 0;
+                        int pressable = 0;
                         StringBuilder places = new StringBuilder();
                         android.view.View found = null;
                         java.util.ArrayDeque<android.view.View> queue = new java.util.ArrayDeque<>(windowRoots());
                         while (!queue.isEmpty()) {
                             android.view.View view = queue.removeFirst();
-                            if (view instanceof android.widget.TextView && view.isShown()
-                                    && wanted.contentEquals(String.valueOf(((android.widget.TextView) view).getText()))) {
+                            // An empty field shows its hint ("Add comment..."), which is the label a
+                            // person sees there.
+                            String shownText = null;
+                            if (view instanceof android.widget.TextView) {
+                                android.widget.TextView textView = (android.widget.TextView) view;
+                                CharSequence shown = textView.getText();
+                                if ((shown == null || shown.length() == 0) && textView.getHint() != null) shown = textView.getHint();
+                                shownText = withoutFormatMarks(String.valueOf(shown));
+                            }
+                            if (shownText != null && view.isShown()
+                                    && (pattern == null ? wanted.contentEquals(shownText) : pattern.matcher(shownText).find())) {
                                 matches++;
                                 int[] place = new int[2];
                                 view.getLocationOnScreen(place);
                                 places.append(" #").append(matches).append('=').append(place[0]).append(',').append(place[1]);
-                                if (matches == index) found = view;
+                                boolean onScreen = view.getGlobalVisibleRect(new android.graphics.Rect());
+                                if (!onScreen) places.append("(off screen)");
+                                if (found == null && (!pressing || onScreen) && ++pressable == index) found = view;
                             }
                             if (view instanceof android.view.ViewGroup) {
                                 android.view.ViewGroup group = (android.view.ViewGroup) view;
@@ -1080,6 +1105,24 @@ public final class Probe extends Instrumentation {
                         if (found == null) {
                             Log.i(TAG, "ok findtext none (" + matches + " matches" + places + ")");
                             break;
+                        }
+                        // -e sibling next: the view right after the match in its parent, for an
+                        // icon with no text or description beside a label (the comment sort glyph
+                        // after "189 comments"). Its id is renamed every build; its place isn't.
+                        String sibling = "";
+                        if ("next".equals(intent.getStringExtra("sibling"))) {
+                            android.view.View next = null;
+                            if (found.getParent() instanceof android.view.ViewGroup) {
+                                android.view.ViewGroup group = (android.view.ViewGroup) found.getParent();
+                                int position = group.indexOfChild(found);
+                                if (position >= 0 && position + 1 < group.getChildCount()) next = group.getChildAt(position + 1);
+                            }
+                            if (next == null || !next.isShown()) {
+                                Log.i(TAG, "ok findtext none (no shown view after the match; " + matches + " matches" + places + ")");
+                                break;
+                            }
+                            found = next;
+                            sibling = " sibling=" + next.getClass().getSimpleName();
                         }
                         int[] at = new int[2];
                         found.getLocationOnScreen(at);
@@ -1091,7 +1134,19 @@ public final class Probe extends Instrumentation {
                             }
                             clicked = target == null ? " clicked=no clickable ancestor" : " clicked=" + target.performClick();
                         }
-                        Log.i(TAG, "ok findtext found at=" + at[0] + "," + at[1] + " size=" + found.getWidth() + "x" + found.getHeight() + clicked
+                        if (holdMs > 0) {
+                            android.view.View root = found.getRootView();
+                            int[] inWindow = new int[2];
+                            found.getLocationInWindow(inWindow);
+                            float x = inWindow[0] + found.getWidth() / 2f;
+                            float y = inWindow[1] + found.getHeight() / 2f;
+                            long down = android.os.SystemClock.uptimeMillis();
+                            touch(root, down, down, android.view.MotionEvent.ACTION_DOWN, x, y);
+                            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> touch(root, down,
+                                    android.os.SystemClock.uptimeMillis(), android.view.MotionEvent.ACTION_UP, x, y), holdMs);
+                            clicked += " held=" + holdMs + "ms";
+                        }
+                        Log.i(TAG, "ok findtext found at=" + at[0] + "," + at[1] + " size=" + found.getWidth() + "x" + found.getHeight() + sibling + clicked
                                 + " (" + matches + " matches" + places + ")");
                         break;
                     }
@@ -3093,6 +3148,15 @@ public final class Probe extends Instrumentation {
         }
 
         @SuppressWarnings("unchecked")
+        /**
+         * Text without invisible format characters. TikTok 47.1.4 wraps numbers in direction
+         * marks, so "189 comments" and a comment's "3d" each start with one and a pattern
+         * anchored at a digit never matched.
+         */
+        private static String withoutFormatMarks(String text) {
+            return text.replaceAll("\\p{Cf}", "");
+        }
+
         private static java.util.List<android.view.View> windowRoots() throws Exception {
             Class<?> globalClass = Class.forName("android.view.WindowManagerGlobal");
             java.lang.reflect.Method getInstance = globalClass.getDeclaredMethod("getInstance");
