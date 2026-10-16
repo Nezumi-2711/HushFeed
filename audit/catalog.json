@@ -8544,11 +8544,12 @@
     "steps": [
      {
       "set": {
-       "block_webview_js_interfaces": "true"
+       "block_webview_js_interfaces": "true",
+       "open_external_links": "false"
       }
      },
      {
-      "open": "url:https://www.tiktok.com/legal/terms-of-service"
+      "open": "url:snssdk1233://webview?url=https%3A%2F%2Fwww.tiktok.com%2Flegal%2Fterms-of-service"
      },
      {
       "log": "Browser privacy guard: JavaScript bridge (withheld from|restored for) ",
@@ -8562,7 +8563,7 @@
     "auto": true
    }
   ],
-  "notes": "The guard logs only when it changes a WebView's bridge state (BrowserPrivacyGuard.prepareForPage), so it needs a page that is not already in the state the switch asks for. A tiktok.com legal page is a trusted host, which restores or leaves the bridges (the line may then not appear); a stronger proof is to load an untrusted page and run the probe webview-bridges (async answer \"bridge-exposure webview=N origin=... tracked=T exposed=[]\"). The repo records no deep link that loads an arbitrary external page in TikTok's browser, so that half stays manual: from a profile with a bio link or a shop link, open it, then run probe webview-bridges and expect exposed=[]."
+  "notes": "The guard logs only when it changes a WebView's bridge state (BrowserPrivacyGuard.prepareForPage), so it needs a page that is not already in the state the switch asks for. A tiktok.com legal page is a trusted host, which restores or leaves the bridges (the line may then not appear); a stronger proof is to load an untrusted page and run the probe webview-bridges (async answer \"bridge-exposure webview=N origin=... tracked=T exposed=[]\"). The repo records no deep link that loads an arbitrary external page in TikTok's browser, so that half stays manual: from a profile with a bio link or a shop link, open it, then run probe webview-bridges and expect exposed=[]. TikTok 47.1.4 resolves no activity for a plain https://www.tiktok.com link, so the page opens through snssdk1233://webview?url=<encoded page> (DeepLinkActivityV2), with Open external links directly off so it stays in TikTok's browser (2026-10-16)."
  },
  {
   "name": "Keep a streak going",
@@ -9590,7 +9591,8 @@
      {
       "probe": "report",
       "expect": "Location governor: blocked (getLastKnownLocation|requestSingleUpdate|requestLocationUpdates)",
-      "waitMs": 10000
+      "waitMs": 10000,
+      "precondition": true
      }
     ],
     "auto": true
