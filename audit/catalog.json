@@ -6368,7 +6368,7 @@
       "extras": {
        "find": "i93"
       },
-      "expect": "id=i93\\b[^\\n]* shown=true"
+      "expect": "id=i93\\b[^\\n]* size=\\d+x[1-9]\\d*\\b[^\\n]* shown=true"
      },
      {
       "set": {
@@ -6389,7 +6389,7 @@
       "extras": {
        "find": "i93"
       },
-      "expectNot": "id=i93\\b[^\\n]* shown=true"
+      "expectNot": "id=i93\\b[^\\n]* size=\\d+x[1-9]\\d*\\b[^\\n]* shown=true"
      },
      {
       "set": {
@@ -6415,7 +6415,7 @@
     "auto": true
    }
   ],
-  "notes": "i93 is the favorite button id the overlay hider also uses for the Save entry of the right column list (hide_rail_favourite), so a failed 'on' phase can be the rail switch rather than this one; the check forces hide_rail_favourite off first. The patch targets VideoFavoriteAssem's root LinearLayout, which may be the parent of i93: if i93 stays shown=true with the switch on, read its 'under=' chain in the views output and check the parent's vis= is 8."
+  "notes": "i93 is the favorite button id the overlay hider also uses for the Save entry of the right column list (hide_rail_favourite), so a failed 'on' phase can be the rail switch rather than this one; the check forces hide_rail_favourite off first. The patch targets VideoFavoriteAssem's root LinearLayout, which may be the parent of i93: if i93 stays shown=true with the switch on, read its 'under=' chain in the views output and check the parent's vis= is 8. Seen 2026-10-16 on 47.1.4: with the switch on, i93 stays vis=0 and shown=true but is 0 pixels high, since its child i94 (the assem's root) is GONE, and the bookmark is gone from the column. So the check reads 'drawn' as shown with a height above 0."
  },
  {
   "name": "Hide feed search button",
@@ -7268,9 +7268,6 @@
       "open": "profile"
      },
      {
-      "wait": 3500
-     },
-     {
       "log": "Profile shortcuts: .* hidden",
       "within": 12000
      },
@@ -7298,7 +7295,7 @@
     "auto": true
    }
   ],
-  "notes": "Which shortcuts exist depends on the account: the test account shows whatever the server sends (often TikTok Studio, sometimes Your orders). If it has none, the catalog is empty and both checks fail for lack of a precondition rather than a bug. The shortcut titles typed here are English; the checklist normally stores a kind or feature id, and typed titles hide alike (ProfileShortcuts.canonical). Thoughts (hide_profile_thoughts, restart-required) removes the Thoughts bubble; it is a visual check only."
+  "notes": "Which shortcuts exist depends on the account: the test account shows whatever the server sends (often TikTok Studio, sometimes Your orders). If it has none, the catalog is empty and both checks fail for lack of a precondition rather than a bug. The shortcut titles typed here are English; the checklist normally stores a kind or feature id, and typed titles hide alike (ProfileShortcuts.canonical). Thoughts (hide_profile_thoughts, restart-required) removes the Thoughts bubble; it is a visual check only. On 47.1.4 the test account is served Watch history, LIVE (live events), Showcase, Subscription (live subscription) and Shop (seen 2026-10-16), so Shop and LIVE events in the typed list match by kind."
  },
  {
   "name": "Hide search suggestions",
@@ -8223,6 +8220,10 @@
       "restart": true
      },
      {
+      "log": "Music disc: music_animation_close_exp came back",
+      "within": 10000
+     },
+     {
       "open": "feed"
      },
      {
@@ -8235,10 +8236,6 @@
       },
       "expect": "spun the disc",
       "expectNot": "held the disc"
-     },
-     {
-      "log": "Music disc: music_animation_close_exp came back",
-      "within": 8000
      },
      {
       "set": {
@@ -8537,11 +8534,12 @@
       "open": "url:https://www.tiktok.com/legal/terms-of-service"
      },
      {
-      "wait": 4000
+      "log": "Browser privacy guard: JavaScript bridge (withheld from|restored for) ",
+      "within": 12000,
+      "precondition": true
      },
      {
-      "log": "Browser privacy guard: JavaScript bridge (withheld from|restored for) ",
-      "within": 12000
+      "back": true
      }
     ],
     "auto": true
