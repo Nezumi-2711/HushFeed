@@ -2172,3 +2172,9 @@ Show translation options in Language settings	Dil ayarlarında çeviri seçenekl
 Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.	TikTok'un Ayarlar ve gizlilik altındaki Dil sayfasında yalnızca Uygulama dilini gören hesaplar için çeviri satırlarını geri getirir.
 Only on the sides of the video	Yalnızca videonun kenarlarında
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Uzun basma seçimin yalnızca videonun sol ve sağ üçte birinde çalışır. Ortada basmak yine TikTok'un kendi menüsünü açar. Uzun basma için TikTok varsayılanı dışında bir seçim gerekir.
+Where the time goes	Süre nerede görünsün
+Beside the bar	Çubuğun yanında
+Above the bar	Çubuğun üstünde
+Above puts the time over the left end of the bar while nothing on screen is in the way, and beside the bar when something is.	Çubuğun üstünde, ekranda yolunda bir şey olmadığı sürece süreyi çubuğun sol ucunun üstüne koyar, bir şey olduğunda çubuğun yanına koyar.
+Full-width progress bar	Tam genişlikte ilerleme çubuğu
+Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	İlerleme çubuğu, TikTok'un her iki uçta bıraktığı boşluk olmadan ekranın bir kenarından diğerine uzanır.

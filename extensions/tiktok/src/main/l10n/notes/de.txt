@@ -4,6 +4,8 @@
 
 * **TikTok:** Die LIVE-Liste Videoqualität zeigt ihre Zeilen im Dunkelmodus nicht mehr weiß auf weiß (#57).
 
+* **TikTok:** Zwei neue Optionen für den Fortschrittsbalken: Die Zeit kann über dem Balken stehen, und der Balken kann von Rand zu Rand laufen (#173).
+
 * **TikTok:** Ein neuer Schalter beschränkt deine Auswahl bei Langes Drücken auf die Seiten des Videos, sodass ein Druck in der Mitte weiterhin TikToks Menü öffnet (#136).
 
 * **TikTok:** Ein neuer Schalter fügt „Diesen Kommentierenden blockieren“ zum Menü hinzu, das sich beim langen Drücken auf einen Kommentar öffnet (#169).

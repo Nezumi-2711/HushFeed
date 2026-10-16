@@ -525,6 +525,14 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting SHOW_SEEKBAR = new BooleanSetting("show_seekbar", TRUE);
     /** The time played and the video's length at the end of the progress bar (#90). */
     public static final BooleanSetting SEEKBAR_TIME = new BooleanSetting("seekbar_time", FALSE);
+    /**
+     * Where that time goes: "beside" (the end of the bar's row, the default) or "above" (over the
+     * bar's left end, falling back to beside while text on screen reaches into that spot) (#173).
+     */
+    public static final StringSetting SEEKBAR_TIME_PLACEMENT = new StringSetting(
+            "seekbar_time_placement", "beside", Setting.parent(SEEKBAR_TIME));
+    /** The progress bar runs from screen edge to screen edge instead of stopping at TikTok's side gap (#173). */
+    public static final BooleanSetting SEEKBAR_FULL_WIDTH = new BooleanSetting("seekbar_full_width", FALSE);
     /** A larger handle and a slightly thicker line on the progress bar at rest (#90). */
     public static final BooleanSetting SEEKBAR_BIG_HANDLE = new BooleanSetting("seekbar_big_handle", FALSE);
     /** A line along the bottom of a video story that can be dragged to seek (#72). */

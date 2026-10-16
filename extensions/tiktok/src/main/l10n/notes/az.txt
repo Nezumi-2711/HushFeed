@@ -4,6 +4,8 @@
 
 * **TikTok:** LIVE-ın Video keyfiyyəti siyahısı qaranlıq rejimdə sətirlərini artıq ağ fonda ağ göstərmir (#57).
 
+* **TikTok:** İrəliləyiş paneli üçün iki yeni seçim: vaxt panelin üstündə görünə bilər və panel kənardan kənara uzana bilər (#173).
+
 * **TikTok:** Yeni açar Uzun basma seçimini videonun yanlarında saxlayır, beləliklə ortada basmaq yenə TikTok menyusunu açır (#136).
 
 * **TikTok:** Yeni açar şərhə basıb saxlayanda açılan menyuya Bu şərh yazanı bloklayın seçimini əlavə edir (#169).

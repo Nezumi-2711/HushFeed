@@ -4,6 +4,8 @@
 
 * **TikTok:** Daftar Kualitas video LIVE tidak lagi menampilkan barisnya putih di atas putih dalam mode gelap (#57).
 
+* **TikTok:** Dua pilihan baru untuk bilah progres: waktu bisa ditampilkan di atas bilah, dan bilah bisa membentang dari tepi ke tepi (#173).
+
 * **TikTok:** Sakelar baru membatasi pilihan Tekan lama di sisi video, jadi tekan di tengah tetap membuka menu TikTok (#136).
 
 * **TikTok:** Sakelar baru menambahkan Blokir pengomentar ini ke menu yang terbuka saat komentar ditekan lama (#169).

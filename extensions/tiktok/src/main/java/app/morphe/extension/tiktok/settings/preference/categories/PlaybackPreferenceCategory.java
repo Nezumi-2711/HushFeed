@@ -169,6 +169,19 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                             + "while it's on screen.",
                     Settings.SEEKBAR_TIME
             ));
+            addPreference(new ChoicePreference(context, "Where the time goes",
+                    Settings.SEEKBAR_TIME_PLACEMENT,
+                    new String[]{"Beside the bar", "Above the bar"},
+                    new String[]{"beside", "above"})
+                    .withNote("Above puts the time over the left end of the bar while nothing on "
+                            + "screen is in the way, and beside the bar when something is."));
+            addPreference(new TogglePreference(
+                    context,
+                    "Full-width progress bar",
+                    "Run the progress bar from one screen edge to the other, without the gap "
+                            + "TikTok leaves at each end.",
+                    Settings.SEEKBAR_FULL_WIDTH
+            ));
             addPreference(new TogglePreference(
                     context,
                     "Bigger progress bar handle",
