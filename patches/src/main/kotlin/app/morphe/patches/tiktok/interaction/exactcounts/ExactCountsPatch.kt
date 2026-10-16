@@ -9,6 +9,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.string
+import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.shared.compat.AppCompatibilities
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
@@ -78,6 +79,25 @@ internal object CompactCountFormatterFingerprint : Fingerprint(
 /** How many compact count formatters a build may have. */
 internal val COMPACT_COUNT_FORMATTERS = 4..5
 
+/**
+ * The count formatter that's handed the video too (X/0HAE.LIZIZ on 47.1.4), behind the comment
+ * sheet's title and the like and viewer lists. For someone else's video it gives the count straight
+ * to TikTok's general number formatter and never reaches the compact formatter beside it, so it
+ * needs a hook of its own.
+ */
+internal object VideoCountFormatterFingerprint : Fingerprint(
+    returnType = "Ljava/lang/String;",
+    parameters = listOf("Lcom/ss/android/ugc/aweme/feed/model/Aweme;", "J"),
+    custom = { method, _ ->
+        AccessFlags.STATIC.isSet(method.accessFlags) && method.compactNumberFormatterCalls() == 1 &&
+            // The hook needs one register below the video and the long's pair.
+            (method.implementation?.registerCount ?: 0) > 3
+    },
+)
+
+/** How many count formatters taking the video a build may have. */
+internal val VIDEO_COUNT_FORMATTERS = 1..2
+
 @Suppress("unused")
 val showExactCountsPatch = bytecodePatch(
     name = "Show exact counts",
@@ -108,19 +128,28 @@ val showExactCountsPatch = bytecodePatch(
                     "${compactFormatters.map { it.originalClassDef.type }}",
             )
         }
-        (formatters + compactFormatters).forEach { match ->
-            val method = match.method
-            // p0 and p1 hold the long. v0 is a local the method writes before it reads.
-            method.addInstructionsWithLabels(
-                0,
-                """
-                    invoke-static {p0, p1}, $EXACT_COUNTS_DESCRIPTOR->format(J)Ljava/lang/String;
-                    move-result-object v0
-                    if-eqz v0, :tiktok
-                    return-object v0
-                """,
-                ExternalLabel("tiktok", method.getInstruction(0)),
+        val videoFormatters = VideoCountFormatterFingerprint.matchAll()
+        if (videoFormatters.size !in VIDEO_COUNT_FORMATTERS) {
+            throw PatchException(
+                "Show exact counts: ${videoFormatters.size} count formatters taking the video: " +
+                    "${videoFormatters.map { it.originalClassDef.type }}",
             )
         }
+        // p0 and p1 hold the long in the plain formatters, p1 and p2 where p0 is the video.
+        (formatters + compactFormatters).forEach { it.method.askFirst("p0, p1") }
+        videoFormatters.forEach { it.method.askFirst("p1, p2") }
     }
 }
+
+/** Asks ExactCounts first, with the long in [count]. v0 is a local the method writes before it reads. */
+private fun MutableMethod.askFirst(count: String) =
+    addInstructionsWithLabels(
+        0,
+        """
+            invoke-static {$count}, $EXACT_COUNTS_DESCRIPTOR->format(J)Ljava/lang/String;
+            move-result-object v0
+            if-eqz v0, :tiktok
+            return-object v0
+        """,
+        ExternalLabel("tiktok", getInstruction(0)),
+    )

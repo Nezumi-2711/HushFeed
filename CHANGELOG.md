@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** Show exact counts now also reaches the comment count at the top of the comment sheet and the counts on the likes and viewers lists. On someone else's video TikTok wrote those with a formatter of its own, so they still read 12.3K with the switch on.
+
 * **TikTok:** Hide suggested accounts shows a restart button now when you flip it. The Friends tab and profiles keep the suggestion cards they've already drawn until TikTok restarts, so turning it on while TikTok was open seemed to do nothing there. The Inbox still changes right away.
 
 * **TikTok:** Copy the full link for short links now works with Clean up shared links off. TikTok shortens a link that still has its tracking on its own servers, after Hushfeed has already seen it, so the short link reached the clipboard untouched. It also takes the tiktok.com/t/ short form now, not only vt.tiktok.com and vm.tiktok.com.
