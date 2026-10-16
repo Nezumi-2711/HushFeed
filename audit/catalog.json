@@ -11666,8 +11666,14 @@
       "wait": 3000
      },
      {
+      "probe": "videoinfo",
+      "expect": "storyStatus=[1-9]\\d*/",
+      "retrySwipe": 20,
+      "precondition": true
+     },
+     {
       "shot": "rings-off",
-      "review": "Find a For You video whose creator avatar has a coloured story ring or a pulsing LIVE ring (scroll up to 20 videos; none are served on some accounts, then mark n/a)."
+      "review": "The creator avatar on the rail has a coloured story ring or a pulsing LIVE ring (the check swiped to a creator with a story first)."
      },
      {
       "set": {
@@ -11685,8 +11691,14 @@
       "wait": 3000
      },
      {
+      "probe": "videoinfo",
+      "expect": "storyStatus=[1-9]\\d*/",
+      "retrySwipe": 20,
+      "precondition": true
+     },
+     {
       "shot": "rings-on",
-      "review": "Same creator or any: no ring around any avatar, and a tap target on the avatar opens the profile, not a story or LIVE. Do not tap."
+      "review": "The creator avatar on the rail has no ring, though this creator has a story (the check swiped to one first). Do not tap."
      },
      {
       "set": {
@@ -11698,7 +11710,7 @@
     "auto": false
    }
   ],
-  "notes": "Whether a ring exists to remove depends on whether the creator in the feed has a story or is live right then, which the test account cannot cause, so the runtime effect is review only. The Probe 'finddesc' / 'views' actions have no stable id for the ring (it is a drawable on the avatar). The hook returns 0 from User.getStoryStatus and filters the author-live and User.isLive reads, so it is mostly proved by the injected calls plus the diagnostic registration. 'story-status-answer' reads the hook itself: videoinfo's storyStatus=<stored>/<getter> on a creator with a story (a cyan ring was served on 2026-10-16). If it answers storyStatus=null/..., the stored field was renamed: find User's int field behind getStoryStatus in the dex and update the probe."
+  "notes": "Whether a ring exists to remove depends on whether the creator in the feed has a story or is live right then, which the test account cannot cause, so the runtime effect is review only. The Probe 'finddesc' / 'views' actions have no stable id for the ring (it is a drawable on the avatar). The hook returns 0 from User.getStoryStatus and filters the author-live and User.isLive reads, so it is mostly proved by the injected calls plus the diagnostic registration. 'story-status-answer' reads the hook itself: videoinfo's storyStatus=<stored>/<getter> on a creator with a story (a cyan ring was served on 2026-10-16). If it answers storyStatus=null/..., the stored field was renamed: find User's int field behind getStoryStatus in the dex and update the probe. ring-gone swipes to a creator with a story before each shot (videoinfo storyStatus 1 or more, up to 20 swipes, else inconclusive), since the feed's first video rarely has one (2026-10-16)."
  },
  {
   "name": "Remove content credential and card scanner assets",
