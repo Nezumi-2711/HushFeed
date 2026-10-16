@@ -8546,7 +8546,8 @@
      {
       "set": {
        "enable_long_press_speed_lock": "true",
-       "hold_speed": "2"
+       "hold_speed": "2",
+       "remembered_speed_v2": "1.0"
       }
      },
      {
@@ -8563,6 +8564,12 @@
      },
      {
       "wait": 2500
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "holdslide",
@@ -8602,7 +8609,8 @@
      {
       "set": {
        "enable_long_press_speed_lock": "false",
-       "hold_speed": "2"
+       "hold_speed": "2",
+       "remembered_speed_v2": "1.0"
       }
      },
      {
@@ -8619,6 +8627,12 @@
      },
      {
       "wait": 2500
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "probe": "holdslide",
@@ -8652,7 +8666,7 @@
     "auto": true
    }
   ],
-  "notes": "The 2026-09-22 device notes say TikTok's pull-down lock only works past the first video (on the first one the feed's pull to refresh takes the drag), so both checks swipe up twice first. holdslide injects the hold and slide inside TikTok's own window; it presses the left third of the video, never a rail button: on 47.1.4 a hold in the middle opens TikTok's long-press menu and the 2x hold lives on the sides (seen 2026-10-16). The player handle X.037t / LJIILIIL is the 47.1.4 one from the spec. The lock distance default is 140 dp (FeatureControls.DEFAULT_LONG_PRESS_LOCK_DISTANCE_DP), so the 500 px slide is enough on a 420 dpi screen. The checks leave the video with a swipe because a locked 2x would otherwise carry into the next patch's checks (the runner also restarts after a patch that set a restart-gated key)."
+  "notes": "The 2026-09-22 device notes say TikTok's pull-down lock only works past the first video (on the first one the feed's pull to refresh takes the drag), so both checks swipe up twice first. holdslide injects the hold and slide inside TikTok's own window; it presses the left third of the video, never a rail button: on 47.1.4 a hold in the middle opens TikTok's long-press menu and the 2x hold lives on the sides (seen 2026-10-16). The player handle X.037t / LJIILIIL is the 47.1.4 one from the spec. The lock distance default is 140 dp (FeatureControls.DEFAULT_LONG_PRESS_LOCK_DISTANCE_DP), so the 500 px slide is enough on a 420 dpi screen. The checks leave the video with a swipe because a locked 2x would otherwise carry into the next patch's checks (the runner also restarts after a patch that set a restart-gated key). TikTok marks the lock as a chosen speed (swipe_up_lock_persist) and Remember the last speed saves it, so both checks set remembered_speed_v2 to 1.0 first and the runner puts the phone's own value back afterwards; without that the lock check left 2.0 for every later video. Each hold waits for a normal video (photo=false, ad=false), since ads and photos have no side hold (2026-10-16)."
  },
  {
   "name": "In-app browser privacy guard",
@@ -10881,11 +10895,12 @@
    },
    {
     "id": "no-default-plays-at-one",
-    "what": "With the default speed switch off a newly shown video plays at 1.0.",
+    "what": "With the default speed switch off and the remembered speed at 1.0, a newly shown video plays at 1.0, not at the default the video before it got.",
     "steps": [
      {
       "set": {
-       "default_speed_enabled": "false"
+       "default_speed_enabled": "false",
+       "remembered_speed_v2": "1.0"
       }
      },
      {
@@ -10929,6 +10944,12 @@
       "wait": 2000
      },
      {
+      "probe": "videoinfo",
+      "expect": "photo=false.*ad=false",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
       "probe": "holdslide",
       "extras": {
        "x": "180",
@@ -10952,7 +10973,7 @@
     "auto": true
    }
   ],
-  "notes": "Remember the last speed (remember_playback_speed, on by default) only changes when the person picks a speed in TikTok's speed menu, which is a sheet over the video that the runner cannot open by a stable selector, so it is not exercised; the menu extras (custom_speeds, restart-gated) are the same. The hold log is written once per value per process (loggedHoldSpeed), which is why the check restarts first and reads the export, not logcat (the line is written mid-hold, before the runner's marker). The hold presses the middle of the video, never a rail button."
+  "notes": "Remember the last speed (remember_playback_speed, on by default) only changes when the person picks a speed in TikTok's speed menu, which is a sheet over the video that the runner cannot open by a stable selector, so it is not exercised; the menu extras (custom_speeds, restart-gated) are the same. The hold log is written once per value per process (loggedHoldSpeed), which is why the check restarts first and reads the export, not logcat (the line is written mid-hold, before the runner's marker). The hold presses the middle of the video, never a rail button. The side hold only exists on a normal video: on an ad, a photo or LIVE TikTok's side press opens the long-press panel, so the hold waits for photo=false and ad=false. no-default-plays-at-one pins remembered_speed_v2 to 1.0, since with Default speed off a new video plays at the remembered speed and the hold-and-slide lock is remembered as a choice (2026-10-16)."
  },
  {
   "name": "Prefer H.264 playback",
