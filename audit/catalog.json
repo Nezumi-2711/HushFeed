@@ -2531,6 +2531,19 @@
       "open": "profile"
      },
      {
+      "tap": {
+       "desc": "^Profile menu$"
+      }
+     },
+     {
+      "wait": 1500
+     },
+     {
+      "tap": {
+       "text": "^Settings and privacy$"
+      }
+     },
+     {
       "wait": 2500
      },
      {
@@ -2567,12 +2580,15 @@
      },
      {
       "back": true
+     },
+     {
+      "back": true
      }
     ],
     "auto": true
    }
   ],
-  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). A video's sheet gets only Copy video ID (seen 2026-10-16), and a profile's sheet gets Copy username and Copy user ID (CopyIds.targetsOf, itemType user), so the second half opens the own profile's Share profile button. Nothing on either sheet is tapped. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile."
+  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). A video's sheet gets only Copy video ID (seen 2026-10-16), and a profile's sheet gets Copy username and Copy user ID (CopyIds.targetsOf, itemType user), so the second half opens Share profile. On 47.1.4 the own profile has no Share profile button; the row is in Settings and privacy under Account, so the check goes Profile menu > Settings and privacy > Share profile (2026-10-16). Nothing on either sheet is tapped. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile."
  },
  {
   "name": "Copy comments without username",
@@ -12378,7 +12394,7 @@
     "auto": true
    }
   ],
-  "notes": "Copy link only writes the clipboard (no recipient is touched; the share sheet's contact row is never tapped). The Share button is clicked by its 47.1.4 view id wct (view-id-anchors.txt SHARE_BUTTON_IDS); the English \"Copy link\" label is unverified on a phone: if probe click answers \"no shown view matches\" read the rail with probe views, and note the copy happens at the sheet cell's click. On 47.1.4 Copy link gives a short vt.tiktok.com link with no query (seen 2026-10-16), so both checks turn on expand_short_share_links (Copy the full link for short links), which swaps in the full link through the same sanitizer. A full link proves the expander, its query the sanitize switch. video-link answers \"not-a-tiktok-video-url host=... query=...\" when the swap didn't happen, and \"clip=empty\" when nothing was copied. The setting key is the shared morphe_sanitize_sharing_links (BaseSettings), not in Settings.java. The swap domain (custom_share_domain) must be empty for the plain-URL expectation, which is its default; the checks do not touch it because the runner cannot send an empty value (an empty -e value is dropped by the shell)."
+  "notes": "Copy link only writes the clipboard (no recipient is touched; the share sheet's contact row is never tapped). The Share button is clicked by its 47.1.4 view id wct (view-id-anchors.txt SHARE_BUTTON_IDS); the English \"Copy link\" label is unverified on a phone: if probe click answers \"no shown view matches\" read the rail with probe views, and note the copy happens at the sheet cell's click. On 47.1.4 Copy link gives a short vt.tiktok.com link with no query (seen 2026-10-16), so both checks turn on expand_short_share_links (Copy the full link for short links), which swaps in the full link through the same sanitizer. A full link proves the expander, its query the sanitize switch. video-link answers \"not-a-tiktok-video-url host=... query=... path=<shape>\" when the swap didn't happen (shape is video, photo, t-short, short, root or other-N-segments, never the link), and \"clip=empty\" when nothing was copied. The setting key is the shared morphe_sanitize_sharing_links (BaseSettings), not in Settings.java. The swap domain (custom_share_domain) must be empty for the plain-URL expectation, which is its default; the checks do not touch it because the runner cannot send an empty value (an empty -e value is dropped by the shell). 47.1.4 also hands out the tiktok.com/t/<code>/ short form, which the expander didn't take until 2026-10-16: the switch-off check then read host=www.tiktok.com query=false with no /video/."
  },
  {
   "name": "Settings",
@@ -12484,7 +12500,7 @@
    },
    {
     "id": "home-long-press",
-    "what": "Holding the Home tab opens Hushfeed's settings (home_tab_opens_settings, on by default), and a Hushfeed row sits in TikTok's Settings and privacy.",
+    "what": "Holding the Home tab opens Hushfeed's settings (home_tab_opens_settings, on by default), and the Hushfeed row in TikTok's Settings and privacy opens them too.",
     "steps": [
      {
       "set": {
@@ -12539,12 +12555,23 @@
       "wait": 2500
      },
      {
+      "tap": {
+       "text": "^Hushfeed$"
+      }
+     },
+     {
+      "wait": 2500
+     },
+     {
       "probe": "findtext",
       "extras": {
-       "text": "(?i)^hushfeed",
+       "text": "(?i)^hushfeed$",
        "match": "regex"
       },
       "expect": "ok findtext found"
+     },
+     {
+      "back": true
      },
      {
       "back": true
@@ -12556,7 +12583,7 @@
     "auto": true
    }
   ],
-  "notes": "The probe's settings action starts the same activity the row does, so the first three checks prove the page, its sections and the registration; the two entry points a person uses (the row inside Settings and privacy and the Home long press) need the real gesture. Section rows show only when their patches' status flags are set (Section.isAvailable in TikTokPreferenceFragment.java), which makes the home page a second applied-patch proof. Labels are English. 'Hide new followers' is an Inbox row title near the top of that page."
+  "notes": "The probe's settings action starts the same activity the row does, so the first three checks prove the page, its sections and the registration; the two entry points a person uses (the row inside Settings and privacy and the Home long press) need the real gesture. Section rows show only when their patches' status flags are set (Section.isAvailable in TikTokPreferenceFragment.java), which makes the home page a second applied-patch proof. Labels are English. 'Hide new followers' is an Inbox row title near the top of that page. Settings and privacy is a Compose screen on 47.1.4 (SettingContainerActivity), which the probe's findtext can't see into, so the check taps the Hushfeed row through the dump and reads Hushfeed's own page (2026-10-16)."
  },
  {
   "name": "Share sheet tools",
