@@ -8118,7 +8118,9 @@
       "extras": {
        "find": "o97"
       },
-      "expect": "id=o97\\b[^\\n]* shown=true"
+      "expect": "id=o97\\b[^\\n]* shown=true",
+      "retrySwipe": 8,
+      "precondition": true
      },
      {
       "set": {
@@ -8136,7 +8138,9 @@
       "extras": {
        "find": "o97"
       },
-      "expectNot": "id=o97\\b[^\\n]* shown=true"
+      "expectNot": "id=o97\\b[^\\n]* shown=true",
+      "expect": "id=o97 vis=8 [^\\n]*under=exn\\(vis=0",
+      "retrySwipe": 4
      },
      {
       "set": {
@@ -8420,7 +8424,7 @@
     "auto": true
    }
   ],
-  "notes": "Eighteen switches in one patch; the checks above cover the ones with a view id or a HookStatus line. Not automated: Hide surveys (f98) and location labels / effect tags only exist on videos that carry them (naturally served; Roadmap_Blocked lists the visual-search and survey surfaces as unserved), and Hide full screen button needs a landscape video. Both are covered only by the registered check and the hookdetails 'overlay' family. View ids are 47.1.4 names read from VideoOverlayHider's id lists (obfuscated, they change every TikTok build). A hider acts on layout passes, so each 'on' phase swipes once and waits before it reads. 'morphe_debug' is the Log diagnostics setting; the Music disc log line only prints with it on. The right column list rows (hide_rail_*) have no row title of their own, they are items in the Right column checklist."
+  "notes": "Eighteen switches in one patch; the checks above cover the ones with a view id or a HookStatus line. Not automated: Hide surveys (f98) and location labels / effect tags only exist on videos that carry them (naturally served; Roadmap_Blocked lists the visual-search and survey surfaces as unserved), and Hide full screen button needs a landscape video. Both are covered only by the registered check and the hookdetails 'overlay' family. View ids are 47.1.4 names read from VideoOverlayHider's id lists (obfuscated, they change every TikTok build). A hider acts on layout passes, so each 'on' phase swipes once and waits before it reads. 'morphe_debug' is the Log diagnostics setting; the Music disc log line only prints with it on. The right column list rows (hide_rail_*) have no row title of their own, they are items in the Right column checklist. Some videos have no music line (TikTok puts a search suggestion bar there and collapses exn), so the music check first swipes to a video that shows one, and the hidden state it asks for is o97 GONE under a visible exn (2026-10-16)."
  },
  {
   "name": "Hold-and-slide 2x lock",
