@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** With `Log diagnostics` on, an exported report now notes each LIVE room TikTok enters and whether a LIVE comment went to that same room. It's for comments that show for you but never reach the room (#110). Room ids and what you typed stay out of it.
+
 * **TikTok:** A long video on a slow connection saves now instead of stopping with "The video couldn't be saved". Every save had two minutes, and a big file was cut off while it was still coming in. A download that keeps moving gets up to 20 minutes, and one that goes 30 seconds without any data still stops (#179).
 
 * **TikTok:** Hide the rewards shortcut shows a restart button now when you flip it. Hushfeed hides the gift box as TikTok draws the profile, so a profile that was already open kept it until TikTok restarted.
