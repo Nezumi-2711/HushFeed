@@ -4530,15 +4530,14 @@
    },
    {
     "id": "content-filters",
-    "what": "With photo, verified, AI-labelled, LIVE and long-video filters on, none of ten videos swiped through is any of those.",
+    "what": "With photo, verified, AI-labelled and LIVE filters on, none of ten videos swiped through is any of those.",
     "steps": [
      {
       "set": {
        "hide_image": "true",
        "hide_verified": "true",
        "hide_ai_generated": "true",
-       "hide_live": "true",
-       "max_video_seconds": "20"
+       "hide_live": "true"
       }
      },
      {
@@ -4555,7 +4554,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4565,7 +4564,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4575,7 +4574,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4585,7 +4584,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4595,7 +4594,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4605,7 +4604,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4615,7 +4614,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4625,7 +4624,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4635,7 +4634,7 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "swipe": "up"
@@ -4645,14 +4644,87 @@
      },
      {
       "probe": "videoinfo",
-      "expectNot": "photo=true|verified=true|aiLabel=true|live=true|durationMs=(2[1-9]\\d{3}|[3-9]\\d{4}|\\d{6,})"
+      "expectNot": "photo=true|verified=true|aiLabel=true|live=true"
      },
      {
       "set": {
        "hide_image": "false",
        "hide_verified": "false",
        "hide_ai_generated": "false",
-       "hide_live": "false",
+       "hide_live": "false"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     }
+    ],
+    "auto": true
+   },
+   {
+    "id": "length-limit",
+    "what": "With Maximum video length 20, the filter removes videos over 20 seconds from what TikTok sends (its own item line says FILTER(QualityFilter)).",
+    "steps": [
+     {
+      "set": {
+       "max_video_seconds": "20",
+       "morphe_debug": "true"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 1800
+     },
+     {
+      "log": "=> FILTER\\(QualityFilter\\)",
+      "fromStep": 2,
+      "within": 3000
+     },
+     {
+      "set": {
        "max_video_seconds": "0"
       }
      },
@@ -4740,7 +4812,7 @@
     "auto": true
    }
   ],
-  "notes": "The baseline is not asserted: whether a photo, verified, AI-labelled or LIVE item would have appeared in ten swipes is up to the For You feed, so a pass can be vacuous. Read the [FEED FILTER] lines in the export (probe report) for 'removed' counts to see the filter did work. The ads check is the most reliable because ads are served in nearly every session; if no ad is served in eight videos it is vacuous too. Keyword, creator, sound, region, language, view/like/comment/share ranges and Creator exceptions use text and numbers the probe does not expose per video, so they are not exercised; the unit tests in extensions/tiktok/src/test cover the rules. The settings rows are on Hushfeed settings > Feed filter. The restart is needed after changing a restart-flagged switch (remove_ads, hide_image, hide_ai_generated, hide_verified, hide_live)."
+  "notes": "The baseline is not asserted: whether a photo, verified, AI-labelled or LIVE item would have appeared in ten swipes is up to the For You feed, so a pass can be vacuous. Read the [FEED FILTER] lines in the export (probe report) for 'removed' counts to see the filter did work. The ads check is the most reliable because ads are served in nearly every session; if no ad is served in eight videos it is vacuous too. Keyword, creator, sound, region, language, view/like/comment/share ranges and Creator exceptions use text and numbers the probe does not expose per video, so they are not exercised; the unit tests in extensions/tiktok/src/test cover the rules. The settings rows are on Hushfeed settings > Feed filter. The restart is needed after changing a restart-flagged switch (remove_ads, hide_image, hide_ai_generated, hide_verified, hide_live). Maximum video length is soft by design: when everything one response sent would go, the video closest to the limit stays (the setting's summary says so), and 47.1.4's For You responses are often a single video, so a long one can still play. The length check reads the filter's own removals from the log (Log diagnostics on) instead of the durations on screen (2026-10-16)."
  },
  {
   "name": "Feed tab navigation",
