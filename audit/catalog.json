@@ -2556,7 +2556,7 @@
      },
      {
       "tap": {
-       "text": "^Share profile$"
+       "label": "^Share profile$"
       }
      },
      {
@@ -2596,7 +2596,7 @@
     "auto": true
    }
   ],
-  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). A video's sheet gets only Copy video ID (seen 2026-10-16), and a profile's sheet gets Copy username and Copy user ID (CopyIds.targetsOf, itemType user), so the second half opens Share profile. On 47.1.4 the own profile has no Share profile button; the row is in Settings and privacy under Account, so the check goes Profile menu > Settings and privacy > Share profile (2026-10-16). Nothing on either sheet is tapped. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile."
+  "notes": "The share sheet is opened with the probe click on the rail's Share button by its 47.1.4 view id wct (SHARE_BUTTON_IDS in view-id-anchors.txt); no recipient or app is tapped and Back closes the sheet. If click answers \"no shown view matches\" the feed was not on a video cell yet; \"N shown views match\" means two cells are on screen (add -e index). A video's sheet gets only Copy video ID (seen 2026-10-16), and a profile's sheet gets Copy username and Copy user ID (CopyIds.targetsOf, itemType user), so the second half opens Share profile. On 47.1.4 the own profile has no Share profile button; the row is in Settings and privacy under Account, so the check goes Profile menu > Settings and privacy > Share profile (2026-10-16). Nothing on either sheet is tapped. The bio long-press half (profile bio copyable, \"Bio copied\" toast) is not automated: it needs a long press on the bio text of the own profile. Settings and privacy is a Compose page whose rows carry their words in the content description with an empty text, so its rows are tapped by label, which matches either (2026-10-16)."
  },
  {
   "name": "Copy comments without username",
@@ -12656,7 +12656,7 @@
      },
      {
       "tap": {
-       "text": "^Hushfeed$"
+       "label": "^Hushfeed$"
       }
      },
      {
@@ -12683,7 +12683,7 @@
     "auto": true
    }
   ],
-  "notes": "The probe's settings action starts the same activity the row does, so the first three checks prove the page, its sections and the registration; the two entry points a person uses (the row inside Settings and privacy and the Home long press) need the real gesture. Section rows show only when their patches' status flags are set (Section.isAvailable in TikTokPreferenceFragment.java), which makes the home page a second applied-patch proof. Labels are English. 'Hide new followers' is an Inbox row title near the top of that page. Settings and privacy is a Compose screen on 47.1.4 (SettingContainerActivity), which the probe's findtext can't see into, so the check taps the Hushfeed row through the dump and reads Hushfeed's own page (2026-10-16)."
+  "notes": "The probe's settings action starts the same activity the row does, so the first three checks prove the page, its sections and the registration; the two entry points a person uses (the row inside Settings and privacy and the Home long press) need the real gesture. Section rows show only when their patches' status flags are set (Section.isAvailable in TikTokPreferenceFragment.java), which makes the home page a second applied-patch proof. Labels are English. 'Hide new followers' is an Inbox row title near the top of that page. Settings and privacy is a Compose screen on 47.1.4 (SettingContainerActivity), which the probe's findtext can't see into, so the check taps the Hushfeed row through the dump and reads Hushfeed's own page (2026-10-16). Settings and privacy is a Compose page whose rows carry their words in the content description with an empty text, so its rows are tapped by label, which matches either (2026-10-16)."
  },
  {
   "name": "Share sheet tools",

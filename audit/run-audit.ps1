@@ -152,7 +152,7 @@ if ($Validate) {
                         if ([string]$step.record -notin 'start', 'stop') { & $bad "records '$($step.record)'" }
                         elseif ($step.record -eq 'stop' -and [string]$step.transition -notin 'still', 'animated') { & $bad "expects a transition '$($step.transition)'" }
                     }
-                    { $_ -in 'tap', 'longpress' } { $target = $step.$kind; if (-not ($target.text -or $target.desc -or $target.id)) { & $bad "a $kind with no text, desc or id" } }
+                    { $_ -in 'tap', 'longpress' } { $target = $step.$kind; if (-not ($target.text -or $target.desc -or $target.label -or $target.id)) { & $bad "a $kind with no text, desc, label or id" } }
                     'apk' { if ([string]$step.apk -notin $apkKinds) { & $bad "unknown apk check '$($step.apk)'" } }
                     'shot' { if (-not $step.review) { & $bad 'a shot with no review text' } }
                     { $_ -in 'log', 'logNot' } {
@@ -461,12 +461,18 @@ function Invoke-DumpTapOnce($Target, [int]$HoldMs = 0) {
     $xml = (Invoke-DeviceShell 'cat /sdcard/hushfeed-audit.xml') -join ''
     Invoke-DeviceShell 'rm -f /sdcard/hushfeed-audit.xml' | Out-Null
     if ($xml -notlike '*<hierarchy*') { throw 'uiautomator could not dump the screen (a playing video blocks it)' }
-    $attribute, $pattern = if ($Target.text) { 'text', $Target.text } elseif ($Target.desc) { 'content-desc', $Target.desc } else { 'resource-id', $Target.id }
+    # A label is the text or the description, whichever the row has: TikTok's Compose pages
+    # (Settings and privacy) put a row's words in its description and leave its text empty.
+    $attribute, $pattern = if ($Target.text) { 'text', $Target.text } elseif ($Target.desc) { 'content-desc', $Target.desc }
+        elseif ($Target.label) { 'label', $Target.label } else { 'resource-id', $Target.id }
+    $attributes = if ($attribute -eq 'label') { @('text', 'content-desc') } else { @($attribute) }
     foreach ($node in [regex]::Matches($xml, '<node [^>]*>')) {
         # Without invisible format characters: TikTok wraps numbers in direction marks, so a
         # pattern anchored at a digit ("^3d") never matched its text.
-        $value = if ($node.Value -match " $attribute=`"([^`"]*)`"") { [Net.WebUtility]::HtmlDecode($Matches[1]) -replace '\p{Cf}', '' } else { '' }
-        if ($value -notmatch $pattern) { continue }
+        $values = foreach ($name in $attributes) {
+            if ($node.Value -match " $name=`"([^`"]*)`"") { [Net.WebUtility]::HtmlDecode($Matches[1]) -replace '\p{Cf}', '' }
+        }
+        if (@($values | Where-Object { $_ -and $_ -match $pattern }).Count -eq 0) { continue }
         $label = @('text', 'content-desc') | ForEach-Object { if ($node.Value -match " $_=`"([^`"]*)`"") { [Net.WebUtility]::HtmlDecode($Matches[1]) -replace '\p{Cf}', '' } }
         if (@($label | Where-Object { $_ -and $_.Trim().ToLowerInvariant() -match $outwardWords }).Count -gt 0) {
             throw "refused to tap '$($label -join ' / ')': it reaches other people"
