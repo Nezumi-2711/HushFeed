@@ -13470,6 +13470,50 @@
     "auto": true
    },
    {
+    "id": "comment-title-exact",
+    "what": "Review: with the switch on, the comment sheet's title writes a big comment count whole (12,345 comments, not 12.3K).",
+    "steps": [
+     {
+      "set": {
+       "show_exact_counts": "true"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "wait": 2500
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "likes=over10000",
+      "retrySwipe": 12,
+      "precondition": true
+     },
+     {
+      "probe": "comments",
+      "expect": "openComments\\([^)]*\\)=true",
+      "waitMs": 2500
+     },
+     {
+      "shot": "comment-title-exact",
+      "review": "Comment sheet title: the count is a whole number with commas (12,345 comments), never 12.3K. A video with fewer than 10,000 comments reads the same either way, so that shot is inconclusive. Do not type or post."
+     },
+     {
+      "back": true
+     },
+     {
+      "set": {
+       "show_exact_counts": "false"
+      }
+     }
+    ],
+    "auto": false
+   },
+   {
     "id": "hook-present",
     "what": "The count formatters call ExactCounts.format and the flag is registered. (The dex-string steps show the extension class or constant is shipped, the whole extension is kept in the dex; the registered-switch step is what shows the patch ran.)",
     "steps": [
@@ -13485,7 +13529,7 @@
     "auto": true
    }
   ],
-  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4."
+  "notes": "Exact counts only differ for counts of 10,000 and up (TikTok already shows 1,234 whole), so the check needs a video with a big like count; videoinfo's 'likes=over10000' bucket picks one (2,447 is written whole by TikTok itself, seen 2026-10-16). textwords takes onscreen=true, since the feed keeps the next cell's g86 laid out. The rail count view is g86 (like), ek5 (comment), i82 (save) and w_0 (share) on 47.1.4. The comment sheet title, the likes list and the viewers list come from X/0HAE.LIZIZ(Aweme, long) on 47.1.4, which for someone else's video formats the count itself and never reached the compact formatter's hook; it has its own hook since 2026-10-16 (VideoCountFormatterFingerprint). like-count-exact flips the switch live, and the next cell may already be laid out with the old text, the likely reason pass 3 read 69.4K on a photo post (to be checked after a restart)."
  },
  {
   "name": "Show follow status",
