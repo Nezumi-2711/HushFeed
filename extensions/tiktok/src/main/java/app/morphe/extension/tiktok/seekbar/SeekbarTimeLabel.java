@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -77,6 +78,10 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
     private long checkedAt;
     /** The ancestors that had clipChildren on and were given it off so the time can draw above. */
     private final List<ViewGroup> unclipped = new ArrayList<>();
+    /** The view raised over the feed while the time is above, its own Z and outline to give back. */
+    @Nullable private View raised;
+    private float raisedZ;
+    @Nullable private ViewOutlineProvider raisedOutline;
 
     private static boolean reportedShape;
 
@@ -384,12 +389,39 @@ final class SeekbarTimeLabel extends TextView implements ViewTreeObserver.OnPreD
                 unclipped.add(group);
             }
         }
+        raise(chain.isEmpty() ? null : chain.get(chain.size() - 1));
     }
 
-    /** Gives back every clipChildren this label turned off. */
+    /**
+     * The bar's strip sits under the feed in the container they share, so the feed's player, drawn
+     * after it, painted over a time lifted out of the strip (Login2 emulator, 2026-10-15). While the
+     * time is above, the outermost view of the chain draws over its siblings by a pixel of Z, with no
+     * outline so it casts no shadow; both are given back as they were.
+     */
+    private void raise(@Nullable View top) {
+        if (top == raised) return;
+        lower();
+        if (top == null) return;
+        raised = top;
+        raisedZ = top.getTranslationZ();
+        raisedOutline = top.getOutlineProvider();
+        top.setOutlineProvider(null);
+        top.setTranslationZ(raisedZ + Math.max(1f, density()));
+    }
+
+    private void lower() {
+        if (raised == null) return;
+        raised.setTranslationZ(raisedZ);
+        raised.setOutlineProvider(raisedOutline);
+        raised = null;
+        raisedOutline = null;
+    }
+
+    /** Gives back every clipChildren this label turned off, and the Z it raised. */
     private void restoreClipping() {
         for (ViewGroup group : unclipped) group.setClipChildren(true);
         unclipped.clear();
+        lower();
     }
 
     private float density() {

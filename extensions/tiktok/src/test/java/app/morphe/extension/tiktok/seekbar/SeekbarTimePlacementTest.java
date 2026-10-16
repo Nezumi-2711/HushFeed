@@ -180,6 +180,30 @@ public class SeekbarTimePlacementTest {
         assertFalse("the box around the row", inner.getClipChildren());
         assertTrue("the strip holds the spot and keeps clipping", container.getClipChildren());
         assertTrue(window.getClipChildren());
+        assertTrue("the box draws over the feed beside it", inner.getTranslationZ() > 0f);
+        assertNull("without a shadow", inner.getOutlineProvider());
+        assertEquals(0f, bar.getTranslationZ(), 0f);
+
+        Settings.SEEKBAR_TIME_PLACEMENT.save("beside");
+        tick();
+        assertEquals("its Z is given back", 0f, inner.getTranslationZ(), 0f);
+        assertNotNull("and its outline", inner.getOutlineProvider());
+    }
+
+    @Test
+    public void anIconInTheSpotKeepsTheTimeBesideTheBar() {
+        Settings.SEEKBAR_TIME.save(true);
+        Settings.SEEKBAR_TIME_PLACEMENT.save("above");
+        build();
+        // The Tako button over the bar's right end.
+        android.widget.ImageView tako = new android.widget.ImageView(context);
+        tako.setImageDrawable(new android.graphics.drawable.ColorDrawable(0xffffffff));
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(95, 95, Gravity.TOP | Gravity.END);
+        params.topMargin = 1850;
+        window.addView(tako, params);
+        layoutAll();
+
+        assertFalse(tick().isAbove());
     }
 
     @Test
