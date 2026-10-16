@@ -1475,7 +1475,7 @@
   "checks": [
    {
     "id": "live-bubble",
-    "what": "With Hide the LIVE bubble on, the bubble's check returns early (debug line 'Block popups: skipped the LIVE bubble').",
+    "what": "With Hide the LIVE bubble on, the bubble's check returns early (debug line 'Block popups: skipped the LIVE bubble'). TikTok only runs that check when its server sends a bubble, so no line in 20 seconds is inconclusive.",
     "steps": [
      {
       "set": {
@@ -1486,20 +1486,9 @@
       "restart": true
      },
      {
-      "open": "feed"
-     },
-     {
-      "wait": 3000
-     },
-     {
-      "swipe": "up"
-     },
-     {
-      "wait": 2000
-     },
-     {
       "log": "Block popups: skipped the LIVE bubble",
-      "within": 12000
+      "within": 20000,
+      "precondition": true
      },
      {
       "set": {
@@ -6152,6 +6141,14 @@
       "extras": {
        "family": "side menu button"
       },
+      "expect": "^hookdetail side menu button ",
+      "precondition": true
+     },
+     {
+      "probe": "hookdetails",
+      "extras": {
+       "family": "side menu button"
+      },
       "expect": "left to TikTok",
       "expectNot": "hidden"
      },
@@ -6224,7 +6221,7 @@
   "checks": [
    {
     "id": "follow-plus-gone",
-    "what": "The + under the creator's picture exists with the switch off and is gone (visibility forced to GONE by FeatureControls.hideFeedFollowButtonVisibility) with it on.",
+    "what": "The + under the creator's picture is shown with the switch off and gone (visibility forced to GONE by FeatureControls.hideFeedFollowButtonVisibility) with it on.",
     "steps": [
      {
       "set": {
@@ -6241,12 +6238,13 @@
       "wait": 3000
      },
      {
-      "probe": "finddesc",
+      "probe": "hasids",
       "extras": {
-       "desc": "Follow",
-       "match": "prefix"
+       "names": "ixq,iwi"
       },
-      "expect": "finddesc found"
+      "expect": "(ixq|iwi)=\\d+/[1-9]",
+      "retrySwipe": 6,
+      "precondition": true
      },
      {
       "set": {
@@ -6263,12 +6261,12 @@
       "wait": 3000
      },
      {
-      "probe": "finddesc",
+      "probe": "hasids",
       "extras": {
-       "desc": "Follow",
-       "match": "prefix"
+       "names": "ixq,iwi"
       },
-      "expectNot": "finddesc found"
+      "expect": "ixq=\\d+/0\\b",
+      "expectNot": "iwi=\\d+/[1-9]"
      },
      {
       "set": {
@@ -6324,7 +6322,7 @@
     "auto": false
    }
   ],
-  "notes": "The follow control has no view id in the extension (the patch forces the avatar assem's visibility argument to GONE), so the automatic check relies on the plus view's accessibility description starting with 'Follow' in an English UI. If a TikTok string change breaks that, the off phase fails first, which is the signal to fall back to the screenshot check. The 'Follow' description may also match a different 'Follow' control on screen; the runner should read the off phase's bounds (finddesc prints class, position and size) and expect it near the avatar."
+  "notes": "The + under the avatar has no content description on 47.1.4; the only 'Follow' match on the feed is the Following tab at the top (seen 2026-10-16). The check counts the plus views by id instead: ixq is the TuxIconView plus and iwi the icon-res one, both in ix9 under user_avatar (from the probe's windowviews on 47.1.4). Ids are renamed every build, so a retarget takes them from a fresh windowviews of the feed: the views just below user_avatar in the avatar column. hasids counts a view as shown only when every parent is visible, so it reads 0 whichever of them the patch sets GONE."
  },
  {
   "name": "Hide feed save button",

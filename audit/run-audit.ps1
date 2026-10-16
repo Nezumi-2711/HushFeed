@@ -629,7 +629,12 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                         Start-Sleep -Milliseconds 1000
                         $hits = @(Get-LogAfter $lastMarker | Where-Object { Test-Pattern "$_" $pattern })
                     } until (($kind -eq 'log' -and $hits.Count -gt 0) -or [DateTime]::UtcNow -gt $deadline)
-                    if ($kind -eq 'log' -and $hits.Count -eq 0) { throw "no log line matching $pattern" }
+                    if ($kind -eq 'log' -and $hits.Count -eq 0) {
+                        # A line only TikTok's own event can cause (a LIVE bubble arriving) says
+                        # nothing about the patch when the event never came.
+                        if ($step.precondition) { throw [System.InvalidOperationException]::new("precondition: no log line matching $pattern") }
+                        throw "no log line matching $pattern"
+                    }
                     if ($kind -eq 'logNot' -and $hits.Count -gt 0) { throw "logged: $($hits[0])" }
                     if ($hits.Count -gt 0) { $result.evidence += Save-Evidence "$tag-$index-log" ($hits -join "`n") }
                 }
