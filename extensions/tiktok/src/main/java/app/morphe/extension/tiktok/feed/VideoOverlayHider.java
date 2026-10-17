@@ -78,9 +78,6 @@ import java.util.WeakHashMap;
  *                         strip, so both go and the pager takes the room back (#50). cnk also
  *                         names a Space in other layouts, so only the child of
  *                         id/viewpager_container counts
- *   id/tt3                the Message bar that takes the Add comment bar's place on a video by
- *                         a mutual friend. Outside the cells too; the name also marks a quick
- *                         message pill inside them, so only an opened video's own counts
  *   id/j2g id/g5p        on a video opened from a profile, a hashtag, a sound or search, the
  *                         search bar across the top (its back button and search box) and the
  *                         dark gradient behind it. Both are children of the pager's page layer,
@@ -100,59 +97,59 @@ public final class VideoOverlayHider {
     // TikTok's own ids are looked up under the running package, which a cloned build renames
     // along with its resource table (#59). Feature modules keep their original names there.
     private static final String SEARCH_MODULE_PACKAGE = "com.zhiliaoapp.musically.df_search_biz";
-    private static final String[] VISUAL_SEARCH_LAYER_IDS = {"fo"};
+    private static final String[] VISUAL_SEARCH_LAYER_IDS = {"47.4.3:fr"};
     private static final String[] VISUAL_SEARCH_PILL_IDS = {"d4"};
-    private static final String[] LIVE_ENTRANCE_IDS = {"47.1.4:kam"};
+    private static final String[] LIVE_ENTRANCE_IDS = {"47.4.3:k_d"};
 
     /** The caption under the creator's name. */
     private static final String[] CAPTION_IDS = {"desc"};
     /** VideoMusicTitleAssem's label container, including ordinary and matched-song titles. */
-    private static final String[] MUSIC_IDS = {"47.1.4:o97"};
-    private static final String[] ACTION_BAR_IDS = {"47.1.4:llj"};
-    private static final String[] SURVEY_IDS = {"47.1.4:f98"};
-    private static final String[] TAB_STRIP_IDS = {"47.1.4:uzf"};
+    private static final String[] MUSIC_IDS = {"47.4.3:o7a"};
+    private static final String[] ACTION_BAR_IDS = {"47.4.3:mud"};
+    private static final String[] SURVEY_IDS = {"47.4.3:f92"};
+    private static final String[] TAB_STRIP_IDS = {"47.4.3:uwq"};
     /**
      * The bottom tab bar (Home, Friends, the create button, Inbox, Profile). TikTok takes it away
      * when Clear display starts, but the automatic path can switch the mode on before the bar is
      * laid out after a cold start, and then the bar stays over the first video (#84). It sits
      * outside the cells, under the feed.
      */
-    private static final String[] BOTTOM_TABS_IDS = {"47.1.4:opp"};
+    private static final String[] BOTTOM_TABS_IDS = {"47.4.3:onp"};
     /**
      * The hairline along the tab bar's top edge. It's the bar's sibling in the main layout, not
      * its child, and TikTok puts it away with the bar only when its own clear lands, so taking
      * the bar alone left a thin line across the bottom of each video until then (#84).
      */
-    private static final String[] BOTTOM_TABS_DIVIDER_IDS = {"47.1.4:cnq"};
+    private static final String[] BOTTOM_TABS_DIVIDER_IDS = {"47.4.3:cnj"};
     /**
      * TikTok's loading line, the thin bar along the bottom of each video that grows from the
      * middle while it buffers. With the Clear display controls hidden it was the one bar left at
      * the bottom of a cleared screen (#84). TikTok shows and animates it on every buffer, so the
      * frame that holds it goes see-through instead of the line itself.
      */
-    private static final String[] LOADING_LINE_IDS = {"47.1.4:nh4"};
+    private static final String[] LOADING_LINE_IDS = {"47.4.3:nf6"};
     /** The story-count button is a sibling of the main feed, outside its tab strip and cells. */
-    private static final String[] FOLLOWING_STORY_IDS = {"47.1.4:wtr"};
+    private static final String[] FOLLOWING_STORY_IDS = {"47.4.3:wr5"};
     /**
      * The bar TikTok shows only while Clear display is on: its round close button and the
      * pause and speed pill beside it, with the progress bar above them (#97). The main feed keeps
      * them in its seek bar mask and an opened video in its pager column, outside the cells on both.
      */
-    private static final String[] CLEAR_EXIT_IDS = {"47.1.4:e_5"};
-    private static final String[] CLEAR_PLAYBACK_IDS = {"47.1.4:l83"};
+    private static final String[] CLEAR_EXIT_IDS = {"47.4.3:e_3"};
+    private static final String[] CLEAR_PLAYBACK_IDS = {"47.4.3:l6j"};
     private static final String[] CLEAR_SEEK_BAR_IDS = {"video_seek_bar"};
     /**
      * A photo post's Clear display has no such bar, only this close button at the bottom right,
      * inside the cell. TikTok takes it and its parent away as Clear display ends.
      */
-    private static final String[] CLEAR_PHOTO_EXIT_IDS = {"47.1.4:v1c"};
+    private static final String[] CLEAR_PHOTO_EXIT_IDS = {"47.4.3:uym"};
     /**
      * The anchor row under the caption: a related search, a place, a product or a template.
      * Clear display only fades it, so it stayed tappable while out of sight and a tap near the
      * bottom of the picture opened a search (#84). It goes invisible rather than gone, which
      * takes it out of reach without moving the caption above it.
      */
-    private static final String[] ANCHOR_IDS = {"47.1.4:bqv"};
+    private static final String[] ANCHOR_IDS = {"47.4.3:bqr"};
     /**
      * The spinning music disc at the bottom right, beside the rail's column. On 47.1.4 the
      * anchor's frame above also holds the caption and the music row, and neither sits in the
@@ -165,7 +162,7 @@ public final class VideoOverlayHider {
      * frame, so neither the fade nor Clear display reached it (S22, 2026-10-08). The music disc
      * is laid out above it, which is how its name is found on each build.
      */
-    private static final String[] SEARCH_BAR_IDS = {"47.1.4:ll8"};
+    private static final String[] SEARCH_BAR_IDS = {"47.4.3:ljb"};
     /**
      * What {@link #beforeClearDisplay} notes before TikTok's Clear display: the wrappers the rail's
      * buttons and the search bar sit in, and the frames the anchor row and the music disc sit in.
@@ -177,14 +174,14 @@ public final class VideoOverlayHider {
      * The blank TikTok keeps above the video on tall screens, as tall as the status bar, so the
      * bar never covers the picture. With the bar hidden it's only a black strip (#97).
      */
-    private static final String[] STATUS_BAR_SPACER_IDS = {"47.1.4:dux"};
+    private static final String[] STATUS_BAR_SPACER_IDS = {"47.4.3:dus"};
     /**
      * The black band TikTok lays over the top of each feed cell, as tall as the status bar. It
      * sat over the spacer, so nobody saw it until the spacer went: the video then went up under
      * it and the strip under the clock stayed black (#145, S22). It goes with the spacer,
      * invisible rather than gone, so nothing laid out against it moves.
      */
-    private static final String[] STATUS_BAR_SCRIM_IDS = {"47.1.4:wll"};
+    private static final String[] STATUS_BAR_SCRIM_IDS = {"47.4.3:wiz"};
     /**
      * The player in each feed cell, around the video's surface. With the spacer and the band gone
      * a 9:16 video still sat centered in it with black above and below, so the see-through status
@@ -196,14 +193,14 @@ public final class VideoOverlayHider {
      * theme. It is the cell's last child (dux first, the video area between), and the reason the
      * picture stops above the bar. See-through bottom bar collapses it (#145).
      */
-    private static final String[] BOTTOM_SPACER_IDS = {"47.1.4:duh"};
+    private static final String[] BOTTOM_SPACER_IDS = {"47.4.3:duc"};
     /**
      * The search bar across the top of a video opened from search or a profile, and the gradient
      * under it. The fade never reached them: they sit outside the cells and TikTok's Clear display
      * leaves them up (#84). Only ever faded, never hidden.
      */
-    private static final String[] TOP_SEARCH_BAR_IDS = {"47.1.4:j2g"};
-    private static final String[] TOP_SEARCH_SCRIM_IDS = {"47.1.4:g5p"};
+    private static final String[] TOP_SEARCH_BAR_IDS = {"47.4.3:j1z"};
+    private static final String[] TOP_SEARCH_SCRIM_IDS = {"47.4.3:g5g"};
     /**
      * The search box in that bar, beside the Back button (#158). It is the root of the layout
      * TikTok's DetailFeedSearchHelper inflates into the bar on every page it serves: a video
@@ -211,20 +208,9 @@ public final class VideoOverlayHider {
      * sound. Another page's layout reuses the name, so only a child of the bar counts. It goes
      * invisible, so Back keeps its place.
      */
-    private static final String[] DETAIL_SEARCH_BOX_IDS = {"47.1.4:oa1"};
-    private static final String[] DETAIL_COMMENT_BAR_IDS = {"47.1.4:qqw"};
-    private static final String[] DETAIL_COMMENT_STRIP_IDS = {"47.1.4:cnk"};
-    /**
-     * The pill of the "Message <name>..." bar with three quick emoji that TikTok's opened-video
-     * bottom bar shows instead of Add comment on a mutual friend's video or story. It is another
-     * component of the same bar, laid over the same strip, so with the comment bar's switch on the
-     * strip went, the pager grew under this bar and it covered the bottom of the caption, the
-     * progress bar and the right-hand column (#153). It goes, fades and comes back with the comment
-     * bar, and its absence is never a miss: most videos don't have it. Its layout's root has no id
-     * and no background of its own. The name also marks a quick message pill inside feed cells, so
-     * only one outside the cells of an opened video counts.
-     */
-    private static final String[] DETAIL_MESSAGE_BAR_IDS = {"47.1.4:tt3"};
+    private static final String[] DETAIL_SEARCH_BOX_IDS = {"47.4.3:o94"};
+    private static final String[] DETAIL_COMMENT_BAR_IDS = {"47.4.3:qox"};
+    private static final String[] DETAIL_COMMENT_STRIP_IDS = {"47.4.3:cnc"};
     /**
      * The feed cell root. Furniture is only hidden underneath one: Hide feed surveys used to
      * take every survey card id in the window, and on the profile that is the Favorites tab's whole
@@ -274,19 +260,19 @@ public final class VideoOverlayHider {
         return true;
     };
     /** The row under each rail button holding its count, without the button itself. */
-    private static final String[] LIKE_COUNT_ROW_IDS = {"47.1.4:g87"};
-    private static final String[] COMMENT_COUNT_ROW_IDS = {"47.1.4:ek6"};
-    private static final String[] FAVORITE_COUNT_ROW_IDS = {"47.1.4:i83"};
-    private static final String[] SHARE_COUNT_ROW_IDS = {"47.1.4:w_1"};
+    private static final String[] LIKE_COUNT_ROW_IDS = {"47.4.3:g8c"};
+    private static final String[] COMMENT_COUNT_ROW_IDS = {"47.4.3:ek4"};
+    private static final String[] FAVORITE_COUNT_ROW_IDS = {"47.4.3:i8a"};
+    private static final String[] SHARE_COUNT_ROW_IDS = {"47.4.3:w70"};
     private static final String[][] RAIL_COUNT_ROW_IDS = {
             LIKE_COUNT_ROW_IDS, COMMENT_COUNT_ROW_IDS,
             FAVORITE_COUNT_ROW_IDS, SHARE_COUNT_ROW_IDS
     };
     /** The numeric text inside each row, retained by layouts that replace the row wrapper. */
-    private static final String[] LIKE_COUNT_TEXT_IDS = {"47.1.4:g86"};
-    private static final String[] COMMENT_COUNT_TEXT_IDS = {"47.1.4:ek5"};
-    private static final String[] FAVORITE_COUNT_TEXT_IDS = {"47.1.4:i82"};
-    private static final String[] SHARE_COUNT_TEXT_IDS = {"47.1.4:w_0"};
+    private static final String[] LIKE_COUNT_TEXT_IDS = {"47.4.3:g8b"};
+    private static final String[] COMMENT_COUNT_TEXT_IDS = {"47.4.3:ek3"};
+    private static final String[] FAVORITE_COUNT_TEXT_IDS = {"47.4.3:i8_"};
+    private static final String[] SHARE_COUNT_TEXT_IDS = {"47.4.3:w6z"};
     private static final String[][] RAIL_COUNT_TEXT_IDS = {
             LIKE_COUNT_TEXT_IDS, COMMENT_COUNT_TEXT_IDS,
             FAVORITE_COUNT_TEXT_IDS, SHARE_COUNT_TEXT_IDS
@@ -299,12 +285,12 @@ public final class VideoOverlayHider {
      */
     private static final int[] RAIL_COUNT_BUTTON_INDEX = {1, 2, 3, 5};
     /** The six buttons inside the action column, in the order they are stacked. */
-    private static final String[] AVATAR_BUTTON_IDS = {"47.1.4:i_l"};
-    private static final String[] LIKE_BUTTON_IDS = {"47.1.4:g85"};
-    private static final String[] COMMENT_BUTTON_IDS = {"47.1.4:eq5"};
-    private static final String[] FAVORITE_BUTTON_IDS = {"47.1.4:i93"};
-    private static final String[] MUSIC_BUTTON_IDS = {"47.1.4:pqg"};
-    private static final String[] SHARE_BUTTON_IDS = {"47.1.4:wct"};
+    private static final String[] AVATAR_BUTTON_IDS = {"47.4.3:i_t"};
+    private static final String[] LIKE_BUTTON_IDS = {"47.4.3:g8a"};
+    private static final String[] COMMENT_BUTTON_IDS = {"47.4.3:eq2"};
+    private static final String[] FAVORITE_BUTTON_IDS = {"47.4.3:i9a"};
+    private static final String[] MUSIC_BUTTON_IDS = {"47.4.3:pop"};
+    private static final String[] SHARE_BUTTON_IDS = {"47.4.3:w_s"};
     private static final String[][] RAIL_BUTTON_IDS = {
             AVATAR_BUTTON_IDS, LIKE_BUTTON_IDS, COMMENT_BUTTON_IDS,
             FAVORITE_BUTTON_IDS, MUSIC_BUTTON_IDS, SHARE_BUTTON_IDS
@@ -339,7 +325,6 @@ public final class VideoOverlayHider {
     private static final int DETAIL_SEARCH_BOX_TARGET = BOTTOM_SPACER_TARGET + 1;
     private static final int STATUS_BAR_SCRIM_TARGET = DETAIL_SEARCH_BOX_TARGET + 1;
     private static final int PLAYER_VIEW_TARGET = STATUS_BAR_SCRIM_TARGET + 1;
-    private static final int DETAIL_MESSAGE_BAR_TARGET = PLAYER_VIEW_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -673,7 +658,6 @@ public final class VideoOverlayHider {
                 wanted[BOTTOM_TABS_DIVIDER_TARGET] = wanted[BOTTOM_TABS_TARGET];
                 wanted[FOLLOWING_STORY_TARGET] = tabStrip && !FeedVisibility.isStoryVisible(activity);
                 wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;
-                wanted[DETAIL_MESSAGE_BAR_TARGET] = detailCommentBar;
                 wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar || stripForBar;
                 wanted[CLEAR_EXIT_TARGET] = clearControls;
                 wanted[CLEAR_PLAYBACK_TARGET] = clearControls;
@@ -722,7 +706,6 @@ public final class VideoOverlayHider {
                 int cellId = identifier(activity, activity.getPackageName(), CELL_ROOT_ID);
                 try {
                     collect(root, ids, found, cellId, cellId == 0, needsCell);
-                    keepDetailMessageBars(found, cellId, detailPager);
                     // Only a strip this class hid is ever put back, and that one was the
                     // column's, so the column is looked up only while the strip is wanted.
                     if (detailCommentBar || stripForBar) {
@@ -957,7 +940,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[DETAIL_MESSAGE_BAR_TARGET + 1][];
+        String[][] targets = new String[PLAYER_VIEW_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -990,19 +973,17 @@ public final class VideoOverlayHider {
         targets[DETAIL_SEARCH_BOX_TARGET] = DETAIL_SEARCH_BOX_IDS;
         targets[STATUS_BAR_SCRIM_TARGET] = STATUS_BAR_SCRIM_IDS;
         targets[PLAYER_VIEW_TARGET] = PLAYER_VIEW_IDS;
-        targets[DETAIL_MESSAGE_BAR_TARGET] = DETAIL_MESSAGE_BAR_IDS;
         return targets;
     }
 
     /**
      * Main-feed tabs (top and bottom, with the bottom bar's hairline) and story count, the Clear
-     * display controls, and the detail pager's comment and Message bars are outside the cells.
+     * display controls, and the detail pager's comment bar are outside the cells.
      */
     private static boolean outsideCells(int target) {
         return (target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START) || target == BOTTOM_TABS_TARGET
                 || target == BOTTOM_TABS_DIVIDER_TARGET || target == TOP_SEARCH_BAR_TARGET
-                || target == TOP_SEARCH_SCRIM_TARGET || target == DETAIL_SEARCH_BOX_TARGET
-                || target == DETAIL_MESSAGE_BAR_TARGET;
+                || target == TOP_SEARCH_SCRIM_TARGET || target == DETAIL_SEARCH_BOX_TARGET;
     }
 
     private static int candidateCount(String[][] targets) {
@@ -1177,29 +1158,6 @@ public final class VideoOverlayHider {
         }
     }
 
-    /**
-     * Keeps only an opened video's own Message bar: one outside every feed cell in the detail
-     * pager's window. Feed cells use the same name for their quick message pill, and with no cell
-     * root to tell them apart none counts.
-     */
-    private static void keepDetailMessageBars(List<List<View>> found, int cellId, boolean detailPager) {
-        int at = firstCandidate(DETAIL_MESSAGE_BAR_TARGET);
-        for (int i = 0; i < DETAIL_MESSAGE_BAR_IDS.length; i++) {
-            List<View> bars = found.get(at + i);
-            for (int j = bars.size() - 1; j >= 0; j--) {
-                if (!detailPager || cellId == 0 || insideCell(bars.get(j), cellId)) bars.remove(j);
-            }
-        }
-    }
-
-    private static boolean insideCell(View view, int cellId) {
-        for (android.view.ViewParent parent = view.getParent(); parent instanceof View;
-             parent = parent.getParent()) {
-            if (((View) parent).getId() == cellId) return true;
-        }
-        return false;
-    }
-
     /** Keeps only the search boxes that sit directly in an opened video's top bar (#158). */
     private static void keepTopBarSearchBoxes(List<List<View>> found, int barId) {
         int at = firstCandidate(DETAIL_SEARCH_BOX_TARGET);
@@ -1225,17 +1183,13 @@ public final class VideoOverlayHider {
      * binds one, and putting the strip back there left the photo ending a bar's height short over
      * a black band (#153). A bar renamed by another build doesn't resolve at all, so that case
      * still keeps its strip.
-     *
-     * <p>A mutual friend's Message bar stands in for the comment bar: it lies over the same strip,
-     * so it goes and stays with it the same way (#153).
      */
     private static void pairDetailCommentBar(boolean[] hidden, int[] selected, int[] ids,
                                              boolean detailPager, boolean stripForBar) {
-        boolean bar = selected[DETAIL_COMMENT_BAR_TARGET] >= 0 || selected[DETAIL_MESSAGE_BAR_TARGET] >= 0;
+        boolean bar = selected[DETAIL_COMMENT_BAR_TARGET] >= 0;
         boolean strip = selected[DETAIL_COMMENT_STRIP_TARGET] >= 0;
         if (bar && !strip) {
             hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)] = false;
-            hidden[firstCandidate(DETAIL_MESSAGE_BAR_TARGET)] = false;
         }
         // See-through bottom bar takes the main feed's strip on its own; no comment bar there.
         if (strip && !bar && !stripForBar && !(detailPager && resolves(ids, DETAIL_COMMENT_BAR_TARGET))) {
@@ -1279,7 +1233,7 @@ public final class VideoOverlayHider {
     private static void alignBarRows(List<List<View>> found, int[] selected, boolean[] hidden, int cellId) {
         int rowsAt = selected[CLEAR_SEEK_BAR_TARGET];
         List<View> rows = rowsAt >= 0 ? found.get(rowsAt) : new ArrayList<>();
-        boolean barGone = (selected[DETAIL_COMMENT_BAR_TARGET] >= 0 || selected[DETAIL_MESSAGE_BAR_TARGET] >= 0)
+        boolean barGone = selected[DETAIL_COMMENT_BAR_TARGET] >= 0
                 && selected[DETAIL_COMMENT_STRIP_TARGET] >= 0
                 && hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)]
                 && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)];
@@ -1819,7 +1773,7 @@ public final class VideoOverlayHider {
                         // Invisible, not gone: the bar keeps its shape and Back stays put, and
                         // the cell's band keeps its place.
                         setHidden(view, wanted, View.INVISIBLE);
-                    } else if (target == DETAIL_COMMENT_BAR_TARGET || target == DETAIL_MESSAGE_BAR_TARGET) {
+                    } else if (target == DETAIL_COMMENT_BAR_TARGET) {
                         // Hidden with its strip by the switch, Clear display and a fade of 0;
                         // otherwise faded, and out of a finger's way in the faded Clear display.
                         setFaded(view, wanted ? 100 : fadeLevel, fadedClear && !wanted);
@@ -1870,13 +1824,11 @@ public final class VideoOverlayHider {
             // ordinary feed cell says nothing about whether this build still has the anchor.
             // Nor does the comment bar's from the main feed, which never has one: with its switch
             // on, every pass there called the overlay hooks broken (#153). The detail pager
-            // has it unless a mutual friend's Message bar took its place, so a rename still shows
-            // there. The Message bar shows only on those videos. The search box at the top of an
-            // opened video is there only on the pages TikTok gives a search bar, and the player
-            // only in video cells.
+            // has it, so a rename still shows there. The search box at the top of an opened
+            // video is there only on the pages TikTok gives a search bar, and the player only in
+            // video cells.
             } else if (target != SURVEY_TARGET && target != DETAIL_SEARCH_BOX_TARGET
-                    && target != PLAYER_VIEW_TARGET && target != DETAIL_MESSAGE_BAR_TARGET
-                    && !(target == DETAIL_COMMENT_BAR_TARGET && selected[DETAIL_MESSAGE_BAR_TARGET] >= 0)
+                    && target != PLAYER_VIEW_TARGET
                     && (detailPager || (target != DETAIL_COMMENT_BAR_TARGET
                             && target != DETAIL_COMMENT_STRIP_TARGET))
                     && (wanted || (scaling
