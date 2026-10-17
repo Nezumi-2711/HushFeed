@@ -411,7 +411,7 @@ try {
         $_ -eq 'README.md' -or $_ -eq 'NOTICE' -or $_ -eq 'patches-list.json' -or $_ -eq 'patches-bundle.json' -or
         $_ -eq 'patches-bundle.png' -or $_ -like 'assets/readme-*' -or $_ -like 'concepts/marketing/*'
     }).Count -gt 0
-    $touchesScripts = @($paths | Where-Object { $_ -like 'scripts/*' }).Count -gt 0
+    $touchesScripts = @($paths | Where-Object { $_ -like 'scripts/*' -or $_ -like 'audit/*.ps1' -or $_ -eq 'audit/catalog.json' }).Count -gt 0
     $touchesAttestation = @($paths | Where-Object {
         $_ -in @('scripts/release-attestation.ps1', 'scripts/test-release-attestation.ps1',
             'scripts/validate-release-facts.ps1')

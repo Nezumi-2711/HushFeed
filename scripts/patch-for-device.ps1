@@ -63,6 +63,7 @@ $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'Resolve-Java.ps1')
 . (Join-Path $PSScriptRoot 'apk-signing.ps1')
 . (Join-Path $PSScriptRoot 'device-install.ps1')
+. (Join-Path $PSScriptRoot 'release-receipt.ps1')
 $Java = Resolve-Java -Explicit $Java
 $DesktopJar = Resolve-DesktopCli -Explicit $DesktopJar -Root $root -Required
 $catalogPath = Join-Path $root 'patches-list.json'
@@ -97,6 +98,9 @@ foreach ($excluded in $Exclude) {
 }
 if ($Exclude.Count -gt 0) { Write-Host "[device] leaving out: $($Exclude -join ', ')" }
 $dependencyNames = @(Get-PatchDependencyNames -PatchList $catalog -RequestedNames $names)
+$auditBundleHash = (Get-FileHash -LiteralPath $bundle -Algorithm SHA256).Hash.ToLowerInvariant()
+$auditInputHash = (Get-FileHash -LiteralPath $Apk -Algorithm SHA256).Hash.ToLowerInvariant()
+$auditBundleSource = (Get-BundleManifestFacts -BundlePath $bundle).source
 
 $OutDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutDir)
 $out = Join-Path $OutDir "hushfeed-$version-signed.apk"
@@ -168,6 +172,22 @@ $validation = Test-PatchingReport -Report $report -ExpectedNames $names `
     -ExpectedPackageName $target.PackageName -ExpectedPackageVersion (Get-DeclaredReportVersion -Report $report -Target $target)
 if (-not $validation.Valid) { throw "Patching did not produce a complete APK: $($validation.Reason)" }
 Invoke-ApkSigning -Session $signingSession -InputApk $unsigned -OutputApk $out
+if ($auditBundleHash -ine (Get-FileHash -LiteralPath $bundle -Algorithm SHA256).Hash -or
+    $auditInputHash -ine (Get-FileHash -LiteralPath $Apk -Algorithm SHA256).Hash) {
+    throw 'The bundle or original APK changed during patching; no audit build receipt can be issued.'
+}
+# This describes the APK just produced, not the checkout running the audit later.
+$auditBuildReceipt = [ordered]@{
+    schemaVersion = 1; kind = 'hushfeed-device-build'
+    apk = [ordered]@{ sha256 = (Get-FileHash -LiteralPath $out -Algorithm SHA256).Hash.ToLowerInvariant() }
+    sourceApkSha256 = $auditInputHash
+    bundle = [ordered]@{ sha256 = $auditBundleHash }
+    source = $auditBundleSource
+    patches = $names
+    options = @($Option)
+    patchReportSha256 = (Get-FileHash -LiteralPath $result -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+$auditBuildReceipt | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath "$out.audit-build.json" -Encoding UTF8
 Write-Host "[device] applied $(@($report.appliedPatches).Count), failed $(@($report.failedPatches).Count), target $($report.packageName) $($report.packageVersion)"
 Write-Host "[device] $out"
 

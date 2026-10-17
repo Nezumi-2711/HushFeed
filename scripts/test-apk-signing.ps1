@@ -132,7 +132,7 @@ exit /b %errorlevel%
             'extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox')) {
         New-Item -ItemType Directory -Path (Join-Path $fixtureProject $directory) -Force | Out-Null
     }
-    foreach ($leaf in @('patch-for-device.ps1', 'apk-signing.ps1', 'SigningCertificateCheck.java', 'common.ps1', 'Resolve-Java.ps1', 'patch-target.ps1', 'patch-report.ps1', 'device-install.ps1')) {
+    foreach ($leaf in @('patch-for-device.ps1', 'apk-signing.ps1', 'SigningCertificateCheck.java', 'common.ps1', 'Resolve-Java.ps1', 'patch-target.ps1', 'patch-report.ps1', 'device-install.ps1', 'release-receipt.ps1')) {
         Copy-Item -LiteralPath (Join-Path $Root "scripts/$leaf") -Destination (Join-Path $fixtureProject "scripts/$leaf")
     }
     foreach ($leaf in @('libs.versions.toml', 'verification-metadata.xml')) {
@@ -144,7 +144,16 @@ exit /b %errorlevel%
     Copy-Item -LiteralPath (Join-Path $Root 'extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxRenderedModels.java') `
         -Destination (Join-Path $fixtureProject 'extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxRenderedModels.java')
     [IO.File]::WriteAllText((Join-Path $fixtureProject 'gradle.properties'), 'version=0.0.1')
-    [IO.File]::WriteAllText((Join-Path $fixtureProject 'patches/build/release/patches-0.0.1.mpp'), 'fixture bundle')
+    $fixtureBundle = Join-Path $fixtureProject 'patches/build/release/patches-0.0.1.mpp'
+    $bundleZip = [IO.Compression.ZipFile]::Open($fixtureBundle, 'Create')
+    try {
+        $manifestWriter = [IO.StreamWriter]::new($bundleZip.CreateEntry('META-INF/MANIFEST.MF').Open())
+        try {
+            $manifestWriter.Write("Manifest-Version: 1.0`nVersion: 0.0.1`nTimestamp: 1000`nPatcher-Version: 1.15.1`n" +
+                "Hushfeed-Source-Commit: $('b' * 40)`nHushfeed-Source-Clean: true`n" +
+                "Hushfeed-Source-Start: $('c' * 64)`nHushfeed-Source-End: $('c' * 64)`n")
+        } finally { $manifestWriter.Dispose() }
+    } finally { $bundleZip.Dispose() }
     [IO.File]::WriteAllText((Join-Path $fixtureProject 'patches-list.json'), '{"patches":[{"name":"fixture","compatiblePackages":{"com.zhiliaoapp.musically":["1.0.0"]}}]}')
     $classes = Join-Path $fixture 'fixture-classes'
     New-Item -ItemType Directory -Path $classes | Out-Null
@@ -221,6 +230,11 @@ exit /b %errorlevel%
             Assert-Signing ($session.Certificate -eq $certificate) 'The fixture stores changed the signing certificate.'
             $signedDevice = Join-Path $patchOut 'hushfeed-0.0.1-signed.apk'
             $signedProbe = Join-Path $probeOut 'hushfeed-verification-probe.apk'
+            $buildReceipt = Get-Content -LiteralPath "$signedDevice.audit-build.json" -Raw | ConvertFrom-Json
+            Assert-Signing ($buildReceipt.kind -eq 'hushfeed-device-build') 'The device builder omitted its audit identity receipt.'
+            Assert-Signing ($buildReceipt.apk.sha256 -eq (Get-FileHash $signedDevice -Algorithm SHA256).Hash) 'The audit receipt names another signed APK.'
+            Assert-Signing ($buildReceipt.bundle.sha256 -eq (Get-FileHash $fixtureBundle -Algorithm SHA256).Hash) 'The audit receipt names another bundle.'
+            Assert-Signing ($buildReceipt.source.commit -eq ('b' * 40) -and $buildReceipt.source.clean) 'The audit receipt lost the bundle source identity.'
             foreach ($apk in @($signedDevice, $signedProbe)) {
                 Assert-Signing ((Get-ApkSigningCertificate -Session $session -Apk $apk) -eq $certificate) 'The builders produced different or unverified certificates.'
             }

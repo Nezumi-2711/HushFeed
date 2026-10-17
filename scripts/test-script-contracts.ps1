@@ -2139,6 +2139,12 @@ try {
         Assert-True (-not (Test-Path -LiteralPath $signingMarker)) "A probe tool change $probeTool selected SDK signing fixtures."
     }
 
+    foreach ($auditInput in @('audit/run-audit.ps1', 'audit/evidence.ps1', 'audit/test-evidence.ps1', 'audit/catalog.json')) {
+        Invoke-Hook -Paths @($auditInput)
+        Assert-True (Test-Path -LiteralPath $contractsMarker) "Audit input $auditInput skipped its evidence contracts."
+        Assert-True (-not (Test-Path -LiteralPath $signingMarker)) "Audit-only input $auditInput selected SDK signing fixtures."
+    }
+
     Invoke-Hook -Paths @('release-receipt-0.31.0.json')
     Assert-True (Test-Path -LiteralPath $factsMarker) `
         'A push that changed only the release receipt ran no release check.'
@@ -3544,6 +3550,7 @@ Write-Host '[scripts] shared phone log contracts passed'
 & (Join-Path $Root 'scripts/test-storage-probe.ps1') -Root $Root
 & (Join-Path $Root 'scripts/test-fixture-jobs.ps1') -Root $Root
 & (Join-Path $Root 'scripts/test-release-publication.ps1') -Root $Root
+& (Join-Path $Root 'audit/test-evidence.ps1')
 
 $global:LASTEXITCODE = 0
 Write-Host '[scripts] report, target, Java and guarded replacement contracts passed'

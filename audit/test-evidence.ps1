@@ -1,0 +1,343 @@
+[CmdletBinding()]
+param()
+$ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'evidence.ps1')
+$script:passed = 0
+function Assert-Audit([bool]$Condition, [string]$Message) {
+    if (-not $Condition) { throw $Message }
+    $script:passed++
+}
+function Copy-Json($Value) { return ($Value | ConvertTo-Json -Depth 30 | ConvertFrom-Json) }
+$temporaryRoot = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
+$fixture = Join-Path $temporaryRoot ('hushfeed-audit-test-' + [Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $fixture | Out-Null
+try {
+$entry = [pscustomobject]@{ name = 'Example'; kind = 'runtime'; category = 'Test'; settings = @(); checks = @(
+    [pscustomobject]@{ id = 'screen'; what = 'A screen'; auto = $false; steps = @([pscustomobject]@{ shot = 'screen'; review = 'Readable' }) }
+) }
+$catalog = @($entry)
+$check = $entry.checks[0]
+$hash = Get-AuditDefinitionHash $entry $check
+Assert-Audit ($hash -match '^[a-f0-9]{64}$') 'Definition hash must be SHA-256.'
+$escaping = "quotes `" \ apostrophe ' <&> newline`n" + [char]0 + [char]::ConvertFromUtf32(0x1F642)
+Assert-Audit ((Get-AuditCanonicalJson $escaping | ConvertFrom-Json) -ceq $escaping) 'Canonical string encoding changed content.'
+$cultureBefore = [Threading.Thread]::CurrentThread.CurrentCulture
+try {
+    $keys = [ordered]@{ z = 1; a = 2; I = 3; J = 4 }
+    $keys[[string][char]0x131] = 5
+    $englishHash = Get-AuditHash $keys
+    [Threading.Thread]::CurrentThread.CurrentCulture = [Globalization.CultureInfo]::GetCultureInfo('tr-TR')
+    Assert-Audit ((Get-AuditHash $keys) -ceq $englishHash) 'Culture changed canonical key order.'
+} finally { [Threading.Thread]::CurrentThread.CurrentCulture = $cultureBefore }
+$reordered = [pscustomobject]@{ checks = $entry.checks; settings = @(); category = 'Test'; kind = 'runtime'; name = 'Example' }
+Assert-Audit ($hash -eq (Get-AuditDefinitionHash $reordered $check)) 'Object key order changed definition identity.'
+$changed = Copy-Json $check
+$changed.steps[0].review = 'Different criterion'
+Assert-Audit ($hash -ne (Get-AuditDefinitionHash $entry $changed)) 'Changed review criterion retained identity.'
+Assert-Audit (@(Get-AuditCatalogProblems $catalog).Count -eq 0) 'Valid catalog rejected.'
+$duplicate = Copy-Json $entry
+$duplicate.checks += Copy-Json $check
+Assert-Audit (@(Get-AuditCatalogProblems @($duplicate)).Count -gt 0) 'Duplicate check ID accepted.'
+$blank = Copy-Json $entry
+$blank.checks[0].id = ''
+Assert-Audit (@(Get-AuditCatalogProblems @($blank)).Count -gt 0) 'Blank check ID accepted.'
+$apkHash = 'a' * 64
+$source = [pscustomobject]@{ commit = 'b' * 40; clean = $true; startFingerprint = 'c' * 64; endFingerprint = 'c' * 64 }
+$build = [pscustomobject]@{ status = 'verified'; receiptSha256 = 'd' * 64; source = $source }
+[IO.File]::WriteAllText((Join-Path $fixture 'screen.png'), 'original evidence')
+$result = [ordered]@{ id = 'screen'; auto = $false; status = 'review'; definitionHash = $hash; evidence = @('screen.png'); review = @(@{ shot = 'screen.png'; criteria = 'Readable' }); build = $build; apkSha256 = $apkHash; installedApkSha256 = $apkHash }
+Set-AuditCheckReceipt $result $fixture
+$result = Copy-Json $result
+$run = [pscustomobject]@{ apk = @{ sha256 = $apkHash }; patches = @([pscustomobject]@{ name = 'Example'; checks = @($result) }) }
+$report = Get-AuditResultValidation $catalog $run $fixture
+Assert-Audit ($report.problems.Count -eq 0 -and $report.currentChecks -eq 1) 'Current bound result rejected.'
+$missing = Copy-Json $run
+$missing.patches[0].checks = @()
+Assert-Audit ((Get-AuditResultValidation $catalog $missing $fixture).missing.Count -eq 1) 'Missing check not detected.'
+$twice = Copy-Json $run
+$twice.patches[0].checks += Copy-Json $result
+Assert-Audit ((Get-AuditResultValidation $catalog $twice $fixture).duplicates.Count -eq 1) 'Duplicate result not detected.'
+$stale = Copy-Json $run
+$stale.patches[0].checks[0].definitionHash = 'f' * 64
+Assert-Audit ((Get-AuditResultValidation $catalog $stale $fixture).changed.Count -eq 1) 'Changed definition counted current.'
+$old = Copy-Json $run
+$old.patches[0].checks[0].apkSha256 = '0' * 64
+Assert-Audit ((Get-AuditResultValidation $catalog $old $fixture).currentChecks -eq 0) 'Mixed APK counted current.'
+$unbound = Copy-Json $run
+$unbound.patches[0].checks[0].installedApkSha256 = ''
+Assert-Audit ((Get-AuditResultValidation $catalog $unbound $fixture).currentChecks -eq 0) 'Unbound installed APK counted current.'
+$removed = Copy-Json $run
+$removed.patches[0].checks[0].id = 'removed'
+Assert-Audit ((Get-AuditResultValidation $catalog $removed $fixture).removed.Count -eq 1) 'Removed check not detected.'
+$unknown = Copy-Json $run
+$unknown.patches[0].checks[0].status = 'made-up'
+Assert-Audit ((Get-AuditResultValidation $catalog $unknown $fixture).unknown.Count -eq 1) 'Unknown status accepted.'
+$verdict = [pscustomobject]@{ 'Example/screen' = [pscustomobject]@{ status = 'pass'; note = 'Readable'; receiptId = $result.receiptId } }
+$verdict = ConvertFrom-AuditVerdictJson ($verdict | ConvertTo-Json -Depth 8)
+Assert-Audit ($verdict.'Example/screen'.status -ceq 'pass') 'Unique verdict JSON was rejected.'
+foreach ($invalidJson in @(
+    '{"Example/screen":{"status":"inconclusive"},"Example/screen":{"status":"pass"}}',
+    '{"Example/screen":{},"Example\u002fscreen":{}}',
+    '{"Example/screen":{"status":"inconclusive","status":"pass"}}',
+    '{"Example/screen":{"status":"fail","\u0073tatus":"pass"}}',
+    '{"Example/screen":{"status":"fail","Status":"pass"}}',
+    '{"Example/screen":{status:"fail",status:"pass"}}',
+    '{"Example/screen":{status:"pass"}}',
+    "{`"Example/screen`":{'status':'fail','status':'pass'}}",
+    '{"Example/screen":{"note":"ok"},/* hidden duplicate */"Example/screen":{}}',
+    '[{"Example/screen":{}}]'
+)) {
+    $rejected = $false
+    try { [void](ConvertFrom-AuditVerdictJson $invalidJson) } catch { $rejected = $true }
+    Assert-Audit $rejected 'Ambiguous verdict JSON was accepted.'
+}
+$tokenCases = ConvertFrom-AuditVerdictJson '{"one":{"note":"{\"status\":1}, /* text */","extra":[{"key":1},{"key":2}]},"two":{"note":"two"}}'
+Assert-Audit ($tokenCases.one.extra.Count -eq 2 -and $tokenCases.two.note -ceq 'two') 'Independent objects or quoted punctuation were treated as duplicates.'
+$dateKeys = ConvertFrom-AuditVerdictJson '{"Example/screen":{"extra":{"2026-10-16T00:00:00Z":1,"2026-10-16T00:00:00.000Z":2}}}'
+Assert-Audit (@($dateKeys.'Example/screen'.extra.PSObject.Properties).Count -eq 2) 'Timestamp-shaped property names were converted to DateTime values.'
+Set-AuditVerdicts $catalog $run $verdict $fixture
+Assert-Audit ($result.status -eq 'pass') 'Matching review verdict did not apply.'
+Assert-Audit ((Get-AuditResultValidation $catalog $run $fixture).currentPass -eq 1) 'Imported verdict lost its execution binding.'
+$forged = Copy-Json $run
+$forged.patches[0].checks[0].verdict.receiptId = '0' * 64
+Assert-Audit ((Get-AuditResultValidation $catalog $forged $fixture).currentPass -eq 0) 'A verdict for another execution remained current.'
+$failed = [ordered]@{ status = 'fail'; failures = @('Failed expectation'); auto = $true; definitionHash = $hash; evidence = @(); review = @(); build = $build; apkSha256 = $apkHash; installedApkSha256 = $apkHash }
+Set-AuditCheckReceipt $failed $fixture
+$failed.status = 'pass'
+Assert-Audit (-not (Test-AuditCheckBinding $entry $check $failed $apkHash $fixture)) 'Changing a failed status reused its receipt.'
+$failed.status = 'fail'; $failed.failures = @()
+Assert-Audit (-not (Test-AuditCheckBinding $entry $check $failed $apkHash $fixture)) 'Removing execution failures reused its receipt.'
+foreach ($case in 'wrongReceipt', 'automatic', 'staleDefinition', 'invalidStatus', 'missing', 'alreadyDecided', 'changedPayload', 'changedReview', 'changedFile', 'missingFile', 'wrongDirectory') {
+    $attempt = Copy-Json $run
+    $attempt.patches[0].checks[0].status = 'review'
+    $candidate = Copy-Json $verdict
+    switch ($case) {
+        wrongReceipt { $candidate.'Example/screen'.receiptId = '0' * 64 }
+        automatic { $attempt.patches[0].checks[0].auto = $true }
+        staleDefinition { $attempt.patches[0].checks[0].definitionHash = '0' * 64 }
+        invalidStatus { $candidate.'Example/screen'.status = 'inconclusive' }
+        missing { $attempt.patches[0].checks = @() }
+        alreadyDecided { $attempt.patches[0].checks[0].status = 'pass' }
+        changedPayload { $attempt.patches[0].checks[0].receipt.execution = '0' * 32 }
+        changedReview { $attempt.patches[0].checks[0].review[0].criteria = 'Different evidence' }
+        changedFile { [IO.File]::WriteAllText((Join-Path $fixture 'screen.png'), 'overwritten by a later run') }
+        missingFile { Remove-Item -LiteralPath (Join-Path $fixture 'screen.png') }
+    }
+    $before = $attempt | ConvertTo-Json -Depth 30 -Compress
+    $refused = $false
+    $evidenceDirectory = if ($case -eq 'wrongDirectory') { Join-Path $fixture 'absent' } else { $fixture }
+    try { Set-AuditVerdicts $catalog $attempt $candidate $evidenceDirectory } catch { $refused = $true }
+    Assert-Audit $refused "Unsafe verdict accepted: $case"
+    Assert-Audit (($attempt | ConvertTo-Json -Depth 30 -Compress) -eq $before) "Rejected verdict mutated results: $case"
+    [IO.File]::WriteAllText((Join-Path $fixture 'screen.png'), 'original evidence')
+}
+Assert-Audit ((Get-AuditResultValidation $catalog $run).currentChecks -eq 0) 'Missing evidence directory counted current.'
+$reorderedStep = Copy-Json $check
+$reorderedStep.steps = @([pscustomobject]@{ review = 'Readable'; shot = 'screen' })
+Assert-Audit ($hash -ne (Get-AuditDefinitionHash $entry $reorderedStep)) 'Changing the step dispatcher retained definition identity.'
+# Exercise the actual tap dispatcher without a device. Descriptive tap text must be saved before hashing.
+$runner = Join-Path $PSScriptRoot 'run-audit.ps1'
+$parseErrors = $null
+$syntax = [Management.Automation.Language.Parser]::ParseFile($runner, [ref]$null, [ref]$parseErrors)
+Assert-Audit (@($parseErrors).Count -eq 0) 'Runner failed to parse.'
+foreach ($name in 'Invoke-Check', 'Save-Evidence', 'Save-Shot', 'Stop-ScreenRecord', 'Clear-ScreenRecord', 'Grant-AuditLease', 'Revoke-AuditLease', 'Test-AuditLeaseOwnership', 'Invoke-AuditAdb') {
+    $definition = $syntax.Find({ param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name }, $true)
+    . ([scriptblock]::Create($definition.Extent.Text))
+}
+function Write-Marker { [pscustomobject]@{ id = 'fixture'; since = 'fixture' } }
+function Invoke-DumpTap { 'tapped fixture at 10,20' }
+function Start-Sleep { param($Milliseconds) }
+$deviceUp = $true
+$OutDir = $fixture
+foreach ($kind in 'tap', 'longpress') {
+    $step = [ordered]@{}; $step[$kind] = @{ text = 'Test control' }
+    $tapCheck = [pscustomobject]@{ id = $kind; auto = $true; steps = @([pscustomobject]$step) }
+    $restarted = $false
+    $tapResult = Invoke-Check $entry $tapCheck @{} ([ref]$restarted)
+    Assert-Audit ($tapResult.status -eq 'pass') "$kind step failed."
+    Assert-Audit ((Get-Content -LiteralPath (Join-Path $fixture $tapResult.evidence[0]) -Raw).Trim() -eq 'tapped fixture at 10,20') "$kind did not save its textual evidence."
+    Set-AuditCheckReceipt $tapResult $fixture
+    Assert-Audit ($tapResult.receipt.files.Count -eq 1) "$kind could not bind file evidence."
+}
+$Serial = 'fixture-device'; $LeaseDir = $fixture; $leaseToken = [guid]::NewGuid().ToString('N')
+Grant-AuditLease
+Grant-AuditLease
+Assert-Audit ((Get-Content -LiteralPath $leaseFile -Raw | ConvertFrom-Json).ownershipToken -eq $leaseToken) 'Lease renewal lost ownership.'
+$script:deviceCommands = 0
+function Invoke-FixtureAdb { $script:deviceCommands++ }
+$adbExe = 'Invoke-FixtureAdb'
+Invoke-AuditAdb shell 'fixture'
+Assert-Audit ($script:deviceCommands -eq 1) 'Owned device command was refused.'
+$ownedLease = Get-Content -LiteralPath $leaseFile -Raw
+Remove-Item -LiteralPath $leaseFile -Force
+$rejected = $false
+try { Grant-AuditLease } catch { $rejected = $true }
+Assert-Audit ($rejected -and -not (Test-Path -LiteralPath $leaseFile)) 'A missing acquired lease was silently recreated.'
+[IO.File]::WriteAllText($leaseFile, $ownedLease)
+Revoke-AuditLease
+Assert-Audit (-not (Test-Path -LiteralPath $leaseFile)) 'Owned lease was not released.'
+foreach ($expiry in [DateTime]::UtcNow.AddMinutes(10), [DateTime]::UtcNow.AddMinutes(-10)) {
+    $otherLease = @{ ownershipToken = 'someone-else'; expiresUtc = $expiry.ToString('o') } | ConvertTo-Json
+    [IO.File]::WriteAllText($leaseFile, $otherLease)
+    $rejected = $false
+    try { Grant-AuditLease } catch { $rejected = $true }
+    Assert-Audit $rejected 'Another test lease was reclaimed without confirming it stopped.'
+    Revoke-AuditLease
+    Assert-Audit ((Get-Content -LiteralPath $leaseFile -Raw) -eq $otherLease) 'Another test lease was changed or released.'
+    $rejected = $false
+    try { Invoke-AuditAdb shell 'am force-stop fixture' } catch { $rejected = $true }
+    Assert-Audit ($rejected -and $script:deviceCommands -eq 1) 'Device command was sent after losing the lease.'
+}
+foreach ($expiry in [DateTime]::UtcNow.AddMinutes(-5).ToString('o'), [DateTimeOffset]::UtcNow.AddMinutes(-5).ToOffset([TimeSpan]::FromHours(-4)).ToString('o')) {
+    [IO.File]::WriteAllText($leaseFile, (@{ ownershipToken = $leaseToken; expiresUtc = $expiry } | ConvertTo-Json))
+    Assert-Audit (-not (Test-AuditLeaseOwnership)) 'Expired same-token lease became current after timezone conversion.'
+    $rejected = $false
+    try { Invoke-AuditAdb shell 'fixture' } catch { $rejected = $true }
+    Assert-Audit ($rejected -and $script:deviceCommands -eq 1) 'Expired same-token lease sent a device command.'
+    $expiredLease = Get-Content -LiteralPath $leaseFile -Raw
+    $rejected = $false
+    try { Grant-AuditLease } catch { $rejected = $true }
+    Assert-Audit ($rejected -and -not (Test-AuditLeaseOwnership)) 'Renewal resurrected an expired same-token lease.'
+    Revoke-AuditLease
+    Assert-Audit ((Get-Content -LiteralPath $leaseFile -Raw) -ceq $expiredLease) 'Expired same-token lease was renewed or removed.'
+}
+# Failed capture or transfer must never certify an older local screenshot or recording.
+$script:captureFailure = ''
+$script:ownsCaptureLease = $true
+$script:captureCommands = @()
+function Test-AuditLeaseOwnership { return $script:ownsCaptureLease }
+function Invoke-DeviceShell([string]$Command) {
+    $script:captureCommands += $Command
+    $global:LASTEXITCODE = if ($Command -like 'screencap*' -and $script:captureFailure -eq 'capture') { 1 } else { 0 }
+}
+function Invoke-AuditAdb {
+    if ($args[0] -eq 'pull') {
+        [IO.File]::WriteAllText($args[2], $(if ($script:captureFailure -eq 'empty') { '' } else { 'new capture' }))
+        $global:LASTEXITCODE = if ($script:captureFailure -eq 'pull') { 1 } else { 0 }
+    }
+}
+$firstShot = Save-Shot 'same-name'
+$secondShot = Save-Shot 'same-name'
+Assert-Audit ($firstShot -ne $secondShot) 'Repeated screenshots overwrite prior evidence.'
+foreach ($failure in 'capture', 'pull', 'empty') {
+    $script:captureFailure = $failure
+    $rejected = $false
+    try { [void](Save-Shot 'same-name') } catch { $rejected = $true }
+    Assert-Audit $rejected "Screenshot $failure failure was certified."
+    Assert-Audit ((Get-Content -LiteralPath (Join-Path $fixture $firstShot) -Raw) -eq 'new capture') 'A failed capture replaced older evidence.'
+}
+foreach ($failure in 'recorder', 'pull', 'empty', 'timeout', 'existing', 'success') {
+    $script:captureFailure = $failure
+    $script:recordingRemote = '/fixture/unique-recording.mp4'
+    $script:recorder = [pscustomobject]@{ ExitCode = $(if ($failure -eq 'recorder') { 1 } else { 0 }) }
+    $script:recorder | Add-Member ScriptMethod WaitForExit { param($Timeout) return $script:captureFailure -ne 'timeout' }
+    $script:recorder | Add-Member ScriptMethod Kill { }
+    $script:recorder | Add-Member ScriptMethod Dispose { }
+    $recording = Join-Path $fixture "$failure.mp4"
+    if ($failure -eq 'existing') { [IO.File]::WriteAllText($recording, 'old recording') }
+    $rejected = $false
+    try { Stop-ScreenRecord $recording } catch { $rejected = $true }
+    Assert-Audit ($rejected -eq ($failure -ne 'success')) "Recording outcome was wrong for $failure."
+    Assert-Audit ($null -eq $script:recorder) 'Recorder handle survived completion.'
+    if ($failure -eq 'existing') { Assert-Audit ((Get-Content $recording -Raw) -eq 'old recording') 'Prior recording evidence was overwritten.' }
+}
+$script:captureFailure = ''
+foreach ($owned in $true, $false) {
+    $script:ownsCaptureLease = $owned
+    $script:disposedRecorder = $false
+    $script:killedRecorder = $false
+    $script:captureCommands = @()
+    $script:recordingRemote = '/fixture/interrupted.mp4'
+    $script:recorder = [pscustomobject]@{ HasExited = $false }
+    $script:recorder | Add-Member ScriptMethod Kill { $script:killedRecorder = $true }
+    $script:recorder | Add-Member ScriptMethod Dispose { $script:disposedRecorder = $true }
+    function Invoke-DumpTap { throw 'Tap failed during recording' }
+    function Restart-TikTok { }
+    $restarted = $false
+    $interrupted = Invoke-Check $entry $tapCheck @{} ([ref]$restarted)
+    Assert-Audit ($interrupted.status -eq 'fail' -and $script:killedRecorder -and $script:disposedRecorder -and $null -eq $script:recorder) 'Failed intermediate step leaked its recorder.'
+    Assert-Audit (($script:captureCommands -contains 'rm -f /fixture/interrupted.mp4') -eq $owned) 'Recording cleanup ignored lease ownership.'
+}
+function Write-FixtureJson([string]$Path, $Value) { $Value | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $Path -Encoding UTF8 }
+function New-FixtureZip([string]$Path, [string]$EntryName, [string]$Content) {
+    $zip = [IO.Compression.ZipFile]::Open($Path, 'Create')
+    try {
+        $writer = [IO.StreamWriter]::new($zip.CreateEntry($EntryName).Open())
+        try { $writer.Write($Content) } finally { $writer.Dispose() }
+    } finally { $zip.Dispose() }
+}
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $fixtureApk = Join-Path $fixture 'fixture.apk'
+    $fixtureBundle = Join-Path $fixture 'fixture.mpp'
+    $receiptPath = Join-Path $fixture 'receipt.json'
+    New-FixtureZip $fixtureApk 'marker.txt' 'present'
+    $manifest = "Manifest-Version: 1.0`nVersion: 1.0.0`nTimestamp: 1000`nPatcher-Version: 1.15.1`n" +
+        "Hushfeed-Source-Commit: $($source.commit)`nHushfeed-Source-Clean: true`n" +
+        "Hushfeed-Source-Start: $($source.startFingerprint)`nHushfeed-Source-End: $($source.endFingerprint)`n"
+    New-FixtureZip $fixtureBundle 'META-INF/MANIFEST.MF' $manifest
+    $receipt = [ordered]@{
+        schemaVersion = 1; kind = 'hushfeed-device-build'; source = $source
+        apk = @{ sha256 = (Get-FileHash $fixtureApk -Algorithm SHA256).Hash.ToLowerInvariant() }
+        bundle = @{ sha256 = (Get-FileHash $fixtureBundle -Algorithm SHA256).Hash.ToLowerInvariant() }
+    }
+    Write-FixtureJson $receiptPath $receipt
+    Assert-Audit ((Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle).status -eq 'verified') 'Valid build receipt rejected.'
+    Assert-Audit ((Read-AuditBuildIdentity $fixtureApk '' '').status -eq 'unbound') 'Absent receipt invented source identity.'
+    foreach ($mutation in 'apk', 'bundle', 'source') {
+        $invalid = Copy-Json $receipt
+        if ($mutation -eq 'source') { $invalid.source.clean = $false } else { $invalid.$mutation.sha256 = '0' * 64 }
+        Write-FixtureJson $receiptPath $invalid
+        $rejected = $false
+        try { [void](Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle) } catch { $rejected = $true }
+        Assert-Audit $rejected "Mismatched $mutation accepted."
+    }
+    Write-FixtureJson $receiptPath $receipt
+    $staticEntry = [pscustomobject]@{ name = 'Static'; kind = 'static'; category = 'Test'; settings = @(); checks = @(
+        [pscustomobject]@{ id = 'present'; what = "App's marker <here> & there"; auto = $true; steps = @([pscustomobject]@{ apk = 'entry-present'; path = 'marker.txt' }) }
+    ) }
+    $fixtureCatalog = Join-Path $fixture 'catalog.json'
+    $staticEntry.checks[0].what += [char]0xB7 + [char]::ConvertFromUtf32(0x1F525)
+    $fixtureResults = Join-Path $fixture 'results.json'
+    $fakeAapt = Join-Path $fixture 'aapt.ps1'
+    Write-FixtureJson $fixtureCatalog @($staticEntry)
+    [IO.File]::WriteAllText($fakeAapt, 'Write-Output "package: name=''com.zhiliaoapp.musically'' versionCode=''1'' versionName=''47.1.4''"')
+    $shell = (Get-Process -Id $PID).Path
+    $runner = Join-Path $PSScriptRoot 'run-audit.ps1'
+    & $shell -NoProfile -File $runner -NoDevice -Catalog $fixtureCatalog -Apk $fixtureApk -Aapt2 $fakeAapt -Results $fixtureResults -OutDir (Join-Path $fixture 'evidence') -BuildReceipt $receiptPath -Bundle $fixtureBundle
+    Assert-Audit ($LASTEXITCODE -eq 0) 'Static CLI run failed.'
+    $recorded = Get-Content $fixtureResults -Raw | ConvertFrom-Json
+    Assert-Audit ($recorded.qualification.currentPass -eq 1) 'Static run did not bind evidence.'
+    Assert-Audit ($recorded.patches[0].checks[0].definitionHash -eq (Get-AuditDefinitionHash $staticEntry $staticEntry.checks[0])) 'Runner omitted exact definition.'
+    # Validate a persisted receipt in the other supported shell, not just twice in one host.
+    $otherShell = if ($PSVersionTable.PSVersion.Major -ge 6 -and $env:WINDIR) {
+        Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'
+    } elseif (Get-Command pwsh -ErrorAction SilentlyContinue) { (Get-Command pwsh).Source }
+    if ($otherShell -and (Test-Path -LiteralPath $otherShell)) {
+        $modulePathBefore = $env:PSModulePath
+        try {
+            if ($PSVersionTable.PSVersion.Major -ge 6) {
+                $env:PSModulePath = "$env:WINDIR\System32\WindowsPowerShell\v1.0\Modules;$env:ProgramFiles\WindowsPowerShell\Modules"
+            }
+            $crossResult = & $otherShell -NoProfile -ExecutionPolicy Bypass -File $runner -ValidateResults -Catalog $fixtureCatalog -Results $fixtureResults -OutDir (Join-Path $fixture 'evidence')
+            Assert-Audit ($LASTEXITCODE -eq 0) 'The other PowerShell host rejected an unchanged persisted receipt.'
+            Assert-Audit (($crossResult | ConvertFrom-Json).currentPass -eq 1) 'Cross-shell validation lost its current pass.'
+        } finally { $env:PSModulePath = $modulePathBefore }
+    }
+    # Carry an unchanged historical result while running a different patch, then change its definition.
+    $second = Copy-Json $staticEntry
+    $second.name = 'Second'
+    $staticEntry.checks[0].what = 'Changed marker criterion'
+    Write-FixtureJson $fixtureCatalog @($staticEntry, $second)
+    & $shell -NoProfile -File $runner -NoDevice -Only Second -Catalog $fixtureCatalog -Apk $fixtureApk -Aapt2 $fakeAapt -Results $fixtureResults -OutDir (Join-Path $fixture 'second-evidence') -BuildReceipt $receiptPath -Bundle $fixtureBundle
+    Assert-Audit ($LASTEXITCODE -eq 0) 'Partial CLI run failed.'
+    $merged = Get-Content $fixtureResults -Raw | ConvertFrom-Json
+    Assert-Audit ($merged.qualification.changed -contains 'Static/present') 'Partial rerun promoted an old definition.'
+    Assert-Audit ($merged.qualification.currentChecks -eq 1) 'Partial rerun counted stale evidence current.'
+    Assert-Audit ($merged.patches[0].checks[0].status -eq 'pass') 'Historical verdict was rewritten.'
+} finally {
+    $resolved = [IO.Path]::GetFullPath($fixture)
+    if (-not $resolved.StartsWith($temporaryRoot, [StringComparison]::OrdinalIgnoreCase) -or
+        (Split-Path -Leaf $resolved) -notlike 'hushfeed-audit-test-*') { throw 'Unsafe fixture cleanup path.' }
+    Remove-Item -LiteralPath $resolved -Recurse -Force
+}
+Write-Host "Audit evidence contracts passed: $script:passed"
