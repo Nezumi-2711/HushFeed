@@ -16,7 +16,7 @@ import org.junit.Test
 /**
  * Which colors Accent color recolors, held to each declared build's fixture (#84).
  *
- * <p>TikTok's TUX token table (`X.0CKW.LIZ` on 47.1.4, a chain of `"Name".equals(token)` checks
+ * <p>TikTok's TUX token table (one obfuscated method, a chain of `"Name".equals(token)` checks
  * that each return an attr id) names the semantic attrs its views read. UIShapePrimary to
  * UIShapePrimary5, UITextPrimary and UITextPrimaryDisplay are the accent: the themes point each at
  * a palette token, one for the dark themes and one for the light ones, and the palette styles set

@@ -115,22 +115,23 @@ val accentColorPatch = resourcePatch(
 }
 
 /**
- * The accent tokens per build, by the name TikTok's TUX token table gives each (`X.0CKW.LIZ` maps
- * "UIShapePrimary" to attr a0w on 47.1.4): its dark palette literal, then its light one. The
- * semantic attrs point at `?attr/<dark>` in the dark themes and `?attr/<light>` in the light
- * ones, and a few themes send UIShapePrimary and UITextPrimaryDisplay to `?attr/e7`, a green of
- * their own that stays. UIShapeDanger (agr and avz) is red too and isn't listed: warnings keep it.
+ * The accent tokens per build, by the name TikTok's TUX token table gives each (the method that
+ * returns an attr id per token name maps "UIShapePrimary" to attr a0x on 47.4.3): its dark palette
+ * literal, then its light one. The semantic attrs point at `?attr/<dark>` in the dark themes and
+ * `?attr/<light>` in the light ones, and a few themes send UIShapePrimary and UITextPrimaryDisplay
+ * to `?attr/e7`, a green of their own that stays. UIShapeDanger (agt and aw2) is red too and isn't
+ * listed: warnings keep it. Every name moves a place or three from one build to the next.
  * AccentColorPaletteTest holds each declared build's fixture to its entry here.
  */
 internal val ACCENT_TOKENS: Map<String, Map<String, Pair<String, String>>> = linkedMapOf(
-    "47.1.4" to linkedMapOf(
-        "UIShapePrimary" to ("ah3" to "awa"),
-        "UIShapePrimary2" to ("ah4" to "awb"),
-        "UIShapePrimary3" to ("ah5" to "awc"),
-        "UIShapePrimary4" to ("ah6" to "awd"),
-        "UIShapePrimary5" to ("ah7" to "awe"),
-        "UITextPrimary" to ("aiv" to "ay3"),
-        "UITextPrimaryDisplay" to ("aiw" to "ay4"),
+    "47.4.3" to linkedMapOf(
+        "UIShapePrimary" to ("ah5" to "awd"),
+        "UIShapePrimary2" to ("ah6" to "awe"),
+        "UIShapePrimary3" to ("ah7" to "awf"),
+        "UIShapePrimary4" to ("ah8" to "awg"),
+        "UIShapePrimary5" to ("ah9" to "awh"),
+        "UITextPrimary" to ("aix" to "ay6"),
+        "UITextPrimaryDisplay" to ("aiy" to "ay7"),
     ),
 )
 
@@ -151,13 +152,13 @@ internal fun unreadAccentRefusal(versionName: String?): String {
 
 /**
  * Drawables with TikTok's red drawn into their pixels, per build, which the palette rewrite can't
- * reach. On 47.1.4 `bv8` is the follow plus under each feed avatar (FeedAvatarDefaultAssem sets it
+ * reach. On 47.4.3 `bty` is the follow plus under each feed avatar (FeedAvatarDefaultAssem sets it
  * as an icon res, or as a TuxIcon behind a flag) and on a DM's profile card (#84). Each is a
  * palette PNG of TikTok's red, white and the blends between them, so only its palette changes.
  * AccentColorPaletteTest holds each declared build's fixture to its entry here.
  */
 internal val ACCENT_ICONS: Map<String, List<String>> = linkedMapOf(
-    "47.1.4" to listOf("bv8"),
+    "47.4.3" to listOf("bty"),
 )
 
 /** The drawables to recolor on this build, or a refusal. */
