@@ -34,8 +34,8 @@ import java.util.concurrent.atomic.AtomicLong;
 @SuppressWarnings("unused")
 public final class ReceivedDmTranslationPreview {
     static final String ITEM_KEY = "ReceivedTranslationPreview";
-    /** The menu row's icon, raw/icon_languages on 47.1.4; ReceivedDmTranslationFixturesTest holds it to that name. */
-    static final int LANGUAGES_ICON = 0x7f010835;
+    /** The menu row's icon, raw/icon_languages on 47.4.3; ReceivedDmTranslationIconTest holds it to that name. */
+    static final int LANGUAGES_ICON = 0x7f010844;
     private static final String CONTENT = "com.ss.android.ugc.aweme.im.sdk.chat.ui.text.content.";
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
     private static final Object LOCK = new Object();
