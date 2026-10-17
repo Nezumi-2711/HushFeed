@@ -4,6 +4,10 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+### Supported apps
+
+* **TikTok:** Hushfeed now supports TikTok 47.4.3, and only that one. 47.1.4 isn't supported anymore, so grab the 47.4.3 APK from APKMirror and patch that. PineDrama stays on 47.1.4.
+
 ### Verification
 
 * **TikTok:** The native alignment checker now catches RELRO ranges that would make writable data read-only on 16 KB devices. Safely isolated RELRO segments remain accepted.
