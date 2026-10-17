@@ -398,6 +398,7 @@ Assert-Throws { Get-PatchTarget -PatchList $missingTarget } '*has no compatible 
 $tempBase = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
 $caseRoot = [System.IO.Path]::GetFullPath((Join-Path $tempBase ("hushfeed-script-test-" + [guid]::NewGuid().ToString('N'))))
 $requiredPrefix = $tempBase.TrimEnd('\') + '\'
+$deviceLeases = @{}
 if (-not $caseRoot.StartsWith($requiredPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
     throw "Refusing to create test files outside the temporary directory: $caseRoot"
 }
@@ -517,9 +518,13 @@ exit /b 17
 exit /b 19
 '@
     [System.IO.File]::WriteAllText($fakeAdb, $fakeBody, [System.Text.Encoding]::ASCII)
+    foreach ($fixtureSerial in 'CLEAN', 'READY', 'BROKEN', 'LOCKED') {
+        $deviceLeases[$fixtureSerial] = New-DeviceLease -LeaseDir (Join-Path $caseRoot 'device-leases') `
+            -Serial $fixtureSerial -Project 'hushfeed' -ChatIdentity 'script-contracts' -Purpose 'fake replacement checks'
+    }
 
     [System.IO.File]::WriteAllText($mode, 'absent', [System.Text.Encoding]::ASCII)
-    $removed = Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'CLEAN' -PackageName 'com.example.app'
+    $removed = Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'CLEAN' -PackageName 'com.example.app' -Lease $deviceLeases.CLEAN
     $calls = @(Get-Content -LiteralPath $log)
     Assert-True (-not $removed) 'An absent package was reported as removed.'
     Assert-True ($calls.Count -eq 1 -and $calls[0] -like '*shell pm path com.example.app') `
@@ -528,7 +533,7 @@ exit /b 19
     # API 36's pm path exits 1 with nothing to say for a package that isn't there.
     Remove-Item -LiteralPath $log -Force
     [System.IO.File]::WriteAllText($mode, 'absent-silent', [System.Text.Encoding]::ASCII)
-    $removed = Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'CLEAN' -PackageName 'com.example.app'
+    $removed = Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'CLEAN' -PackageName 'com.example.app' -Lease $deviceLeases.CLEAN
     $calls = @(Get-Content -LiteralPath $log)
     Assert-True (-not $removed) 'A package API 36 reports absent was reported as removed.'
     Assert-True ($calls.Count -eq 2 -and $calls[1] -like '*get-state') `
@@ -536,7 +541,7 @@ exit /b 19
 
     Remove-Item -LiteralPath $log -Force
     [System.IO.File]::WriteAllText($mode, 'present', [System.Text.Encoding]::ASCII)
-    $removed = Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'READY' -PackageName 'com.example.app'
+    $removed = Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'READY' -PackageName 'com.example.app' -Lease $deviceLeases.READY
     $calls = @(Get-Content -LiteralPath $log)
     Assert-True $removed 'An installed package was not removed.'
     Assert-True ($calls.Count -eq 2 -and $calls[0] -like '*shell pm path com.example.app' -and
@@ -545,7 +550,7 @@ exit /b 19
     Remove-Item -LiteralPath $log -Force
     [System.IO.File]::WriteAllText($mode, 'check-fail', [System.Text.Encoding]::ASCII)
     Assert-Throws {
-        Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'BROKEN' -PackageName 'com.example.app'
+        Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'BROKEN' -PackageName 'com.example.app' -Lease $deviceLeases.BROKEN
     } '*could not check*' 'An ADB transport failure was treated as an absent package.'
     $calls = @(Get-Content -LiteralPath $log)
     Assert-True ($calls.Count -eq 2 -and $calls[1] -like '*get-state') 'The check-failure path continued after ADB failed.'
@@ -553,10 +558,11 @@ exit /b 19
     Remove-Item -LiteralPath $log -Force
     [System.IO.File]::WriteAllText($mode, 'uninstall-fail', [System.Text.Encoding]::ASCII)
     Assert-Throws {
-        Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'LOCKED' -PackageName 'com.example.app'
+        Remove-AndroidPackageIfInstalled -Adb $fakeAdb -Serial 'LOCKED' -PackageName 'com.example.app' -Lease $deviceLeases.LOCKED
     } '*uninstall failed*' 'An uninstall failure was accepted.'
     $calls = @(Get-Content -LiteralPath $log)
     Assert-True ($calls.Count -eq 2) 'The uninstall-failure path did not perform exactly a check and uninstall.'
+    foreach ($context in $deviceLeases.Values) { Remove-DeviceLease -Lease $context }
 
     $emptyJdk = Join-Path $caseRoot 'empty-jdk'
     New-Item -ItemType Directory -Path $emptyJdk | Out-Null
@@ -633,6 +639,9 @@ exit /b 19
     Assert-True ($deviceScript -match '\[string\[\]\]\$Option' -and $deviceScript -match "\`$enable \+= '-O'") `
         'patch-for-device.ps1 has no way to pass a patch option to the CLI.'
 } finally {
+    foreach ($context in $deviceLeases.Values) {
+        if ($null -ne $context.Stream) { Remove-DeviceLease -Lease $context }
+    }
     if ($caseRoot.StartsWith($requiredPrefix, [System.StringComparison]::OrdinalIgnoreCase) -and
         (Test-Path -LiteralPath $caseRoot)) {
         Remove-Item -LiteralPath $caseRoot -Recurse -Force
@@ -726,8 +735,9 @@ if (Test-Path -LiteralPath $windowsPowerShell -PathType Leaf) {
         [IO.File]::WriteAllText($standInAdb, "@echo * daemon not running; starting now at tcp:5037 1>&2`r`n@exit /b 0`r`n")
         $installScript = Join-Path $PSScriptRoot 'device-install.ps1'
         $command = "`$ErrorActionPreference = 'Stop'; . '$installScript'; " +
-            "try { 'removed=' + (Remove-AndroidPackageIfInstalled -Adb '$standInAdb' -Serial 'serial' -PackageName 'com.example' 6> `$null) } " +
-            "catch { 'threw: ' + `$_.Exception.Message }"
+            "`$lease = New-DeviceLease -LeaseDir '$(Join-Path $nativeRoot 'device-leases')' -Serial 'serial' -Project 'hushfeed' -ChatIdentity 'ps51-fixture' -Purpose 'stderr fixture'; " +
+            "try { 'removed=' + (Remove-AndroidPackageIfInstalled -Adb '$standInAdb' -Serial 'serial' -PackageName 'com.example' -Lease `$lease 6> `$null) } " +
+            "catch { 'threw: ' + `$_.Exception.Message } finally { Remove-DeviceLease -Lease `$lease }"
         $answer = (& $windowsPowerShell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command $command 2>&1 |
             Out-String).Trim()
         $global:LASTEXITCODE = 0
@@ -2110,7 +2120,7 @@ try {
     foreach ($signingInput in @(
         'scripts/apk-signing.ps1', 'scripts/SigningCertificateCheck.java',
         'scripts/SigningKeyFixtures.java', 'scripts/test-apk-signing.ps1',
-        'scripts/patch-for-device.ps1', 'scripts/device-install.ps1',
+        'scripts/patch-for-device.ps1', 'scripts/device-install.ps1', 'scripts/device-lease.ps1',
         'scripts/common.ps1', 'scripts/Resolve-Java.ps1',
         'scripts/patch-target.ps1', 'scripts/patch-report.ps1',
         'tools/verification-probe/build.ps1', 'tools/verification-probe/AndroidManifest.xml',
@@ -3550,6 +3560,7 @@ Write-Host '[scripts] shared phone log contracts passed'
 & (Join-Path $Root 'scripts/test-storage-probe.ps1') -Root $Root
 & (Join-Path $Root 'scripts/test-fixture-jobs.ps1') -Root $Root
 & (Join-Path $Root 'scripts/test-release-publication.ps1') -Root $Root
+& (Join-Path $Root 'scripts/test-device-lease.ps1')
 & (Join-Path $Root 'audit/test-evidence.ps1')
 
 $global:LASTEXITCODE = 0

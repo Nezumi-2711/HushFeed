@@ -2,6 +2,7 @@
 param()
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'evidence.ps1')
+. (Join-Path (Split-Path -Parent $PSScriptRoot) 'scripts/device-lease.ps1')
 $script:passed = 0
 function Assert-Audit([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw $Message }
@@ -140,7 +141,7 @@ $runner = Join-Path $PSScriptRoot 'run-audit.ps1'
 $parseErrors = $null
 $syntax = [Management.Automation.Language.Parser]::ParseFile($runner, [ref]$null, [ref]$parseErrors)
 Assert-Audit (@($parseErrors).Count -eq 0) 'Runner failed to parse.'
-foreach ($name in 'Invoke-Check', 'Save-Evidence', 'Save-Shot', 'Stop-ScreenRecord', 'Clear-ScreenRecord', 'Grant-AuditLease', 'Revoke-AuditLease', 'Test-AuditLeaseOwnership', 'Invoke-AuditAdb') {
+foreach ($name in 'Invoke-Check', 'Save-Evidence', 'Save-Shot', 'Start-ScreenRecord', 'Stop-ScreenRecord', 'Clear-ScreenRecord', 'Grant-AuditLease', 'Revoke-AuditLease', 'Test-AuditLeaseOwnership', 'Invoke-AuditAdb') {
     $definition = $syntax.Find({ param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name }, $true)
     . ([scriptblock]::Create($definition.Extent.Text))
 }
@@ -159,23 +160,38 @@ foreach ($kind in 'tap', 'longpress') {
     Set-AuditCheckReceipt $tapResult $fixture
     Assert-Audit ($tapResult.receipt.files.Count -eq 1) "$kind could not bind file evidence."
 }
-$Serial = 'fixture-device'; $LeaseDir = $fixture; $leaseToken = [guid]::NewGuid().ToString('N')
+$Serial = 'fixture-device'; $LeaseDir = $fixture; $ChatIdentity = 'audit-fixture'; $LeaseMinutes = 30
+$script:auditLease = $null
 Grant-AuditLease
+$leaseFile = $script:auditLease.Path
+$leaseToken = $script:auditLease.OwnershipToken
 Grant-AuditLease
-Assert-Audit ((Get-Content -LiteralPath $leaseFile -Raw | ConvertFrom-Json).ownershipToken -eq $leaseToken) 'Lease renewal lost ownership.'
+Assert-Audit ((Read-DeviceLeaseRecord $script:auditLease).ownershipToken -eq $leaseToken) 'Lease renewal lost ownership.'
 $script:deviceCommands = 0
 function Invoke-FixtureAdb { $script:deviceCommands++ }
 $adbExe = 'Invoke-FixtureAdb'
 Invoke-AuditAdb shell 'fixture'
 Assert-Audit ($script:deviceCommands -eq 1) 'Owned device command was refused.'
-$ownedLease = Get-Content -LiteralPath $leaseFile -Raw
+$Serial = 'different-device'
+$rejected = $false
+try { Invoke-AuditAdb shell 'fixture' } catch { $rejected = $true }
+Assert-Audit ($rejected -and $script:deviceCommands -eq 1) 'Audit command accepted a lease for a different serial.'
+$rejected = $false
+try { Start-ScreenRecord 1 } catch { $rejected = $_.Exception.Message -like '*ownership or serial*' }
+Assert-Audit $rejected 'Recorder started without the exact serial lease.'
+$Serial = 'fixture-device'
+Revoke-AuditLease
+Assert-Audit (-not (Test-Path -LiteralPath $leaseFile)) 'Owned lease was not released.'
+Grant-AuditLease
+# A held Windows handle prevents path deletion. Close that handle to simulate lost ownership,
+# then remove the fixture file; renewal must still reject the previously acquired context.
+$script:auditLease.Stream.Dispose()
 Remove-Item -LiteralPath $leaseFile -Force
 $rejected = $false
 try { Grant-AuditLease } catch { $rejected = $true }
 Assert-Audit ($rejected -and -not (Test-Path -LiteralPath $leaseFile)) 'A missing acquired lease was silently recreated.'
-[IO.File]::WriteAllText($leaseFile, $ownedLease)
 Revoke-AuditLease
-Assert-Audit (-not (Test-Path -LiteralPath $leaseFile)) 'Owned lease was not released.'
+$script:auditLease = $null # The stopped fixture is explicitly recovered for the next case.
 foreach ($expiry in [DateTime]::UtcNow.AddMinutes(10), [DateTime]::UtcNow.AddMinutes(-10)) {
     $otherLease = @{ ownershipToken = 'someone-else'; expiresUtc = $expiry.ToString('o') } | ConvertTo-Json
     [IO.File]::WriteAllText($leaseFile, $otherLease)
@@ -188,19 +204,44 @@ foreach ($expiry in [DateTime]::UtcNow.AddMinutes(10), [DateTime]::UtcNow.AddMin
     try { Invoke-AuditAdb shell 'am force-stop fixture' } catch { $rejected = $true }
     Assert-Audit ($rejected -and $script:deviceCommands -eq 1) 'Device command was sent after losing the lease.'
 }
+Remove-Item -LiteralPath $leaseFile -Force
 foreach ($expiry in [DateTime]::UtcNow.AddMinutes(-5).ToString('o'), [DateTimeOffset]::UtcNow.AddMinutes(-5).ToOffset([TimeSpan]::FromHours(-4)).ToString('o')) {
-    [IO.File]::WriteAllText($leaseFile, (@{ ownershipToken = $leaseToken; expiresUtc = $expiry } | ConvertTo-Json))
+    Grant-AuditLease
+    # Mutate only the owned stream; external writes are now blocked while the context is held.
+    $held = Read-DeviceLeaseRecord $script:auditLease
+    $held.expiresUtc = $expiry
+    Write-DeviceLeaseRecord $script:auditLease $held
     Assert-Audit (-not (Test-AuditLeaseOwnership)) 'Expired same-token lease became current after timezone conversion.'
     $rejected = $false
     try { Invoke-AuditAdb shell 'fixture' } catch { $rejected = $true }
     Assert-Audit ($rejected -and $script:deviceCommands -eq 1) 'Expired same-token lease sent a device command.'
-    $expiredLease = Get-Content -LiteralPath $leaseFile -Raw
+    $script:auditLease.Stream.Position = 0
+    $leaseReader = [IO.StreamReader]::new($script:auditLease.Stream, [Text.Encoding]::UTF8, $true, 1024, $true)
+    try { $expiredLease = $leaseReader.ReadToEnd() } finally { $leaseReader.Dispose() }
     $rejected = $false
     try { Grant-AuditLease } catch { $rejected = $true }
     Assert-Audit ($rejected -and -not (Test-AuditLeaseOwnership)) 'Renewal resurrected an expired same-token lease.'
     Revoke-AuditLease
     Assert-Audit ((Get-Content -LiteralPath $leaseFile -Raw) -ceq $expiredLease) 'Expired same-token lease was renewed or removed.'
+    Remove-Item -LiteralPath $leaseFile -Force
+    $script:auditLease = $null # Explicit recovery after the expired fake test stopped.
 }
+# Exercise the real finalizer: a restoration failure must still close/release the owned handle.
+Grant-AuditLease
+$apkZip = [pscustomobject]@{}
+$apkZip | Add-Member ScriptMethod Dispose { }
+$script:recorder = $null
+$deviceStarted = $true
+function Restore-NightMode { throw 'Fixture restoration failure.' }
+$mainCleanup = $syntax.Find({ param($node)
+    $node -is [Management.Automation.Language.TryStatementAst] -and $null -ne $node.Finally -and
+        $node.Finally.Extent.Text -match '\$apkZip\.Dispose\('
+}, $true)
+$rejected = $false
+try { & ([scriptblock]::Create(($mainCleanup.Finally.Statements.Extent.Text -join "`n"))) }
+catch { $rejected = $_.Exception.Message -eq 'Fixture restoration failure.' }
+Assert-Audit $rejected 'The fixture did not exercise a restoration failure.'
+Assert-Audit ($null -eq $script:auditLease -and -not (Test-Path -LiteralPath $leaseFile)) 'Restoration failure retained the device lease.'
 # Failed capture or transfer must never certify an older local screenshot or recording.
 $script:captureFailure = ''
 $script:ownsCaptureLease = $true
@@ -335,6 +376,7 @@ function New-FixtureZip([string]$Path, [string]$EntryName, [string]$Content) {
     Assert-Audit ($merged.qualification.currentChecks -eq 1) 'Partial rerun counted stale evidence current.'
     Assert-Audit ($merged.patches[0].checks[0].status -eq 'pass') 'Historical verdict was rewritten.'
 } finally {
+    if ($null -ne $script:auditLease -and $null -ne $script:auditLease.Stream) { $script:auditLease.Stream.Dispose() }
     $resolved = [IO.Path]::GetFullPath($fixture)
     if (-not $resolved.StartsWith($temporaryRoot, [StringComparison]::OrdinalIgnoreCase) -or
         (Split-Path -Leaf $resolved) -notlike 'hushfeed-audit-test-*') { throw 'Unsafe fixture cleanup path.' }

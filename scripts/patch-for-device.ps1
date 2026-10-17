@@ -28,6 +28,9 @@
 [CmdletBinding()]
 param(
     [string]$Serial,
+    [string]$LeaseDir = $env:HUSHFEED_DEVICE_LEASE_DIR,
+    [string]$ChatIdentity = $env:HUSHFEED_CHAT_IDENTITY,
+    [ValidateRange(1, 30)][int]$LeaseMinutes = 30,
     [switch]$Replace,
     # Print every line the desktop CLI writes, not only errors. The privacy patches say how
     # many call sites they intercepted, and a count of zero is the finding that matters.
@@ -109,6 +112,7 @@ $temp = Join-Path $OutDir 'tmp'
 $result = Join-Path $OutDir 'result.json'
 $argumentFile = Join-Path $OutDir 'morphe-patch.args'
 $signingSession = $null
+$deviceLease = $null
 $outputInitialized = $false
 try {
 $signingSession = New-ApkSigningSession -BoundParameters $PSBoundParameters -Root $root -Sdk $Sdk `
@@ -195,10 +199,12 @@ if (-not $Serial) { return }
 $adb = (Get-Command adb -ErrorAction SilentlyContinue).Source
 if (-not $adb) { $adb = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Recurse -Filter adb.exe -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName }
 if (-not $adb) { throw 'No adb found. Put it on the PATH or install the platform tools.' }
+$deviceLease = New-DeviceLease -LeaseDir $LeaseDir -Serial $Serial -Project 'hushfeed' `
+    -ChatIdentity $ChatIdentity -Purpose 'patched application install' -LeaseMinutes $LeaseMinutes
 if ($Replace) {
-    [void](Remove-AndroidPackageIfInstalled -Adb $adb -Serial $Serial -PackageName $target.PackageName)
+    [void](Remove-AndroidPackageIfInstalled -Adb $adb -Serial $Serial -PackageName $target.PackageName -Lease $deviceLease)
 } else {
-    Assert-InstalledApkSigner -Adb $adb -Serial $Serial -PackageName $target.PackageName -SigningSession $signingSession
+    Assert-InstalledApkSigner -Adb $adb -Serial $Serial -PackageName $target.PackageName -SigningSession $signingSession -Lease $deviceLease
 }
 Write-Host "[device] installing on $Serial"
 # adb prints Failure [...] and exits non-zero on a refused install; without this the script
@@ -206,12 +212,14 @@ Write-Host "[device] installing on $Serial"
 $preference = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
 try {
+    Assert-DeviceLease -Lease $deviceLease -Serial $Serial
     & $adb -s $Serial install -r -g $out 2>&1 | Out-Host
     $installStatus = $LASTEXITCODE
 } finally {
     $ErrorActionPreference = $preference
 }
 if ($installStatus -ne 0) { throw "adb install failed on $Serial. The output above says why." }
+Assert-DeviceLease -Lease $deviceLease -Serial $Serial
 & $adb -s $Serial shell dumpsys package $target.PackageName | Select-String 'versionName' | Out-Host
 } finally {
     try {
@@ -219,5 +227,8 @@ if ($installStatus -ne 0) { throw "adb install failed on $Serial. The output abo
             Remove-Item -LiteralPath $argumentFile -Force -ErrorAction SilentlyContinue
             if (Test-Path -LiteralPath $unsigned) { Remove-Item -LiteralPath $unsigned -Force }
         }
-    } finally { Close-ApkSigningSession -Session $signingSession }
+    } finally {
+        try { Remove-DeviceLease -Lease $deviceLease -WarnOnFailure }
+        finally { Close-ApkSigningSession -Session $signingSession }
+    }
 }

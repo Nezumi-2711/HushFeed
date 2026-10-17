@@ -423,7 +423,7 @@ try {
     $apkSigningPaths = @(
         'scripts/apk-signing.ps1', 'scripts/SigningCertificateCheck.java',
         'scripts/SigningKeyFixtures.java', 'scripts/test-apk-signing.ps1',
-        'scripts/patch-for-device.ps1', 'scripts/device-install.ps1',
+        'scripts/patch-for-device.ps1', 'scripts/device-install.ps1', 'scripts/device-lease.ps1',
         'scripts/common.ps1', 'scripts/Resolve-Java.ps1',
         'scripts/patch-target.ps1', 'scripts/patch-report.ps1',
         'tools/verification-probe/build.ps1', 'tools/verification-probe/AndroidManifest.xml',

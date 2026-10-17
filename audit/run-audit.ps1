@@ -61,6 +61,8 @@ param(
     [string]$Aapt2,
     [string]$Ffmpeg,
     [string]$LeaseDir = $env:HUSHFEED_DEVICE_LEASE_DIR,
+    [string]$ChatIdentity = $env:HUSHFEED_CHAT_IDENTITY,
+    [ValidateRange(1, 30)][int]$LeaseMinutes = 30,
     [switch]$NoDevice,
     [string]$ApplyVerdicts,
     [switch]$ValidateResults,
@@ -74,6 +76,7 @@ $root = Split-Path -Parent $PSScriptRoot
 $package = 'com.zhiliaoapp.musically'
 if (-not $Catalog) { $Catalog = Join-Path $PSScriptRoot 'catalog.json' }
 . (Join-Path $PSScriptRoot 'evidence.ps1')
+. (Join-Path $root 'scripts/device-lease.ps1')
 $allCatalogEntries = Get-Content -LiteralPath $Catalog -Raw -Encoding UTF8 | ConvertFrom-Json
 $allCatalogEntries = @($allCatalogEntries)
 $catalogKeyProblems = @(Get-AuditCatalogProblems $allCatalogEntries)
@@ -330,63 +333,38 @@ $deviceUp = -not $NoDevice
 if ($deviceUp) {
     if (-not $Serial) { throw 'Pass -Serial (or set HUSHFEED_DEVICE_SERIAL), or -NoDevice for the APK checks only.' }
     if (-not $LeaseDir) { throw 'Device checks require -LeaseDir or HUSHFEED_DEVICE_LEASE_DIR for the shared device pool.' }
-    New-Item -ItemType Directory -Path $LeaseDir -Force | Out-Null
+    if (-not $ChatIdentity) { throw 'Device checks require -ChatIdentity or HUSHFEED_CHAT_IDENTITY.' }
     $adbExe = Resolve-AuditAdb
 }
-$leaseFile = $null
-$leaseToken = [guid]::NewGuid().ToString('N')
-$auditLeaseAcquired = $false
+$auditLease = $null
 function Grant-AuditLease {
-    if (-not $LeaseDir) { return }
-    if ($script:auditLeaseAcquired -and -not (Test-AuditLeaseOwnership)) {
-        throw 'Device lease expired or was lost. It cannot be renewed without confirmed recovery.'
+    if ($null -eq $script:auditLease) {
+        $script:auditLease = New-DeviceLease -LeaseDir $LeaseDir -Serial $Serial -Project 'hushfeed' `
+            -ChatIdentity $ChatIdentity -Purpose 'patch audit' -LeaseMinutes $LeaseMinutes
+    } else {
+        Assert-DeviceLease -Lease $script:auditLease -Serial $Serial
+        Update-DeviceLease -Lease $script:auditLease -LeaseMinutes $LeaseMinutes
     }
-    $script:leaseFile = Join-Path $LeaseDir "$Serial.json"
-    # Older lease writers call the token "token", newer ones "ownershipToken"; both are read.
-    $body = [ordered]@{ schemaVersion = 1; serial = $Serial; project = 'hushfeed'; purpose = 'patch audit'; ownershipToken = $leaseToken
-        acquiredUtc = [DateTime]::UtcNow.ToString('o'); expiresUtc = [DateTime]::UtcNow.AddMinutes(30).ToString('o') } | ConvertTo-Json
-    if (Test-Path -LiteralPath $script:leaseFile) {
-        $held = Get-Content -LiteralPath $script:leaseFile -Raw -Encoding UTF8 | ConvertFrom-Json
-        $mine = ($held.ownershipToken, $held.token) -contains $leaseToken
-        $expiry = [string]$held.expiresUtc
-        if (-not $mine) {
-            throw "The device has another lease from $($held.project) ($($held.purpose)), expiry $expiry. Confirm its test stopped before reclaiming it."
-        }
-        if (-not (Test-AuditLeaseOwnership)) { throw 'The device lease expired. It cannot be renewed without confirmed recovery.' }
-        Set-Content -LiteralPath $script:leaseFile -Value $body
-        $script:auditLeaseAcquired = $true
-        return
-    }
-    $stream = [IO.File]::Open($script:leaseFile, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write)
-    try { $bytes = [Text.Encoding]::UTF8.GetBytes($body); $stream.Write($bytes, 0, $bytes.Length) } finally { $stream.Dispose() }
-    $script:auditLeaseAcquired = $true
 }
 function Revoke-AuditLease {
-    if (Test-AuditLeaseOwnership) {
-        Remove-Item -LiteralPath $script:leaseFile -Force
-        $script:auditLeaseAcquired = $false
+    try {
+        Remove-DeviceLease -Lease $script:auditLease
+        $script:auditLease = $null
+    } catch {
+        # The helper closes our handle even on rejection, without deleting an unowned file.
+        Write-Warning "Device lease could not be released; confirmed recovery is required. $($_.Exception.Message)"
     }
 }
 
 function Test-AuditLeaseOwnership {
-    if (-not $script:leaseFile -or -not (Test-Path -LiteralPath $script:leaseFile)) { return $false }
     try {
-        $held = Get-Content -LiteralPath $script:leaseFile -Raw -Encoding UTF8 | ConvertFrom-Json
-        # PS7 may deserialize an ISO timestamp as DateTime. Stringifying it loses its UTC Kind.
-        $expiry = if ($held.expiresUtc -is [datetime]) {
-            if ($held.expiresUtc.Kind -eq [DateTimeKind]::Unspecified) { return $false }
-            [DateTimeOffset]$held.expiresUtc
-        } else {
-            if ([string]$held.expiresUtc -notmatch '(?:Z|[+-]\d{2}:\d{2})$') { return $false }
-            [DateTimeOffset]::Parse([string]$held.expiresUtc, [Globalization.CultureInfo]::InvariantCulture)
-        }
-        return (($held.ownershipToken, $held.token) -contains $leaseToken) -and
-            ($expiry -gt [DateTimeOffset]::UtcNow)
+        Assert-DeviceLease -Lease $script:auditLease -Serial $Serial
+        return $true
     } catch { return $false }
 }
 
 function Invoke-AuditAdb {
-    if (-not (Test-AuditLeaseOwnership)) { throw 'Device lease is no longer owned. No device command was sent.' }
+    Assert-DeviceLease -Lease $script:auditLease -Serial $Serial
     & $adbExe -s $Serial @args
 }
 function ConvertTo-DeviceQuoted([string]$Text) { "'" + ($Text -replace "'", "'\''") + "'" }
@@ -630,12 +608,12 @@ function Get-TikTokVibrations([string]$Since) {
 $script:recorder = $null
 $script:ffmpegExe = $null
 function Start-ScreenRecord([int]$Seconds) {
-    if (-not (Test-AuditLeaseOwnership)) { throw 'Device lease is no longer owned. No recording was started.' }
     $script:recordingRemote = "/sdcard/hushfeed-audit-$([Guid]::NewGuid().ToString('N')).mp4"
     $start = [Diagnostics.ProcessStartInfo]::new($adbExe)
     $start.Arguments = "-s $Serial shell screenrecord --time-limit $Seconds $script:recordingRemote"
     $start.UseShellExecute = $false
     $start.CreateNoWindow = $true
+    Assert-DeviceLease -Lease $script:auditLease -Serial $Serial
     $script:recorder = [Diagnostics.Process]::Start($start)
     # screenrecord takes a moment before its first frame.
     Start-Sleep -Milliseconds 1000
@@ -1141,6 +1119,7 @@ try {
         if ($run.hooks.missed.Count -gt 0) { Write-Host '[audit] hook families with misses:'; $run.hooks.missed | ForEach-Object { Write-Host "  $_" } }
     }
 } finally {
+    try {
     $apkZip.Dispose()
     if ($script:recorder) { Clear-ScreenRecord }
     if ($deviceStarted -and (Test-AuditLeaseOwnership)) {
@@ -1165,7 +1144,9 @@ try {
     } elseif ($deviceStarted) {
         Write-Warning 'Device lease was lost. No cleanup commands were sent; temporary settings may still need restoration.'
     }
-    if ($deviceUp) { Revoke-AuditLease }
+    } finally {
+        if ($deviceUp) { Revoke-AuditLease }
+    }
 }
 Save-Results
 $counts = $run.summary
