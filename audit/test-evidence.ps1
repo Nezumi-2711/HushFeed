@@ -30,6 +30,17 @@ try {
     [Threading.Thread]::CurrentThread.CurrentCulture = [Globalization.CultureInfo]::GetCultureInfo('tr-TR')
     Assert-Audit ((Get-AuditHash $keys) -ceq $englishHash) 'Culture changed canonical key order.'
 } finally { [Threading.Thread]::CurrentThread.CurrentCulture = $cultureBefore }
+# Pipeline output arrives wrapped in PSObject; it must hash as the plain value, by content.
+$wrapped = @('one.png', 'two.png' | Write-Output)
+Assert-Audit ((Get-AuditCanonicalJson $wrapped) -ceq '["one.png","two.png"]') 'A wrapped string serialized as an object.'
+Assert-Audit ((Get-AuditHash @('aaa.png' | Write-Output)) -cne (Get-AuditHash @('bbb.png' | Write-Output))) 'Evidence names of equal length shared a hash.'
+# Windows PowerShell reads 1.5 from JSON as decimal, PS7 as double. 0.1 + 0.7 needs 16 digits,
+# where Windows PowerShell's 'R' and PS7's shortest round trip print different text.
+foreach ($number in @('0.1', '0.7999999999999999', '1E+21')) {
+    Assert-Audit ((Get-AuditCanonicalJson ([decimal]::Parse($number, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture))) -ceq
+        (Get-AuditCanonicalJson ([double]::Parse($number, [Globalization.CultureInfo]::InvariantCulture)))) "Decimal and double printed $number differently."
+}
+Assert-Audit ((Get-AuditCanonicalJson (0.1 + 0.7)) -ceq '0.79999999999999993') 'A double lost its fixed 17-digit canonical form.'
 $reordered = [pscustomobject]@{ checks = $entry.checks; settings = @(); category = 'Test'; kind = 'runtime'; name = 'Example' }
 Assert-Audit ($hash -eq (Get-AuditDefinitionHash $reordered $check)) 'Object key order changed definition identity.'
 $changed = Copy-Json $check
@@ -58,6 +69,10 @@ Assert-Audit ((Get-AuditResultValidation $catalog $missing $fixture).missing.Cou
 $twice = Copy-Json $run
 $twice.patches[0].checks += Copy-Json $result
 Assert-Audit ((Get-AuditResultValidation $catalog $twice $fixture).duplicates.Count -eq 1) 'Duplicate result not detected.'
+$mixed = Copy-Json $run
+$mixed.patches += [pscustomobject]@{ name = 'Other'; checks = @([pscustomobject]@{ id = 'other'; status = 'pass'; apkSha256 = 'e' * 64 }) }
+$mixedReport = Get-AuditResultValidation $catalog $mixed $fixture
+Assert-Audit ($mixedReport.mixedBuild -and @($mixedReport.problems | Where-Object { $_ -like 'mixed-build:*' }).Count -eq 1) 'Results from two APKs were not reported as a problem.'
 $stale = Copy-Json $run
 $stale.patches[0].checks[0].definitionHash = 'f' * 64
 Assert-Audit ((Get-AuditResultValidation $catalog $stale $fixture).changed.Count -eq 1) 'Changed definition counted current.'
@@ -349,6 +364,25 @@ function New-FixtureZip([string]$Path, [string]$EntryName, [string]$Content) {
     $recorded = Get-Content $fixtureResults -Raw | ConvertFrom-Json
     Assert-Audit ($recorded.qualification.currentPass -eq 1) 'Static run did not bind evidence.'
     Assert-Audit ($recorded.patches[0].checks[0].definitionHash -eq (Get-AuditDefinitionHash $staticEntry $staticEntry.checks[0])) 'Runner omitted exact definition.'
+    # Without the evidence folder every receipt reads as stale, so both read-only modes refuse to guess.
+    $resultsBefore = [IO.File]::ReadAllText($fixtureResults)
+    $emptyVerdicts = Join-Path $fixture 'empty-verdicts.json'
+    [IO.File]::WriteAllText($emptyVerdicts, '{}')
+    $ErrorActionPreference = 'Continue'
+    try {
+        & $shell -NoProfile -File $runner -ValidateResults -Catalog $fixtureCatalog -Results $fixtureResults 2>&1 | Out-Null
+        $validateStatus = $LASTEXITCODE
+        & $shell -NoProfile -File $runner -ApplyVerdicts $emptyVerdicts -Catalog $fixtureCatalog -Results $fixtureResults 2>&1 | Out-Null
+        $applyStatus = $LASTEXITCODE
+        # A review of one APK's screenshots can't land on results recorded for another.
+        $otherApk = Join-Path $fixture 'other.apk'
+        New-FixtureZip $otherApk 'marker.txt' 'another build'
+        & $shell -NoProfile -File $runner -ApplyVerdicts $emptyVerdicts -Catalog $fixtureCatalog -Results $fixtureResults -OutDir (Join-Path $fixture 'evidence') -Apk $otherApk 2>&1 | Out-Null
+        $otherApkStatus = $LASTEXITCODE
+    } finally { $ErrorActionPreference = 'Stop' }
+    Assert-Audit ($validateStatus -ne 0) 'Validation without -OutDir reported a result.'
+    Assert-Audit ($applyStatus -ne 0 -and [IO.File]::ReadAllText($fixtureResults) -ceq $resultsBefore) 'Verdicts were applied without -OutDir.'
+    Assert-Audit ($otherApkStatus -ne 0 -and [IO.File]::ReadAllText($fixtureResults) -ceq $resultsBefore) 'Verdicts were applied to results recorded for another APK.'
     # Validate a persisted receipt in the other supported shell, not just twice in one host.
     $otherShell = if ($PSVersionTable.PSVersion.Major -ge 6 -and $env:WINDIR) {
         Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'

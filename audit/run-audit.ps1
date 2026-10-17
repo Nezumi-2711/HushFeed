@@ -102,7 +102,12 @@ function Write-Summary {
 if ($ApplyVerdicts) {
     # Every review must name the exact execution receipt it reviewed.
     if (-not $Results) { throw '-ApplyVerdicts needs -Results.' }
+    # Without the evidence folder every receipt's files are unreadable, so every verdict looked stale.
+    if (-not $OutDir) { throw '-ApplyVerdicts needs -OutDir, the evidence folder of the run it reviews.' }
     $run = Get-Content -LiteralPath $Results -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($Apk -and (Get-FileHash -LiteralPath $Apk -Algorithm SHA256).Hash.ToLowerInvariant() -cne [string]$run.apk.sha256) {
+        throw '-Results were recorded for a different APK than -Apk. No verdict was applied.'
+    }
     $verdicts = ConvertFrom-AuditVerdictJson (Get-Content -LiteralPath $ApplyVerdicts -Raw -Encoding UTF8)
     Set-AuditVerdicts $allCatalogEntries $run $verdicts $OutDir
     $applied = @($verdicts.PSObject.Properties).Count
@@ -115,6 +120,7 @@ if ($ApplyVerdicts) {
 
 if ($ValidateResults) {
     if (-not $Results) { throw '-ValidateResults needs -Results.' }
+    if (-not $OutDir) { throw '-ValidateResults needs -OutDir, the evidence folder of the saved run.' }
     $saved = Get-Content -LiteralPath $Results -Raw -Encoding UTF8 | ConvertFrom-Json
     if ($Apk) { $saved.apk.sha256 = (Get-FileHash -LiteralPath $Apk -Algorithm SHA256).Hash.ToLowerInvariant() }
     $validation = Get-AuditResultValidation $allCatalogEntries $saved $OutDir

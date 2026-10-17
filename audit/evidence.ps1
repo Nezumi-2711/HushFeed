@@ -12,6 +12,24 @@ function ConvertTo-AuditJsonString([string]$Value) {
 
 function Get-AuditCanonicalJson($Value) {
     if ($null -eq $Value) { return 'null' }
+    # Scalars first. [pscustomobject] means PSObject, and any value a pipeline emitted is
+    # wrapped in one, so a string tested that way serialized as {"Length":n}. -is looks through
+    # the wrapper for every other type, PSCustomObject included.
+    if ($Value -is [string] -or $Value -is [char]) { return ConvertTo-AuditJsonString ([string]$Value) }
+    if ($Value -is [bool]) { return ([string]$Value).ToLowerInvariant() }
+    $culture = [Globalization.CultureInfo]::InvariantCulture
+    # ConvertFrom-Json reads 1.5 as decimal on Windows PowerShell and as double on PS7, so a
+    # decimal prints as the double it stands for. Fixed digit counts, never 'R': Windows
+    # PowerShell's 'R' falls back to 17 digits where PS7 prints the shortest round trip.
+    if ($Value -is [decimal]) { $Value = [double]$Value }
+    if ($Value -is [double] -or $Value -is [single]) {
+        if ([double]::IsNaN($Value) -or [double]::IsInfinity($Value)) { throw 'Non-finite audit number.' }
+        return $Value.ToString($(if ($Value -is [single]) { 'G9' } else { 'G17' }), $culture)
+    }
+    if ($Value -is [byte] -or $Value -is [sbyte] -or $Value -is [int16] -or $Value -is [uint16] -or
+        $Value -is [int32] -or $Value -is [uint32] -or $Value -is [int64] -or $Value -is [uint64]) {
+        return $Value.ToString($culture)
+    }
     if ($Value -is [System.Collections.IDictionary]) {
         $keys = [string[]]@($Value.Keys)
         [Array]::Sort($keys, [StringComparer]::Ordinal)
@@ -20,7 +38,7 @@ function Get-AuditCanonicalJson($Value) {
         }
         return '{' + ($parts -join ',') + '}'
     }
-    if ($Value -is [pscustomobject]) {
+    if ($Value -is [System.Management.Automation.PSCustomObject]) {
         $keys = [string[]]@($Value.PSObject.Properties.Name)
         [Array]::Sort($keys, [StringComparer]::Ordinal)
         $parts = foreach ($key in $keys) {
@@ -28,20 +46,9 @@ function Get-AuditCanonicalJson($Value) {
         }
         return '{' + ($parts -join ',') + '}'
     }
-    if ($Value -is [System.Collections.IEnumerable] -and $Value -isnot [string]) {
-        return '[' + (@($Value | ForEach-Object { Get-AuditCanonicalJson $_ }) -join ',') + ']'
-    }
-    if ($Value -is [string] -or $Value -is [char]) { return ConvertTo-AuditJsonString ([string]$Value) }
-    if ($Value -is [bool]) { return ([string]$Value).ToLowerInvariant() }
-    $culture = [Globalization.CultureInfo]::InvariantCulture
-    if ($Value -is [double] -or $Value -is [single]) {
-        if ([double]::IsNaN($Value) -or [double]::IsInfinity($Value)) { throw 'Non-finite audit number.' }
-        return $Value.ToString($(if ($Value -is [single]) { 'G9' } else { 'G17' }), $culture)
-    }
-    if ($Value -is [decimal]) { return $Value.ToString('G29', $culture) }
-    if ($Value -is [byte] -or $Value -is [sbyte] -or $Value -is [int16] -or $Value -is [uint16] -or
-        $Value -is [int32] -or $Value -is [uint32] -or $Value -is [int64] -or $Value -is [uint64]) {
-        return $Value.ToString($culture)
+    if ($Value -is [System.Collections.IEnumerable]) {
+        $items = foreach ($item in $Value) { Get-AuditCanonicalJson $item }
+        return '[' + (@($items) -join ',') + ']'
     }
     throw "Unsupported audit value type: $($Value.GetType().FullName)"
 }
@@ -170,6 +177,7 @@ function Get-AuditResultValidation($Entries, $Run, [string]$Directory) {
         foreach ($key in $category[1]) { $problems.Add("$($category[0]): $key") }
     }
     foreach ($key in $historical) { $problems.Add("historical-or-unbound: $key") }
+    if ($digests.Count -gt 1) { $problems.Add("mixed-build: results come from $($digests.Count) APKs") }
     return [pscustomobject]@{
         state = if ($problems.Count -eq 0) { 'current-bound' } else { 'historical-or-incomplete' }
         catalogChecks = $expected.Count; resultChecks = $seen.Count; currentChecks = $current; currentPass = $currentPass
