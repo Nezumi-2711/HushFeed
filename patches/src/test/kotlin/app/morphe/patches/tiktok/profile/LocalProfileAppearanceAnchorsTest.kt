@@ -92,6 +92,7 @@ class LocalProfileAppearanceAnchorsTest {
             assertEquals(listOf(BOOLEAN, BOOLEAN), after[site.index].getReference<MethodReference>()!!.parameterTypes.map(CharSequence::toString))
             assertTrue(before.any { (it as? WideLiteralInstruction)?.wideLiteral == NATIVE_BLUE_BADGE.toLong() })
             assertEquals(0x7f01026c, NATIVE_BLUE_BADGE)
+            assertEquals(NATIVE_BLUE_BADGE, extensionBadge())
             assertTrue(before.none { it.opcode.name.startsWith("iput") && it.getReference<FieldReference>()?.definingClass?.endsWith("/UserAccountInfo;") == true })
             val identity = found.classes.getValue(LEGACY_NICKNAME_OWNER).methods.single { it.name == "zr" }
             val fields = identity.implementation!!.instructions.mapNotNull { it.getReference<FieldReference>() }
@@ -525,6 +526,15 @@ class LocalProfileAppearanceAnchorsTest {
             assertEquals(2, warnings.size)
             Found(classes, legacy, nickname, repaint, warnings)
         }
+    }
+
+    /** The badge the extension hands TikTok for the own profile, a bare resource id that moves with each build. */
+    private fun extensionBadge(): Int {
+        val repo = if (File("src/main/kotlin").isDirectory) File("..") else File(".")
+        val source = File(repo, "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/profile/LocalProfileAppearance.java")
+        return checkNotNull(Regex("""VERIFIED_BADGE = 0x([0-9a-f]{8});""").find(source.readText())) {
+            "LocalProfileAppearance no longer declares VERIFIED_BADGE"
+        }.groupValues[1].toLong(16).toInt()
     }
 
     private fun addressIndex(code: List<Instruction>, address: Int): Int =
