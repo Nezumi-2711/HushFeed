@@ -212,6 +212,13 @@ public final class VideoOverlayHider {
     private static final String[] DETAIL_COMMENT_BAR_IDS = {"47.4.3:qox"};
     private static final String[] DETAIL_COMMENT_STRIP_IDS = {"47.4.3:cnc"};
     /**
+     * The slot the "Message..." bar goes in on a mutual friend's opened video, where the comment
+     * bar would be, over the same strip (#153, a reporter's layout recording on 47.1.4). It goes
+     * with the comment bar. TikTok's quick DM fragment puts the bar in this slot, and the bottom
+     * container around it also holds other pages' bars, so only the slot is hidden.
+     */
+    private static final String[] DETAIL_MESSAGE_BAR_IDS = {"47.4.3:kyn"};
+    /**
      * The feed cell root. Furniture is only hidden underneath one: Hide feed surveys used to
      * take every survey card id in the window, and on the profile that is the Favorites tab's whole
      * page, which showed as an empty tab (a Galaxy S25, 2026-09-16, found by restoring the
@@ -325,6 +332,7 @@ public final class VideoOverlayHider {
     private static final int DETAIL_SEARCH_BOX_TARGET = BOTTOM_SPACER_TARGET + 1;
     private static final int STATUS_BAR_SCRIM_TARGET = DETAIL_SEARCH_BOX_TARGET + 1;
     private static final int PLAYER_VIEW_TARGET = STATUS_BAR_SCRIM_TARGET + 1;
+    private static final int DETAIL_MESSAGE_BAR_TARGET = PLAYER_VIEW_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -658,6 +666,7 @@ public final class VideoOverlayHider {
                 wanted[BOTTOM_TABS_DIVIDER_TARGET] = wanted[BOTTOM_TABS_TARGET];
                 wanted[FOLLOWING_STORY_TARGET] = tabStrip && !FeedVisibility.isStoryVisible(activity);
                 wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;
+                wanted[DETAIL_MESSAGE_BAR_TARGET] = detailCommentBar;
                 wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar || stripForBar;
                 wanted[CLEAR_EXIT_TARGET] = clearControls;
                 wanted[CLEAR_PLAYBACK_TARGET] = clearControls;
@@ -940,7 +949,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[PLAYER_VIEW_TARGET + 1][];
+        String[][] targets = new String[DETAIL_MESSAGE_BAR_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -973,17 +982,19 @@ public final class VideoOverlayHider {
         targets[DETAIL_SEARCH_BOX_TARGET] = DETAIL_SEARCH_BOX_IDS;
         targets[STATUS_BAR_SCRIM_TARGET] = STATUS_BAR_SCRIM_IDS;
         targets[PLAYER_VIEW_TARGET] = PLAYER_VIEW_IDS;
+        targets[DETAIL_MESSAGE_BAR_TARGET] = DETAIL_MESSAGE_BAR_IDS;
         return targets;
     }
 
     /**
      * Main-feed tabs (top and bottom, with the bottom bar's hairline) and story count, the Clear
-     * display controls, and the detail pager's comment bar are outside the cells.
+     * display controls, and the detail pager's comment and Message bars are outside the cells.
      */
     private static boolean outsideCells(int target) {
         return (target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START) || target == BOTTOM_TABS_TARGET
                 || target == BOTTOM_TABS_DIVIDER_TARGET || target == TOP_SEARCH_BAR_TARGET
-                || target == TOP_SEARCH_SCRIM_TARGET || target == DETAIL_SEARCH_BOX_TARGET;
+                || target == TOP_SEARCH_SCRIM_TARGET || target == DETAIL_SEARCH_BOX_TARGET
+                || target == DETAIL_MESSAGE_BAR_TARGET;
     }
 
     private static int candidateCount(String[][] targets) {
@@ -1182,7 +1193,8 @@ public final class VideoOverlayHider {
      * starts on photos, or runs through several, has no bar in its tree on 47.1.4 until a video
      * binds one, and putting the strip back there left the photo ending a bar's height short over
      * a black band (#153). A bar renamed by another build doesn't resolve at all, so that case
-     * still keeps its strip.
+     * still keeps its strip. A mutual friend's video has no comment bar either, its Message bar
+     * sits over the strip instead, and it goes only when the strip does.
      */
     private static void pairDetailCommentBar(boolean[] hidden, int[] selected, int[] ids,
                                              boolean detailPager, boolean stripForBar) {
@@ -1194,6 +1206,9 @@ public final class VideoOverlayHider {
         // See-through bottom bar takes the main feed's strip on its own; no comment bar there.
         if (strip && !bar && !stripForBar && !(detailPager && resolves(ids, DETAIL_COMMENT_BAR_TARGET))) {
             hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)] = false;
+        }
+        if (!(strip && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)])) {
+            hidden[firstCandidate(DETAIL_MESSAGE_BAR_TARGET)] = false;
         }
     }
 
@@ -1233,18 +1248,19 @@ public final class VideoOverlayHider {
     private static void alignBarRows(List<List<View>> found, int[] selected, boolean[] hidden, int cellId) {
         int rowsAt = selected[CLEAR_SEEK_BAR_TARGET];
         List<View> rows = rowsAt >= 0 ? found.get(rowsAt) : new ArrayList<>();
-        boolean barGone = selected[DETAIL_COMMENT_BAR_TARGET] >= 0
-                && selected[DETAIL_COMMENT_STRIP_TARGET] >= 0
-                && hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)]
-                && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)];
+        boolean barGone = selected[DETAIL_COMMENT_STRIP_TARGET] >= 0
+                && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)]
+                && ((selected[DETAIL_COMMENT_BAR_TARGET] >= 0 && hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)])
+                        || (selected[DETAIL_MESSAGE_BAR_TARGET] >= 0 && hidden[firstCandidate(DETAIL_MESSAGE_BAR_TARGET)]));
         List<View> frames = underShownParents(selectedViews(found, selected, ANCHOR_TARGET));
         List<View> discs = underShownParents(selectedViews(found, selected, MUSIC_COVER_TARGET));
-        // The rail's buttons, the disc's own button left out since the disc has a lift of its own.
+        // The rail's buttons, the disc's own button apart: it spans the rail's width, and only the
+        // disc inside it counts (see captionLifts).
         List<View> buttons = new ArrayList<>();
+        List<View> musicButtons = new ArrayList<>();
         for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
-            if (RAIL_BUTTON_IDS[i] != MUSIC_BUTTON_IDS) {
-                buttons.addAll(underShownParents(selectedViews(found, selected, RAIL_TARGET_START + i)));
-            }
+            List<View> shown = underShownParents(selectedViews(found, selected, RAIL_TARGET_START + i));
+            (RAIL_BUTTON_IDS[i] == MUSIC_BUTTON_IDS ? musicButtons : buttons).addAll(shown);
         }
         // The heart's count is a row under the heart, not inside its button the way the others'
         // are, so a heart left lowest ended on the row with its count over the time (#145).
@@ -1263,7 +1279,7 @@ public final class VideoOverlayHider {
             rowShown |= shown;
             if (frame != null) {
                 if (shown && lifts == null) {
-                    lifts = captionLifts(row, frame, frames, discs, buttons, columns, cellId);
+                    lifts = captionLifts(row, frame, frames, discs, buttons, musicButtons, columns, cellId);
                 }
                 Float lift = lifts == null ? null : lifts.get(frame);
                 drop = barRowDrop(row, frame, lift == null ? 0f : lift);
@@ -1489,10 +1505,17 @@ public final class VideoOverlayHider {
      * time (#153, 0.74.0). {@code buttons} holds the count rows too, since the heart's sits under
      * it rather than inside it (#145). The column carries the disc, so the disc's own lift is
      * what's left of its lift after the column's. Each column found is added to {@code columns}.
+     *
+     * <p>On some phones the disc is the column's own last button, in {@code musicButtons}, and the
+     * column went up only for Share, so the disc stayed across the line and the time (#153, 0.75.0).
+     * That button spans the rail's width and holds the notes that float off the disc, a layer that
+     * reaches its bottom well left of the other buttons, so the disc counts by what it shows in
+     * their lane (see discBottom), not by the button's own bottom.
      */
     private static Map<View, Float> captionLifts(View row, View current, List<View> frames,
                                                  List<View> discs, List<View> buttons,
-                                                 List<View> columns, int cellId) {
+                                                 List<View> musicButtons, List<View> columns,
+                                                 int cellId) {
         Map<View, Float> lifts = new HashMap<>();
         float lowestLine = topInWindow(row) + row.getHeight() / 2f + Math.max(0f, slotRoom(row));
         View currentCell = cellOf(current, cellId);
@@ -1517,11 +1540,20 @@ public final class VideoOverlayHider {
             if (column != null) {
                 columns.add(column);
                 float lowest = Float.NEGATIVE_INFINITY;
+                float laneLeft = Float.POSITIVE_INFINITY;
+                float laneRight = Float.NEGATIVE_INFINITY;
                 for (View button : buttons) {
                     if (cellOf(button, cellId) != cell || button.getHeight() == 0
                             || button.getVisibility() != View.VISIBLE) continue;
                     lowest = Math.max(lowest, topInWindow(button) + button.getTranslationY()
                             - columnOffset + button.getHeight() - cellTop);
+                    float left = leftInWindow(button) + button.getTranslationX();
+                    laneLeft = Math.min(laneLeft, left);
+                    laneRight = Math.max(laneRight, left + button.getWidth());
+                }
+                for (View music : musicButtons) {
+                    if (cellOf(music, cellId) != cell || !holds(column, music)) continue;
+                    lowest = Math.max(lowest, discBottom(music, laneLeft, laneRight) - columnOffset - cellTop);
                 }
                 railLift = Math.round(Math.max(0f, lowest - rowTopInCell));
                 if (railLift > 0f) lifts.put(column, railLift);
@@ -1625,6 +1657,44 @@ public final class VideoOverlayHider {
             parent = group.getParent();
         }
         return top;
+    }
+
+    /** Where {@code view}'s laid-out left sits in its window, as {@link #topInWindow} has the top. */
+    private static float leftInWindow(View view) {
+        float left = view.getLeft();
+        android.view.ViewParent parent = view.getParent();
+        while (parent instanceof View) {
+            View group = (View) parent;
+            left += group.getLeft() - group.getScrollX() + group.getTranslationX();
+            parent = group.getParent();
+        }
+        return left;
+    }
+
+    /**
+     * Where the disc in a music button ends in its window: the bottom of the lowest view shown in
+     * it, with nothing shown inside, whose middle sits between {@code laneLeft} and
+     * {@code laneRight}. Negative infinity when the button shows nothing in that lane.
+     */
+    private static float discBottom(View view, float laneLeft, float laneRight) {
+        if (view.getVisibility() != View.VISIBLE || view.getWidth() == 0 || view.getHeight() == 0) {
+            return Float.NEGATIVE_INFINITY;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            boolean shownInside = false;
+            float lowest = Float.NEGATIVE_INFINITY;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                View child = group.getChildAt(i);
+                if (child.getVisibility() != View.VISIBLE || child.getWidth() == 0 || child.getHeight() == 0) continue;
+                shownInside = true;
+                lowest = Math.max(lowest, discBottom(child, laneLeft, laneRight));
+            }
+            if (shownInside) return lowest;
+        }
+        float middle = leftInWindow(view) + view.getTranslationX() + view.getWidth() / 2f;
+        if (middle < laneLeft || middle > laneRight) return Float.NEGATIVE_INFINITY;
+        return topInWindow(view) + view.getTranslationY() + view.getHeight();
     }
 
     /**
@@ -1773,7 +1843,7 @@ public final class VideoOverlayHider {
                         // Invisible, not gone: the bar keeps its shape and Back stays put, and
                         // the cell's band keeps its place.
                         setHidden(view, wanted, View.INVISIBLE);
-                    } else if (target == DETAIL_COMMENT_BAR_TARGET) {
+                    } else if (target == DETAIL_COMMENT_BAR_TARGET || target == DETAIL_MESSAGE_BAR_TARGET) {
                         // Hidden with its strip by the switch, Clear display and a fade of 0;
                         // otherwise faded, and out of a finger's way in the faded Clear display.
                         setFaded(view, wanted ? 100 : fadeLevel, fadedClear && !wanted);
@@ -1825,10 +1895,10 @@ public final class VideoOverlayHider {
             // Nor does the comment bar's from the main feed, which never has one: with its switch
             // on, every pass there called the overlay hooks broken (#153). The detail pager
             // has it, so a rename still shows there. The search box at the top of an opened
-            // video is there only on the pages TikTok gives a search bar, and the player only in
-            // video cells.
+            // video is there only on the pages TikTok gives a search bar, the player only in
+            // video cells, and the Message bar only on a mutual friend's video.
             } else if (target != SURVEY_TARGET && target != DETAIL_SEARCH_BOX_TARGET
-                    && target != PLAYER_VIEW_TARGET
+                    && target != PLAYER_VIEW_TARGET && target != DETAIL_MESSAGE_BAR_TARGET
                     && (detailPager || (target != DETAIL_COMMENT_BAR_TARGET
                             && target != DETAIL_COMMENT_STRIP_TARGET))
                     && (wanted || (scaling

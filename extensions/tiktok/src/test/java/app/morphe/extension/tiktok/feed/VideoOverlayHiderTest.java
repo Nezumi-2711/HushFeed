@@ -2117,6 +2117,131 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * On the reporter's phone the disc is the column's last button: a block the rail's width,
+     * with the notes that float off the disc reaching its bottom left of the other buttons, and
+     * the disc above that in the buttons' lane. The column went up only for Share, so the disc sat
+     * across the line and the time (#153, BynchPOP on 0.75.0). The column now goes up until the
+     * disc ends on the row's top, and not by the block's bottom, which would leave a gap under it.
+     */
+    @Test
+    public void theRailClearsTheRowWhenTheDiscIsItsLowestButton() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.4.3:bqr", CAPTION_FRAME_ID);
+        VideoOverlayHider.resolveForTests("47.4.3:g8a", 0x7f0a0216);
+        VideoOverlayHider.resolveForTests("47.4.3:w_s", 0x7f0a0217);
+        VideoOverlayHider.resolveForTests("47.4.3:pop", 0x7f0a0219);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            View row = views[1];
+            View frame = views[3];
+            FrameLayout cell = (FrameLayout) frame.getParent();
+            LinearLayout column = new LinearLayout(detail);
+            column.setOrientation(LinearLayout.VERTICAL);
+            column.setGravity(android.view.Gravity.END);
+            View like = new View(detail);
+            like.setId(0x7f0a0216);
+            View share = new View(detail);
+            share.setId(0x7f0a0217);
+            // The disc's block as the reporter's layout recording has it, 1080 by 267: the notes,
+            // 267 px square from x 754 down to its bottom, and the 113 px disc 28 px down a 180 by
+            // 174 frame at the right.
+            FrameLayout music = new FrameLayout(detail);
+            music.setId(0x7f0a0219);
+            FrameLayout.LayoutParams notesParams = new FrameLayout.LayoutParams(267, 267,
+                    android.view.Gravity.BOTTOM | android.view.Gravity.START);
+            notesParams.leftMargin = 754;
+            View notes = new View(detail);
+            music.addView(notes, notesParams);
+            FrameLayout discFrame = new FrameLayout(detail);
+            FrameLayout.LayoutParams discParams = new FrameLayout.LayoutParams(113, 113,
+                    android.view.Gravity.TOP | android.view.Gravity.CENTER_HORIZONTAL);
+            discParams.topMargin = 28;
+            View disc = new View(detail);
+            discFrame.addView(disc, discParams);
+            music.addView(discFrame, new FrameLayout.LayoutParams(180, 174,
+                    android.view.Gravity.BOTTOM | android.view.Gravity.END));
+            column.addView(like, new LinearLayout.LayoutParams(180, 169));
+            column.addView(share, new LinearLayout.LayoutParams(180, 169));
+            column.addView(music, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 267));
+            cell.addView(column, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT, android.view.Gravity.BOTTOM));
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(views[0]);
+            VideoOverlayHider.applyTo(detail);
+
+            assertEquals("the disc doesn't end on the row's top", drawnTop(row), bottomOf(disc), 1f);
+            assertTrue("Share runs into the row", bottomOf(share) <= drawnTop(row) + 1f);
+            assertTrue("the notes lifted the column: " + bottomOf(notes) + " over " + drawnTop(row),
+                    bottomOf(notes) > drawnTop(row) + 20f);
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals("the column didn't go back down", 0f, column.getTranslationY(), 0f);
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.4.3:bqr", 0);
+            VideoOverlayHider.resolveForTests("47.4.3:g8a", 0);
+            VideoOverlayHider.resolveForTests("47.4.3:w_s", 0);
+            VideoOverlayHider.resolveForTests("47.4.3:pop", 0);
+        }
+    }
+
+    private static final int MESSAGE_BAR_ID = 0x7f0a021a;
+
+    /**
+     * A mutual friend's opened video has no comment bar. A "Message..." bar sits over the strip
+     * in its place, and with the strip gone it covered the bottom of the caption and the rail
+     * (#153, BynchPOP's layout recording on 0.75.0). It now goes with the strip, the progress bar
+     * comes down as it does without the comment bar, and both come back with the switch.
+     */
+    @Test
+    public void theMessageBarGoesWithTheCommentBarOnAFriendsVideo() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("47.4.3:kyn", MESSAGE_BAR_ID);
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.4.3:bqr", CAPTION_FRAME_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            FrameLayout root = (FrameLayout) views[0];
+            root.removeView(root.findViewById(BAR_ID));
+            FrameLayout messageBar = new FrameLayout(detail);
+            messageBar.setId(MESSAGE_BAR_ID);
+            messageBar.addView(new View(detail), new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 124));
+            root.addView(messageBar, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 138, android.view.Gravity.BOTTOM));
+            layOutAt(root);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(root);
+            VideoOverlayHider.applyTo(detail);
+
+            assertEquals("the Message bar stayed", View.GONE, messageBar.getVisibility());
+            assertEquals(View.GONE, views[2].getVisibility());
+            assertEquals("the progress bar didn't come down with the caption",
+                    101f, views[1].getTranslationY(), 0.5f);
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.VISIBLE, messageBar.getVisibility());
+            assertEquals(View.VISIBLE, views[2].getVisibility());
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            VideoOverlayHider.resolveForTests("47.4.3:kyn", 0);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.4.3:bqr", 0);
+        }
+    }
+
+    /**
      * A short caption ends above the lowest line, so it needs no lift and the line comes down to
      * meet it. The disc only ever took the caption's lift, so it got none and sat across the end of
      * the line and the time beside it (#153, a video opened from search on 0.73.0). It now goes up
