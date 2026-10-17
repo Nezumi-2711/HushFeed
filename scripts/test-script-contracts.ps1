@@ -2066,6 +2066,7 @@ try {
     $signingMarker = Join-Path $hookRoot 'signing-ran.txt'
     $attestationMarker = Join-Path $hookRoot 'attestation-ran.txt'
     $bundleSignatureMarker = Join-Path $hookRoot 'bundle-signature-ran.txt'
+    $searchLynxMarker = Join-Path $hookRoot 'search-lynx-ran.txt'
     $requireWrapper = Join-Path $hookRoot 'require-wrapper.txt'
     Set-Content -LiteralPath (Join-Path $hookRoot 'scripts/validate-release-facts.ps1') -Encoding UTF8 -Value @(
         'param([string]$Root, [switch]$SkipDescriptionTestCount, [switch]$AllowPublishedIndexLag,',
@@ -2088,10 +2089,13 @@ try {
         Set-Content -LiteralPath (Join-Path $hookRoot "scripts/$($suite[0])") -Encoding UTF8 -Value @(
             'param([string]$Root)', "Set-Content -LiteralPath '$($suite[1])' -Value 'ran'", 'exit 0')
     }
+    New-Item -ItemType Directory -Path (Join-Path $hookRoot 'tools/verification-probe') -Force | Out-Null
+    Set-Content -LiteralPath (Join-Path $hookRoot 'tools/verification-probe/test-search-lynx.ps1') -Encoding UTF8 -Value @(
+        'param([string]$Root)', "Set-Content -LiteralPath '$searchLynxMarker' -Value `"root=`$Root`"", 'exit 0')
 
     function Invoke-Hook {
         param([string[]]$Paths)
-        Remove-Item -LiteralPath $factsMarker, $contractsMarker, $signingMarker, $attestationMarker, $bundleSignatureMarker -Force -ErrorAction SilentlyContinue
+        Remove-Item -LiteralPath $factsMarker, $contractsMarker, $signingMarker, $attestationMarker, $bundleSignatureMarker, $searchLynxMarker -Force -ErrorAction SilentlyContinue
         $global:LASTEXITCODE = 0
         & $prePushScript -Root $hookRoot -ChangedPaths $Paths 6> $null
         if ($LASTEXITCODE -ne 0) { throw "pre-push exited $LASTEXITCODE for $($Paths -join ', ')" }
@@ -2141,6 +2145,17 @@ try {
     Invoke-Hook -Paths @('tools/verification-probe/tests/app/hushfeed/verification/StorageScanContract.java')
     Assert-True (Test-Path -LiteralPath $contractsMarker) 'A storage scanner test change skipped its contracts.'
     Assert-True (-not (Test-Path -LiteralPath $signingMarker)) 'A scanner JVM test selected SDK signing fixtures.'
+    Assert-True (-not (Test-Path -LiteralPath $searchLynxMarker)) 'A storage scanner test change selected the Search Lynx contracts.'
+
+    foreach ($searchLynxInput in @('tools/verification-probe/src/app/hushfeed/verification/SearchLynxEvidence.java',
+            'tools/verification-probe/src/app/hushfeed/verification/SearchLynxSnapshot.java',
+            'tools/verification-probe/tests/app/hushfeed/verification/SearchLynxEvidenceContract.java',
+            'tools/verification-probe/test-search-lynx.ps1')) {
+        Invoke-Hook -Paths @($searchLynxInput)
+        Assert-True ((Test-Path -LiteralPath $searchLynxMarker) -and
+            (Get-Content -LiteralPath $searchLynxMarker -Raw).Trim() -eq "root=$hookRoot") `
+            "Search Lynx input $searchLynxInput skipped its contracts or used another root."
+    }
 
     foreach ($probeTool in @('tools/verification-probe/probe-log.ps1', 'tools/verification-probe/strip-hunt.ps1',
             'tools/verification-probe/record-markers.ps1')) {

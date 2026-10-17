@@ -436,6 +436,11 @@ try {
     $touchesProbeTests = @($paths | Where-Object {
         $_ -like 'tools/verification-probe/tests/*' -or $_ -like 'tools/verification-probe/*.ps1'
     }).Count -gt 0
+    $touchesSearchLynxEvidence = @($paths | Where-Object {
+        $_ -like 'tools/verification-probe/src/app/hushfeed/verification/SearchLynx*' -or
+        $_ -like 'tools/verification-probe/tests/app/hushfeed/verification/SearchLynx*' -or
+        $_ -eq 'tools/verification-probe/test-search-lynx.ps1'
+    }).Count -gt 0
     # Declarations, catalog generation and its consumed build pins can change the unnamed
     # dependency closure without changing a script. Check that closure before starting a build.
     $touchesCatalog = @($paths | Where-Object {
@@ -565,6 +570,10 @@ try {
         if ($touchesApkSigning) {
             $suites += , @('scripts/test-apk-signing.ps1', 'device builder inputs changed, running SDK signing and cleanup fixtures',
                 'The device builder signing and cleanup fixtures did not pass.')
+        }
+        if ($touchesSearchLynxEvidence) {
+            $suites += , @('tools/verification-probe/test-search-lynx.ps1', 'probe Search Lynx evidence changed, running its snapshot and redaction contracts',
+                'The probe Search Lynx contracts did not pass.')
         }
         if ($touchesInjectedRegisterVerifier) {
             $suites += , @('scripts/test-injected-registers.ps1', 'injected-register verifier changed, running its fixture tests',
