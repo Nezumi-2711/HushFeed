@@ -41,12 +41,9 @@ import org.junit.Test
 
 private const val TITLE_BAR = "Lcom/ss/android/ugc/aweme/im/chatroom/common/titlebar/BaseSingleChatTitleBarRightAssem;"
 private const val TUX = "Lcom/bytedance/tux/icon/TuxIconView;"
-private const val STICKER_BANNER =
-    "Lcom/ss/android/ugc/aweme/im/sdk/chat/ui/base/assems/preshown/PreshownStickerBannerProtocol;"
-private const val SUGGESTED_REPLY =
-    "Lcom/ss/android/ugc/aweme/im/smartreply/impl/suggestedreply/protocol/IMUnifiedSuggestedReplyMsgProtocol;"
-private const val REPLY_INTRO =
-    "Lcom/ss/android/ugc/aweme/im/smartreply/impl/entrance/protocol/SmartReplyIntroBannerProtocol;"
+private const val STICKER_BANNER = "LX/0dPI;"
+private const val SUGGESTED_REPLY = "LX/0dOz;"
+private const val REPLY_INTRO = "LX/0dYe;"
 private const val CONTROLS = "Lapp/morphe/extension/tiktok/inbox/InboxControls;"
 private const val CHAT_TITLE_BAR = "Lapp/morphe/extension/tiktok/inbox/ChatTitleBar;"
 private const val CHAT_GESTURES = "Lapp/morphe/extension/tiktok/inbox/ChatGestures;"
@@ -96,6 +93,31 @@ class ChatDeclutterAnchorsTest {
                 native.implementation!!.instructions.toList().forEachIndexed { index, original ->
                     assertEquals(original.opcode, code[index + 4].opcode)
                 }
+            }
+        }
+    }
+
+    @Test
+    fun `each obfuscated message list protocol is the one that registers its own protocol constant`() {
+        val registered = mapOf(
+            STICKER_BANNER to "PRESHOWN_STICKER_BANNER_PROTOCOL",
+            SUGGESTED_REPLY to "UNIFIED_SUGGESTED_REPLY_MSG",
+            REPLY_INTRO to "SMART_REPLY_ENTRANCE_CARD",
+        )
+        Fixtures.forEachDeclared { apk ->
+            val version = Fixtures.versionOf(apk)
+            val classes = classesOf(apk, registered.keys)
+            for ((type, constant) in registered) {
+                val classDef = classes[type] ?: error("$version: no $type")
+                assertTrue(
+                    "$version: $type is not a message list protocol",
+                    "Lcom/ss/android/ugc/aweme/im/messagelist/api/cell/IMMessageListProtocol;" in classDef.interfaces,
+                )
+                val constructor = classDef.methods.single { it.name == "<init>" }
+                assertTrue(
+                    "$version: $type does not store $constant",
+                    constructor.implementation!!.instructions.any { it.getReference<FieldReference>()?.name == constant },
+                )
             }
         }
     }

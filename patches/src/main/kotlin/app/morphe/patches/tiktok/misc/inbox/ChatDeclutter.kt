@@ -21,9 +21,10 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
 /*
- * The chat screen's clutter, hidden one switch at a time. Every class here keeps its real
- * name on 47.0.3, 47.1.3 and 47.1.4, and so does every method the gates use, because the
- * message list protocols implement an interface and the title bar overrides a framework hook.
+ * The chat screen's clutter, hidden one switch at a time. The title bar and the gesture
+ * dispatcher keep their real names on 47.4.3. The three message list protocols with an enable
+ * check do not: R8 renamed them, so they are found by their exact obfuscated names, and
+ * ChatDeclutterAnchorsTest proves each still registers its own MessageListProtocolEnum constant.
  */
 
 private const val CHAT_TITLE_BAR_EXTENSION = "Lapp/morphe/extension/tiktok/inbox/ChatTitleBar;"
@@ -37,25 +38,30 @@ internal object ChatTitleBarRightBindFingerprint : Fingerprint(
     parameters = listOf("Landroid/view/View;"),
 )
 
-/** The banner of sticker suggestions in a chat. Its enable check answers true. */
+/**
+ * The banner of sticker suggestions in a chat. Its enable check answers true. On 47.4.3 R8 renamed
+ * the protocol class (it was PreshownStickerBannerProtocol); it is the one IMMessageListProtocol
+ * whose constructor stores MessageListProtocolEnum.PRESHOWN_STICKER_BANNER_PROTOCOL, which
+ * ChatDeclutterAnchorsTest checks.
+ */
 internal object ChatStickerBannerEnabledFingerprint : Fingerprint(
-    definingClass = "/PreshownStickerBannerProtocol;",
+    definingClass = "LX/0dPI;",
     name = "isEnabled",
     returnType = "Z",
     parameters = emptyList(),
 )
 
-/** The suggested reply cells in a chat's message list. */
+/** The suggested reply cells in a chat's message list. On 47.4.3 R8 renamed the class (IMUnifiedSuggestedReplyMsgProtocol); it registers UNIFIED_SUGGESTED_REPLY_MSG. */
 internal object ChatSuggestedReplyEnabledFingerprint : Fingerprint(
-    definingClass = "/IMUnifiedSuggestedReplyMsgProtocol;",
+    definingClass = "LX/0dOz;",
     name = "isEnabled",
     returnType = "Z",
     parameters = emptyList(),
 )
 
-/** The banner that introduces suggested replies. */
+/** The banner that introduces suggested replies. On 47.4.3 R8 renamed the class (SmartReplyIntroBannerProtocol); it registers SMART_REPLY_ENTRANCE_CARD. */
 internal object ChatSmartReplyIntroEnabledFingerprint : Fingerprint(
-    definingClass = "/SmartReplyIntroBannerProtocol;",
+    definingClass = "LX/0dYe;",
     name = "isEnabled",
     returnType = "Z",
     parameters = emptyList(),
