@@ -141,6 +141,39 @@ public class CaptionToolsTest {
         assertEquals(0xCC4D4D4D, restored.getColor().getDefaultColor());
         assertEquals(dp(4), restored.getCornerRadius(), 0.01f);
     }
+    /**
+     * #158 again: on a reporter's phone the Black strip came out with corners far rounder than
+     * TikTok's own captions, from a copied shape rounder than 4 dp. The painted copy keeps
+     * TikTok's 4 dp, and the native shape keeps its own corners for when the choice goes back.
+     */
+    @Test public void chosenCaptionBackgroundUsesTikToksCornersWhateverShapeItCopies() {
+        int textId = View.generateViewId();
+        int backgroundId = View.generateViewId();
+        CaptionStyle.resolveForTests("47.4.3:dm5", textId);
+        CaptionStyle.resolveForTests("47.4.3:dly", backgroundId);
+        FrameLayout root = new FrameLayout(Utils.getContext());
+        FrameLayout strip = new FrameLayout(Utils.getContext());
+        strip.setId(backgroundId);
+        TextView text = new TextView(Utils.getContext());
+        text.setId(textId);
+        strip.addView(text);
+        root.addView(strip);
+        GradientDrawable round = new GradientDrawable();
+        round.setColor(0xCC4D4D4D);
+        round.setCornerRadius(dp(16));
+        strip.setBackground(round);
+
+        Settings.CAPTION_BACKGROUND.save("black");
+        CaptionStyle.apply(root);
+        GradientDrawable painted = (GradientDrawable) strip.getBackground();
+        assertNotSame(round, painted);
+        assertEquals(dp(4), painted.getCornerRadius(), 0.01f);
+        assertEquals("TikTok's own shape lost its corners", dp(16), round.getCornerRadius(), 0.01f);
+
+        Settings.CAPTION_BACKGROUND.save("default");
+        CaptionStyle.apply(root);
+        assertEquals(dp(16), ((GradientDrawable) strip.getBackground()).getCornerRadius(), 0.01f);
+    }
     private static float dp(float value) {
         return value * Utils.getContext().getResources().getDisplayMetrics().density;
     }
