@@ -11,6 +11,7 @@ Every Hushfeed release, newest first.
 ### Features and fixes
 
 * **TikTok:** With `Caption background` on Dark or Black, the strip's corners are TikTok's small rounded ones again. The last fix copied TikTok's shape, and on some phones that copy came out much rounder than TikTok's own captions (#158).
+* **TikTok:** With Accent color's Follow the wallpaper option, the follow plus under a creator's avatar takes the wallpaper color too. It's a picture with the red drawn in, so it used to stay red. Now the patch splits it into a white plus and a circle the phone colors (#163).
 
 ### Verification
 

@@ -114,7 +114,7 @@
         {
           "key": "followWallpaper",
           "title": "Follow the wallpaper",
-          "description": "On Android 12 and up, buttons and red text take the color of the phone's wallpaper theme and change when the wallpaper does, and the color above is not used. Android 11 and older keep TikTok's red. The follow plus under a creator's avatar and the soft see-through reds stay as they are.",
+          "description": "On Android 12 and up, buttons and red text take the color of the phone's wallpaper theme and change when the wallpaper does, and the color above is not used. Android 11 and older keep TikTok's red. The soft see-through reds stay as they are.",
           "required": false,
           "type": "kotlin.Boolean",
           "default": false,

@@ -64,8 +64,7 @@ val accentColorPatch = resourcePatch(
         title = "Follow the wallpaper",
         description = "On Android 12 and up, buttons and red text take the color of the phone's " +
             "wallpaper theme and change when the wallpaper does, and the color above is not used. " +
-            "Android 11 and older keep TikTok's red. The follow plus under a creator's avatar " +
-            "and the soft see-through reds stay as they are.",
+            "Android 11 and older keep TikTok's red. The soft see-through reds stay as they are.",
         required = false,
     )
     execute {
@@ -93,12 +92,18 @@ val accentColorPatch = resourcePatch(
             }
             if (found != tokens) throw PatchException(incompleteAccentRefusal(tokens - found))
             // Icons with the red drawn in, each recolored in memory first for the same reason. A picture
-            // can't take a color the phone picks later, so the wallpaper choice leaves them as they are.
+            // can't take a color the phone picks later, so with the wallpaper choice each one splits into
+            // a white layer and a red one the phone tints.
             val drawables = get("res").listFiles().orEmpty().filter { it.isDirectory && it.name.startsWith("drawable") }
-            val icons = if (wallpaper) emptyList() else accentIcons(packageMetadata.versionName).flatMap { name ->
-                val pictures = drawables.map { it.resolve("$name.png") }.filter { it.isFile }
-                if (pictures.isEmpty()) throw PatchException(missingAccentIconRefusal(name))
-                pictures.map { it to (recolorRedPalette(it.readBytes(), target) ?: throw PatchException(missingAccentIconRefusal(name))) }
+            val pictures = accentIcons(packageMetadata.versionName).map { name ->
+                name to drawables.map { it.resolve("$name.png") }.filter { it.isFile }
+                    .ifEmpty { throw PatchException(missingAccentIconRefusal(name)) }
+            }
+            val icons = if (wallpaper) emptyList() else pictures.flatMap { (name, files) ->
+                files.map { it to (recolorRedPalette(it.readBytes(), target) ?: throw PatchException(missingAccentIconRefusal(name))) }
+            }
+            val layers = if (!wallpaper) emptyList() else pictures.flatMap { (name, files) ->
+                files.map { Triple(name, it, splitRedPalette(it.readBytes()) ?: throw PatchException(missingAccentIconRefusal(name))) }
             }
             val wallpaperLiterals = mutableSetOf<String>()
             val colorFiles = if (wallpaper) wallpaperColorPaths(get("res")) else null
@@ -108,6 +113,17 @@ val accentColorPatch = resourcePatch(
                 }
             }
             for ((picture, bytes) in icons) picture.writeBytes(bytes)
+            for ((name, picture, split) in layers) {
+                val (white, tint) = wallpaperIconLayers(name)
+                picture.resolveSibling("$white.png").writeBytes(split.first)
+                picture.resolveSibling("$tint.png").writeBytes(split.second)
+                picture.delete()
+            }
+            for (name in layers.map { it.first }.distinct()) {
+                wallpaperLiterals.add(TIKTOK_ACCENT)
+                get("res").resolve("drawable").apply { mkdirs() }.resolve("$name.xml")
+                    .writeText(wallpaperIconDrawable(name, wallpaperReference(TIKTOK_ACCENT)!!), Charsets.UTF_8)
+            }
             if (colorFiles != null) writeWallpaperColors(colorFiles, wallpaperLiterals)
         }
         BuildDetails.applied(get(BUILD_DETAILS_ASSET), "accentColor")
@@ -209,6 +225,104 @@ internal fun recolorRedPalette(png: ByteArray, target: String): ByteArray? {
         return out
     }
     return null
+}
+
+/**
+ * [png] as two pictures for the wallpaper choice, drawn one over the other: its white parts, and
+ * its red parts in white for the phone to tint. A picture can't take a color the phone picks
+ * later, but a tint can (#163). Each palette entry that is TikTok's red, white or a blend splits
+ * so the tinted layer over the white one draws that blend: with the entry's alpha a and its share
+ * of red t, the top layer keeps a·t and the one under it a·(1−t)/(1−a·t). Other entries stay in
+ * the bottom layer as they are. Null when [png] isn't a palette PNG or has no red in its palette.
+ * Only PLTE and tRNS change.
+ */
+internal fun splitRedPalette(png: ByteArray): Pair<ByteArray, ByteArray>? {
+    val signature = byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10)
+    if (png.size < 33 || !png.copyOfRange(0, 8).contentEquals(signature)) return null
+    if (String(png, 12, 4, Charsets.US_ASCII) != "IHDR" || png[25].toInt() != 3) return null
+    val chunks = mutableListOf<Pair<String, ByteArray>>()
+    var at = 8
+    while (at + 12 <= png.size) {
+        val length = ((png[at].toInt() and 0xff) shl 24) or ((png[at + 1].toInt() and 0xff) shl 16) or
+            ((png[at + 2].toInt() and 0xff) shl 8) or (png[at + 3].toInt() and 0xff)
+        if (length < 0 || at + 12 + length > png.size) return null
+        chunks += String(png, at + 4, 4, Charsets.US_ASCII) to png.copyOfRange(at + 8, at + 8 + length)
+        at += 12 + length
+    }
+    val palette = chunks.firstOrNull { it.first == "PLTE" }?.second ?: return null
+    val count = palette.size / 3
+    val alphas = chunks.firstOrNull { it.first == "tRNS" }?.second ?: ByteArray(0)
+    val basePalette = palette.copyOf()
+    val tintPalette = palette.copyOf()
+    val baseAlphas = ByteArray(count)
+    val tintAlphas = ByteArray(count)
+    var reds = 0
+    for (i in 0 until count) {
+        val rgb = ((palette[3 * i].toInt() and 0xff) shl 16) or ((palette[3 * i + 1].toInt() and 0xff) shl 8) or
+            (palette[3 * i + 2].toInt() and 0xff)
+        val a = (if (i < alphas.size) alphas[i].toInt() and 0xff else 255) / 255.0
+        val blend = redBlend(rgb)
+        if (blend == null) {
+            baseAlphas[i] = (a * 255).roundToInt().toByte()
+            continue
+        }
+        if (blend >= 0.5) reds++
+        for (channel in 0 until 3) {
+            basePalette[3 * i + channel] = -1
+            tintPalette[3 * i + channel] = -1
+        }
+        val top = a * blend
+        val under = if (top >= 1.0) 0.0 else a * (1 - blend) / (1 - top)
+        tintAlphas[i] = (top * 255).roundToInt().coerceIn(0, 255).toByte()
+        baseAlphas[i] = (under * 255).roundToInt().coerceIn(0, 255).toByte()
+    }
+    if (reds == 0) return null
+    fun build(newPalette: ByteArray, newAlphas: ByteArray): ByteArray {
+        val out = java.io.ByteArrayOutputStream()
+        out.write(signature)
+        fun write(type: String, data: ByteArray) {
+            for (shift in listOf(24, 16, 8, 0)) out.write(data.size shr shift and 0xff)
+            val typeBytes = type.toByteArray(Charsets.US_ASCII)
+            out.write(typeBytes)
+            out.write(data)
+            val crc = CRC32().apply { update(typeBytes); update(data) }.value
+            for (shift in listOf(24, 16, 8, 0)) out.write((crc shr shift and 0xff).toInt())
+        }
+        for ((type, data) in chunks) {
+            when (type) {
+                "tRNS" -> continue
+                "PLTE" -> {
+                    write(type, newPalette)
+                    write("tRNS", newAlphas)
+                }
+                else -> write(type, data)
+            }
+        }
+        return out.toByteArray()
+    }
+    return build(basePalette, baseAlphas) to build(tintPalette, tintAlphas)
+}
+
+/** What the two layers of a split [name] are called, beside the picture they replace. */
+internal fun wallpaperIconLayers(name: String): Pair<String, String> =
+    "${WALLPAPER_ICON_PREFIX}${name}_white" to "${WALLPAPER_ICON_PREFIX}${name}_tint"
+
+internal const val WALLPAPER_ICON_PREFIX = "hushfeed_wallpaper_"
+
+/**
+ * The drawable that takes [name]'s place with the wallpaper choice: its white layer, and over it
+ * the red layer tinted with [color], a color that is the system accent on Android 12 and up and
+ * TikTok's red below. It keeps [name], so the id TikTok's code loads stays the same.
+ */
+internal fun wallpaperIconDrawable(name: String, color: String): String {
+    val (white, tint) = wallpaperIconLayers(name)
+    return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+        "<layer-list xmlns:android=\"http://schemas.android.com/apk/res/android\">\n" +
+        "    <item android:drawable=\"@drawable/$white\" />\n" +
+        "    <item>\n" +
+        "        <bitmap android:src=\"@drawable/$tint\" android:tint=\"$color\" />\n" +
+        "    </item>\n" +
+        "</layer-list>\n"
 }
 
 /**
