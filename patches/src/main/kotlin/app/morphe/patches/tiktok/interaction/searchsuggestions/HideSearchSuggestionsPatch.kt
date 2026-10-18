@@ -183,6 +183,34 @@ private object SearchReentryFingerprint : Fingerprint(
     strings = listOf("show_suggest_search_words", "searchTransferEnter"),
 )
 
+private const val SUGGEST_WORD = "Lcom/ss/android/ugc/aweme/discover/model/suggest/Word;"
+
+/**
+ * The observer that writes TikTok's trending word into the search box placeholder ("costco
+ * finds") and stores it as what an empty submit searches for. It sits in a renamed class on each
+ * build: an instance `onChanged` in `0EcI` on 47.4.3, and a static `onChanged$42` that PineDrama
+ * merged into a shared observer class. What names it is its content: it is the one method in the
+ * app that reads `Word.checkAndResetIsFromRefresh` and calls a `setSearchHint(String)`.
+ */
+internal fun isSearchHintObserver(method: Method): Boolean =
+    method.returnType == "V" && method.implementation?.instructions?.let { instructions ->
+        instructions.any {
+            it.getReference<MethodReference>()?.let { reference ->
+                reference.definingClass == SUGGEST_WORD && reference.name == "checkAndResetIsFromRefresh"
+            } == true
+        } && instructions.any {
+            it.getReference<MethodReference>()?.let { reference ->
+                reference.name == "setSearchHint" &&
+                    reference.parameterTypes.map(CharSequence::toString) == listOf("Ljava/lang/String;")
+            } == true
+        }
+    } == true
+
+private object SearchHintObserverFingerprint : Fingerprint(
+    returnType = "V",
+    custom = { method, _ -> isSearchHintObserver(method) },
+)
+
 /**
  * Stops the search page filling itself with things to search for. TikTok asks for suggested
  * words before you have typed anything and shows them as "You might be interested in" and
@@ -206,6 +234,7 @@ val hideSearchSuggestionsPatch = bytecodePatch(
         val rewards = SearchRewardsServiceFingerprint.method
         val rewardsGetters = searchRewardsGetters()
         val nativeGuess = NativeGuessSearchFingerprint.method
+        val searchHint = SearchHintObserverFingerprint.method
         SettingsStatusLoadFingerprint.method.addInstruction(
             0,
             "invoke-static {}, " +
@@ -227,6 +256,8 @@ val hideSearchSuggestionsPatch = bytecodePatch(
         nativeGuess.guard("const/4 v0, 0x0\n                    return v0")
         SuggestWordsRequestFingerprint.method.guard("return-void")
         SuggestWordsPublishFingerprint.method.guard("return-void")
+        // The box keeps TikTok's own "Search" placeholder, and an empty submit has no word to run.
+        searchHint.guard("return-void")
         LynxFirstScreenCacheFingerprint.method.hookFirstScreenCache()
         LynxParameterFingerprint.method.hookInitialLynxParameter()
         SearchReentryFingerprint.method.hookReentryVisibility()

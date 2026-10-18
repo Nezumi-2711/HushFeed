@@ -14,6 +14,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** With Accent color's Follow the wallpaper option, the follow plus under a creator's avatar takes the wallpaper color too. It's a picture with the red drawn in, so it used to stay red. Now the patch splits it into a white plus and a circle the phone colors (#163).
 * **TikTok:** `Hide the comment bar on opened videos` also hides the Message bar that shows up in that spot on a mutual friend's video. It used to stay behind and sit over the caption (#153).
 * **TikTok:** When the music disc is the last button on the right side, it no longer sits on top of the progress bar and the time after the comment bar is hidden. The buttons now move up far enough to clear the disc too (#153).
+* **TikTok and PineDrama:** `Hide search suggestions` also stops the trending search that rotates in the grey text inside the search box. The box keeps its plain "Search" placeholder, and tapping search on an empty box doesn't run TikTok's pick anymore.
 
 ### Verification
 
