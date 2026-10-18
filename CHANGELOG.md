@@ -24,6 +24,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Device builds and audits now require an exclusive lease before accessing a test device. An expired or lost lease stops device commands. Local builds still work without one. The probe tools (strip-hunt, record-markers and every probe action) and the injected-register check take the same lease now, and they won't start while another task holds the phone.
 
+* **TikTok:** With `Log diagnostics` on, each card in the search results also logs its type codes (origin and token type, whether it's shopping, its popup type) and the names of the keys in its data. It never logs what a key holds, so the search and the card's text stay out of the log. That's what it takes to tell a hotel price card or a leaked search ad apart from a normal place card.
+
 * **TikTok:** `scripts/phone.sh` checks the device lease itself now, before every adb call. Run on its own without the lease file and token, or with someone else's or an expired one, it refuses and sends nothing to the phone. strip-hunt and record-markers hand it theirs.
 
 * **TikTok:** The injected-register check compares against the 47.4.3 APK. It still expected 47.1.4 and refused every current build.

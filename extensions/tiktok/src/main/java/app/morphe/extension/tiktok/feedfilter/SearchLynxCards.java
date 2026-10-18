@@ -93,7 +93,8 @@ public final class SearchLynxCards {
         }
         if (BaseSettings.DEBUG.get()) {
             String shape = schemaShape(Reflect.readField(patch, "schema"));
-            Logger.printDebug(() -> "[Morphe TikTok FeedFilter] search lynx card: " + kind + " | " + shape);
+            String fields = patchFields(patch);
+            Logger.printDebug(() -> "[Morphe TikTok FeedFilter] search lynx card: " + kind + " | " + shape + " | " + fields);
         }
         if (Settings.HIDE_MINI_DRAMAS.get() && isDrama(patch)) {
             collapse(row);
@@ -238,6 +239,96 @@ public final class SearchLynxCards {
             }
         }
         return out.toString();
+    }
+
+    /**
+     * For the debug log only: the members that say what sort of card a patch is (its origin and
+     * token types, its popup type, whether it is commerce) and the key names of its extra info,
+     * global props and raw data, two levels deep. Codes are cut to identifier characters, and no
+     * map value or raw data value is read, since those carry what the card says and the search.
+     */
+    static String patchFields(Object patch) {
+        if (patch == null) return "no patch";
+        StringBuilder out = new StringBuilder("originType=").append(Reflect.readField(patch, "originType"));
+        for (String name : new String[] {"tokenType", "popupType", "qrecVirtualEnable"}) {
+            String code = identifier(Reflect.readField(patch, name));
+            if (code != null) out.append(' ').append(name).append('=').append(code);
+        }
+        for (String name : new String[] {"isEcom", "needDynamicPatchVideos", "needGeneralSearchVideos"}) {
+            Object flag = Reflect.readField(patch, name);
+            if (flag instanceof Boolean) out.append(' ').append(name).append('=').append(flag);
+        }
+        Object videos = Reflect.readField(patch, "awemeList");
+        if (videos instanceof java.util.Collection) out.append(" videos=").append(((java.util.Collection<?>) videos).size());
+        if (Reflect.readField(patch, "nearByAuth") != null) out.append(" nearByAuth");
+        for (String name : new String[] {"extraInfo", "globalProps"}) {
+            Object map = Reflect.readField(patch, name);
+            if (!(map instanceof java.util.Map) || ((java.util.Map<?, ?>) map).isEmpty()) continue;
+            out.append(' ').append(name).append('{');
+            appendNames(out, ((java.util.Map<?, ?>) map).keySet().iterator());
+            out.append('}');
+        }
+        Object raw = Reflect.readField(patch, "rawData");
+        if (raw instanceof String && !((String) raw).isEmpty()) {
+            out.append(" rawData");
+            try {
+                appendJsonNames(out, new org.json.JSONObject((String) raw), 2);
+            } catch (Exception notAnObject) {
+                out.append(" not an object");
+            }
+        }
+        return out.toString();
+    }
+
+    private static final int MAX_NAMES = 40;
+
+    private static void appendNames(StringBuilder out, java.util.Iterator<?> names) {
+        int count = 0;
+        while (names.hasNext()) {
+            String name = identifier(names.next());
+            if (name == null) continue;
+            if (count == MAX_NAMES) {
+                out.append(" ...");
+                return;
+            }
+            if (count++ > 0) out.append(' ');
+            out.append(name);
+        }
+    }
+
+    private static void appendJsonNames(StringBuilder out, org.json.JSONObject object, int depth) {
+        out.append('{');
+        java.util.Iterator<String> names = object.keys();
+        int count = 0;
+        while (names.hasNext()) {
+            String key = names.next();
+            String name = identifier(key);
+            if (name == null) continue;
+            if (count == MAX_NAMES) {
+                out.append(" ...");
+                break;
+            }
+            if (count++ > 0) out.append(' ');
+            out.append(name);
+            Object value = object.opt(key);
+            if (depth > 1 && value instanceof org.json.JSONObject) {
+                appendJsonNames(out, (org.json.JSONObject) value, depth - 1);
+            } else if (value instanceof org.json.JSONArray) {
+                out.append('[').append(((org.json.JSONArray) value).length()).append(']');
+            }
+        }
+        out.append('}');
+    }
+
+    /** A name or type code cut to at most 40 identifier characters, or null when nothing is left. */
+    private static String identifier(Object value) {
+        if (value == null) return null;
+        StringBuilder out = new StringBuilder();
+        for (char c : value.toString().toCharArray()) {
+            if (out.length() == 40) break;
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_' || c == '-') out.append(c);
+        }
+        return out.length() == 0 ? null : out.toString();
     }
 
     /** A schema parameter's decoded value, or null. */

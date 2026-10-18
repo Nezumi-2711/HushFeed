@@ -135,6 +135,42 @@ public class SearchLynxCardsTest {
         assertFalse("the search reached the card's kind: " + kind, kind.contains("short%20drama") || kind.contains("keyword"));
     }
 
+    /** The type members of 47.4.3's DynamicPatch, with what a hotel card might carry in its maps. */
+    public static class TypedPatch {
+        public int originType = 7;
+        public String tokenType = "poi card\n";
+        public String popupType;
+        public Boolean isEcom = Boolean.TRUE;
+        public java.util.List<Object> awemeList = java.util.Arrays.asList(new Object(), new Object());
+        public java.util.Map<String, Object> extraInfo = new java.util.HashMap<>();
+        public java.util.Map<String, Object> globalProps = new java.util.HashMap<>();
+        public String rawData = "{\"poi_info\":{\"name\":\"Hotel Example\",\"price\":\"$847\"},\"ad_id\":\"123\",\"items\":[1,2,3],\"query\":\"hotels new york\"}";
+
+        TypedPatch() {
+            extraInfo.put("search_keyword", "hotels new york");
+            globalProps.put("is_ad", "1");
+        }
+    }
+
+    /** The debug line names a card's type codes and key names, never what the card or the search says. */
+    @Test public void theDebugFieldsNameTypesAndKeysButNoValues() {
+        String fields = SearchLynxCards.patchFields(new TypedPatch());
+        assertTrue(fields, fields.startsWith("originType=7 tokenType=poicard isEcom=true videos=2"));
+        assertTrue(fields, fields.contains("extraInfo{search_keyword}"));
+        assertTrue(fields, fields.contains("globalProps{is_ad}"));
+        assertTrue(fields, fields.contains("rawData{"));
+        assertTrue(fields, fields.contains("poi_info{name price}") || fields.contains("poi_info{price name}"));
+        assertTrue(fields, fields.contains("items[3]"));
+        for (String value : new String[] {"hotels", "Hotel Example", "847", "123"}) {
+            assertFalse("a value reached the log: " + fields, fields.contains(value));
+        }
+        assertEquals("no patch", SearchLynxCards.patchFields(null));
+        assertEquals("originType=null", SearchLynxCards.patchFields(new Object()));
+        TypedPatch broken = new TypedPatch();
+        broken.rawData = "[not an object";
+        assertTrue(SearchLynxCards.patchFields(broken).endsWith("rawData not an object"));
+    }
+
     @Test public void withHideMiniDramasOnADramaCardsRowCollapsesAndOtherCardsStay() {
         Settings.HIDE_MINI_DRAMAS.save(true);
         View dramaRow = row();
