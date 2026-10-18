@@ -1581,6 +1581,21 @@ try {
         if ($synced -notmatch '\b\d+ patch tests passed\b') {
             $synced = $synced -replace '\b(\d+ runtime tests passed)\b', '$1 and 421 patch tests passed'
         }
+        # The Manager changelog groups quote the index's own CHANGELOG section, so a copy moved up
+        # to the source version quotes that version's groups. 0.75.0 was the first index to carry
+        # groups, and preparing 0.76.0 over it failed every scripts push here (2026-10-18). They come
+        # from this checkout's CHANGELOG, since a case resets the index before its edited copy.
+        if ($indexVersion -ne $fixtureVersion) {
+            $document = $synced | ConvertFrom-Json
+            $description = [string]$document.description
+            $groupMatch = [regex]::Match($description, '(?m)^### ')
+            if ($groupMatch.Success) {
+                $changelog = Get-Content -LiteralPath (Join-Path $Root 'CHANGELOG.md') -Raw
+                $document.description = $description.Substring(0, $groupMatch.Index) +
+                    (Get-ManagerChangelogGroups -Text $changelog -Version $fixtureVersion)
+                $synced = $document | ConvertTo-Json -Depth 100
+            }
+        }
         if ($synced -ceq $indexText) { return }
         Set-FactsFile 'patches-bundle.json' { param($text) $synced }
     }
