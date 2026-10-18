@@ -380,9 +380,28 @@ public class FeatureGateLabActionsTest {
             var started = Shadows.shadowOf(activity).getNextStartedActivityForResult();
             var provider = DocumentExportProvider.register(activity)
                     .contents(root.toString().getBytes(StandardCharsets.UTF_8));
+            LogBufferManager.clearLogBuffer();
             fragment.onActivityResult(started.requestCode, Activity.RESULT_OK, new Intent().setData(provider.uri));
             waitFor("These loaded values are for a different TikTok version.");
             assertTrue(FeatureGateLabStore.rules().isEmpty());
+            assertLoggedOnce("INFO", "Loaded-value file import refused", "Loaded-value file import failed");
+        }
+    }
+
+    /** A file the review can't name stays a patch error: that's how a real export the Lab should take shows up. */
+    @Test public void anUnreadableFileIsStillLoggedAsAPatchError() throws Exception {
+        try (var owner = Robolectric.buildActivity(TestActivity.class).setup().visible()) {
+            var activity = owner.get();
+            var fragment = attach(activity);
+            action(fragment, 3);
+            var started = Shadows.shadowOf(activity).getNextStartedActivityForResult();
+            var provider = DocumentExportProvider.register(activity)
+                    .contents("{\"payload_kind\": \"loaded_values\", ".getBytes(StandardCharsets.UTF_8));
+            LogBufferManager.clearLogBuffer();
+            fragment.onActivityResult(started.requestCode, Activity.RESULT_OK, new Intent().setData(provider.uri));
+            waitFor("That file isn't a loaded-values export, or it's larger than the Lab accepts");
+            assertTrue(FeatureGateLabStore.rules().isEmpty());
+            assertLoggedOnce("ERROR", "Loaded-value file import failed", "Loaded-value file import refused");
         }
     }
 
@@ -470,9 +489,11 @@ public class FeatureGateLabActionsTest {
             var started = Shadows.shadowOf(activity).getNextStartedActivityForResult();
             var provider = DocumentExportProvider.register(activity)
                     .contents(loadedValues(rules).toString().getBytes(StandardCharsets.UTF_8));
+            LogBufferManager.clearLogBuffer();
             fragment.onActivityResult(started.requestCode, Activity.RESULT_OK, new Intent().setData(provider.uri));
             waitFor("The Lab keeps at most 1,024 rules. This change would make 1,030, so nothing was changed.");
             assertTrue(FeatureGateLabStore.rules().isEmpty());
+            assertLoggedOnce("INFO", "Lab change refused", "Lab change failed");
         }
     }
 
@@ -1334,6 +1355,23 @@ public class FeatureGateLabActionsTest {
             fail("Missing completion: " + toast);
         }
     }
+
+    /**
+     * The log holds exactly one line for {@code message}, at {@code level}, and none for
+     * {@code absent}. A refusal the reader is told is INFO; filed as a patch error, its debug
+     * toast covered the reason.
+     */
+    static void assertLoggedOnce(String level, String message, String absent) {
+        int lines = 0;
+        for (String line : LogBufferManager.buildExportText().split("\n")) {
+            assertFalse("logged as a failure: " + line, line.contains(absent));
+            if (!line.contains(message)) continue;
+            lines++;
+            assertTrue("logged at the wrong level: " + line, line.contains("| " + level + " | " + message));
+        }
+        assertEquals("no line for " + message, 1, lines);
+    }
+
     private static Switch findSwitch(View view) {
         if (view instanceof Switch) return (Switch) view;
         if (view instanceof ViewGroup) {

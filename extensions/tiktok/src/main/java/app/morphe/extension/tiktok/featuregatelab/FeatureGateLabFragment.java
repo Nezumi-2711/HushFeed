@@ -1558,7 +1558,13 @@ public final class FeatureGateLabFragment extends Fragment {
             lab.reviewLoadedImport(imported, current);
         } catch (Exception | OutOfMemoryError error) {
             if (file.stage() == DocumentOperation.Stage.STOPPED) return;
-            Logger.printException(() -> "Loaded-value file import failed", error);
+            // A file the review could name is told to the reader. Anything else stays a patch
+            // error: a parse failure is how an export the Lab should take shows up.
+            if (error instanceof Refused) {
+                Logger.printInfo(() -> "Loaded-value file import refused", (Refused) error);
+            } else {
+                Logger.printException(() -> "Loaded-value file import failed", error);
+            }
             // A refusal the review could name says what it was. A file from another build
             // used to be reported as invalid or too large, the same as a corrupt one.
             fileNotice(error instanceof Refused
@@ -1962,10 +1968,15 @@ public final class FeatureGateLabFragment extends Fragment {
             try {
                 result = change.run();
             } catch (Exception error) {
-                Logger.printException(() -> "Lab change failed", error);
+                boolean refused = error instanceof Refused
+                        || error instanceof FeatureGateLabStore.RuleLimitRefused;
+                // A refusal is the Lab working, and the reader is told why. Filed as a patch
+                // error, its debug toast covered that reason.
+                if (refused) Logger.printInfo(() -> "Lab change refused", error);
+                else Logger.printException(() -> "Lab change failed", error);
                 // A refusal already carries its reason in the reader's words. Swapped for the
                 // retry line, the reader was told to try again what would fail the same way.
-                result = error instanceof Refused || error instanceof FeatureGateLabStore.RuleLimitRefused
+                result = refused
                         ? error.getMessage()
                         : L10n.t(Utils.getContext(), "Couldn't change the Lab settings. Try again.");
                 tell = Utils::showToastLong;
