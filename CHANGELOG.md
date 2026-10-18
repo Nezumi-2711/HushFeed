@@ -16,6 +16,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** When the music disc is the last button on the right side, it no longer sits on top of the progress bar and the time after the comment bar is hidden. The buttons now move up far enough to clear the disc too (#153).
 * **TikTok and PineDrama:** `Hide search suggestions` also stops the trending search that rotates in the grey text inside the search box. The box keeps its plain "Search" placeholder, and tapping search on an empty box doesn't run TikTok's pick anymore.
 * **TikTok:** `Remove feed ads` also hides the hotel deals block in search results, the one with a cashback banner over hotels priced by booking sites. A landmark's place card and the Must Eat lists stay, and so do videos tagged with a hotel.
+* **TikTok:** `Hide CAPTCHA popups` works in the first seconds after TikTok opens. TikTok checks in with its account servers by itself at every start, and the switch took that for you changing your sign-in, so a puzzle in those first seconds always showed. Real sign-in changes still let their puzzle through. With `Log diagnostics` on, the log also names the address of the first action that let a puzzle through (#111, #87).
 
 ### Verification
 
