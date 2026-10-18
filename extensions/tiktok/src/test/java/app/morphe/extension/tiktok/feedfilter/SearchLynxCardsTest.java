@@ -144,7 +144,9 @@ public class SearchLynxCardsTest {
         public java.util.List<Object> awemeList = java.util.Arrays.asList(new Object(), new Object());
         public java.util.Map<String, Object> extraInfo = new java.util.HashMap<>();
         public java.util.Map<String, Object> globalProps = new java.util.HashMap<>();
-        public String rawData = "{\"poi_info\":{\"name\":\"Hotel Example\",\"price\":\"$847\"},\"ad_id\":\"123\",\"items\":[1,2,3],\"query\":\"hotels new york\"}";
+        public String rawData = "{\"poi_info\":{\"name\":\"Hotel Example\",\"price\":\"$847\"},\"ad_id\":\"123\",\"items\":[1,2,3],\"query\":\"hotels new york\","
+                + "\"type\":78,\"doc_type\":\"nearby_poi\",\"nearby_poi\":{\"card_intent_type\":\"hotel booking\",\"local_service_key_category_enum\":4,"
+                + "\"poi_info_list\":[{\"poi_id\":\"9\",\"name\":\"Hotel Example\"}]}}";
 
         TypedPatch() {
             extraInfo.put("search_keyword", "hotels new york");
@@ -161,7 +163,12 @@ public class SearchLynxCardsTest {
         assertTrue(fields, fields.contains("rawData{"));
         assertTrue(fields, fields.contains("poi_info{name price}") || fields.contains("poi_info{price name}"));
         assertTrue(fields, fields.contains("items[3]"));
-        for (String value : new String[] {"hotels", "Hotel Example", "847", "123"}) {
+        // One-word type codes show; a code with words in it, like any text, doesn't.
+        assertTrue(fields, fields.contains("type=78") && fields.contains("doc_type=nearby_poi"));
+        assertTrue(fields, fields.contains("local_service_key_category_enum=4"));
+        assertTrue(fields, fields.contains("card_intent_type") && !fields.contains("card_intent_type="));
+        assertTrue(fields, fields.contains("poi_info_list[1]{poi_id name}") || fields.contains("poi_info_list[1]{name poi_id}"));
+        for (String value : new String[] {"hotels", "Hotel Example", "847", "123", "booking", "poi_id=9"}) {
             assertFalse("a value reached the log: " + fields, fields.contains(value));
         }
         assertEquals("no patch", SearchLynxCards.patchFields(null));

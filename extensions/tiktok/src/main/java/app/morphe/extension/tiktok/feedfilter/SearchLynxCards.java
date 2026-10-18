@@ -244,8 +244,9 @@ public final class SearchLynxCards {
     /**
      * For the debug log only: the members that say what sort of card a patch is (its origin and
      * token types, its popup type, whether it is commerce) and the key names of its extra info,
-     * global props and raw data, two levels deep. Codes are cut to identifier characters, and no
-     * map value or raw data value is read, since those carry what the card says and the search.
+     * global props and raw data, three levels deep (a list shows its length and its first entry's
+     * names). Codes are cut to identifier characters. Of the values, only the raw data's one-word
+     * type codes are shown, since the rest carry what the card says and the search.
      */
     static String patchFields(Object patch) {
         if (patch == null) return "no patch";
@@ -272,7 +273,7 @@ public final class SearchLynxCards {
         if (raw instanceof String && !((String) raw).isEmpty()) {
             out.append(" rawData");
             try {
-                appendJsonNames(out, new org.json.JSONObject((String) raw), 2);
+                appendJsonNames(out, new org.json.JSONObject((String) raw), 3);
             } catch (Exception notAnObject) {
                 out.append(" not an object");
             }
@@ -311,13 +312,39 @@ public final class SearchLynxCards {
             if (count++ > 0) out.append(' ');
             out.append(name);
             Object value = object.opt(key);
+            if (CODE_KEYS.contains(key)) {
+                String code = code(value);
+                if (code != null) out.append('=').append(code);
+            }
             if (depth > 1 && value instanceof org.json.JSONObject) {
                 appendJsonNames(out, (org.json.JSONObject) value, depth - 1);
             } else if (value instanceof org.json.JSONArray) {
-                out.append('[').append(((org.json.JSONArray) value).length()).append(']');
+                org.json.JSONArray array = (org.json.JSONArray) value;
+                out.append('[').append(array.length()).append(']');
+                Object first = array.opt(0);
+                if (depth > 1 && first instanceof org.json.JSONObject) {
+                    appendJsonNames(out, (org.json.JSONObject) first, depth - 1);
+                }
             }
         }
         out.append('}');
+    }
+
+    /**
+     * Raw data keys whose value is a type code rather than text, so the debug line shows it: what
+     * tells a hotel deals card from a place card is in these, not in the key names.
+     */
+    private static final java.util.Set<String> CODE_KEYS = new java.util.HashSet<>(java.util.Arrays.asList(
+            "type", "doc_type", "card_type", "card_intent_type", "biz_type", "service_type",
+            "local_service_key_category", "local_service_key_category_enum", "poi_type", "poi_backend_type"));
+
+    /** A number, a flag or a one-word code as written; null for anything with spaces or other text. */
+    private static String code(Object value) {
+        if (value instanceof Number || value instanceof Boolean) return value.toString();
+        if (!(value instanceof String)) return null;
+        String text = (String) value;
+        String cut = identifier(text);
+        return cut != null && cut.equals(text) ? cut : null;
     }
 
     /** A name or type code cut to at most 40 identifier characters, or null when nothing is left. */
