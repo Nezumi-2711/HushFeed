@@ -294,13 +294,23 @@ def catalog_patches() -> list:
 
 
 def catalog() -> tuple[int, list[str]]:
+    """The patch count and the TikTok versions of the package every patch declares, as
+    scripts/patch-target.ps1 reads them. PineDrama is declared only by the patches that apply
+    to it (#156), so its build never joins the targets the index and README name."""
     patches = catalog_patches()
-    versions = set()
+    versions: dict[str, set[str]] = {}
+    declared_by: dict[str, int] = {}
     for patch in patches:
         for app in patch.get("compatibility") or []:
-            versions.update(t["version"] for t in app.get("targets") or []
-                            if t.get("version") and not t.get("experimental"))
-    return len(patches), sorted(versions, key=lambda v: tuple(map(int, v.split("."))))
+            package = str(app.get("packageName") or "")
+            declared_by[package] = declared_by.get(package, 0) + 1
+            versions.setdefault(package, set()).update(
+                t["version"] for t in app.get("targets") or [] if t.get("version") and not t.get("experimental"))
+    everywhere = [package for package, count in declared_by.items() if count == len(patches)]
+    if len(everywhere) != 1:
+        fail(f"patches-list.json has {len(everywhere)} packages every patch declares, not one: "
+             f"{', '.join(sorted(declared_by)) or 'none'}")
+    return len(patches), sorted(versions[everywhere[0]], key=lambda v: tuple(map(int, v.split("."))))
 
 
 def spoken(items: list[str]) -> str:
