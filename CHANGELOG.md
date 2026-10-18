@@ -30,6 +30,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** `Report a problem` leaves the bug form's What went wrong box empty, with What happened and What I expected shown as a hint. When the link filled them in, the box came back untouched on every report, and two people said it wouldn't take their text (#197, #201).
 * **TikTok:** Photo posts Hushfeed saves itself now count for `Check for already-saved videos` and get the ✓ from `Mark saved videos`. That covers photos saved with `Download original photos` on, posts saved with `Save photo posts as a video` on and anything picked on a profile grid. Saving one again offers Open or Save again, like a video does. Before, only videos were remembered (#197).
 * **TikTok:** Photo posts picked on a profile grid are saved as one video when `Save photo posts as a video` is on, the same as Download does on a single post. The picker used to save their photos every time (#197).
+* **TikTok:** Hiding Like in `Hide buttons in the right column` closes the column up like the other buttons do. Its row stayed behind as an empty space between the avatar and the comments (#190).
 
 ### Verification
 
