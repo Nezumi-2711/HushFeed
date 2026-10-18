@@ -10,9 +10,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import app.morphe.extension.shared.BackgroundPoolSaturation;
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.preference.LogBufferManager;
 import app.morphe.extension.tiktok.DocumentExportProvider;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.preference.DocumentOperation;
+import app.morphe.extension.tiktok.settings.preference.DocumentOperationTest;
 import app.morphe.extension.tiktok.settings.preference.SettingsActionBanner;
 import app.morphe.extension.tiktok.settings.preference.SettingsUi;
 import java.io.ByteArrayOutputStream;
@@ -609,6 +611,7 @@ public class FeatureGateLabActionsTest {
             var fragment = attach(activity);
             var provider = DocumentExportProvider.register(activity);
             var release = provider.holdOpens();
+            LogBufferManager.clearLogBuffer();
             try {
                 action(fragment, 2);
                 var started = Shadows.shadowOf(activity).getNextStartedActivityForResult();
@@ -632,6 +635,7 @@ public class FeatureGateLabActionsTest {
                 release.countDown();
             }
             assertEquals("The export wasn't saved. Export again when the file app is ready.", settledBanner(activity));
+            DocumentOperationTest.assertStopLoggedAsInfo("Loaded-value file export failed");
             assertFalse("the empty document the export never filled was left behind", provider.exists);
             assertFalse(DocumentOperation.busy(DocumentOperation.Kind.LAB_FILE));
         }

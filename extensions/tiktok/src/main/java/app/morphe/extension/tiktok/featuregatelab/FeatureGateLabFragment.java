@@ -1522,7 +1522,7 @@ public final class FeatureGateLabFragment extends Fragment {
                 DocumentOperation.removeUnsaved(resolver, uri, false);
                 return;
             }
-            Logger.printException(() -> "Loaded-value file export failed", error);
+            DocumentOperation.logFailure(file, () -> "Loaded-value file export failed", error);
             String message = file.stage() == DocumentOperation.Stage.STOPPED_WHILE_PUBLISHING
                     ? L10n.t(context, "The export wasn't saved. Export again when the file app is ready.")
                     : L10n.t(context, "Loaded-value file export failed");
