@@ -123,11 +123,16 @@ public final class FeatureGateLabFragment extends Fragment {
     private static volatile Runnable searchWorkHookForTests;
     private static final int REQUEST_EXPORT_LOADED = 0x6f10;
     private static final int REQUEST_IMPORT_LOADED = 0x6f11;
-    private static final int MAX_COMPRESSED_IMPORT_BYTES = 4 * 1024 * 1024;
-    private static final int MAX_JSON_IMPORT_BYTES = 8 * 1024 * 1024;
-    private static final int MAX_IMPORT_RULES = FeatureGateLabStore.MAX_RULES;
+    /*
+     * A loaded-values export holds every value TikTok loaded (14,747 on 47.4.3, 5.7 MB of JSON
+     * and 177,709 values counted the parser's way) plus up to 2,048 settings-manager
+     * observations. The import turns only the values that differ into rules, and the rule store
+     * refuses more than it keeps, so these bounds are for the file alone. Sized at the Lab's own
+     * rule cap, they refused every real export.
+     */
+    private static final int MAX_JSON_IMPORT_BYTES = 16 * 1024 * 1024;
     private static final SettingsJson.Limits IMPORT_JSON_LIMITS = new SettingsJson.Limits(
-            24, 8192, 64 * 1024, MAX_IMPORT_RULES, MAX_JSON_IMPORT_BYTES);
+            24, 1 << 20, 64 * 1024, 1 << 16, MAX_JSON_IMPORT_BYTES);
     private static final int FILTER_ALL = 0;
     private static final int FILTER_BOOLEAN = 1;
     private static final int FILTER_ENABLED = 2;
@@ -1542,7 +1547,7 @@ public final class FeatureGateLabFragment extends Fragment {
         try {
             byte[] encoded;
             try (InputStream input = file.openForRead(context.getContentResolver(), uri)) {
-                encoded = readLimited(input, MAX_COMPRESSED_IMPORT_BYTES);
+                encoded = readLimited(input, MAX_JSON_IMPORT_BYTES);
             }
             JSONObject imported = readLoadedJson(encoded);
             if (!file.commit()) return;
@@ -1672,9 +1677,6 @@ public final class FeatureGateLabFragment extends Fragment {
         int unavailable = 0;
         int malformed = 0;
         if (sourceRules == null) throw new Refused(L10n.t(context, "This file has no loaded values in it."));
-        if (sourceRules.length() > MAX_IMPORT_RULES) {
-            throw new Refused(L10n.t(context, "This file has more loaded values than the Lab takes at once."));
-        }
         {
             for (int i = 0; i < sourceRules.length(); i++) {
                 JSONObject item = sourceRules.optJSONObject(i);

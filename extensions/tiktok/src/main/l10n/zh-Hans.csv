@@ -1872,7 +1872,6 @@ This LIVE's stream can't be saved,无法保存此 LIVE 的流
 This catalog entry is no longer available. Refresh the Lab and try again.,该目录条目不再可用。刷新实验室并重试.
 This change couldn't be saved. Try again.,无法保存此更改。再试一次.
 This configuration has no fields that can be copied and changed safely on this build.,此配置没有可以在此版本上安全复制和更改的字段.
-This file has more loaded values than the Lab takes at once.,该文件加载的值比实验室一次获取的值还要多.
 This file has no loaded values in it.,该文件中没有加载的值.
 This file isn't a loaded-values export from the Feature Gate Lab.,此文件不是从功能门实验室导出的加载值.
 This gate type isn't supported.,不支持此门类型.
