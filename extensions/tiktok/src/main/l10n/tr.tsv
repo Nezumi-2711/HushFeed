@@ -2176,3 +2176,7 @@ Only on the sides of the video	Yalnızca videonun kenarlarında
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Uzun basma seçimin yalnızca videonun sol ve sağ üçte birinde çalışır. Ortada basmak yine TikTok'un kendi menüsünü açar. Uzun basma için TikTok varsayılanı dışında bir seçim gerekir.
 Full-width progress bar	Tam genişlikte ilerleme çubuğu
 Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	İlerleme çubuğu, TikTok'un her iki uçta bıraktığı boşluk olmadan ekranın bir kenarından diğerine uzanır.
+New device identity	Yeni cihaz kimliği
+Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	TikTok'un verilerini siler ve bir sonraki açılışta ona yeni bir Android kimliği ve reklam kimliği verir, böylece hiç tanımadığı bir telefon görür. Oturumun kapanır ve taslakların silinir. Hushfeed ayarları kalır.
+TikTok starts as a new phone after the restart. Tap again to cancel.	TikTok yeniden başlatmadan sonra yeni bir telefon gibi açılır. İptal etmek için tekrar dokun.
+Couldn't set up a new device identity. Try again.	Yeni cihaz kimliği ayarlanamadı. Tekrar dene.
