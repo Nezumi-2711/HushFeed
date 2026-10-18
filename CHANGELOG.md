@@ -31,6 +31,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** Photo posts Hushfeed saves itself now count for `Check for already-saved videos` and get the ✓ from `Mark saved videos`. That covers photos saved with `Download original photos` on, posts saved with `Save photo posts as a video` on and anything picked on a profile grid. Saving one again offers Open or Save again, like a video does. Before, only videos were remembered (#197).
 * **TikTok:** Photo posts picked on a profile grid are saved as one video when `Save photo posts as a video` is on, the same as Download does on a single post. The picker used to save their photos every time (#197).
 * **TikTok:** Hiding Like in `Hide buttons in the right column` closes the column up like the other buttons do. Its row stayed behind as an empty space between the avatar and the comments (#190).
+* **TikTok:** New `Hide reply previews` switch on the Comments page. TikTok opens one reply under some comments before you tap View replies, often the creator's. With the switch on, those comments show just View replies, and tapping it still loads every reply, that one included (#193).
 
 ### Verification
 
