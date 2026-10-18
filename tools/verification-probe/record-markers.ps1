@@ -152,7 +152,9 @@ function Invoke-Phone([Parameter(ValueFromRemainingArguments = $true)][string[]]
         throw "Could not translate scripts/phone.sh for the guarded input: $windowsScript"
     }
     $script = '/mnt/' + $Matches[1].ToLowerInvariant() + '/' + $Matches[2]
+    # phone.sh rereads the lease before each adb call it makes.
     & wsl.exe env "PHONE_SERIAL=$serial" "HUSHFEED_DEVICE_SERIAL=$serial" PHONE_SCALE=1 `
+        "HUSHFEED_LEASE_FILE=$($deviceLease.Path)" "HUSHFEED_LEASE_TOKEN=$($deviceLease.OwnershipToken)" `
         bash $script @Arguments
     if ($LASTEXITCODE -ne 0) { throw "Guarded phone input failed: $($Arguments -join ' ')" }
 }

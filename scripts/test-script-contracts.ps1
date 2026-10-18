@@ -187,6 +187,26 @@ foreach ($url in @('https://example.com/', 'https://www.tiktok.com/@a;reboot',
     Assert-True ($refused.ExitCode -eq 2 -and $refused.Output -like '*only accepts https://www.tiktok.com/*') `
         "phone.sh accepted $url for device navigation."
 }
+# Lease files for the runs that reach the fake adb. Written here rather than in bash, whose command
+# lines can't carry the JSON's double quotes through Windows PowerShell 5.1, and handed over as
+# Windows paths, which phone.sh turns into its own.
+$phoneLeaseDir = Join-Path ([IO.Path]::GetTempPath()) ('hushfeed-phone-lease-' + [guid]::NewGuid().ToString('N'))
+[void][IO.Directory]::CreateDirectory($phoneLeaseDir)
+function Write-PhoneLeaseFixture([string]$Name, [string]$Serial, [string]$Expires, [switch]$Pretty) {
+    $record = [ordered]@{
+        schemaVersion = 1; serial = $Serial; project = 'hushfeed'; chatIdentity = 'contract'
+        purpose = 'phone.sh lease contract'; ownershipToken = 'goodtoken'
+        acquiredUtc = [DateTime]::UtcNow.ToString('o'); expiresUtc = $Expires
+    }
+    $path = Join-Path $phoneLeaseDir $Name
+    [IO.File]::WriteAllText($path, ($record | ConvertTo-Json -Compress:(-not $Pretty)), [Text.UTF8Encoding]::new($false))
+    return $path.Replace("'", "'\''")
+}
+$validPhoneLease = Write-PhoneLeaseFixture 'valid.json' 'TESTPHONE01' ([DateTime]::UtcNow.AddHours(1).ToString('o'))
+$expiredPhoneLease = Write-PhoneLeaseFixture 'expired.json' 'TESTPHONE01' ([DateTime]::UtcNow.AddMinutes(-1).ToString('o')) -Pretty
+$otherPhoneLease = Write-PhoneLeaseFixture 'other.json' 'OTHERPHONE02' ([DateTime]::UtcNow.AddHours(1).ToString('o'))
+$absentPhoneLease = (Join-Path $phoneLeaseDir 'absent.json').Replace("'", "'\''")
+
 # A plain video link has to reach am start as one intact argument, or the refusals above prove
 # nothing. The fake adb reports TikTok in front on display 0 and records what am start was given.
 # No double quotes: Windows PowerShell 5.1 splits a native argument at them.
@@ -202,9 +222,10 @@ esac
 FAKE
 chmod +x $fixture/adb
 PHONE_SERIAL=TESTPHONE01 HUSHFEED_DEVICE_SERIAL=TESTPHONE01 ADB=$fixture/adb \
+    HUSHFEED_LEASE_FILE='__LEASE__' HUSHFEED_LEASE_TOKEN=goodtoken \
     PHONE_SHOTS=/tmp/hushfeed-phone-parser-contract '__PHONE_SCRIPT__' open_url 'https://www.tiktok.com/@creator/video/123' 0
 cat $fixture/am-start
-'@).Replace('__PHONE_SCRIPT__', $escapedPhoneScript)
+'@).Replace('__PHONE_SCRIPT__', $escapedPhoneScript).Replace('__LEASE__', $validPhoneLease)
 $openedUrl = @(& $bashHost @bashArguments $openUrlCommand 2> $null)
 Assert-True ($LASTEXITCODE -eq 0 -and ($openedUrl -join "`n") -like
     "*-d`nhttps://www.tiktok.com/@creator/video/123`n-p`ncom.zhiliaoapp.musically*") `
@@ -244,6 +265,83 @@ Assert-True ($otherPhoneExit -eq 2 -and ($otherPhone -join "`n") -like '*REFUSED
 Assert-True ($unnamedExit -ne 0 -and ($unnamed -join "`n") -like '*HUSHFEED_DEVICE_SERIAL*') `
     'phone.sh ran with no test phone named in HUSHFEED_DEVICE_SERIAL.'
 
+# The device lease. Every run below reaches for adb through a fake one that writes down each
+# call, so a refused run has to leave that list empty. The held lease is a real one from
+# device-lease.ps1, whose open handle shares reading alone, so phone.sh has to read through it.
+$heldPhoneLease = New-DeviceLease -LeaseDir (Join-Path $phoneLeaseDir 'held') -Serial 'TESTPHONE01' -Project 'hushfeed' `
+    -ChatIdentity 'contract' -Purpose 'phone.sh held lease contract' -LeaseMinutes 5
+try {
+    $leaseRunsCommand = (@'
+fixture=$(mktemp -d)
+trap 'rm -rf $fixture' EXIT
+cat > $fixture/adb <<'FAKE'
+#!/bin/sh
+echo $* >> ${0%/*}/calls
+case $* in
+    *dumpsys*) printf 'WINDOW MANAGER DISPLAY CONTENTS (dumpsys window displays)\n  Display: mDisplayId=0\n  mCurrentFocus=Window{1 u0 com.zhiliaoapp.musically/.MainActivity}\n';;
+esac
+FAKE
+chmod +x $fixture/adb
+run() {
+    name=$1; lease=$2; token=$3; verb=$4
+    rm -f $fixture/calls
+    if [ $lease = none ]; then
+        out=$(env -u HUSHFEED_LEASE_FILE -u HUSHFEED_LEASE_TOKEN PHONE_SERIAL=TESTPHONE01 HUSHFEED_DEVICE_SERIAL=TESTPHONE01 \
+            ADB=$fixture/adb PHONE_SHOTS=$fixture/shots '__PHONE_SCRIPT__' $verb 1 2>&1)
+    else
+        out=$(env HUSHFEED_LEASE_FILE=$lease HUSHFEED_LEASE_TOKEN=$token PHONE_SERIAL=TESTPHONE01 HUSHFEED_DEVICE_SERIAL=TESTPHONE01 \
+            ADB=$fixture/adb PHONE_SHOTS=$fixture/shots '__PHONE_SCRIPT__' $verb 1 2>&1)
+    fi
+    code=$?
+    calls=0
+    [ -f $fixture/calls ] && calls=$(( $(wc -l < $fixture/calls) ))
+    case $out in *'REFUSED: no device lease'*) refused=1;; *) refused=0;; esac
+    echo lease-run $name $code $calls $refused
+}
+run none none none top
+run absent '__ABSENT__' goodtoken top
+run foreign '__VALID__' othertoken top
+run expired '__EXPIRED__' goodtoken top
+run otherserial '__OTHER__' goodtoken top
+run foreignshot '__VALID__' othertoken shot
+run foreigntap '__VALID__' othertoken tap
+run valid '__VALID__' goodtoken top
+run held '__HELD__' __HELDTOKEN__ top
+'@).Replace('__PHONE_SCRIPT__', $escapedPhoneScript).Replace('__ABSENT__', $absentPhoneLease).
+        Replace('__VALID__', $validPhoneLease).Replace('__EXPIRED__', $expiredPhoneLease).
+        Replace('__OTHER__', $otherPhoneLease).Replace('__HELD__', $heldPhoneLease.Path.Replace("'", "'\''")).
+        Replace('__HELDTOKEN__', $heldPhoneLease.OwnershipToken)
+    $savedLeaseEAP = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $leaseRuns = @(& $bashHost @bashArguments $leaseRunsCommand 2> $null)
+    } finally {
+        $ErrorActionPreference = $savedLeaseEAP
+    }
+} finally {
+    Remove-DeviceLease -Lease $heldPhoneLease
+}
+$leaseResults = @{}
+foreach ($line in $leaseRuns) {
+    $fields = ([string]$line).Trim() -split ' '
+    if ($fields.Count -eq 5 -and $fields[0] -eq 'lease-run') { $leaseResults[$fields[1]] = $fields[2..4] -join ' ' }
+}
+foreach ($refusal in @('none', 'absent', 'foreign', 'expired', 'otherserial', 'foreignshot', 'foreigntap')) {
+    Assert-True ($leaseResults[$refusal] -eq '2 0 1') `
+        "phone.sh reached adb or didn't refuse without a lease of its own ($refusal): exit, adb calls, refused = $($leaseResults[$refusal])"
+}
+Assert-True ($leaseResults['valid'] -eq '0 1 0') "phone.sh refused its own lease: $($leaseResults['valid'])"
+Assert-True ($leaseResults['held'] -eq '0 1 0') `
+    "phone.sh couldn't read a lease device-lease.ps1 holds open: $($leaseResults['held'])"
+Assert-True (([regex]::Matches($phoneSource, '"\$ADB" -s')).Count -eq 2) `
+    'phone.sh calls adb outside adb_call and adb_quiet, which check the lease first.'
+foreach ($caller in @('tools/verification-probe/strip-hunt.ps1', 'tools/verification-probe/record-markers.ps1')) {
+    $callerSource = Get-Content -LiteralPath (Join-Path $Root $caller) -Raw
+    Assert-True ($callerSource -match 'HUSHFEED_LEASE_FILE=\$\(\$deviceLease\.Path\)' -and
+        $callerSource -match 'HUSHFEED_LEASE_TOKEN=\$\(\$deviceLease\.OwnershipToken\)') `
+        "$caller runs phone.sh without handing it the device lease."
+}
+
 # A wslpath that fails should refuse the path rather than creating a stray directory.
 $wslpathFailCommand = (@'
 fixture=$(mktemp -d)
@@ -264,6 +362,7 @@ try {
 }
 Assert-True ($wslpathExit -eq 0) `
     'phone.sh passed through a Windows path when wslpath was present but failed.'
+Remove-Item -LiteralPath $phoneLeaseDir -Recurse -Force
 
 Write-Host '[scripts] guarded phone foreground parser contracts passed'
 
