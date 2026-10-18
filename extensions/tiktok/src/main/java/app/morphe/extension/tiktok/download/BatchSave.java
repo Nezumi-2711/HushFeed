@@ -31,7 +31,8 @@ import java.util.List;
  * Remove watermark is on (TikTok's own when it is off and the quality is Automatic), its sound
  * put back in when the rendition carries it separately, or left out with Save videos without
  * sound. A photo post saves every photo at full size. With Check for already-saved videos on, a
- * video saved here before is counted and left alone, and a video this run saves is remembered.
+ * video or photo post saved here before is counted and left alone, and a post this run saves is
+ * remembered.
  * Details files, subtitles, tags and a caption written on the video are single-save extras and
  * aren't added in a run.
  */
@@ -117,11 +118,14 @@ final class BatchSave {
     static Result saveOne(Context app, Object post, MediaFileWriter.Saved[] last) throws IOException {
         String id = Reflect.string(post, "getAid", "aid");
         if (id == null) throw new IOException("A picked post has no id");
+        boolean checkSaved = Settings.CHECK_SAVED_VIDEOS.get();
         if (Reflect.property(post, "getPhotoModeImageInfo", "photoModeImageInfo") != null) {
-            savePhotos(app, post, last);
+            if (checkSaved && SavedVideoArchive.find(app, id) != null) return Result.ALREADY_SAVED;
+            long photoGeneration = SavedVideoArchive.generation();
+            MediaFileWriter.Saved first = savePhotos(app, post, last);
+            if (checkSaved) SavedVideoArchive.rememberQuietly(app, id, first, photoGeneration);
             return Result.SAVED;
         }
-        boolean checkSaved = Settings.CHECK_SAVED_VIDEOS.get();
         if (checkSaved && SavedVideoArchive.find(app, id) != null) return Result.ALREADY_SAVED;
         // A single save of the same video is under way; this one would race it for the file.
         if (VideoDownloads.saving(id)) throw new IOException("This video is already being saved");
@@ -194,11 +198,16 @@ final class BatchSave {
         return new Source(urls, audio, false);
     }
 
-    /** Every photo of a photo post at full size, as Download original photos saves them. */
-    private static void savePhotos(Context app, Object post, MediaFileWriter.Saved[] last) throws IOException {
+    /**
+     * Every photo of a photo post at full size, as Download original photos saves them.
+     *
+     * @return the first photo that landed, which the record of saved posts opens
+     */
+    private static MediaFileWriter.Saved savePhotos(Context app, Object post, MediaFileWriter.Saved[] last) throws IOException {
         List<List<String>> photos = OriginalPhotos.sources(post);
         if (photos.isEmpty()) throw new IOException("The original photos aren't available");
         String path = DownloadFilenameFormatter.destinationPath(post, true);
+        MediaFileWriter.Saved first = null;
         for (int i = 0; i < photos.size(); i++) {
             MediaBudget.checkDiskSpace(app.getCacheDir(), -1L);
             File temp = MediaCache.createTempFile(app, "original-photo-", ".tmp");
@@ -209,10 +218,12 @@ final class BatchSave {
                 String named = DownloadFilenameFormatter.formatOriginalPhotoName(post, i + 1, "tmp");
                 String name = named.substring(0, named.lastIndexOf('.') + 1) + extension;
                 last[0] = MediaFileWriter.publishForResult(app, temp, name, mime, path, false);
+                if (first == null) first = last[0];
             } finally {
                 if (!MediaCache.delete(temp)) Logger.printInfo(() -> "Could not remove a run's photo temporary file");
             }
         }
+        return first;
     }
 
     private static File temp(Context context, List<File> files) throws IOException {
