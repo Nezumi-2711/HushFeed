@@ -10,6 +10,7 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok and PineDrama:** `Comments beside the video` now really opens the comments next to the video on a wide window. TikTok's server tells phones they aren't tablets, and the feed then skipped the side panel even with the switch on, so comments still slid up over the video (#26).
 * **TikTok:** With `Caption background` on Dark or Black, the strip's corners are TikTok's small rounded ones again. The last fix copied TikTok's shape, and on some phones that copy came out much rounder than TikTok's own captions (#158).
 * **TikTok:** With Accent color's Follow the wallpaper option, the follow plus under a creator's avatar takes the wallpaper color too. It's a picture with the red drawn in, so it used to stay red. Now the patch splits it into a white plus and a circle the phone colors (#163).
 * **TikTok:** `Hide the comment bar on opened videos` also hides the Message bar that shows up in that spot on a mutual friend's video. It used to stay behind and sit over the caption (#153).
