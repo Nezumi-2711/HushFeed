@@ -29,13 +29,14 @@ import java.util.WeakHashMap;
  * its row binds it instead: the Top results adapter hands each card to one of two holders (the
  * ten-parameter one, or DynamicViewHolder for the cards TikTok routes there), and both hand this
  * (holder, fragment, patch); the other lists' Lynx card cell hands (cell, item). A card Hide mini
- * dramas takes has its row collapsed to nothing, and the row comes back on the bind that hands it
- * another card, or on any bind once the switch is off.
+ * dramas takes, or a hotel deals block Remove ads takes, has its row collapsed to nothing, and the
+ * row comes back on the bind that hands it another card, or on any bind once the switch is off.
  */
 public final class SearchLynxCards {
     /** Route name for the diagnostic report. */
     static final String SOURCE = "SearchLynxCard";
     static final String DRAMA_REASON = "miniDramaCard";
+    static final String HOTEL_REASON = "hotelDealsCard";
 
     private static final Object LOCK = new Object();
     /** Rows this collapsed, with the height and visibility they had. */
@@ -75,7 +76,7 @@ public final class SearchLynxCards {
         }
     }
 
-    /** Collapses the row a drama card is bound into, and gives any other row its size back. */
+    /** Collapses the row a hidden card is bound into, and gives any other row its size back. */
     private static void judge(Object holder, Object patch) {
         Object itemView = Reflect.readField(holder, "itemView");
         if (!(itemView instanceof View)) return;
@@ -96,9 +97,13 @@ public final class SearchLynxCards {
             String fields = patchFields(patch);
             Logger.printDebug(() -> "[Morphe TikTok FeedFilter] search lynx card: " + kind + " | " + shape + " | " + fields);
         }
-        if (Settings.HIDE_MINI_DRAMAS.get() && isDrama(patch)) {
+        String reason = hideReason(patch);
+        if (reason != null) {
             collapse(row);
-            if (fresh) FeedFilterCounters.removedItems(SOURCE, 1, DRAMA_REASON);
+            if (fresh) {
+                FeedFilterCounters.removedItems(SOURCE, 1, reason);
+                if (HOTEL_REASON.equals(reason)) FeedFilterCounters.sawKind(AdsFilter.AD_SIGNALS_SOURCE, "hotel deals card");
+            }
             // TikTok's own bind runs after this and may size the row again, so once it has
             // returned the row is collapsed again, if it still holds this card. The pass runs on
             // the main looper, where nothing may escape either.
@@ -108,7 +113,7 @@ public final class SearchLynxCards {
                     synchronized (LOCK) {
                         current = BOUND.get(row);
                     }
-                    if (current == patch && Settings.HIDE_MINI_DRAMAS.get()) collapse(row);
+                    if (current == patch && hideReason(patch) != null) collapse(row);
                 } catch (Throwable failure) {
                     warnOnce(failure);
                 }
@@ -116,6 +121,39 @@ public final class SearchLynxCards {
         } else {
             restore(row);
         }
+    }
+
+    /** The removal reason when a switch that's on hides this card, or null when it stays. */
+    private static String hideReason(Object patch) {
+        if (Settings.HIDE_MINI_DRAMAS.get() && isDrama(patch)) return DRAMA_REASON;
+        if (Settings.REMOVE_ADS.get() && isHotelDeals(patch)) return HOTEL_REASON;
+        return null;
+    }
+
+    /**
+     * TikTok's hotel deals block (a cashback banner over hotels with prices quoted by booking
+     * sites). It carries no ad flag or ad key, so it is told by its raw data: 47.4.3 serves it as
+     * a nearby_poi object whose hotels each list the merchants quoting a price (ls_merchant_list).
+     * A landmark's place card (poi_content_card) and the Must Eat ranking
+     * (poi_must_eat_ranking_card) list no merchants and stay.
+     */
+    static boolean isHotelDeals(Object patch) {
+        if (patch == null) return false;
+        Object raw = Reflect.readField(patch, "rawData");
+        if (!(raw instanceof String) || !((String) raw).contains("ls_merchant_list")) return false;
+        try {
+            org.json.JSONObject nearby = new org.json.JSONObject((String) raw).optJSONObject("nearby_poi");
+            org.json.JSONArray hotels = nearby == null ? null : nearby.optJSONArray("poi_info_list");
+            if (hotels == null) return false;
+            for (int i = 0; i < hotels.length(); i++) {
+                org.json.JSONObject hotel = hotels.optJSONObject(i);
+                org.json.JSONArray merchants = hotel == null ? null : hotel.optJSONArray("ls_merchant_list");
+                if (merchants != null && merchants.length() > 0) return true;
+            }
+        } catch (org.json.JSONException notAnObject) {
+            // The raw data comes from the network; a card it can't read is ordinary content.
+        }
+        return false;
     }
 
     /**

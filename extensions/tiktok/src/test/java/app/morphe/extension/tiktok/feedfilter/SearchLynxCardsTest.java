@@ -80,6 +80,7 @@ public class SearchLynxCardsTest {
 
     @After public void tearDown() {
         Settings.HIDE_MINI_DRAMAS.resetToDefault();
+        Settings.REMOVE_ADS.resetToDefault();
         SearchLynxCards.resetForTests();
         FeedItemsFilter.resetDiagnosticsForTests();
     }
@@ -206,6 +207,62 @@ public class SearchLynxCardsTest {
         SearchLynxCards.onHolderBound(null, null, null);
         SearchLynxCards.onHolderBound(new Cell(otherRow), null, new Object());
         assertShowing(otherRow);
+    }
+
+    /** A Lynx card's patch with the raw data 47.4.3 serves; the template is the one all three share. */
+    public static class RawPatch {
+        public String schema = "sslocal://lynxview?channel=fe_search_vertical_card_lynx&bundle=poi_card%2Ftemplate.js";
+        public String alaSrc;
+        public String rawData;
+
+        RawPatch(String rawData) {
+            this.rawData = rawData;
+        }
+    }
+
+    // The shapes captured on 47.4.3 for "hotels new york", a landmark and a restaurant search,
+    // cut down to the keys that matter and with made-up values.
+    private static final String HOTEL_DEALS = "{\"type\":78,\"doc_type\":200,\"nearby_poi\":{\"local_service_key_category\":\"Hotel\","
+            + "\"poi_info_list\":[{\"poi_name\":\"Hotel Example\",\"ls_merchant_list\":[{\"name\":\"Agoda\"},{\"name\":\"Booking\"}],\"coupon_bar_list\":[{}]}]}}";
+    private static final String PLACE_CARD = "{\"type\":107,\"doc_type\":246,\"poi_content_card\":{\"poi_content_card_info_list\":[{\"poi_info\":{}}],"
+            + "\"local_service_key_category\":\"Travel\"}}";
+    private static final String MUST_EAT = "{\"type\":325,\"doc_type\":105,\"poi_must_eat_ranking_card\":{\"tab_list\":[{\"poi_list\":[{},{}]}]}}";
+
+    @Test public void withRemoveAdsTheHotelDealsBlockCollapsesAndPlaceCardsStay() {
+        FeedFilterCounters.clear();
+        Settings.REMOVE_ADS.save(true);
+        View hotelRow = row();
+        View placeRow = row();
+        View mustEatRow = row();
+
+        SearchLynxCards.onHolderBound(new Cell(hotelRow), new Object(), new RawPatch(HOTEL_DEALS));
+        SearchLynxCards.onHolderBound(new Cell(placeRow), new Object(), new RawPatch(PLACE_CARD));
+        SearchLynxCards.onHolderBound(new Cell(mustEatRow), new Object(), new RawPatch(MUST_EAT));
+
+        assertCollapsed(hotelRow);
+        assertShowing(placeRow);
+        assertShowing(mustEatRow);
+        String report = String.join("\n", FeedFilterCounters.report());
+        assertTrue(report, report.contains(SearchLynxCards.HOTEL_REASON));
+        assertTrue(report, report.contains("hotel deals card"));
+
+        Settings.REMOVE_ADS.save(false);
+        SearchLynxCards.onHolderBound(new Cell(hotelRow), new Object(), new RawPatch(HOTEL_DEALS));
+        assertShowing(hotelRow);
+    }
+
+    /** Hotels with no merchant quoting a price, or a merchant list outside nearby_poi, are not the deals block. */
+    @Test public void onlyHotelsWithMerchantPricesAreTheDealsBlock() {
+        assertTrue(SearchLynxCards.isHotelDeals(new RawPatch(HOTEL_DEALS)));
+        assertFalse(SearchLynxCards.isHotelDeals(new RawPatch(
+                "{\"nearby_poi\":{\"poi_info_list\":[{\"poi_name\":\"x\",\"ls_merchant_list\":[]}]}}")));
+        assertFalse(SearchLynxCards.isHotelDeals(new RawPatch(
+                "{\"poi_content_card\":{\"ls_merchant_list\":[{\"name\":\"Agoda\"}]}}")));
+        assertFalse(SearchLynxCards.isHotelDeals(new RawPatch("[\"ls_merchant_list\"")));
+        assertFalse(SearchLynxCards.isHotelDeals(new RawPatch(null)));
+        assertFalse(SearchLynxCards.isHotelDeals(new RawPatch(PLACE_CARD)));
+        assertFalse(SearchLynxCards.isHotelDeals(new DynamicPatch(DRAMA_SCHEMA, null)));
+        assertFalse(SearchLynxCards.isHotelDeals(null));
     }
 
     @Test public void withHideMiniDramasOffTheDramaCardStays() {
