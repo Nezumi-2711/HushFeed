@@ -18,6 +18,7 @@ import app.morphe.patches.shared.compat.AppCompatibilities
 import app.morphe.patches.tiktok.misc.extension.MainActivityOnCreateFingerprint
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.navigation.MainNewIntentFingerprint
+import app.morphe.patches.tiktok.misc.navigation.writes
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.patches.tiktok.misc.theme.declaredVersions
@@ -355,13 +356,6 @@ val feedFilterPatch = bytecodePatch(
                 "$EXTENSION_CLASS_DESCRIPTOR->filterFriendsFeed(Ljava/lang/Object;)V",
         )
 
-        // The V3 Friends feed has its own response and list, handled in one place per response.
-        FriendsV3FeedHandleResponseFingerprint.method.addInstruction(
-            0,
-            "invoke-static/range {p1 .. p1}, " +
-                "$EXTENSION_CLASS_DESCRIPTOR->filterFriendsV3Feed(Ljava/lang/Object;)V",
-        )
-
         FriendsFeedResponseFingerprint.method.apply {
             val returns = implementation!!.instructions.withIndex()
                 .filter { it.value.opcode == Opcode.RETURN_VOID }
@@ -378,6 +372,13 @@ val feedFilterPatch = bytecodePatch(
                 )
             }
         }
+
+        val repostFeedData = if (declaredBuild) RepostFeedDataFingerprint.method else RepostFeedDataFingerprint.methodOrNull
+        repostFeedData?.addInstruction(
+            0,
+            "invoke-static/range {p0 .. p0}, " +
+                "$EXTENSION_CLASS_DESCRIPTOR->filterRepostFeed(Ljava/lang/Object;)V",
+        )
 
         // Opening a video from a profile hands the list to the detail pager once, which the
         // event above covers. Scrolling past that video refills the pager through the profile
@@ -701,6 +702,18 @@ val feedFilterPatch = bytecodePatch(
             }
         }
 
+        // The "People also ask Tako" card in the search results, a native card of Tako questions
+        // in a row of its own that none of the hooks above reach (47.4.3). Its slot component
+        // finds the card's parts in onViewCreated and never touches the card's own visibility, so
+        // the extension is handed the view at every return and hides the card and its row.
+        // Required on a declared build like the search binds; a forced build goes without it.
+        val takoSugCard = if (declaredBuild) {
+            SearchTakoSugCardCreatedFingerprint.method
+        } else {
+            SearchTakoSugCardCreatedFingerprint.methodOrNull
+        }
+        takoSugCard?.hideTakoSugCardAtReturns(required = declaredBuild)
+
         // The Tako bar inside the comments sheet, the "related words" strip above the comment
         // list. It is a server-driven top bar component of biz type SEARCH_TAKO (the service in
         // the Tako package) or SEARCH_TAKO_BG (the commentv2 bridge to the same Tako service).
@@ -1010,6 +1023,31 @@ private fun Instruction.readsProfileAdList(): Boolean =
             field.name == "awemeList" &&
             field.type == "Ljava/util/List;"
     } == true
+
+/**
+ * Hands the Tako questions card's view, p1 of `SearchTakoSugCardAssem.onViewCreated(View)V`, to
+ * the extension at every return. The view is the method's last register; a build that writes
+ * over it would hand the extension something else and fail verification on the way, so that
+ * build and one with no return to hook go without the hook: a [PatchException] when [required],
+ * the method left as it is otherwise.
+ */
+internal fun MutableMethod.hideTakoSugCardAtReturns(required: Boolean) {
+    fun skip(why: String) {
+        if (required) throw PatchException("Feed filter: SearchTakoSugCardAssem.onViewCreated $why")
+    }
+    val code = implementation ?: return skip("has no implementation")
+    if (code.instructions.any { it.writes(code.registerCount - 1) }) return skip("writes over its view parameter")
+    val returnIndices = code.instructions.withIndex()
+        .filter { it.value.opcode == Opcode.RETURN_VOID }
+        .map { it.index }
+    if (returnIndices.isEmpty()) return skip("has no return to hook")
+    returnIndices.asReversed().forEach { returnIndex ->
+        addInstructionsAtControlFlowLabel(
+            returnIndex,
+            "invoke-static/range {p1 .. p1}, $TAKO_AI_FILTER_CLASS_DESCRIPTOR->hideSearchSugCard(Landroid/view/View;)V",
+        )
+    }
+}
 
 /**
  * Filters the result before the rebuilt cache stack forwards it to any callback.

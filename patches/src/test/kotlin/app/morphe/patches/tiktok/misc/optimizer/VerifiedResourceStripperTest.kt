@@ -1,6 +1,7 @@
 package app.morphe.patches.tiktok.misc.optimizer
 
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patches.shared.compat.AppCompatibilities
 import java.io.File
 import java.security.MessageDigest
 import org.junit.Assert.assertArrayEquals
@@ -34,6 +35,19 @@ class VerifiedResourceStripperTest {
         assertThrows(PatchException::class.java) { strip("2.1") }
         assertThrows(PatchException::class.java) { strip(null) }
         assertThrows(IllegalArgumentException::class.java) { ResourceProfile("unpinned", emptyList()) }
+    }
+
+    @Test
+    fun `the relay strip passes every declared PineDrama build, which ships no relay library`() {
+        // The 47.4.3 retarget renamed the only 47.1.4 empty profile and PineDrama 47.1.4 stopped patching.
+        val versions = AppCompatibilities.pineDrama().flatMap { it.targets }.map { it.version }
+        assertTrue(versions.isNotEmpty())
+        for (version in versions) {
+            val root = temporary.newFolder("pinedrama-$version")
+            val result = stripVerifiedResources(root, "P2P Relay Blocker", emptyList(),
+                p2pRelayProfiles.flatMap { it.files }.map { it.path }.distinct(), p2pRelayProfiles, versionName = version)
+            assertEquals(version, 0, result.files)
+        }
     }
 
     @Test
@@ -350,6 +364,30 @@ class VerifiedResourceStripperTest {
         assertThrows(PatchException::class.java) {
             parseLanguageSelection("xx", available)
         }
+    }
+
+    @Test
+    fun `a real language TikTok has no pack for is skipped while a typo still refuses`() {
+        // #196: "en, sr" stopped the whole run because no TikTok build carries Serbian.
+        val available = setOf("en", "es", "tr")
+        assertEquals(setOf("en"), parseLanguageSelection("en, sr", available))
+        assertEquals("sr alone still removes the rest", setOf("en"), parseLanguageSelection("sr", available))
+        assertEquals(setOf("en", "tr"), parseLanguageSelection("SR, tr", available))
+        assertEquals(available, parseLanguageSelection("all, sr", available))
+        assertEquals(setOf("sr"), languagesNotShipped("en, sr, tr, xx", available))
+        val typo = assertThrows(PatchException::class.java) { parseLanguageSelection("sr, xx", available) }
+        assertTrue(typo.message.orEmpty(), typo.message.orEmpty().contains("xx isn't a language code"))
+        assertTrue(typo.message.orEmpty(), typo.message.orEmpty().contains("This TikTok has: en, es, tr."))
+        assertFalse(typo.message.orEmpty(), typo.message.orEmpty().contains("sr"))
+
+        val root = temporary.newFolder("missing-language")
+        val english = root.write("assets/strings#lang_en/en.xrsc", "english")
+        val spanish = root.write("assets/strings#lang_es/es.xrsc", "spanish")
+        val result = stripVerifiedLanguagePacks(root, "en, sr", listOf(languageContract(root, setOf("en", "es"))))
+        assertEquals(setOf("sr"), result.missingLocales)
+        assertEquals(setOf("en"), result.retainedLocales)
+        assertArrayEquals("english".toByteArray(), english.readBytes())
+        assertTrue(spanish.readBytes().isEmpty())
     }
 
     @Test

@@ -155,6 +155,7 @@ public class FeedScreenCoverageTest {
         put("publish_date_short_date", YES, YES, NONE);
         // Profile grids only.
         put("publish_date_on_grid", NONE, NONE, NONE);
+        put("video_length_on_grid", NONE, NONE, NONE);
         put("show_author_region", YES, YES, NONE);
         // Only how the region label shows its code, so it reaches where the label does (#157).
         put("region_as_flag", YES, YES, NONE);
@@ -396,14 +397,14 @@ public class FeedScreenCoverageTest {
         int cellId = 0x7f0a1c01;
         Map<String, Integer> ids = new LinkedHashMap<>();
         ids.put("desc", 0x7f0a1c02);
-        ids.put("47.1.4:o97", 0x7f0a1c03);
-        ids.put("47.1.4:llj", 0x7f0a1c04);
-        ids.put("47.1.4:f98", 0x7f0a1c05);
+        ids.put("47.4.3:o7a", 0x7f0a1c03);
+        ids.put("47.4.3:mud", 0x7f0a1c04);
+        ids.put("47.4.3:f92", 0x7f0a1c05);
         Map<BooleanSetting, String> switches = new LinkedHashMap<>();
         switches.put(Settings.HIDE_FEED_CAPTION, "desc");
-        switches.put(Settings.HIDE_FEED_MUSIC, "47.1.4:o97");
-        switches.put(Settings.HIDE_FEED_ACTION_BAR, "47.1.4:llj");
-        switches.put(Settings.HIDE_FEED_SURVEYS, "47.1.4:f98");
+        switches.put(Settings.HIDE_FEED_MUSIC, "47.4.3:o7a");
+        switches.put(Settings.HIDE_FEED_ACTION_BAR, "47.4.3:mud");
+        switches.put(Settings.HIDE_FEED_SURVEYS, "47.4.3:f92");
         for (BooleanSetting setting : switches.keySet()) {
             Coverage coverage = TABLE.get(setting.key);
             assertNotNull(setting.key, coverage);

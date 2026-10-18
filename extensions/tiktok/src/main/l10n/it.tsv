@@ -558,6 +558,8 @@ Hide paid partnerships	Nascondi le collaborazioni a pagamento
 Hide people and options by name	Nascondi persone e opzioni per nome
 Hide photo posts	Nascondi i post fotografici
 Hide picture comments	Nascondi i commenti con immagini
+Hide reply previews	Nascondi le anteprime delle risposte
+Don't open a reply under each comment. View replies still shows all of them.	Non aprire una risposta sotto ogni commento. Visualizza risposte le mostra ancora tutte.
 Hide playlist videos	Nascondi i video delle playlist
 Hide promotional music	Nascondi la musica promozionale
 Hide comment typing suggestions	Nascondi i suggerimenti durante la scrittura dei commenti
@@ -1170,7 +1172,6 @@ These loaded values are for a different TikTok version.	Questi valori caricati s
 This catalog entry is no longer available. Refresh the Lab and try again.	Questa voce del catalogo non è più disponibile. Aggiorna il Lab e riprova.
 This change couldn't be saved. Try again.	Non è stato possibile salvare questa modifica. Riprova.
 This configuration has no fields that can be copied and changed safely on this build.	Questa configurazione non ha campi che si possano copiare e modificare in sicurezza in questa build.
-This file has more loaded values than the Lab takes at once.	Questo file contiene più valori caricati di quanti il Lab ne accetti in una volta sola.
 This file has no loaded values in it.	Questo file non contiene valori caricati.
 This file isn't a loaded-values export from the Feature Gate Lab.	Questo file non è un'esportazione di valori caricati dal Feature Gate Lab.
 This gate type isn't supported.	Questo tipo di gate non è supportato.
@@ -1881,6 +1882,8 @@ Show the time to the second	Mostra l'ora al secondo
 Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name.	Mostra quando è stato pubblicato un video, al secondo e con il tuo fuso orario, al posto della data breve di TikTok accanto al nome del creator.
 Show dates on profile grids	Mostra le date nella griglia del profilo
 Show the day each video was posted under its view count on profile grids.	Mostra il giorno in cui è stato pubblicato ogni video sotto il numero di visualizzazioni nella griglia del profilo.
+Show video length on profile grids	Mostra la durata nella griglia del profilo
+Show how long each video runs under its view count on profile grids. Photo posts and videos TikTok sent no length for show none.	Mostra quanto dura ogni video sotto il numero di visualizzazioni nella griglia del profilo. I post di foto e i video di cui TikTok non ha inviato la durata non mostrano nulla.
 Fall back to the watermarked copy	Ripiega sulla copia con filigrana
 When the video without the watermark can't be fetched, save TikTok's own watermarked copy instead and say so. It's the size TikTok's own save uses, so it may be smaller than the quality you picked.	Se il video senza filigrana non si riesce a scaricare, salva invece la copia con filigrana di TikTok e avvisa. Ha la dimensione usata dal salvataggio di TikTok, quindi può essere più piccola della qualità che hai scelto.
 The video without the watermark couldn't be fetched, so TikTok's watermarked copy was saved to %1$s. Try again later for the clean copy.	Non è stato possibile scaricare il video senza filigrana, quindi la copia con filigrana di TikTok è stata salvata in %1$s. Riprova più tardi per avere la copia pulita.
@@ -1911,7 +1914,7 @@ Copy the full link for short links	Copia il link completo per i link brevi
 When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit, and it connects directly even when a proxy is on. Links you send to another app go out as they were.	Quando Copia link dà un link breve vt.tiktok.com o vm.tiktok.com, Hushfeed lo apre una volta in background per trovare il link completo del video e copia quello. TikTok vede quella visita, e si collega direttamente anche con un proxy attivo. I link che invii a un'altra app partono com'erano.
 Full link copied	Link completo copiato
 Mark saved videos	Segna i video salvati
-Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.	Mette un ✓ sui video che hai salvato con Hushfeed, nelle griglie dei profili e accanto all'ora nel feed. Funziona solo finché Controlla i video già salvati è attivo. I post con foto non vengono contrassegnati.
+Puts a ✓ by videos and photo posts you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on.	Mette un ✓ sui video e sui post con foto che hai salvato con Hushfeed, nelle griglie dei profili e accanto all'ora nel feed. Funziona solo finché Controlla i video già salvati è attivo.
 Also replaces the saved region and country code TikTok sends with every request. Signing in still sends your real region. Your IP address and your account's own rules still apply.	Sostituisce anche la regione salvata e il codice paese che TikTok invia a ogni richiesta. L'accesso invia ancora la tua regione reale. Il tuo indirizzo IP e le regole del tuo account continuano a valere.
 Turn off double tap to react	Disattiva il doppio tocco per reagire
 A double tap on a message no longer adds a heart to it. A single tap and a long press work as before.	Un doppio tocco su un messaggio non gli aggiunge più un cuore. Il tocco singolo e la pressione prolungata funzionano come prima.
@@ -2174,3 +2177,7 @@ Only on the sides of the video	Solo ai lati del video
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	La tua scelta di Pressione prolungata vale solo sul terzo sinistro e destro del video. Una pressione al centro apre comunque il menu di TikTok. Serve una scelta di Pressione prolungata diversa da Predefinito di TikTok.
 Full-width progress bar	Barra di avanzamento a tutta larghezza
 Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	La barra di avanzamento va da un bordo all'altro dello schermo, senza lo spazio che TikTok lascia alle estremità.
+New device identity	Nuova identità del dispositivo
+Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	Cancella i dati di TikTok e gli dà un nuovo ID Android e un nuovo ID pubblicitario al prossimo avvio, così vede un telefono che non conosce. Verrai disconnesso e perderai le bozze. Le impostazioni di Hushfeed restano.
+TikTok starts as a new phone after the restart. Tap again to cancel.	Dopo il riavvio TikTok si avvia come su un telefono nuovo. Tocca di nuovo per annullare.
+Couldn't set up a new device identity. Try again.	Impossibile impostare una nuova identità del dispositivo. Riprova.

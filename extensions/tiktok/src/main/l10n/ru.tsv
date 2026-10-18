@@ -615,6 +615,8 @@ Hide paid partnerships	Скрывать платные партнёрства
 Hide people and options by name	Скрывать людей и варианты по названию
 Hide photo posts	Скрывать фотопубликации
 Hide picture comments	Скрывать комментарии-картинки
+Hide reply previews	Скрывать превью ответов
+Don't open a reply under each comment. View replies still shows all of them.	Не раскрывать ответ под каждым комментарием. Кнопка просмотра ответов по-прежнему показывает все.
 Hide playlist videos	Скрывать видео из плейлистов
 Hide promotional music	Скрывать рекламную музыку
 Hide comment typing suggestions	Скрывать подсказки при наборе комментария
@@ -1251,7 +1253,6 @@ These loaded values are for a different TikTok version.	Эти загружен�
 This catalog entry is no longer available. Refresh the Lab and try again.	Эта запись каталога больше не доступна. Обновите Lab и повторите попытку.
 This change couldn't be saved. Try again.	Не удалось сохранить это изменение. Повторите попытку.
 This configuration has no fields that can be copied and changed safely on this build.	В этой конфигурации нет полей, которые можно безопасно скопировать и изменить в этой сборке.
-This file has more loaded values than the Lab takes at once.	В этом файле больше загруженных значений, чем Lab принимает за один раз.
 This file has no loaded values in it.	В этом файле нет загруженных значений.
 This file isn't a loaded-values export from the Feature Gate Lab.	Этот файл не является экспортом загруженных значений из Feature Gate Lab.
 This gate type isn't supported.	Этот тип переключателя не поддерживается.
@@ -2046,6 +2047,8 @@ Show the time to the second	Показывать время до секунды
 Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name.	Показывать, когда опубликовано видео, с точностью до секунды и с вашим часовым поясом вместо короткой даты TikTok рядом с именем автора.
 Show dates on profile grids	Показывать даты в сетке профиля
 Show the day each video was posted under its view count on profile grids.	Показывать день публикации каждого видео под числом просмотров в сетке профиля.
+Show video length on profile grids	Показывать длительность в сетке профиля
+Show how long each video runs under its view count on profile grids. Photo posts and videos TikTok sent no length for show none.	Показывать длительность каждого видео под числом просмотров в сетке профиля. У фотопубликаций и видео, для которых TikTok не прислал длительность, она не показывается.
 Fall back to the watermarked copy	Сохранять копию с водяным знаком, если иначе нельзя
 When the video without the watermark can't be fetched, save TikTok's own watermarked copy instead and say so. It's the size TikTok's own save uses, so it may be smaller than the quality you picked.	Если видео без водяного знака не удаётся загрузить, сохраняется собственная копия TikTok с водяным знаком, и об этом сообщается. У неё размер, который использует сохранение TikTok, поэтому она может быть меньше выбранного качества.
 The video without the watermark couldn't be fetched, so TikTok's watermarked copy was saved to %1$s. Try again later for the clean copy.	Не удалось загрузить видео без водяного знака, поэтому копия TikTok с водяным знаком сохранена в %1$s. Повторите попытку позже, чтобы получить чистую копию.
@@ -2079,7 +2082,7 @@ Copy the full link for short links	Копировать полную ссылк�
 When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit, and it connects directly even when a proxy is on. Links you send to another app go out as they were.	Когда «Копировать ссылку» даёт короткую ссылку vt.tiktok.com или vm.tiktok.com, Hushfeed один раз открывает её в фоне, находит полную ссылку на видео и копирует её. TikTok видит это открытие, и оно идёт напрямую, даже если включён прокси. Ссылки, которые вы отправляете в другое приложение, уходят как есть.
 Full link copied	Полная ссылка скопирована
 Mark saved videos	Отмечать сохранённые видео
-Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.	Ставит ✓ у видео, сохранённых через Hushfeed, в сетках профилей и рядом со временем в ленте. Работает только при включённом параметре «Проверять уже сохранённые видео». Фотопосты не отмечаются.
+Puts a ✓ by videos and photo posts you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on.	Ставит ✓ у видео и фотопостов, сохранённых через Hushfeed, в сетках профилей и рядом со временем в ленте. Работает только при включённом параметре «Проверять уже сохранённые видео».
 Also replaces the saved region and country code TikTok sends with every request. Signing in still sends your real region. Your IP address and your account's own rules still apply.	Также подменяет сохранённый регион и код страны, которые TikTok отправляет с каждым запросом. При входе по-прежнему отправляется ваш настоящий регион. IP-адрес и собственные правила вашего аккаунта продолжают действовать.
 Turn off double tap to react	Отключить двойное касание для реакции
 A double tap on a message no longer adds a heart to it. A single tap and a long press work as before.	Двойное касание сообщения больше не ставит на него сердечко. Одиночное касание и долгое нажатие работают как раньше.
@@ -2354,3 +2357,7 @@ Only on the sides of the video	Только по бокам видео
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Выбранное действие для долгого нажатия работает только на левой и правой трети видео. Нажатие посередине по-прежнему открывает собственное меню TikTok. Нужен вариант долгого нажатия, отличный от стандарта TikTok.
 Full-width progress bar	Полоса прогресса во всю ширину
 Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	Полоса прогресса идёт от одного края экрана до другого, без зазора, который TikTok оставляет с каждого конца.
+New device identity	Новые идентификаторы устройства
+Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	Стирает данные TikTok и при следующем запуске выдаёт ему новый Android ID и рекламный ID, чтобы он видел незнакомый телефон. Вы выйдете из аккаунта, а черновики пропадут. Настройки Hushfeed сохранятся.
+TikTok starts as a new phone after the restart. Tap again to cancel.	После перезапуска TikTok запустится как на новом телефоне. Нажмите ещё раз, чтобы отменить.
+Couldn't set up a new device identity. Try again.	Не удалось задать новые идентификаторы устройства. Попробуйте ещё раз.

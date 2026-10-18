@@ -550,6 +550,8 @@ Hide paid partnerships,Sembunyikan kemitraan berbayar
 Hide people and options by name,Sembunyikan orang dan opsi berdasarkan nama
 Hide photo posts,Sembunyikan publikasi foto
 Hide picture comments,Sembunyikan komentar bergambar
+Hide reply previews,Sembunyikan pratinjau balasan
+Don't open a reply under each comment. View replies still shows all of them.,Jangan buka satu balasan di bawah setiap komentar. Lihat balasan tetap menampilkan semuanya.
 Hide playlist videos,Sembunyikan video playlist
 Hide promotional music,Sembunyikan musik promosi
 Hide comment typing suggestions,Sembunyikan saran saat mengetik komentar
@@ -1164,7 +1166,6 @@ These loaded values are for a different TikTok version.,Nilai yang dimuat ini un
 This catalog entry is no longer available. Refresh the Lab and try again.,Entri katalog ini sudah tidak tersedia. Segarkan Lab dan coba lagi.
 This change couldn't be saved. Try again.,Perubahan ini tidak dapat disimpan. Coba lagi.
 This configuration has no fields that can be copied and changed safely on this build.,Konfigurasi ini tidak punya bidang yang bisa disalin dan diubah dengan aman di build ini.
-This file has more loaded values than the Lab takes at once.,Berkas ini berisi lebih banyak nilai yang dimuat daripada yang bisa diterima Lab sekaligus.
 This file has no loaded values in it.,Berkas ini tidak berisi nilai yang dimuat.
 This file isn't a loaded-values export from the Feature Gate Lab.,Berkas ini bukan ekspor nilai yang dimuat dari Feature Gate Lab.
 This gate type isn't supported.,Tipe gate ini tidak didukung.
@@ -1871,6 +1872,8 @@ Show the time to the second,Tampilkan waktu hingga detik
 "Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name.","Tampilkan kapan video diposting hingga detiknya, beserta zona waktumu, sebagai ganti tanggal singkat TikTok di samping nama kreator."
 Show dates on profile grids,Tampilkan tanggal di kisi profil
 Show the day each video was posted under its view count on profile grids.,Tampilkan hari setiap video diposting di bawah jumlah tayangannya di kisi profil.
+Show video length on profile grids,Tampilkan durasi video di kisi profil
+Show how long each video runs under its view count on profile grids. Photo posts and videos TikTok sent no length for show none.,Tampilkan berapa lama setiap video berjalan di bawah jumlah tayangannya di kisi profil. Postingan foto dan video yang durasinya tidak dikirim TikTok tidak menampilkan apa pun.
 Fall back to the watermarked copy,Gunakan salinan bertanda air sebagai cadangan
 "When the video without the watermark can't be fetched, save TikTok's own watermarked copy instead and say so. It's the size TikTok's own save uses, so it may be smaller than the quality you picked.","Jika video tanpa tanda air tidak bisa diambil, simpan salinan bertanda air milik TikTok sebagai gantinya dan beri tahu. Ukurannya sama dengan yang dipakai penyimpanan TikTok sendiri, jadi bisa lebih kecil dari kualitas yang kamu pilih."
 "The video without the watermark couldn't be fetched, so TikTok's watermarked copy was saved to %1$s. Try again later for the clean copy.","Video tanpa tanda air tidak bisa diambil, jadi salinan bertanda air TikTok disimpan di %1$s. Coba lagi nanti untuk mendapatkan salinan yang bersih."
@@ -1901,7 +1904,7 @@ Copy the full link for short links,Salin tautan lengkap untuk tautan pendek
 "When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit, and it connects directly even when a proxy is on. Links you send to another app go out as they were.","Saat Salin tautan memberi tautan pendek vt.tiktok.com atau vm.tiktok.com, Hushfeed membukanya sekali di latar belakang untuk menemukan tautan video lengkap, lalu menyalin yang itu. TikTok melihat kunjungan itu, dan terhubung langsung meskipun proxy aktif. Tautan yang kamu kirim ke aplikasi lain tetap seperti semula."
 Full link copied,Tautan lengkap disalin
 Mark saved videos,Tandai video tersimpan
-"Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.","Menaruh ✓ pada video yang kamu simpan dengan Hushfeed, di grid profil dan di samping waktu di feed. Hanya berfungsi saat Periksa video yang sudah disimpan menyala. Kiriman foto tidak ditandai."
+"Puts a ✓ by videos and photo posts you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on.","Menaruh ✓ pada video dan kiriman foto yang kamu simpan dengan Hushfeed, di grid profil dan di samping waktu di feed. Hanya berfungsi saat Periksa video yang sudah disimpan menyala."
 Also replaces the saved region and country code TikTok sends with every request. Signing in still sends your real region. Your IP address and your account's own rules still apply.,"Juga mengganti wilayah tersimpan dan kode negara yang dikirim TikTok di setiap permintaan. Saat masuk, wilayah aslimu tetap dikirim. Alamat IP dan aturan akunmu sendiri tetap berlaku."
 Turn off double tap to react,Matikan ketuk dua kali untuk bereaksi
 A double tap on a message no longer adds a heart to it. A single tap and a long press work as before.,Ketuk dua kali pada pesan tidak lagi menambahkan hati ke pesan itu. Ketuk sekali dan tekan lama tetap berfungsi seperti biasa.
@@ -2153,3 +2156,7 @@ Only on the sides of the video,Hanya di sisi video
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.,Pilihan Tekan lama hanya berjalan di sepertiga kiri dan kanan video. Tekan di tengah tetap membuka menu bawaan TikTok. Perlu pilihan Tekan lama selain Bawaan TikTok.
 Full-width progress bar,Bilah progres selebar layar
 "Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.","Bilah progres membentang dari satu tepi layar ke tepi lainnya, tanpa celah yang disisakan TikTok di kedua ujung."
+New device identity,Identitas perangkat baru
+"Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.","Hapus data TikTok dan beri ID Android serta ID iklan baru saat mulai berikutnya, agar TikTok melihat ponsel yang belum pernah dikenalnya. Kamu akan keluar dari akun dan kehilangan draf. Pengaturan Hushfeed tetap ada."
+TikTok starts as a new phone after the restart. Tap again to cancel.,TikTok mulai sebagai ponsel baru setelah dimulai ulang. Ketuk lagi untuk membatalkan.
+Couldn't set up a new device identity. Try again.,Tidak bisa menyiapkan identitas perangkat baru. Coba lagi.

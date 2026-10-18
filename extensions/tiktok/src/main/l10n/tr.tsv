@@ -568,6 +568,8 @@ Hide people and options by name	Kişileri ve seçenekleri ada göre gizle
 Hide photo posts	Fotoğraf gönderilerini gizle
 Hide photo posts from the feed.	Fotoğraf gönderilerini akıştan gizle.
 Hide picture comments	Görselli yorumları gizle
+Hide reply previews	Yanıt önizlemelerini gizle
+Don't open a reply under each comment. View replies still shows all of them.	Her yorumun altında bir yanıt açık gelmesin. Yanıtları görüntüle yine hepsini gösterir.
 Hide place badges on videos, including cards with multiple places. Videos and your location permissions stay unchanged.	Videolardaki yer rozetlerini, birden fazla yer içeren kartlar dahil gizle. Videolar ve konum izinlerin değişmez.
 Hide effect and template tags	Efekt ve şablon etiketlerini gizle
 Hide the tags above a video's description that invite you to try an effect, a template, CapCut or an AI style. Location labels and the music line have their own switches.	Bir videonun açıklamasının üstünde seni bir efekti, şablonu, CapCut'ı veya yapay zekâ stilini denemeye davet eden etiketleri gizle. Konum etiketleri ve müzik satırının kendi anahtarları var.
@@ -1205,7 +1207,6 @@ These loaded values are for a different TikTok version.	Bu yüklenen değerler f
 This catalog entry is no longer available. Refresh the Lab and try again.	Bu katalog girişi artık kullanılamıyor. Lab'i yenile ve yeniden dene.
 This change couldn't be saved. Try again.	Bu değişiklik kaydedilemedi. Yeniden dene.
 This configuration has no fields that can be copied and changed safely on this build.	Bu yapılandırmada, bu sürümde güvenle kopyalanıp değiştirilebilecek bir alan yok.
-This file has more loaded values than the Lab takes at once.	Bu dosyada Lab'in tek seferde aldığından fazla yüklenen değer var.
 This file has no loaded values in it.	Bu dosyada hiç yüklenen değer yok.
 This file isn't a loaded-values export from the Feature Gate Lab.	Bu dosya Feature Gate Lab'den alınmış bir yüklenen değerler dışa aktarımı değil.
 This gate type isn't supported.	Bu özellik kapısı türü desteklenmiyor.
@@ -1881,6 +1882,8 @@ Show the time to the second	Saati saniyesine kadar göster
 Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name.	Bir videonun ne zaman paylaşıldığını, içerik üreticisinin adının yanındaki TikTok'un kısa tarihi yerine saniyesine kadar ve saat diliminle göster.
 Show dates on profile grids	Profil ızgarasında tarihleri göster
 Show the day each video was posted under its view count on profile grids.	Profil ızgarasında her videonun paylaşıldığı günü görüntülenme sayısının altında göster.
+Show video length on profile grids	Profil ızgarasında video süresini göster
+Show how long each video runs under its view count on profile grids. Photo posts and videos TikTok sent no length for show none.	Profil ızgarasında her videonun ne kadar sürdüğünü görüntülenme sayısının altında göster. Fotoğraf gönderilerinde ve TikTok'un süresini göndermediği videolarda süre gösterilmez.
 Fall back to the watermarked copy	Filigranlı kopyaya geri dön
 When the video without the watermark can't be fetched, save TikTok's own watermarked copy instead and say so. It's the size TikTok's own save uses, so it may be smaller than the quality you picked.	Filigransız video alınamazsa onun yerine TikTok'un kendi filigranlı kopyasını kaydet ve bunu söyle. Boyutu TikTok'un kendi kaydetmesinin kullandığı boyuttur, bu yüzden seçtiğin kaliteden küçük olabilir.
 The video without the watermark couldn't be fetched, so TikTok's watermarked copy was saved to %1$s. Try again later for the clean copy.	Filigransız video alınamadı, bu yüzden TikTok'un filigranlı kopyası şuraya kaydedildi: %1$s. Temiz kopya için daha sonra yeniden dene.
@@ -1911,7 +1914,7 @@ Copy the full link for short links	Kısa bağlantılarda tam bağlantıyı kopya
 When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit, and it connects directly even when a proxy is on. Links you send to another app go out as they were.	Bağlantıyı kopyala kısa bir vt.tiktok.com veya vm.tiktok.com bağlantısı verdiğinde, Hushfeed onu arka planda bir kez açıp videonun tam bağlantısını bulur ve onu kopyalar. TikTok bu ziyareti görür ve bir proxy açık olsa bile doğrudan bağlanır. Başka bir uygulamaya gönderdiğin bağlantılar olduğu gibi gider.
 Full link copied	Tam bağlantı kopyalandı
 Mark saved videos	Kaydedilen videoları işaretle
-Puts a ✓ by videos you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on. Photo posts aren't marked.	Hushfeed ile kaydettiğin videolara profil ızgaralarında ve akışta saatin yanında ✓ koyar. Yalnızca “Önceden kaydedilen videoları kontrol et” açıkken çalışır. Fotoğraf gönderileri işaretlenmez.
+Puts a ✓ by videos and photo posts you saved with Hushfeed, on profile grids and next to the time in the feed. Works only while Check for already-saved videos is on.	Hushfeed ile kaydettiğin videolara ve fotoğraf gönderilerine profil ızgaralarında ve akışta saatin yanında ✓ koyar. Yalnızca “Önceden kaydedilen videoları kontrol et” açıkken çalışır.
 Also replaces the saved region and country code TikTok sends with every request. Signing in still sends your real region. Your IP address and your account's own rules still apply.	TikTok'un her istekle gönderdiği kayıtlı bölgeyi ve ülke kodunu da değiştirir. Giriş yaparken gerçek bölgen yine gönderilir. IP adresin ve hesabının kendi kuralları geçerli olmaya devam eder.
 Turn off double tap to react	Tepki için çift dokunmayı kapat
 A double tap on a message no longer adds a heart to it. A single tap and a long press work as before.	Bir mesaja çift dokunmak artık ona kalp eklemiyor. Tek dokunma ve uzun basma eskisi gibi çalışır.
@@ -2174,3 +2177,7 @@ Only on the sides of the video	Yalnızca videonun kenarlarında
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Uzun basma seçimin yalnızca videonun sol ve sağ üçte birinde çalışır. Ortada basmak yine TikTok'un kendi menüsünü açar. Uzun basma için TikTok varsayılanı dışında bir seçim gerekir.
 Full-width progress bar	Tam genişlikte ilerleme çubuğu
 Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	İlerleme çubuğu, TikTok'un her iki uçta bıraktığı boşluk olmadan ekranın bir kenarından diğerine uzanır.
+New device identity	Yeni cihaz kimliği
+Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	TikTok'un verilerini siler ve bir sonraki açılışta ona yeni bir Android kimliği ve reklam kimliği verir, böylece hiç tanımadığı bir telefon görür. Oturumun kapanır ve taslakların silinir. Hushfeed ayarları kalır.
+TikTok starts as a new phone after the restart. Tap again to cancel.	TikTok yeniden başlatmadan sonra yeni bir telefon gibi açılır. İptal etmek için tekrar dokun.
+Couldn't set up a new device identity. Try again.	Yeni cihaz kimliği ayarlanamadı. Tekrar dene.

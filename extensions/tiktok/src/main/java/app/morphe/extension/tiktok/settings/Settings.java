@@ -622,6 +622,7 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting PUBLISH_DATE_SHORT_DATE = new BooleanSetting(
             "publish_date_short_date", FALSE, false, Setting.parent(PUBLISH_DATE_EXACT_TIME));
     public static final BooleanSetting PUBLISH_DATE_ON_GRID = new BooleanSetting("publish_date_on_grid", FALSE);
+    public static final BooleanSetting VIDEO_LENGTH_ON_GRID = new BooleanSetting("video_length_on_grid", FALSE);
     public static final BooleanSetting SHOW_EXACT_COUNTS = new BooleanSetting("show_exact_counts", FALSE);
     public static final BooleanSetting CLEAR_DISPLAY = new BooleanSetting("clear_display", FALSE);
     public static final BooleanSetting COPY_COMMENTS_WITHOUT_USERNAME = new BooleanSetting("copy_comments_without_username", TRUE);
@@ -1098,6 +1099,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting COMMENT_LINKS = new BooleanSetting("comment_links", FALSE);
     public static final BooleanSetting HIDE_COMMENT_MEDIA = new BooleanSetting("hide_comment_media", FALSE);
     public static final BooleanSetting HIDE_COMMENT_POLLS = new BooleanSetting("hide_comment_polls", FALSE);
+    /** Drops the reply TikTok opens under a comment before View replies is tapped (#193). */
+    public static final BooleanSetting HIDE_COMMENT_REPLY_PREVIEWS = new BooleanSetting("hide_comment_reply_previews", FALSE);
     /** Answers no survey from TikTok's comment survey config, so a comment list carries none. */
     public static final BooleanSetting HIDE_COMMENT_SURVEYS = new BooleanSetting("hide_comment_surveys", FALSE);
     /** Keeps the photo, @ and gift buttons in the comment box gone. Emoji and sending stay. */
