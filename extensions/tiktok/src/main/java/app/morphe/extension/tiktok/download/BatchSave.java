@@ -30,7 +30,8 @@ import java.util.List;
  * <p>Each post is saved the way Download saves it with the chosen quality: the clean file when
  * Remove watermark is on (TikTok's own when it is off and the quality is Automatic), its sound
  * put back in when the rendition carries it separately, or left out with Save videos without
- * sound. A photo post saves every photo at full size. With Check for already-saved videos on, a
+ * sound. A photo post saves every photo at full size, or as one video with Save photo posts as a
+ * video on, as a single download does. With Check for already-saved videos on, a
  * video or photo post saved here before is counted and left alone, and a post this run saves is
  * remembered.
  * Details files, subtitles, tags and a caption written on the video are single-save extras and
@@ -122,7 +123,17 @@ final class BatchSave {
         if (Reflect.property(post, "getPhotoModeImageInfo", "photoModeImageInfo") != null) {
             if (checkSaved && SavedVideoArchive.find(app, id) != null) return Result.ALREADY_SAVED;
             long photoGeneration = SavedVideoArchive.generation();
-            MediaFileWriter.Saved first = savePhotos(app, post, last);
+            MediaFileWriter.Saved first;
+            // As a single save does: Save photo posts as a video makes the video, not the photos.
+            // A live photo stays with the photos, as it stays with TikTok's own save.
+            if (SlideshowVideo.enabled() && !OriginalPhotos.anyChosenIsLive(post, null)) {
+                // A single save of the same post's video is under way; this one would race it.
+                if (SlideshowVideo.saving(id)) throw new IOException("This post is already being saved as a video");
+                first = SlideshowVideo.makeForRun(app, post);
+                last[0] = first;
+            } else {
+                first = savePhotos(app, post, last);
+            }
             if (checkSaved) SavedVideoArchive.rememberQuietly(app, id, first, photoGeneration);
             return Result.SAVED;
         }

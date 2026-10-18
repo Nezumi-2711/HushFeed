@@ -206,6 +206,25 @@ public final class SlideshowVideo {
 
     static volatile Maker makerForTests;
 
+    /**
+     * The video of all of a post's photos, made now on the media worker that's calling, for a run
+     * of picked posts (#197). It is the single save without its queue slot, its progress row and
+     * its banner: the run has its own.
+     */
+    static MediaFileWriter.Saved makeForRun(Context app, Object aweme) throws IOException {
+        List<List<String>> photos = OriginalPhotos.sources(aweme);
+        if (photos.isEmpty()) throw new IOException("The original photos aren't available");
+        String name = DownloadFilenameFormatter.formatSelectedVideoName(aweme);
+        String path = DownloadFilenameFormatter.destinationPath(aweme, false);
+        return make(app, photos, soundSources(aweme), seconds(Settings.PHOTO_VIDEO_SECONDS.get()), name, path,
+                SaveProgress.begin(1), new boolean[]{false});
+    }
+
+    /** Whether a save of this post's video holds it. */
+    static boolean saving(String id) {
+        return ACTIVE.contains(id);
+    }
+
     private static boolean failed() {
         Utils.showToastLong(L10n.t("The video couldn't be made from these photos. Try again."));
         return true;
