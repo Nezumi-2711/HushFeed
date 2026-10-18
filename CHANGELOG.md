@@ -26,6 +26,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** Stopping a backup or an export while the file app had it no longer counts as a Hushfeed error, in PineDrama either. With the error toast debug option on, a toast used to pop up over the row's own answer once the file app finally let go, and the diagnostics log filed the stop under errors.
 * **TikTok:** Feature Gate Lab's Import loaded values takes a real export again. Since September it turned down every one, the Lab's own included, as "isn't a loaded-values export, or it's larger than the Lab accepts", because a full export holds about 15,000 values and the import stopped at 1,024. A file that's been unpacked from its .gz imports too. When the values that differ would take the Lab past its 1,024 overrides, it now says how many there would have been and changes nothing.
 * **TikTok:** When Feature Gate Lab turns something down and says why, like a change past its 1,024 overrides or a loaded-values file from another TikTok version, that's no longer logged as a Hushfeed error. With the error toast debug option on, a toast used to cover the Lab's own answer. A file the Lab can't read at all still counts as an error.
+* **TikTok:** `Remove unused language packs` no longer stops the whole patch run when its list names a language TikTok doesn't have, like `sr` (TikTok has no Serbian pack). That code is skipped and the patch log says so. A code that isn't a language at all still stops it, and the message now lists the codes this TikTok carries (#196).
 
 ### Verification
 
