@@ -84,6 +84,16 @@ public final class BuildDetails {
         }
     }
 
+    /**
+     * The package the bundle patched, as the patcher read it from the manifest before any patch
+     * changed it: TikTok's for a copy that Morphe's Clone app renamed, PineDrama's for PineDrama.
+     * Null when the record is missing, invalid or names no declared build.
+     */
+    public static String targetPackage(String metadata) {
+        String name = parse(metadata).get("target_package");
+        return name.equals("unknown") ? null : name;
+    }
+
     public static String report() { return report(Utils.getBuildMetadata()); }
 
     public static String report(String metadata) {

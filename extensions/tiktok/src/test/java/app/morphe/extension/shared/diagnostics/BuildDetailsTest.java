@@ -110,6 +110,15 @@ public class BuildDetailsTest {
         assertUnknown(record.replace("version_code_override=2147483647", "version_code_override=2024704030"));
     }
 
+    /** The target package stands on its own for a renamed copy's name lookups (#209): the record's, or nothing. */
+    @Test public void theTargetPackageIsTheRecordsOrNothing() throws Exception {
+        String record = metadata();
+        assertEquals("com.zhiliaoapp.musically", BuildDetails.targetPackage(record));
+        assertNull(BuildDetails.targetPackage(record.replace("target_package=com.zhiliaoapp.musically", "target_package=unknown")));
+        assertNull("an invalid record names no target", BuildDetails.targetPackage(record.replace("amoled=applied", "amoled=not_selected")));
+        assertNull("no record, no target", BuildDetails.targetPackage(""));
+    }
+
     @Test public void unverifiedSelectionsAndUntickedChoicesRemainDifferent() throws Exception {
         String record = metadata().replace("amoled=applied", "amoled=unverified")
                 .replace("amoled_color=#121212", "amoled_color=unknown")
