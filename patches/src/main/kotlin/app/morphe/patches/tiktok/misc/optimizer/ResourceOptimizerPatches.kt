@@ -57,7 +57,9 @@ val coreAssetDebloatPatch = rawResourcePatch(
 ) {
     category("Performance")
     compatibleWith(*AppCompatibilities.tiktok())
-    dependsOn(buildChoicePatch(BuildChoice.CORE))
+    // The guard keeps the content credential service from loading the emptied C2PA library
+    // when a comment reply opens the photo picker (#211).
+    dependsOn(buildChoicePatch(BuildChoice.CORE), c2paInitGuardPatch)
 
     execute {
         // Only libraries nothing else in the APK links against. An emptied .so that another
