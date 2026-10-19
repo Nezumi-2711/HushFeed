@@ -6,6 +6,21 @@ Every Hushfeed release, newest first.
 
 ### Supported apps
 
+* **TikTok:** PineDrama moves to 47.4.3, the build APKMirror got on 2026-10-19, and 47.1.4 is dropped. The same 90 patches apply to it (#156).
+
+### Features and fixes
+
+* **TikTok:** `Filter the LIVE feed` leaves the LIVE row in your Inbox and the Following tab's LIVE row alone, apart from blocked creators. TikTok fills those rows through the same page handler as the LIVE feed, so the viewers, followers, gaming and category rules were thinning out the creators you follow too (#212).
+* **TikTok:** A copy made with `Run beside the store app` gets its bottom navigation, share sheet and video control tweaks back. The renamed copy didn't count as TikTok, so every view name written for 47.4.3 came up missing in it (#209).
+* **TikTok:** `Remove content credential and card scanner assets` no longer crashes TikTok when you tap the gallery icon while replying to a comment. The photo picker started TikTok's content credential service, which loaded the emptied library and took the app down into safe mode. The service now stays unstarted, and a photo you pick carries no content credential (#211).
+* **TikTok:** `Show the progress bar` also shows the bar on videos that open behind a sensitive content warning. TikTok kept treating them as covered after you tapped through, so the bar stayed off on those videos even with the switch on (#208).
+* **TikTok:** `Use system font` and `Use an imported font` now reach Activity center, Watch history, Comment history and TikTok's other web pages. Those screens are web pages inside the app, so they kept TikTok's font. Websites you open in TikTok's browser keep their own fonts. An imported font over 2 MB shows up there as your phone's font instead (#7).
+* **Hushfeed settings:** Search results show a setting's new value when you change it from a result and come back. They used to keep the old one, so `Caption background` still read Dark after you'd picked TikTok default.
+
+## 0.76.0 (2026-10-18)
+
+### Supported apps
+
 * **TikTok:** Hushfeed now supports TikTok 47.4.3, and only that one. 47.1.4 isn't supported anymore, so grab the 47.4.3 APK from APKMirror and patch that. PineDrama stays on 47.1.4.
 
 ### Features and fixes
@@ -37,15 +52,10 @@ Every Hushfeed release, newest first.
 ### Verification
 
 * **TikTok:** The native alignment checker now catches RELRO ranges that would make writable data read-only on 16 KB devices. Safely isolated RELRO segments remain accepted.
-
 * **TikTok:** The patch audit now checks saved results against their definitions, tested APK and build receipt, including the actual evidence files. Older or incomplete runs stay marked historical. Screenshot verdicts can't be applied to a different run.
-
 * **TikTok:** Device builds and audits now require an exclusive lease before accessing a test device. An expired or lost lease stops device commands. Local builds still work without one. The probe tools (strip-hunt, record-markers and every probe action) and the injected-register check take the same lease now, and they won't start while another task holds the phone.
-
 * **TikTok:** With `Log diagnostics` on, each card in the search results also logs its type codes (origin and token type, whether it's shopping, its popup type) and the names of the keys in its data. Of what those keys hold, only one-word type codes get logged, so the search and the card's text stay out of the log. That's what it takes to tell a hotel price card or a leaked search ad apart from a normal place card.
-
 * **TikTok:** `scripts/phone.sh` checks the device lease itself now, before every adb call. Run on its own without the lease file and token, or with someone else's or an expired one, it refuses and sends nothing to the phone. strip-hunt and record-markers hand it theirs.
-
 * **TikTok:** The injected-register check compares against the 47.4.3 APK. It still expected 47.1.4 and refused every current build.
 
 ## 0.75.0 (2026-10-16)
