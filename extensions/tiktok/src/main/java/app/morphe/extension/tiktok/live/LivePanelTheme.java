@@ -11,15 +11,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -189,6 +193,74 @@ public final class LivePanelTheme {
         } catch (Throwable failure) {
             Logger.printException(() -> "Could not color a LIVE bio's link", failure);
         }
+    }
+
+    /**
+     * Called by the LIVE profile card with its labels and the strip that draws them, before it
+     * builds them: the shop rating and sold count chips among them. The server sends each label's
+     * colors as they look on the light card, a faint see-through chip under dark text and a dark
+     * icon, so on the dark card they read dark on dark (Login2, 2026-10-19). While Dark LIVE
+     * panels is on in dark mode, each label drawn on a color gets that color as it shows over the
+     * light card, so it stays the light chip its own text and icon were picked for. A label drawn
+     * on an image keeps it.
+     */
+    public static void cardLabels(Object labels, Object strip) {
+        try {
+            if (!(labels instanceof Iterable) || !(strip instanceof View)
+                    || !LiveControls.darkLivePanels(((View) strip).getContext())) {
+                return;
+            }
+            for (Object label : (Iterable<?>) labels) {
+                lightLabel(label);
+            }
+        } catch (Throwable failure) {
+            Logger.printException(() -> "Could not keep a LIVE profile card's labels readable", failure);
+        }
+    }
+
+    /** Gives the label's background its color as it shows over the light card, a new one when it has none. */
+    static void lightLabel(Object label) throws ReflectiveOperationException {
+        if (label == null) {
+            return;
+        }
+        Field field = Reflect.field(label.getClass(), "background");
+        if (field == null) {
+            return;
+        }
+        Object background = field.get(label);
+        if (background == null) {
+            Constructor<?> make = field.getType().getDeclaredConstructor();
+            make.setAccessible(true);
+            background = make.newInstance();
+            field.set(label, background);
+        }
+        if (Reflect.readField(background, "image") != null) {
+            return;
+        }
+        Field color = Reflect.field(background.getClass(), "colorCode");
+        if (color != null) {
+            color.set(background, onLightCard((String) color.get(background)));
+        }
+    }
+
+    /**
+     * The label color as it shows over the light card's white, opaque, the way TikTok's color
+     * parse reads it. Missing or unreadable, TikTok draws no chip, which on the light card is white.
+     */
+    static String onLightCard(String code) {
+        int color = Color.TRANSPARENT;
+        if (code != null && !code.isEmpty()) {
+            try {
+                color = Color.parseColor(code);
+            } catch (IllegalArgumentException unreadable) {
+                color = Color.TRANSPARENT;
+            }
+        }
+        int alpha = Color.alpha(color);
+        int red = (Color.red(color) * alpha + 255 * (255 - alpha)) / 255;
+        int green = (Color.green(color) * alpha + 255 * (255 - alpha)) / 255;
+        int blue = (Color.blue(color) * alpha + 255 * (255 - alpha)) / 255;
+        return String.format(Locale.ROOT, "#FF%02X%02X%02X", red, green, blue);
     }
 
     /**

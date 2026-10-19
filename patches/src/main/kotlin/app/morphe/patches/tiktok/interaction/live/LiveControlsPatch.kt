@@ -593,13 +593,7 @@ internal fun bioLinkColor(method: Method): BioLinkColor? {
     ) return null
     if ((call + 1 until suffix).any { writes(it, view) }) return null
     val addresses = code.runningFold(0) { at, instruction -> at + instruction.codeUnits }
-    val byAddress = code.indices.associateBy { addresses[it] }
-    // A switch's offset points at its payload, whose cases are offsets from the switch itself.
-    val targets = code.indices.flatMap { at ->
-        val target = (code[at] as? OffsetInstruction)?.let { addresses[at] + it.codeOffset } ?: return@flatMap emptyList()
-        val payload = byAddress[target]?.let { code[it] as? SwitchPayload }
-        payload?.switchElements?.map { addresses[at] + it.offset } ?: listOf(target)
-    }.toSet() + method.implementation!!.tryBlocks.flatMap { block -> block.exceptionHandlers.map { it.handlerCodeAddress } }
+    val targets = landings(method, code, addresses)
     if ((read + 1..call + 2).any { addresses[it] in targets }) return null
     return BioLinkColor(call, color, view)
 }
@@ -616,6 +610,90 @@ internal fun hookBioLink(bio: MutableMethod) {
     bio.addInstructions(
         link.call + 2,
         "invoke-static {v${link.color}, v${link.view}}, $PANEL_THEME->bioLinkColor(ILjava/lang/Object;)V",
+    )
+}
+
+/** The profile card's label model, real-named on 47.4.3. */
+internal const val PROFILE_CARD_LABEL = "Lcom/bytedance/android/livesdkapi/depend/model/live/ProfileCardLabel;"
+
+/**
+ * The profile card setting up its labels, the shop rating and sold count chips among them
+ * (HeaderCell.LJIIJ on 47.4.3, #159). The server sends each label's colors as they look on the
+ * light card, a faint see-through chip under dark text and a dark icon, so they read dark on the
+ * dark card (Login2, 2026-10-19).
+ */
+internal object LiveProfileLabelsFingerprint : Fingerprint(
+    definingClass = LIVE_PROFILE_HEADER,
+    returnType = "Z",
+    custom = { method, _ -> cardLabels(method) != null },
+)
+
+/** The labels' iterator() at [call], the register holding the label list and the one holding the label strip. */
+internal class CardLabels(val call: Int, val labels: Int, val strip: Int)
+
+/**
+ * In [method], the iterator() over the list whose items it casts to the card's label model, the
+ * register holding that list, and the register holding the view whose getContext() it asks last
+ * before the iterator(): the strip that draws the labels. Null when [method] isn't the card's
+ * labels, and null too for a shape the hook can't take safely: the strip's register written
+ * between its getContext() and the iterator(), or a branch, switch case or handler landing after
+ * the getContext() up to the iterator(), where one would skip the hook or reach it with the
+ * strip's register holding something else, or either call in the range form. Both take the
+ * non-range form, so both registers fit the hook's four-bit call.
+ */
+internal fun cardLabels(method: Method): CardLabels? {
+    val code = method.implementation?.instructions?.toList() ?: return null
+    fun ref(at: Int) = (code[at] as? ReferenceInstruction)?.reference
+    val cast = code.indices.firstOrNull {
+        code[it].opcode == Opcode.CHECK_CAST && (ref(it) as? TypeReference)?.type == PROFILE_CARD_LABEL
+    } ?: return null
+    fun asks(at: Int, type: String, name: String) = (ref(at) as? MethodReference)?.let {
+        it.definingClass == type && it.name == name && it.parameterTypes.isEmpty()
+    } == true
+    // Found in either form and then held to the non-range one, so a range call is refused rather
+    // than passed over for an earlier call on some other list or view.
+    val call = (cast - 1 downTo 0).firstOrNull { asks(it, "Ljava/lang/Iterable;", "iterator") } ?: return null
+    val context = (call - 1 downTo 0).firstOrNull { asks(it, "Landroid/view/View;", "getContext") } ?: return null
+    if (code[call].opcode != Opcode.INVOKE_INTERFACE || code[context].opcode != Opcode.INVOKE_VIRTUAL) return null
+    val labels = (code[call] as FiveRegisterInstruction).registerC
+    val strip = (code[context] as FiveRegisterInstruction).registerC
+    val written = (context + 1 until call).any {
+        val write = code[it] as? OneRegisterInstruction ?: return@any false
+        (code[it].opcode.setsRegister() && write.registerA == strip) ||
+            (code[it].opcode.setsWideRegister() && write.registerA + 1 == strip)
+    }
+    if (written) return null
+    val addresses = code.runningFold(0) { at, instruction -> at + instruction.codeUnits }
+    val targets = landings(method, code, addresses)
+    if ((context + 1..call).any { addresses[it] in targets }) return null
+    return CardLabels(call, labels, strip)
+}
+
+/**
+ * Every code address a branch, switch case or exception handler in [method] lands on, from its
+ * [code] and the [addresses] each instruction starts at.
+ */
+private fun landings(method: Method, code: List<Instruction>, addresses: List<Int>): Set<Int> {
+    val byAddress = code.indices.associateBy { addresses[it] }
+    // A switch's offset points at its payload, whose cases are offsets from the switch itself.
+    return code.indices.flatMap { at ->
+        val target = (code[at] as? OffsetInstruction)?.let { addresses[at] + it.codeOffset } ?: return@flatMap emptyList()
+        val payload = byAddress[target]?.let { code[it] as? SwitchPayload }
+        payload?.switchElements?.map { addresses[at] + it.offset } ?: listOf(target)
+    }.toSet() + method.implementation!!.tryBlocks.flatMap { block -> block.exceptionHandlers.map { it.handlerCodeAddress } }
+}
+
+/**
+ * Hands the card's labels and their strip to the extension right before the card walks them.
+ * While Dark LIVE panels is on in dark mode, the extension gives each label drawn on a color that
+ * color as it shows over the light card, so the server's dark text and icon stay readable on
+ * it. The hook writes no register.
+ */
+internal fun hookCardLabels(header: MutableMethod) {
+    val labels = cardLabels(header) ?: throw PatchException("LIVE controls: the profile card's labels weren't found")
+    header.addInstructions(
+        labels.call,
+        "invoke-static {v${labels.labels}, v${labels.strip}}, $PANEL_THEME->cardLabels(Ljava/lang/Object;Ljava/lang/Object;)V",
     )
 }
 
@@ -1084,6 +1162,11 @@ val liveControlsPatch = bytecodePatch(
         // color, skipping the link color. The extension makes the link color the view's text
         // color while the switch is on in dark mode.
         hookBioLink(LiveProfileBioFingerprint.method)
+        // Its labels, the shop rating and sold count chips among them, come with the server's
+        // colors for the light card: dark text and icons on a faint see-through chip, dark on
+        // the dark card (Login2, 2026-10-19). The extension makes each chip's color what it is
+        // over the light card while the switch is on in dark mode.
+        hookCardLabels(LiveProfileLabelsFingerprint.method)
         // The older quality list's rows can read white on white in dark mode, switch or no
         // switch; the extension gives poorly contrasted text a readable color there.
         hookQualityList(LiveDefinitionListFingerprint.method)

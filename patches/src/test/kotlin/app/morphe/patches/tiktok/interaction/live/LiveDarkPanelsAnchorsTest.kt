@@ -14,6 +14,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstructio
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
@@ -38,7 +39,9 @@ import org.junit.Test
  * after its last room theme (each one re-applies TikTok's light app theme), and TikTok's dark app
  * theme is read from its own dark mode code. The profile card's bio link is drawn in the bio
  * view's own text color, so the link color its call resolves goes to the extension with the view,
- * which has to be a TextView. The ranking dialogs that take TikTok's light overlay with force
+ * which has to be a TextView. The card's labels come with the server's light card colors, so the
+ * label list and the strip drawing it go to the extension right before the card walks them, and
+ * the label model keeps the fields the extension sets by name. The ranking dialogs that take TikTok's light overlay with force
  * instead of the dark one keep their names, and their pages and lists stay fragments: plain ones
  * take the room's inflater, so androidx's fragment inflater takes a hook of its own, and the
  * extension finds them by the public getParentFragment and getContext it calls by name. The
@@ -181,6 +184,53 @@ class LiveDarkPanelsAnchorsTest {
                 ((it as? ReferenceInstruction)?.reference as? MethodReference)?.takeIf { ref -> ref.name == "setSuffixText" }
             }
             assertEquals("${apk.name}: the bio view", "Landroid/widget/TextView;", outermost(classes, suffix.definingClass))
+        }
+    }
+
+    @Test
+    fun `each declared build keeps the profile card's labels the labels hook lightens`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val header = classes[LIVE_PROFILE_HEADER] ?: throw AssertionError("${apk.name}: $LIVE_PROFILE_HEADER is gone")
+            val found = header.methods.filter { LiveProfileLabelsFingerprint.takes(it, header) }
+            assertEquals("${apk.name}: the labels", 1, found.size)
+            val labels = cardLabels(found.single())!!
+            val original = found.single().implementation!!.instructions.toList()
+            val context = (labels.call - 1 downTo 0).first {
+                ((original[it] as? ReferenceInstruction)?.reference as? MethodReference)?.name == "getContext"
+            }
+            assertEquals(labels.strip, (original[context] as FiveRegisterInstruction).registerC)
+            if ("47.4.3" in apk.name) {
+                // The strip is the badge strip id/mts finds, X/0wKt, which the card reads its label
+                // manager off just before (2026-10-19).
+                val read = (context - 1 downTo 0).first {
+                    original[it].opcode == Opcode.IGET_OBJECT && (original[it] as TwoRegisterInstruction).registerB == labels.strip
+                }
+                assertEquals("${apk.name}: the strip", "LX/0wKt;", ((original[read] as ReferenceInstruction).reference as FieldReference).definingClass)
+            }
+
+            // The hook as the patch writes it: right before the card walks the labels, the
+            // extension gets the label list and the strip.
+            val hooked = MutableMethod(found.single())
+            hookCardLabels(hooked)
+            val code = hooked.implementation!!.instructions.toList()
+            val hook = code[labels.call]
+            assertEquals(Opcode.INVOKE_STATIC, hook.opcode)
+            assertEquals("${apk.name}: the hook's call", "cardLabels", ((hook as ReferenceInstruction).reference as MethodReference).name)
+            assertEquals(listOf(labels.labels, labels.strip), (hook as FiveRegisterInstruction).let { listOf(it.registerC, it.registerD) })
+            val iterator = code[labels.call + 1]
+            assertEquals("${apk.name}: the iterator() comes next", "iterator", ((iterator as ReferenceInstruction).reference as MethodReference).name)
+            assertEquals(labels.labels, (iterator as FiveRegisterInstruction).registerC)
+            assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
+
+            // The extension sets the label's background color by name, and makes the background
+            // itself with its no-argument constructor when the server sent none.
+            val label = classes[PROFILE_CARD_LABEL] ?: throw AssertionError("${apk.name}: $PROFILE_CARD_LABEL is gone")
+            val type = label.fields.single { it.name == "background" }.type
+            val background = classes[type] ?: throw AssertionError("${apk.name}: $type is gone")
+            assertEquals("${apk.name}: the color", "Ljava/lang/String;", background.fields.single { it.name == "colorCode" }.type)
+            assertNotNull("${apk.name}: the image", background.fields.singleOrNull { it.name == "image" })
+            assertTrue("${apk.name}: the constructor", background.methods.any { it.name == "<init>" && it.parameterTypes.isEmpty() })
         }
     }
 

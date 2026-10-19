@@ -36,6 +36,8 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.robolectric.util.ReflectionHelpers.ClassParameter;
 
+import java.util.Arrays;
+
 /**
  * #159: a LIVE panel's views inflate through its own (dark) LIVE overlay, applied with force,
  * only while Dark LIVE panels is on and its context is in dark mode, and only for themed dialogs
@@ -46,7 +48,8 @@ import org.robolectric.util.ReflectionHelpers.ClassParameter;
  * too. Everything else gets TikTok's inflater back untouched.
  * Under the same conditions a LIVE room takes TikTok's dark app theme with force over its own light
  * one, so TikTok's generic sheets over a room open dark too, and the profile card's bio view takes
- * the link color, since its link is drawn in the view's own text color.
+ * the link color, since its link is drawn in the view's own text color, and the card's labels
+ * take their chip color as it shows over the light card their text and icon were picked for.
  */
 @RunWith(RobolectricTestRunner.class)
 public class LivePanelThemeTest {
@@ -443,6 +446,74 @@ public class LivePanelThemeTest {
         SettingsStatus.liveControlsEnabled = false;
         LivePanelTheme.bioLinkColor(link, paused);
         assertEquals("without the patch", Color.BLACK, paused.getCurrentTextColor());
+    }
+
+    /** ProfileCardLabel's shape: the background the extension colors. */
+    static final class Label {
+        private LabelBackground background;
+
+        Label(LabelBackground background) {
+            this.background = background;
+        }
+    }
+
+    /** LabelBackground's shape, made by the extension through its no-argument constructor. */
+    static final class LabelBackground {
+        private String colorCode;
+        private Object image;
+
+        private LabelBackground() {
+        }
+
+        static LabelBackground of(String colorCode) {
+            LabelBackground background = new LabelBackground();
+            background.colorCode = colorCode;
+            return background;
+        }
+    }
+
+    @Test public void aCardsLabelsTakeTheirColorAsItShowsOverTheLightCardInDarkModeWithTheSwitch() {
+        View strip = new View(dark);
+        Label faint = new Label(LabelBackground.of("#0A161823"));
+        LivePanelTheme.cardLabels(Arrays.asList(faint), strip);
+        assertEquals("the switch starts off", "#0A161823", faint.background.colorCode);
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        Label opaque = new Label(LabelBackground.of("#2A2A2A"));
+        Label none = new Label(LabelBackground.of(null));
+        Label empty = new Label(LabelBackground.of(""));
+        Label unreadable = new Label(LabelBackground.of("nope"));
+        Label pictured = new Label(LabelBackground.of("#0A161823"));
+        pictured.background.image = new Object();
+        Label bare = new Label(null);
+        LivePanelTheme.cardLabels(Arrays.asList(faint, null, opaque, none, empty, unreadable, pictured, bare), strip);
+        assertEquals("over white", "#FFF5F5F6", faint.background.colorCode);
+        assertEquals("#FF2A2A2A", opaque.background.colorCode);
+        assertEquals("no chip shows white", "#FFFFFFFF", none.background.colorCode);
+        assertEquals("#FFFFFFFF", empty.background.colorCode);
+        assertEquals("#FFFFFFFF", unreadable.background.colorCode);
+        assertEquals("an image stays", "#0A161823", pictured.background.colorCode);
+        assertEquals("a label without one gets one", "#FFFFFFFF", bare.background.colorCode);
+        LivePanelTheme.cardLabels(Arrays.asList(faint), strip);
+        assertEquals("twice is the same", "#FFF5F5F6", faint.background.colorCode);
+
+        Label lightLabel = new Label(LabelBackground.of("#0A161823"));
+        LivePanelTheme.cardLabels(Arrays.asList(lightLabel), new View(light));
+        assertEquals("light mode", "#0A161823", lightLabel.background.colorCode);
+        LivePanelTheme.cardLabels(Arrays.asList(lightLabel), "strip");
+        LivePanelTheme.cardLabels(Arrays.asList(lightLabel), null);
+        LivePanelTheme.cardLabels(lightLabel, strip);
+        LivePanelTheme.cardLabels(null, strip);
+        LivePanelTheme.cardLabels(Arrays.asList("label", 7), strip);
+        assertEquals("#0A161823", lightLabel.background.colorCode);
+
+        ReflectionHelpers.callStaticMethod(Setting.class, "setPausedForProcess", ClassParameter.from(boolean.class, true));
+        LivePanelTheme.cardLabels(Arrays.asList(lightLabel), strip);
+        assertEquals("paused", "#0A161823", lightLabel.background.colorCode);
+        ReflectionHelpers.callStaticMethod(Setting.class, "setPausedForProcess", ClassParameter.from(boolean.class, false));
+        SettingsStatus.liveControlsEnabled = false;
+        LivePanelTheme.cardLabels(Arrays.asList(lightLabel), strip);
+        assertEquals("without the patch", "#0A161823", lightLabel.background.colorCode);
     }
 
     @Test public void panelsAreFoundByTikToksClassNames() {
