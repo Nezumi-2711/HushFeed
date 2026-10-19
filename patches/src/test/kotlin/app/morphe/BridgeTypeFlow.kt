@@ -31,8 +31,8 @@ import com.android.tools.smali.dexlib2.iface.reference.TypeReference
  *
  * Class hierarchies are not known here, so two named classes are never judged against each
  * other. The checks are exactly the ones a merge or a stray primitive can fail. ART's verifier
- * lets any reference into an interface parameter and checks it when the call runs, so the
- * framework interfaces in [INTERFACES] take the Object a merge leaves too.
+ * lets any reference into an interface parameter and only checks it when an interface method
+ * is invoked on it, so the framework interfaces in [INTERFACES] take the Object a merge leaves too.
  */
 object BridgeTypeFlow {
     private const val ZERO = "0"
