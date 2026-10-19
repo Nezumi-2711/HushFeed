@@ -635,11 +635,12 @@ internal class CardLabels(val call: Int, val labels: Int, val strip: Int)
  * In [method], the iterator() over the list whose items it casts to the card's label model, the
  * register holding that list, and the register holding the view whose getContext() it asks last
  * before the iterator(): the strip that draws the labels. Null when [method] isn't the card's
- * labels, and null too for a shape the hook can't take safely: the strip's register written
- * between its getContext() and the iterator(), or a branch, switch case or handler landing after
- * the getContext() up to the iterator(), where one would skip the hook or reach it with the
- * strip's register holding something else, or either call in the range form. Both take the
- * non-range form, so both registers fit the hook's four-bit call.
+ * labels or the iterator() isn't the one whose next() feeds the cast, and null too for a shape
+ * the hook can't take safely: the strip's register written between its getContext() and the
+ * iterator(), or a branch, switch case or handler landing after the getContext() up to the
+ * iterator(), where one would skip the hook or reach it with the strip's register holding
+ * something else, or either call in the range form. Both take the non-range form, so both
+ * registers fit the hook's four-bit call.
  */
 internal fun cardLabels(method: Method): CardLabels? {
     val code = method.implementation?.instructions?.toList() ?: return null
@@ -657,6 +658,13 @@ internal fun cardLabels(method: Method): CardLabels? {
     if (code[call].opcode != Opcode.INVOKE_INTERFACE || code[context].opcode != Opcode.INVOKE_VIRTUAL) return null
     val labels = (code[call] as FiveRegisterInstruction).registerC
     val strip = (code[context] as FiveRegisterInstruction).registerC
+    // The iterator() has to be the one the cast's loop walks, not some other list's: its result
+    // taken straight off, and the last next() before the cast asked of that iterator.
+    val walker = code.getOrNull(call + 1)?.takeIf { it.opcode == Opcode.MOVE_RESULT_OBJECT }
+        ?.let { (it as OneRegisterInstruction).registerA } ?: return null
+    val next = (cast - 1 downTo call + 2).firstOrNull { asks(it, "Ljava/util/Iterator;", "next") } ?: return null
+    val walked = (code[next] as? FiveRegisterInstruction)?.registerC ?: (code[next] as? RegisterRangeInstruction)?.startRegister
+    if (walked != walker) return null
     val written = (context + 1 until call).any {
         val write = code[it] as? OneRegisterInstruction ?: return@any false
         (code[it].opcode.setsRegister() && write.registerA == strip) ||

@@ -448,11 +448,20 @@ public class LivePanelThemeTest {
         assertEquals("without the patch", Color.BLACK, paused.getCurrentTextColor());
     }
 
-    /** ProfileCardLabel's shape: the background the extension colors. */
-    static final class Label {
+    /** ProfileCardLabel's shape and simple name: the background the extension colors. */
+    static final class ProfileCardLabel {
         private LabelBackground background;
 
-        Label(LabelBackground background) {
+        ProfileCardLabel(LabelBackground background) {
+            this.background = background;
+        }
+    }
+
+    /** Some other model with the same shape, which the extension leaves alone. */
+    static final class Sticker {
+        private LabelBackground background;
+
+        Sticker(LabelBackground background) {
             this.background = background;
         }
     }
@@ -474,30 +483,32 @@ public class LivePanelThemeTest {
 
     @Test public void aCardsLabelsTakeTheirColorAsItShowsOverTheLightCardInDarkModeWithTheSwitch() {
         View strip = new View(dark);
-        Label faint = new Label(LabelBackground.of("#0A161823"));
+        ProfileCardLabel faint = new ProfileCardLabel(LabelBackground.of("#0A161823"));
         LivePanelTheme.cardLabels(Arrays.asList(faint), strip);
         assertEquals("the switch starts off", "#0A161823", faint.background.colorCode);
 
         Settings.DARK_LIVE_PANELS.save(true);
-        Label opaque = new Label(LabelBackground.of("#2A2A2A"));
-        Label none = new Label(LabelBackground.of(null));
-        Label empty = new Label(LabelBackground.of(""));
-        Label unreadable = new Label(LabelBackground.of("nope"));
-        Label pictured = new Label(LabelBackground.of("#0A161823"));
+        ProfileCardLabel opaque = new ProfileCardLabel(LabelBackground.of("#2A2A2A"));
+        ProfileCardLabel none = new ProfileCardLabel(LabelBackground.of(null));
+        ProfileCardLabel empty = new ProfileCardLabel(LabelBackground.of(""));
+        ProfileCardLabel unreadable = new ProfileCardLabel(LabelBackground.of("nope"));
+        ProfileCardLabel pictured = new ProfileCardLabel(LabelBackground.of("#0A161823"));
         pictured.background.image = new Object();
-        Label bare = new Label(null);
-        LivePanelTheme.cardLabels(Arrays.asList(faint, null, opaque, none, empty, unreadable, pictured, bare), strip);
+        ProfileCardLabel bare = new ProfileCardLabel(null);
+        Sticker sticker = new Sticker(LabelBackground.of("#0A161823"));
+        LivePanelTheme.cardLabels(Arrays.asList(faint, null, opaque, none, empty, unreadable, pictured, bare, sticker), strip);
         assertEquals("over white", "#FFF5F5F6", faint.background.colorCode);
         assertEquals("#FF2A2A2A", opaque.background.colorCode);
-        assertEquals("no chip shows white", "#FFFFFFFF", none.background.colorCode);
-        assertEquals("#FFFFFFFF", empty.background.colorCode);
-        assertEquals("#FFFFFFFF", unreadable.background.colorCode);
+        assertEquals("TikTok's default over white", "#FFF1F1F2", none.background.colorCode);
+        assertEquals("#FFF1F1F2", empty.background.colorCode);
+        assertEquals("#FFF1F1F2", unreadable.background.colorCode);
         assertEquals("an image stays", "#0A161823", pictured.background.colorCode);
-        assertEquals("a label without one gets one", "#FFFFFFFF", bare.background.colorCode);
+        assertEquals("a label without one gets one", "#FFF1F1F2", bare.background.colorCode);
+        assertEquals("not a card label", "#0A161823", sticker.background.colorCode);
         LivePanelTheme.cardLabels(Arrays.asList(faint), strip);
         assertEquals("twice is the same", "#FFF5F5F6", faint.background.colorCode);
 
-        Label lightLabel = new Label(LabelBackground.of("#0A161823"));
+        ProfileCardLabel lightLabel = new ProfileCardLabel(LabelBackground.of("#0A161823"));
         LivePanelTheme.cardLabels(Arrays.asList(lightLabel), new View(light));
         assertEquals("light mode", "#0A161823", lightLabel.background.colorCode);
         LivePanelTheme.cardLabels(Arrays.asList(lightLabel), "strip");

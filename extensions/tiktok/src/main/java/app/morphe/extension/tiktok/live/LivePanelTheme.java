@@ -61,6 +61,8 @@ public final class LivePanelTheme {
     static volatile boolean stockSeen;
     /** Each darkened room's theme as it was before TikTok's dark app theme went on. */
     private static final Map<Activity, Resources.Theme> LIGHT_ROOMS = Collections.synchronizedMap(new WeakHashMap<>());
+    /** The profile card's label color when the server's is missing or unreadable: color/aj, #0F161823, on 47.4.3. */
+    private static final int LABEL_DEFAULT = 0x0F161823;
     private static volatile boolean overlayFailureLogged;
 
     private LivePanelTheme() {
@@ -202,7 +204,7 @@ public final class LivePanelTheme {
      * icon, so on the dark card they read dark on dark (Login2, 2026-10-19). While Dark LIVE
      * panels is on in dark mode, each label drawn on a color gets that color as it shows over the
      * light card, so it stays the light chip its own text and icon were picked for. A label drawn
-     * on an image keeps it.
+     * on an image keeps it. Only the card's own labels are touched, by TikTok's class name.
      */
     public static void cardLabels(Object labels, Object strip) {
         try {
@@ -211,7 +213,9 @@ public final class LivePanelTheme {
                 return;
             }
             for (Object label : (Iterable<?>) labels) {
-                lightLabel(label);
+                if (label != null && "ProfileCardLabel".equals(label.getClass().getSimpleName())) {
+                    lightLabel(label);
+                }
             }
         } catch (Throwable failure) {
             Logger.printException(() -> "Could not keep a LIVE profile card's labels readable", failure);
@@ -234,6 +238,8 @@ public final class LivePanelTheme {
             background = make.newInstance();
             field.set(label, background);
         }
+        // TikTok draws backgroundDarkMode's image instead only in a right-to-left layout, which
+        // this doesn't check: a label with no image of its own there keeps the color it gets here.
         if (Reflect.readField(background, "image") != null) {
             return;
         }
@@ -245,15 +251,16 @@ public final class LivePanelTheme {
 
     /**
      * The label color as it shows over the light card's white, opaque, the way TikTok's color
-     * parse reads it. Missing or unreadable, TikTok draws no chip, which on the light card is white.
+     * parse reads it. Missing or unreadable, TikTok keeps its own default for the card's labels,
+     * color/aj on 47.4.3, which has no night variant.
      */
     static String onLightCard(String code) {
-        int color = Color.TRANSPARENT;
+        int color = LABEL_DEFAULT;
         if (code != null && !code.isEmpty()) {
             try {
                 color = Color.parseColor(code);
             } catch (IllegalArgumentException unreadable) {
-                color = Color.TRANSPARENT;
+                color = LABEL_DEFAULT;
             }
         }
         int alpha = Color.alpha(color);

@@ -24,8 +24,8 @@ import org.junit.Test
  * The profile card labels' shape checks on hand-written methods (#159): the 47.4.3 shape is found
  * and hooked right before the labels' iterator(), and each way the strip could be wrong at the
  * hook, or the hook skipped (a write, a jump, switch case or handler landing after the strip's
- * getContext() up to the iterator(), a range call) is refused rather than written. The real build
- * is covered by LiveDarkPanelsAnchorsTest.
+ * getContext() up to the iterator(), a range call) is refused rather than written, as is an
+ * iterator() the cast's loop doesn't walk. The real build is covered by LiveDarkPanelsAnchorsTest.
  */
 class LiveCardLabelsHookTest {
 
@@ -88,14 +88,25 @@ class LiveCardLabelsHookTest {
 
     @Test
     fun `range calls are refused, not passed over for an earlier one`() {
-        // An earlier iterator() and getContext() on other registers sit at the top, so a finder that
-        // skipped the range call would land on them.
-        val earlier = "invoke-virtual {v1}, Landroid/view/View;->getContext()Landroid/content/Context;\n" +
-            "invoke-interface {v1}, Ljava/lang/Iterable;->iterator()Ljava/util/Iterator;"
+        // An earlier getContext() and iterator() on p0, which nothing writes, sit at the top with
+        // the iterator the loop walks, so a finder that skipped the range call would take them.
+        val earlier = "invoke-virtual {v6}, Landroid/view/View;->getContext()Landroid/content/Context;\n" +
+            "invoke-interface {v6}, Ljava/lang/Iterable;->iterator()Ljava/util/Iterator;\n" +
+            "move-result-object v5"
         val iterator = "invoke-interface/range {v3 .. v3}, Ljava/lang/Iterable;->iterator()Ljava/util/Iterator;"
         val context = "invoke-virtual/range {v2 .. v2}, Landroid/view/View;->getContext()Landroid/content/Context;"
         assertNull(cardLabels(smali(labels(top = earlier, iterator = iterator))))
         assertNull(cardLabels(smali(labels(top = earlier, context = context))))
+        assertEquals(10, cardLabels(smali(labels(top = earlier)))!!.call)
+    }
+
+    @Test
+    fun `an iterator the cast's loop doesn't walk is refused`() {
+        // Its result left untaken, or the loop's next() asked of some other iterator.
+        assertNull(cardLabels(smali(labels(walk = ""))))
+        assertNull(cardLabels(smali(labels(next = "invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;"))))
+        val range = "invoke-interface/range {v5 .. v5}, Ljava/util/Iterator;->next()Ljava/lang/Object;"
+        assertEquals(7, cardLabels(smali(labels(next = range)))!!.call)
     }
 
     @Test
@@ -122,6 +133,8 @@ class LiveCardLabelsHookTest {
         afterContext: String = "",
         beforeIterator: String = "",
         iterator: String = "invoke-interface {v3}, Ljava/lang/Iterable;->iterator()Ljava/util/Iterator;",
+        walk: String = "move-result-object v5",
+        next: String = "invoke-interface {v5}, Ljava/util/Iterator;->next()Ljava/lang/Object;",
         cast: String = "check-cast v4, $PROFILE_CARD_LABEL",
     ) = """
         $top
@@ -136,12 +149,12 @@ class LiveCardLabelsHookTest {
         if-nez v0, :done
         $beforeIterator
         $iterator
-        move-result-object v5
+        $walk
         :loop
         invoke-interface {v5}, Ljava/util/Iterator;->hasNext()Z
         move-result v0
         if-eqz v0, :done
-        invoke-interface {v5}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+        $next
         move-result-object v4
         $cast
         goto :loop
