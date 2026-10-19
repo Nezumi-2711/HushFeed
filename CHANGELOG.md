@@ -4,6 +4,10 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+### Supported apps
+
+* **TikTok:** PineDrama moves to 47.4.3, the build APKMirror got on 2026-10-19, and 47.1.4 is dropped. The same 90 patches apply to it (#156).
+
 ### Features and fixes
 
 * **TikTok:** `Filter the LIVE feed` leaves the LIVE row in your Inbox and the Following tab's LIVE row alone, apart from blocked creators. TikTok fills those rows through the same page handler as the LIVE feed, so the viewers, followers, gaming and category rules were thinning out the creators you follow too (#212).
