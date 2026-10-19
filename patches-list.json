@@ -5372,6 +5372,7 @@
       "category": "Performance",
       "use": false,
       "dependencies": [
+        "BytecodePatch",
         "RawResourcePatch"
       ],
       "compatiblePackages": {
