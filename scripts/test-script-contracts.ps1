@@ -759,6 +759,14 @@ foreach ($name in $consumerScripts) {
         "$name does not pass declared dependency names into result validation."
 }
 
+# The release receipt runs over the builds the gate applied. Collecting every package's targets
+# took PineDrama's 47.1.4 for a TikTok build at 0.76.0 and stopped the build stage.
+$releaseText = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'release/release.ps1') -Raw
+Assert-True ($releaseText -match '\$target = Get-PatchTarget' -and $releaseText -match 'foreach \(\$v in @\(\$target\.PackageVersions\)\)') `
+    'release.ps1 does not pick its receipt fixtures from the bundle''s target through Get-PatchTarget.'
+Assert-True ($releaseText -notmatch 'compatibility\.targets') `
+    'release.ps1 reads every package''s compatibility targets, so a second app''s version reads as a TikTok build.'
+
 # --- patch timing ----------------------------------------------------------------------------
 #
 # time-patches.ps1 splits one CLI run into patches by the "Applied:" and "FAILED:" lines and gives
