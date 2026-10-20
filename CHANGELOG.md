@@ -22,6 +22,7 @@ Every Hushfeed release, newest first.
 * **Hushfeed settings:** Search results show a setting's new value when you change it from a result and come back. They used to keep the old one, so `Caption background` still read Dark after you'd picked TikTok default.
 * **Hushfeed settings:** The Likes field in `Own profile counts` is translated now. It was the only English word in that editor on a phone set to another language.
 * **Hushfeed settings:** `Undo last restore or reset` also gives the Feature Gate Lab its own Undo back. A restore that carried Lab rules threw that away, so after undoing the restore you couldn't take back the Lab change you'd made just before it.
+* **TikTok:** Tests now run a whole `Save videos without sound` save of a DASH video against a stand-in server. The saved file has to be TikTok's picture stream exactly as it arrived, with no sound track, the same rotation and length, and nothing left behind in the cache.
 
 ## 0.76.0 (2026-10-18)
 
