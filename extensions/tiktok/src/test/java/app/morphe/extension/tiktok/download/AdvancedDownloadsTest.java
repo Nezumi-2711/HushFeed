@@ -939,6 +939,31 @@ public class AdvancedDownloadsTest {
         }
     }
 
+    @Test public void aVerifiedBadgeInsideTheHandleStillMatchesItsProfile() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            var activity = controller.get();
+            Utils.setContext(activity);
+            android.widget.LinearLayout header = new android.widget.LinearLayout(activity);
+            android.widget.TextView handle = new android.widget.TextView(activity);
+            android.view.View avatar = new android.view.View(activity);
+            header.addView(handle);
+            header.addView(avatar);
+
+            // 47.4.3 draws a verified account's badge as an image inside the handle's own text,
+            // which stands on an object replacement character: @natgeo's header reads "@natgeo"
+            // and that character, so every verified profile's picture was refused.
+            android.text.SpannableStringBuilder text = new android.text.SpannableStringBuilder("@dancer");
+            text.append((char) 0xFFFC);
+            text.setSpan(new android.text.style.ImageSpan(activity, android.R.drawable.star_on),
+                    text.length() - 1, text.length(), android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            handle.setText(text);
+            assertTrue(ProfileAvatarSaver.matchesProfileOnScreen(avatar, new Account("dancer", "Dancer")));
+            assertFalse(ProfileAvatarSaver.matchesProfileOnScreen(avatar, new Account("singer", "Singer")));
+            // A handle that only starts the same is still somebody else.
+            assertFalse(ProfileAvatarSaver.matchesProfileOnScreen(avatar, new Account("dance", "Dance")));
+        }
+    }
+
     @Test public void aVeryLongCreatorNameStaysInsideWhatTheFilesystemTakes() {
         // 160 Japanese characters is 480 bytes of UTF-8, well past the 255 a filesystem takes,
         // and cutting at a fixed index can land between the halves of a surrogate pair.

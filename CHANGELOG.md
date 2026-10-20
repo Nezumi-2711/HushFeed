@@ -16,6 +16,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** `Show the progress bar` also shows the bar on videos that open behind a sensitive content warning. TikTok kept treating them as covered after you tapped through, so the bar stayed off on those videos even with the switch on (#208).
 * **TikTok:** `Use system font` and `Use an imported font` now reach Activity center, Watch history, Comment history and TikTok's other web pages. Those screens are web pages inside the app, so they kept TikTok's font. Websites you open in TikTok's browser keep their own fonts. An imported font over 2 MB shows up there as your phone's font instead (#7).
 * **TikTok:** Hushfeed's downloads work again behind a proxy app running in fake-IP mode, the way Clash, mihomo, sing-box and Xray often run. Those apps answer TikTok's video and photo servers with stand-in addresses from 198.18.0.0/15 or fc00::/18, and Hushfeed turned every save down as a local address, while TikTok's own save still worked (#145).
+* **TikTok:** Holding a verified account's profile picture saves it again. TikTok 47.4.3 puts the blue check inside the @handle's text, so Hushfeed read the handle as somebody else's and asked you to open the profile again every time.
 * **Hushfeed settings:** Search results show a setting's new value when you change it from a result and come back. They used to keep the old one, so `Caption background` still read Dark after you'd picked TikTok default.
 
 ## 0.76.0 (2026-10-18)
