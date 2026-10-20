@@ -1,6 +1,7 @@
 package app.morphe.extension.tiktok.comment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import android.app.Activity;
 import android.os.Looper;
@@ -141,6 +142,22 @@ public class CommentBoxButtonsTest {
         CommentBoxButtons.photo(heldPhoto);
         layOut();
         assertEquals(View.VISIBLE, held.getVisibility());
+    }
+
+    /** Stands in for TikTok's plus panel button enum, with every constant 47.4.3's has. */
+    private enum Tile { PHOTO, STICKER, MENTION, AUDIO, EMOJI, PRODUCT, GIFT, GROUP_CHAT, POLL }
+
+    @Test public void thePlusPanelLosesTheHiddenButtonsAndKeepsTheRest() {
+        assertEquals(Tile.GIFT, CommentBoxButtons.plusTile(Tile.GIFT));
+        Settings.HIDE_COMMENT_BOX_BUTTONS.save(true);
+        for (Tile tile : Tile.values()) {
+            boolean hidden = tile == Tile.PHOTO || tile == Tile.MENTION || tile == Tile.GIFT;
+            assertEquals(tile.name(), hidden ? null : tile, CommentBoxButtons.plusTile(tile));
+        }
+        assertEquals("gift", CommentBoxButtons.plusTile("gift"));
+        assertNull(CommentBoxButtons.plusTile(null));
+        PausedProcess.set(true);
+        assertEquals(Tile.GIFT, CommentBoxButtons.plusTile(Tile.GIFT));
     }
 
     @Test public void handingTheSameButtonOverTwiceIsHarmless() {

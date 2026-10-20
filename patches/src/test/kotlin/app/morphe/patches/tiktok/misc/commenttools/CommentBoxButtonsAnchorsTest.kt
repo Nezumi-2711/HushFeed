@@ -7,6 +7,7 @@ import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
+import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -73,6 +74,30 @@ class CommentBoxButtonsAnchorsTest {
                     CommentBoxButton.GIFT -> "gift"
                 }
                 assertEquals("$button: ${listener.type} carries $marks", setOf(own), marks)
+            }
+        }
+    }
+
+    @Test
+    fun `the plus panel's tiles and the row's plus check each look a button up once and skip a null`() {
+        Fixtures.forEachDeclared { apk ->
+            val build = Build(apk)
+            listOf(CommentPlusPanelRefreshFingerprint, KeyboardIconGroupPlusFingerprint).forEach { fingerprint ->
+                val method = build.single(fingerprint)
+                val instructions = method.implementation!!.instructions.toList()
+                val (index, register) = plusPanelLookups(method).single()
+                // The enum's constant names are what the extension reads, so they must still be its names.
+                val map = instructions[index - 2].let { ((it as ReferenceInstruction).reference as FieldReference) }
+                val buttons = build.byType.getValue(map.definingClass)
+                val names = buttons.fields.filter { it.type == buttons.type }.map { it.name }.toSet()
+                assertTrue("$fingerprint: ${buttons.type} has $names", names.containsAll(setOf("PHOTO", "MENTION", "GIFT", "EMOJI")))
+                val constructed = buttons.methods.single { it.name == "<clinit>" }.implementation!!.instructions
+                    .mapNotNull { ((it as? ReferenceInstruction)?.reference as? StringReference)?.string }.toSet()
+                assertTrue("$fingerprint: the enum names its constants $constructed", constructed.containsAll(setOf("PHOTO", "MENTION", "GIFT")))
+                val after = instructions.subList(index + 1, minOf(index + 3, instructions.size))
+                assertTrue("$fingerprint: a null button isn't skipped right after the lookup: ${after.map { it.opcode }}", after.any {
+                    it.opcode == Opcode.IF_EQZ && (it as OneRegisterInstruction).registerA == register
+                })
             }
         }
     }
@@ -146,6 +171,10 @@ class CommentBoxButtonsAnchorsTest {
             "CommentInputViewCreatedFingerprint.method.resolveCommentBoxButtons(fields)"))
         assertTrue("the row over the keyboard is not hooked", patch.contains(
             "commentBoxButtonFields(setup, KEYBOARD_ICON_GROUP_ASSEM) { classDefByOrNull(it) }"))
+        assertTrue("the plus panel's tiles are not filtered", patch.contains(
+            "CommentPlusPanelRefreshFingerprint.method.resolvePlusPanelTiles()"))
+        assertTrue("the row's plus check is not filtered", patch.contains(
+            "KeyboardIconGroupPlusFingerprint.method.resolvePlusPanelTiles()"))
         val hook = File(root, "app/morphe/patches/tiktok/misc/commenttools/CommentBoxButtons.kt").readText()
         assertTrue("the hook does not go after the store", hook.contains("addInstruction(\n                index + 1,"))
     }
