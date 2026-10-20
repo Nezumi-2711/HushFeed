@@ -4,6 +4,7 @@ import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.builder.BuilderOffsetInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -12,6 +13,7 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableMethodImplementation
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction10x
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction21c
+import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction21t
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableTypeReference
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -46,6 +48,26 @@ class SuggestionCellCollapseTest {
         assertEquals(listOf("Ljava/lang/Object;"), target.parameterTypes.map(CharSequence::toString))
         assertEquals("V", target.returnType)
         assertSame(original.last(), code.last())
+        assertEquals(Opcode.RETURN_VOID, code.last().opcode)
+    }
+
+    @Test
+    fun `a branch to the bind's return runs the hook too`() {
+        // TitleAreaCell's bind on 47.4.3 jumps to its last return from six places. A hook put
+        // ahead of that return without its label was jumped over, and the title stayed.
+        val method = branchingBind()
+
+        method.collapseSuggestionCellAtBind()
+
+        val code = method.implementation!!.instructions.toList()
+        assertEquals(4, code.size)
+        val branch = code.first() as BuilderOffsetInstruction
+        val landing = code[branch.target.location.index]
+        assertEquals(Opcode.INVOKE_STATIC_RANGE, landing.opcode)
+        assertEquals("onBind", ((landing as ReferenceInstruction).reference as MethodReference).name)
+        // The cast still falls through into the same call.
+        assertEquals(Opcode.CHECK_CAST, code[1].opcode)
+        assertSame(landing, code[2])
         assertEquals(Opcode.RETURN_VOID, code.last().opcode)
     }
 
@@ -88,6 +110,30 @@ class SuggestionCellCollapseTest {
                 2,
                 listOf(
                     ImmutableInstruction21c(Opcode.CHECK_CAST, 1, ImmutableTypeReference("LX/0l3W;")),
+                    ImmutableInstruction10x(Opcode.RETURN_VOID),
+                ),
+                null,
+                null,
+            ),
+        ),
+    )
+
+    /** `TitleAreaCell.onBindItemView` on 47.4.3, cut down: a branch straight to its return. */
+    private fun branchingBind() = MutableMethod(
+        ImmutableMethod(
+            "Lcom/ss/android/ugc/aweme/relation/usercard/impl/cell/TitleAreaCell;",
+            "onBindItemView",
+            listOf(ImmutableMethodParameter("LX/05u8;", null, null)),
+            "V",
+            AccessFlags.PUBLIC.value or AccessFlags.FINAL.value,
+            null,
+            null,
+            ImmutableMethodImplementation(
+                2,
+                listOf(
+                    // if-eqz p0 is 2 code units and the cast 2 more, so +4 is the return.
+                    ImmutableInstruction21t(Opcode.IF_EQZ, 1, 4),
+                    ImmutableInstruction21c(Opcode.CHECK_CAST, 1, ImmutableTypeReference("LX/0O5D;")),
                     ImmutableInstruction10x(Opcode.RETURN_VOID),
                 ),
                 null,

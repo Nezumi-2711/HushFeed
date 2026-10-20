@@ -15,6 +15,7 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
 import app.morphe.util.addInstructionsWithLabels
+import app.morphe.util.addInstructionsAtControlFlowLabel
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
@@ -125,7 +126,9 @@ internal fun requireSuggestionCellBinds(types: List<String>) {
  * Hands the cell to the extension as TikTok's bind returns, so what the bind did to the item
  * view is what gets collapsed. The Rect cells write their own top margin inside the bind; a
  * call ahead of it would have been undone. Every return is covered, in range form so a
- * register above v15 on some later build assembles.
+ * register above v15 on some later build assembles. The call takes over each return's label:
+ * TitleAreaCell's bind branches to its last return from six places, and a call put in front
+ * of that label was jumped over, so the title stayed.
  */
 internal fun MutableMethod.collapseSuggestionCellAtBind() {
     val implementation = implementation ?: return
@@ -134,7 +137,7 @@ internal fun MutableMethod.collapseSuggestionCellAtBind() {
         .filter { (_, instruction) -> instruction.opcode == Opcode.RETURN_VOID }
         .map { it.index }
     returns.sortedDescending().forEach { index ->
-        addInstruction(
+        addInstructionsAtControlFlowLabel(
             index,
             "invoke-static/range {v$self .. v$self}, " +
                 "$CELLS_EXTENSION_CLASS_DESCRIPTOR->onBind(Ljava/lang/Object;)V",
