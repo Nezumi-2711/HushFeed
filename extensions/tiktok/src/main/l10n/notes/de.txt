@@ -4,7 +4,7 @@
 
 * **TikTok:** „Systemschrift verwenden“ und „Importierte Schrift verwenden“ wirken jetzt auch im Aktivitätscenter, im Wiedergabeverlauf und auf den anderen Webseiten von TikTok (#7).
 
-* **TikTok:** Ein neuer Schalter öffnet das Teilen-Menü, die Zuschauer-Ranglisten, den Fanclub und die Profilkarten eines LIVE-Raums dunkel, wenn TikTok im Dunkelmodus ist (#159).
+* **TikTok:** Ein neuer Schalter öffnet das Teilen-Menü, den Fanclub und die Profilkarten eines LIVE-Raums dunkel, wenn TikTok im Dunkelmodus ist (#159).
 
 ## 0.76.0 (2026-10-18)
 

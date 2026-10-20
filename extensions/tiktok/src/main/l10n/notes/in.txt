@@ -4,7 +4,7 @@
 
 * **TikTok:** Gunakan font sistem dan Gunakan font yang diimpor kini juga berlaku di Pusat aktivitas, Riwayat tontonan, dan halaman web TikTok lainnya (#7).
 
-* **TikTok:** Sakelar baru membuka menu bagikan, peringkat penonton, klub penggemar, dan kartu profil di ruang LIVE dalam warna gelap saat TikTok dalam mode gelap (#159).
+* **TikTok:** Sakelar baru membuka menu bagikan, klub penggemar, dan kartu profil di ruang LIVE dalam warna gelap saat TikTok dalam mode gelap (#159).
 
 ## 0.76.0 (2026-10-18)
 

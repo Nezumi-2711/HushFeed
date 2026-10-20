@@ -4,7 +4,7 @@
 
 * **TikTok:** Use system font and Use an imported font now reach Activity center, Watch history and TikTok's other web pages (#7).
 
-* **TikTok:** A new switch opens a LIVE room's share menu, viewer rankings, fan club and profile cards dark while TikTok is in dark mode (#159).
+* **TikTok:** A new switch opens a LIVE room's share menu, fan club and profile cards dark while TikTok is in dark mode (#159).
 
 ## 0.76.0 (2026-10-18)
 
