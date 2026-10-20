@@ -42,7 +42,7 @@ feed/VideoOverlayHider.java|VISUAL_SEARCH_PILL_IDS|d4|df_search_biz|com.ss.andro
 feed/VideoOverlayHider.java|LIVE_ENTRANCE_IDS|47.4.3:k_d|app|com.bytedance.tiktok.homepage.mainfragment.inflate.HomepageIconServiceImpl|on:TuxIconView#1
 feed/VideoOverlayHider.java|CAPTION_IDS|desc|app|com.ss.android.ugc.aweme.feed.assem.desc.VideoDescAssem|on:View
 feed/VideoOverlayHider.java|MUSIC_IDS|47.4.3:o7a|app|com.ss.android.ugc.aweme.feed.assem.music.VideoMusicTitleAssem|on:LinearLayout#1
-feed/VideoOverlayHider.java|ACTION_BAR_IDS|47.4.3:mud|app|com.ss.android.ugc.feed.platform.cell.interact.InteractAreaComponent|on:View#4
+feed/VideoOverlayHider.java|ACTION_BAR_IDS|47.4.3:ljn|app|com.ss.android.ugc.feed.platform.cell.interact.InteractAreaComponent|on:View#6
 feed/VideoOverlayHider.java|SURVEY_IDS|47.4.3:f92|app|layout:com.by.andInflater.common_feed_item_feed|tag:RelativeLayout#1
 feed/VideoOverlayHider.java|TAB_STRIP_IDS|47.4.3:uwq|app|com.ss.android.ugc.aweme.homepage.ui.view.tab.top.TopTabLayoutAbility|on:View
 feed/VideoOverlayHider.java|BOTTOM_TABS_IDS|47.4.3:onp|app|com.ss.android.ugc.aweme.main.assems.mainfragment.BottomTabAssemBase|-

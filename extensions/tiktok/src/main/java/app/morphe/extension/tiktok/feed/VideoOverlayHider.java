@@ -105,7 +105,11 @@ public final class VideoOverlayHider {
     private static final String[] CAPTION_IDS = {"desc"};
     /** VideoMusicTitleAssem's label container, including ordinary and matched-song titles. */
     private static final String[] MUSIC_IDS = {"47.4.3:o7a"};
-    private static final String[] ACTION_BAR_IDS = {"47.4.3:mud"};
+    /**
+     * The rail column: the avatar, like, comment, save and share wrappers, with the music row
+     * along its bottom. Not mud, a strip at the top of the cell from the same component.
+     */
+    private static final String[] ACTION_BAR_IDS = {"47.4.3:ljn"};
     private static final String[] SURVEY_IDS = {"47.4.3:f92"};
     private static final String[] TAB_STRIP_IDS = {"47.4.3:uwq"};
     /**

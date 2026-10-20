@@ -10,6 +10,7 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** `Fade the video controls` reaches the avatar, like, comment, save and share buttons on TikTok 47.4.3 again, and Clear display with a fade level keeps them in sight at that level. On 47.4.3 Hushfeed looked for that column under the name of a thin strip at the top of the video, so the buttons stayed at full strength and a faded Clear display let TikTok take them all away. `Hide the right column` and `Burn-in guard`'s dimming reach the column again too (#209).
 * **TikTok:** Patching needs far less memory at `Turn off haptics`, `Allow screenshots and Circle to Search` and the privacy patches. Finding TikTok's haptic calls used to make a record for every method that touched a view, about 700 MB of allocations on 47.4.3, and patching ran out of memory there with a smaller heap. The calls are now looked up by name, which takes about 20 MB (#220).
 * **TikTok:** With `Hide the comment bar on opened videos` on, a video or photo you open from a sound's page keeps its spot above TikTok's red `Use sound` bar. The post used to stretch down under that bar, so the bar covered the end of the caption, See translation, the progress bar and the time (#153).
 * **TikTok:** New `Liquid glass look` switch under `Floating bottom bar` draws the floating tab pill as glass. It's lighter and more see-through than the plain dark pill, brightens toward the top, and has a bright rim along its top edge where the light catches it. The tabs stay exactly where they were (#218, #124).
