@@ -176,12 +176,12 @@ public final class ShortLinkExpander {
         }
         ClipboardManager.OnPrimaryClipChangedListener[] listener = new ClipboardManager.OnPrimaryClipChangedListener[1];
         listener[0] = () -> {
-            if (!holds(clipboard, copied)) return;
+            if (ended(clipboard, copied, listener[0]) || !holds(clipboard, copied)) return;
             // Off before the swap, whose own change would otherwise come back here.
             stopWatching(clipboard, copied, listener[0]);
             open(shortLink, resolver, swapIn);
         };
-        followPauses(context, clipboard);
+        followPauses(context);
         WATCHING.put(copied, listener[0]);
         clipboard.addPrimaryClipChangedListener(listener[0]);
         Utils.runOnMainThreadDelayed(() -> stopWatching(clipboard, copied, listener[0]), WATCH_MS);
@@ -222,6 +222,7 @@ public final class ShortLinkExpander {
         }
         ClipboardManager.OnPrimaryClipChangedListener[] listener = new ClipboardManager.OnPrimaryClipChangedListener[1];
         listener[0] = () -> {
+            if (ended(clipboard, SHORTENED_LATER, listener[0])) return;
             Logger.printDebug(() -> "The clip changed during the short link watch, reading it");
             String copiedShort = shortLinkOn(clipboard);
             if (copiedShort == null) return;
@@ -229,7 +230,7 @@ public final class ShortLinkExpander {
             stopWatching(clipboard, SHORTENED_LATER, listener[0]);
             open(copiedShort, resolver, full -> swap(clipboard, copiedShort, full));
         };
-        followPauses(context, clipboard);
+        followPauses(context);
         WATCHING.put(SHORTENED_LATER, listener[0]);
         clipboard.addPrimaryClipChangedListener(listener[0]);
         Utils.runOnMainThreadDelayed(() -> stopWatching(clipboard, SHORTENED_LATER, listener[0]), WATCH_MS);
@@ -261,21 +262,32 @@ public final class ShortLinkExpander {
     }
 
     /**
+     * True for a listener whose wait has ended, which is then taken off the clipboard it was put
+     * on without reading the clip. Each listener does this itself because Utils' context, and the
+     * clipboard manager it gives, can change between waits (a new MainActivity with Hushfeed's
+     * language set), and a manager only takes off listeners it was given.
+     */
+    private static boolean ended(ClipboardManager clipboard, String copied,
+                                 ClipboardManager.OnPrimaryClipChangedListener listener) {
+        if (WATCHING.get(copied) == listener) return false;
+        clipboard.removePrimaryClipChangedListener(listener);
+        return true;
+    }
+
+    /**
      * Ends every wait when one of TikTok's screens leaves the front, such as for Android's share
      * sheet after More (Login2, Android 13, 2026-10-20: that sheet's Copy reached the wait once
      * TikTok was back, and Android showed its notice). TikTok's own share sheet is a dialog, so
-     * its Copy link leaves nothing. Main thread.
+     * its Copy link leaves nothing. Each listener left behind goes at its next call ({@link
+     * #ended}) or its time limit. Main thread.
      */
-    private static void followPauses(Context context, ClipboardManager clipboard) {
+    private static void followPauses(Context context) {
         Context app = context.getApplicationContext();
         if (!(app instanceof Application) || followed.get() == app) return;
         followed = new WeakReference<>((Application) app);
         ((Application) app).registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override public void onActivityPaused(Activity paused) {
                 if (WATCHING.isEmpty()) return;
-                for (ClipboardManager.OnPrimaryClipChangedListener listener : WATCHING.values()) {
-                    clipboard.removePrimaryClipChangedListener(listener);
-                }
                 WATCHING.clear();
                 Logger.printDebug(() -> "TikTok left the front, so the short link watch ended");
             }
