@@ -16,6 +16,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -55,7 +58,9 @@ import java.util.Arrays;
  * Under the same conditions a LIVE room takes TikTok's dark app theme with force over its own light
  * one, so TikTok's generic sheets over a room open dark too, and the profile card's bio view takes
  * the link color, since its link is drawn in the view's own text color, and the card's labels
- * take their chip color as it shows over the light card their text and icon were picked for.
+ * take their chip color as it shows over the light card their text and icon were picked for. The
+ * card's event box, a white shape under text in the card theme's colors, takes a see-through light
+ * fill once its text came out light, on its own copy of the shape.
  */
 @RunWith(RobolectricTestRunner.class)
 public class LivePanelThemeTest {
@@ -660,6 +665,70 @@ public class LivePanelThemeTest {
         SettingsStatus.liveControlsEnabled = false;
         LivePanelTheme.cardLabels(Arrays.asList(lightLabel), strip);
         assertEquals("without the patch", "#0A161823", lightLabel.background.colorCode);
+    }
+
+    /** The event module's box: a shape drawn from the given state around a title in the given color. */
+    private static ViewGroup eventBox(Context context, int textColor, Drawable.ConstantState shape) {
+        FrameLayout box = new FrameLayout(context);
+        box.setBackground(shape.newDrawable());
+        TextView title = new TextView(context);
+        title.setTextColor(textColor);
+        box.addView(title);
+        return box;
+    }
+
+    private static int fill(View box) {
+        return ((GradientDrawable) box.getBackground()).getColor().getDefaultColor();
+    }
+
+    @Test public void aCardsEventBoxTakesALightFillWhenItsTextCameOutLightInDarkModeWithTheSwitch() {
+        GradientDrawable white = new GradientDrawable();
+        white.setColor(Color.WHITE);
+        white.setCornerRadius(16f);
+        Drawable.ConstantState shape = white.getConstantState();
+        ViewGroup box = eventBox(dark, 0xFFF6F6F6, shape);
+        LivePanelTheme.eventBox(box);
+        assertEquals("the switch starts off", Color.WHITE, fill(box));
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        ViewGroup other = eventBox(dark, Color.BLACK, shape);
+        LivePanelTheme.eventBox(box);
+        assertEquals(0x29FFFFFF, fill(box));
+        assertEquals("the corners stay", 16f, ((GradientDrawable) box.getBackground()).getCornerRadius(), 0f);
+        assertEquals("the shared shape stays white", Color.WHITE, fill(other));
+        LivePanelTheme.eventBox(box);
+        assertEquals("twice is the same", 0x29FFFFFF, fill(box));
+        LivePanelTheme.eventBox(other);
+        assertEquals("dark text keeps its white", Color.WHITE, fill(other));
+
+        ViewGroup nested = new FrameLayout(dark);
+        nested.setBackground(shape.newDrawable());
+        nested.addView(eventBox(dark, Color.WHITE, shape));
+        LivePanelTheme.eventBox(nested);
+        assertEquals("text a level down", 0x29FFFFFF, fill(nested));
+
+        ViewGroup lightBox = eventBox(light, Color.WHITE, shape);
+        LivePanelTheme.eventBox(lightBox);
+        assertEquals("light mode", Color.WHITE, fill(lightBox));
+        ViewGroup plain = new FrameLayout(dark);
+        plain.setBackgroundColor(Color.WHITE);
+        TextView plainTitle = new TextView(dark);
+        plainTitle.setTextColor(Color.WHITE);
+        plain.addView(plainTitle);
+        LivePanelTheme.eventBox(plain);
+        assertEquals("not a shape", Color.WHITE, ((ColorDrawable) plain.getBackground()).getColor());
+        LivePanelTheme.eventBox(new TextView(dark));
+        LivePanelTheme.eventBox("box");
+        LivePanelTheme.eventBox(null);
+
+        ViewGroup paused = eventBox(dark, Color.WHITE, shape);
+        ReflectionHelpers.callStaticMethod(Setting.class, "setPausedForProcess", ClassParameter.from(boolean.class, true));
+        LivePanelTheme.eventBox(paused);
+        assertEquals("paused", Color.WHITE, fill(paused));
+        ReflectionHelpers.callStaticMethod(Setting.class, "setPausedForProcess", ClassParameter.from(boolean.class, false));
+        SettingsStatus.liveControlsEnabled = false;
+        LivePanelTheme.eventBox(paused);
+        assertEquals("without the patch", Color.WHITE, fill(paused));
     }
 
     @Test public void panelsAreFoundByTikToksClassNames() {

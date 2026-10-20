@@ -45,7 +45,9 @@ import org.junit.Test
  * view's own text color, so the link color its call resolves goes to the extension with the view,
  * which has to be a TextView. The card's labels come with the server's light card colors, so the
  * label list and the strip drawing it go to the extension right before the card walks them, and
- * the label model keeps the fields the extension sets by name. The ranking dialogs that take TikTok's light overlay with force
+ * the label model keeps the fields the extension sets by name. The card's upcoming event box is a
+ * fixed white shape under text in the card theme's colors, so the event module's bind hands the
+ * box to the extension right after reading it, before its null check. The ranking dialogs that take TikTok's light overlay with force
  * instead of the dark one keep their names, and their pages and lists stay fragments: plain ones
  * take the room's inflater, so androidx's fragment inflater takes a hook of its own, and the
  * extension finds them by the public getParentFragment and getContext it calls by name. The
@@ -240,6 +242,75 @@ class LiveDarkPanelsAnchorsTest {
             assertNotNull("${apk.name}: the image", background.fields.singleOrNull { it.name == "image" })
             assertTrue("${apk.name}: the constructor", background.methods.any { it.name == "<init>" && it.parameterTypes.isEmpty() })
         }
+    }
+
+    @Test
+    fun `each declared build keeps the profile card's event box the event hook fills`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val found = classes.values.flatMap { owner -> owner.methods.filter { LiveProfileEventFingerprint.takes(it, owner) } }
+            assertEquals("${apk.name}: the event module's bind", 1, found.size)
+            val bind = found.single()
+            val event = eventBox(bind)!!
+            val original = bind.implementation!!.instructions.toList()
+            val read = (original[event.at - 1] as ReferenceInstruction).reference as FieldReference
+            assertEquals("${apk.name}: the box", "Landroid/view/ViewGroup;", read.type)
+            if ("47.4.3" in apk.name) {
+                // X/0wEX finds the box as id/hwn, the ConstraintLayout layout/ha3 draws on
+                // drawable/e9l, a white shape (2026-10-20).
+                assertEquals("${apk.name}: the event module", "LX/0wEX;", bind.definingClass)
+                val module = classes.getValue(bind.definingClass)
+                val hwn = module.methods.any { method ->
+                    method.implementation?.instructions?.any { (it as? NarrowLiteralInstruction)?.narrowLiteral == 0x7f0a2aa9 } == true
+                }
+                assertTrue("${apk.name}: the module finds id/hwn", hwn)
+            }
+
+            // The hook as the patch writes it: right after the box's read and before its null
+            // check, the extension gets the box.
+            val hooked = MutableMethod(bind)
+            hookEventBox(hooked)
+            val code = hooked.implementation!!.instructions.toList()
+            val hook = code[event.at]
+            assertEquals(Opcode.INVOKE_STATIC, hook.opcode)
+            assertEquals("${apk.name}: the hook's call", "eventBox", ((hook as ReferenceInstruction).reference as MethodReference).name)
+            assertEquals(event.box, (hook as FiveRegisterInstruction).registerC)
+            assertEquals(Opcode.IGET_OBJECT, code[event.at - 1].opcode)
+            assertEquals("${apk.name}: the null check comes next", Opcode.IF_EQZ, code[event.at + 1].opcode)
+            assertEquals(event.box, (code[event.at + 1] as OneRegisterInstruction).registerA)
+            assertTrue("${apk.name}: a branch skips the hook", code[event.at + 1].location.labels.isEmpty())
+            assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
+        }
+    }
+
+    /** An event module's bind reading the host's events, then [box] and what follows it. */
+    private fun eventBind(box: String, events: Boolean = true) = MutableMethod(ImmutableMethod("Lapp/morphe/Event;", "LJIIJ",
+        listOf(ImmutableMethodParameter(LIVE_USER, null, null), ImmutableMethodParameter("Ljava/lang/Object;", null, null)),
+        "Z", AccessFlags.PUBLIC.value or AccessFlags.FINAL.value,
+        null, null, ImmutableMethodImplementation(5, emptyList(), null, null))).apply {
+        addInstructionsWithLabels(0, """
+            ${if (events) "iget-object v0, p1, $LIVE_USER->upcomingEventList:Ljava/util/List;" else "const/4 v0, 0x0"}
+            $box
+            const/4 v0, 0x1
+            return v0
+            :skip
+            const/4 v0, 0x0
+            return v0
+        """)
+    }
+
+    @Test
+    fun `the event hook takes only a box read its null check follows`() {
+        val read = "iget-object v1, p0, Lapp/morphe/Event;->box:Landroid/view/ViewGroup;"
+        val event = eventBox(eventBind("$read\nif-eqz v1, :skip"))!!
+        assertEquals(listOf(2, 1), listOf(event.at, event.box))
+        assertNull("no events read", eventBox(eventBind("$read\nif-eqz v1, :skip", events = false)))
+        assertNull("no null check", eventBox(eventBind("$read\nif-nez v1, :skip")))
+        assertNull("another register checked", eventBox(eventBind("$read\nif-eqz v0, :skip")))
+        assertNull("another class's box", eventBox(eventBind(
+            "iget-object v1, p0, Lapp/morphe/Other;->box:Landroid/view/ViewGroup;\nif-eqz v1, :skip")))
+        assertNull("a branch lands on the check", eventBox(eventBind(
+            "if-eqz v0, :check\n$read\n:check\nif-eqz v1, :skip")))
     }
 
     @Test

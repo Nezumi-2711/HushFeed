@@ -1026,6 +1026,64 @@ internal fun hookCardLabels(header: MutableMethod) {
     )
 }
 
+internal const val LIVE_USER = "Lcom/bytedance/android/live/base/model/user/User;"
+
+/**
+ * The profile card's upcoming event module binding the host's next event (X.0wEX.LJIIJ on 47.4.3,
+ * #159). Its box (id/hwn) is a fixed white rounded shape with no night variant (drawable/e9l over
+ * color/ao), while its title, time and chevron take the card theme's colors, so on the dark card
+ * the "LIVE event" line read light on white (Login2, 2026-10-20).
+ */
+internal object LiveProfileEventFingerprint : Fingerprint(
+    returnType = "Z",
+    parameters = listOf(LIVE_USER, "Ljava/lang/Object;"),
+    strings = listOf("livesdk_live_event_user_entrance_show"),
+    custom = { method, _ -> eventBox(method) != null },
+)
+
+/** Where the event box hook goes, right after the box's read, and the register holding the box. */
+internal class EventBox(val at: Int, val box: Int)
+
+/**
+ * In [method], the read of the event box: the first read of a ViewGroup field of [method]'s own
+ * class, in a method that reads the host's upcoming events. Null when [method] reads no events or
+ * no such field, when the read isn't followed straight by the null check of its register (the box
+ * the module goes on to bind), or when a branch, switch case or handler lands on that check, which
+ * would skip the hook. The read names its register in four bits, so it fits the hook's call.
+ */
+internal fun eventBox(method: Method): EventBox? {
+    val code = method.implementation?.instructions?.toList() ?: return null
+    fun field(at: Int) = (code[at] as? ReferenceInstruction)?.reference as? FieldReference
+    val events = code.indices.any {
+        code[it].opcode == Opcode.IGET_OBJECT && field(it)?.let { read ->
+            read.definingClass == LIVE_USER && read.name == "upcomingEventList"
+        } == true
+    }
+    if (!events) return null
+    val read = code.indices.firstOrNull {
+        code[it].opcode == Opcode.IGET_OBJECT && field(it)?.let { box ->
+            box.definingClass == method.definingClass && box.type == "Landroid/view/ViewGroup;"
+        } == true
+    } ?: return null
+    val box = (code[read] as TwoRegisterInstruction).registerA
+    val check = code.getOrNull(read + 1) ?: return null
+    if (check.opcode != Opcode.IF_EQZ || (check as OneRegisterInstruction).registerA != box) return null
+    val addresses = code.runningFold(0) { at, instruction -> at + instruction.codeUnits }
+    if (addresses[read + 1] in landings(method, code, addresses)) return null
+    return EventBox(read + 1, box)
+}
+
+/**
+ * Hands the event box to the extension right after the module reads it, before its null check.
+ * While Dark LIVE panels is on in dark mode and the box's text came out light, the extension
+ * gives the box's shape a see-through light fill, so its text reads on the dark card. The hook
+ * writes no register.
+ */
+internal fun hookEventBox(bind: MutableMethod) {
+    val event = eventBox(bind) ?: throw PatchException("LIVE controls: the profile card's event box wasn't found")
+    bind.addInstructions(event.at, "invoke-static {v${event.box}}, $PANEL_THEME->eventBox(Ljava/lang/Object;)V")
+}
+
 internal const val PULL_STREAM_SERVICE ="Lcom/bytedance/android/live/livepullstream/PullStreamService;"
 private const val LIVE_MODE = "Lcom/bytedance/android/livesdkapi/depend/model/live/LiveMode;"
 
@@ -1514,6 +1572,10 @@ val liveControlsPatch = bytecodePatch(
         // the dark card (Login2, 2026-10-19). The extension makes each chip's color what it is
         // over the light card while the switch is on in dark mode.
         hookCardLabels(LiveProfileLabelsFingerprint.method)
+        // Its upcoming event box is a fixed white shape under text in the card theme's colors,
+        // light on white on the dark card (Login2, 2026-10-20). The extension gives the box a
+        // see-through light fill while the switch is on in dark mode and its text came out light.
+        hookEventBox(LiveProfileEventFingerprint.method)
         // The older quality list's rows can read white on white in dark mode, switch or no
         // switch; the extension gives poorly contrasted text a readable color there.
         hookQualityList(LiveDefinitionListFingerprint.method)
