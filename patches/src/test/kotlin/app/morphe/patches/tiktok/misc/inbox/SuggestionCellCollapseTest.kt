@@ -13,7 +13,9 @@ import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstructio
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction21c
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableTypeReference
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** The hook at a suggestion cell's bind, on the bridge shape TikTok 46.2.3 gives it. */
@@ -43,6 +45,21 @@ class SuggestionCellCollapseTest {
         assertEquals("V", target.returnType)
         assertSame(original.last(), code.last())
         assertEquals(Opcode.RETURN_VOID, code.last().opcode)
+    }
+
+    @Test
+    fun `a suggestion list's title is collapsed with its cells`() {
+        val cells = "Lcom/ss/android/ugc/aweme/relation/usercard/impl/cell/"
+        assertTrue(isSuggestionListCell("${cells}AbsRecUserCell;"))
+        assertTrue(isSuggestionListCell("${cells}BaseRectRecUserCell;"))
+        // Profile > Find people on 47.4.3 kept its "Suggested accounts" title over an empty list.
+        assertTrue(isSuggestionListCell("${cells}TitleAreaCell;"))
+        // The Facebook and contacts cards, the entry rows and the loading row stay.
+        assertFalse(isSuggestionListCell("${cells}AbsAuthCell;"))
+        assertFalse(isSuggestionListCell("${cells}EntryAreaCell;"))
+        assertFalse(isSuggestionListCell("${cells}AdapterLoadingCell;"))
+        assertFalse(isSuggestionListCell("${cells}FixedCell;"))
+        assertFalse(isSuggestionListCell("Lcom/ss/android/ugc/aweme/profile/TitleAreaCell;"))
     }
 
     /** `AbsRecUserCell.onBindItemView(LX/0lOS;)V` on 46.2.3: a check-cast, the typed bind, return. */

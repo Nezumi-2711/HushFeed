@@ -68,6 +68,15 @@ private const val CELLS_EXTENSION_CLASS_DESCRIPTOR =
     "Lapp/morphe/extension/tiktok/inbox/SuggestedAccountCells;"
 private const val CELL_PACKAGE = "/relation/usercard/impl/cell/"
 private const val CELL_SUFFIX = "RecUserCell;"
+private const val TITLE_CELL = "/TitleAreaCell;"
+
+/**
+ * Whether a class in TikTok's user card lists is one of the suggestion cells, or the title
+ * cell that heads such a list. With only the cells collapsed, Profile > Find people on
+ * 47.4.3 kept its "Suggested accounts" title over an empty list.
+ */
+internal fun isSuggestionListCell(type: String) =
+    type.contains(CELL_PACKAGE) && (type.endsWith(CELL_SUFFIX) || type.endsWith(TITLE_CELL))
 
 /**
  * Collapses every suggestion cell at its bind, whichever list it sits in.
@@ -76,7 +85,8 @@ private const val CELL_SUFFIX = "RecUserCell;"
  * Friends tab and the feed's account cards each build their own list from a different
  * component with no shared source to anchor on, but every one of them is made of cells that
  * extend the real-named `AbsRecUserCell`, and every cell's `onBindItemView` bridge is a
- * PowerCell method with a real name. Each bridge in that family is hooked, so a build that
+ * PowerCell method with a real name. The list's `TitleAreaCell` is hooked the same way, so
+ * no title is left over an empty list. Each bridge in that family is hooked, so a build that
  * adds a cell class is covered as long as it keeps the package and the suffix, and a build
  * that renames the package fails here rather than shipping a switch that does nothing.
  *
@@ -86,7 +96,7 @@ internal fun BytecodePatchContext.collapseSuggestionCells(): Int {
     // Collected first, mutated after: the walk is over the immutable classes.
     val binds = mutableListOf<Pair<ClassDef, Method>>()
     classDefForEach { classDef ->
-        if (!classDef.type.contains(CELL_PACKAGE) || !classDef.type.endsWith(CELL_SUFFIX)) return@classDefForEach
+        if (!isSuggestionListCell(classDef.type)) return@classDefForEach
         classDef.methods.forEach { method ->
             if (method.name == "onBindItemView" && method.implementation != null) binds += classDef to method
         }
