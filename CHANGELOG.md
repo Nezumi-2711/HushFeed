@@ -19,6 +19,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** Holding a verified account's profile picture saves it again. TikTok 47.4.3 puts the blue check inside the @handle's text, so Hushfeed read the handle as somebody else's and asked you to open the profile again every time.
 * **TikTok:** `Hide suggested accounts` also takes away the "Suggested accounts" title on Profile > Find people. The suggestions under it were already hidden, so the title sat over an empty list.
 * **Hushfeed settings:** Search results show a setting's new value when you change it from a result and come back. They used to keep the old one, so `Caption background` still read Dark after you'd picked TikTok default.
+* **Hushfeed settings:** The Likes field in `Own profile counts` is translated now. It was the only English word in that editor on a phone set to another language.
 
 ## 0.76.0 (2026-10-18)
 
