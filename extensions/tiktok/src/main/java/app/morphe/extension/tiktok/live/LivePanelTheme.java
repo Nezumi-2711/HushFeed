@@ -66,6 +66,7 @@ public final class LivePanelTheme {
     private static final int LABEL_DEFAULT = 0x0F161823;
     private static volatile boolean overlayFailureLogged;
     private static volatile boolean rowFailureLogged;
+    private static volatile boolean viewContextFailureLogged;
 
     private LivePanelTheme() {
     }
@@ -471,17 +472,21 @@ public final class LivePanelTheme {
      * That context is the room activity, so over the darkened room the icon after the trending
      * tab's "99+" row took the dark theme's white on the ranking's white sheet (Login2, 2026-10-19).
      * While Dark LIVE panels is on in dark mode, a row a stock panel's light context inflated gets
-     * that context. Every other row gets its context back untouched.
+     * that context. Every other row gets its context back untouched, and so does a row text that
+     * isn't a View: the patch only proves it's what the row read the text from.
      */
-    public static Context stockViewContext(View view, Context context) {
+    public static Context stockViewContext(Object text, Context context) {
         try {
-            if (!stockSeen || view == null || context == null || !LiveControls.darkLivePanels(context)) {
+            if (!stockSeen || !(text instanceof View) || context == null || !LiveControls.darkLivePanels(context)) {
                 return context;
             }
-            Context own = view.getContext();
+            Context own = ((View) text).getContext();
             return isStockContext(own) ? own : context;
         } catch (Throwable failure) {
-            Logger.printException(() -> "Could not give a LIVE ranking's info icon its light theme", failure);
+            if (!viewContextFailureLogged) {
+                viewContextFailureLogged = true;
+                Logger.printException(() -> "Could not give a LIVE ranking's info icon its light theme", failure);
+            }
             return context;
         }
     }

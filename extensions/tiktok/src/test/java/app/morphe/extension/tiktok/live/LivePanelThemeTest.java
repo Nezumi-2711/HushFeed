@@ -517,6 +517,9 @@ public class LivePanelThemeTest {
         Context panel = LivePanelTheme.darkLivePanel(share, LayoutInflater.from(live)).getContext();
         assertSame("a row in an ordinary panel", live, LivePanelTheme.stockViewContext(new TextView(panel), live));
         assertSame("no row", live, LivePanelTheme.stockViewContext(null, live));
+        ReflectionHelpers.setStaticField(LivePanelTheme.class, "viewContextFailureLogged", false);
+        assertSame("a row text that isn't a view", live, LivePanelTheme.stockViewContext("99+", live));
+        assertTrue("turned away, not caught", !(boolean) ReflectionHelpers.getStaticField(LivePanelTheme.class, "viewContextFailureLogged"));
         assertNull("no context", LivePanelTheme.stockViewContext(gap, null));
         assertSame("light mode", light, LivePanelTheme.stockViewContext(new TextView(new LivePanelTheme.StockContext(light, OVERLAY)), light));
         Settings.DARK_LIVE_PANELS.save(false);
