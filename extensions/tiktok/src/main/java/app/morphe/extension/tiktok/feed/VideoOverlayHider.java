@@ -1383,6 +1383,19 @@ public final class VideoOverlayHider {
                 collapsed |= HIDDEN_HERE.containsKey(spacer);
             }
         }
+        if (collapsed && stripAt >= 0) {
+            for (View strip : found.get(stripAt)) {
+                // A strip TikTok has shown again, or one whose column still waits to give the
+                // pager its room, leaves the layers unlifted in cells that may still have the
+                // room, and the caption the next layout puts back was blamed (S22, 2026-10-20:
+                // the switch turned on with TikTok running kept the strip until a restart).
+                if (HIDDEN_HERE.containsKey(strip) && (strip.getVisibility() != View.GONE
+                        || strip.getParent() instanceof android.widget.LinearLayout
+                        && leavesRoom((android.widget.LinearLayout) strip.getParent()))) {
+                    return;
+                }
+            }
+        }
         List<View> bars = selectedViews(found, selected, BOTTOM_TABS_TARGET);
         List<View> overlays = new ArrayList<>(selectedViews(found, selected, ANCHOR_TARGET));
         overlays.addAll(selectedViews(found, selected, ACTION_BAR_TARGET));
@@ -1394,7 +1407,15 @@ public final class VideoOverlayHider {
             // selected holds the candidate each target settled on, which is hidden's index too.
             if (spacerAt >= 0) hidden[spacerAt] = false;
             if (stripAt >= 0) hidden[stripAt] = false;
-            Logger.printDebug(() -> "See-through bottom bar: the collapse put the caption or buttons under the bar, spacer kept");
+            StringBuilder strips = new StringBuilder();
+            if (stripAt >= 0) {
+                for (View strip : found.get(stripAt)) {
+                    strips.append(", strip room ").append(roomGained(strip));
+                }
+            }
+            String detail = SeeThroughBottomBar.blamed() + strips + ", layers lifted " + WIDGETS_LIFTED.values();
+            Logger.printDebug(() -> "See-through bottom bar: the collapse put the caption or buttons under the bar, spacer kept ("
+                    + detail + ")");
         }
     }
 

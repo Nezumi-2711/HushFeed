@@ -415,6 +415,70 @@ public class SeeThroughBottomBarTest {
         }
     }
 
+    /**
+     * The switch turned on with TikTok running (S22, 2026-10-20): the guard had measured the
+     * caption clear of the bar, so it was armed, and TikTok then showed the strip again. The pass
+     * before TikTok's layout found the strip shown and the layer no longer lifted while the cell
+     * still had the strip's room, blamed the caption and kept the strip until a restart. Until
+     * the column has given the pager the room again nothing is judged.
+     */
+    @Test
+    public void aStripTikTokShowsAgainDoesNotEndTheCollapse() {
+        VideoOverlayHider.resolveForTests("47.4.3:cnc", STRIP_ID);
+        VideoOverlayHider.resolveForTests("viewpager_container", COLUMN_ID);
+        VideoOverlayHider.resolveForTests("widget_container", LAYER_ID);
+        Settings.SEE_THROUGH_BOTTOM_BAR.save(true);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            LinearLayout column = new LinearLayout(activity);
+            column.setId(COLUMN_ID);
+            column.setOrientation(LinearLayout.VERTICAL);
+            FrameLayout cell = new FrameLayout(activity);
+            cell.setId(CELL_ID);
+            column.addView(cell, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+            View strip = new View(activity);
+            strip.setId(STRIP_ID);
+            column.addView(strip, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 138));
+            FrameLayout layer = new FrameLayout(activity);
+            layer.setId(LAYER_ID);
+            cell.addView(layer);
+            View anchor = new FrameLayout(activity);
+            anchor.setId(ANCHOR_ID);
+            layer.addView(anchor, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 161, android.view.Gravity.BOTTOM));
+            root.addView(column);
+            View bar = new FrameLayout(activity);
+            bar.setId(BAR_ID);
+            bar.setBackgroundColor(Color.BLACK);
+            root.addView(bar, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 138, android.view.Gravity.BOTTOM));
+            activity.setContentView(root);
+            layOut(root);
+            VideoOverlayHider.applyTo(activity);
+            layOut(root);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(-138f, layer.getTranslationY(), 0f);
+
+            strip.setVisibility(View.VISIBLE);
+            VideoOverlayHider.applyTo(activity);
+            assertTrue("a strip waiting for TikTok's layout isn't blamed on the caption",
+                    SeeThroughBottomBar.collapseAllowed());
+            assertEquals(View.GONE, strip.getVisibility());
+
+            layOut(root);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(2181, cell.getHeight());
+            assertEquals(-138f, layer.getTranslationY(), 0f);
+            assertTrue(SeeThroughBottomBar.collapseAllowed());
+        } finally {
+            VideoOverlayHider.resolveForTests("47.4.3:cnc", 0);
+            VideoOverlayHider.resolveForTests("viewpager_container", 0);
+            VideoOverlayHider.resolveForTests("widget_container", 0);
+        }
+    }
+
     private static void layOut(View root) {
         root.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(2181, View.MeasureSpec.EXACTLY));

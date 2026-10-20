@@ -210,7 +210,14 @@ final class SeeThroughBottomBar {
     /** Set once a collapse put an overlay under the bar; the spacer then stays as TikTok has it. */
     private static boolean collapseRefused;
 
+    /** The overlay the refusal blamed and where it sat against the bar, for the debug log. */
+    private static String blamed = "";
+
     private SeeThroughBottomBar() {
+    }
+
+    static String blamed() {
+        return blamed;
     }
 
     /** Whether the spacer under the video may be collapsed. */
@@ -284,6 +291,8 @@ final class SeeThroughBottomBar {
                 CLEAR_BEFORE.put(overlay, !under);
             } else if (under && Boolean.TRUE.equals(CLEAR_BEFORE.get(overlay))) {
                 collapseRefused = true;
+                blamed = "0x" + Integer.toHexString(overlay.getId()) + " at " + Math.round(top) + "-"
+                        + Math.round(top + overlay.getHeight()) + ", bar top " + Math.round(barTop);
                 return true;
             }
         }
