@@ -65,6 +65,7 @@ public class SettingsBackupTest {
         AtomicFile journal = new AtomicFile(new File(Utils.getContext().getFilesDir(), SettingsOperationJournal.FILE_NAME));
         journal.delete();
         new AtomicFile(new File(Utils.getContext().getFilesDir(), "feature-gate-lab-undo.json")).delete();
+        new AtomicFile(new File(Utils.getContext().getFilesDir(), "feature-gate-lab-undo-held.json")).delete();
         SettingsOperationJournal.consumeRecoveryNotice();
     }
 
@@ -83,6 +84,9 @@ public class SettingsBackupTest {
         }
         // The one switch a file can't turn on (NetworkProxyTest.aRestoredFileNeverTurnsTheProxyOnOrMovesIt).
         expected.put(Settings.NETWORK_PROXY, false);
+        // The retired Normal-weight captions switch comes back as Caption boldness's Normal (#206).
+        expected.put(Settings.CAPTION_REGULAR_WEIGHT, false);
+        expected.put(Settings.CAPTION_FONT_WEIGHT, "400");
         FeatureGateLabStore.saveRule("abmock", "test_gate", "BOOLEAN", "true", true);
         FeatureGateLabStore.setMasterEnabled(true);
         FeatureGateLabStore.acknowledgeWarning();
@@ -129,6 +133,49 @@ public class SettingsBackupTest {
         assertEquals(java.util.List.of(app.morphe.extension.tiktok.download.DownloadDestination.Kind.VIDEO,
                         app.morphe.extension.tiktok.download.DownloadDestination.Kind.STICKER),
                 SettingsBackup.foldersKept(legacy));
+    }
+
+    /**
+     * #206: Caption boldness took the place of the Normal-weight captions switch. A backup from
+     * before it with the switch on restores to Normal rather than TikTok's bold, and the new key
+     * it lacks isn't reported as left alone. A file that carries both keeps the boldness it chose.
+     */
+    @Test public void aBackupWithNormalWeightCaptionsOnRestoresCaptionBoldnessAsNormal() throws Exception {
+        Settings.CAPTION_REGULAR_WEIGHT.save(true);
+        String legacy = withoutKeys(SettingsBackup.create(false), Settings.CAPTION_FONT_WEIGHT.key);
+        Settings.CAPTION_REGULAR_WEIGHT.resetToDefault();
+        Settings.CAPTION_FONT_WEIGHT.save("700");
+
+        assertEquals(0, SettingsBackup.settingsNotInFile(legacy));
+        SettingsBackup.restore(Utils.getContext(), legacy, true);
+        assertEquals("400", Settings.CAPTION_FONT_WEIGHT.get());
+        assertFalse(Settings.CAPTION_REGULAR_WEIGHT.get());
+
+        Settings.CAPTION_REGULAR_WEIGHT.save(true);
+        Settings.CAPTION_FONT_WEIGHT.save("700");
+        String both = SettingsBackup.create(false);
+        Settings.CAPTION_REGULAR_WEIGHT.resetToDefault();
+        Settings.CAPTION_FONT_WEIGHT.resetToDefault();
+        SettingsBackup.restore(Utils.getContext(), both, true);
+        assertEquals("700", Settings.CAPTION_FONT_WEIGHT.get());
+        assertFalse(Settings.CAPTION_REGULAR_WEIGHT.get());
+    }
+
+    /** And on the phone: a switch left on becomes Normal once, and a boldness already chosen stays. */
+    @Test public void normalWeightCaptionsLeftOnBecomesCaptionBoldnessNormalOnce() {
+        Settings.CAPTION_REGULAR_WEIGHT.save(true);
+        Settings.migrateCaptionWeight();
+        assertEquals("400", Settings.CAPTION_FONT_WEIGHT.get());
+        assertFalse(Settings.CAPTION_REGULAR_WEIGHT.get());
+        Settings.CAPTION_FONT_WEIGHT.save("default");
+        Settings.migrateCaptionWeight();
+        assertEquals("a second start changed the boldness again", "default", Settings.CAPTION_FONT_WEIGHT.get());
+
+        Settings.CAPTION_REGULAR_WEIGHT.save(true);
+        Settings.CAPTION_FONT_WEIGHT.save("700");
+        Settings.migrateCaptionWeight();
+        assertEquals("700", Settings.CAPTION_FONT_WEIGHT.get());
+        assertFalse(Settings.CAPTION_REGULAR_WEIGHT.get());
     }
 
     /**
@@ -289,6 +336,56 @@ public class SettingsBackupTest {
 
         assertEquals(1, FeatureGateLabStore.rules().size());
         assertFalse("the Lab kept an undo that would take the restored rules back", labUndo.exists());
+        FeatureGateLabStore.resetAllLabData();
+    }
+
+    /**
+     * The settings' Undo put the Lab back as it was before the restore, but the Lab's own undo
+     * copy stayed gone, so the Lab change made just before the restore could no longer be undone.
+     */
+    @Test public void theSettingsUndoGivesTheLabItsOwnUndoBack() throws Exception {
+        java.io.File labUndo = new java.io.File(Utils.getContext().getFilesDir(), "feature-gate-lab-undo.json");
+        byte[] ownUndo = "{\"held\":\"before the restore\"}".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        java.nio.file.Files.write(labUndo.toPath(), ownUndo);
+        JSONObject backup = new JSONObject(SettingsBackup.create(false));
+        backup.getJSONObject("lab").getJSONArray("rules").put(new JSONObject().put("manager", "abmock")
+                .put("key", "restored_gate").put("type", "BOOLEAN").put("value", "true").put("force", true));
+        SettingsBackup.restore(Utils.getContext(), backup.toString(), true);
+        assertFalse(labUndo.exists());
+
+        SettingsBackup.undo(Utils.getContext());
+
+        assertEquals(0, FeatureGateLabStore.rules().size());
+        assertTrue("the Undo left the Lab without its own undo", labUndo.isFile());
+        assertArrayEquals(ownUndo, java.nio.file.Files.readAllBytes(labUndo.toPath()));
+
+        SettingsBackup.undo(Utils.getContext());
+
+        assertEquals(1, FeatureGateLabStore.rules().size());
+        assertFalse("a second Undo brought back the restore but kept an undo that takes it back",
+                labUndo.exists());
+        SettingsBackup.undo(Utils.getContext());
+        assertArrayEquals("the copy went missing between the two Undos",
+                ownUndo, java.nio.file.Files.readAllBytes(labUndo.toPath()));
+        FeatureGateLabStore.resetAllLabData();
+    }
+
+    @Test public void theUndoOfAResetGivesTheLabItsOwnUndoBackToo() throws Exception {
+        JSONObject withRule = new JSONObject(SettingsBackup.create(false));
+        withRule.getJSONObject("lab").getJSONArray("rules").put(new JSONObject().put("manager", "abmock")
+                .put("key", "kept_gate").put("type", "BOOLEAN").put("value", "true").put("force", true));
+        SettingsBackup.restore(Utils.getContext(), withRule.toString(), false);
+        java.io.File labUndo = new java.io.File(Utils.getContext().getFilesDir(), "feature-gate-lab-undo.json");
+        byte[] ownUndo = "{\"held\":\"before the reset\"}".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        java.nio.file.Files.write(labUndo.toPath(), ownUndo);
+
+        SettingsBackup.reset(Utils.getContext());
+        assertEquals(0, FeatureGateLabStore.rules().size());
+        assertFalse(labUndo.exists());
+        SettingsBackup.undo(Utils.getContext());
+
+        assertEquals(1, FeatureGateLabStore.rules().size());
+        assertArrayEquals(ownUndo, java.nio.file.Files.readAllBytes(labUndo.toPath()));
         FeatureGateLabStore.resetAllLabData();
     }
 

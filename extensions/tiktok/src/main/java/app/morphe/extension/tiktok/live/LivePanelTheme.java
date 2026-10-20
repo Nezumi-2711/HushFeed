@@ -12,6 +12,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,7 @@ import android.widget.TextView;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -64,8 +68,17 @@ public final class LivePanelTheme {
     private static final Map<Activity, Resources.Theme> LIGHT_ROOMS = Collections.synchronizedMap(new WeakHashMap<>());
     /** The profile card's label color when the server's is missing or unreadable: color/aj, #0F161823, on 47.4.3. */
     private static final int LABEL_DEFAULT = 0x0F161823;
+    /**
+     * The event box's fill on the dark card: white at 16%, about the card's own tiles there
+     * (#47484E over its #262626, Login2, 2026-10-20).
+     */
+    private static final int EVENT_BOX = 0x29FFFFFF;
+    /** How far into the event box the light text check looks. */
+    private static final int MAX_BOX_DEPTH = 3;
     private static volatile boolean overlayFailureLogged;
     private static volatile boolean rowFailureLogged;
+    private static volatile boolean viewContextFailureLogged;
+    private static volatile boolean sparkFailureLogged;
 
     private LivePanelTheme() {
     }
@@ -229,8 +242,10 @@ public final class LivePanelTheme {
         if (label == null) {
             return;
         }
+        // A static field would ignore the label, and a static final one refuses the write once
+        // TikTok targets Android 17, so only the label's own fields are written.
         Field field = Reflect.field(label.getClass(), "background");
-        if (field == null) {
+        if (field == null || Modifier.isStatic(field.getModifiers())) {
             return;
         }
         Object background = field.get(label);
@@ -246,7 +261,7 @@ public final class LivePanelTheme {
             return;
         }
         Field color = Reflect.field(background.getClass(), "colorCode");
-        if (color != null) {
+        if (color != null && !Modifier.isStatic(color.getModifiers())) {
             color.set(background, onLightCard((String) color.get(background)));
         }
     }
@@ -270,6 +285,81 @@ public final class LivePanelTheme {
         int green = (Color.green(color) * alpha + 255 * (255 - alpha)) / 255;
         int blue = (Color.blue(color) * alpha + 255 * (255 - alpha)) / 255;
         return String.format(Locale.ROOT, "#FF%02X%02X%02X", red, green, blue);
+    }
+
+    /**
+     * Called by the LIVE profile card's upcoming event module with its box as it binds the host's
+     * next event. The box is a fixed white rounded shape with no night variant, while its title,
+     * time and chevron take their colors from the card's theme, so on the dark card the "LIVE
+     * event" line read light on white (Login2, 2026-10-20). While Dark LIVE panels is on in dark
+     * mode and the box's own text came out light, its shape gets a see-through light fill like the
+     * card's own tiles, corners kept. A box whose text is still dark keeps its white. The group
+     * chat row ("Chat di gruppo") calls it too, right after it puts the same kind of white shape
+     * on itself.
+     */
+    public static void eventBox(Object box) {
+        try {
+            if (!(box instanceof ViewGroup) || !LiveControls.darkLivePanels(((View) box).getContext())) {
+                return;
+            }
+            Drawable background = ((View) box).getBackground();
+            if (background instanceof GradientDrawable && hasLightText((ViewGroup) box, 0)) {
+                // The shape's state is shared with every other view drawn from it, so it's copied first.
+                ((GradientDrawable) background.mutate()).setColor(EVENT_BOX);
+            }
+        } catch (Throwable failure) {
+            Logger.printException(() -> "Could not keep a LIVE profile card's event box readable", failure);
+        }
+    }
+
+    /**
+     * Called by the LIVE profile card's badge tiles (the level tile and the ones beside it) in
+     * place of each setBackground TikTok gives a tile. The server draws a tile's art and text for
+     * the white card and often see-through: the low levels' "Lv." tile is a pale lavender at
+     * about a fifth of full strength with gray text at about a third, so on the dark card both
+     * went dark gray and the text sank into the tile (Login2, 2026-10-20). While Dark LIVE panels
+     * is on in dark mode, a white copy of the tile's own rounded shape goes under it, so the art
+     * draws over white the way it does on the stock card. A solid tile looks the same either way.
+     */
+    public static void badgeTile(View tile, Drawable background) {
+        Drawable shown = background;
+        try {
+            if (background instanceof GradientDrawable && LiveControls.darkLivePanels(tile.getContext())) {
+                Drawable.ConstantState shape = background.getConstantState();
+                if (shape != null) {
+                    // A copy with its own state, so the tile's shape keeps its fill and border.
+                    GradientDrawable base = (GradientDrawable) shape.newDrawable().mutate();
+                    base.setColor(Color.WHITE);
+                    base.setStroke(0, Color.TRANSPARENT);
+                    LayerDrawable layers = new LayerDrawable(new Drawable[]{base, background});
+                    // Both layers carry the shape's padding, which nesting would count twice.
+                    layers.setPaddingMode(LayerDrawable.PADDING_MODE_STACK);
+                    shown = layers;
+                }
+            }
+        } catch (Throwable failure) {
+            Logger.printException(() -> "Could not lay a LIVE profile card badge over white", failure);
+        }
+        tile.setBackground(shown);
+    }
+
+    /** True when a text in the box, at most a few levels down, is drawn in a light color. */
+    static boolean hasLightText(ViewGroup box, int depth) {
+        for (int i = 0; i < box.getChildCount(); i++) {
+            View child = box.getChildAt(i);
+            if (child instanceof TextView && isLight(((TextView) child).getCurrentTextColor())) {
+                return true;
+            }
+            if (child instanceof ViewGroup && depth < MAX_BOX_DEPTH && hasLightText((ViewGroup) child, depth + 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** True for a color brighter than mid gray, by its perceived brightness. */
+    static boolean isLight(int color) {
+        return Color.red(color) * 299 + Color.green(color) * 587 + Color.blue(color) * 114 > 127_500;
     }
 
     /**
@@ -471,17 +561,48 @@ public final class LivePanelTheme {
      * That context is the room activity, so over the darkened room the icon after the trending
      * tab's "99+" row took the dark theme's white on the ranking's white sheet (Login2, 2026-10-19).
      * While Dark LIVE panels is on in dark mode, a row a stock panel's light context inflated gets
-     * that context. Every other row gets its context back untouched.
+     * that context. Every other row gets its context back untouched, and so does a row text that
+     * isn't a View: the patch only proves it's what the row read the text from.
      */
-    public static Context stockViewContext(View view, Context context) {
+    public static Context stockViewContext(Object text, Context context) {
         try {
-            if (!stockSeen || view == null || context == null || !LiveControls.darkLivePanels(context)) {
+            if (!stockSeen || !(text instanceof View) || context == null || !LiveControls.darkLivePanels(context)) {
                 return context;
             }
-            Context own = view.getContext();
+            Context own = ((View) text).getContext();
             return isStockContext(own) ? own : context;
         } catch (Throwable failure) {
-            Logger.printException(() -> "Could not give a LIVE ranking's info icon its light theme", failure);
+            if (!viewContextFailureLogged) {
+                viewContextFailureLogged = true;
+                Logger.printException(() -> "Could not give a LIVE ranking's info icon its light theme", failure);
+            }
+            return context;
+        }
+    }
+
+    /**
+     * Called by TikTok's Spark theme lookups, the light or dark answer and the page color Spark's
+     * web pages and popups take, with the context they read TikTok's theme name from. Over a room
+     * the room hook darkened, that name is TikTok's dark theme's, so a shop room's Top customers
+     * popup drew dark while its tab titles kept the light page's dark text (S22, 2026-10-20).
+     * While Dark LIVE panels is on in dark mode, a context over a darkened room gets one over the
+     * room's light theme as it was before, so the room's Spark popups stay stock. Every other
+     * context, the feed's and a room the hook never darkened included, comes back untouched.
+     */
+    public static Context sparkContext(Context context) {
+        try {
+            Resources.Theme light = lightRoom(context);
+            if (light == null || !LiveControls.darkLivePanels(context)) {
+                return context;
+            }
+            Resources.Theme theme = context.getResources().newTheme();
+            theme.setTo(light);
+            return new StockContext(context, theme);
+        } catch (Throwable failure) {
+            if (!sparkFailureLogged) {
+                sparkFailureLogged = true;
+                Logger.printException(() -> "Could not keep a LIVE room's Spark page stock", failure);
+            }
             return context;
         }
     }

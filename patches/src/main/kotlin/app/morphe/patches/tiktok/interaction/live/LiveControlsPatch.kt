@@ -6,6 +6,7 @@ package app.morphe.patches.tiktok.interaction.live
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
+import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
@@ -16,6 +17,7 @@ import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.patches.tiktok.shared.guardAtEntry
+import app.morphe.util.ControlFlow
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
 import app.morphe.util.addInstructionsAtControlFlowLabel
@@ -40,6 +42,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
+import java.util.BitSet
 
 private const val EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveControls;"
 private const val RECORD_EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveRecordChip;"
@@ -539,7 +542,8 @@ internal object RankGapInfoIconFingerprint : Fingerprint(
  * Context) lookup. Null for any other method, and for a shape the hook can't take safely: no local
  * to copy the text through, a context above v15 or written again, or the context read anywhere it
  * isn't a null test or a Context parameter (a cast to Activity would throw on the wrapper the
- * extension hands back). The text call proves to the verifier that the row text is a View.
+ * extension hands back). The text call only anchors the row text: the hook hands it on as an
+ * Object, and the extension tests it's a View itself.
  */
 internal fun gapInfoIcon(method: Method): Pair<Int, Int>? {
     val body = method.implementation ?: return null
@@ -583,7 +587,7 @@ internal fun hookGapInfoIcon(method: MutableMethod) {
         0,
         """
             move-object/from16 v0, v$text
-            invoke-static {v0, v$context}, $PANEL_THEME->stockViewContext(Landroid/view/View;Landroid/content/Context;)Landroid/content/Context;
+            invoke-static {v0, v$context}, $PANEL_THEME->stockViewContext(Ljava/lang/Object;Landroid/content/Context;)Landroid/content/Context;
             move-result-object v$context
         """,
     )
@@ -719,7 +723,9 @@ internal fun rowBinder(method: Method, classDef: ClassDef): RowBinder? {
  * a row it inflates through the list's own light context goes straight to the binder's holder call
  * and back, and null runs TikTok's code untouched. The added code takes v0 and v1 before TikTok
  * writes anything, and the list must fit its four-bit calls, so a shape where either doesn't hold
- * is refused instead of written.
+ * is refused instead of written. [rowBinder]'s four-bit holder call on the list already keeps the
+ * list under v16; the check stays for a shape that loosens it. So does a binder that does anything
+ * to the holder before handing it back, which the hook would skip.
  */
 internal fun hookRowBinder(method: MutableMethod, classDef: ClassDef) {
     val binder = rowBinder(method, classDef)
@@ -727,6 +733,18 @@ internal fun hookRowBinder(method: MutableMethod, classDef: ClassDef) {
     val registers = method.implementation!!.registerCount
     if (registers - 1 > 15 || registers - 3 < 2) {
         throw PatchException("LIVE controls: the LIVE row binder's registers don't fit the hook")
+    }
+    val code = method.implementation!!.instructions.toList()
+    val handedBack = code.indices.filter {
+        code[it].opcode == Opcode.INVOKE_VIRTUAL && (code[it] as ReferenceInstruction).reference == binder.holder
+    }.all {
+        val result = code.getOrNull(it + 1)
+        val back = code.getOrNull(it + 2)
+        result?.opcode == Opcode.MOVE_RESULT_OBJECT && back?.opcode == Opcode.RETURN_OBJECT &&
+            (result as OneRegisterInstruction).registerA == (back as OneRegisterInstruction).registerA
+    }
+    if (!handedBack) {
+        throw PatchException("LIVE controls: the LIVE row binder does more with its holder than hand it back")
     }
     method.addInstructionsWithLabels(
         0,
@@ -823,6 +841,45 @@ internal fun roomThemeJoin(instructions: List<Instruction>): Int {
             instructions.getOrNull(at + 1)?.opcode !in setOf(Opcode.GOTO, Opcode.GOTO_16, Opcode.GOTO_32)
     }
     return falls.lastOrNull()?.plus(1) ?: -1
+}
+
+/**
+ * TikTok's Spark theme lookup (X.0GrQ.LIZLLL on 47.4.3, #159): the light or dark answer Spark's
+ * web pages and popups take for a context, read from TikTok's theme name attribute in the
+ * context's theme ("TikTok Theme Dark" or "Const" is dark). Over a room the room hook darkened,
+ * a shop room's Top customers popup asked it with the room, drew dark, and kept the light page's
+ * dark tab titles (S22, 2026-10-20). Its answer's type is renamed each build, so it's found by
+ * its Context parameter and the theme names it compares; the one other method comparing them
+ * takes a String.
+ */
+internal object SparkThemeNameFingerprint : Fingerprint(
+    parameters = listOf("Landroid/content/Context;"),
+    strings = listOf("TikTok Theme Light", "TikTok Theme Dark"),
+)
+
+/**
+ * The same class's page color lookup, (Context)Integer, which resolves Spark's page background
+ * against the context's theme the same way, so it came out dark over the darkened room too.
+ */
+internal fun <M : Method> sparkThemeColor(methods: Iterable<M>): M? = methods.singleOrNull {
+    !AccessFlags.STATIC.isSet(it.accessFlags) && it.returnType == "Ljava/lang/Integer;" &&
+        it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;")
+}
+
+/** Hands the context a Spark theme lookup reads to the extension first, which can swap in the room's light one. */
+internal fun hookSparkTheme(lookup: MutableMethod) {
+    if (AccessFlags.STATIC.isSet(lookup.accessFlags) || lookup.implementation == null ||
+        lookup.parameterTypes.map(CharSequence::toString) != listOf("Landroid/content/Context;")
+    ) {
+        throw PatchException("LIVE controls: ${lookup.definingClass}->${lookup.name} isn't a Spark theme lookup")
+    }
+    lookup.addInstructions(
+        0,
+        """
+            invoke-static/range {p1 .. p1}, $PANEL_THEME->sparkContext(Landroid/content/Context;)Landroid/content/Context;
+            move-result-object p1
+        """,
+    )
 }
 
 /**
@@ -1009,6 +1066,228 @@ internal fun hookCardLabels(header: MutableMethod) {
         labels.call,
         "invoke-static {v${labels.labels}, v${labels.strip}}, $PANEL_THEME->cardLabels(Ljava/lang/Object;Ljava/lang/Object;)V",
     )
+}
+
+internal const val LIVE_USER = "Lcom/bytedance/android/live/base/model/user/User;"
+
+/**
+ * The profile card's upcoming event module binding the host's next event (X.0wEX.LJIIJ on 47.4.3,
+ * #159). Its box (id/hwn) is a fixed white rounded shape with no night variant (drawable/e9l over
+ * color/ao), while its title, time and chevron take the card theme's colors, so on the dark card
+ * the "LIVE event" line read light on white (Login2, 2026-10-20).
+ */
+internal object LiveProfileEventFingerprint : Fingerprint(
+    returnType = "Z",
+    parameters = listOf(LIVE_USER, "Ljava/lang/Object;"),
+    strings = listOf("livesdk_live_event_user_entrance_show"),
+    custom = { method, _ -> eventBox(method) != null },
+)
+
+/** Where the event box hook goes, right after the box's read, and the register holding the box. */
+internal class EventBox(val at: Int, val box: Int)
+
+/**
+ * In [method], the read of the event box: the first read of a ViewGroup field of [method]'s own
+ * class, in a method that reads the host's upcoming events. Null when [method] reads no events or
+ * no such field, when the read isn't followed straight by the null check of its register (the box
+ * the module goes on to bind), or when a branch, switch case or handler lands on that check, which
+ * would skip the hook. The read names its register in four bits, so it fits the hook's call.
+ */
+internal fun eventBox(method: Method): EventBox? {
+    val code = method.implementation?.instructions?.toList() ?: return null
+    fun field(at: Int) = (code[at] as? ReferenceInstruction)?.reference as? FieldReference
+    val events = code.indices.any {
+        code[it].opcode == Opcode.IGET_OBJECT && field(it)?.let { read ->
+            read.definingClass == LIVE_USER && read.name == "upcomingEventList"
+        } == true
+    }
+    if (!events) return null
+    val read = code.indices.firstOrNull {
+        code[it].opcode == Opcode.IGET_OBJECT && field(it)?.let { box ->
+            box.definingClass == method.definingClass && box.type == "Landroid/view/ViewGroup;"
+        } == true
+    } ?: return null
+    val box = (code[read] as TwoRegisterInstruction).registerA
+    val check = code.getOrNull(read + 1) ?: return null
+    if (check.opcode != Opcode.IF_EQZ || (check as OneRegisterInstruction).registerA != box) return null
+    val addresses = code.runningFold(0) { at, instruction -> at + instruction.codeUnits }
+    if (addresses[read + 1] in landings(method, code, addresses)) return null
+    return EventBox(read + 1, box)
+}
+
+/**
+ * Hands the event box to the extension right after the module reads it, before its null check.
+ * While Dark LIVE panels is on in dark mode and the box's text came out light, the extension
+ * gives the box's shape a see-through light fill, so its text reads on the dark card. The hook
+ * writes no register.
+ */
+internal fun hookEventBox(bind: MutableMethod) {
+    val event = eventBox(bind) ?: throw PatchException("LIVE controls: the profile card's event box wasn't found")
+    bind.addInstructions(event.at, "invoke-static {v${event.box}}, $PANEL_THEME->eventBox(Ljava/lang/Object;)V")
+}
+
+internal const val LIVE_BADGE = "Lcom/bytedance/android/live/base/model/user/BadgeStruct;"
+private const val COMBINE_BADGE = "Lcom/bytedance/android/live/base/model/user/CombineBadgeStruct;"
+private const val SET_BACKGROUND = "Landroid/view/View;->setBackground(Landroid/graphics/drawable/Drawable;)V"
+
+/**
+ * The profile card's badge tile bind (X.0wLz.LJIJI on 47.4.3, #159): it reads its tile, an image
+ * view, from a lazy field and gives it a rounded shape drawn from the badge's server background
+ * (a border around the server's art, a server color, or a border alone). The server draws that
+ * art and the text over it for the white card, the low levels' "Lv." tile see-through, so on the
+ * dark card the tile and its text went dark gray together (Login2, 2026-10-20).
+ */
+internal object LiveProfileBadgeFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf(LIVE_BADGE),
+    custom = { method, _ -> badgeTileCalls(method) != null },
+)
+
+/**
+ * In [method], every `setBackground` on the badge tile: the tile is the one value cast to View
+ * right after a lazy field of [method]'s own class hands it over, with the combined badge's
+ * background read next. Each call has to take that value as its receiver on every path that
+ * reaches it, so a register the method reuses for another view is never handed over as the
+ * tile. Null when there's no such tile or no call, or when any call on the tile's register
+ * could see another value there. The calls are replaced where they stand, so a branch landing on
+ * one still runs the hook.
+ */
+internal fun badgeTileCalls(method: Method): List<Int>? {
+    val code = method.implementation?.instructions?.toList() ?: return null
+    fun reference(at: Int) = (code.getOrNull(at) as? ReferenceInstruction)?.reference
+    val casts = (3 until code.size - 1).filter { at ->
+        if (code[at].opcode != Opcode.CHECK_CAST || (reference(at) as? TypeReference)?.type != "Landroid/view/View;") {
+            return@filter false
+        }
+        val tile = (code[at] as OneRegisterInstruction).registerA
+        val lazy = reference(at - 3) as? FieldReference
+        val value = reference(at - 2) as? MethodReference
+        val background = reference(at + 1) as? FieldReference
+        code[at - 1].opcode == Opcode.MOVE_RESULT_OBJECT && (code[at - 1] as OneRegisterInstruction).registerA == tile &&
+            code[at - 2].opcode == Opcode.INVOKE_INTERFACE && value?.name == "getValue" && value.returnType == "Ljava/lang/Object;" &&
+            code[at - 3].opcode == Opcode.IGET_OBJECT && lazy?.definingClass == method.definingClass &&
+            code[at + 1].opcode == Opcode.IGET_OBJECT && background?.definingClass == COMBINE_BADGE && background.name == "background"
+    }
+    val cast = casts.singleOrNull() ?: return null
+    val tile = (code[cast] as OneRegisterInstruction).registerA
+    fun receiver(at: Int) = when (val call = code[at]) {
+        is FiveRegisterInstruction -> call.registerC
+        is RegisterRangeInstruction -> call.startRegister
+        else -> null
+    }
+    val calls = method.literalReads(cast).filter { at ->
+        code[at].opcode in setOf(Opcode.INVOKE_VIRTUAL, Opcode.INVOKE_VIRTUAL_RANGE) && (reference(at) as? MethodReference)?.let {
+            "${it.definingClass}->${it.name}(${it.parameterTypes.joinToString("")})${it.returnType}" == SET_BACKGROUND
+        } == true && receiver(at) == tile
+    }
+    if (calls.isEmpty() || calls.any { code[it].opcode != Opcode.INVOKE_VIRTUAL || !onlyReaches(method, cast, it, tile) }) return null
+    return calls
+}
+
+/**
+ * Whether [register] can hold only what the instruction at [definition] wrote when the
+ * instruction at [use] runs: walking back from [use] along every path, the first write to
+ * [register] on each is [definition], and no path gets back to the method's start without one.
+ * An instruction that throws never writes its destination, so a handler's path walks on past it.
+ */
+private fun onlyReaches(method: Method, definition: Int, use: Int, register: Int): Boolean {
+    val flow = ControlFlow.of(method)
+    val code = flow.instructions
+    val normal = Array(code.size) { mutableListOf<Int>() }
+    val exceptional = Array(code.size) { mutableListOf<Int>() }
+    code.indices.forEach { from ->
+        flow.normal[from].forEach { normal[it] += from }
+        flow.exceptional[from].forEach { exceptional[it] += from }
+    }
+    val seen = BitSet()
+    val pending = ArrayDeque(listOf(use))
+    while (pending.isNotEmpty()) {
+        val at = pending.removeFirst()
+        if (at == 0) return false
+        normal[at].forEach { from ->
+            if (writesRegister(code[from], register)) {
+                if (from != definition) return false
+            } else if (!seen[from]) {
+                seen.set(from)
+                pending += from
+            }
+        }
+        exceptional[at].forEach { from -> if (!seen[from]) { seen.set(from); pending += from } }
+    }
+    return true
+}
+
+/**
+ * Hands each of the badge tile's backgrounds to the extension in place of TikTok's own call. While
+ * Dark LIVE panels is on in dark mode, the extension lays a white copy of the tile's shape under
+ * it, so the server's see-through art and text draw over white the way they do on the stock card.
+ * The call takes the same two registers, so nothing else in the method moves.
+ */
+internal fun hookBadgeTiles(bind: MutableMethod) {
+    val calls = badgeTileCalls(bind) ?: throw PatchException("LIVE controls: the profile card's badge tile wasn't found")
+    calls.forEach { at ->
+        val call = bind.getInstruction<FiveRegisterInstruction>(at)
+        bind.replaceInstruction(
+            at,
+            "invoke-static {v${call.registerC}, v${call.registerD}}, " +
+                "$PANEL_THEME->badgeTile(Landroid/view/View;Landroid/graphics/drawable/Drawable;)V",
+        )
+    }
+}
+
+private const val SET_BACKGROUND_RESOURCE = "Landroid/view/View;->setBackgroundResource(I)V"
+
+/**
+ * The profile card's group chat row bind (X.0wJT.LJIIJ on 47.4.3, #159): the row puts a fixed
+ * white shape on itself, in the bind for a host with no group yet and in a helper for the rest,
+ * under a title and count in the card theme's colors, light on white on the dark card (Login2,
+ * 2026-10-20).
+ */
+internal object LiveProfileGroupChatFingerprint : Fingerprint(
+    returnType = "Z",
+    parameters = listOf(LIVE_USER, "Ljava/lang/Object;"),
+    strings = listOf("group_chat", "profile_card_entrance_click"),
+    custom = { _, classDef -> classDef.methods.any { groupChatBackgrounds(it).isNotEmpty() } },
+)
+
+/**
+ * In [method], every `setBackgroundResource` on a ViewGroup field of [method]'s own class: the
+ * call's receiver has to hold that field's read on every path that reaches it, so a register the
+ * method reuses for another view is never handed over as the row.
+ */
+internal fun groupChatBackgrounds(method: Method): List<Int> {
+    val code = method.implementation?.instructions?.toList() ?: return emptyList()
+    fun reference(at: Int) = (code[at] as? ReferenceInstruction)?.reference
+    val reads = code.indices.filter { at ->
+        code[at].opcode == Opcode.IGET_OBJECT && (reference(at) as? FieldReference)?.let {
+            it.definingClass == method.definingClass && it.type == "Landroid/view/ViewGroup;"
+        } == true
+    }
+    return code.indices.filter { at ->
+        code[at].opcode == Opcode.INVOKE_VIRTUAL && (reference(at) as? MethodReference)?.let {
+            "${it.definingClass}->${it.name}(${it.parameterTypes.joinToString("")})${it.returnType}" == SET_BACKGROUND_RESOURCE
+        } == true && (code[at] as FiveRegisterInstruction).registerC.let { row ->
+            reads.any { read -> (code[read] as TwoRegisterInstruction).registerA == row && onlyReaches(method, read, at, row) }
+        }
+    }
+}
+
+/**
+ * Hands the group chat row to the extension right after each white shape goes on it, in every
+ * method of the bind's class. While Dark LIVE panels is on in dark mode and the row's text came out
+ * light, the extension gives the shape the event box's see-through light fill. The hook goes
+ * after the call, so a branch over the call skips it with the call, and it writes no register.
+ */
+internal fun hookGroupChat(methods: Iterable<MutableMethod>) {
+    var hooked = 0
+    methods.forEach { method ->
+        groupChatBackgrounds(method).asReversed().forEach { at ->
+            val row = method.getInstruction<FiveRegisterInstruction>(at).registerC
+            method.addInstructions(at + 1, "invoke-static {v$row}, $PANEL_THEME->eventBox(Ljava/lang/Object;)V")
+            hooked++
+        }
+    }
+    if (hooked == 0) throw PatchException("LIVE controls: the profile card's group chat row wasn't found")
 }
 
 internal const val PULL_STREAM_SERVICE ="Lcom/bytedance/android/live/livepullstream/PullStreamService;"
@@ -1489,6 +1768,17 @@ val liveControlsPatch = bytecodePatch(
             it.name == "darkAppTheme" && it.returnType == "I" && it.parameterTypes.isEmpty()
         }.returnEarly(darkTheme)
         hookRoomTheme(LivePlayActivityThemeFingerprint.method)
+        // TikTok's Spark pages read light or dark from the theme name of the context they open
+        // in, so over the darkened room a shop room's Top customers popup drew dark with dark tab
+        // titles (S22, 2026-10-20). Its theme and page color lookups hand their context to the
+        // extension first, which gives back one over the room's kept light theme, so the room's
+        // Spark popups stay stock.
+        val sparkTheme = SparkThemeNameFingerprint.method
+        hookSparkTheme(sparkTheme)
+        hookSparkTheme(
+            sparkThemeColor(mutableClassDefBy(sparkTheme.definingClass).methods)
+                ?: throw PatchException("LIVE controls: the Spark page color lookup wasn't found"),
+        )
         // A translated bio's "See original" link read dark on the dark profile card (Login2,
         // 2026-10-18): its replacement span draws it in the bio view's own light-theme text
         // color, skipping the link color. The extension makes the link color the view's text
@@ -1499,6 +1789,18 @@ val liveControlsPatch = bytecodePatch(
         // the dark card (Login2, 2026-10-19). The extension makes each chip's color what it is
         // over the light card while the switch is on in dark mode.
         hookCardLabels(LiveProfileLabelsFingerprint.method)
+        // Its upcoming event box is a fixed white shape under text in the card theme's colors,
+        // light on white on the dark card (Login2, 2026-10-20). The extension gives the box a
+        // see-through light fill while the switch is on in dark mode and its text came out light.
+        hookEventBox(LiveProfileEventFingerprint.method)
+        // Its badge tiles carry server art and text drawn for the white card, the low levels'
+        // tile see-through, so both went dark gray on the dark card (Login2, 2026-10-20). The
+        // extension lays a white copy of each tile's shape under it while the switch is on in
+        // dark mode.
+        hookBadgeTiles(LiveProfileBadgeFingerprint.method)
+        // Its group chat row is the same kind of fixed white shape under text in the card theme's
+        // colors (Login2, 2026-10-20), so the extension gives it the event box's fill.
+        hookGroupChat(mutableClassDefBy(LiveProfileGroupChatFingerprint.method.definingClass).methods)
         // The older quality list's rows can read white on white in dark mode, switch or no
         // switch; the extension gives poorly contrasted text a readable color there.
         hookQualityList(LiveDefinitionListFingerprint.method)

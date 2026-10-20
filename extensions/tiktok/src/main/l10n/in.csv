@@ -320,6 +320,8 @@ Separate usernames or display names with commas. Their comments are hidden.,Pisa
 Comment media filename,Nama berkas media komentar
 Comments,Komentar
 Comments aren't available for this video,Komentar tidak tersedia untuk video ini
+Turn Clear display on or off,Nyalakan atau matikan tampilan bersih
+Clear display isn't available for this video,Tampilan bersih tidak tersedia untuk video ini
 Comments beside the video,Komentar di samping video
 Compare gate reads with their previous values.,Bandingkan pembacaan gate dengan nilai sebelumnya.
 Completed an interrupted settings change. Restart TikTok to apply this.,Perubahan pengaturan yang terhenti telah diselesaikan. Mulai ulang TikTok agar berlaku.
@@ -553,6 +555,7 @@ Hide picture comments,Sembunyikan komentar bergambar
 Hide reply previews,Sembunyikan pratinjau balasan
 Don't open a reply under each comment. View replies still shows all of them.,Jangan buka satu balasan di bawah setiap komentar. Lihat balasan tetap menampilkan semuanya.
 Hide playlist videos,Sembunyikan video playlist
+Hide subscriber-only videos,Sembunyikan video khusus pelanggan
 Hide promotional music,Sembunyikan musik promosi
 Hide comment typing suggestions,Sembunyikan saran saat mengetik komentar
 Hide rows by title,Sembunyikan baris berdasarkan judul
@@ -617,6 +620,7 @@ Hide video actions,Sembunyikan aksi video
 "Hide videos with TikTok's AI-generated label, AI content credentials, a TikTok AI effect such as AI Alive, or a tag like #ai or #aigenerated.","Sembunyikan video dengan label AI dari TikTok, kredensial konten AI, efek AI TikTok seperti AI Alive, atau tagar seperti #ai atau #aigenerated."
 Hide videos marked as paid partnership or branded content.,Sembunyikan video yang ditandai sebagai kemitraan berbayar atau konten bermerek.
 Hide videos posted as part of a playlist.,Sembunyikan video yang diunggah sebagai bagian dari playlist.
+"Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.","Sembunyikan kiriman bergembok yang hanya bisa ditonton pelanggan kreator, di feed dan di profil."
 Hide videos posted by verified accounts.,Sembunyikan video yang diunggah akun terverifikasi.
 Hide videos that belong to a paid Series.,Sembunyikan video yang termasuk Series berbayar.
 Hide videos with a lot of views and few comments. Works the same way as views per like. Zero turns it off.,Sembunyikan video dengan banyak tayangan dan sedikit komentar. Bekerja sama seperti tayangan per suka. Nol mematikannya.
@@ -843,6 +847,7 @@ Plays videos that TikTok covers with a content warning without asking you to tap
 Playback,Pemutaran
 Player,Pemutar
 Playlist posts,Kiriman playlist
+Subscriber-only posts,Kiriman khusus pelanggan
 Popular,Populer
 Popups,Pop-up
 Press and hold a profile picture to save the full size original to your photo destination.,Tekan dan tahan foto profil untuk menyimpan aslinya dalam ukuran penuh ke lokasi simpan fotomu.
@@ -1723,6 +1728,8 @@ A LIVE in the feed can count down and take you into the room on its own. This ke
 Play sounds TikTok pulled,Putar suara yang ditarik TikTok
 Play the audio on videos TikTok silenced because their sound was pulled for copyright or in your region. TikTok may still say the sound isn't available.,Putar audio pada video yang dibisukan TikTok karena suaranya ditarik akibat hak cipta atau di wilayah Anda. TikTok mungkin tetap menyebut suaranya tidak tersedia.
 Match region fields in requests,Samakan kolom wilayah dalam permintaan
+Keep the For You feed on your real SIM,Biarkan Untuk Kamu memakai SIM asli
+"Sticker search, PineDrama and the rest of TikTok still see the SIM above, while For You asks for videos with your phone's own SIM country and carrier. Your IP address and account history still count.","Pencarian stiker, PineDrama, dan bagian TikTok lainnya tetap melihat SIM di atas, sedangkan Untuk Kamu meminta video dengan negara dan operator SIM ponselmu sendiri. Alamat IP dan riwayat akunmu tetap berpengaruh."
 Show exact LIVE viewer counts,Tampilkan jumlah penonton LIVE yang tepat
 A LIVE room shows how many people are watching as a rounded number like 1.2K. This shows the exact count instead.,"Ruang LIVE menampilkan jumlah penonton sebagai angka dibulatkan seperti 1,2K. Ini menampilkan jumlah yang tepat."
 Offer LIVE quality in more rooms,Tawarkan kualitas LIVE di lebih banyak ruang
@@ -1974,6 +1981,7 @@ Search loaded activity,Cari aktivitas yang dimuat
 Wait for loading to finish,Tunggu hingga pemuatan selesai
 Choose counts for this signed-in account. Leave a field empty to use TikTok's count. Zero shows zero. Choices stay on this phone.,Pilih jumlah untuk akun yang sedang masuk. Kosongkan kolom untuk memakai jumlah TikTok. Nol menampilkan nol. Pilihan tetap di ponsel ini.
 Followers,Pengikut
+Likes,Suka
 Local profile counts,Jumlah profil lokal
 Own profile counts,Jumlah profil sendiri
 Show chosen counts on your own profile on this phone. Other people see the real counts.,Tampilkan jumlah pilihan pada profil sendiri di ponsel ini. Orang lain melihat jumlah sebenarnya.
@@ -2135,8 +2143,18 @@ Show the country as a flag,Tampilkan negara sebagai bendera
 "Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.","Menampilkan bendera negara sebagai ganti dua hurufnya, di sebelah nama kreator dan di sebelah waktu komentar."
 Full long-press menu in search results,Menu tekan lama lengkap di hasil pencarian
 A long press on a video you opened from search opens the same menu as on For You. It needs Long press on TikTok default.,Tekan lama pada video yang kamu buka dari pencarian membuka menu yang sama seperti di Untuk Kamu. Perlu Tekan lama pada bawaan TikTok.
-Normal-weight captions,Keterangan dengan ketebalan normal
-Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.,"Tampilkan teks ucapan dengan ketebalan biasa, bukan huruf tebal TikTok. Berlaku untuk keterangan berikutnya."
+Caption height,Tinggi keterangan
+"Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.","Menaikkan teks ucapan di atas posisi TikTok saat ponsel tegak. Pakai 0 untuk posisi TikTok, atau hingga %1$d."
+Caption height in landscape,Tinggi keterangan saat mendatar
+"Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.","Menaikkan teks ucapan di atas posisi TikTok saat ponsel mendatar. Pakai 0 untuk posisi TikTok, atau hingga %1$d."
+Caption boldness,Ketebalan keterangan
+Light,Tipis
+Medium,Sedang
+Semi-bold,Agak tebal
+Bold,Tebal
+Extra bold,Sangat tebal
+Caption height in Clear display,Tinggi keterangan saat tampilan bersih
+"Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.","Menaikkan keterangan yang dipertahankan saat tampilan bersih di atas posisi biasanya. Pakai 0 untuk posisi biasa, atau hingga %1$d."
 The LIVE recording TikTok closed on couldn't be saved. Its unfinished file was cleared.,Rekaman LIVE yang terpotong saat TikTok tertutup tidak bisa disimpan. File yang belum selesai sudah dihapus.
 Also on opened videos,Juga di video yang dibuka
 "Hide the search bar at the top of videos you open from search, a profile or your watch history. The Back button stays.","Sembunyikan bilah pencarian di bagian atas video yang kamu buka dari pencarian, profil, atau riwayat tontonanmu. Tombol Kembali tetap ada."
@@ -2148,12 +2166,16 @@ See-through status bar,Bilah status transparan
 "Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.","Biarkan video di feed utama menjangkau bagian atas layar, dengan jam dan ikon status di atasnya. Tab di bagian atas tetap di tempatnya."
 Floating bottom bar,Bilah bawah mengambang
 "Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.","Tampilkan tab feed utama di atas kapsul gelap yang membulat dan transparan, yang mengambang di atas video. Perlu Bilah bawah transparan."
+Liquid glass look,Tampilan kaca cair
+"Draw the main feed's floating pill as glass, lighter and more see-through, with a bright rim along its top edge. Needs Floating bottom bar.","Gambar kapsul mengambang di feed utama sebagai kaca, lebih terang dan lebih transparan, dengan tepi terang di sisi atasnya. Perlu Bilah bawah mengambang."
 Bring back TikTok's translation,Kembalikan terjemahan TikTok
 "Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.","Mengembalikan baris terjemahan di halaman Bahasa TikTok, di Pengaturan dan privasi, untuk akun yang di sana hanya melihat Bahasa aplikasi."
 For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions. Restart TikTok to see the change.,Untuk akun yang terjemahannya dihapus TikTok. Mengembalikan Lihat terjemahan di bawah deskripsi video dan di teks video. Mulai ulang TikTok untuk melihat perubahannya.
 "For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions, and the translation rows on the Language page in Settings and privacy. Restart TikTok to see it on videos.","Untuk akun yang terjemahannya dihapus TikTok. Mengembalikan Lihat terjemahan di bawah deskripsi video dan di teks video, serta baris terjemahan di halaman Bahasa, di Pengaturan dan privasi. Mulai ulang TikTok untuk melihatnya di video."
 Only on the sides of the video,Hanya di sisi video
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.,Pilihan Tekan lama hanya berjalan di sepertiga kiri dan kanan video. Tekan di tengah tetap membuka menu bawaan TikTok. Perlu pilihan Tekan lama selain Bawaan TikTok.
+"Dark LIVE panels in dark mode","Panel LIVE gelap di mode gelap"
+"With TikTok in dark mode, a LIVE room still opens its share menu, fan club and other panels in light colors. This opens them dark.","Saat TikTok dalam mode gelap, ruang LIVE tetap membuka menu bagikan, klub penggemar, dan panel lainnya dengan warna terang. Ini membukanya dalam warna gelap."
 Full-width progress bar,Bilah progres selebar layar
 "Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.","Bilah progres membentang dari satu tepi layar ke tepi lainnya, tanpa celah yang disisakan TikTok di kedua ujung."
 New device identity,Identitas perangkat baru

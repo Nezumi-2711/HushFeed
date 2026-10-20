@@ -223,7 +223,7 @@ public final class SettingsBackup {
             throw RestoreException.rejected(error);
         }
         SettingsOperationJournal.Operation operation = SettingsOperationJournal.acquire(context);
-        restoreWithOperation(context, text, saveUndo, next, operation);
+        restoreWithOperation(context, text, saveUndo, !holdRuleLists, next, operation);
     }
 
     public static void reset(Context context) throws Exception {
@@ -236,7 +236,7 @@ public final class SettingsBackup {
             } catch (Exception error) {
                 throw RestoreException.rejected(error);
             }
-            restoreWithOperation(context, text, true, next, operation);
+            restoreWithOperation(context, text, true, false, next, operation);
         } catch (Exception error) {
             operation.abort();
             throw error;
@@ -247,8 +247,10 @@ public final class SettingsBackup {
         Settings.NETWORK_PROXY_PASSWORD.resetToDefault();
     }
 
+    /** @param undoCopy the text is the device's own undo copy, put back by {@link #undo}. */
     private static void restoreWithOperation(Context context, String text, boolean saveUndo,
-            Snapshot next, SettingsOperationJournal.Operation operation) throws Exception {
+            boolean undoCopy, Snapshot next, SettingsOperationJournal.Operation operation)
+            throws Exception {
         boolean closed = false;
         try {
             // A budget change already due is applied before anything is read, so it is part of
@@ -264,6 +266,7 @@ public final class SettingsBackup {
             if (saveUndo) {
                 writeUndo(context, previousText);
                 CalmFeedPreset.holdForUndo(context);
+                FeatureGateLabStore.holdLabUndo();
             }
             BudgetChanges.Split budget = BudgetChanges.forRestore(next.values, SessionBudget.now());
             Map<Setting<?>, Object> updates = budget.withWaiting();
@@ -287,7 +290,13 @@ public final class SettingsBackup {
                 }
                 operation.complete();
                 closed = true;
-                if (next.labIncluded) FeatureGateLabStore.discardLabUndo();
+                // The Lab's own undo held the rules from before its last change, which a restore
+                // just replaced. It went aside with the undo copy, so the Undo brings it back
+                // with the Lab it belongs to, and a second Undo sets it aside again.
+                if (next.labIncluded) {
+                    if (undoCopy) FeatureGateLabStore.swapLabUndoWithHeld();
+                    else FeatureGateLabStore.discardLabUndo();
+                }
                 // The Calm feed card offered "Restore setup" from before a reset or an import,
                 // which would have put back values it had just replaced. Its copy went aside
                 // with the undo copy above, so the Undo below brings both back.
@@ -713,6 +722,7 @@ public final class SettingsBackup {
             updates.put(Settings.SESSION_BUDGET_PENDING, pending);
         }
         absent -= migrateDownloadPath(values, updates);
+        absent -= migrateCaptionWeight(values, updates);
         List<DownloadDestination.Kind> keptFolders = holdRuleLists
                 ? keepUsableFolders(updates) : Collections.<DownloadDestination.Kind>emptyList();
         if (!labApplies) {
@@ -812,6 +822,28 @@ public final class SettingsBackup {
             filled++;
         }
         return filled;
+    }
+
+    /**
+     * Turns a Normal-weight captions switch that a file has on into Caption boldness's Normal.
+     *
+     * <p>Settings' one-shot migration only runs as the app starts, so a file restored later would
+     * leave the switch on with nothing reading it, and the captions bold again. A file from the
+     * fork the picker came from may hold both keys, the picker at "default", and its captions drew
+     * at 400 then too, so that one is moved as well.
+     *
+     * @return 1 when the file had no picker value and this filled it in, so it isn't also counted as missing.
+     */
+    private static int migrateCaptionWeight(JSONObject values, Map<Setting<?>, Object> updates) {
+        if (!values.has(Settings.CAPTION_REGULAR_WEIGHT.key)
+                || !Boolean.TRUE.equals(updates.get(Settings.CAPTION_REGULAR_WEIGHT))
+                || !updates.containsKey(Settings.CAPTION_FONT_WEIGHT)) return 0;
+        boolean filled = !values.has(Settings.CAPTION_FONT_WEIGHT.key);
+        if (filled || "default".equals(updates.get(Settings.CAPTION_FONT_WEIGHT))) {
+            updates.put(Settings.CAPTION_FONT_WEIGHT, "400");
+        }
+        updates.put(Settings.CAPTION_REGULAR_WEIGHT, false);
+        return filled ? 1 : 0;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
