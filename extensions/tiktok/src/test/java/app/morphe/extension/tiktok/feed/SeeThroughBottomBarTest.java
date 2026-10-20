@@ -61,6 +61,7 @@ public class SeeThroughBottomBarTest {
     public void tearDown() {
         Settings.SEE_THROUGH_BOTTOM_BAR.save(false);
         Settings.FLOATING_BOTTOM_BAR.save(false);
+        Settings.LIQUID_GLASS_BOTTOM_BAR.save(false);
         SeeThroughBottomBar.reset();
         VideoOverlayHider.resolveForTests("view_rootview", 0);
     }
@@ -182,6 +183,76 @@ public class SeeThroughBottomBarTest {
         } finally {
             PausedProcess.set(false);
             Settings.FLOATING_BOTTOM_BAR.save(false);
+        }
+    }
+
+    /**
+     * Liquid glass look (#218): with Floating bottom bar on, the pill is drawn as glass in the same
+     * place. Turning it off gives the plain pill back, and every way out still gives TikTok's own
+     * background back, never a pill kept as if it were TikTok's.
+     */
+    @Test
+    public void aGlassBarTakesThePillsPlaceAndEveryWayOutGivesTikToksBack() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            Scene scene = new Scene(activity, View.VISIBLE, Color.BLACK);
+            scene.bar.setPadding(5, 6, 7, 8);
+            android.graphics.drawable.Drawable original = scene.bar.getBackground();
+
+            Settings.SEE_THROUGH_BOTTOM_BAR.save(true);
+            Settings.LIQUID_GLASS_BOTTOM_BAR.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertFalse("the glass showed without Floating bottom bar",
+                    scene.bar.getBackground() instanceof SeeThroughBottomBar.FloatingBackground);
+            assertTrue(scene.bar.getBackground() instanceof ColorDrawable);
+
+            Settings.FLOATING_BOTTOM_BAR.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertTrue(scene.bar.getBackground() instanceof SeeThroughBottomBar.GlassBackground);
+            SeeThroughBottomBar.GlassBackground glass = (SeeThroughBottomBar.GlassBackground) scene.bar.getBackground();
+            assertTrue(glass.getDrawable() instanceof SeeThroughBottomBar.GlassPill);
+            assertEquals("the glass moved the tabs", Arrays.asList(5, 6, 7, 8), padding(scene.bar));
+            float density = activity.getResources().getDisplayMetrics().density;
+            glass.setBounds(0, 0, 1080, 150);
+            assertEquals(new Rect(Math.round(12 * density), Math.round(2 * density),
+                    1080 - Math.round(12 * density), 150 - Math.round(6 * density)), glass.getDrawable().getBounds());
+
+            VideoOverlayHider.applyTo(activity);
+            assertSame("a pass swapped the glass for a new one", glass, scene.bar.getBackground());
+
+            Settings.LIQUID_GLASS_BOTTOM_BAR.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertTrue(scene.bar.getBackground() instanceof SeeThroughBottomBar.FloatingBackground);
+            assertFalse("the glass stayed with the switch off",
+                    scene.bar.getBackground() instanceof SeeThroughBottomBar.GlassBackground);
+
+            Settings.LIQUID_GLASS_BOTTOM_BAR.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertTrue(scene.bar.getBackground() instanceof SeeThroughBottomBar.GlassBackground);
+            PausedProcess.set(true);
+            VideoOverlayHider.applyTo(activity);
+            assertSame("Pause kept the glass", original, scene.bar.getBackground());
+            PausedProcess.set(false);
+            VideoOverlayHider.applyTo(activity);
+            assertTrue(scene.bar.getBackground() instanceof SeeThroughBottomBar.GlassBackground);
+
+            Settings.FLOATING_BOTTOM_BAR.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertTrue(scene.bar.getBackground() instanceof ColorDrawable);
+            assertEquals(Color.TRANSPARENT, ((ColorDrawable) scene.bar.getBackground()).getColor());
+
+            Settings.FLOATING_BOTTOM_BAR.save(true);
+            VideoOverlayHider.applyTo(activity);
+            Settings.SEE_THROUGH_BOTTOM_BAR.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertSame("the bar's own background must be the very drawable TikTok set",
+                    original, scene.bar.getBackground());
+            assertEquals(Arrays.asList(5, 6, 7, 8), padding(scene.bar));
+        } finally {
+            PausedProcess.set(false);
+            Settings.FLOATING_BOTTOM_BAR.save(false);
+            Settings.LIQUID_GLASS_BOTTOM_BAR.save(false);
         }
     }
 

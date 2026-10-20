@@ -402,6 +402,8 @@ public final class VideoOverlayHider {
     private static boolean seeThroughBarNow;
     /** Whether that bar floats as a rounded pill this pass (#124). */
     private static boolean floatingBarNow;
+    /** Whether that pill is drawn as glass this pass (#218). */
+    private static boolean glassBarNow;
 
     /**
      * Whether the current pass is in Clear display with the fade between 0 and 100 (#84). The
@@ -626,6 +628,7 @@ public final class VideoOverlayHider {
             if (!seeThroughBar) SeeThroughBottomBar.reset();
             seeThroughBarNow = seeThroughBar;
             floatingBarNow = seeThroughBar && Settings.FLOATING_BOTTOM_BAR.get();
+            glassBarNow = floatingBarNow && Settings.LIQUID_GLASS_BOTTOM_BAR.get();
             // On the S22 the main feed's room for the bar is the pager column's strip, the one an
             // opened post keeps under its comment bar; the spacer in each cell is already 0 there.
             boolean stripForBar = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
@@ -1943,7 +1946,7 @@ public final class VideoOverlayHider {
                         boolean clearBar = seeThroughBarNow && !wanted;
                         // Floating bottom bar draws a rounded pill there instead (#124).
                         if (target == BOTTOM_TABS_TARGET) {
-                            SeeThroughBottomBar.setBackgroundClear(view, clearBar, floatingBarNow);
+                            SeeThroughBottomBar.setBackgroundClear(view, clearBar, floatingBarNow, glassBarNow);
                         }
                         if (target == BOTTOM_TABS_DIVIDER_TARGET && clearBar) {
                             setFaded(view, 100);
