@@ -689,7 +689,8 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
         if (SettingsStatus.doubleTapEnabled) {
             // Long press's actions, which GestureActions runs the same way for both gestures. The
             // speed toggle changes the playing video's speed, so it needs the Playback speed patch's
-            // player bridge (#136).
+            // player bridge, and Clear display posts TikTok's own event through Remember clear
+            // display's bridge (#136).
             List<String> tapLabels = new ArrayList<>(Arrays.asList("TikTok default", "Do nothing", "Open comments",
                     "Save the original sound", "Copy the video link", "Copy the sound link",
                     "Find the sound on YouTube Music", "Set a sleep timer that closes TikTok",
@@ -699,6 +700,10 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             if (SettingsStatus.liveSpeedEnabled) {
                 tapLabels.add("Speed up this video, double tap again to undo");
                 tapValues.add("speed_toggle");
+            }
+            if (SettingsStatus.automaticClearDisplayEnabled) {
+                tapLabels.add("Turn Clear display on or off");
+                tapValues.add("clear_display");
             }
             addPreference(new ChoicePreference(context, "Double tap", Settings.DOUBLE_TAP_ACTION,
                     tapLabels.toArray(new String[0]), tapValues.toArray(new String[0])));
@@ -710,14 +715,20 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
         }
         if (SettingsStatus.longPressEnabled) {
             // Double tap's actions and a like, which TikTok's own double tap already does.
+            List<String> pressLabels = new ArrayList<>(Arrays.asList("TikTok default (hold to speed up, quick share)",
+                    "Do nothing", "Like the video", "Open comments", "Save the original sound",
+                    "Copy the video link", "Copy the sound link", "Find the sound on YouTube Music",
+                    "Set a sleep timer that closes TikTok", "Save the frame on screen as a photo",
+                    "Save the video's cover"));
+            List<String> pressValues = new ArrayList<>(Arrays.asList("default", "nothing", "like", "comments",
+                    "original_sound", "copy_link", "copy_sound_link", "youtube_music", "sleep_timer", "save_frame",
+                    "save_cover"));
+            if (SettingsStatus.automaticClearDisplayEnabled) {
+                pressLabels.add("Turn Clear display on or off");
+                pressValues.add("clear_display");
+            }
             addPreference(new ChoicePreference(context, "Long press", Settings.LONG_PRESS_ACTION,
-                    new String[]{"TikTok default (hold to speed up, quick share)", "Do nothing",
-                            "Like the video", "Open comments", "Save the original sound",
-                            "Copy the video link", "Copy the sound link", "Find the sound on YouTube Music",
-                            "Set a sleep timer that closes TikTok", "Save the frame on screen as a photo",
-                            "Save the video's cover"},
-                    new String[]{"default", "nothing", "like", "comments", "original_sound", "copy_link",
-                            "copy_sound_link", "youtube_music", "sleep_timer", "save_frame", "save_cover"}));
+                    pressLabels.toArray(new String[0]), pressValues.toArray(new String[0])));
             addPreference(new TogglePreference(context, "Only on the sides of the video",
                     "Your Long press choice runs only on the left and right thirds of the video. "
                             + "A press in the middle still opens TikTok's own menu. "

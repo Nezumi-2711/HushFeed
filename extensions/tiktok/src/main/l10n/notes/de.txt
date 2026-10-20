@@ -12,6 +12,8 @@
 
 * **TikTok:** Neue Zeilen Untertitelhöhe unter Untertitel heben gesprochene Untertitel höher, je eine für aufrecht, quer und die freie Ansicht. Schriftstärke der Untertitel ersetzt Untertitel in normaler Stärke und reicht von Leicht bis Extrafett. Wer den Schalter an hatte, bekommt Normal (#206).
 
+* **TikTok:** Doppeltippen und Langes Drücken haben eine neue Auswahl, Freie Ansicht ein- oder ausschalten. Sie blendet die Schaltflächen über dem Video aus wie TikToks eigene freie Ansicht, und dieselbe Geste holt sie zurück (#136).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed unterstützt jetzt TikTok 47.4.3 und nur diese Version. Patche die 47.4.3-APK von APKMirror. PineDrama bleibt bei 47.1.4.

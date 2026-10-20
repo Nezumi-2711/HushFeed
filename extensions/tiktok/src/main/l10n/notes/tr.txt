@@ -12,6 +12,8 @@
 
 * **TikTok:** Altyazılar altındaki yeni Altyazı yüksekliği satırları konuşma altyazılarını yukarı kaldırır, biri dik, biri yatay, biri temiz ekran için. Altyazı kalınlığı, Normal kalınlıkta altyazılar anahtarının yerini alır ve İnce'den Ekstra kalın'a kadar gider. O anahtar açıksa Normal olarak gelir (#206).
 
+* **TikTok:** Çift dokunma ve Uzun basma için yeni bir seçenek var, Temiz ekranı aç veya kapat. Videonun üstündeki düğmeleri TikTok'un kendi temiz ekranı gibi gizler, aynı hareket onları geri getirir (#136).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed artık TikTok 47.4.3'ü destekliyor, yalnızca bu sürümü. APKMirror'dan 47.4.3 APK'sını yamala. PineDrama 47.1.4'te kalıyor.

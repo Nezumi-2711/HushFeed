@@ -12,6 +12,8 @@
 
 * **TikTok:** Baris Tinggi keterangan baru di Keterangan menaikkan teks ucapan, satu untuk ponsel tegak, satu untuk mendatar, dan satu untuk tampilan bersih. Ketebalan keterangan menggantikan Keterangan dengan ketebalan normal, dari Tipis sampai Sangat tebal. Kalau sakelar itu dulu aktif, nilainya jadi Normal (#206).
 
+* **TikTok:** Ketuk dua kali dan Tekan lama punya pilihan baru, Nyalakan atau matikan tampilan bersih. Pilihan ini menyembunyikan tombol di atas video seperti tampilan bersih TikTok, dan gerakan yang sama memunculkannya lagi (#136).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed kini mendukung TikTok 47.4.3, dan hanya versi itu. Patch APK 47.4.3 dari APKMirror. PineDrama tetap di 47.1.4.

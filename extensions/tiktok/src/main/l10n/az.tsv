@@ -329,6 +329,8 @@ Separate words with commas. A comment is hidden if it contains any of them. Capi
 Comment media filename	Şərh mediasının fayl adı
 Comments	Şərhlər
 Comments aren't available for this video	Bu video üçün şərhlər əlçatan deyil
+Turn Clear display on or off	Təmiz ekranı aç və ya bağla
+Clear display isn't available for this video	Bu video üçün təmiz ekran əlçatan deyil
 Comments beside the video	Videonun yanında şərhlər
 Compact comment header	Yığcam şərh başlığı
 Compare gate reads with their previous values.	Qapı oxunuşlarını əvvəlki dəyərləri ilə müqayisə edin.

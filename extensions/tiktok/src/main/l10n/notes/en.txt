@@ -12,6 +12,8 @@
 
 * **TikTok:** New Caption height rows under Captions lift spoken captions higher, with one for upright, one for sideways and one for Clear display. Caption boldness replaces Normal-weight captions and goes from Light to Extra bold. If you had that switch on, it comes back as Normal (#206).
 
+* **TikTok:** Double tap and Long press have a new choice, Turn Clear display on or off. It hides the buttons over the video the way TikTok's own Clear display does, and the same gesture brings them back (#136).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed now supports TikTok 47.4.3, and only that one. Patch the 47.4.3 APK from APKMirror. PineDrama stays on 47.1.4.

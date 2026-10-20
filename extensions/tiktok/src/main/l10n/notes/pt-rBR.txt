@@ -12,6 +12,8 @@
 
 * **TikTok:** Novas linhas de Altura das legendas em Legendas sobem as legendas faladas, uma com o celular em pé, uma na horizontal e uma com a tela limpa. Espessura das legendas substitui Legendas com espessura normal e vai de Fino a Extranegrito. Se você tinha aquela chave ligada, ela volta como Normal (#206).
 
+* **TikTok:** Toque duplo e Toque longo ganharam uma opção nova, Ligar ou desligar a tela limpa. Ela esconde os botões sobre o vídeo como a tela limpa do próprio TikTok, e o mesmo gesto traz eles de volta (#136).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** O Hushfeed agora é compatível com o TikTok 47.4.3, e só com essa versão. Aplique o patch no APK 47.4.3 do APKMirror. O PineDrama continua no 47.1.4.
