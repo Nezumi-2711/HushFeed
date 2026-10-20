@@ -10,6 +10,8 @@
 
 * **TikTok:** Un nuevo interruptor de Región, Mantener Para ti con tu SIM real, deja que la búsqueda de stickers y PineDrama vean la SIM que elegiste mientras Para ti pide vídeos con la SIM de tu teléfono. Necesita el parche Region spoof en tu paquete (#214, #215).
 
+* **TikTok:** Nuevas filas de Altura de los subtítulos en Subtítulos suben los subtítulos hablados, una con el teléfono en vertical, otra en horizontal y otra con los controles ocultos. Grosor de los subtítulos sustituye a Subtítulos con grosor normal y va de Fino a Extranegrita. Si tenías ese interruptor activado, vuelve como Normal (#206).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed ahora es compatible con TikTok 47.4.3, y solo con esa versión. Parchea el APK 47.4.3 de APKMirror. PineDrama sigue en 47.1.4.

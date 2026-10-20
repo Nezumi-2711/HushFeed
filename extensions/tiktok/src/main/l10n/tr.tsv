@@ -2163,8 +2163,18 @@ Show the country as a flag	Ülkeyi bayrakla göster
 Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.	Ülkenin iki harfi yerine bayrağını, içerik üreticisinin adının ve yorumun saatinin yanında gösterir.
 Full long-press menu in search results	Arama sonuçlarında tam uzun basma menüsü
 A long press on a video you opened from search opens the same menu as on For You. It needs Long press on TikTok default.	Aramadan açtığın bir videoya uzun basmak, Senin İçin'deki menünün aynısını açar. Uzun basma TikTok varsayılanında olmalıdır.
-Normal-weight captions	Normal kalınlıkta altyazılar
-Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.	Konuşma altyazılarını TikTok'un kalın yazısı yerine normal kalınlıkta göster. Bir sonraki altyazıdan itibaren geçerli olur.
+Caption height	Altyazı yüksekliği
+Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.	Telefon dikken konuşma altyazılarını TikTok'un konumunun üstüne kaldırır. TikTok'un konumu için 0, en fazla %1$d kullan.
+Caption height in landscape	Yatayda altyazı yüksekliği
+Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.	Telefon yatayken konuşma altyazılarını TikTok'un konumunun üstüne kaldırır. TikTok'un konumu için 0, en fazla %1$d kullan.
+Caption boldness	Altyazı kalınlığı
+Light	İnce
+Medium	Orta
+Semi-bold	Yarı kalın
+Bold	Kalın
+Extra bold	Ekstra kalın
+Caption height in Clear display	Temiz ekranda altyazı yüksekliği
+Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.	Temiz ekranda tutulan altyazıyı olağan konumunun üstüne kaldırır. Olağan konum için 0, en fazla %1$d kullan.
 The LIVE recording TikTok closed on couldn't be saved. Its unfinished file was cleared.	TikTok kapanınca yarıda kalan LIVE kaydı kaydedilemedi. Yarım kalan dosya silindi.
 Also on opened videos	Açılan videolarda da
 Hide the search bar at the top of videos you open from search, a profile or your watch history. The Back button stays.	Aramadan, bir profilden veya izleme geçmişinden açtığın videoların üstündeki arama çubuğunu gizle. Geri düğmesi kalır.

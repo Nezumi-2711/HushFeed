@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import app.morphe.extension.shared.settings.IntegerSetting;
 import app.morphe.extension.tiktok.captions.CaptionStyle;
 import app.morphe.extension.tiktok.feed.BurnInGuard;
 import app.morphe.extension.tiktok.feed.FeedTextSize;
@@ -563,15 +564,33 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             };
             captionSize.zeroMeans("TikTok's size");
             addPreference(captionSize);
-            addPreference(new TogglePreference(context, "Normal-weight captions",
-                    "Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.",
-                    Settings.CAPTION_REGULAR_WEIGHT));
+            addPreference(captionHeight(context, "Caption height",
+                    "Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.",
+                    Settings.CAPTION_BOTTOM_OFFSET));
+            addPreference(captionHeight(context, "Caption height in landscape",
+                    "Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.",
+                    Settings.CAPTION_LANDSCAPE_OFFSET));
+            addPreference(new ChoicePreference(context, "Caption boldness", Settings.CAPTION_FONT_WEIGHT,
+                    new String[]{"TikTok default", "Light", "Normal", "Medium", "Semi-bold", "Bold", "Extra bold"},
+                    new String[]{"default", "300", "400", "500", "600", "700", "800"}));
             addPreference(new ChoicePreference(context, "Caption background", Settings.CAPTION_BACKGROUND,
                     new String[]{"TikTok default", "Transparent", "Dark", "Black"},
                     new String[]{"default", "transparent", "dark", "black"}));
             addPreference(new TogglePreference(context, "Keep captions in Clear display",
                     "Show the current spoken caption while the other controls are hidden.", Settings.KEEP_CAPTIONS_CLEAR_DISPLAY));
+            addPreference(captionHeight(context, "Caption height in Clear display",
+                    "Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.",
+                    Settings.CAPTION_CLEAR_DISPLAY_OFFSET));
         }
+    }
+
+    private static NumberInputPreference captionHeight(Context context, String title, String summary, IntegerSetting setting) {
+        NumberInputPreference height = new NumberInputPreference(context, title,
+                L10n.f(context, summary, CaptionStyle.MAX_HEIGHT_DP), setting, "%1$s dp", "%1$s dp") {
+            @Override protected int clamp(int value) { return CaptionStyle.clampHeight(value); }
+        };
+        height.zeroMeans("Default");
+        return height;
     }
 
     private void addClearDisplay(Context context) {

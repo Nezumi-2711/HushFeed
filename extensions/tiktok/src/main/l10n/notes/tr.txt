@@ -10,6 +10,8 @@
 
 * **TikTok:** Yeni bir Bölge anahtarı, Senin İçin akışını gerçek SIM'de tut, çıkartma aramasının ve PineDrama'nın seçtiğin SIM'i görmesini sağlarken Senin İçin telefonunun kendi SIM'iyle video ister. Paketinde Region spoof yamasının olması gerekir (#214, #215).
 
+* **TikTok:** Altyazılar altındaki yeni Altyazı yüksekliği satırları konuşma altyazılarını yukarı kaldırır, biri dik, biri yatay, biri temiz ekran için. Altyazı kalınlığı, Normal kalınlıkta altyazılar anahtarının yerini alır ve İnce'den Ekstra kalın'a kadar gider. O anahtar açıksa Normal olarak gelir (#206).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed artık TikTok 47.4.3'ü destekliyor, yalnızca bu sürümü. APKMirror'dan 47.4.3 APK'sını yamala. PineDrama 47.1.4'te kalıyor.

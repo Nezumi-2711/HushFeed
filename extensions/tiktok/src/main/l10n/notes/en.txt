@@ -10,6 +10,8 @@
 
 * **TikTok:** A new Region switch, Keep the For You feed on your real SIM, lets sticker search and PineDrama see the SIM you set while For You asks for videos with your phone's own SIM. It needs the Region spoof patch in your bundle (#214, #215).
 
+* **TikTok:** New Caption height rows under Captions lift spoken captions higher, with one for upright, one for sideways and one for Clear display. Caption boldness replaces Normal-weight captions and goes from Light to Extra bold. If you had that switch on, it comes back as Normal (#206).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed now supports TikTok 47.4.3, and only that one. Patch the 47.4.3 APK from APKMirror. PineDrama stays on 47.1.4.

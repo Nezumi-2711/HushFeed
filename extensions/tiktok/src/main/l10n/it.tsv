@@ -2163,8 +2163,18 @@ Show the country as a flag	Mostra il paese come bandiera
 Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.	Mostra la bandiera del paese al posto delle sue due lettere, accanto al nome del creator e all'ora di un commento.
 Full long-press menu in search results	Menu completo con pressione prolungata nei risultati di ricerca
 A long press on a video you opened from search opens the same menu as on For You. It needs Long press on TikTok default.	Una pressione prolungata su un video aperto dalla ricerca apre lo stesso menu di Per te. Richiede che Pressione prolungata sia su Predefinito di TikTok.
-Normal-weight captions	Sottotitoli con spessore normale
-Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.	Mostra i sottotitoli parlati con spessore normale invece del grassetto di TikTok. Si applica al sottotitolo successivo.
+Caption height	Altezza dei sottotitoli
+Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.	Alza i sottotitoli parlati sopra la posizione di TikTok con il telefono in verticale. Usa 0 per la posizione di TikTok, o fino a %1$d.
+Caption height in landscape	Altezza dei sottotitoli in orizzontale
+Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.	Alza i sottotitoli parlati sopra la posizione di TikTok con il telefono in orizzontale. Usa 0 per la posizione di TikTok, o fino a %1$d.
+Caption boldness	Spessore dei sottotitoli
+Light	Sottile
+Medium	Medio
+Semi-bold	Semigrassetto
+Bold	Grassetto
+Extra bold	Extra grassetto
+Caption height in Clear display	Altezza dei sottotitoli nella vista pulita
+Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.	Alza il sottotitolo mantenuto nella vista pulita sopra la sua posizione abituale. Usa 0 per la posizione abituale, o fino a %1$d.
 The LIVE recording TikTok closed on couldn't be saved. Its unfinished file was cleared.	Non è stato possibile salvare la registrazione LIVE interrotta dalla chiusura di TikTok. Il file incompleto è stato eliminato.
 Also on opened videos	Anche nei video aperti
 Hide the search bar at the top of videos you open from search, a profile or your watch history. The Back button stays.	Nascondi la barra di ricerca in cima ai video che apri dalla ricerca, da un profilo o dalla cronologia delle visualizzazioni. Il pulsante Indietro resta.

@@ -299,6 +299,7 @@ Blocked sound ids,Blocked sound ids
 Blocked sound names,Blocked sound names
 Blocked sounds,Blocked sounds
 Blocking,Blocking
+Bold,Bold
 Bottom tabs to keep,Bottom tabs to keep
 Brightness,Brightness
 Bring back TikTok's translation,Bring back TikTok's translation
@@ -320,6 +321,10 @@ Can't check yet: %1$s,Can't check yet: %1$s
 Cancel,Cancel
 Caption above comments,Caption above comments
 Caption background,Caption background
+Caption boldness,Caption boldness
+Caption height,Caption height
+Caption height in Clear display,Caption height in Clear display
+Caption height in landscape,Caption height in landscape
 Caption languages,Caption languages
 Caption text size,Caption text size
 Captions,Captions
@@ -522,7 +527,6 @@ Downloads,Downloads
 Drag up or down along the left or right edge of a video to change what that edge strip is set to below. By default that's the screen brightness on the left and the volume on the right. Swiping anywhere else still scrolls the feed.,Drag up or down along the left or right edge of a video to change what that edge strip is set to below. By default that's the screen brightness on the left and the volume on the right. Swiping anywhere else still scrolls the feed.
 Drama and Series,Drama and Series
 "Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are.","Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are."
-Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.,Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.
 Each area shows how many of the things Hushfeed looks for were found in this TikTok and how many are missing.,Each area shows how many of the things Hushfeed looks for were found in this TikTok and how many are missing.
 Easier comment likes,Easier comment likes
 Edge strip width,Edge strip width
@@ -557,6 +561,7 @@ Export loaded values,Export loaded values
 Exported %1$d comments and %2$d replies,Exported %1$d comments and %2$d replies
 Exported %1$d loaded values,Exported %1$d loaded values
 Exported 1 loaded value,Exported 1 loaded value
+Extra bold,Extra bold
 "Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. At 0 the buttons and caption are hidden, and the tabs stay at 10.","Fade the buttons, caption and tabs over the video to this level instead of hiding them. 100 leaves them as TikTok draws them. Faded controls still take taps. At 0 the buttons and caption are hidden, and the tabs stay at 10."
 Fade the feed out before the hold,Fade the feed out before the hold
 Fade the video controls,Fade the video controls
@@ -954,6 +959,10 @@ Let the video reach the bottom of the screen on the main feed and show the tabs 
 "Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.","Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are."
 Licenses,Licenses
 Lift text length limits,Lift text length limits
+"Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.","Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d."
+"Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.","Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d."
+"Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.","Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d."
+Light,Light
 Like,Like
 Like the video,Like the video
 Liked videos,Liked videos
@@ -1018,6 +1027,7 @@ Maximum views per like,Maximum views per like
 Media,Media
 Media config (VE),Media config (VE)
 Media save,Media save
+Medium,Medium
 Message,Message
 "Message bubble colors, Inbox archive and sharing to more chats","Message bubble colors, Inbox archive and sharing to more chats"
 "Messages, profiles and search still work.","Messages, profiles and search still work."
@@ -1091,7 +1101,6 @@ None of these gates had an override to reset.,None of these gates had an overrid
 None of these gates takes a true or false value.,None of these gates takes a true or false value.
 None recorded,None recorded
 Normal,Normal
-Normal-weight captions,Normal-weight captions
 "Not a handle or id, so ignored: %1$s","Not a handle or id, so ignored: %1$s"
 "Not a part Hushfeed fills in, so it's kept as typed: %1$s","Not a part Hushfeed fills in, so it's kept as typed: %1$s"
 Not blocked,Not blocked
@@ -1497,6 +1506,7 @@ Select,Select
 Select at least one field.,Select at least one field.
 Select every tab,Select every tab
 Selected,Selected
+Semi-bold,Semi-bold
 Send TikTok through a proxy,Send TikTok through a proxy
 Send it now,Send it now
 Send links to another app,Send links to another app

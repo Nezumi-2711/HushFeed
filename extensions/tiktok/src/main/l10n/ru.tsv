@@ -2343,8 +2343,18 @@ Show the country as a flag	Показывать страну флагом
 Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.	Показывает флаг страны вместо двух букв рядом с именем автора и со временем комментария.
 Full long-press menu in search results	Полное меню долгого нажатия в результатах поиска
 A long press on a video you opened from search opens the same menu as on For You. It needs Long press on TikTok default.	Долгое нажатие на видео, открытое из поиска, открывает то же меню, что и в «Рекомендациях». Для этого в настройке «Долгое нажатие» должно быть выбрано «Стандарт TikTok».
-Normal-weight captions	Субтитры обычной толщины
-Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.	Показывать субтитры речи обычным начертанием вместо жирного шрифта TikTok. Применяется к следующей строке субтитров.
+Caption height	Высота субтитров
+Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.	Поднимает субтитры над местом TikTok, когда телефон стоит вертикально. Укажите 0 для места TikTok или до %1$d.
+Caption height in landscape	Высота субтитров в горизонтальном положении
+Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.	Поднимает субтитры над местом TikTok, когда телефон лежит горизонтально. Укажите 0 для места TikTok или до %1$d.
+Caption boldness	Жирность субтитров
+Light	Тонкая
+Medium	Средняя
+Semi-bold	Полужирная
+Bold	Жирная
+Extra bold	Сверхжирная
+Caption height in Clear display	Высота субтитров в чистом виде
+Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.	Поднимает оставленную строку субтитров в чистом виде над её обычным местом. Укажите 0 для обычного места или до %1$d.
 The LIVE recording TikTok closed on couldn't be saved. Its unfinished file was cleared.	Не удалось сохранить запись LIVE, прерванную закрытием TikTok. Незавершённый файл удалён.
 Also on opened videos	Также в открытых видео
 Hide the search bar at the top of videos you open from search, a profile or your watch history. The Back button stays.	Скрывать строку поиска вверху видео, открытых из поиска, профиля или истории просмотров. Кнопка «Назад» остаётся.

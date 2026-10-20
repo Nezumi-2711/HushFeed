@@ -15238,16 +15238,34 @@
     "row": "Caption background"
    },
    {
-    "key": "caption_regular_weight",
-    "default": false,
-    "type": "bool",
-    "row": "Normal-weight captions"
+    "key": "caption_bottom_offset",
+    "default": 0,
+    "type": "int",
+    "row": "Caption height"
+   },
+   {
+    "key": "caption_landscape_offset",
+    "default": 0,
+    "type": "int",
+    "row": "Caption height in landscape"
+   },
+   {
+    "key": "caption_font_weight",
+    "default": "default",
+    "type": "string",
+    "row": "Caption boldness"
    },
    {
     "key": "keep_captions_clear_display",
     "default": false,
     "type": "bool",
     "row": "Keep captions in Clear display"
+   },
+   {
+    "key": "caption_clear_display_offset",
+    "default": 0,
+    "type": "int",
+    "row": "Caption height in Clear display"
    },
    {
     "key": "download_subtitles",

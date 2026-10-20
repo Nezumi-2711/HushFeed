@@ -2163,8 +2163,18 @@ Show the country as a flag	Mostrar el país como bandera
 Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.	Muestra la bandera del país en lugar de sus dos letras, junto al nombre del creador y a la hora de un comentario.
 Full long-press menu in search results	Menú completo de pulsación larga en los resultados de búsqueda
 A long press on a video you opened from search opens the same menu as on For You. It needs Long press on TikTok default.	Una pulsación larga en un video que abriste desde la búsqueda abre el mismo menú que en Para ti. Requiere Pulsación larga en Predeterminado de TikTok.
-Normal-weight captions	Subtítulos con grosor normal
-Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.	Mostrar los subtítulos hablados con grosor normal en lugar de la negrita de TikTok. Se aplica al siguiente subtítulo.
+Caption height	Altura de los subtítulos
+Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.	Sube los subtítulos hablados por encima del sitio de TikTok con el teléfono en vertical. Usa 0 para el sitio de TikTok, o hasta %1$d.
+Caption height in landscape	Altura de los subtítulos en horizontal
+Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.	Sube los subtítulos hablados por encima del sitio de TikTok con el teléfono en horizontal. Usa 0 para el sitio de TikTok, o hasta %1$d.
+Caption boldness	Grosor de los subtítulos
+Light	Fino
+Medium	Medio
+Semi-bold	Seminegrita
+Bold	Negrita
+Extra bold	Extranegrita
+Caption height in Clear display	Altura de los subtítulos con los controles ocultos
+Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.	Sube el subtítulo que se mantiene con los controles ocultos por encima de su sitio habitual. Usa 0 para el sitio habitual, o hasta %1$d.
 The LIVE recording TikTok closed on couldn't be saved. Its unfinished file was cleared.	No se pudo guardar la grabación de LIVE que se cortó al cerrarse TikTok. Se borró el archivo sin terminar.
 Also on opened videos	También en los videos abiertos
 Hide the search bar at the top of videos you open from search, a profile or your watch history. The Back button stays.	Oculta la barra de búsqueda de la parte superior de los videos que abres desde la búsqueda, un perfil o tu historial de visualización. El botón Atrás se mantiene.

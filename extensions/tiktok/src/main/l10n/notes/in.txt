@@ -10,6 +10,8 @@
 
 * **TikTok:** Sakelar Wilayah baru, Biarkan Untuk Kamu memakai SIM asli, membuat pencarian stiker dan PineDrama melihat SIM yang kamu pilih, sementara Untuk Kamu meminta video dengan SIM ponselmu sendiri. Perlu patch Region spoof di paketmu (#214, #215).
 
+* **TikTok:** Baris Tinggi keterangan baru di Keterangan menaikkan teks ucapan, satu untuk ponsel tegak, satu untuk mendatar, dan satu untuk tampilan bersih. Ketebalan keterangan menggantikan Keterangan dengan ketebalan normal, dari Tipis sampai Sangat tebal. Kalau sakelar itu dulu aktif, nilainya jadi Normal (#206).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed kini mendukung TikTok 47.4.3, dan hanya versi itu. Patch APK 47.4.3 dari APKMirror. PineDrama tetap di 47.1.4.

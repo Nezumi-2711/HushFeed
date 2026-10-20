@@ -31,6 +31,7 @@ Every Hushfeed release, newest first.
 * **Hushfeed settings:** `Undo last restore or reset` also gives the Feature Gate Lab its own Undo back. A restore that carried Lab rules threw that away, so after undoing the restore you couldn't take back the Lab change you'd made just before it.
 * **TikTok:** Tests now run a whole `Save videos without sound` save of a DASH video against a stand-in server. The saved file has to be TikTok's picture stream exactly as it arrived, with no sound track, the same rotation and length, and nothing left behind in the cache.
 * **TikTok:** New `Hide subscriber-only videos` switch under Feed filter. It hides the posts only a creator's subscribers can watch, the ones with a lock on them, from the feed, search and profile grids. A creator on your exceptions list keeps theirs, and your own posts always stay (#219).
+* **TikTok:** Three new `Caption height` rows under Captions lift spoken captions higher, up to 300 dp: one while the phone is upright, one while it's sideways, and one for the line `Keep captions in Clear display` leaves on screen. Each only moves its own caption, and 0 puts it back exactly where TikTok had it. `Caption boldness` replaces the `Normal-weight captions` switch with seven choices from Light to Extra bold, and reaches the kept Clear display line too. If you had the old switch on, it comes back as Normal, from a settings backup as well. Thanks to OmerKurdi79, whose branch these come from (#206).
 
 ## 0.76.0 (2026-10-18)
 

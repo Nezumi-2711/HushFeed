@@ -521,7 +521,6 @@ Downloads,下载
 Drag up or down along the left or right edge of a video to change what that edge strip is set to below. By default that's the screen brightness on the left and the volume on the right. Swiping anywhere else still scrolls the feed.,沿着视频的左边缘或右边缘向上或向下拖动以更改边缘条在下方的设置。默认情况下，左侧是屏幕亮度，右侧是音量。在其他地方滑动仍然会滚动信息流.
 Drama and Series,戏剧和连续剧
 "Draw a larger handle and a slightly thicker line on the progress bar, so it's easier to see where you are.",在进度条上画一个更大的手柄和一条稍粗的线，这样就更容易看到您所在的位置.
-Draw spoken captions at regular weight instead of TikTok's bold. Applies to the next caption.,以常规粗细绘制语音字幕，而不是 TikTok 的粗体。适用于下一个标题.
 Each area shows how many of the things Hushfeed looks for were found in this TikTok and how many are missing.,每个区域显示在这个 TikTok 中找到了 Hushfeed 寻找的东西以及丢失了多少东西.
 Easier comment likes,评论点赞更简单
 Edge strip width,封边条宽度
@@ -1089,7 +1088,18 @@ None of these gates had an override to reset.,这些门都没有可以重置的�
 None of these gates takes a true or false value.,这些门都不采用 true 或 false 值.
 None recorded,没有记录
 Normal,正常
-Normal-weight captions,正常粗细的字幕
+Caption height,字幕高度
+"Lifts spoken captions above TikTok's spot while the phone is upright. Use 0 for TikTok's spot, or up to %1$d.",手机竖直时，把语音字幕抬到 TikTok 的位置之上。填 0 使用 TikTok 的位置，最高 %1$d.
+Caption height in landscape,横屏字幕高度
+"Lifts spoken captions above TikTok's spot while the phone is sideways. Use 0 for TikTok's spot, or up to %1$d.",手机横置时，把语音字幕抬到 TikTok 的位置之上。填 0 使用 TikTok 的位置，最高 %1$d.
+Caption boldness,字幕粗细
+Light,细
+Medium,中等
+Semi-bold,半粗
+Bold,粗
+Extra bold,特粗
+Caption height in Clear display,显示清晰时的字幕高度
+"Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.",显示清晰时，把保留的字幕抬到通常位置之上。填 0 使用通常位置，最高 %1$d.
 "Not a handle or id, so ignored: %1$s",不是句柄或 ID，因此被忽略：%1$s
 "Not a part Hushfeed fills in, so it's kept as typed: %1$s",Hushfeed 部分未填写，因此保持键入的状态：%1$s
 Not blocked,没有被阻止

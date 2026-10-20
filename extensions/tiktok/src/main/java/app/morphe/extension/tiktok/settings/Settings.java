@@ -101,9 +101,24 @@ public class Settings extends BaseSettings {
             "subtitle_language", "original", false, Setting.parent(DOWNLOAD_SUBTITLES));
     public static final IntegerSetting CAPTION_TEXT_SIZE =
             new IntegerSetting("caption_text_size", 0).withRange(0, 48);
+    // How far a spoken caption is lifted above TikTok's spot, in dp, with the phone upright and
+    // turned sideways (#206, from OmerKurdi79's branch, whose keys these are).
+    public static final IntegerSetting CAPTION_BOTTOM_OFFSET =
+            new IntegerSetting("caption_bottom_offset", 0).withRange(0, 300);
+    public static final IntegerSetting CAPTION_LANDSCAPE_OFFSET =
+            new IntegerSetting("caption_landscape_offset", 0).withRange(0, 300);
+    /** "default" for TikTok's own weight, or a font weight from 300 to 800. */
+    public static final StringSetting CAPTION_FONT_WEIGHT = new StringSetting("caption_font_weight", "default");
+    /**
+     * The Normal-weight captions switch, which Caption boldness replaced. No row reads it now: it
+     * stays so a backup from before the picker still restores, and the static block below and
+     * SettingsBackup turn it into the picker's 400.
+     */
     public static final BooleanSetting CAPTION_REGULAR_WEIGHT = new BooleanSetting("caption_regular_weight", FALSE);
     public static final StringSetting CAPTION_BACKGROUND = new StringSetting("caption_background", "default");
     public static final BooleanSetting KEEP_CAPTIONS_CLEAR_DISPLAY = new BooleanSetting("keep_captions_clear_display", FALSE);
+    public static final IntegerSetting CAPTION_CLEAR_DISPLAY_OFFSET = new IntegerSetting(
+            "caption_clear_display_offset", 0, Setting.parent(KEEP_CAPTIONS_CLEAR_DISPLAY)).withRange(0, 300);
     public static final BooleanSetting ALLOW_SCREEN_CAPTURE = new BooleanSetting("allow_screen_capture", FALSE, true);
     public static final BooleanSetting SYSTEM_FONT = new BooleanSetting("system_font", FALSE, true);
     public static final BooleanSetting SYSTEM_EMOJI = new BooleanSetting("system_emoji", FALSE, true);
@@ -1248,6 +1263,14 @@ public class Settings extends BaseSettings {
             DOWNLOAD_STICKER_PATH.save(legacyPath);
             DOWNLOAD_PATHS_MIGRATED.save(TRUE);
         }
+        migrateCaptionWeight();
+    }
+
+    /** A Normal-weight captions switch left on becomes Caption boldness's Normal, once. */
+    static void migrateCaptionWeight() {
+        if (!CAPTION_REGULAR_WEIGHT.savedValue()) return;
+        if ("default".equals(CAPTION_FONT_WEIGHT.savedValue())) CAPTION_FONT_WEIGHT.save("400");
+        CAPTION_REGULAR_WEIGHT.save(FALSE);
     }
 
     /**
