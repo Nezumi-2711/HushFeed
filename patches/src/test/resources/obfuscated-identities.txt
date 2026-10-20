@@ -80,7 +80,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.ja
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|fy6
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|kp7
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|l7j
-extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|l92
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|l7h
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|omm
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|q4f
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|u2n
