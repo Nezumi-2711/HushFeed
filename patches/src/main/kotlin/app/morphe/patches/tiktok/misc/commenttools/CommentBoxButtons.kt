@@ -14,18 +14,20 @@ import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 internal const val BASE_INPUT_ASSEM = "Lcom/ss/android/ugc/aweme/comment/keyboard/keyboardv2/refactor/BaseInputAssem;"
 internal const val BASE_FAKE_INPUT = "Lcom/ss/android/ugc/aweme/comment/keyboard/keyboardv2/refactor/BaseFakeInput;"
+internal const val KEYBOARD_ICON_GROUP_ASSEM = "Lcom/ss/android/ugc/aweme/comment/keyboard/keyboardv2/refactor/KeyboardIconGroupAssem;"
 internal const val TUX_ICON_VIEW = "Lcom/bytedance/tux/icon/TuxIconView;"
+internal const val GIFT_VIEW_MODEL = "Lcom/ss/android/ugc/aweme/comment/gift/model/GiftViewModel;"
 internal const val COMMENT_BOX_BUTTONS_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/comment/CommentBoxButtons;"
 
 /**
- * The comment box's view setup. Every comment input, the "Add comment..." bar and the one over the
- * keyboard alike, extends BaseInputAssem, and this is where it finds its icon buttons and keeps
- * each in a field. The field names move from build to build.
+ * The comment box's view setup. The "Add comment..." bar extends BaseInputAssem, and this is where
+ * it finds its icon buttons and keeps each in a field. The field names move from build to build.
  */
 internal object CommentInputViewCreatedFingerprint : Fingerprint(
     definingClass = BASE_INPUT_ASSEM,
@@ -42,6 +44,18 @@ internal object FakeInputViewCreatedFingerprint : Fingerprint(
     parameters = listOf("Landroid/view/View;"),
 )
 
+/**
+ * The icon row over the keyboard. On 47.4.3 it's its own assem rather than a BaseInputAssem, with
+ * its own icon fields, and its setup both finds them by id and gives each its click listener, so
+ * the photo and @ buttons still showed there with the switch on (Login2, 2026-10-20).
+ */
+internal object KeyboardIconGroupViewCreatedFingerprint : Fingerprint(
+    definingClass = KEYBOARD_ICON_GROUP_ASSEM,
+    name = "onViewCreated",
+    returnType = "V",
+    parameters = listOf("Landroid/view/View;"),
+)
+
 /** The comment box buttons Hide comment box buttons takes away, each with its extension entry. */
 internal enum class CommentBoxButton(val entry: String) {
     PHOTO("photo"),
@@ -52,19 +66,22 @@ internal enum class CommentBoxButton(val entry: String) {
 /**
  * Which button each icon field is, told by what its click listener does: the photo button logs
  * click_comment_photo, and the @ and gift buttons open the input's MENTION and GIFT panels (the
- * panel enum keeps its constant names). The emoji button opens EMOJI and stays.
+ * panel enum keeps its constant names). Over the keyboard the @ button logs click_comment_at and
+ * the gift button names the gift view model instead. The emoji button opens EMOJI and stays.
+ * [owner] is the class whose icon fields the listeners are wired to.
  */
 internal fun commentBoxButtonFields(
-    fakeInputViewCreated: Method,
+    viewCreated: Method,
+    owner: String = BASE_INPUT_ASSEM,
     classDefOf: (String) -> ClassDef?,
 ): Map<CommentBoxButton, FieldReference> {
-    val instructions = fakeInputViewCreated.implementation?.instructions?.toList()
+    val instructions = viewCreated.implementation?.instructions?.toList()
         ?: throw PatchException("Comment tools: the comment box setup has no body")
     val found = HashMap<CommentBoxButton, MutableList<FieldReference>>()
     instructions.forEachIndexed { index, instruction ->
         if (instruction.opcode != Opcode.IGET_OBJECT) return@forEachIndexed
         val field = instruction.getReference<FieldReference>() ?: return@forEachIndexed
-        if (field.definingClass != BASE_INPUT_ASSEM || field.type != TUX_ICON_VIEW) return@forEachIndexed
+        if (field.definingClass != owner || field.type != TUX_ICON_VIEW) return@forEachIndexed
         val listener = instructions.subList(index + 1, minOf(index + 4, instructions.size))
             .firstOrNull { it.opcode == Opcode.NEW_INSTANCE }
             ?.getReference<TypeReference>()?.type ?: return@forEachIndexed
@@ -81,26 +98,31 @@ internal fun commentBoxButtonFields(
 
 internal fun commentBoxButtonOf(listener: ClassDef): CommentBoxButton? {
     val instructions = listener.methods.flatMap { it.implementation?.instructions ?: emptyList() }
-    if (instructions.any { it.getReference<StringReference>()?.string == "click_comment_photo" }) {
+    val strings = instructions.mapNotNull { it.getReference<StringReference>()?.string }
+    if ("click_comment_photo" in strings) {
         return CommentBoxButton.PHOTO
     }
     val panels = instructions.filter { it.opcode == Opcode.SGET_OBJECT }
         .mapNotNull { it.getReference<FieldReference>() }
         .filter { it.type == it.definingClass }
         .map { it.name }
+    val namesGift = instructions.any { instruction ->
+        instruction.getReference<FieldReference>()?.definingClass == GIFT_VIEW_MODEL ||
+            instruction.getReference<MethodReference>()?.returnType == GIFT_VIEW_MODEL
+    }
     return when {
-        "MENTION" in panels -> CommentBoxButton.MENTION
-        "GIFT" in panels -> CommentBoxButton.GIFT
+        "MENTION" in panels || "click_comment_at" in strings -> CommentBoxButton.MENTION
+        "GIFT" in panels || ("EMOJI" !in panels && namesGift) -> CommentBoxButton.GIFT
         else -> null
     }
 }
 
-/** Where the input's setup stores [field]: the one iput-object of it, by index. */
+/** Where the setup stores [field]: the one iput-object of it, by index. */
 internal fun commentBoxButtonStore(viewCreated: Method, field: FieldReference): Int {
     val stores = viewCreated.implementation!!.instructions.withIndex().filter { (_, instruction) ->
         instruction.opcode == Opcode.IPUT_OBJECT &&
             instruction.getReference<FieldReference>()?.let {
-                it.definingClass == BASE_INPUT_ASSEM && it.name == field.name && it.type == TUX_ICON_VIEW
+                it.definingClass == field.definingClass && it.name == field.name && it.type == TUX_ICON_VIEW
             } == true
     }
     return stores.singleOrNull()?.index ?: throw PatchException(

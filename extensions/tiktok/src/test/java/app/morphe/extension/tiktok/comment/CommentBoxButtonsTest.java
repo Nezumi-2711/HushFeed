@@ -90,6 +90,59 @@ public class CommentBoxButtonsTest {
         assertEquals(View.GONE, gift.getVisibility());
     }
 
+    @Test public void thePhotoSlotGoesWithThePhotoButton() {
+        // Over the keyboard the photo icon sits in a tappable FrameLayout beside a badge that's gone.
+        Settings.HIDE_COMMENT_BOX_BUTTONS.save(true);
+        FrameLayout slot = new FrameLayout(box.getContext());
+        slot.setClickable(true);
+        View photo = new View(box.getContext());
+        View badge = new View(box.getContext());
+        badge.setVisibility(View.GONE);
+        slot.addView(photo);
+        slot.addView(badge);
+        box.addView(slot);
+        CommentBoxButtons.photo(photo);
+        layOut();
+        assertEquals(View.GONE, photo.getVisibility());
+        assertEquals(View.GONE, slot.getVisibility());
+        slot.setVisibility(View.VISIBLE);
+        layOut();
+        assertEquals(View.GONE, slot.getVisibility());
+    }
+
+    @Test public void aRowWithOtherButtonsShowingStays() {
+        Settings.HIDE_COMMENT_BOX_BUTTONS.save(true);
+        FrameLayout row = new FrameLayout(box.getContext());
+        row.setClickable(true);
+        View photo = new View(box.getContext());
+        View emoji = new View(box.getContext());
+        row.addView(photo);
+        row.addView(emoji);
+        box.addView(row);
+        CommentBoxButtons.photo(photo);
+        layOut();
+        assertEquals(View.GONE, photo.getVisibility());
+        assertEquals(View.VISIBLE, row.getVisibility());
+        FrameLayout tapless = new FrameLayout(box.getContext());
+        View icon = new View(box.getContext());
+        tapless.addView(icon);
+        box.addView(tapless);
+        CommentBoxButtons.photo(icon);
+        layOut();
+        assertEquals(View.VISIBLE, tapless.getVisibility());
+        FrameLayout held = new FrameLayout(box.getContext());
+        held.setClickable(true);
+        View heldPhoto = new View(box.getContext());
+        View spinner = new View(box.getContext());
+        spinner.setVisibility(View.INVISIBLE);
+        held.addView(heldPhoto);
+        held.addView(spinner);
+        box.addView(held);
+        CommentBoxButtons.photo(heldPhoto);
+        layOut();
+        assertEquals(View.VISIBLE, held.getVisibility());
+    }
+
     @Test public void handingTheSameButtonOverTwiceIsHarmless() {
         Settings.HIDE_COMMENT_BOX_BUTTONS.save(true);
         View photo = button();

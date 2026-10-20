@@ -268,6 +268,13 @@ val commentToolsPatch = bytecodePatch(
                 CommentInputViewCreatedFingerprint.method.resolveCommentBoxButtons(fields)
             },
             {
+                // The row over the keyboard is its own assem, which wires and stores its own icons.
+                val setup = KeyboardIconGroupViewCreatedFingerprint.method
+                setup.resolveCommentBoxButtons(
+                    commentBoxButtonFields(setup, KEYBOARD_ICON_GROUP_ASSEM) { classDefByOrNull(it) },
+                )
+            },
+            {
                 // Tapping more under a video can open its comments with the caption at the top
                 // (upstream #156). The caption's expand asks first and, on yes, Double-tap
                 // controls' comment press opens the sheet. TikTok's comment list starts with the
