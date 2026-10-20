@@ -60,6 +60,8 @@ import org.junit.Test
  * list's bottom row tints its info icon through the context the list hands it, so that context
  * and the row's text go to the extension before the row runs. LIVE's list rows skip the list's
  * inflater, so the row binders' base asks the extension for each row before TikTok's code runs.
+ * LIVE's web page props pick the web pages' "trait_mode" from the provider's dark answer, so each
+ * of their asks sits between two extension calls that stand the provider hook down.
  */
 class LiveDarkPanelsAnchorsTest {
     private fun classes(apk: java.io.File): Map<String, ClassDef> {
@@ -480,6 +482,105 @@ class LiveDarkPanelsAnchorsTest {
         assertEquals("the null check still skips both", 5, (code[1] as BuilderOffsetInstruction).target.location.index)
         assertEquals(Opcode.RETURN_VOID, code[5].opcode)
         assertThrows(PatchException::class.java) { hookGroupChat(listOf(groupChatRow("nop"))) }
+    }
+
+    @Test
+    fun `each declared build keeps the web page props the web hook brackets`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val found = classes.values.flatMap { owner -> owner.methods.filter { LiveWebPropsFingerprint.takes(it, owner) } }
+            assertEquals("${apk.name}: the web page props", 1, found.size)
+            val props = found.single()
+            val asks = liveDarkAsks(props)
+            val original = props.implementation!!.instructions.toList()
+            val calls = asks.map { (original[it] as ReferenceInstruction).reference as MethodReference }
+            if ("47.4.3" in apk.name) {
+                // X/0K18 asks X/09QZ for LJIJJLI (the provider's dark answer) twice, LJIJ and
+                // LJIJI once each (2026-10-20).
+                assertEquals("${apk.name}: the props", "LX/0K18;", props.definingClass)
+                assertEquals("${apk.name}: the asks", listOf("LJIJJLI", "LJIJ", "LJIJJLI", "LJIJI"), calls.map { it.name })
+            }
+
+            // Some ask reaches the provider's dark answer the guard hooks: its method calls one of
+            // that name and shape on an interface the provider implements.
+            val provider = classes.values.firstNotNullOf { owner ->
+                owner.methods.firstOrNull { LiveDarkThemeFingerprint.takes(it, owner) }
+            }
+            val interfaces = mutableSetOf<String>()
+            val pending = ArrayDeque(classes.getValue(provider.definingClass).interfaces)
+            while (pending.isNotEmpty()) {
+                val type = pending.removeFirst()
+                if (interfaces.add(type)) classes[type]?.interfaces?.let(pending::addAll)
+            }
+            val reaches = calls.any { call ->
+                val asked = classes[call.definingClass]?.methods?.firstOrNull { it.name == call.name &&
+                    it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;") }
+                asked?.implementation?.instructions?.toList().orEmpty().any {
+                    val inner = (it as? ReferenceInstruction)?.reference as? MethodReference
+                    it.opcode == Opcode.INVOKE_INTERFACE && inner != null && inner.name == provider.name &&
+                        inner.definingClass in interfaces && inner.returnType == "Z"
+                }
+            }
+            assertTrue("${apk.name}: no ask reaches ${provider.definingClass}->${provider.name}", reaches)
+
+            // The hook as the patch writes it: each ask between the extension's two calls, and a
+            // branch onto an ask lands on the first of them.
+            val before = MutableMethod(props)
+            val targeted = before.implementation!!.instructions.filterIsInstance<BuilderOffsetInstruction>()
+                .map { it.target.location.index }.toSet()
+            val hooked = MutableMethod(props)
+            hookWebProps(hooked)
+            val code = hooked.implementation!!.instructions.toList()
+            assertEquals("${apk.name}: the props grow by two per ask", original.size + 2 * asks.size, code.size)
+            val targets = code.filterIsInstance<BuilderOffsetInstruction>().map { it.target.location.index }.toSet()
+            asks.forEachIndexed { done, at ->
+                val start = at + 2 * done
+                val named = listOf(start, start + 3).map { ((code[it] as ReferenceInstruction).reference as MethodReference).name }
+                assertEquals("${apk.name}: ask at $at", listOf("askingLiveDark", "askedLiveDark"), named)
+                assertEquals("${apk.name}: ask at $at", calls[done], (code[start + 1] as ReferenceInstruction).reference)
+                assertEquals(Opcode.MOVE_RESULT, code[start + 2].opcode)
+                assertTrue("${apk.name}: a branch skips the first call at $at", start + 1 !in targets)
+                if (at in targeted) assertTrue("${apk.name}: the branch onto $at", start in targets)
+            }
+            if ("47.4.3" in apk.name) assertTrue("${apk.name}: the second LJIJJLI is a branch target", asks[2] in targeted)
+            assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
+        }
+    }
+
+    /** Web page props that ask a host after loading it and a context, then run [body]. */
+    private fun webProps(body: String) =
+        MutableMethod(ImmutableMethod("Lapp/morphe/Props;", "LIZ", emptyList(), "Ljava/util/Map;", AccessFlags.PUBLIC.value or AccessFlags.STATIC.value,
+            null, null, ImmutableMethodImplementation(3, emptyList(), null, null))).apply {
+            addInstructionsWithLabels(0, """
+                const/4 v0, 0x0
+                sget-object v1, Lapp/morphe/Host;->it:Lapp/morphe/Host;
+                sget-object v2, Lapp/morphe/Host;->context:Landroid/content/Context;
+                $body
+                return-object v0
+            """)
+        }
+
+    @Test
+    fun `the web hook takes only answers the props keep`() {
+        val ask = "invoke-virtual {v1, v2}, Lapp/morphe/Host;->dark(Landroid/content/Context;)Z\nmove-result v0"
+        assertEquals(listOf(3, 5), liveDarkAsks(webProps("$ask\n$ask")))
+        assertEquals("a dropped answer", emptyList<Int>(), liveDarkAsks(webProps(
+            "invoke-virtual {v1, v2}, Lapp/morphe/Host;->dark(Landroid/content/Context;)Z\nnop")))
+        assertEquals("a static call", emptyList<Int>(), liveDarkAsks(webProps(
+            "invoke-static {v2}, Lapp/morphe/Host;->dark(Landroid/content/Context;)Z\nmove-result v0")))
+        assertEquals("another answer type", emptyList<Int>(), liveDarkAsks(webProps(
+            "invoke-virtual {v1, v2}, Lapp/morphe/Host;->theme(Landroid/content/Context;)I\nmove-result v0")))
+        assertEquals("other parameters", emptyList<Int>(), liveDarkAsks(webProps(
+            "invoke-virtual {v1}, Lapp/morphe/Host;->dark()Z\nmove-result v0")))
+        assertThrows(PatchException::class.java) { hookWebProps(webProps(ask)) }
+
+        val hooked = webProps("$ask\nif-eqz v0, :second\nnop\n:second\n$ask")
+        hookWebProps(hooked)
+        val code = hooked.implementation!!.instructions.toList()
+        val named = listOf(3, 6, 9, 12).map { ((code[it] as ReferenceInstruction).reference as MethodReference).name }
+        assertEquals(listOf("askingLiveDark", "askedLiveDark", "askingLiveDark", "askedLiveDark"), named)
+        assertEquals("the branch lands on the first call", 9, (code[7] as BuilderOffsetInstruction).target.location.index)
+        assertEquals(Opcode.RETURN_OBJECT, code[13].opcode)
     }
 
     @Test

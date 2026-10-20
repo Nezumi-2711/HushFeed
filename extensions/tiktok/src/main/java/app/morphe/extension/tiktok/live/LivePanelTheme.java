@@ -57,7 +57,7 @@ public final class LivePanelTheme {
     /** How far up a page's parent fragments the walk looks for a stock panel. */
     private static final int MAX_PARENTS = 8;
     private static final Map<Class<?>, Integer> PANEL_TYPES = new ConcurrentHashMap<>();
-    /** Set while a stock panel asks TikTok's own provider answer for its overlay. */
+    /** Set while a stock panel asks TikTok's own provider answer for its overlay, or LIVE's web page props ask it. */
     private static final ThreadLocal<Boolean> STOCK_ANSWER = new ThreadLocal<>();
     /**
      * Set once a stock panel has inflated with the switch on. Until then no fragment can sit under
@@ -598,7 +598,25 @@ public final class LivePanelTheme {
         return null;
     }
 
-    /** True while a stock panel asks TikTok's own provider answer, which the hook then leaves alone. */
+    /**
+     * Called by LIVE's web page props right before each question they ask the LIVE dark answer.
+     * Its answer picks the props' "trait_mode", which TikTok's web pages in a room draw their
+     * colors from. TikTok's own answer in a room is always light, and those pages' dark colors are
+     * unfinished: with the provider hook answering dark, the shop room's Top customers sheet went
+     * dark with its tab titles still dark on it (S22, 2026-10-20). The provider hook stands down
+     * until {@link #askedLiveDark()}, so web pages keep TikTok's own answer, the way the daily
+     * ranking keeps its light sheet.
+     */
+    public static void askingLiveDark() {
+        STOCK_ANSWER.set(Boolean.TRUE);
+    }
+
+    /** Called right after the question {@link #askingLiveDark()} came before; the provider hook answers again. */
+    public static void askedLiveDark() {
+        STOCK_ANSWER.remove();
+    }
+
+    /** True while a stock panel or LIVE's web page props ask TikTok's own provider answer, which the hook then leaves alone. */
     static boolean askingStock() {
         return STOCK_ANSWER.get() != null;
     }

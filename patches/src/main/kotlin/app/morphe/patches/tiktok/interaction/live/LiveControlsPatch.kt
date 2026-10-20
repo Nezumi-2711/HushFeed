@@ -183,6 +183,45 @@ internal fun isLiveDarkThemeAnswer(method: Method, classDef: ClassDef): Boolean 
         }
 }
 
+/**
+ * LIVE's web page props (X.0K18.LIZ on 47.4.3): the room, the viewer and the "trait_mode" that
+ * TikTok's web pages in a room draw their light or dark colors from, the shop room's Top customers
+ * and Top viewers sheet among them. It says "dark" when the LIVE dark answer above does, which in
+ * a room only the provider hook does, and those pages' dark colors are unfinished: the sheet's tab
+ * titles stayed dark on its dark background (S22, 2026-10-20, #159).
+ */
+internal object LiveWebPropsFingerprint : Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "Ljava/util/Map;",
+    parameters = listOf(),
+    strings = listOf("trait_mode", "force_theme_style"),
+)
+
+/** Where the web page props ask a (Context)Z answer of the LIVE host: each call and its move-result. */
+internal fun liveDarkAsks(method: Method): List<Int> {
+    val code = method.implementation?.instructions?.toList() ?: return emptyList()
+    return code.indices.filter { at ->
+        val call = (code[at] as? ReferenceInstruction)?.reference as? MethodReference
+        code[at].opcode == Opcode.INVOKE_VIRTUAL && call != null && call.returnType == "Z" &&
+            call.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;") &&
+            code.getOrNull(at + 1)?.opcode == Opcode.MOVE_RESULT
+    }
+}
+
+/**
+ * Brackets each of the web page props' asks with the extension, which stands the provider hook
+ * down in between, so the props get TikTok's own answer. The first call sits on the ask's own
+ * label, so a branch onto the ask runs it too.
+ */
+internal fun hookWebProps(props: MutableMethod) {
+    val asks = liveDarkAsks(props)
+    if (asks.size < 2) throw PatchException("LIVE controls: the web page props ask the LIVE host ${asks.size} times")
+    asks.reversed().forEach { at ->
+        props.addInstructions(at + 2, "invoke-static {}, $PANEL_THEME->askedLiveDark()V")
+        props.addInstructionsAtControlFlowLabel(at, "invoke-static {}, $PANEL_THEME->askingLiveDark()V")
+    }
+}
+
 /** The base of every themed LIVE dialog (LiveDialogFragment and the rest), real-named on 47.1.4. */
 internal const val LIVE_THEMED_DIALOG = "Lcom/bytedance/android/live/design/resource/theme/LiveThemeAwareDialogFragment;"
 
@@ -1682,6 +1721,9 @@ val liveControlsPatch = bytecodePatch(
             "invoke-static {p1}, $EXTENSION->darkLivePanels(Landroid/content/Context;)Z",
             "const/4 v0, 0x1\nreturn v0",
         )
+        // The web pages in a room keep TikTok's own answer: their dark colors are unfinished, so
+        // the shop room's Top customers sheet read dark tab titles on dark (S22, 2026-10-20).
+        hookWebProps(LiveWebPropsFingerprint.method)
         // That answer alone left the panels white (S25, 2026-10-14): TikTok adds the dark theme
         // to the room's light one without force. Each themed dialog's and sheet page's inflater
         // goes through the extension, which applies the panel's dark overlay with force while
