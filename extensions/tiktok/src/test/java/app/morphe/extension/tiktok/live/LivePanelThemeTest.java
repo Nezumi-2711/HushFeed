@@ -19,6 +19,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -729,6 +730,59 @@ public class LivePanelThemeTest {
         SettingsStatus.liveControlsEnabled = false;
         LivePanelTheme.eventBox(paused);
         assertEquals("without the patch", Color.WHITE, fill(paused));
+    }
+
+    @Test public void aCardsBadgeTileGoesOverAWhiteCopyOfItsShapeInDarkModeWithTheSwitch() {
+        // The low levels' tile on 47.4.3: a pale lavender at about a fifth of full strength.
+        GradientDrawable tint = new GradientDrawable();
+        tint.setColor(0x30CCD1F0);
+        tint.setCornerRadius(16f);
+        tint.setStroke(1, Color.RED);
+        View tile = new View(dark);
+        LivePanelTheme.badgeTile(tile, tint);
+        assertSame("the switch starts off", tint, tile.getBackground());
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        LivePanelTheme.badgeTile(tile, tint);
+        LayerDrawable layers = (LayerDrawable) tile.getBackground();
+        assertEquals(2, layers.getNumberOfLayers());
+        assertEquals("the shape's padding counts once", LayerDrawable.PADDING_MODE_STACK, layers.getPaddingMode());
+        GradientDrawable base = (GradientDrawable) layers.getDrawable(0);
+        assertEquals(Color.WHITE, base.getColor().getDefaultColor());
+        assertEquals("the corners stay", 16f, base.getCornerRadius(), 0f);
+        assertSame("the server's shape draws over it", tint, layers.getDrawable(1));
+        assertEquals("the tile's own shape keeps its fill", 0x30CCD1F0, tint.getColor().getDefaultColor());
+
+        View lightTile = new View(light);
+        LivePanelTheme.badgeTile(lightTile, tint);
+        assertSame("light mode", tint, lightTile.getBackground());
+        ColorDrawable plain = new ColorDrawable(Color.RED);
+        LivePanelTheme.badgeTile(tile, plain);
+        assertSame("not a shape", plain, tile.getBackground());
+        LivePanelTheme.badgeTile(tile, null);
+        assertNull("no background", tile.getBackground());
+        GradientDrawable stateless = new GradientDrawable() {
+            @Override public ConstantState getConstantState() {
+                return null;
+            }
+        };
+        LivePanelTheme.badgeTile(tile, stateless);
+        assertSame("a shape with no state to copy", stateless, tile.getBackground());
+        GradientDrawable broken = new GradientDrawable() {
+            @Override public ConstantState getConstantState() {
+                throw new IllegalStateException("copy");
+            }
+        };
+        LivePanelTheme.badgeTile(tile, broken);
+        assertSame("a failed copy still sets the tile's own", broken, tile.getBackground());
+
+        ReflectionHelpers.callStaticMethod(Setting.class, "setPausedForProcess", ClassParameter.from(boolean.class, true));
+        LivePanelTheme.badgeTile(tile, tint);
+        assertSame("paused", tint, tile.getBackground());
+        ReflectionHelpers.callStaticMethod(Setting.class, "setPausedForProcess", ClassParameter.from(boolean.class, false));
+        SettingsStatus.liveControlsEnabled = false;
+        LivePanelTheme.badgeTile(tile, tint);
+        assertSame("without the patch", tint, tile.getBackground());
     }
 
     @Test public void panelsAreFoundByTikToksClassNames() {

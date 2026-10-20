@@ -6,6 +6,7 @@ package app.morphe.patches.tiktok.interaction.live
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
+import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
@@ -16,6 +17,7 @@ import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.patches.tiktok.shared.guardAtEntry
+import app.morphe.util.ControlFlow
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
 import app.morphe.util.addInstructionsAtControlFlowLabel
@@ -40,6 +42,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
+import java.util.BitSet
 
 private const val EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveControls;"
 private const val RECORD_EXTENSION = "Lapp/morphe/extension/tiktok/live/LiveRecordChip;"
@@ -1084,6 +1087,115 @@ internal fun hookEventBox(bind: MutableMethod) {
     bind.addInstructions(event.at, "invoke-static {v${event.box}}, $PANEL_THEME->eventBox(Ljava/lang/Object;)V")
 }
 
+internal const val LIVE_BADGE = "Lcom/bytedance/android/live/base/model/user/BadgeStruct;"
+private const val COMBINE_BADGE = "Lcom/bytedance/android/live/base/model/user/CombineBadgeStruct;"
+private const val SET_BACKGROUND = "Landroid/view/View;->setBackground(Landroid/graphics/drawable/Drawable;)V"
+
+/**
+ * The profile card's badge tile bind (X.0wLz.LJIJI on 47.4.3, #159): it reads its tile, an image
+ * view, from a lazy field and gives it a rounded shape drawn from the badge's server background
+ * (a border around the server's art, a server color, or a border alone). The server draws that
+ * art and the text over it for the white card, the low levels' "Lv." tile see-through, so on the
+ * dark card the tile and its text went dark gray together (Login2, 2026-10-20).
+ */
+internal object LiveProfileBadgeFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf(LIVE_BADGE),
+    custom = { method, _ -> badgeTileCalls(method) != null },
+)
+
+/**
+ * In [method], every `setBackground` on the badge tile: the tile is the one value cast to View
+ * right after a lazy field of [method]'s own class hands it over, with the combined badge's
+ * background read next. Each call has to take that value as its receiver on every path that
+ * reaches it, so a register the method reuses for another view is never handed over as the
+ * tile. Null when there's no such tile or no call, or when any call on the tile's register
+ * could see another value there. The calls are replaced where they stand, so a branch landing on
+ * one still runs the hook.
+ */
+internal fun badgeTileCalls(method: Method): List<Int>? {
+    val code = method.implementation?.instructions?.toList() ?: return null
+    fun reference(at: Int) = (code.getOrNull(at) as? ReferenceInstruction)?.reference
+    val casts = (3 until code.size - 1).filter { at ->
+        if (code[at].opcode != Opcode.CHECK_CAST || (reference(at) as? TypeReference)?.type != "Landroid/view/View;") {
+            return@filter false
+        }
+        val tile = (code[at] as OneRegisterInstruction).registerA
+        val lazy = reference(at - 3) as? FieldReference
+        val value = reference(at - 2) as? MethodReference
+        val background = reference(at + 1) as? FieldReference
+        code[at - 1].opcode == Opcode.MOVE_RESULT_OBJECT && (code[at - 1] as OneRegisterInstruction).registerA == tile &&
+            code[at - 2].opcode == Opcode.INVOKE_INTERFACE && value?.name == "getValue" && value.returnType == "Ljava/lang/Object;" &&
+            code[at - 3].opcode == Opcode.IGET_OBJECT && lazy?.definingClass == method.definingClass &&
+            code[at + 1].opcode == Opcode.IGET_OBJECT && background?.definingClass == COMBINE_BADGE && background.name == "background"
+    }
+    val cast = casts.singleOrNull() ?: return null
+    val tile = (code[cast] as OneRegisterInstruction).registerA
+    fun receiver(at: Int) = when (val call = code[at]) {
+        is FiveRegisterInstruction -> call.registerC
+        is RegisterRangeInstruction -> call.startRegister
+        else -> null
+    }
+    val calls = method.literalReads(cast).filter { at ->
+        code[at].opcode in setOf(Opcode.INVOKE_VIRTUAL, Opcode.INVOKE_VIRTUAL_RANGE) && (reference(at) as? MethodReference)?.let {
+            "${it.definingClass}->${it.name}(${it.parameterTypes.joinToString("")})${it.returnType}" == SET_BACKGROUND
+        } == true && receiver(at) == tile
+    }
+    if (calls.isEmpty() || calls.any { code[it].opcode != Opcode.INVOKE_VIRTUAL || !onlyReaches(method, cast, it, tile) }) return null
+    return calls
+}
+
+/**
+ * Whether [register] can hold only what the instruction at [definition] wrote when the
+ * instruction at [use] runs: walking back from [use] along every path, the first write to
+ * [register] on each is [definition], and no path gets back to the method's start without one.
+ * An instruction that throws never writes its destination, so a handler's path walks on past it.
+ */
+private fun onlyReaches(method: Method, definition: Int, use: Int, register: Int): Boolean {
+    val flow = ControlFlow.of(method)
+    val code = flow.instructions
+    val normal = Array(code.size) { mutableListOf<Int>() }
+    val exceptional = Array(code.size) { mutableListOf<Int>() }
+    code.indices.forEach { from ->
+        flow.normal[from].forEach { normal[it] += from }
+        flow.exceptional[from].forEach { exceptional[it] += from }
+    }
+    val seen = BitSet()
+    val pending = ArrayDeque(listOf(use))
+    while (pending.isNotEmpty()) {
+        val at = pending.removeFirst()
+        if (at == 0) return false
+        normal[at].forEach { from ->
+            if (writesRegister(code[from], register)) {
+                if (from != definition) return false
+            } else if (!seen[from]) {
+                seen.set(from)
+                pending += from
+            }
+        }
+        exceptional[at].forEach { from -> if (!seen[from]) { seen.set(from); pending += from } }
+    }
+    return true
+}
+
+/**
+ * Hands each of the badge tile's backgrounds to the extension in place of TikTok's own call. While
+ * Dark LIVE panels is on in dark mode, the extension lays a white copy of the tile's shape under
+ * it, so the server's see-through art and text draw over white the way they do on the stock card.
+ * The call takes the same two registers, so nothing else in the method moves.
+ */
+internal fun hookBadgeTiles(bind: MutableMethod) {
+    val calls = badgeTileCalls(bind) ?: throw PatchException("LIVE controls: the profile card's badge tile wasn't found")
+    calls.forEach { at ->
+        val call = bind.getInstruction<FiveRegisterInstruction>(at)
+        bind.replaceInstruction(
+            at,
+            "invoke-static {v${call.registerC}, v${call.registerD}}, " +
+                "$PANEL_THEME->badgeTile(Landroid/view/View;Landroid/graphics/drawable/Drawable;)V",
+        )
+    }
+}
+
 internal const val PULL_STREAM_SERVICE ="Lcom/bytedance/android/live/livepullstream/PullStreamService;"
 private const val LIVE_MODE = "Lcom/bytedance/android/livesdkapi/depend/model/live/LiveMode;"
 
@@ -1576,6 +1688,11 @@ val liveControlsPatch = bytecodePatch(
         // light on white on the dark card (Login2, 2026-10-20). The extension gives the box a
         // see-through light fill while the switch is on in dark mode and its text came out light.
         hookEventBox(LiveProfileEventFingerprint.method)
+        // Its badge tiles carry server art and text drawn for the white card, the low levels'
+        // tile see-through, so both went dark gray on the dark card (Login2, 2026-10-20). The
+        // extension lays a white copy of each tile's shape under it while the switch is on in
+        // dark mode.
+        hookBadgeTiles(LiveProfileBadgeFingerprint.method)
         // The older quality list's rows can read white on white in dark mode, switch or no
         // switch; the extension gives poorly contrasted text a readable color there.
         hookQualityList(LiveDefinitionListFingerprint.method)

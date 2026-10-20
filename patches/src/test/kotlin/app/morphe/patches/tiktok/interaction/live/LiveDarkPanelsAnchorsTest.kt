@@ -2,6 +2,7 @@ package app.morphe.patches.tiktok.interaction.live
 
 import app.morphe.BridgeTypeFlow
 import app.morphe.Fixtures
+import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.takes
@@ -311,6 +312,96 @@ class LiveDarkPanelsAnchorsTest {
             "iget-object v1, p0, Lapp/morphe/Other;->box:Landroid/view/ViewGroup;\nif-eqz v1, :skip")))
         assertNull("a branch lands on the check", eventBox(eventBind(
             "if-eqz v0, :check\n$read\n:check\nif-eqz v1, :skip")))
+    }
+
+    @Test
+    fun `each declared build keeps the profile card's badge tile the badge hook lays over white`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val found = classes.values.flatMap { owner -> owner.methods.filter { LiveProfileBadgeFingerprint.takes(it, owner) } }
+            assertEquals("${apk.name}: the badge bind", 1, found.size)
+            val bind = found.single()
+            val calls = badgeTileCalls(bind)!!
+            if ("47.4.3" in apk.name) {
+                // X/0wLz's tile is its lazy X/11qx, given a border around the server's art, a
+                // server color, or a border alone (2026-10-20).
+                assertEquals("${apk.name}: the badge module", "LX/0wLz;", bind.definingClass)
+                assertEquals("${apk.name}: one call per background", 3, calls.size)
+            }
+
+            // The hook as the patch writes it: each call becomes the extension's, on the same
+            // two registers, and nothing else in the bind moves.
+            val original = bind.implementation!!.instructions.toList()
+            val hooked = MutableMethod(bind)
+            hookBadgeTiles(hooked)
+            val code = hooked.implementation!!.instructions.toList()
+            assertEquals("${apk.name}: nothing moves", original.size, code.size)
+            calls.forEach { at ->
+                val before = original[at] as FiveRegisterInstruction
+                val hook = code[at] as FiveRegisterInstruction
+                assertEquals(Opcode.INVOKE_STATIC, hook.opcode)
+                assertEquals("${apk.name}: the hook's call", "badgeTile", ((hook as ReferenceInstruction).reference as MethodReference).name)
+                assertEquals(listOf(2, before.registerC, before.registerD), listOf(hook.registerCount, hook.registerC, hook.registerD))
+            }
+            val untouched = original.indices.filter { it !in calls }.map { original[it].opcode to code[it].opcode }
+            assertTrue("${apk.name}: only the tile's calls change", untouched.all { (was, now) -> was == now })
+            assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
+        }
+    }
+
+    /** A badge bind that reads its tile from [owner]'s lazy field and casts it to [cast], then runs [after]. */
+    private fun badgeBind(
+        after: String,
+        cast: String = "Landroid/view/View;",
+        owner: String = "Lapp/morphe/Badge;",
+        before: String = "",
+        value: String = "getValue",
+    ) = MutableMethod(ImmutableMethod("Lapp/morphe/Badge;", "LJIJI",
+        listOf(ImmutableMethodParameter(LIVE_BADGE, null, null)), "V", AccessFlags.PUBLIC.value or AccessFlags.FINAL.value,
+        null, null, ImmutableMethodImplementation(6, emptyList(), null, null))).apply {
+        addInstructionsWithLabels(0, """
+            new-instance v3, Landroid/graphics/drawable/GradientDrawable;
+            invoke-direct {v3}, Landroid/graphics/drawable/GradientDrawable;-><init>()V
+            $before
+            iget-object v0, p0, $owner->tile:Lkotlin/Lazy;
+            invoke-interface {v0}, Lkotlin/Lazy;->$value()Ljava/lang/Object;
+            move-result-object v1
+            check-cast v1, $cast
+            iget-object v2, p1, Lcom/bytedance/android/live/base/model/user/CombineBadgeStruct;->background:Lcom/bytedance/android/live/base/model/user/CombineBadgeBackground;
+            $after
+            return-void
+        """)
+    }
+
+    @Test
+    fun `the badge hook takes only calls the tile alone reaches`() {
+        val set = "invoke-virtual {v1, v3}, Landroid/view/View;->setBackground(Landroid/graphics/drawable/Drawable;)V"
+        assertEquals(listOf(7), badgeTileCalls(badgeBind(set)))
+        assertEquals("each branch's call", listOf(8, 9), badgeTileCalls(badgeBind("if-eqz v2, :other\n$set\n:other\n$set")))
+        assertEquals("a later view in the same register isn't the tile", listOf(7),
+            badgeTileCalls(badgeBind("$set\nnew-instance v1, Landroid/view/View;\n$set")))
+        assertNull("another view can reach the call", badgeTileCalls(badgeBind(
+            "if-eqz v2, :call\nnew-instance v1, Landroid/view/View;\n:call\n$set")))
+        assertNull("the method's start can reach the call", badgeTileCalls(badgeBind(
+            "goto :end\n:call\n$set\nreturn-void\n:end\ngoto :call", before = "if-eqz p1, :call")))
+        assertNull("no call", badgeTileCalls(badgeBind("nop")))
+        assertNull("a range call", badgeTileCalls(badgeBind(
+            "invoke-virtual/range {v1 .. v2}, Landroid/view/View;->setBackground(Landroid/graphics/drawable/Drawable;)V")))
+        assertNull("not a view", badgeTileCalls(badgeBind(set, cast = "Landroid/widget/TextView;")))
+        assertNull("another class's field", badgeTileCalls(badgeBind(set, owner = "Lapp/morphe/Other;")))
+        assertNull("not a lazy's value", badgeTileCalls(badgeBind(set, value = "get")))
+        assertNull("a plain call beside a range one", badgeTileCalls(badgeBind(
+            "$set\ninvoke-virtual/range {v1 .. v2}, Landroid/view/View;->setBackground(Landroid/graphics/drawable/Drawable;)V")))
+        assertNull("no badge background read", badgeTileCalls(badgeBind(set).apply {
+            replaceInstruction(6, "const/4 v2, 0x0")
+        }))
+
+        val hooked = badgeBind(set)
+        hookBadgeTiles(hooked)
+        val hook = hooked.implementation!!.instructions.toList()[7] as FiveRegisterInstruction
+        assertEquals(Opcode.INVOKE_STATIC, hook.opcode)
+        assertEquals(listOf(1, 3), listOf(hook.registerC, hook.registerD))
+        assertThrows(PatchException::class.java) { hookBadgeTiles(badgeBind("nop")) }
     }
 
     @Test

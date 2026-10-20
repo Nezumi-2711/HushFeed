@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -306,6 +307,37 @@ public final class LivePanelTheme {
         } catch (Throwable failure) {
             Logger.printException(() -> "Could not keep a LIVE profile card's event box readable", failure);
         }
+    }
+
+    /**
+     * Called by the LIVE profile card's badge tiles (the level tile and the ones beside it) in
+     * place of each setBackground TikTok gives a tile. The server draws a tile's art and text for
+     * the white card and often see-through: the low levels' "Lv." tile is a pale lavender at
+     * about a fifth of full strength with gray text at about a third, so on the dark card both
+     * went dark gray and the text sank into the tile (Login2, 2026-10-20). While Dark LIVE panels
+     * is on in dark mode, a white copy of the tile's own rounded shape goes under it, so the art
+     * draws over white the way it does on the stock card. A solid tile looks the same either way.
+     */
+    public static void badgeTile(View tile, Drawable background) {
+        Drawable shown = background;
+        try {
+            if (background instanceof GradientDrawable && LiveControls.darkLivePanels(tile.getContext())) {
+                Drawable.ConstantState shape = background.getConstantState();
+                if (shape != null) {
+                    // A copy with its own state, so the tile's shape keeps its fill and border.
+                    GradientDrawable base = (GradientDrawable) shape.newDrawable().mutate();
+                    base.setColor(Color.WHITE);
+                    base.setStroke(0, Color.TRANSPARENT);
+                    LayerDrawable layers = new LayerDrawable(new Drawable[]{base, background});
+                    // Both layers carry the shape's padding, which nesting would count twice.
+                    layers.setPaddingMode(LayerDrawable.PADDING_MODE_STACK);
+                    shown = layers;
+                }
+            }
+        } catch (Throwable failure) {
+            Logger.printException(() -> "Could not lay a LIVE profile card badge over white", failure);
+        }
+        tile.setBackground(shown);
     }
 
     /** True when a text in the box, at most a few levels down, is drawn in a light color. */
