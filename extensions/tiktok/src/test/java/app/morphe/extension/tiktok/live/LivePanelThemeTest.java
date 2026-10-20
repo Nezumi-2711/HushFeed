@@ -595,6 +595,27 @@ public class LivePanelThemeTest {
         }
     }
 
+    /** A label whose background is static, which a write would set for every label at once. */
+    static final class SharedLabel {
+        static LabelBackground background;
+    }
+
+    /** A background whose color is static. */
+    static final class SharedColor {
+        static String colorCode = "#0A161823";
+    }
+
+    static final class SharedColorLabel {
+        private final SharedColor background = new SharedColor();
+    }
+
+    @Test public void aLabelsStaticFieldsAreLeftAlone() throws Exception {
+        LivePanelTheme.lightLabel(new SharedLabel());
+        assertNull("a static background was made", SharedLabel.background);
+        LivePanelTheme.lightLabel(new SharedColorLabel());
+        assertEquals("a static color was written", "#0A161823", SharedColor.colorCode);
+    }
+
     @Test public void aCardsLabelsTakeTheirColorAsItShowsOverTheLightCardInDarkModeWithTheSwitch() {
         View strip = new View(dark);
         ProfileCardLabel faint = new ProfileCardLabel(LabelBackground.of("#0A161823"));

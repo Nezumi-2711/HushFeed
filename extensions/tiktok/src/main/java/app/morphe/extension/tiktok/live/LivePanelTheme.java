@@ -21,6 +21,7 @@ import android.widget.TextView;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -230,8 +231,10 @@ public final class LivePanelTheme {
         if (label == null) {
             return;
         }
+        // A static field would ignore the label, and a static final one refuses the write once
+        // TikTok targets Android 17, so only the label's own fields are written.
         Field field = Reflect.field(label.getClass(), "background");
-        if (field == null) {
+        if (field == null || Modifier.isStatic(field.getModifiers())) {
             return;
         }
         Object background = field.get(label);
@@ -247,7 +250,7 @@ public final class LivePanelTheme {
             return;
         }
         Field color = Reflect.field(background.getClass(), "colorCode");
-        if (color != null) {
+        if (color != null && !Modifier.isStatic(color.getModifiers())) {
             color.set(background, onLightCard((String) color.get(background)));
         }
     }
