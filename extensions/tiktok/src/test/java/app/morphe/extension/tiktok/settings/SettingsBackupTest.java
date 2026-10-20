@@ -324,6 +324,25 @@ public class SettingsBackupTest {
         FeatureGateLabStore.resetAllLabData();
     }
 
+    @Test public void theUndoOfAResetGivesTheLabItsOwnUndoBackToo() throws Exception {
+        JSONObject withRule = new JSONObject(SettingsBackup.create(false));
+        withRule.getJSONObject("lab").getJSONArray("rules").put(new JSONObject().put("manager", "abmock")
+                .put("key", "kept_gate").put("type", "BOOLEAN").put("value", "true").put("force", true));
+        SettingsBackup.restore(Utils.getContext(), withRule.toString(), false);
+        java.io.File labUndo = new java.io.File(Utils.getContext().getFilesDir(), "feature-gate-lab-undo.json");
+        byte[] ownUndo = "{\"held\":\"before the reset\"}".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        java.nio.file.Files.write(labUndo.toPath(), ownUndo);
+
+        SettingsBackup.reset(Utils.getContext());
+        assertEquals(0, FeatureGateLabStore.rules().size());
+        assertFalse(labUndo.exists());
+        SettingsBackup.undo(Utils.getContext());
+
+        assertEquals(1, FeatureGateLabStore.rules().size());
+        assertArrayEquals(ownUndo, java.nio.file.Files.readAllBytes(labUndo.toPath()));
+        FeatureGateLabStore.resetAllLabData();
+    }
+
     @Test public void aBackupWithMoreLabRulesThanTheLabKeepsIsRefusedByName() throws Exception {
         // Some 26,000 of these fit the 2 MB cap. Restored, they made every later backup and Lab
         // undo copy too large to write, which refused Restore, Reset and every Lab change.

@@ -330,6 +330,8 @@ final class FeatureGateLabUndo {
             else writeUndo(held, current);
         } catch (Exception error) {
             Logger.printException(() -> "Could not keep the Lab undo for the settings Undo", error);
+            // A held copy left from an earlier restore would come back with this one's Undo.
+            discardHeld();
         }
     }
 
@@ -349,8 +351,17 @@ final class FeatureGateLabUndo {
             else writeUndo(current, kept);
         } catch (Exception error) {
             Logger.printException(() -> "Could not bring the Lab undo back with the settings Undo", error);
-            // Half swapped, this copy may belong to the Lab the Undo just replaced.
+            // Half swapped, either copy may belong to the other side of the Undo.
             discardAfterSettingsChange();
+            discardHeld();
+        }
+    }
+
+    private static void discardHeld() {
+        try {
+            heldFile().delete();
+        } catch (Exception error) {
+            Logger.printException(() -> "Could not discard the held Lab undo", error);
         }
     }
 
