@@ -63,6 +63,7 @@ feed/VideoOverlayHider.java|BOTTOM_SPACER_IDS|47.4.3:duc|app|com.by.andInflater.
 feed/VideoOverlayHider.java|DETAIL_COMMENT_BAR_IDS|47.4.3:qox|app|com.ss.android.ugc.aweme.comment.service.CommentDetailInputLayoutIdsImpl|at:2
 feed/VideoOverlayHider.java|DETAIL_COMMENT_STRIP_IDS|47.4.3:cnc|app|com.by.andInflater.common_feed_fragment_feed_base_opt|on:View#2
 feed/VideoOverlayHider.java|DETAIL_MESSAGE_BAR_IDS|47.4.3:kyn|app|com.ss.android.ugc.aweme.im.sdk.chat.feature.reply.feature.feed.DetailFeedQuickDMFragment|at:1
+feed/VideoOverlayHider.java|DETAIL_SOUND_BAR_IDS|47.4.3:ci3|app|com.ss.android.ugc.aweme.detail.component.bottom.shoot.ShootButtonBottomComponent|at:2
 feed/VideoOverlayHider.java|TOP_SEARCH_BAR_IDS|47.4.3:j1z|app|com.by.andInflater.detail_feed_fragment_detail_page_opt|on:ConstraintLayout#1
 feed/VideoOverlayHider.java|TOP_SEARCH_SCRIM_IDS|47.4.3:g5g|app|com.by.andInflater.detail_feed_fragment_detail_page_opt|on:View#1
 feed/VideoOverlayHider.java|DETAIL_SEARCH_BOX_IDS|47.4.3:o94|app|com.ss.android.ugc.aweme.search.entry.core.viewmodel.DetailFeedSearchHelper|at:4

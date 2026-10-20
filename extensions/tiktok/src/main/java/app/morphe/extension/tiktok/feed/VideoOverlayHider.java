@@ -219,6 +219,14 @@ public final class VideoOverlayHider {
      */
     private static final String[] DETAIL_MESSAGE_BAR_IDS = {"47.4.3:kyn"};
     /**
+     * The red "Use sound" bar a post opened from a sound's page has over the strip in place of
+     * the comment bar, in the same bottom container (#153, a reporter's layout recording on
+     * 47.4.3: the frame around its icon and label). TikTok's other "use this" bars on opened
+     * posts (a template's, a sticker's) fill the same frame. Only ever read, never hidden: while
+     * it shows the strip stays under it.
+     */
+    private static final String[] DETAIL_SOUND_BAR_IDS = {"47.4.3:ci3"};
+    /**
      * The feed cell root. Furniture is only hidden underneath one: Hide feed surveys used to
      * take every survey card id in the window, and on the profile that is the Favorites tab's whole
      * page, which showed as an empty tab (a Galaxy S25, 2026-09-16, found by restoring the
@@ -344,6 +352,7 @@ public final class VideoOverlayHider {
     private static final int STATUS_BAR_SCRIM_TARGET = DETAIL_SEARCH_BOX_TARGET + 1;
     private static final int PLAYER_VIEW_TARGET = STATUS_BAR_SCRIM_TARGET + 1;
     private static final int DETAIL_MESSAGE_BAR_TARGET = PLAYER_VIEW_TARGET + 1;
+    private static final int DETAIL_SOUND_BAR_TARGET = DETAIL_MESSAGE_BAR_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -681,6 +690,8 @@ public final class VideoOverlayHider {
                 wanted[FOLLOWING_STORY_TARGET] = tabStrip && !FeedVisibility.isStoryVisible(activity);
                 wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;
                 wanted[DETAIL_MESSAGE_BAR_TARGET] = detailCommentBar;
+                // Only ever read; see pairDetailCommentBar.
+                wanted[DETAIL_SOUND_BAR_TARGET] = false;
                 wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar || stripForBar;
                 wanted[CLEAR_EXIT_TARGET] = clearControls;
                 wanted[CLEAR_PLAYBACK_TARGET] = clearControls;
@@ -736,7 +747,7 @@ public final class VideoOverlayHider {
                     }
                     keepTopBarSearchBoxes(found, ids[firstCandidate(TOP_SEARCH_BAR_TARGET)]);
                     selectCurrentTargets(found, TRAVERSAL.selected);
-                    pairDetailCommentBar(hidden, TRAVERSAL.selected, ids, detailPager, stripForBar);
+                    pairDetailCommentBar(hidden, found, TRAVERSAL.selected, ids, detailPager, stripForBar);
                     List<View> strips = selectedViews(found, TRAVERSAL.selected, DETAIL_COMMENT_STRIP_TARGET);
                     // Before the guard, so it measures the caption where this pass leaves it.
                     liftWidgetLayers(strips, seeThroughBar, seeThroughBar
@@ -965,7 +976,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[DETAIL_MESSAGE_BAR_TARGET + 1][];
+        String[][] targets = new String[DETAIL_SOUND_BAR_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -999,18 +1010,20 @@ public final class VideoOverlayHider {
         targets[STATUS_BAR_SCRIM_TARGET] = STATUS_BAR_SCRIM_IDS;
         targets[PLAYER_VIEW_TARGET] = PLAYER_VIEW_IDS;
         targets[DETAIL_MESSAGE_BAR_TARGET] = DETAIL_MESSAGE_BAR_IDS;
+        targets[DETAIL_SOUND_BAR_TARGET] = DETAIL_SOUND_BAR_IDS;
         return targets;
     }
 
     /**
      * Main-feed tabs (top and bottom, with the bottom bar's hairline) and story count, the Clear
-     * display controls, and the detail pager's comment and Message bars are outside the cells.
+     * display controls, and the detail pager's comment, Message and Use sound bars are outside
+     * the cells.
      */
     private static boolean outsideCells(int target) {
         return (target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START) || target == BOTTOM_TABS_TARGET
                 || target == BOTTOM_TABS_DIVIDER_TARGET || target == TOP_SEARCH_BAR_TARGET
                 || target == TOP_SEARCH_SCRIM_TARGET || target == DETAIL_SEARCH_BOX_TARGET
-                || target == DETAIL_MESSAGE_BAR_TARGET;
+                || target == DETAIL_MESSAGE_BAR_TARGET || target == DETAIL_SOUND_BAR_TARGET;
     }
 
     private static int candidateCount(String[][] targets) {
@@ -1210,17 +1223,29 @@ public final class VideoOverlayHider {
      * binds one, and putting the strip back there left the photo ending a bar's height short over
      * a black band (#153). A bar renamed by another build doesn't resolve at all, so that case
      * still keeps its strip. A mutual friend's video has no comment bar either, its Message bar
-     * sits over the strip instead, and it goes only when the strip does.
+     * sits over the strip instead, and it goes only when the strip does. A post opened from a
+     * sound's page has TikTok's Use sound bar there instead, which stays, so its strip stays too
+     * and the comment bar isn't missed.
      */
-    private static void pairDetailCommentBar(boolean[] hidden, int[] selected, int[] ids,
-                                             boolean detailPager, boolean stripForBar) {
+    private static void pairDetailCommentBar(boolean[] hidden, List<List<View>> found, int[] selected,
+                                             int[] ids, boolean detailPager, boolean stripForBar) {
         boolean bar = selected[DETAIL_COMMENT_BAR_TARGET] >= 0;
         boolean strip = selected[DETAIL_COMMENT_STRIP_TARGET] >= 0;
         if (bar && !strip) {
             hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)] = false;
         }
+        boolean soundBar = false;
+        if (!bar) {
+            for (View view : selectedViews(found, selected, DETAIL_SOUND_BAR_TARGET)) {
+                soundBar |= shownUpTheTree(view);
+            }
+        }
+        if (soundBar) {
+            hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)] = false;
+        }
         // See-through bottom bar takes the main feed's strip on its own; no comment bar there.
-        if (strip && !bar && !stripForBar && !(detailPager && resolves(ids, DETAIL_COMMENT_BAR_TARGET))) {
+        if (strip && !bar && !stripForBar
+                && (soundBar || !(detailPager && resolves(ids, DETAIL_COMMENT_BAR_TARGET)))) {
             hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)] = false;
         }
         if (!(strip && hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)])) {

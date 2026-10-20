@@ -2318,6 +2318,57 @@ public class VideoOverlayHiderTest {
         }
     }
 
+    private static final int SOUND_BAR_ID = 0x7f0a021b;
+
+    /**
+     * A video or photo opened from a sound's page has TikTok's red "Use sound" bar where the
+     * comment bar would be, and no comment bar. The strip went anyway, so the post ran under the
+     * bar and it covered the caption, the progress bar and the time (#153, BynchPOP's layout
+     * recording on 0.76.0). The strip now stays under that bar, nothing is called missing, and a
+     * photo with neither bar still loses its strip.
+     */
+    @Test
+    public void theStripStaysUnderTheUseSoundBar() {
+        resolveCommentBarIds();
+        VideoOverlayHider.resolveForTests("47.4.3:ci3", SOUND_BAR_ID);
+        VideoOverlayHider.resolveForTests("video_seek_bar", SEEK_ROW_ID);
+        VideoOverlayHider.resolveForTests("47.4.3:bqr", CAPTION_FRAME_ID);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        HookStatus.clear();
+        try (var detailController = Robolectric.buildActivity(
+                com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            Activity detail = detailController.get();
+            View[] views = openedVideo(detail, false);
+            FrameLayout root = (FrameLayout) views[0];
+            root.removeView(root.findViewById(BAR_ID));
+            FrameLayout soundBar = new FrameLayout(detail);
+            soundBar.setId(SOUND_BAR_ID);
+            root.addView(soundBar, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 107, android.view.Gravity.BOTTOM));
+            layOutAt(root);
+            VideoOverlayHider.applyTo(detail);
+            layOutAt(root);
+            VideoOverlayHider.applyTo(detail);
+
+            assertEquals("the post ran under the Use sound bar", View.VISIBLE, views[2].getVisibility());
+            assertEquals(View.VISIBLE, soundBar.getVisibility());
+            assertEquals("the progress bar moved under a bar that stayed", 0f, views[1].getTranslationY(), 0f);
+            assertTrue("a sound's page called the comment bar missing: " + HookStatus.missing("overlay"),
+                    HookStatus.missing("overlay").stream().noneMatch(line -> line.contains("47.4.3:qox")));
+
+            // TikTok puts the bar away: a photo with no bar of either kind loses its strip.
+            soundBar.setVisibility(View.GONE);
+            VideoOverlayHider.applyTo(detail);
+            assertEquals(View.GONE, views[2].getVisibility());
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            HookStatus.clear();
+            VideoOverlayHider.resolveForTests("47.4.3:ci3", 0);
+            VideoOverlayHider.resolveForTests("video_seek_bar", 0);
+            VideoOverlayHider.resolveForTests("47.4.3:bqr", 0);
+        }
+    }
+
     /**
      * A short caption ends above the lowest line, so it needs no lift and the line comes down to
      * meet it. The disc only ever took the caption's lift, so it got none and sat across the end of
