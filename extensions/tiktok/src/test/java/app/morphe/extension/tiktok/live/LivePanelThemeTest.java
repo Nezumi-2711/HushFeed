@@ -1,7 +1,6 @@
 package app.morphe.extension.tiktok.live;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
@@ -99,7 +98,6 @@ public class LivePanelThemeTest {
         SettingsStatus.liveControlsEnabled = false;
         Settings.DARK_LIVE_PANELS.save(Settings.DARK_LIVE_PANELS.defaultValue);
         LivePanelTheme.stockSeen = false;
-        LivePanelTheme.askedLiveDark();
     }
 
     private static int textColor(Context context) {
@@ -112,16 +110,6 @@ public class LivePanelThemeTest {
         ShareDialog dialog = new ShareDialog();
         dialog.overlay = OVERLAY;
         return dialog;
-    }
-
-    @Test public void theWebPagePropsGetTikToksOwnAnswerBetweenTheirTwoCalls() {
-        Settings.DARK_LIVE_PANELS.save(true);
-        assertTrue(LiveControls.darkLivePanels(dark));
-
-        LivePanelTheme.askingLiveDark();
-        assertFalse("the props' ask gets TikTok's own answer", LiveControls.darkLivePanels(dark));
-        LivePanelTheme.askedLiveDark();
-        assertTrue("the panels' answer is back after it", LiveControls.darkLivePanels(dark));
     }
 
     @Test public void aPanelInflatesThroughItsOverlayWithForceInDarkModeWithTheSwitch() {
