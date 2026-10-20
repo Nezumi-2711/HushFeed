@@ -561,6 +561,7 @@ Hide picture comments	Nascondi i commenti con immagini
 Hide reply previews	Nascondi le anteprime delle risposte
 Don't open a reply under each comment. View replies still shows all of them.	Non aprire una risposta sotto ogni commento. Visualizza risposte le mostra ancora tutte.
 Hide playlist videos	Nascondi i video delle playlist
+Hide subscriber-only videos	Nascondi i video solo per abbonati
 Hide promotional music	Nascondi la musica promozionale
 Hide comment typing suggestions	Nascondi i suggerimenti durante la scrittura dei commenti
 Hide rows by title	Nascondi le righe per titolo
@@ -625,6 +626,7 @@ Hide video actions	Nascondi le azioni sul video
 Hide videos with TikTok's AI-generated label, AI content credentials, a TikTok AI effect such as AI Alive, or a tag like #ai or #aigenerated.	Nascondi i video con l'etichetta IA di TikTok, credenziali di contenuto IA, un effetto IA di TikTok come AI Alive o un hashtag come #ai o #aigenerated.
 Hide videos marked as paid partnership or branded content.	Nascondi i video contrassegnati come collaborazione a pagamento o contenuto sponsorizzato.
 Hide videos posted as part of a playlist.	Nascondi i video pubblicati come parte di una playlist.
+Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.	Nascondi i post con il lucchetto che solo gli abbonati di un creator possono guardare, nel feed e nei profili.
 Hide videos posted by verified accounts.	Nascondi i video pubblicati da account verificati.
 Hide videos that belong to a paid Series.	Nascondi i video che appartengono a una Serie a pagamento.
 Hide videos with a lot of views and few comments. Works the same way as views per like. Zero turns it off.	Nascondi i video con molte visualizzazioni e pochi commenti. Funziona come le visualizzazioni per Mi piace. Zero lo disattiva.
@@ -849,6 +851,7 @@ Plays videos that TikTok covers with a content warning without asking you to tap
 Playback	Riproduzione
 Player	Lettore
 Playlist posts	Post playlist
+Subscriber-only posts	Post solo per abbonati
 Popular	Popolare
 Popups	Popup
 Press and hold a profile picture to save the full size original to your photo destination.	Tieni premuta una foto profilo per salvare l'originale a piena dimensione nella destinazione foto.

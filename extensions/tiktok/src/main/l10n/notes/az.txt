@@ -6,6 +6,8 @@
 
 * **TikTok:** Yeni açar TikTok qaranlıq rejimdə olanda LIVE otağının paylaşma menyusunu, fan klubunu və profil kartlarını tünd açır (#159).
 
+* **TikTok:** Lent filtrində yeni Yalnız abunəçilər üçün olan videoları gizlədin açarı yalnız yaradıcının abunəçilərinin izləyə bildiyi paylaşımları lentdə və profillərdə gizlədir (#219).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed indi TikTok 47.4.3-ü dəstəkləyir, yalnız bu versiyanı. APKMirror-dan 47.4.3 APK-nı yamaqlayın. PineDrama 47.1.4-də qalır.

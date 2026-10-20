@@ -714,6 +714,7 @@ Hide photo posts from the feed.,Hide photo posts from the feed.
 Hide picture comments,Hide picture comments
 "Hide place badges on videos, including cards with multiple places. Videos and your location permissions stay unchanged.","Hide place badges on videos, including cards with multiple places. Videos and your location permissions stay unchanged."
 Hide playlist videos,Hide playlist videos
+"Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.","Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles."
 Hide profile shortcuts,Hide profile shortcuts
 Hide profile shortcuts by name,Hide profile shortcuts by name
 Hide profile views,Hide profile views
@@ -734,6 +735,7 @@ Hide sticker suggestions,Hide sticker suggestions
 Hide stories,Hide stories
 Hide stories from the feed.,Hide stories from the feed.
 Hide stories tray,Hide stories tray
+Hide subscriber-only videos,Hide subscriber-only videos
 Hide suggested accounts,Hide suggested accounts
 Hide suggested replies,Hide suggested replies
 Hide suggestions on the search page,Hide suggestions on the search page
@@ -1708,6 +1710,7 @@ Story position,Story position
 Story saved to %1$s,Story saved to %1$s
 Streak,Streak
 Structured value observed,Structured value observed
+Subscriber-only posts,Subscriber-only posts
 Subtitle language,Subtitle language
 Subtitles,Subtitles
 Subtitles: %1$s,Subtitles: %1$s

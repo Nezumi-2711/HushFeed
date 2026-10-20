@@ -958,6 +958,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_EVENT_BADGE = new BooleanSetting("hide_event_badge", FALSE, true);
     public static final BooleanSetting HIDE_INSERTED_CARDS = new BooleanSetting("hide_inserted_cards", FALSE, true);
     public static final BooleanSetting HIDE_PLAYLIST_VIDEOS = new BooleanSetting("hide_playlist_videos", FALSE, true);
+    // TikTok Subs posts only subscribers can watch (#219), on the feed and on profile grids.
+    public static final BooleanSetting HIDE_SUBSCRIBER_ONLY = new BooleanSetting("hide_subscriber_only", FALSE, true);
     // The LIVE feed you swipe through (issue #57). Read on every page TikTok sends, so a change
     // reaches the next page without a restart.
     public static final BooleanSetting LIVE_FEED_FILTER = new BooleanSetting("live_feed_filter", FALSE);

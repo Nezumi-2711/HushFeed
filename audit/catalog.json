@@ -4388,6 +4388,13 @@
     "restart": true
    },
    {
+    "key": "hide_subscriber_only",
+    "default": false,
+    "type": "bool",
+    "row": "Hide subscriber-only videos",
+    "restart": true
+   },
+   {
     "key": "hide_paid_partnership",
     "default": false,
     "type": "bool",

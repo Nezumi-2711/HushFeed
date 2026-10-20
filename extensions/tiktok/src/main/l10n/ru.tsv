@@ -618,6 +618,7 @@ Hide picture comments	Скрывать комментарии-картинки
 Hide reply previews	Скрывать превью ответов
 Don't open a reply under each comment. View replies still shows all of them.	Не раскрывать ответ под каждым комментарием. Кнопка просмотра ответов по-прежнему показывает все.
 Hide playlist videos	Скрывать видео из плейлистов
+Hide subscriber-only videos	Скрывать видео только для платных подписчиков
 Hide promotional music	Скрывать рекламную музыку
 Hide comment typing suggestions	Скрывать подсказки при наборе комментария
 Hide rows by title	Скрывать строки по названию
@@ -682,6 +683,7 @@ Hide video actions	Скрывать действия под видео
 Hide videos with TikTok's AI-generated label, AI content credentials, a TikTok AI effect such as AI Alive, or a tag like #ai or #aigenerated.	Скрывать видео с пометкой TikTok о создании ИИ, ИИ-метаданными C2PA, ИИ-эффектом TikTok вроде AI Alive или хештегом вроде #ai или #aigenerated.
 Hide videos marked as paid partnership or branded content.	Скрывать видео с пометкой «платное партнёрство» или «контент от бренда».
 Hide videos posted as part of a playlist.	Скрывать видео, опубликованные в составе плейлиста.
+Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.	Скрывать публикации с замком, которые могут смотреть только платные подписчики автора, в ленте и в профилях.
 Hide videos posted by verified accounts.	Скрывать видео от верифицированных аккаунтов.
 Hide videos that belong to a paid Series.	Скрывать видео, которые относятся к платному сериалу.
 Hide videos with a lot of views and few comments. Works the same way as views per like. Zero turns it off.	Скрывать видео с большим числом просмотров и малым числом комментариев. Работает так же, как «Просмотров на лайк». Ноль отключает это.
@@ -909,6 +911,7 @@ Plays videos that TikTok covers with a content warning without asking you to tap
 Playback	Воспроизведение
 Player	Плеер
 Playlist posts	Публикации из плейлиста
+Subscriber-only posts	Публикации только для платных подписчиков
 Popular	Популярное
 Popups	Всплывающие окна
 Press and hold a profile picture to save the full size original to your photo destination.	Нажмите и удерживайте фото профиля, чтобы сохранить оригинал в полном размере в папку для фото.

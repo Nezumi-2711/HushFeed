@@ -574,6 +574,7 @@ Hide place badges on videos, including cards with multiple places. Videos and yo
 Hide effect and template tags	Efekt ve şablon etiketlerini gizle
 Hide the tags above a video's description that invite you to try an effect, a template, CapCut or an AI style. Location labels and the music line have their own switches.	Bir videonun açıklamasının üstünde seni bir efekti, şablonu, CapCut'ı veya yapay zekâ stilini denemeye davet eden etiketleri gizle. Konum etiketleri ve müzik satırının kendi anahtarları var.
 Hide playlist videos	Oynatma listesi videolarını gizle
+Hide subscriber-only videos	Yalnızca abonelere özel videoları gizle
 Hide promotional music	Tanıtım amaçlı müzikleri gizle
 Hide comment typing suggestions	Yorum yazma önerilerini gizle
 Hide recommended searches before you type on TikTok's search page. Your search history stays. This doesn't hide suggestions above comments.	TikTok'un arama sayfasında sen yazmadan önce çıkan önerilen aramaları gizle. Arama geçmişin kalır. Bu, yorumların üzerindeki önerileri gizlemez.
@@ -650,6 +651,7 @@ Hide video actions	Video eylemlerini gizle
 Hide videos with TikTok's AI-generated label, AI content credentials, a TikTok AI effect such as AI Alive, or a tag like #ai or #aigenerated.	TikTok'un yapay zeka etiketini, yapay zeka içerik kimlik bilgilerini, AI Alive gibi bir TikTok yapay zeka efektini ya da #ai veya #aigenerated gibi bir etiketi taşıyan videoları gizle.
 Hide videos marked as paid partnership or branded content.	Ücretli ortaklık veya markalı içerik olarak işaretlenen videoları gizle.
 Hide videos posted as part of a playlist.	Bir oynatma listesinin parçası olarak paylaşılan videoları gizle.
+Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.	Yalnızca bir içerik üreticinin abonelerinin izleyebildiği kilitli gönderileri akışta ve profillerde gizle.
 Hide videos posted by verified accounts.	Doğrulanmış hesapların paylaştığı videoları gizle.
 Hide videos that belong to a paid Series.	Ücretli bir Seri'ye ait videoları gizle.
 Hide videos with a lot of views and few comments. Works the same way as views per like. Zero turns it off.	Görüntülenmesi çok, yorumu az olan videoları gizle. Beğeni başına görüntülenme ile aynı şekilde çalışır. Sıfır bunu kapatır.
@@ -879,6 +881,7 @@ Plays videos that TikTok covers with a content warning without asking you to tap
 Playback	Oynatma
 Player	Oynatıcı
 Playlist posts	Oynatma listesi gönderileri
+Subscriber-only posts	Abonelere özel gönderiler
 Popular	Popüler
 Popups	Açılır pencereler
 Preset	Hazır ayar

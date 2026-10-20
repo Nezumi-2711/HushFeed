@@ -553,6 +553,7 @@ Hide picture comments,Sembunyikan komentar bergambar
 Hide reply previews,Sembunyikan pratinjau balasan
 Don't open a reply under each comment. View replies still shows all of them.,Jangan buka satu balasan di bawah setiap komentar. Lihat balasan tetap menampilkan semuanya.
 Hide playlist videos,Sembunyikan video playlist
+Hide subscriber-only videos,Sembunyikan video khusus pelanggan
 Hide promotional music,Sembunyikan musik promosi
 Hide comment typing suggestions,Sembunyikan saran saat mengetik komentar
 Hide rows by title,Sembunyikan baris berdasarkan judul
@@ -617,6 +618,7 @@ Hide video actions,Sembunyikan aksi video
 "Hide videos with TikTok's AI-generated label, AI content credentials, a TikTok AI effect such as AI Alive, or a tag like #ai or #aigenerated.","Sembunyikan video dengan label AI dari TikTok, kredensial konten AI, efek AI TikTok seperti AI Alive, atau tagar seperti #ai atau #aigenerated."
 Hide videos marked as paid partnership or branded content.,Sembunyikan video yang ditandai sebagai kemitraan berbayar atau konten bermerek.
 Hide videos posted as part of a playlist.,Sembunyikan video yang diunggah sebagai bagian dari playlist.
+"Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.","Sembunyikan kiriman bergembok yang hanya bisa ditonton pelanggan kreator, di feed dan di profil."
 Hide videos posted by verified accounts.,Sembunyikan video yang diunggah akun terverifikasi.
 Hide videos that belong to a paid Series.,Sembunyikan video yang termasuk Series berbayar.
 Hide videos with a lot of views and few comments. Works the same way as views per like. Zero turns it off.,Sembunyikan video dengan banyak tayangan dan sedikit komentar. Bekerja sama seperti tayangan per suka. Nol mematikannya.
@@ -843,6 +845,7 @@ Plays videos that TikTok covers with a content warning without asking you to tap
 Playback,Pemutaran
 Player,Pemutar
 Playlist posts,Kiriman playlist
+Subscriber-only posts,Kiriman khusus pelanggan
 Popular,Populer
 Popups,Pop-up
 Press and hold a profile picture to save the full size original to your photo destination.,Tekan dan tahan foto profil untuk menyimpan aslinya dalam ukuran penuh ke lokasi simpan fotomu.

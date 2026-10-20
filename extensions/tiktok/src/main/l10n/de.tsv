@@ -561,6 +561,7 @@ Hide picture comments	Bild-Kommentare ausblenden
 Hide reply previews	Antwortvorschauen ausblenden
 Don't open a reply under each comment. View replies still shows all of them.	Unter Kommentaren keine Antwort aufgeklappt zeigen. Antworten ansehen zeigt weiterhin alle.
 Hide playlist videos	Playlist-Videos ausblenden
+Hide subscriber-only videos	Videos nur für Abonnenten ausblenden
 Hide promotional music	Werbemusik ausblenden
 Hide comment typing suggestions	Kommentarvorschläge beim Tippen ausblenden
 Hide rows by title	Zeilen nach Titel ausblenden
@@ -625,6 +626,7 @@ Hide video actions	Videoaktionen ausblenden
 Hide videos with TikTok's AI-generated label, AI content credentials, a TikTok AI effect such as AI Alive, or a tag like #ai or #aigenerated.	Videos mit TikToks KI-Kennzeichnung, KI-Inhaltsnachweisen, einem KI-Effekt von TikTok wie AI Alive oder einem Tag wie #ai oder #aigenerated ausblenden.
 Hide videos marked as paid partnership or branded content.	Videos ausblenden, die als bezahlte Partnerschaft oder Markeninhalt gekennzeichnet sind.
 Hide videos posted as part of a playlist.	Videos ausblenden, die als Teil einer Playlist veröffentlicht wurden.
+Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.	Beiträge mit Schloss, die nur die Abonnenten eines Creators ansehen können, im Feed und auf Profilen ausblenden.
 Hide videos posted by verified accounts.	Videos von verifizierten Konten ausblenden.
 Hide videos that belong to a paid Series.	Videos ausblenden, die zu einer bezahlten Serie gehören.
 Hide videos with a lot of views and few comments. Works the same way as views per like. Zero turns it off.	Blendet Videos mit vielen Aufrufen und wenigen Kommentaren aus. Funktioniert genauso wie Aufrufe pro Like. Null schaltet es aus.
@@ -849,6 +851,7 @@ Plays videos that TikTok covers with a content warning without asking you to tap
 Playback	Wiedergabe
 Player	Wiedergabe
 Playlist posts	Playlist-Beiträge
+Subscriber-only posts	Beiträge nur für Abonnenten
 Popular	Beliebt
 Popups	Pop-ups
 Press and hold a profile picture to save the full size original to your photo destination.	Ein Profilbild gedrückt halten, um das Original in voller Größe im Fotoordner zu speichern.

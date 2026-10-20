@@ -6,6 +6,8 @@
 
 * **TikTok:** Un nuovo interruttore apre scuri il menu di condivisione, il fan club e le schede profilo di una stanza LIVE quando TikTok è in modalità scura (#159).
 
+* **TikTok:** Un nuovo interruttore del filtro del feed, Nascondi i video solo per abbonati, nasconde i post che solo gli abbonati di un creator possono guardare, nel feed e nei profili (#219).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed ora supporta TikTok 47.4.3, e solo quella. Applica la patch all'APK 47.4.3 di APKMirror. PineDrama resta alla 47.1.4.

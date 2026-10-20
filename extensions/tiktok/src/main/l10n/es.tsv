@@ -558,6 +558,7 @@ Hide picture comments	Ocultar los comentarios con imagen
 Hide reply previews	Ocultar las vistas previas de respuestas
 Don't open a reply under each comment. View replies still shows all of them.	No abrir una respuesta debajo de cada comentario. Ver respuestas sigue mostrándolas todas.
 Hide playlist videos	Ocultar los vídeos de listas de reproducción
+Hide subscriber-only videos	Ocultar los vídeos solo para suscriptores
 Hide promotional music	Ocultar la música promocional
 Hide comment typing suggestions	Ocultar sugerencias al escribir comentarios
 Hide rows by title	Ocultar filas por título
@@ -622,6 +623,7 @@ Hide video actions	Ocultar las acciones del vídeo
 Hide videos with TikTok's AI-generated label, AI content credentials, a TikTok AI effect such as AI Alive, or a tag like #ai or #aigenerated.	Ocultar los vídeos con la etiqueta de IA de TikTok, credenciales de contenido de IA, un efecto de IA de TikTok como AI Alive o una etiqueta como #ai o #aigenerated.
 Hide videos marked as paid partnership or branded content.	Ocultar los vídeos marcados como colaboración pagada o contenido de marca.
 Hide videos posted as part of a playlist.	Ocultar los vídeos publicados dentro de una lista de reproducción.
+Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.	Ocultar las publicaciones con candado que solo pueden ver los suscriptores de un creador, en el feed y en los perfiles.
 Hide videos posted by verified accounts.	Ocultar los vídeos publicados por cuentas verificadas.
 Hide videos that belong to a paid Series.	Ocultar los vídeos que pertenecen a una Serie de pago.
 Hide videos with a lot of views and few comments. Works the same way as views per like. Zero turns it off.	Oculta los vídeos con muchas visualizaciones y pocos comentarios. Funciona igual que las visualizaciones por me gusta. Cero lo desactiva.
@@ -846,6 +848,7 @@ Plays videos that TikTok covers with a content warning without asking you to tap
 Playback	Reproducción
 Player	Reproductor
 Playlist posts	Publicaciones de listas de reproducción
+Subscriber-only posts	Publicaciones solo para suscriptores
 Popular	Popular
 Popups	Ventanas emergentes
 Press and hold a profile picture to save the full size original to your photo destination.	Mantén pulsada una foto de perfil para guardar el original a tamaño completo en tu destino de fotos.

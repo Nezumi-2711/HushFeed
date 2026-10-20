@@ -713,6 +713,7 @@ Hide reply previews,隐藏回复预览
 Don't open a reply under each comment. View replies still shows all of them.,不在每条评论下展开一条回复。查看回复仍会显示全部回复.
 "Hide place badges on videos, including cards with multiple places. Videos and your location permissions stay unchanged.",隐藏视频上的地点徽章，包括具有多个地点的卡片。视频和您的位置权限保持不变.
 Hide playlist videos,隐藏播放列表视频
+Hide subscriber-only videos,隐藏仅限订阅者的视频
 Hide profile shortcuts,隐藏个人资料快捷方式
 Hide profile shortcuts by name,按名称隐藏配置文件快捷方式
 Hide profile views,隐藏个人资料视图
@@ -816,6 +817,7 @@ Hide video actions,隐藏视频动作
 Hide videos marked as paid partnership or branded content.,隐藏标记为付费合作伙伴或品牌内容的视频.
 Hide videos marked as using promotional music.,隐藏标记为使用促销音乐的视频.
 Hide videos posted as part of a playlist.,隐藏作为播放列表的一部分发布的视频.
+"Hide posts only a creator's subscribers can watch, the ones with a lock, on the feed and on profiles.",在推荐流和个人主页上隐藏只有创作者的订阅者才能观看的带锁帖子.
 Hide videos posted by verified accounts.,隐藏已验证帐户发布的视频.
 Hide videos that belong to a paid Series.,隐藏属于付费系列的视频.
 "Hide videos that use a sound blocked with the player's sound button, or named below.",隐藏使用播放器声音按钮阻止的声音或如下命名的视频.
@@ -1223,6 +1225,7 @@ Playback,回放
 Player,玩家
 Playing at %1$sx,在 %1$sx 进行比赛
 Playlist posts,播放列表帖子
+Subscriber-only posts,仅限订阅者的帖子
 Plays videos that TikTok covers with a content warning without asking you to tap through first.,播放 TikTok 包含内容警告的视频，而不要求您先点按.
 Popular,热门
 Popups,弹出窗口
