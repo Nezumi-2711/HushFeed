@@ -46,7 +46,7 @@ public final class SuggestedAccountCells {
     private SuggestedAccountCells() {
     }
 
-    /** Called at the end of every suggestion cell's bind, with the cell. */
+    /** Called at the end of every suggestion cell's bind and its list title's, with the cell. */
     public static void onBind(Object cell) {
         try {
             Object view = Reflect.readField(cell, "itemView");

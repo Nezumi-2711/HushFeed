@@ -88,7 +88,8 @@ internal fun isSuggestionListCell(type: String) =
  * PowerCell method with a real name. The list's `TitleAreaCell` is hooked the same way, so
  * no title is left over an empty list. Each bridge in that family is hooked, so a build that
  * adds a cell class is covered as long as it keeps the package and the suffix, and a build
- * that renames the package fails here rather than shipping a switch that does nothing.
+ * that moves the cells fails here, title cell or not, rather than shipping a switch that does
+ * nothing.
  *
  * @return how many bind methods were hooked.
  */
@@ -101,15 +102,23 @@ internal fun BytecodePatchContext.collapseSuggestionCells(): Int {
             if (method.name == "onBindItemView" && method.implementation != null) binds += classDef to method
         }
     }
-    if (binds.isEmpty()) {
-        throw PatchException(
-            "Hide suggested accounts: no suggestion cell binds under $CELL_PACKAGE; the cells moved.",
-        )
-    }
+    requireSuggestionCellBinds(binds.map { (classDef, _) -> classDef.type })
     binds.forEach { (classDef, method) ->
         mutableClassDefBy(classDef).findMutableMethodOf(method).collapseSuggestionCellAtBind()
     }
     return binds.size
+}
+
+/**
+ * Fails the patch when no suggestion cell's bind was found, so the switch never ships doing
+ * nothing. A title cell alone doesn't count: it would hide the heading and leave the people.
+ */
+internal fun requireSuggestionCellBinds(types: List<String>) {
+    if (types.none { it.contains(CELL_PACKAGE) && it.endsWith(CELL_SUFFIX) }) {
+        throw PatchException(
+            "Hide suggested accounts: no suggestion cell binds under $CELL_PACKAGE; the cells moved.",
+        )
+    }
 }
 
 /**

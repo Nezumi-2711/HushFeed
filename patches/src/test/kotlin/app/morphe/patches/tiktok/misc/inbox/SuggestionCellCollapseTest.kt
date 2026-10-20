@@ -1,5 +1,6 @@
 package app.morphe.patches.tiktok.misc.inbox
 
+import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -15,6 +16,7 @@ import com.android.tools.smali.dexlib2.immutable.reference.ImmutableTypeReferenc
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -60,6 +62,16 @@ class SuggestionCellCollapseTest {
         assertFalse(isSuggestionListCell("${cells}AdapterLoadingCell;"))
         assertFalse(isSuggestionListCell("${cells}FixedCell;"))
         assertFalse(isSuggestionListCell("Lcom/ss/android/ugc/aweme/profile/TitleAreaCell;"))
+    }
+
+    @Test
+    fun `a build whose suggestion cells moved fails even when the title cell stayed`() {
+        val cells = "Lcom/ss/android/ugc/aweme/relation/usercard/impl/cell/"
+        requireSuggestionCellBinds(listOf("${cells}TitleAreaCell;", "${cells}AbsRecUserCell;"))
+        assertThrows(PatchException::class.java) {
+            requireSuggestionCellBinds(listOf("${cells}TitleAreaCell;"))
+        }
+        assertThrows(PatchException::class.java) { requireSuggestionCellBinds(emptyList()) }
     }
 
     /** `AbsRecUserCell.onBindItemView(LX/0lOS;)V` on 46.2.3: a check-cast, the typed bind, return. */
