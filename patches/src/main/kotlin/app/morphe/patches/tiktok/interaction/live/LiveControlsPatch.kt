@@ -1196,6 +1196,61 @@ internal fun hookBadgeTiles(bind: MutableMethod) {
     }
 }
 
+private const val SET_BACKGROUND_RESOURCE = "Landroid/view/View;->setBackgroundResource(I)V"
+
+/**
+ * The profile card's group chat row bind (X.0wJT.LJIIJ on 47.4.3, #159): the row puts a fixed
+ * white shape on itself, in the bind for a host with no group yet and in a helper for the rest,
+ * under a title and count in the card theme's colors, light on white on the dark card (Login2,
+ * 2026-10-20).
+ */
+internal object LiveProfileGroupChatFingerprint : Fingerprint(
+    returnType = "Z",
+    parameters = listOf(LIVE_USER, "Ljava/lang/Object;"),
+    strings = listOf("group_chat", "profile_card_entrance_click"),
+    custom = { _, classDef -> classDef.methods.any { groupChatBackgrounds(it).isNotEmpty() } },
+)
+
+/**
+ * In [method], every `setBackgroundResource` on a ViewGroup field of [method]'s own class: the
+ * call's receiver has to hold that field's read on every path that reaches it, so a register the
+ * method reuses for another view is never handed over as the row.
+ */
+internal fun groupChatBackgrounds(method: Method): List<Int> {
+    val code = method.implementation?.instructions?.toList() ?: return emptyList()
+    fun reference(at: Int) = (code[at] as? ReferenceInstruction)?.reference
+    val reads = code.indices.filter { at ->
+        code[at].opcode == Opcode.IGET_OBJECT && (reference(at) as? FieldReference)?.let {
+            it.definingClass == method.definingClass && it.type == "Landroid/view/ViewGroup;"
+        } == true
+    }
+    return code.indices.filter { at ->
+        code[at].opcode == Opcode.INVOKE_VIRTUAL && (reference(at) as? MethodReference)?.let {
+            "${it.definingClass}->${it.name}(${it.parameterTypes.joinToString("")})${it.returnType}" == SET_BACKGROUND_RESOURCE
+        } == true && (code[at] as FiveRegisterInstruction).registerC.let { row ->
+            reads.any { read -> (code[read] as TwoRegisterInstruction).registerA == row && onlyReaches(method, read, at, row) }
+        }
+    }
+}
+
+/**
+ * Hands the group chat row to the extension right after each white shape goes on it, in every
+ * method of the bind's class. While Dark LIVE panels is on in dark mode and the row's text came out
+ * light, the extension gives the shape the event box's see-through light fill. The hook goes
+ * after the call, so a branch over the call skips it with the call, and it writes no register.
+ */
+internal fun hookGroupChat(methods: Iterable<MutableMethod>) {
+    var hooked = 0
+    methods.forEach { method ->
+        groupChatBackgrounds(method).asReversed().forEach { at ->
+            val row = method.getInstruction<FiveRegisterInstruction>(at).registerC
+            method.addInstructions(at + 1, "invoke-static {v$row}, $PANEL_THEME->eventBox(Ljava/lang/Object;)V")
+            hooked++
+        }
+    }
+    if (hooked == 0) throw PatchException("LIVE controls: the profile card's group chat row wasn't found")
+}
+
 internal const val PULL_STREAM_SERVICE ="Lcom/bytedance/android/live/livepullstream/PullStreamService;"
 private const val LIVE_MODE = "Lcom/bytedance/android/livesdkapi/depend/model/live/LiveMode;"
 
@@ -1693,6 +1748,9 @@ val liveControlsPatch = bytecodePatch(
         // extension lays a white copy of each tile's shape under it while the switch is on in
         // dark mode.
         hookBadgeTiles(LiveProfileBadgeFingerprint.method)
+        // Its group chat row is the same kind of fixed white shape under text in the card theme's
+        // colors (Login2, 2026-10-20), so the extension gives it the event box's fill.
+        hookGroupChat(mutableClassDefBy(LiveProfileGroupChatFingerprint.method.definingClass).methods)
         // The older quality list's rows can read white on white in dark mode, switch or no
         // switch; the extension gives poorly contrasted text a readable color there.
         hookQualityList(LiveDefinitionListFingerprint.method)

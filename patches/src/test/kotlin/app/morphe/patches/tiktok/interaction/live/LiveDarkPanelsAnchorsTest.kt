@@ -48,7 +48,9 @@ import org.junit.Test
  * label list and the strip drawing it go to the extension right before the card walks them, and
  * the label model keeps the fields the extension sets by name. The card's upcoming event box is a
  * fixed white shape under text in the card theme's colors, so the event module's bind hands the
- * box to the extension right after reading it, before its null check. The ranking dialogs that take TikTok's light overlay with force
+ * box to the extension right after reading it, before its null check. The group chat row puts the
+ * same kind of shape on itself, so each of its module's setBackgroundResource calls on the row's
+ * own field hands the row over right after. The ranking dialogs that take TikTok's light overlay with force
  * instead of the dark one keep their names, and their pages and lists stay fragments: plain ones
  * take the room's inflater, so androidx's fragment inflater takes a hook of its own, and the
  * extension finds them by the public getParentFragment and getContext it calls by name. The
@@ -402,6 +404,82 @@ class LiveDarkPanelsAnchorsTest {
         assertEquals(Opcode.INVOKE_STATIC, hook.opcode)
         assertEquals(listOf(1, 3), listOf(hook.registerC, hook.registerD))
         assertThrows(PatchException::class.java) { hookBadgeTiles(badgeBind("nop")) }
+    }
+
+    @Test
+    fun `each declared build keeps the profile card's group chat row the event box fill reaches`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val found = classes.values.flatMap { owner -> owner.methods.filter { LiveProfileGroupChatFingerprint.takes(it, owner) } }
+            assertEquals("${apk.name}: the group chat bind", 1, found.size)
+            val rows = classes.getValue(found.single().definingClass).methods.map { MutableMethod(it) }
+            val calls = rows.associateWith { groupChatBackgrounds(it) }.filterValues { it.isNotEmpty() }
+            if ("47.4.3" in apk.name) {
+                // X/0wJT puts drawable/e9l on its row in LJIJ and drawable/e9i in the bind's
+                // branch for a host with no group yet (2026-10-20).
+                assertEquals("${apk.name}: the group chat module", "LX/0wJT;", found.single().definingClass)
+                assertEquals("${apk.name}: one call each", mapOf("LJIIJ" to listOf(54), "LJIJ" to listOf(3)),
+                    calls.mapKeys { it.key.name }.toSortedMap())
+            }
+
+            // The hook as the patch writes it: the extension's call right after each of TikTok's,
+            // on the same receiver, and nothing else in the class changes.
+            val originals = rows.associateWith { it.implementation?.instructions?.toList().orEmpty() }
+            hookGroupChat(rows)
+            rows.forEach { method ->
+                val original = originals.getValue(method)
+                val at = calls[method].orEmpty()
+                val code = method.implementation?.instructions?.toList().orEmpty()
+                assertEquals("${apk.name}: ${method.name} grows by its hooks", original.size + at.size, code.size)
+                at.forEachIndexed { done, call ->
+                    val hook = code[call + done + 1] as FiveRegisterInstruction
+                    assertEquals(Opcode.INVOKE_STATIC, hook.opcode)
+                    assertEquals("${apk.name}: the hook's call", "eventBox", ((hook as ReferenceInstruction).reference as MethodReference).name)
+                    assertEquals(listOf(1, (original[call] as FiveRegisterInstruction).registerC), listOf(hook.registerCount, hook.registerC))
+                }
+                if (at.isNotEmpty()) assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(method))
+            }
+        }
+    }
+
+    /** A group chat row method that reads its row from [owner]'s field, then runs [after]. */
+    private fun groupChatRow(after: String, owner: String = "Lapp/morphe/Group;", type: String = "Landroid/view/ViewGroup;") =
+        MutableMethod(ImmutableMethod("Lapp/morphe/Group;", "LJIJ", emptyList(), "V", AccessFlags.PUBLIC.value or AccessFlags.FINAL.value,
+            null, null, ImmutableMethodImplementation(4, emptyList(), null, null))).apply {
+            addInstructionsWithLabels(0, """
+                iget-object v1, p0, $owner->row:$type
+                if-eqz v1, :end
+                const v0, 0x7f0418aa
+                $after
+                :end
+                return-void
+            """)
+        }
+
+    @Test
+    fun `the group chat hook takes only calls the row alone reaches`() {
+        val set = "invoke-virtual {v1, v0}, Landroid/view/View;->setBackgroundResource(I)V"
+        assertEquals(listOf(3), groupChatBackgrounds(groupChatRow(set)))
+        assertEquals("a later view in the same register isn't the row", listOf(3),
+            groupChatBackgrounds(groupChatRow("$set\nnew-instance v1, Landroid/view/View;\n$set")))
+        assertEquals("another view can reach the call", emptyList<Int>(), groupChatBackgrounds(groupChatRow(
+            "if-eqz v0, :call\nnew-instance v1, Landroid/view/View;\n:call\n$set")))
+        assertEquals("another class's field", emptyList<Int>(), groupChatBackgrounds(groupChatRow(set, owner = "Lapp/morphe/Other;")))
+        assertEquals("not a ViewGroup field", emptyList<Int>(), groupChatBackgrounds(groupChatRow(set, type = "Landroid/view/View;")))
+        assertEquals("another call", emptyList<Int>(), groupChatBackgrounds(groupChatRow(
+            "invoke-virtual {v1, v0}, Landroid/view/View;->setBackgroundColor(I)V")))
+        assertEquals("a range call", emptyList<Int>(), groupChatBackgrounds(groupChatRow(
+            "invoke-virtual/range {v0 .. v1}, Landroid/view/View;->setBackgroundResource(I)V")))
+
+        val hooked = groupChatRow(set)
+        hookGroupChat(listOf(hooked))
+        val code = hooked.implementation!!.instructions.toList()
+        val hook = code[4] as FiveRegisterInstruction
+        assertEquals(Opcode.INVOKE_STATIC, hook.opcode)
+        assertEquals(listOf(1, 1), listOf(hook.registerCount, hook.registerC))
+        assertEquals("the null check still skips both", 5, (code[1] as BuilderOffsetInstruction).target.location.index)
+        assertEquals(Opcode.RETURN_VOID, code[5].opcode)
+        assertThrows(PatchException::class.java) { hookGroupChat(listOf(groupChatRow("nop"))) }
     }
 
     @Test

@@ -292,7 +292,9 @@ public final class LivePanelTheme {
      * time and chevron take their colors from the card's theme, so on the dark card the "LIVE
      * event" line read light on white (Login2, 2026-10-20). While Dark LIVE panels is on in dark
      * mode and the box's own text came out light, its shape gets a see-through light fill like the
-     * card's own tiles, corners kept. A box whose text is still dark keeps its white.
+     * card's own tiles, corners kept. A box whose text is still dark keeps its white. The group
+     * chat row ("Chat di gruppo") calls it too, right after it puts the same kind of white shape
+     * on itself.
      */
     public static void eventBox(Object box) {
         try {
