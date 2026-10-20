@@ -9,6 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -31,9 +32,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowToast;
 
@@ -273,6 +276,30 @@ public class ShortLinkExpanderTest {
         idle();
         assertEquals(SHORT, text());
         assertEquals(0, opens.get());
+    }
+
+    @Test public void aLinkSentToAnotherAppEndsTheWait() {
+        ActivityController<Activity> tiktok = Robolectric.buildActivity(Activity.class).setup();
+        copy("hello");
+        ShortLinkExpander.watchShortened(context, ShortLinkExpander.clipStamp(context), resolver);
+        ShortLinkExpander.watch(context, SHORT, SHORT, ShortLinkExpander.clipStamp(context), resolver);
+        idle();
+        // Android's share sheet takes the front, and its own Copy puts the link there.
+        tiktok.pause();
+        copy(SHORT);
+        idle();
+        tiktok.resume();
+        idle();
+        assertEquals(SHORT, text());
+        assertEquals(0, opens.get());
+        assertFalse(ShortLinkExpander.watchingShortenedForTests());
+
+        // TikTok's own Copy link on the next share still gets the full link.
+        ShortLinkExpander.watch(context, OTHER, OTHER, ShortLinkExpander.clipStamp(context), resolver);
+        copy(OTHER);
+        idle();
+        assertEquals(1, opens.get());
+        assertEquals(PHOTO, text());
     }
 
     @Test public void aLinkThatCouldntBeOpenedIsLeftForAWhile() {
