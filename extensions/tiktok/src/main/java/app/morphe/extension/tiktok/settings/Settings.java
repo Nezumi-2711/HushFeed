@@ -1185,6 +1185,9 @@ public class Settings extends BaseSettings {
     public static final StringSetting SIM_SPOOF_ISO = new StringSetting("simspoof_iso", "us");
     public static final StringSetting SIMSPOOF_MCCMNC = new StringSetting("simspoof_mccmnc", "310260");
     public static final StringSetting SIMSPOOF_OP_NAME = new StringSetting("simspoof_op_name", "T-Mobile");
+    // Read by the region patch's request hooks as each For You request is built, so no restart.
+    public static final BooleanSetting SIM_SPOOF_FEED_REAL =
+            new BooleanSetting("simspoof_feed_real", FALSE, false, Setting.parent(SIM_SPOOF));
     // Network proxy. Off by default, and every value is read once as TikTok starts, before its
     // network stack is built, so each one takes a restart. The user name and password stay out
     // of backups: a backup file is easy to pass around.

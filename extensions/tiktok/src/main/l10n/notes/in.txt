@@ -8,6 +8,8 @@
 
 * **TikTok:** Sakelar filter feed baru, Sembunyikan video khusus pelanggan, menyembunyikan kiriman yang hanya bisa ditonton pelanggan kreator, di feed dan di profil (#219).
 
+* **TikTok:** Sakelar Wilayah baru, Biarkan Untuk Kamu memakai SIM asli, membuat pencarian stiker dan PineDrama melihat SIM yang kamu pilih, sementara Untuk Kamu meminta video dengan SIM ponselmu sendiri. Perlu patch Region spoof di paketmu (#214, #215).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed kini mendukung TikTok 47.4.3, dan hanya versi itu. Patch APK 47.4.3 dari APKMirror. PineDrama tetap di 47.1.4.

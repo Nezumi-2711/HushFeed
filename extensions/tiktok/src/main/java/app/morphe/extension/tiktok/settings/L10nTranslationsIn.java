@@ -15,7 +15,7 @@ final class L10nTranslationsIn {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4330);
+        Map<String, String> table = new HashMap<>(4334);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -1897,11 +1897,13 @@ final class L10nTranslationsIn {
                 "Tetap putar di latar belakang aktif di pengaturan Pemutaran Hushfeed, jadi TikTok mendapat 2 untuk kunci ini dan penggantian di sini tidak berpengaruh sampai tombol itu dimatikan.");
         table.put("Keep the Favorites tab",
                 "Pertahankan tab Favorit");
-        table.put("Keep the LIVE quality after TikTok restarts",
-                "Pertahankan kualitas LIVE setelah TikTok dimulai ulang");
+        table.put("Keep the For You feed on your real SIM",
+                "Biarkan Untuk Kamu memakai SIM asli");
     }
 
     private static void fill15(Map<String, String> table) {
+        table.put("Keep the LIVE quality after TikTok restarts",
+                "Pertahankan kualitas LIVE setelah TikTok dimulai ulang");
         table.put("Keep the clock and status icons off the screen while TikTok is open. Swipe down from the top to peek at them.",
                 "Sembunyikan jam dan ikon status selama TikTok terbuka. Geser dari atas untuk mengintipnya.");
         table.put("Keep the language picked in TikTok",
@@ -2020,11 +2022,11 @@ final class L10nTranslationsIn {
                 "Suka");
         table.put("Likes aren't available for this video",
                 "Suka tidak tersedia untuk video ini");
-        table.put("Likes range",
-                "Rentang suka");
     }
 
     private static void fill16(Map<String, String> table) {
+        table.put("Likes range",
+                "Rentang suka");
         table.put("Limit background traffic",
                 "Batasi lalu lintas latar belakang");
         table.put("Limits",
@@ -2143,11 +2145,11 @@ final class L10nTranslationsIn {
                 "Penyimpanan media");
         table.put("Message",
                 "Pesan");
-        table.put("Message bubble colors, Inbox archive and sharing to more chats",
-                "Warna gelembung pesan, arsip Kotak Masuk, dan berbagi ke lebih banyak chat");
     }
 
     private static void fill17(Map<String, String> table) {
+        table.put("Message bubble colors, Inbox archive and sharing to more chats",
+                "Warna gelembung pesan, arsip Kotak Masuk, dan berbagi ke lebih banyak chat");
         table.put("Messages, profiles and search still work.",
                 "Pesan, profil dan pencarian masih berfungsi.");
         table.put("Microphone in use",
@@ -2266,11 +2268,11 @@ final class L10nTranslationsIn {
                 "Belum ada aturan, jadi tidak ada yang cocok.");
         table.put("No seen videos recorded yet.",
                 "Belum ada video yang dilihat tercatat.");
-        table.put("No share actions have been seen yet",
-                "Belum ada tindakan berbagi yang terlihat");
     }
 
     private static void fill18(Map<String, String> table) {
+        table.put("No share actions have been seen yet",
+                "Belum ada tindakan berbagi yang terlihat");
         table.put("No share actions match this search",
                 "Tidak ada tindakan berbagi yang cocok dengan pencarian ini");
         table.put("No sound to block on this video",
@@ -2389,11 +2391,11 @@ final class L10nTranslationsIn {
                 "Satu nilai per baris");
         table.put("One video was recorded before each account kept its own list. It hides nothing until you add it here.",
                 "Satu video direkam sebelum setiap akun punya daftarnya sendiri. Video itu tidak menyembunyikan apa pun sampai kamu menambahkannya di sini.");
-        table.put("One was already saved",
-                "Satu sudah tersimpan sebelumnya");
     }
 
     private static void fill19(Map<String, String> table) {
+        table.put("One was already saved",
+                "Satu sudah tersimpan sebelumnya");
         table.put("Only bottom tabs TikTok has loaded on this device are shown here. This doesn't force unavailable tabs to appear.",
                 "Hanya tab bawah yang sudah dimuat TikTok di perangkat ini yang muncul di sini. Ini tidak memaksa tab yang tidak tersedia untuk muncul.");
         table.put("Only fields the Lab can check and copy safely are shown.",
@@ -2512,11 +2514,11 @@ final class L10nTranslationsIn {
                 "Jeda video saat komentar terbuka");
         table.put("Paused",
                 "Dijeda");
-        table.put("Pauses the video behind the comment sheet while you read. It plays on from the same spot when the sheet closes.",
-                "Menjeda video di balik komentar saat kamu membaca. Video lanjut dari titik yang sama saat komentar ditutup.");
     }
 
     private static void fill20(Map<String, String> table) {
+        table.put("Pauses the video behind the comment sheet while you read. It plays on from the same spot when the sheet closes.",
+                "Menjeda video di balik komentar saat kamu membaca. Video lanjut dari titik yang sama saat komentar ditutup.");
         table.put("People, shortcuts and sending controls",
                 "Orang, pintasan, dan kontrol pengiriman");
         table.put("Performance",
@@ -2635,11 +2637,11 @@ final class L10nTranslationsIn {
                 "Latar profil");
         table.put("Profile banner",
                 "Banner profil");
-        table.put("Profile banner and new profile layout",
-                "Banner profil dan tata letak profil baru");
     }
 
     private static void fill21(Map<String, String> table) {
+        table.put("Profile banner and new profile layout",
+                "Banner profil dan tata letak profil baru");
         table.put("Profile picture",
                 "Foto profil");
         table.put("Profile picture saved to %1$s",
@@ -2758,11 +2760,11 @@ final class L10nTranslationsIn {
                 "Hapus %1$s");
         table.put("Remove all overrides",
                 "Hapus semua penggantian");
-        table.put("Remove feed ads",
-                "Hapus iklan di feed");
     }
 
     private static void fill22(Map<String, String> table) {
+        table.put("Remove feed ads",
+                "Hapus iklan di feed");
         table.put("Remove feed ads, creator commission posts, paid partnerships, and branded content.",
                 "Hapus iklan di feed, postingan komisi kreator, kemitraan berbayar, dan konten bermerek.");
         table.put("Remove story rings",
@@ -2881,11 +2883,11 @@ final class L10nTranslationsIn {
                 "Kategori contoh untuk dicoba");
         table.put("Save",
                 "Simpan");
-        table.put("Save a profile picture on a long press",
-                "Simpan foto profil dengan tekan lama");
     }
 
     private static void fill23(Map<String, String> table) {
+        table.put("Save a profile picture on a long press",
+                "Simpan foto profil dengan tekan lama");
         table.put("Save a story from its share sheet",
                 "Simpan Story dari menu bagikan");
         table.put("Save a story on a long press",
@@ -3004,11 +3006,11 @@ final class L10nTranslationsIn {
                 "Menyimpan laporan error TikTok terbaru di ponsel ini agar bisa dimasukkan ke laporan diagnostik.");
         table.put("Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.",
                 "Menyimpan file subtitel (SRT) bersama video. File itu masuk ke Movies di Android 11 ke atas, Download di Android 10, dan folder videomu di versi yang lebih lama. Di Android 11 ke atas dengan Simpan detail menyala, video pindah ke Download atau Documents dan subtitel tetap di Movies.");
-        table.put("Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
-                "Menyimpan keterangan, kreator, tautan, dan tanggal unggah dalam file teks di samping video. Di Android 10 ke atas, pasangan file itu masuk ke Download atau Documents dengan nama folder yang sama. Berlaku untuk penyimpanan yang dilakukan Hushfeed.");
     }
 
     private static void fill24(Map<String, String> table) {
+        table.put("Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
+                "Menyimpan keterangan, kreator, tautan, dan tanggal unggah dalam file teks di samping video. Di Android 10 ke atas, pasangan file itu masuk ke Download atau Documents dengan nama folder yang sama. Berlaku untuk penyimpanan yang dilakukan Hushfeed.");
         table.put("Saves the details file in JSON format instead of plain text. Useful if another tool will read it.",
                 "Menyimpan file detail dalam format JSON, bukan teks biasa. Berguna jika file akan dibaca oleh alat lain.");
         table.put("Saves your Hushfeed settings and Feature Gate Lab rules to a file.",
@@ -3127,11 +3129,11 @@ final class L10nTranslationsIn {
                 "Kirim TikTok lewat proksi");
         table.put("Send it now",
                 "Kirim sekarang");
-        table.put("Send links to another app",
-                "Kirim tautan ke aplikasi lain");
     }
 
     private static void fill25(Map<String, String> table) {
+        table.put("Send links to another app",
+                "Kirim tautan ke aplikasi lain");
         table.put("Sending feedback",
                 "Mengirim masukan");
         table.put("Sending the message",
@@ -3250,11 +3252,11 @@ final class L10nTranslationsIn {
                 "Tampilkan kegagalan di layar");
         table.put("Show follow status",
                 "Tampilkan status mengikuti");
-        table.put("Show gates",
-                "Tampilkan gate");
     }
 
     private static void fill26(Map<String, String> table) {
+        table.put("Show gates",
+                "Tampilkan gate");
         table.put("Show how long each video runs under its view count on profile grids. Photo posts and videos TikTok sent no length for show none.",
                 "Tampilkan berapa lama setiap video berjalan di bawah jumlah tayangannya di kisi profil. Postingan foto dan video yang durasinya tidak dikirim TikTok tidak menampilkan apa pun.");
         table.put("Show how many were filtered",
@@ -3373,11 +3375,11 @@ final class L10nTranslationsIn {
                 "Masuk untuk melihat daftar ini");
         table.put("Sign in without a passkey",
                 "Masuk tanpa kunci sandi");
-        table.put("Skip TikTok's setup screens",
-                "Lewati layar penyiapan TikTok");
     }
 
     private static void fill27(Map<String, String> table) {
+        table.put("Skip TikTok's setup screens",
+                "Lewati layar penyiapan TikTok");
         table.put("Skip content warnings",
                 "Lewati peringatan konten");
         table.put("Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off.",
@@ -3452,6 +3454,8 @@ final class L10nTranslationsIn {
                 "Lokasi simpan stiker");
         table.put("Sticker saved to %1$s",
                 "Stiker disimpan ke %1$s");
+        table.put("Sticker search, PineDrama and the rest of TikTok still see the SIM above, while For You asks for videos with your phone's own SIM country and carrier. Your IP address and account history still count.",
+                "Pencarian stiker, PineDrama, dan bagian TikTok lainnya tetap melihat SIM di atas, sedangkan Untuk Kamu meminta video dengan negara dan operator SIM ponselmu sendiri. Alamat IP dan riwayat akunmu tetap berpengaruh.");
         table.put("Stickers can't be saved to the folder in that file, so your sticker folder was kept",
                 "Stiker tidak bisa disimpan ke folder di file itu, jadi folder stikermu tetap dipakai");
         table.put("Stickers: %1$s",
@@ -3494,13 +3498,13 @@ final class L10nTranslationsIn {
                 "Hentikan profiling AI di perangkat");
         table.put("Stop recording this LIVE",
                 "Hentikan perekaman LIVE ini");
+    }
+
+    private static void fill28(Map<String, String> table) {
         table.put("Stop search results playing on their own",
                 "Hentikan hasil pencarian diputar sendiri");
         table.put("Stop the brand animation that plays over the comments when what someone typed matches an advertiser's trigger.",
                 "Hentikan animasi merek yang muncul di atas komentar saat ketikan seseorang cocok dengan pemicu pengiklan.");
-    }
-
-    private static void fill28(Map<String, String> table) {
         table.put("Stop the bubble TikTok floats at the top of the feed to point you to a LIVE.",
                 "Hentikan gelembung yang dimunculkan TikTok di atas feed untuk mengarahkanmu ke sebuah LIVE.");
         table.put("Stop the bubble that asks you to share a video with friends after you like it.",
@@ -3617,13 +3621,13 @@ final class L10nTranslationsIn {
                 "Ketuk, lalu buka layar yang berisi hal yang ingin kamu sembunyikan. Setelah %1$d detik Hushfeed merekam susunan layar itu, tanpa teksnya sama sekali, untuk laporan diagnostik.");
         table.put("Tapping more under a video opens its comments with the whole caption at the top instead of spreading the caption over the video. A tap on the caption itself does the same. Photo posts keep TikTok's own page for this.",
                 "Mengetuk selengkapnya di bawah video membuka komentarnya dengan seluruh keterangan di atas alih-alih membentangkan keterangan di atas video. Mengetuk keterangan itu sendiri melakukan hal yang sama. Postingan foto tetap memakai halaman TikTok sendiri untuk ini.");
+    }
+
+    private static void fill29(Map<String, String> table) {
         table.put("Technical details",
                 "Detail teknis");
         table.put("Technical details, %1$s",
                 "Detail teknis, %1$s");
-    }
-
-    private static void fill29(Map<String, String> table) {
         table.put("Text sticker words",
                 "Kata di stiker teks");
         table.put("That JSON file doesn't contain the supported TikTok watch history.",
@@ -3740,13 +3744,13 @@ final class L10nTranslationsIn {
                 "Kontrol status aktivitas hilang dari bagian atas Kotak Masuk. Apakah orang lain melihatmu aktif tidak berubah.");
         table.put("The add people icon leaves the Inbox header. Only the shortcut goes, so friend suggestions elsewhere are unchanged.",
                 "Ikon tambah orang hilang dari bagian atas Kotak Masuk. Hanya pintasannya yang hilang, saran teman di tempat lain tidak berubah.");
+    }
+
+    private static void fill30(Map<String, String> table) {
         table.put("The already-saved check failed. Try again.",
                 "Pemeriksaan video tersimpan gagal. Coba lagi.");
         table.put("The backup didn't start and its partial file couldn't be removed. Delete it from the folder you chose.",
                 "Pencadangan tidak dimulai dan file yang belum lengkap tidak dapat dihapus. Hapus dari folder yang kamu pilih.");
-    }
-
-    private static void fill30(Map<String, String> table) {
         table.put("The backup wasn't saved. Back up again when the file app is ready.",
                 "Cadangan tidak tersimpan. Cadangkan lagi saat aplikasi file sudah siap.");
         table.put("The banner at the top of the Inbox that invites you to start a group chat stops showing. Groups you're already in are unchanged.",
@@ -3863,13 +3867,13 @@ final class L10nTranslationsIn {
                 "Nilai terkecil lebih besar daripada yang terbesar");
         table.put("The sound couldn't be saved. Try again.",
                 "Suara tidak bisa disimpan. Coba lagi.");
+    }
+
+    private static void fill31(Map<String, String> table) {
         table.put("The sticker couldn't be saved. Try again.",
                 "Sticker tidak bisa disimpan. Coba lagi.");
         table.put("The sticker suggestion banner stops showing in a chat. Your own stickers are still in the sticker picker.",
                 "Banner saran stiker tidak lagi muncul di obrolan. Stiker Anda sendiri tetap ada di pemilih stiker.");
-    }
-
-    private static void fill31(Map<String, String> table) {
         table.put("The story couldn't be saved. Try again.",
                 "Story-nya tidak bisa disimpan.");
         table.put("The thumbs down on each comment blocks the commenter instead of disliking. The comment dims, an undo banner follows, and a second tap unblocks.",
@@ -3986,13 +3990,13 @@ final class L10nTranslationsIn {
                 "TikTok tertutup saat penyimpanan ini berjalan");
         table.put("TikTok closed three times within a minute of starting, so Hushfeed paused itself. Your settings stay as they are.",
                 "TikTok tertutup tiga kali dalam satu menit setelah dibuka, jadi Hushfeed menjeda dirinya sendiri. Pengaturanmu tetap seperti semula.");
+    }
+
+    private static void fill32(Map<String, String> table) {
         table.put("TikTok closed. What was recorded is saved to %1$s",
                 "TikTok ditutup. Bagian yang terekam disimpan di %1$s");
         table.put("TikTok closes at %1$s",
                 "TikTok tutup pukul %1$s");
-    }
-
-    private static void fill32(Map<String, String> table) {
         table.put("TikTok default",
                 "Bawaan TikTok");
         table.put("TikTok default (hold to speed up, quick share)",
@@ -4109,13 +4113,13 @@ final class L10nTranslationsIn {
                 "Sudah terlambat untuk mengembalikan video tersimpan");
         table.put("Too many media saves are already running. Try again in a moment.",
                 "Terlalu banyak penyimpanan media yang sedang berjalan. Coba lagi sebentar.");
+    }
+
+    private static void fill33(Map<String, String> table) {
         table.put("Tracking",
                 "Pelacakan");
         table.put("Tracking, device access and links",
                 "Pelacakan, akses perangkat, dan tautan");
-    }
-
-    private static void fill33(Map<String, String> table) {
         table.put("Translate button in comments",
                 "Tombol terjemahkan di komentar");
         table.put("Translate comments as they load, using TikTok's own translator.",
@@ -4232,13 +4236,13 @@ final class L10nTranslationsIn {
                 "Gunakan Feed tenang");
         table.put("Use Save report for this large report",
                 "Gunakan Simpan laporan untuk laporan besar ini");
+    }
+
+    private static void fill34(Map<String, String> table) {
         table.put("Use TikTok for a while. A popup shows up here after TikTok first tries to show it.",
                 "Pakai TikTok sebentar. Sebuah popup muncul di sini setelah TikTok pertama kali mencoba menampilkannya.");
         table.put("Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another.",
                 "Pakai gestur bawaan TikTok, tahan lalu tarik ke bawah dan lepas, untuk tetap di kecepatan tahan, yaitu 2x kecuali kamu memilih yang lain di Pemutaran.");
-    }
-
-    private static void fill34(Map<String, String> table) {
         table.put("Use a default playback speed",
                 "Pakai kecepatan pemutaran bawaan");
         table.put("Use a whole number from 0 to %1$s, or leave the field empty.",
@@ -4355,13 +4359,13 @@ final class L10nTranslationsIn {
                 "Riwayat diimpor untuk akun yang memilih berkas. Kembali ke akun itu untuk melihatnya.");
         table.put("WebP, exactly as TikTok sent it",
                 "WebP, persis seperti yang dikirim TikTok");
+    }
+
+    private static void fill35(Map<String, String> table) {
         table.put("What TikTok gets",
                 "Yang didapat TikTok");
         table.put("What gets sent each day.",
                 "Yang dikirim setiap hari.");
-    }
-
-    private static void fill35(Map<String, String> table) {
         table.put("What's new",
                 "Yang baru");
         table.put("When Copy link gives a short vt.tiktok.com or vm.tiktok.com link, Hushfeed opens it once in the background to find the full video link and copies that instead. TikTok sees that visit, and it connects directly even when a proxy is on. Links you send to another app go out as they were.",
@@ -4478,13 +4482,13 @@ final class L10nTranslationsIn {
                 "Nol berarti jalan keluar dari penahanan selalu tersedia. Angka lain adalah berapa kali sehari jalan keluar itu bisa dipakai. Setelah habis, penahanan tetap sampai hari dimulai ulang. Diabaikan saat anggaran terkunci, karena itu menghilangkan jalan keluar.");
         table.put("Zero shows the notice and leaves the feed alone. Anything else covers the feed for that many minutes once a budget is reached. Messages, profiles and search keep working, and nothing in the feed is thrown away.",
                 "Nol menampilkan pemberitahuan dan membiarkan feed apa adanya. Nilai lain menutupi feed selama sekian menit begitu batas tercapai. Pesan, profil, dan pencarian tetap berjalan, dan tidak ada isi feed yang dibuang.");
+    }
+
+    private static void fill36(Map<String, String> table) {
         table.put("Zero switches this off. A short reminder after that many minutes of watching, and again after the same again. Time on messages, a profile or search doesn't count, and nothing is shown while the feed is on hold.",
                 "Nol mematikan ini. Pengingat singkat setelah sekian menit menonton, lalu lagi setelah selang yang sama. Waktu di pesan, profil, atau pencarian tidak dihitung, dan tidak ada yang muncul selama feed ditahan.");
         table.put("Zero switches this off. Count the minutes the player spends running in the feed. Time on messages, a profile or search doesn't count.",
                 "Nol mematikan ini. Menghitung menit saat pemutar berjalan di feed. Waktu di pesan, profil, atau pencarian tidak dihitung.");
-    }
-
-    private static void fill36(Map<String, String> table) {
         table.put("Zero switches this off. Counts every video that comes up in the feed and tells you when you reach the limit. Separate from the auto-advance session limit under Playback, which counts only videos Hushfeed moved past for you.",
                 "Nol mematikan ini. Menghitung setiap video yang muncul di feed dan memberitahumu saat batas tercapai. Terpisah dari batas sesi maju otomatis di Pemutaran, yang hanya menghitung video yang dilewati Hushfeed untukmu.");
         table.put("collapsed",

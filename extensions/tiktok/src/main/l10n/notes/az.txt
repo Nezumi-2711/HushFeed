@@ -8,6 +8,8 @@
 
 * **TikTok:** Lent filtrində yeni Yalnız abunəçilər üçün olan videoları gizlədin açarı yalnız yaradıcının abunəçilərinin izləyə bildiyi paylaşımları lentdə və profillərdə gizlədir (#219).
 
+* **TikTok:** Yeni Region açarı, Sənin üçün lentini əsl SIM-də saxla, stiker axtarışına və PineDrama-ya seçdiyiniz SIM-i göstərir, Sənin üçün isə telefonunuzun öz SIM-i ilə video istəyir. Bunun üçün paketdə Region spoof yaması olmalıdır (#214, #215).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed indi TikTok 47.4.3-ü dəstəkləyir, yalnız bu versiyanı. APKMirror-dan 47.4.3 APK-nı yamaqlayın. PineDrama 47.1.4-də qalır.

@@ -8,6 +8,8 @@
 
 * **TikTok:** Un nuevo interruptor del filtro del feed, Ocultar los vídeos solo para suscriptores, oculta las publicaciones que solo pueden ver los suscriptores de un creador, en el feed y en los perfiles (#219).
 
+* **TikTok:** Un nuevo interruptor de Región, Mantener Para ti con tu SIM real, deja que la búsqueda de stickers y PineDrama vean la SIM que elegiste mientras Para ti pide vídeos con la SIM de tu teléfono. Necesita el parche Region spoof en tu paquete (#214, #215).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed ahora es compatible con TikTok 47.4.3, y solo con esa versión. Parchea el APK 47.4.3 de APKMirror. PineDrama sigue en 47.1.4.

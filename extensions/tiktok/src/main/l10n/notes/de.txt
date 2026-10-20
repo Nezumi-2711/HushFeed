@@ -8,6 +8,8 @@
 
 * **TikTok:** Ein neuer Feed-Filter-Schalter, Videos nur für Abonnenten ausblenden, blendet Beiträge, die nur die Abonnenten eines Creators ansehen können, im Feed und auf Profilen aus (#219).
 
+* **TikTok:** Ein neuer Regionsschalter, „Für dich“ bei der echten SIM lassen, lässt Stickersuche und PineDrama die eingestellte SIM sehen, während „Für dich“ Videos mit der eigenen SIM deines Handys anfragt. Dafür muss der Patch Region spoof im Paket sein (#214, #215).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed unterstützt jetzt TikTok 47.4.3 und nur diese Version. Patche die 47.4.3-APK von APKMirror. PineDrama bleibt bei 47.1.4.

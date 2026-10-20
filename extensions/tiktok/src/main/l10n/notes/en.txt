@@ -8,6 +8,8 @@
 
 * **TikTok:** A new Feed filter switch, Hide subscriber-only videos, hides posts only a creator's subscribers can watch, on the feed and on profiles (#219).
 
+* **TikTok:** A new Region switch, Keep the For You feed on your real SIM, lets sticker search and PineDrama see the SIM you set while For You asks for videos with your phone's own SIM. It needs the Region spoof patch in your bundle (#214, #215).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** Hushfeed now supports TikTok 47.4.3, and only that one. Patch the 47.4.3 APK from APKMirror. PineDrama stays on 47.1.4.

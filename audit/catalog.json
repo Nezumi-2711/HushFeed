@@ -11344,6 +11344,12 @@
     "restart": true
    },
    {
+    "key": "simspoof_feed_real",
+    "default": false,
+    "type": "bool",
+    "row": "Keep the For You feed on your real SIM"
+   },
+   {
     "key": "region_store_spoof",
     "default": false,
     "type": "bool",

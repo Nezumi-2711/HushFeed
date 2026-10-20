@@ -8,6 +8,8 @@
 
 * **TikTok:** Uma nova chave do filtro do feed, Esconder os vídeos só para assinantes, esconde as publicações que só os assinantes de um criador podem assistir, no feed e nos perfis (#219).
 
+* **TikTok:** Uma nova chave em Região, Manter o Para você no seu SIM real, deixa a busca de figurinhas e o PineDrama verem o SIM escolhido enquanto o Para você pede vídeos com o SIM do seu celular. Ela precisa do patch Region spoof no pacote (#214, #215).
+
 ## 0.76.0 (2026-10-18)
 
 * **TikTok:** O Hushfeed agora é compatível com o TikTok 47.4.3, e só com essa versão. Aplique o patch no APK 47.4.3 do APKMirror. O PineDrama continua no 47.1.4.
