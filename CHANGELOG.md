@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** With `Accent color` on, the unread count on the Inbox tab and the small unread dots now take your color too. The LIVE bubble over the Inbox tab already did, so the bubble and the count under it didn't match. Warnings still stay red (#192).
+
 * **TikTok:** New `Open the comments at full height` switch under Hushfeed settings > Comments. TikTok opens the comment sheet part way up the screen, and with the switch on it opens all the way to the top. Dragging it down still closes it. It's off by default (#191).
 
 * **TikTok:** New `Keep the screen's brightness in the camera` switch under Hushfeed settings > App > System. TikTok turns your screen brighter when you open its camera, and keeps it that way through editing and posting. With the switch on, the screen stays at the brightness you set. It's off by default (#200).
