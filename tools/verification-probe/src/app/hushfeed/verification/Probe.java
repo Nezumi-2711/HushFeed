@@ -3279,7 +3279,9 @@ public final class Probe extends Instrumentation {
                 out.append(" child ").append(depth).append('.').append(i).append(' ')
                         .append(child.getClass().getSimpleName()).append(" id=")
                         .append(idName(child, resources)).append(" size=")
-                        .append(child.getWidth()).append('x').append(child.getHeight());
+                        .append(child.getWidth()).append('x').append(child.getHeight())
+                        // A video surface carries no id, and See-through status bar grows it.
+                        .append(" top=").append(child.getTop()).append(" scale=").append(child.getScaleY());
                 appendLayoutInfo(child, out);
                 out.append('\n');
                 if (depth < 2 && child instanceof android.view.ViewGroup) {
