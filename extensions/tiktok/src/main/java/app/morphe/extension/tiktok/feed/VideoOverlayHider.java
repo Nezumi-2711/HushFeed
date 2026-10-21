@@ -712,8 +712,10 @@ public final class VideoOverlayHider {
                 wanted[DETAIL_SEARCH_BOX_TARGET] = detailSearchBox;
                 wanted[STATUS_BAR_SPACER_TARGET] = statusBar || seeThroughStatusBar;
                 wanted[STATUS_BAR_SCRIM_TARGET] = statusBar || seeThroughStatusBar;
-                // Grown, not hidden: see SeeThroughStatusBar.fill.
-                wanted[PLAYER_VIEW_TARGET] = seeThroughStatusBar;
+                // Grown, not hidden: see SeeThroughStatusBar.fill. With the strip under the video
+                // gone the player reaches the bottom edge, but TikTok still centers a 9:16 picture
+                // in it, so the picture stopped short of the tabs over a black band (#218).
+                wanted[PLAYER_VIEW_TARGET] = seeThroughStatusBar || stripForBar;
                 wanted[BOTTOM_SPACER_TARGET] = seeThroughBar && SeeThroughBottomBar.collapseAllowed();
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
                     wanted[RAIL_TARGET_START + i] = rail[i] || carryHides;
