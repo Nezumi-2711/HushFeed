@@ -62,6 +62,7 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                 || SettingsStatus.sensitiveWarningsEnabled
                 || SettingsStatus.popupLabelsEnabled
                 || SettingsStatus.subtitleToolsEnabled
+                || SettingsStatus.captionsAvailableEnabled
                 || SettingsStatus.blockAuthorEnabled
                 || SettingsStatus.notInterestedEnabled
                 || SettingsStatus.feedMuteEnabled
@@ -572,8 +573,16 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
     }
 
     private void addCaptions(Context context) {
-        if (SettingsStatus.subtitleToolsEnabled) {
+        if (SettingsStatus.subtitleToolsEnabled || SettingsStatus.captionsAvailableEnabled) {
             addPreference(new SectionHeadingPreference(context, "Captions"));
+        }
+        if (SettingsStatus.captionsAvailableEnabled) {
+            addPreference(new TogglePreference(context, "Keep captions available",
+                    "Bring back TikTok's captions switch in its accessibility settings, and the caption controls on videos, "
+                            + "when TikTok leaves them out. Captions only show on videos that have them.",
+                    Settings.KEEP_CAPTIONS_AVAILABLE));
+        }
+        if (SettingsStatus.subtitleToolsEnabled) {
             NumberInputPreference captionSize = new NumberInputPreference(context, "Caption text size",
                     L10n.f(context, "Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.",
                             CaptionStyle.MIN_TEXT_SIZE, CaptionStyle.MAX_TEXT_SIZE),

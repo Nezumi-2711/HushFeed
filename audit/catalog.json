@@ -15484,8 +15484,10 @@
   "kind": "runtime",
   "source": [
    "patches/src/main/kotlin/app/morphe/patches/tiktok/interaction/captions/SubtitleToolsPatch.kt",
+   "patches/src/main/kotlin/app/morphe/patches/tiktok/interaction/captions/CaptionsAvailable.kt",
    "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/captions/CaptionStyle.java",
-   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/captions/CaptionTools.java"
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/captions/CaptionTools.java",
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/captions/CaptionsAvailable.java"
   ],
   "settings": [
    {
@@ -15531,6 +15533,13 @@
     "row": "Caption height in Clear display"
    },
    {
+    "key": "keep_captions_available",
+    "default": false,
+    "type": "bool",
+    "row": "Keep captions available",
+    "restart": true
+   },
+   {
     "key": "download_subtitles",
     "default": false,
     "type": "bool",
@@ -15547,9 +15556,9 @@
       "probe": "fields",
       "extras": {
        "class": "app.morphe.extension.tiktok.settings.SettingsStatus",
-       "names": "subtitleToolsEnabled"
+       "names": "subtitleToolsEnabled,captionsAvailableEnabled"
       },
-      "expect": "\\bsubtitleToolsEnabled=true\\b",
+      "expect": "\\bsubtitleToolsEnabled=true\\b[^\\n]*\\bcaptionsAvailableEnabled=true\\b",
       "waitMs": 1500
      }
     ],

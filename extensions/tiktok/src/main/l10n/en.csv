@@ -305,6 +305,7 @@ Blocking,Blocking
 Bold,Bold
 Bottom tabs to keep,Bottom tabs to keep
 Brightness,Brightness
+"Bring back TikTok's captions switch in its accessibility settings, and the caption controls on videos, when TikTok leaves them out. Captions only show on videos that have them.","Bring back TikTok's captions switch in its accessibility settings, and the caption controls on videos, when TikTok leaves them out. Captions only show on videos that have them."
 Bring back TikTok's translation,Bring back TikTok's translation
 "Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.","Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there."
 Browse,Browse
@@ -908,6 +909,7 @@ Keep a local record of what you have watched and hide those videos when the feed
 Keep a paused video paused,Keep a paused video paused
 "Keep a photo story on screen until you tap or swipe, instead of moving on after a few seconds.","Keep a photo story on screen until you tap or swipe, instead of moving on after a few seconds."
 Keep a streak going,Keep a streak going
+Keep captions available,Keep captions available
 Keep captions in Clear display,Keep captions in Clear display
 Keep faded controls in Clear display,Keep faded controls in Clear display
 Keep going,Keep going

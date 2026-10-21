@@ -301,6 +301,7 @@ Blocked sounds,受阻的声音
 Blocking,阻塞
 Bottom tabs to keep,要保留的底部选项卡
 Brightness,亮度
+"Bring back TikTok's captions switch in its accessibility settings, and the caption controls on videos, when TikTok leaves them out. Captions only show on videos that have them.",当 TikTok 隐藏它们时，恢复 TikTok 无障碍设置中的字幕开关和视频上的字幕控件。字幕只会显示在带有字幕的视频上.
 "Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.",对于仅在那里看到应用程序语言的帐户，在 TikTok 的语言页面上的“设置和隐私”下返回翻译行.
 "Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.",即使开启了 TikTok 的“始终翻译”，视频的描述、字幕和文字也会保持原来的语言。点击“查看翻译”仍然有效。评论在上方有自己的开关.
 Don't auto translate videos,不要自动翻译视频
@@ -891,6 +892,7 @@ Keep a local record of what you have watched and hide those videos when the feed
 Keep a paused video paused,使暂停的视频保持暂停状态
 "Keep a photo story on screen until you tap or swipe, instead of moving on after a few seconds.",将照片故事保留在屏幕上，直到您点击或滑动，而不是在几秒钟后继续.
 Keep a streak going,保持连胜
+Keep captions available,保持字幕可用
 Keep captions in Clear display,保持字幕清晰显示
 Keep faded controls in Clear display,使褪色的控件保持清晰显示
 Keep going,继续前进
