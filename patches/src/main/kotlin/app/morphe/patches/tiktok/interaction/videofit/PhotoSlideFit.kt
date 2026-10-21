@@ -5,6 +5,12 @@
 package app.morphe.patches.tiktok.interaction.videofit
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
+import app.morphe.patcher.patch.BytecodePatchContext
+import app.morphe.patcher.util.smali.ExternalLabel
+import app.morphe.patches.tiktok.misc.theme.declaredVersions
+import app.morphe.patches.tiktok.shared.requireLocals
+import app.morphe.util.addInstructionsWithLabels
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -14,6 +20,8 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 internal const val SCALE_TYPE = "Landroid/widget/ImageView\$ScaleType;"
+private const val SLIDES = "Lapp/morphe/extension/tiktok/interaction/PhotoSlideFit;"
+private const val PATCH = "Fit video to the screen"
 private const val VIEW = "Landroid/view/View;"
 private const val CONSTRAINT_LAYOUT = "Landroidx/constraintlayout/widget/ConstraintLayout;"
 
@@ -79,4 +87,59 @@ internal fun Method.containerViewField(): FieldReference? {
         ?.distinctBy { it.name }
         ?: return null
     return reads.singleOrNull()
+}
+
+/**
+ * Hooks the two places TikTok crops a photo slide to cover its cell (#188), so a slide it would
+ * cut a lot off on a squarer screen is shown whole instead. Both are required on a build the
+ * patch is declared for, where a miss would leave photo posts cropped without a word, and left
+ * out on any other, which keeps the video fit. Both are found and checked before either is
+ * written. Takes the version so a test can stand in for a build that isn't declared.
+ */
+internal fun BytecodePatchContext.hookPhotoSlides(versionName: String): Boolean {
+    val declaredBuild = versionName in declaredVersions()
+    val scale = if (declaredBuild) SlideScaleTypeFingerprint.method else SlideScaleTypeFingerprint.methodOrNull
+    val crop = if (declaredBuild) SlideContainerCropFingerprint.method else SlideContainerCropFingerprint.methodOrNull
+    if (scale == null || crop == null) return false
+
+    scale.requireLocals(PATCH, 1)
+    // The crop question reads its container off its own instance. The injected read keeps the
+    // container in one local and the aspect in a second, so it needs two locals, and a frame
+    // that lets the invoke below name the second one.
+    val container = checkNotNull(crop.containerViewField()) {
+        "$PATCH: the slide crop question has no single View field to read the container from."
+    }
+    crop.requireLocals(PATCH, 2)
+    check(crop.implementation!!.registerCount <= 16) {
+        "$PATCH: ${crop.definingClass}->${crop.name} holds ${crop.implementation!!.registerCount} " +
+            "registers, and the invoke that hands the container over cannot name one past v15."
+    }
+
+    // A slide TikTok would crop to cover its cell gets the fit scale instead when the extension
+    // says the screen is square enough for that crop to cut real picture.
+    scale.addInstructionsWithLabels(
+        0,
+        """
+            invoke-static/range { p0 .. p0 }, $SLIDES->fitOnScreen(F)I
+            move-result v0
+            if-eqz v0, :morphe_slide_stock
+            sget-object v0, $SCALE_TYPE->FIT_CENTER:$SCALE_TYPE
+            return-object v0
+        """,
+        ExternalLabel("morphe_slide_stock", scale.getInstruction(0)),
+    )
+    crop.addInstructionsWithLabels(
+        0,
+        """
+            iget-object v0, p0, ${container.definingClass}->${container.name}:${container.type}
+            move/from16 v1, p1
+            invoke-static { v0, v1 }, $SLIDES->fitInContainer(Landroid/view/View;F)I
+            move-result v0
+            if-eqz v0, :morphe_slide_crop
+            const/4 v0, 0x0
+            return v0
+        """,
+        ExternalLabel("morphe_slide_crop", crop.getInstruction(0)),
+    )
+    return true
 }

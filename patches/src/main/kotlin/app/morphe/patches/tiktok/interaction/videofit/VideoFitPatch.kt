@@ -17,7 +17,6 @@ import app.morphe.patches.shared.compat.AppCompatibilities
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
-import app.morphe.patches.tiktok.misc.theme.declaredVersions
 import app.morphe.patches.tiktok.shared.requireLocals
 import app.morphe.util.getReference
 import app.morphe.util.numberOfParameterRegisters
@@ -26,7 +25,6 @@ import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 private const val EXTENSION = "Lapp/morphe/extension/tiktok/interaction/VideoFit;"
-private const val SLIDES = "Lapp/morphe/extension/tiktok/interaction/PhotoSlideFit;"
 
 /** The whole `com.ss.android.ugc.aweme.videoadaption` package kept its names, this one included. */
 private const val RESULT = "Lcom/ss/android/ugc/aweme/videoadaption/adaptionparams/VideoAdaptionResult;"
@@ -144,30 +142,6 @@ val videoFitPatch = bytecodePatch(
                 "compares the result, found $checkers."
         }
 
-        // The photo slides: the helper that picks a slide's scale type and the crop question the
-        // full screen cell asks. Both are required on a build the patch is declared for, where a
-        // miss would leave photo posts cropped without a word, and left out on a build it is
-        // forced onto, which keeps the video fit.
-        val declaredBuild = packageMetadata.versionName in declaredVersions()
-        val slideScale = if (declaredBuild) SlideScaleTypeFingerprint.method else SlideScaleTypeFingerprint.methodOrNull
-        val slideCrop = if (declaredBuild) SlideContainerCropFingerprint.method else SlideContainerCropFingerprint.methodOrNull
-        slideScale?.requireLocals("Fit video to the screen", 1)
-        // The crop question reads its container off its own instance, and the injected read
-        // keeps the container in one local and the aspect in a second, so it needs two locals
-        // and a frame that lets the invoke below name the second one.
-        val slideContainer = slideCrop?.containerViewField()
-        if (slideCrop != null) {
-            checkNotNull(slideContainer) {
-                "Fit video to the screen: the slide crop question has no single View field to read the container from."
-            }
-            slideCrop.requireLocals("Fit video to the screen", 2)
-            check(slideCrop.implementation!!.registerCount <= 16) {
-                "Fit video to the screen: ${slideCrop.definingClass}->${slideCrop.name} holds " +
-                    "${slideCrop.implementation!!.registerCount} registers, and the invoke that " +
-                    "hands the container over cannot name one past v15."
-            }
-        }
-
         // The story cell writes the result's own fields, from inside the result's own class.
         val registers = story.implementation!!.registerCount
         story.requireLocals("Fit video to the screen", 1)
@@ -237,32 +211,7 @@ val videoFitPatch = bytecodePatch(
             )
         }
 
-        // A slide TikTok would crop to cover its cell gets the fit scale instead when the
-        // extension says the screen is square enough for that crop to cut real picture.
-        slideScale?.addInstructionsWithLabels(
-            0,
-            """
-                invoke-static/range { p0 .. p0 }, $SLIDES->fitOnScreen(F)I
-                move-result v0
-                if-eqz v0, :morphe_slide_stock
-                sget-object v0, $SCALE_TYPE->FIT_CENTER:$SCALE_TYPE
-                return-object v0
-            """,
-            ExternalLabel("morphe_slide_stock", slideScale.getInstruction(0)),
-        )
-        slideCrop?.addInstructionsWithLabels(
-            0,
-            """
-                iget-object v0, p0, ${slideContainer!!.definingClass}->${slideContainer.name}:${slideContainer.type}
-                move/from16 v1, p1
-                invoke-static { v0, v1 }, $SLIDES->fitInContainer(Landroid/view/View;F)I
-                move-result v0
-                if-eqz v0, :morphe_slide_crop
-                const/4 v0, 0x0
-                return v0
-            """,
-            ExternalLabel("morphe_slide_crop", slideCrop.getInstruction(0)),
-        )
+        hookPhotoSlides(packageMetadata.versionName)
 
         settingsStatus.addInstruction(
             0,

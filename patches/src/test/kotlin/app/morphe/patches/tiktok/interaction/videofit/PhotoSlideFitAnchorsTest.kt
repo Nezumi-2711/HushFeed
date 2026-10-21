@@ -5,7 +5,15 @@
 package app.morphe.patches.tiktok.interaction.videofit
 
 import app.morphe.Fixtures
+import app.morphe.patcher.Patcher
+import app.morphe.patcher.PatcherConfig
+import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.takes
+import app.morphe.util.getReference
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.Opcodes
@@ -29,6 +37,8 @@ import org.junit.Test
  * frame small enough for the invoke that hands the container over.
  */
 class PhotoSlideFitAnchorsTest {
+    @get:Rule val temporary = TemporaryFolder()
+
     @Test
     fun `each declared build has one slide scale chooser and one container crop question`() {
         Fixtures.forEachDeclared { apk ->
@@ -58,6 +68,51 @@ class PhotoSlideFitAnchorsTest {
             assertTrue("$version: the invoke cannot name registers past v15", registers <= 16)
             assertNotNull("$version: no single container View field", question.containerViewField())
             assertEquals("Z", question.returnType)
+        }
+    }
+
+    /**
+     * The hooks go in on each declared build and assemble: the chooser asks the extension for the
+     * aspect it was given and leaves with the fit scale, the crop question reads its container
+     * and asks, and each falls through to TikTok's own first instruction on a no.
+     */
+    @Test
+    fun `the hooks assemble on each declared build and ask the extension first`() {
+        Fixtures.forEachDeclared { apk ->
+            val version = Fixtures.versionOf(apk)
+            var checked = false
+            val probe = bytecodePatch(name = "photo slide probe") {
+                execute {
+                    assertTrue("$version: the hooks went in", hookPhotoSlides(version))
+                    val scale = SlideScaleTypeFingerprint.method.implementation!!.instructions.toList()
+                    assertEquals(
+                        "$version: the chooser's guard",
+                        listOf(Opcode.INVOKE_STATIC_RANGE, Opcode.MOVE_RESULT, Opcode.IF_EQZ, Opcode.SGET_OBJECT, Opcode.RETURN_OBJECT),
+                        scale.take(5).map { it.opcode },
+                    )
+                    val ask = scale[0].getReference<MethodReference>()!!
+                    assertEquals("Lapp/morphe/extension/tiktok/interaction/PhotoSlideFit;->fitOnScreen(F)I",
+                        "${ask.definingClass}->${ask.name}(${ask.parameterTypes.joinToString("")})${ask.returnType}")
+
+                    val crop = SlideContainerCropFingerprint.method.implementation!!.instructions.toList()
+                    assertEquals(
+                        "$version: the crop question's guard",
+                        listOf(Opcode.IGET_OBJECT, Opcode.MOVE_FROM16, Opcode.INVOKE_STATIC, Opcode.MOVE_RESULT, Opcode.IF_EQZ, Opcode.CONST_4, Opcode.RETURN),
+                        crop.take(7).map { it.opcode },
+                    )
+                    val container = crop[2].getReference<MethodReference>()!!
+                    assertEquals("Lapp/morphe/extension/tiktok/interaction/PhotoSlideFit;->fitInContainer(Landroid/view/View;F)I",
+                        "${container.definingClass}->${container.name}(${container.parameterTypes.joinToString("")})${container.returnType}")
+                    checked = true
+                }
+            }
+            SlideScaleTypeFingerprint.clearMatch()
+            SlideContainerCropFingerprint.clearMatch()
+            Patcher(PatcherConfig(apk, temporary.newFolder())).use { patcher ->
+                patcher += setOf(probe)
+                runBlocking { patcher().collect { result -> result.exception?.let { throw it } } }
+            }
+            assertTrue("$version: the probe never ran", checked)
         }
     }
 
