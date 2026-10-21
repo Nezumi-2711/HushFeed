@@ -2084,9 +2084,13 @@ public final class VideoOverlayHider {
             // on, every pass there called the overlay hooks broken (#153). The detail pager
             // has it, so a rename still shows there. The search box at the top of an opened
             // video is there only on the pages TikTok gives a search bar, the player only in
-            // video cells, and the Message bar only on a mutual friend's video.
+            // video cells, and the Message bar only on a mutual friend's video. The Following
+            // stories button is there only for an account with stories to show, so once its id
+            // resolves, its absence is the account's: every Clear display called the overlay
+            // hooks broken in #209's report. An id this build lacks is still reported.
             } else if (target != SURVEY_TARGET && target != DETAIL_SEARCH_BOX_TARGET
                     && target != PLAYER_VIEW_TARGET && target != DETAIL_MESSAGE_BAR_TARGET
+                    && !(target == FOLLOWING_STORY_TARGET && anyResolved(ids, candidateAt, names.length))
                     && (detailPager || (target != DETAIL_COMMENT_BAR_TARGET
                             && target != DETAIL_COMMENT_STRIP_TARGET))
                     && (wanted || (scaling
@@ -2124,6 +2128,13 @@ public final class VideoOverlayHider {
             TapThroughControls.mark(entry, !gone && fadedClear);
             setHidden(entry, gone, View.INVISIBLE);
         }
+    }
+
+    private static boolean anyResolved(int[] ids, int from, int count) {
+        for (int i = from; i < from + count; i++) {
+            if (ids[i] != 0) return true;
+        }
+        return false;
     }
 
     private static int selectedId(int[] ids, int selected) {
