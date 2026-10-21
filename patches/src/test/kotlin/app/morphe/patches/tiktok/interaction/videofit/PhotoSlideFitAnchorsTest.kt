@@ -18,6 +18,7 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.iface.Method
+import com.android.tools.smali.dexlib2.immutable.ImmutableClassDef
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethodImplementation
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
@@ -32,30 +33,36 @@ import org.junit.Test
 
 /**
  * What Fit the video to the screen hooks for photo slideshows (#188), held to each declared
- * build: exactly one scale-type chooser and one container crop question, the chooser with a local
- * register to spare, the crop question with two, a single container View field to read, and a
- * frame small enough for the invoke that hands the container over.
+ * build: exactly one scale-type chooser, one container crop question and one display mode answer,
+ * the chooser and the mode answer with a local register to spare, the crop question with two, a
+ * single container View field to read, and a frame small enough for the invoke that hands the
+ * container over.
  */
 class PhotoSlideFitAnchorsTest {
     @get:Rule val temporary = TemporaryFolder()
 
     @Test
-    fun `each declared build has one slide scale chooser and one container crop question`() {
+    fun `each declared build has one slide scale chooser, one container crop question and one mode answer`() {
         Fixtures.forEachDeclared { apk ->
             val version = Fixtures.versionOf(apk)
             val scale = mutableListOf<Method>()
             val crop = mutableListOf<Method>()
+            val whole = mutableListOf<Method>()
             val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
             for (entry in container.dexEntryNames) {
                 for (classDef in container.getEntry(entry)!!.dexFile.classes) {
                     for (method in classDef.methods) {
                         if (SlideScaleTypeFingerprint.takes(method, classDef)) scale += method
                         if (SlideContainerCropFingerprint.takes(method, classDef)) crop += method
+                        if (ShowsWholeImageFingerprint.takes(method, classDef)) whole += method
                     }
                 }
             }
             assertEquals("$version: scale choosers ${scale.map { it.definingClass }}", 1, scale.size)
             assertEquals("$version: crop questions ${crop.map { it.definingClass }}", 1, crop.size)
+            assertEquals("$version: mode answers ${whole.map { it.definingClass }}", 1, whole.size)
+            // Instance, no parameters: one parameter register, so the rest are locals.
+            assertTrue("$version: the mode answer has no local", whole.single().implementation!!.registerCount - 1 >= 1)
 
             val chooser = scale.single()
             // Static (aspect, layout variant): two parameter registers, so the rest are locals.
@@ -103,11 +110,22 @@ class PhotoSlideFitAnchorsTest {
                     val container = crop[2].getReference<MethodReference>()!!
                     assertEquals("Lapp/morphe/extension/tiktok/interaction/PhotoSlideFit;->fitInContainer(Landroid/view/View;F)I",
                         "${container.definingClass}->${container.name}(${container.parameterTypes.joinToString("")})${container.returnType}")
+
+                    val whole = ShowsWholeImageFingerprint.method.implementation!!.instructions.toList()
+                    assertEquals(
+                        "$version: the mode answer's guard",
+                        listOf(Opcode.INVOKE_STATIC, Opcode.MOVE_RESULT, Opcode.IF_EQZ, Opcode.CONST_4, Opcode.RETURN),
+                        whole.take(5).map { it.opcode },
+                    )
+                    val mode = whole[0].getReference<MethodReference>()!!
+                    assertEquals("Lapp/morphe/extension/tiktok/interaction/PhotoSlideFit;->showsWholeImage()I",
+                        "${mode.definingClass}->${mode.name}(${mode.parameterTypes.joinToString("")})${mode.returnType}")
                     checked = true
                 }
             }
             SlideScaleTypeFingerprint.clearMatch()
             SlideContainerCropFingerprint.clearMatch()
+            ShowsWholeImageFingerprint.clearMatch()
             Patcher(PatcherConfig(apk, temporary.newFolder())).use { patcher ->
                 patcher += setOf(probe)
                 runBlocking { patcher().collect { result -> result.exception?.let { throw it } } }
@@ -123,6 +141,34 @@ class PhotoSlideFitAnchorsTest {
         assertFalse("picks a third", chooser(static = true, picks = listOf("CENTER_CROP", "FIT_CENTER", "FIT_XY")).isSlideScaleChoice())
         assertFalse("picks one", chooser(static = true, picks = listOf("FIT_CENTER")).isSlideScaleChoice())
     }
+
+    @Test
+    fun `only an enum getter reading its own value is taken as the mode answer`() {
+        val mode = "LX/0Mode;"
+        val getter = modeGetter(mode, reads = mode)
+        assertTrue(ShowsWholeImageFingerprint.takes(getter, owner(mode, "Ljava/lang/Enum;", getter)))
+        assertFalse("not an enum", ShowsWholeImageFingerprint.takes(getter, owner(mode, "Ljava/lang/Object;", getter)))
+        val elsewhere = modeGetter(mode, reads = "LX/0Other;")
+        assertFalse("reads another class's value",
+            ShowsWholeImageFingerprint.takes(elsewhere, owner(mode, "Ljava/lang/Enum;", elsewhere)))
+    }
+
+    /** The display mode getter cut down to what is matched: it reads one of its enum's values. */
+    private fun modeGetter(type: String, reads: String): Method = ImmutableMethod(
+        type, "getShowsWholeImage", emptyList(), "Z", AccessFlags.PUBLIC.value or AccessFlags.FINAL.value, null, null,
+        ImmutableMethodImplementation(
+            2,
+            listOf(
+                ImmutableInstruction21c(Opcode.SGET_OBJECT, 0, ImmutableFieldReference(reads, "V5", reads)),
+                ImmutableInstruction11x(Opcode.RETURN, 0),
+            ),
+            null, null,
+        ),
+    )
+
+    private fun owner(type: String, superclass: String, method: Method) = ImmutableClassDef(
+        type, AccessFlags.PUBLIC.value, superclass, emptyList(), null, emptySet(), emptyList(), listOf(method),
+    )
 
     /** A chooser cut down to its scale type reads: one `sget-object` per pick, one returned. */
     private fun chooser(static: Boolean, picks: List<String>): Method {

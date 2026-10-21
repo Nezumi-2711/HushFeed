@@ -84,6 +84,40 @@ public class PhotoSlideFitTest {
     }
 
     @Test
+    public void squarishStartsAtTheThreshold() {
+        assertTrue(PhotoSlideFit.squarish(SQUARE_W, SQUARE_H));
+        assertTrue(PhotoSlideFit.squarish(65f, 100f));
+        assertTrue("a landscape screen", PhotoSlideFit.squarish(PHONE_H, PHONE_W));
+        assertFalse(PhotoSlideFit.squarish(PHONE_W, PHONE_H));
+        assertFalse(PhotoSlideFit.squarish(0f, SQUARE_H));
+        assertFalse(PhotoSlideFit.squarish(SQUARE_W, 0f));
+        assertFalse(PhotoSlideFit.squarish(Float.NaN, SQUARE_H));
+    }
+
+    /** The display mode's answer: every slide whole on a squarish screen with Fit on (#188). */
+    @Test @Config(qualifiers = "w400dp-h440dp-mdpi")
+    public void aSquarishScreenShowsEverySlideWholeWhenFitIsOn() {
+        try {
+            Settings.FIT_VIDEO_TO_SCREEN.save(true);
+            assertEquals(1, PhotoSlideFit.showsWholeImage());
+            Settings.FIT_VIDEO_TO_SCREEN.save(false);
+            assertEquals("off is stock", 0, PhotoSlideFit.showsWholeImage());
+        } finally {
+            Settings.FIT_VIDEO_TO_SCREEN.save(false);
+        }
+    }
+
+    @Test @Config(qualifiers = "w360dp-h640dp-mdpi")
+    public void aTallPhoneKeepsTikToksDisplayMode() {
+        try {
+            Settings.FIT_VIDEO_TO_SCREEN.save(true);
+            assertEquals(0, PhotoSlideFit.showsWholeImage());
+        } finally {
+            Settings.FIT_VIDEO_TO_SCREEN.save(false);
+        }
+    }
+
+    @Test
     public void screenAnswerIsStockWhenOffOrWithoutAnAspect() {
         try {
             Settings.FIT_VIDEO_TO_SCREEN.save(false);

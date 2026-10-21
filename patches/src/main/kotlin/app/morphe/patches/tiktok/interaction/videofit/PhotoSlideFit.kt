@@ -51,6 +51,28 @@ internal object SlideContainerCropFingerprint : Fingerprint(
     custom = { method, _ -> method.isSlideContainerCrop() },
 )
 
+/**
+ * The photo display mode's answer to whether it shows every slide whole. TikTok puts each photo
+ * post in one of a handful of modes, kept as an enum, and lets the mode's layout overrule the
+ * scale the chooser above picked: most modes crop a slide taller than 9:16 to the full screen
+ * cell, and only one answers yes here, which puts every slide on the fit scale. The getter keeps
+ * its name in the app, so it is found by that, on an enum, reading one of the enum's own values.
+ */
+internal object ShowsWholeImageFingerprint : Fingerprint(
+    name = "getShowsWholeImage",
+    returnType = "Z",
+    parameters = emptyList(),
+    custom = { method, classDef -> classDef.superclass == "Ljava/lang/Enum;" && method.readsOwnValue() },
+)
+
+/** Whether a method reads one of its own class's static values, as an enum's getter does. */
+internal fun Method.readsOwnValue(): Boolean =
+    implementation?.instructions?.any {
+        it.opcode == Opcode.SGET_OBJECT && it.getReference<FieldReference>()?.let { field ->
+            field.definingClass == definingClass && field.type == definingClass
+        } == true
+    } == true
+
 internal fun Method.isSlideScaleChoice(): Boolean {
     if (!AccessFlags.STATIC.isSet(accessFlags)) return false
     if (parameterTypes.size != 2 || parameterTypes[0] != "F") return false
@@ -90,19 +112,21 @@ internal fun Method.containerViewField(): FieldReference? {
 }
 
 /**
- * Hooks the two places TikTok crops a photo slide to cover its cell (#188), so a slide it would
- * cut a lot off on a squarer screen is shown whole instead. Both are required on a build the
- * patch is declared for, where a miss would leave photo posts cropped without a word, and left
- * out on any other, which keeps the video fit. Both are found and checked before either is
- * written. Takes the version so a test can stand in for a build that isn't declared.
+ * Hooks the three places TikTok decides to crop a photo slide to cover its cell (#188), so a
+ * slide it would cut a lot off on a squarer screen is shown whole instead. All three are required
+ * on a build the patch is declared for, where a miss would leave photo posts cropped without a
+ * word, and left out on any other, which keeps the video fit. All are found and checked before
+ * any is written. Takes the version so a test can stand in for a build that isn't declared.
  */
 internal fun BytecodePatchContext.hookPhotoSlides(versionName: String): Boolean {
     val declaredBuild = versionName in declaredVersions()
     val scale = if (declaredBuild) SlideScaleTypeFingerprint.method else SlideScaleTypeFingerprint.methodOrNull
     val crop = if (declaredBuild) SlideContainerCropFingerprint.method else SlideContainerCropFingerprint.methodOrNull
-    if (scale == null || crop == null) return false
+    val whole = if (declaredBuild) ShowsWholeImageFingerprint.method else ShowsWholeImageFingerprint.methodOrNull
+    if (scale == null || crop == null || whole == null) return false
 
     scale.requireLocals(PATCH, 1)
+    whole.requireLocals(PATCH, 1)
     // The crop question reads its container off its own instance. The injected read keeps the
     // container in one local and the aspect in a second, so it needs two locals, and a frame
     // that lets the invoke below name the second one.
@@ -140,6 +164,19 @@ internal fun BytecodePatchContext.hookPhotoSlides(versionName: String): Boolean 
             return v0
         """,
         ExternalLabel("morphe_slide_crop", crop.getInstruction(0)),
+    )
+    // The display mode's layout overrules the two answers above, so on a squarish screen every
+    // mode says it shows slides whole, which is the one that keeps the fit scale.
+    whole.addInstructionsWithLabels(
+        0,
+        """
+            invoke-static { }, $SLIDES->showsWholeImage()I
+            move-result v0
+            if-eqz v0, :morphe_slide_mode
+            const/4 v0, 0x1
+            return v0
+        """,
+        ExternalLabel("morphe_slide_mode", whole.getInstruction(0)),
     )
     return true
 }
