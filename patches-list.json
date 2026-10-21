@@ -64,6 +64,7 @@
       "category": "Interface",
       "use": false,
       "dependencies": [
+        "BytecodePatch",
         "RawResourcePatch"
       ],
       "compatiblePackages": {
