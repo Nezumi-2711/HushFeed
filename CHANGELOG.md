@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** `Hide CAPTCHA popups`, `Comment tools` and `Look like the store app` are ready for Morphe Manager 2.0, which is stricter about how a patch finds its spot in TikTok's code. Nothing changes with the Manager you have now.
 * **TikTok:** New `Hide Balance in the profile menu` switch under Hushfeed settings > App. It takes Balance out of the menu your profile's top right button opens. Your coins and gifts don't change. It's off by default (#194).
 
 * **TikTok:** New `Don't auto translate videos` switch under Hushfeed settings > Comments. With TikTok's Always translate on, it translates video descriptions and captions by itself in For You, Following and Search. Turn this on and videos stay in the language they were made in. Comments follow their own switch, and tapping See translation still works on any video. It's off by default and takes a TikTok restart to apply (#194).
