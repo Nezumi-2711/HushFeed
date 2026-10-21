@@ -217,6 +217,8 @@ public class FeedScreenCoverageTest {
         put("caption_landscape_offset", YES, UNCHECKED, NONE);
         // The kept line Hushfeed draws itself, beside keep_captions_clear_display.
         put("caption_clear_display_offset", YES, UNCHECKED, NONE);
+        // One answer every caption control asks, wherever the video plays (#217).
+        put("keep_captions_available", YES, YES, NONE);
 
         // Clear display follows TikTok's own mode in either window (#84).
         put("automatic_clear_display", YES, YES, NONE);
