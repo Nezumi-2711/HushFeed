@@ -2188,3 +2188,11 @@ New device identity,新设备身份
 "Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.",下次启动时清除 TikTok 的数据，并给它新的 Android ID 和广告 ID，让它看到一部没见过的手机。您将被退出登录，草稿也会丢失。Hushfeed 的设置会保留.
 TikTok starts as a new phone after the restart. Tap again to cancel.,重启后 TikTok 会以新手机的身份启动。再次点按可取消.
 Couldn't set up a new device identity. Try again.,无法设置新的设备身份。请重试.
+Saves at once,同时保存数
+How many saves run at the same time. The others wait in line and start as each one ends.,同时进行的保存数量。其余的排队等候，每完成一个就开始下一个.
+Saves right now,正在进行的保存
+Nothing is saving right now,目前没有正在保存的内容
+Cover,封面
+One at a time,一次一个
+Two at once,同时两个
+Three at once,同时三个

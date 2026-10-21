@@ -160,7 +160,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting DOWNLOAD_WITHOUT_SOUND =
             new BooleanSetting("download_without_sound", FALSE);
     public static final BooleanSetting DOWNLOAD_PROGRESS = new BooleanSetting("download_progress", false);
-    public static final BooleanSetting DOWNLOAD_DETAILS = new BooleanSetting("download_details", FALSE);
+    /** How many of Hushfeed's saves run at once, "1" to "3"; the rest wait in line (#27). */
+    public static final StringSetting DOWNLOAD_SAVES_AT_ONCE = new StringSetting("download_saves_at_once", "3");
+    public static final BooleanSetting DOWNLOAD_DETAILS =new BooleanSetting("download_details", FALSE);
     /** The details file as JSON rather than plain text. */
     public static final BooleanSetting DOWNLOAD_DETAILS_JSON = new BooleanSetting(
             "download_details_json", FALSE, false, Setting.parent(DOWNLOAD_DETAILS));

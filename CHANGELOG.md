@@ -20,6 +20,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** With `Accent color` on, the "You may like" words on the search page and the dot before each one now take your color too, whether it's a preset or the wallpaper's. TikTok sends those words with a red of their own instead of using the app's colors, so they stayed red before (#163).
 
+* **TikTok:** Two new rows under Hushfeed settings > Downloads. `Saves right now` lists the saves under way, oldest first, and says what each one is doing or how many saves it's waiting on. Its Cancel takes a save out of line, or stops a save of several files after the one it's on. `Saves at once` sets how many saves run together, from 1 to 3, and the rest wait their turn (#27).
+
 ## 0.77.0 (2026-10-20)
 
 ### Supported apps

@@ -257,16 +257,31 @@ public final class LiveRecordChip {
         }
         view.setEnabled(true);
         if (recorder != null && recorder.recording()) {
-            long seconds = recorder.elapsedMs() / 1000;
-            String elapsed = seconds >= 3600
-                    ? String.format(Locale.US, "%d:%02d:%02d", seconds / 3600, seconds / 60 % 60, seconds % 60)
-                    : String.format(Locale.US, "%d:%02d", seconds / 60, seconds % 60);
-            view.setText("● " + elapsed + "  " + L10n.t("Stop"));
+            view.setText("● " + elapsed(recorder.elapsedMs()) + "  " + L10n.t("Stop"));
             view.setContentDescription(L10n.t("Stop recording this LIVE"));
         } else {
             view.setText(L10n.t("Record"));
             view.setContentDescription(L10n.t("Record this LIVE from now"));
         }
+    }
+
+    static String elapsed(long ms) {
+        long seconds = ms / 1000;
+        return seconds >= 3600
+                ? String.format(Locale.US, "%d:%02d:%02d", seconds / 3600, seconds / 60 % 60, seconds % 60)
+                : String.format(Locale.US, "%d:%02d", seconds / 60, seconds % 60);
+    }
+
+    /**
+     * What a LIVE recording is doing, for the Downloads page's list of saves (#27): its time while
+     * it records, "Saving the recording" once it's writing the file, and null when there's none.
+     * Opening the settings leaves the room, so the page mostly sees one being saved. Main thread only.
+     */
+    public static String queueStatus() {
+        LiveRecorder current = recorder;
+        if (current == null) return null;
+        if (!saving && current.recording()) return "● " + elapsed(current.elapsedMs());
+        return L10n.t("Saving the recording");
     }
 
     // ---- start and stop -------------------------------------------------------------------

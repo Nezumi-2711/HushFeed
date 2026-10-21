@@ -2190,3 +2190,11 @@ New device identity,Identitas perangkat baru
 "Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.","Hapus data TikTok dan beri ID Android serta ID iklan baru saat mulai berikutnya, agar TikTok melihat ponsel yang belum pernah dikenalnya. Kamu akan keluar dari akun dan kehilangan draf. Pengaturan Hushfeed tetap ada."
 TikTok starts as a new phone after the restart. Tap again to cancel.,TikTok mulai sebagai ponsel baru setelah dimulai ulang. Ketuk lagi untuk membatalkan.
 Couldn't set up a new device identity. Try again.,Tidak bisa menyiapkan identitas perangkat baru. Coba lagi.
+Saves at once,Penyimpanan sekaligus
+How many saves run at the same time. The others wait in line and start as each one ends.,Berapa penyimpanan yang berjalan bersamaan. Sisanya menunggu dalam antrean dan dimulai setiap kali satu selesai.
+Saves right now,Penyimpanan saat ini
+Nothing is saving right now,Tidak ada yang sedang disimpan
+Cover,Sampul
+One at a time,Satu per satu
+Two at once,Dua sekaligus
+Three at once,Tiga sekaligus

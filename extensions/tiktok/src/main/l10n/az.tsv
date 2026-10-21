@@ -2212,3 +2212,11 @@ New device identity	Yeni cihaz kimliyi
 Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	TikTok-un məlumatlarını silir və növbəti açılışda ona yeni Android ID və reklam ID-si verir ki, tanımadığı telefon görsün. Hesabdan çıxış ediləcək və qaralamalarınız silinəcək. Hushfeed ayarları qalır.
 TikTok starts as a new phone after the restart. Tap again to cancel.	TikTok yenidən başladıqdan sonra yeni telefon kimi açılır. Ləğv etmək üçün yenidən toxunun.
 Couldn't set up a new device identity. Try again.	Yeni cihaz kimliyi qurmaq alınmadı. Yenidən cəhd edin.
+Saves at once	Eyni anda saxlamalar
+How many saves run at the same time. The others wait in line and start as each one ends.	Eyni anda neçə saxlamanın işlədiyi. Digərləri növbədə gözləyir və hər biri bitdikcə başlayır.
+Saves right now	Hazırkı saxlamalar
+Nothing is saving right now	Hazırda heç nə saxlanılmır
+Cover	Örtük
+One at a time	Bir-bir
+Two at once	Eyni anda iki
+Three at once	Eyni anda üç

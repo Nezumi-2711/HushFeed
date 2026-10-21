@@ -467,6 +467,7 @@ Country and network preferences,Country and network preferences
 Country code,Country code
 Country filters,Country filters
 Counts under the buttons,Counts under the buttons
+Cover,Cover
 Cover saved to %1$s,Cover saved to %1$s
 Create,Create
 Creator exceptions,Creator exceptions
@@ -859,6 +860,7 @@ Home tab name,Home tab name
 Hook status,Hook status
 How far each edge press moves the video.,How far each edge press moves the video.
 How long each photo stays on screen in a video made from a photo post.,How long each photo stays on screen in a video made from a photo post.
+How many saves run at the same time. The others wait in line and start as each one ends.,How many saves run at the same time. The others wait in line and start as each one ends.
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.,How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.
 "How wide each edge strip is, as a percent of the screen width.","How wide each edge strip is, as a percent of the screen width."
 Hushfeed,Hushfeed
@@ -1124,6 +1126,7 @@ Not sent,Not sent
 Nothing hidden.,Nothing hidden.
 Nothing is playing to seek,Nothing is playing to seek
 Nothing is playing to speed up,Nothing is playing to speed up
+Nothing is saving right now,Nothing is saving right now
 "Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected.","Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected."
 "Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected. First rejection: %4$s","Nothing new was imported. %1$d already matched, %2$d unavailable, %3$d rejected. First rejection: %4$s"
 Nothing on this page changes what TikTok does until they are on.,Nothing on this page changes what TikTok does until they are on.
@@ -1149,6 +1152,7 @@ On. Hushfeed hasn't seen TikTok send any reports since it started.,On. Hushfeed 
 On. Restore puts back the feed setup you had before.,On. Restore puts back the feed setup you had before.
 "Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out.","Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out."
 One area was checked and everything it needs is here.,One area was checked and everything it needs is here.
+One at a time,One at a time
 "One language code, like en or es. Comments and captions TikTok translates come out in this language instead of the app's. Leave it empty to keep TikTok's choice.","One language code, like en or es. Comments and captions TikTok translates come out in this language instead of the app's. Leave it empty to keep TikTok's choice."
 One minute left,One minute left
 One more save waiting,One more save waiting
@@ -1456,6 +1460,8 @@ Saved videos put back,Saved videos put back
 "Saved, override off","Saved, override off"
 Saved. Restart TikTok to apply this.,Saved. Restart TikTok to apply this.
 Saves TikTok's latest crash report on this phone so it can go in the diagnostic report.,Saves TikTok's latest crash report on this phone so it can go in the diagnostic report.
+Saves at once,Saves at once
+Saves right now,Saves right now
 "Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.","Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies."
 "Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.","Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed."
 Saves the details file in JSON format instead of plain text. Useful if another tool will read it.,Saves the details file in JSON format instead of plain text. Useful if another tool will read it.
@@ -1934,6 +1940,7 @@ This video is already saved. Open TikTok to save another copy.,This video is alr
 This video isn't available as a complete file. Try again later.,This video isn't available as a complete file. Try again later.
 This video's sound has no title to look for,This video's sound has no title to look for
 Those photos can't be tried again now. Save the post again to get the rest.,Those photos can't be tried again now. Save the post again to get the rest.
+Three at once,Three at once
 Thumbs down blocks the commenter,Thumbs down blocks the commenter
 TikTok account facts,TikTok account facts
 "TikTok checks how it was signed and installed. This answers those checks the way the Play Store version would. Try it if follows or likes undo themselves after a refresh. It may not help, since TikTok has other checks.","TikTok checks how it was signed and installed. This answers those checks the way the Play Store version would. Try it if follows or likes undo themselves after a refresh. It may not help, since TikTok has other checks."
@@ -2030,6 +2037,7 @@ Turned off 1 gate of %2$d. The rest don't take a true or false value. Restart Ti
 Turned off 1 gate. Restart TikTok to apply this.,Turned off 1 gate. Restart TikTok to apply this.
 "Turns off TikTok's notification service, so nothing it sends reaches your notification shade and it can't wake your phone. You won't hear about new messages until you open TikTok. Notifications hidden while this is on don't come back. Ongoing ones like media controls stay.","Turns off TikTok's notification service, so nothing it sends reaches your notification shade and it can't wake your phone. You won't hear about new messages until you open TikTok. Notifications hidden while this is on don't come back. Ongoing ones like media controls stay."
 Turns off at %1$s,Turns off at %1$s
+Two at once,Two at once
 "Two letters, like us, gb or jp.","Two letters, like us, gb or jp."
 Type,Type
 "Type a website name to use instead of tiktok.com in links you share or copy, like vxtiktok.com. Leave empty to share TikTok's own links. Only TikTok links change, and only the website name.","Type a website name to use instead of tiktok.com in links you share or copy, like vxtiktok.com. Leave empty to share TikTok's own links. Only TikTok links change, and only the website name."

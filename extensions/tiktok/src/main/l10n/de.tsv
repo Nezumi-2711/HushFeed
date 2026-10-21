@@ -2215,3 +2215,11 @@ New device identity	Neue Geräteidentität
 Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	Löscht die Daten von TikTok und gibt ihm beim nächsten Start eine neue Android-ID und Werbe-ID, damit es ein Telefon sieht, das es nicht kennt. Du wirst abgemeldet und verlierst deine Entwürfe. Die Einstellungen von Hushfeed bleiben.
 TikTok starts as a new phone after the restart. Tap again to cancel.	TikTok startet nach dem Neustart als neues Telefon. Tippe erneut, um abzubrechen.
 Couldn't set up a new device identity. Try again.	Die neue Geräteidentität konnte nicht eingerichtet werden. Versuch es noch einmal.
+Saves at once	Gleichzeitige Speicherungen
+How many saves run at the same time. The others wait in line and start as each one ends.	Wie viele Speicherungen gleichzeitig laufen. Die anderen warten in der Schlange und starten, sobald eine davon fertig ist.
+Saves right now	Laufende Speicherungen
+Nothing is saving right now	Gerade wird nichts gespeichert
+Cover	Titelbild
+One at a time	Eine nach der anderen
+Two at once	Zwei gleichzeitig
+Three at once	Drei gleichzeitig

@@ -2392,3 +2392,11 @@ New device identity	Новые идентификаторы устройства
 Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	Стирает данные TikTok и при следующем запуске выдаёт ему новый Android ID и рекламный ID, чтобы он видел незнакомый телефон. Вы выйдете из аккаунта, а черновики пропадут. Настройки Hushfeed сохранятся.
 TikTok starts as a new phone after the restart. Tap again to cancel.	После перезапуска TikTok запустится как на новом телефоне. Нажмите ещё раз, чтобы отменить.
 Couldn't set up a new device identity. Try again.	Не удалось задать новые идентификаторы устройства. Попробуйте ещё раз.
+Saves at once	Сохранений одновременно
+How many saves run at the same time. The others wait in line and start as each one ends.	Сколько сохранений идёт одновременно. Остальные ждут в очереди и начинаются по мере завершения каждого.
+Saves right now	Текущие сохранения
+Nothing is saving right now	Сейчас ничего не сохраняется
+Cover	Обложка
+One at a time	По одному
+Two at once	Два одновременно
+Three at once	Три одновременно
