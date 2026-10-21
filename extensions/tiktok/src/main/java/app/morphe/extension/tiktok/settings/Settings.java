@@ -617,6 +617,11 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting RECORD_LIVE = new BooleanSetting("record_live", FALSE);
     /**
+     * Which of a room's streams a LIVE recording takes (#203): "room" for the quality being
+     * watched, "highest" or "lowest". Read as each recording starts, so no restart.
+     */
+    public static final StringSetting LIVE_RECORD_QUALITY = new StringSetting("live_record_quality", "room");
+    /**
      * Plays the audio TikTok mutes on a post whose sound was pulled; the Keep pulled sounds
      * patch. Read as each video starts, so no restart.
      */

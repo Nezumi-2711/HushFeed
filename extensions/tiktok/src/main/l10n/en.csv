@@ -931,6 +931,7 @@ LIVE,LIVE
 LIVE chat auto-translate,LIVE chat auto-translate
 LIVE feed,LIVE feed
 LIVE followers range,LIVE followers range
+LIVE recording quality,LIVE recording quality
 LIVE recording saved to %1$s,LIVE recording saved to %1$s
 LIVE replays,LIVE replays
 LIVE settings,LIVE settings
@@ -1399,6 +1400,8 @@ Rows,Rows
 SIM country preset,SIM country preset
 SOCKS5,SOCKS5
 STEM,STEM
+Same as the room,Same as the room
+"Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower.","Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower."
 Sample caption to test,Sample caption to test
 Sample category to test,Sample category to test
 Save,Save

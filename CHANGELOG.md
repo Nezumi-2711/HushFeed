@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** New `LIVE recording quality` choice under `Record LIVEs you watch`. `Same as the room` keeps recording what you're watching, like before. `Highest` records the best stream the room has even while you watch it lower, and `Lowest` keeps the file small (#203).
+
 * **TikTok:** Turning on `See-through bottom bar` while TikTok is open now keeps the video running behind the tabs as you swipe. Before, the first swipe brought the black strip under the video back, and it stayed until TikTok was restarted. Hushfeed measured the next video while it was still sliding into place and took it for a caption pushed under the tabs (#145).
 
 * **TikTok:** New `Hide the AI Cast button` switch under Hushfeed settings > App > Posting. It takes TikTok's AI Cast button off the camera's side toolbar, the same way TikTok already leaves it out of duets, stories and the DM camera. It starts off.

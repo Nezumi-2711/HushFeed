@@ -319,7 +319,8 @@ public final class LiveRecordChip {
             return;
         }
         Object room = roomOf(fragment);
-        LiveRoomStream.Pick pick = LiveRoomStream.fromRoom(room, LiveControls.lastQualityPick());
+        LiveRoomStream.Pick pick = LiveRoomStream.fromRoom(room,
+                LiveRoomStream.forRecording(Settings.LIVE_RECORD_QUALITY.get(), LiveControls.lastQualityPick()));
         if (pick.target == null) {
             Logger.printInfo(() -> "LIVE record: no stream to record (" + pick.problem + ")");
             Utils.showToastShort(L10n.t("Couldn't find this LIVE's stream to record. Leave the room and open it again."));
