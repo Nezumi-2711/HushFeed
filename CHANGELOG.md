@@ -6,6 +6,10 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** New `Long-press Profile for Watch history` switch under Feed tab navigation. Holding the Profile tab opens TikTok's Watch history right away instead of four menus deep, and a tap still opens your profile. It's off by default. On accounts where holding Profile switches accounts, the switch takes over that press while it's on (the name at the top of your profile still switches) and hands it back when you turn it off (#199).
+
+* **TikTok:** In Simplified Chinese, "Profile" in Hushfeed's settings (the bottom tab lists, `Open TikTok on` and the Profile section heading) read "company profile". It now says 个人主页.
+
 * **TikTok:** New `LIVE recording quality` choice under `Record LIVEs you watch`. `Same as the room` keeps recording what you're watching, like before. `Highest` records the best stream the room has even while you watch it lower, and `Lowest` keeps the file small (#203).
 
 * **TikTok:** Turning on `See-through bottom bar` while TikTok is open now keeps the video running behind the tabs as you swipe. Before, the first swipe brought the black strip under the video back, and it stayed until TikTok was restarted. Hushfeed measured the next video while it was still sliding into place and took it for a caption pushed under the tabs (#145).
