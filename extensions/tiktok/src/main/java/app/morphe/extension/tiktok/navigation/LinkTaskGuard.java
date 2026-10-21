@@ -24,9 +24,9 @@ import app.morphe.extension.shared.settings.Setting;
  * <p>TikTok turns its AppLinkHandlerV2 (singleTask, excluded from Recents) off at run time and
  * its link alias of MainActivity on, so links land in MainActivity with the default affinity and
  * nothing to stop it joining the sender's task. The hook runs at the start of
- * {@code MainActivity.onCreate} (the alias target) and starts the same intent again with the
- * flag, which finds TikTok's own task or makes one. The instance already made is turned into a
- * plain launch and finished, so TikTok doesn't also open the link in it.
+ * {@code MainActivity.onCreate} (the alias target), turns the instance already made into a plain
+ * launch and finishes it, so TikTok doesn't also open the link in it, then starts the same intent
+ * again with the flag, which finds TikTok's own task or makes one.
  *
  * <p>{@code onNewIntent} needs no guard. A foreign task can only get a new intent if a
  * MainActivity is already on top of it, and this keeps one from ever being created there.
@@ -60,11 +60,15 @@ public final class LinkTaskGuard {
             }
             Intent relaunch = new Intent(intent);
             relaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            activity.startActivity(relaunch);
             // This instance still runs the rest of onCreate. Give it nothing to open.
             activity.setIntent(new Intent(Intent.ACTION_MAIN).setPackage(activity.getPackageName()));
+            // Finish first. The link alias is singleTop, so while this instance is still the
+            // running top of the focused task the system hands the relaunch straight back to it
+            // as onNewIntent (START_DELIVERED_TO_TOP), NEW_TASK or not, and TikTok opens the link
+            // right here. A finishing source also makes the start take a task of TikTok's own.
             activity.finish();
             activity.overridePendingTransition(0, 0);
+            activity.startActivity(relaunch);
             Logger.printInfo(() -> "A TikTok link joined another app's task; started it in TikTok's own");
             return true;
         } catch (Throwable error) {

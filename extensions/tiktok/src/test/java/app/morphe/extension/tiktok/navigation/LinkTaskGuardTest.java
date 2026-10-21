@@ -60,6 +60,27 @@ public class LinkTaskGuardTest {
         assertEquals(activity.getPackageName(), activity.getIntent().getPackage());
     }
 
+    /** Remembers whether it was already finishing when it started the relaunch. */
+    public static class RecordingActivity extends Activity {
+        Boolean finishingAtStart;
+
+        @Override public void startActivity(Intent intent) {
+            finishingAtStart = isFinishing();
+            super.startActivity(intent);
+        }
+    }
+
+    @Test public void finishesBeforeRelaunching() {
+        // Started while still the running top of the sender's task, the singleTop alias got its
+        // own relaunch back as onNewIntent and opened the link there (seen on 47.4.3).
+        RecordingActivity activity =
+                Robolectric.buildActivity(RecordingActivity.class, view(LINK, 0)).create().get();
+        activity.setIntent(view(LINK, 0));
+
+        assertTrue(LinkTaskGuard.redirectIfForeign(activity, false, Boolean.FALSE));
+        assertEquals(Boolean.TRUE, activity.finishingAtStart);
+    }
+
     @Test public void ownTaskIsLeftAlone() {
         Activity activity = activityWith(view(LINK, 0));
         assertFalse(LinkTaskGuard.redirectIfForeign(activity, false, Boolean.TRUE));
