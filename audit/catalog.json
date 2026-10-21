@@ -13963,7 +13963,8 @@
    {
     "key": "seekbar_time_placement",
     "default": "beside",
-    "type": "string"
+    "type": "string",
+    "row": "Where the time goes"
    },
    {
     "key": "seekbar_big_handle",
