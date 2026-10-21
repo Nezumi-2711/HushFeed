@@ -4848,6 +4848,45 @@
       "options": []
     },
     {
+      "name": "Open the comments at full height",
+      "description": "Opens the comment sheet at the full height of the screen instead of part way up. Starts off. Turn it on in Hushfeed settings > Comments.",
+      "category": "Comments",
+      "use": true,
+      "dependencies": [
+        "BytecodePatch",
+        "Settings"
+      ],
+      "compatiblePackages": {
+        "com.zhiliaoapp.musically": [
+          "47.4.3"
+        ]
+      },
+      "compatibility": [
+        {
+          "name": "TikTok",
+          "packageName": "com.zhiliaoapp.musically",
+          "description": null,
+          "appIconColor": 16657493,
+          "signatures": [
+            "9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"
+          ],
+          "targets": [
+            {
+              "version": "47.4.3",
+              "experimental": false,
+              "versionCodes": {
+                "ARM64_V8A": 2024704030,
+                "ARMEABI_V7A": 2024704030,
+                "X86": 2024704030,
+                "X86_64": 2024704030
+              }
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Picture-in-picture",
       "description": "Keeps the video playing in a small window when you leave TikTok, so you can keep watching while you use other apps. Starts off. Turn it on in Hushfeed settings > Playback.",
       "category": "Playback",

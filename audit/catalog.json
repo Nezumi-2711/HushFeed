@@ -2096,6 +2096,114 @@
   "notes": "Known 47.1.4 limit (learned.md, 2026-09-23): the S22 test account is already served the full sort sheet with the switch off, so forcing style 2 changes nothing visible there. The log line proves the hook ran; the cut-down-to-full conversion needs an account TikTok serves the cut-down row to (Roadmap_Blocked.md 'Comment sort full-sheet proof'). The style is read through a Kotlin lazy, so every phase restarts before it opens comments. Hushfeed's own compact_comment_header hides the sort glyph, which is why the review check turns it off."
  },
  {
+  "name": "Open the comments at full height",
+  "category": "Comments",
+  "default": true,
+  "kind": "runtime",
+  "source": [
+   "patches/src/main/kotlin/app/morphe/patches/tiktok/misc/comment/CommentSheetHeightPatch.kt",
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/comment/CommentSheetHeight.java"
+  ],
+  "settings": [
+   {
+    "key": "comments_full_height",
+    "default": false,
+    "type": "bool",
+    "row": "Open the comments at full height"
+   }
+  ],
+  "surface": "comments",
+  "checks": [
+   {
+    "id": "patch-applied",
+    "what": "SettingsStatus.commentsFullHeightEnabled is true, so the patch is in this APK and the extension loaded it.",
+    "steps": [
+     {
+      "probe": "fields",
+      "extras": {
+       "class": "app.morphe.extension.tiktok.settings.SettingsStatus",
+       "names": "commentsFullHeightEnabled"
+      },
+      "expect": "\\bcommentsFullHeightEnabled=true\\b",
+      "waitMs": 1500
+     }
+    ],
+    "auto": true
+   },
+   {
+    "id": "height-asked",
+    "what": "With the switch on, opening the comments sizes the sheet to the screen (debug line 'Open the comments at full height: sheet sized to the screen'); with it off, no such line.",
+    "steps": [
+     {
+      "set": {
+       "comments_full_height": "false"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
+      "probe": "comments",
+      "expect": "openComments\\([^)]*\\)=true",
+      "waitMs": 2500
+     },
+     {
+      "logNot": "Open the comments at full height: sheet sized",
+      "within": 6000
+     },
+     {
+      "back": true
+     },
+     {
+      "set": {
+       "comments_full_height": "true"
+      }
+     },
+     {
+      "restart": true
+     },
+     {
+      "open": "feed"
+     },
+     {
+      "probe": "videoinfo",
+      "expect": "likes=over1000",
+      "retrySwipe": 8,
+      "precondition": true
+     },
+     {
+      "probe": "comments",
+      "expect": "openComments\\([^)]*\\)=true",
+      "waitMs": 2500
+     },
+     {
+      "log": "Open the comments at full height: sheet sized",
+      "within": 8000
+     },
+     {
+      "back": true
+     },
+     {
+      "set": {
+       "comments_full_height": "false"
+      }
+     }
+    ],
+    "auto": true
+   }
+  ],
+  "notes": "Issue #191. TikTok sizes the sheet from a server mode: 68 or 73 percent of the content view, a config ratio, or a fixed dimen when the mode is 0. The patch answers the height method with the content view's full height and lifts a mode of 0 to 1 so the panel asks for it. The height is cached in a static field, which the switch bypasses rather than clears, so flipping it needs no restart. Whether the sheet reaches the top and still drags down to close is a look on the phone, which the log line stands in for."
+ },
+ {
   "name": "Comment tools",
   "category": "Comments",
   "default": true,

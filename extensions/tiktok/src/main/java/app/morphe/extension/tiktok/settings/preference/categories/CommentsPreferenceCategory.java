@@ -37,6 +37,7 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                 || SettingsStatus.copyCommentsWithoutUsernameEnabled
                 || SettingsStatus.hideCommentEggsEnabled
                 || SettingsStatus.commentSortControlsEnabled
+                || SettingsStatus.commentsFullHeightEnabled
                 || SettingsStatus.lengthLimitsEnabled
                 || SettingsStatus.voiceCommentsEnabled
                 || SettingsStatus.commenterDetailsEnabled;
@@ -56,6 +57,7 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                 || SettingsStatus.languagePageTranslationsEnabled
                 || SettingsStatus.feedTranslationsEnabled
                 || SettingsStatus.commentSortControlsEnabled
+                || SettingsStatus.commentsFullHeightEnabled
                 || SettingsStatus.commentToolsEnabled
                 || SettingsStatus.copyCommentsWithoutUsernameEnabled
                 || SettingsStatus.commenterDetailsEnabled;
@@ -117,6 +119,15 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                             + "creator options, instead of the shorter one your account got. "
                             + "Restart TikTok to see the change.",
                     Settings.COMMENT_SORT_CONTROLS
+            ));
+        }
+        if (SettingsStatus.commentsFullHeightEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Open the comments at full height",
+                    "Opens the comment sheet at the full height of the screen instead of part "
+                            + "way up. Drag it down to close it, as before.",
+                    Settings.COMMENTS_FULL_HEIGHT
             ));
         }
         if (SettingsStatus.commentToolsEnabled) {

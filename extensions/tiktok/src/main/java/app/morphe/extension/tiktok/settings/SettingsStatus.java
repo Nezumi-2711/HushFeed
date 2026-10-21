@@ -133,6 +133,7 @@ public class SettingsStatus {
     public static boolean commentToolsEnabled = false;
     public static boolean hideCommentEggsEnabled = false;
     public static boolean commentSortControlsEnabled = false;
+    public static boolean commentsFullHeightEnabled = false;
     public static boolean videoOverlaysEnabled = false;
     public static boolean feedTextSizeEnabled = false;
     public static boolean shareSheetEnabled = false;
@@ -525,6 +526,10 @@ public class SettingsStatus {
 
     public static void enableCommentSortControls() {
         commentSortControlsEnabled = true;
+    }
+
+    public static void enableCommentsFullHeight() {
+        commentsFullHeightEnabled = true;
     }
 
     public static void enableSeenVideoFilter() {

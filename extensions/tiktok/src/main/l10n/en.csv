@@ -1182,6 +1182,7 @@ Open external links directly,Open external links directly
 Open messages,Open messages
 Open profile and story website links in your system browser instead of TikTok's in-app browser.,Open profile and story website links in your system browser instead of TikTok's in-app browser.
 Open shared videos alone,Open shared videos alone
+Open the comments at full height,Open the comments at full height
 Open the feed anyway,Open the feed anyway
 "Open the feed anyway, %1$d left today","Open the feed anyway, %1$d left today"
 "Open the feed anyway, the last time today","Open the feed anyway, the last time today"
@@ -1193,6 +1194,7 @@ Open the story again and try once more,Open the story again and try once more
 "Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet.","Opens TikTok's own profile background editor in Edit profile, and shows the backgrounds other profiles have set. TikTok's servers may still refuse to save one for an account TikTok hasn't offered it to yet."
 Opens a GitHub report with your versions and settings filled in. Add what happened.,Opens a GitHub report with your versions and settings filled in. Add what happened.
 Opens github.com in your browser,Opens github.com in your browser
+"Opens the comment sheet at the full height of the screen instead of part way up. Drag it down to close it, as before.","Opens the comment sheet at the full height of the screen instead of part way up. Drag it down to close it, as before."
 Operator code,Operator code
 Operator name,Operator name
 "Optional, used with the user name. It isn't shown, logged or put in a backup.","Optional, used with the user name. It isn't shown, logged or put in a backup."

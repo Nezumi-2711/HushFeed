@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** New `Open the comments at full height` switch under Hushfeed settings > Comments. TikTok opens the comment sheet part way up the screen, and with the switch on it opens all the way to the top. Dragging it down still closes it. It's off by default (#191).
+
 * **TikTok:** New `Keep the screen's brightness in the camera` switch under Hushfeed settings > App > System. TikTok turns your screen brighter when you open its camera, and keeps it that way through editing and posting. With the switch on, the screen stays at the brightness you set. It's off by default (#200).
 
 * **TikTok:** New `Long-press Profile for Watch history` switch under Feed tab navigation. Holding the Profile tab opens TikTok's Watch history right away instead of four menus deep, and a tap still opens your profile. It's off by default. On accounts where holding Profile switches accounts, the switch takes over that press while it's on (the name at the top of your profile still switches) and hands it back when you turn it off (#199).

@@ -1178,6 +1178,7 @@ public class Settings extends BaseSettings {
             new BooleanSetting("larger_comment_like_target", FALSE, true);
     public static final BooleanSetting HIDE_COMMENT_EGGS = new BooleanSetting("hide_comment_eggs", FALSE);
     public static final BooleanSetting COMMENT_SORT_CONTROLS = new BooleanSetting("comment_sort_controls", FALSE);
+    public static final BooleanSetting COMMENTS_FULL_HEIGHT = new BooleanSetting("comments_full_height", FALSE);
     // Share sheet tools.
     public static final BooleanSetting HIDE_SHARE_CONTACTS = new BooleanSetting("hide_share_contacts", FALSE);
     public static final BooleanSetting SHARE_TAP_COPIES_LINK = new BooleanSetting("share_tap_copies_link", FALSE);
