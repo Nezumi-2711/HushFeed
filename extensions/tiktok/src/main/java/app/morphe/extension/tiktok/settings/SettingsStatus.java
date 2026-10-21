@@ -158,9 +158,11 @@ public class SettingsStatus {
     public static boolean hideFeedSearchButtonEnabled = false;
     public static boolean showSeekbarEnabled = false;
     /** Show the progress bar's extras, which a build other than the declared one can leave out
-     *  while the bar itself still applies: the time and the bigger handle, and the story seek bar. */
+     *  while the bar itself still applies: the time and the bigger handle, the story seek bar and
+     *  the sound preview seek bar. */
     public static boolean seekbarExtrasEnabled = false;
     public static boolean storySeekbarEnabled = false;
+    public static boolean soundSeekbarEnabled = false;
     public static boolean sanitizeShareUrlsEnabled = false;
     public static boolean contactListBlockerEnabled = false;
     public static boolean searchHistoryEnabled = false;
@@ -391,6 +393,10 @@ public class SettingsStatus {
 
     public static void enableStorySeekbar() {
         storySeekbarEnabled = true;
+    }
+
+    public static void enableSoundSeekbar() {
+        soundSeekbarEnabled = true;
     }
 
     public static void enableSanitizeShareUrls() {

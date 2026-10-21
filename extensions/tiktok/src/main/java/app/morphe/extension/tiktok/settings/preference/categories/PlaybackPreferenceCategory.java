@@ -205,6 +205,16 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                     Settings.STORY_SEEKBAR
             ));
         }
+        if (SettingsStatus.showSeekbarEnabled && SettingsStatus.soundSeekbarEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Seek bar on sound previews",
+                    "Add a line along the bottom of a sound's cover while its preview plays, with "
+                            + "the time played and the preview's length. Tap or drag it to move "
+                            + "through the preview.",
+                    Settings.SOUND_SEEKBAR
+            ));
+        }
         if (SettingsStatus.seekbarThumbnailEnabled) {
             addPreference(new TogglePreference(
                     context,

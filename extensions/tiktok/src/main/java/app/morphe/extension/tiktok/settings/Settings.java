@@ -576,6 +576,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting SEEKBAR_BIG_HANDLE = new BooleanSetting("seekbar_big_handle", FALSE);
     /** A line along the bottom of a video story that can be dragged to seek (#72). */
     public static final BooleanSetting STORY_SEEKBAR = new BooleanSetting("story_seekbar", FALSE);
+    /** A line along the bottom of a sound page's cover while its preview plays, which seeks the preview (#185). */
+    public static final BooleanSetting SOUND_SEEKBAR = new BooleanSetting("sound_seekbar", FALSE);
     public static final BooleanSetting SHOW_SEEKBAR_THUMBNAIL = new BooleanSetting(
             "show_seekbar_thumbnail",
             TRUE

@@ -14209,6 +14209,12 @@
     "default": false,
     "type": "bool",
     "row": "Seek bar on video stories"
+   },
+   {
+    "key": "sound_seekbar",
+    "default": false,
+    "type": "bool",
+    "row": "Seek bar on sound previews"
    }
   ],
   "surface": "feed",
@@ -14289,7 +14295,7 @@
     "auto": true
    }
   ],
-  "notes": "TikTok only asks for show types 3 or 4 on videos it hides the bar for (short ones), so the first check can stay silent on a feed of long videos: inconclusive, not a failure, and the export shows it with Log diagnostics on (the runner turns it on for the run). The bar and its time are not found by id here because the repo records no stable id for the bar view; a screenshot review is the next step if the log lines do not settle it. The bigger handle, the full-width bar and the video story seek bar (story_seekbar, which needs a story and the audit never opens one) are not exercised."
+  "notes": "TikTok only asks for show types 3 or 4 on videos it hides the bar for (short ones), so the first check can stay silent on a feed of long videos: inconclusive, not a failure, and the export shows it with Log diagnostics on (the runner turns it on for the run). The bar and its time are not found by id here because the repo records no stable id for the bar view; a screenshot review is the next step if the log lines do not settle it. The bigger handle, the full-width bar, the video story seek bar (story_seekbar, which needs a story and the audit never opens one) and the sound preview seek bar (sound_seekbar, which needs a sound page) are not exercised."
  },
  {
   "name": "Show the progress bar thumbnail",

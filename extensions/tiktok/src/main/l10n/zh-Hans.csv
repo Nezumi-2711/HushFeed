@@ -163,6 +163,7 @@ Account region,账户区域
 Active,活跃
 Activity,活动
 Activity center (PIA),活动中心（PIA）
+"Add a line along the bottom of a sound's cover while its preview plays, with the time played and the preview's length. Tap or drag it to move through the preview.",在声音试听播放时，沿声音封面底部添加一条线，显示已播放时间和试听时长。点按或拖动它即可在试听中移动.
 Add,添加
 Add a button beside the block control that turns the feed's sound off and on.,在块控件旁边添加一个按钮，用于关闭和打开信息流的声音.
 Add a button beside the block control to send feedback about the current video.,在块控件旁边添加一个按钮以发送有关当前视频的反馈.
@@ -375,6 +376,8 @@ Comment sort and dislike styles,评论排序和不喜欢的风格
 "Comment with live photos, the camera or audio",使用实时照片、相机或音频进行评论
 Comments,评论
 Comments aren't available for this video,该视频无法发表评论
+Seek bar on sound previews,声音试听进度条
+Sound position,声音位置
 Turn Clear display on or off,开启或关闭清除显示
 Clear display isn't available for this video,该视频无法使用清除显示
 Comments beside the video,视频旁边的评论

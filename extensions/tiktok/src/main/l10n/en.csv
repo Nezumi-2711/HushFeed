@@ -170,6 +170,7 @@ Add a button beside the block control that turns the feed's sound off and on.,Ad
 Add a button beside the block control to send feedback about the current video.,Add a button beside the block control to send feedback about the current video.
 Add a button that hides the current creator on this phone without blocking them.,Add a button that hides the current creator on this phone without blocking them.
 Add a creator,Add a creator
+"Add a line along the bottom of a sound's cover while its preview plays, with the time played and the preview's length. Tap or drag it to move through the preview.","Add a line along the bottom of a sound's cover while its preview plays, with the time played and the preview's length. Tap or drag it to move through the preview."
 Add a seen-history file saved by Hushfeed to the videos @%1$s has seen. A video in both keeps the newer date.,Add a seen-history file saved by Hushfeed to the videos @%1$s has seen. A video in both keeps the newer date.
 Add a seen-history file saved by Hushfeed to this account's seen videos. A video in both keeps the newer date.,Add a seen-history file saved by Hushfeed to this account's seen videos. A video in both keeps the newer date.
 Add a separate button that skips videos using the current sound.,Add a separate button that skips videos using the current sound.
@@ -1535,6 +1536,7 @@ Seconds per photo,Seconds per photo
 "Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept.","Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept."
 See-through bottom bar,See-through bottom bar
 See-through status bar,See-through status bar
+Seek bar on sound previews,Seek bar on sound previews
 Seek bar on video stories,Seek bar on video stories
 Seek by,Seek by
 Seek from the edges,Seek from the edges
@@ -1690,6 +1692,7 @@ Sound,Sound
 Sound format,Sound format
 Sound link copied,Sound link copied
 Sound on,Sound on
+Sound position,Sound position
 Sound saved to %1$s,Sound saved to %1$s
 Sound: %1$s,Sound: %1$s
 Source,Source

@@ -1118,6 +1118,9 @@ Draw a larger handle and a slightly thicker line on the progress bar, so it's ea
 Seek bar on video stories	Ползунок перемотки в видеоисториях
 Add a thin line along the bottom of a video story that you can drag to go back or skip ahead. The time shows while you drag, and a tap on it still moves between stories.	Добавить тонкую линию внизу видеоистории, которую можно перетаскивать, чтобы перемотать назад или вперёд. Во время перетаскивания показывается время, а нажатие на неё по-прежнему переключает истории.
 Story position	Позиция в истории
+Seek bar on sound previews	Ползунок перемотки в превью звуков
+Add a line along the bottom of a sound's cover while its preview plays, with the time played and the preview's length. Tap or drag it to move through the preview.	Добавить линию внизу обложки звука, пока играет его превью, с прошедшим временем и длиной превью. Нажмите на неё или перетащите, чтобы перемещаться по превью.
+Sound position	Позиция в звуке
 %1$s of %2$s	%1$s из %2$s
 Show the progress bar thumbnail	Показывать превью на полосе прогресса
 Show the whole Activity and New followers lists instead of stopping at a View all button.	Показывать списки «Активность» и «Новые подписчики» целиком, не останавливаясь на кнопке «Смотреть все».
