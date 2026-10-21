@@ -719,6 +719,12 @@
     "default": false,
     "type": "bool",
     "row": "Show video length on profile grids"
+   },
+   {
+    "key": "profile_grid_sort",
+    "default": "off",
+    "type": "string",
+    "row": "Sort loaded videos on profile grids"
    }
   ],
   "surface": "feed",

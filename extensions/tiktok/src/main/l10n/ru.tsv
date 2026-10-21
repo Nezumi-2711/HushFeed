@@ -2423,3 +2423,12 @@ Hide the TikTok Minis icons in the profile menu	Скрывать значки Ti
 Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.	Запись TikTok Minis остаётся в меню, которое открывает кнопка справа вверху вашего профиля, а ряд значков приложений под ней скрывается, и меню становится короче.
 Turn off the swipe to the side menu	Отключить свайп к боковому меню
 Swiping right on For You no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.	Свайп вправо на вкладке Рекомендации больше не открывает боковое меню TikTok с разделами «Ваши заказы», TikTok Minis и другими.
+Sort loaded videos on profile grids	Сортировать загруженные видео в сетках профиля
+Original order	Исходный порядок
+Newest first	Сначала новые
+Oldest first	Сначала старые
+Longest first	Сначала длинные
+Shortest first	Сначала короткие
+Most viewed first	Сначала самые просматриваемые
+Most liked first	Сначала с наибольшим числом лайков
+Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.	Сортирует видео, которые сетка профиля или раздела «Понравившиеся» уже загрузила, закреплённые остаются первыми. По мере прокрутки порядок охватывает больше видео. В следующий раз сетка откроется уже в этом порядке.

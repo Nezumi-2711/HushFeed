@@ -599,6 +599,13 @@ public class SettingsStatus {
     /** The right swipe that opens the side menu was found and hooked; a build that moved it leaves it out. */
     public static boolean feedSidebarSwipeEnabled = false;
 
+    /** The profile grid adapter was found and hooked to sort its loaded videos (#180). */
+    public static boolean gridSortEnabled = false;
+
+    public static void enableGridSort() {
+        gridSortEnabled = true;
+    }
+
     public static void enableFeedSidebarSwipe() {
         feedSidebarSwipeEnabled = true;
     }

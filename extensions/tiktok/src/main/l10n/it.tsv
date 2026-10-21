@@ -2243,3 +2243,12 @@ Hide the TikTok Minis icons in the profile menu	Nascondi le icone di TikTok Mini
 Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.	Lascia la voce TikTok Minis nel menu che si apre con il pulsante in alto a destra del tuo profilo e nascondi la riga di icone di app sotto, così il menu è più corto.
 Turn off the swipe to the side menu	Disattiva lo scorrimento al menu laterale
 Swiping right on For You no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.	Scorrere verso destra su “Per te” non apre più il menu laterale di TikTok, con I tuoi ordini, TikTok Minis e altro.
+Sort loaded videos on profile grids	Ordina i video caricati nelle griglie del profilo
+Original order	Ordine originale
+Newest first	Prima i più recenti
+Oldest first	Prima i più vecchi
+Longest first	Prima i più lunghi
+Shortest first	Prima i più corti
+Most viewed first	Prima i più visti
+Most liked first	Prima i più piaciuti
+Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.	Ordina i video che una griglia del profilo o dei Mi piace ha caricato finora, con quelli in evidenza davanti. Scorrendo, l'ordine copre più video. La prossima volta che si apre una griglia, lo seguirà.

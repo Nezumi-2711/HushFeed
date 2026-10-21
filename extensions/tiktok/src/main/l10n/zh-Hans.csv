@@ -2219,3 +2219,12 @@ Hide the TikTok Minis icons in the profile menu,在个人资料菜单中隐藏 T
 "Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.",保留个人资料右上角按钮所打开菜单中的 TikTok 迷你条目，并隐藏其下方的应用图标行，让菜单更短.
 Turn off the swipe to the side menu,关闭滑向侧面菜单的手势
 "Swiping right on For You no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.",在“为您推荐”上向右滑动不再打开 TikTok 的侧面菜单，其中包含您的订单、TikTok 迷你等.
+Sort loaded videos on profile grids,对个人资料网格中已加载的视频排序
+Original order,原始顺序
+Newest first,最新的在前
+Oldest first,最早的在前
+Longest first,最长的在前
+Shortest first,最短的在前
+Most viewed first,播放最多的在前
+Most liked first,点赞最多的在前
+"Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.",对个人资料或喜欢网格目前已加载的视频排序，置顶视频仍排在最前。向下滚动时，排序会涵盖更多视频。下次打开网格时按此顺序显示.

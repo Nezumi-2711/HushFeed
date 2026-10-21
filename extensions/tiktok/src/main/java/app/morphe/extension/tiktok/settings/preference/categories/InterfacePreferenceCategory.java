@@ -294,6 +294,14 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "Show how long each video runs under its view count on profile grids. Photo posts and videos TikTok sent no length for show none.",
                     Settings.VIDEO_LENGTH_ON_GRID
             ));
+            if (SettingsStatus.gridSortEnabled) {
+                addPreference(new ChoicePreference(context, "Sort loaded videos on profile grids",
+                        Settings.PROFILE_GRID_SORT,
+                        new String[]{"Original order", "Newest first", "Oldest first", "Longest first",
+                                "Shortest first", "Most viewed first", "Most liked first"},
+                        new String[]{"off", "newest", "oldest", "longest", "shortest", "most_viewed", "most_liked"})
+                        .withNote("Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this."));
+            }
         }
         if (SettingsStatus.authorRegionEnabled) {
             addPreference(new TogglePreference(

@@ -2221,3 +2221,12 @@ Hide the TikTok Minis icons in the profile menu,Sembunyikan ikon TikTok Minis di
 "Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.","Biarkan entri TikTok Minis di menu yang dibuka tombol kanan atas di profilmu, dan sembunyikan baris ikon aplikasi di bawahnya agar menunya lebih pendek."
 Turn off the swipe to the side menu,Matikan usapan ke menu samping
 "Swiping right on For You no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.","Mengusap ke kanan di Untuk Kamu tidak lagi membuka menu samping TikTok, berisi Pesananmu, TikTok Minis, dan lainnya."
+Sort loaded videos on profile grids,Urutkan video yang dimuat di kisi profil
+Original order,Urutan asli
+Newest first,Terbaru dulu
+Oldest first,Terlama dulu
+Longest first,Terpanjang dulu
+Shortest first,Terpendek dulu
+Most viewed first,Paling banyak ditonton dulu
+Most liked first,Paling banyak disukai dulu
+"Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.","Mengurutkan video yang sudah dimuat kisi profil atau Disukai, dan video yang disematkan tetap di depan. Saat kamu menggulir, urutannya mencakup lebih banyak video. Kisi yang dibuka berikutnya mengikuti ini."

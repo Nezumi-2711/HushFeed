@@ -1025,6 +1025,7 @@ Long-press Home for Hushfeed settings,Long-press Home for Hushfeed settings
 Long-press Profile for Watch history,Long-press Profile for Watch history
 "Long-press a bio to copy it. A profile's share sheet gets buttons that copy its username and user ID, and a video's share sheet one that copies the video ID.","Long-press a bio to copy it. A profile's share sheet gets buttons that copy its username and user ID, and a video's share sheet one that copies the video ID."
 Long-press menu on every post,Long-press menu on every post
+Longest first,Longest first
 Looking for apps,Looking for apps
 Loop a story,Loop a story
 Lowest,Lowest
@@ -1062,6 +1063,8 @@ More items are available.,More items are available.
 More opens the comments,More opens the comments
 More options,More options
 "More than %1$d comments were loaded, so the rest aren't in the file.","More than %1$d comments were loaded, so the rest aren't in the file."
+Most liked first,Most liked first
+Most viewed first,Most viewed first
 Move down,Move down
 Move left,Move left
 Move right,Move right
@@ -1076,6 +1079,7 @@ Never from these countries,Never from these countries
 New comment emoji,New comment emoji
 New device identity,New device identity
 New value,New value
+Newest first,Newest first
 Next message: today at %1$s.,Next message: today at %1$s.
 Next message: tomorrow at %1$s.,Next message: tomorrow at %1$s.
 No,No
@@ -1155,6 +1159,7 @@ Offer LIVE quality in more rooms,Offer LIVE quality in more rooms
 Offer clear screen in every LIVE room,Offer clear screen in every LIVE room
 Offline videos,Offline videos
 Offline videos limit,Offline videos limit
+Oldest first,Oldest first
 On,On
 "On a one-photo post, Download video makes an MP4 with the post's sound and no TikTok logo or end card. On a post with several photos, Download asks if you want the originals or one video.","On a one-photo post, Download video makes an MP4 with the post's sound and no TikTok logo or end card. On a post with several photos, Download asks if you want the originals or one video."
 On mobile data,On mobile data
@@ -1213,6 +1218,7 @@ Opus didn't work on this phone. Saving the sound as TikTok sent it instead.,Opus
 "Opus needs Android 10 or later, so sounds save as TikTok sent them.","Opus needs Android 10 or later, so sounds save as TikTok sent them."
 Original language,Original language
 Original message,Original message
+Original order,Original order
 Original photos,Original photos
 Original sound,Original sound
 Other,Other
@@ -1582,6 +1588,7 @@ Shop order updates and coupon messages no longer take up rows in the Inbox. Your
 Shop posts,Shop posts
 Shop tab name,Shop tab name
 Short date,Short date
+Shortest first,Shortest first
 Show,Show
 Show @username beside a video instead of the display name the creator chose.,Show @username beside a video instead of the display name the creator chose.
 Show See translation,Show See translation
@@ -1674,6 +1681,8 @@ Sleep timer off,Sleep timer off
 Some Calm feed settings changed. Restore still puts back your earlier setup.,Some Calm feed settings changed. Restore still puts back your earlier setup.
 Some of these notes are in English.,Some of these notes are in English.
 Something is missing from %1$s. Tap for the whole report.,Something is missing from %1$s. Tap for the whole report.
+Sort loaded videos on profile grids,Sort loaded videos on profile grids
+"Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.","Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this."
 Sound,Sound
 "Sound IDs saved by the player's sound button, separated by commas. Remove one to unblock it.","Sound IDs saved by the player's sound button, separated by commas. Remove one to unblock it."
 Sound format,Sound format
