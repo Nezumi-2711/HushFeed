@@ -1727,6 +1727,24 @@ public final class Probe extends Instrumentation {
                                     out.append(" textPx=").append(label.getTextSize())
                                             .append(" textSp=").append(textSp(label, label.getTextSize()))
                                             .append(" lines=").append(label.getLineCount());
+                                    if (label.getLayout() != null) out.append(" layout:").append(layoutReport(label.getLayout()));
+                                }
+                                if (id == strip) {
+                                    // Caption height's lift and un-clip (#206): each group above the
+                                    // strip with its top, translation and whether it clips.
+                                    android.view.ViewParent up = view.getParent();
+                                    for (int depth = 0; depth < 5 && up instanceof android.view.ViewGroup; depth++) {
+                                        android.view.ViewGroup group = (android.view.ViewGroup) up;
+                                        out.append(" up").append(depth).append('=').append(group.getClass().getSimpleName())
+                                                .append(':').append(idName(group, resources))
+                                                .append("/top").append(group.getTop())
+                                                .append("/h").append(group.getHeight())
+                                                .append("/ty").append(group.getTranslationY())
+                                                .append("/tz").append(group.getTranslationZ())
+                                                .append("/clip").append(group.getClipChildren() ? 1 : 0)
+                                                .append("/pad").append(group.getClipToPadding() ? group.getPaddingTop() : -1);
+                                        up = group.getParent();
+                                    }
                                 }
                                 if (id == strip && view instanceof android.view.ViewGroup) {
                                     // On 47.0.3 the text view stays gone and a sibling draws the
@@ -4447,7 +4465,10 @@ public final class Probe extends Instrumentation {
             return optional(address, "getWidth") + "x" + optional(address, "getHeight");
         }
 
-        /** Its lines, width and how many lines end inside a word, never the text itself. */
+        /**
+         * Its lines, width and how many lines end inside a word, never the text itself, then the
+         * weight it draws at: the typeface's and the paint's variation settings (Caption boldness).
+         */
         private static String layoutReport(android.text.Layout layout) {
             CharSequence text = layout.getText();
             int inWords = 0;
@@ -4456,7 +4477,14 @@ public final class Probe extends Instrumentation {
                 if (end > 0 && end < text.length() && Character.isLetterOrDigit(text.charAt(end - 1))
                         && Character.isLetterOrDigit(text.charAt(end))) inWords++;
             }
-            return "lines" + layout.getLineCount() + "/w" + layout.getWidth() + "/inWords" + inWords;
+            android.text.TextPaint paint = layout.getPaint();
+            android.graphics.Typeface face = paint.getTypeface();
+            String weight = face == null ? "none" : android.os.Build.VERSION.SDK_INT >= 28
+                    ? String.valueOf(face.getWeight()) : face.isBold() ? "bold" : "normal";
+            String variation = android.os.Build.VERSION.SDK_INT >= 26 ? paint.getFontVariationSettings() : null;
+            return "lines" + layout.getLineCount() + "/w" + layout.getWidth() + "/inWords" + inWords
+                    + "/weight" + weight + "/fakeBold" + paint.isFakeBoldText()
+                    + "/var" + (variation == null ? "none" : variation.replace(' ', '_'));
         }
 
         private static Object staticField(Class<?> owner, String name) throws ReflectiveOperationException {
