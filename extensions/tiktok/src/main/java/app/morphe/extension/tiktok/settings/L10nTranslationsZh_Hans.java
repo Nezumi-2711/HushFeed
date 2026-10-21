@@ -497,8 +497,8 @@ final class L10nTranslationsZh_Hans {
                 "已标记为不感兴趣");
         table.put("Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.",
                 "当信息流无法加载足够的新项目时，还可以将这些过滤器应用于 TikTok 使用的下载视频.");
-        table.put("Also change the region TikTok reports internally. Keeps your interface language. Your IP address and your account's own rules still apply.",
-                "还要在内部更改区域 TikTok 报告。保留您的界面语言。您的 IP 地址和您帐户自身的规则仍然适用.");
+        table.put("Also change the region TikTok reports internally. Times on messages and comments follow the country's time zone too. Keeps your interface language. Your IP address and your account's own rules still apply.",
+                "还要在内部更改区域 TikTok 报告。消息和评论上的时间也会采用该国家/地区的时区。保留您的界面语言。您的 IP 地址和您帐户自身的规则仍然适用.");
         table.put("Also hide videos whose text stickers match a blocked caption word. Text stickers are the words a creator types over the video in TikTok's editor. Text that's part of the picture itself can't be read.",
                 "还隐藏文本贴纸与被阻止的字幕词匹配的视频。文本贴纸是创作者在 TikTok 的编辑器中在视频上输入的文字。无法读取属于图片本身的文本.");
         table.put("Also on a block list, so still hidden: %1$s",
