@@ -279,6 +279,12 @@ public class Settings extends BaseSettings {
             new BooleanSetting("fill_video_to_screen", FALSE);
     public static final BooleanSetting UNCAP_REFRESH_RATE =
             new BooleanSetting("uncap_refresh_rate", FALSE);
+    /**
+     * Skips TikTok's brightness boost in the camera, editor and post screens (issue #200). The
+     * patch is in the default selection, so the switch starts off.
+     */
+    public static final BooleanSetting KEEP_CAMERA_BRIGHTNESS =
+            new BooleanSetting("keep_camera_brightness", FALSE);
     // The four Performance patches, in the default selection because each hook asks one of these
     // first. Off until the reader turns one on, and a paused build answers off. The splash, update
     // and traffic hooks act on TikTok's startup tasks, so they need a restart. The animated image

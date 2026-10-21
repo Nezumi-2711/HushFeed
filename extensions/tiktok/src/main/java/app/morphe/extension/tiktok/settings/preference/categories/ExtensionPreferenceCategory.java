@@ -60,6 +60,7 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                 || SettingsStatus.hdUploadEnabled
                 || SettingsStatus.aiCastEntranceEnabled
                 || SettingsStatus.refreshRateEnabled
+                || SettingsStatus.cameraBrightnessEnabled
                 || SettingsStatus.launcherShortcutsEnabled
                 || SettingsStatus.firstLaunchSetupEnabled
                 || SettingsStatus.screenCaptureEnabled
@@ -325,8 +326,8 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
         // The whole app, not the feed: screenshots and the status bar used to be on Feed screen and
         // the store check on Privacy, under a heading of its own.
         if (SettingsStatus.screenCaptureEnabled || SettingsStatus.videoOverlaysEnabled
-                || SettingsStatus.refreshRateEnabled || SettingsStatus.launcherShortcutsEnabled
-                || SettingsStatus.firstLaunchSetupEnabled || SettingsStatus.storeIdentityEnabled
+                || SettingsStatus.refreshRateEnabled || SettingsStatus.cameraBrightnessEnabled
+                || SettingsStatus.launcherShortcutsEnabled || SettingsStatus.firstLaunchSetupEnabled || SettingsStatus.storeIdentityEnabled
                 || SettingsStatus.passkeySignInEnabled || SettingsStatus.appLanguageEnabled) {
             addPreference(new SectionHeadingPreference(context, "System"));
         }
@@ -365,6 +366,14 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                             + "a 90 or 120 Hz phone, that request makes the whole app, "
                             + "scrolling too, run slower.",
                     Settings.UNCAP_REFRESH_RATE
+            ));
+        }
+        if (SettingsStatus.cameraBrightnessEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Keep the screen's brightness in the camera",
+                    "Stops TikTok from turning your screen brighter while you film, edit or post a video.",
+                    Settings.KEEP_CAMERA_BRIGHTNESS
             ));
         }
         if (SettingsStatus.launcherShortcutsEnabled) {
