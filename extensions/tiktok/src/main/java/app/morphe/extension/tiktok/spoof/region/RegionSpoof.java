@@ -49,9 +49,10 @@ public final class RegionSpoof {
      * The whole app's time zone (#184, #198). The hook answers TikTok's own TimeZone.getDefault()
      * calls, but the framework's formatters read the process default themselves: SimpleDateFormat,
      * Calendar.getInstance(), DateFormat.getTimeFormat, DateUtils, java.time's
-     * ZoneId.systemDefault() and ICU, which follows java.util's default on Android. Message and
-     * comment times go through those, so with Match locale and timezone on, the preset's zone is
-     * made the process default too. That happens as the host application attaches its context,
+     * ZoneId.systemDefault() and ICU, which follows java.util's default on Android. So with Match
+     * locale and timezone on, the preset's zone is made the process default too. The S22 showed
+     * all three reading it (2026-10-21), while the chat's date labels stayed on the phone's zone,
+     * so those are worked out somewhere that doesn't ask the default. The switch happens as the host application attaches its context,
      * before TikTok builds a formatter, and the zone it replaced is the phone's, kept for the
      * things that run on the phone's clock (phoneTimeZone()) and put back when the setting goes
      * off or Hushfeed is paused.

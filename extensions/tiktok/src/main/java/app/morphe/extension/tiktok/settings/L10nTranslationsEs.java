@@ -497,8 +497,8 @@ final class L10nTranslationsEs {
                 "Ya marcado como no me interesa");
         table.put("Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.",
                 "Aplicar también estos filtros a los vídeos descargados que TikTok usa cuando el feed no consigue cargar suficientes elementos nuevos.");
-        table.put("Also change the region TikTok reports internally. Times on messages and comments follow the country's time zone too. Keeps your interface language. Your IP address and your account's own rules still apply.",
-                "Cambia también la región que TikTok informa internamente. Las horas de los mensajes y comentarios también siguen la zona horaria del país. Mantiene el idioma de la interfaz. Tu dirección IP y las reglas de tu cuenta siguen aplicándose.");
+        table.put("Also change the region TikTok reports internally and set TikTok to the country's time zone. Keeps your interface language. Your IP address and your account's own rules still apply.",
+                "Cambia también la región que TikTok informa internamente y pone TikTok en la zona horaria del país. Mantiene el idioma de la interfaz. Tu dirección IP y las reglas de tu cuenta siguen aplicándose.");
         table.put("Also hide videos whose text stickers match a blocked caption word. Text stickers are the words a creator types over the video in TikTok's editor. Text that's part of the picture itself can't be read.",
                 "Oculta también los vídeos cuyos stickers de texto coinciden con una palabra bloqueada en las descripciones. Los stickers de texto son las palabras que alguien escribe sobre el vídeo en el editor de TikTok. El texto que forma parte de la propia imagen no se puede leer.");
         table.put("Also on a block list, so still hidden: %1$s",

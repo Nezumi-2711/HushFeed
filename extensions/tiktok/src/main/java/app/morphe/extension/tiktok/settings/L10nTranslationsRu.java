@@ -722,8 +722,8 @@ final class L10nTranslationsRu {
                 "Уже отмечено как «не интересно»");
         table.put("Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.",
                 "Также применять эти фильтры к загруженным видео, которые TikTok использует, когда ленте не хватает новых материалов.");
-        table.put("Also change the region TikTok reports internally. Times on messages and comments follow the country's time zone too. Keeps your interface language. Your IP address and your account's own rules still apply.",
-                "Также изменять регион, который TikTok сообщает внутри себя. Время в сообщениях и комментариях тоже показывается по часовому поясу страны. Язык интерфейса остаётся прежним. Ваш IP-адрес и правила вашего аккаунта по-прежнему действуют.");
+        table.put("Also change the region TikTok reports internally and set TikTok to the country's time zone. Keeps your interface language. Your IP address and your account's own rules still apply.",
+                "Также изменять регион, который TikTok сообщает внутри себя, и переводить TikTok на часовой пояс страны. Язык интерфейса остаётся прежним. Ваш IP-адрес и правила вашего аккаунта по-прежнему действуют.");
         table.put("Also hide videos whose text stickers match a blocked caption word. Text stickers are the words a creator types over the video in TikTok's editor. Text that's part of the picture itself can't be read.",
                 "Скрывает и видео, в текстовых стикерах которых есть заблокированное слово из подписей. Текстовыми стикерами называются слова, которые автор пишет поверх видео в редакторе TikTok. Текст, который является частью самого изображения, прочитать нельзя.");
         table.put("Also on a block list, so still hidden: %1$s",

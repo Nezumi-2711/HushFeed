@@ -11620,7 +11620,7 @@
    },
    {
     "id": "app-zone",
-    "what": "With Match locale and timezone on and the SIM preset Serbia, the whole app's time zone is Belgrade's from start-up, so message and comment times follow it (debug line 'App time zone set to Europe/Belgrade').",
+    "what": "With Match locale and timezone on and the SIM preset Serbia, the whole app's default time zone is Belgrade's from start-up (debug line 'App time zone set to Europe/Belgrade').",
     "steps": [
      {
       "set": {
