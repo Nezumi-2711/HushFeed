@@ -2194,6 +2194,8 @@ Saves at once,Penyimpanan sekaligus
 How many saves run at the same time. The others wait in line and start as each one ends.,Berapa penyimpanan yang berjalan bersamaan. Sisanya menunggu dalam antrean dan dimulai setiap kali satu selesai.
 Saves right now,Penyimpanan saat ini
 Nothing is saving right now,Tidak ada yang sedang disimpan
+Earlier this session,Sebelumnya di sesi ini
+Stopped by an unexpected error,Berhenti karena kesalahan tak terduga
 Cover,Sampul
 One at a time,Satu per satu
 Two at once,Dua sekaligus

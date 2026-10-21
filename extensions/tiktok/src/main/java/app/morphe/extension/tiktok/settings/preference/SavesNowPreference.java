@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * The saves under way, on the Downloads page (#27). The row names them and keeps up while it's on
  * screen; a tap lists each one with what it's doing and a Cancel where Cancel still does
- * something, and the list keeps up too, emptying as the saves end.
+ * something, and the list keeps up too, a save moving under Earlier this session as it ends.
  */
 @SuppressWarnings("deprecation")
 public class SavesNowPreference extends Preference {
@@ -126,6 +126,14 @@ public class SavesNowPreference extends Preference {
         LinearLayout list = new LinearLayout(context);
         list.setOrientation(LinearLayout.VERTICAL);
         body.addView(list);
+        TextView earlier = SettingsUi.text(context, L10n.t(context, "Earlier this session"),
+                SettingsUi.TEXT_BODY_SMALL, SettingsUi.textSecondary(), Typeface.BOLD);
+        earlier.setPadding(0, SettingsUi.dp(context, 16), 0, 0);
+        earlier.setVisibility(View.GONE);
+        body.addView(earlier);
+        LinearLayout endedList = new LinearLayout(context);
+        endedList.setOrientation(LinearLayout.VERTICAL);
+        body.addView(endedList);
         ScrollView scroll = new ScrollView(context);
         scroll.addView(body);
 
@@ -140,12 +148,18 @@ public class SavesNowPreference extends Preference {
         SettingsUi.styleActionButton(dialog.getButton(AlertDialog.BUTTON_NEGATIVE), false);
 
         Map<Object, Line> lines = new HashMap<>();
+        Map<Object, Line> endedLines = new HashMap<>();
         Runnable listTick = new Runnable() {
             @Override public void run() {
                 // A page closed under the list (a theme or size change) takes the dialog's window
                 // without dismissing it, so the dialog alone would keep this running.
                 if (!dialog.isShowing() || closed(context)) return;
-                fill(context, empty, list, lines, this);
+                List<SaveQueue.Entry> entries = SaveQueue.entries(context);
+                fill(context, entries, list, lines, this);
+                empty.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
+                List<SaveQueue.Entry> ended = SaveQueue.endedEntries(context);
+                fill(context, ended, endedList, endedLines, this);
+                earlier.setVisibility(ended.isEmpty() ? View.GONE : View.VISIBLE);
                 handler.postDelayed(this, LIST_TICK_MS);
             }
         };
@@ -163,11 +177,11 @@ public class SavesNowPreference extends Preference {
     }
 
     /**
-     * Brings the list to the saves as they are now. A line that is still there keeps its view, and
+     * Brings a list to the saves as they are now. A line that is still there keeps its view, and
      * its words change only when they do, so a screen reader on a Cancel isn't moved every tick.
      */
-    private void fill(Context context, TextView empty, LinearLayout list, Map<Object, Line> lines, Runnable refresh) {
-        List<SaveQueue.Entry> entries = SaveQueue.entries(context);
+    private void fill(Context context, List<SaveQueue.Entry> entries, LinearLayout list,
+                      Map<Object, Line> lines, Runnable refresh) {
         Set<Object> current = new HashSet<>();
         for (SaveQueue.Entry entry : entries) current.add(entry.key);
         for (Object key : new HashSet<>(lines.keySet())) {
@@ -190,7 +204,6 @@ public class SavesNowPreference extends Preference {
                 list.addView(line.view, Math.min(index, list.getChildCount()));
             }
         }
-        empty.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private Line newLine(Context context, Runnable refresh, LinearLayout list) {

@@ -2192,6 +2192,8 @@ Saves at once,同时保存数
 How many saves run at the same time. The others wait in line and start as each one ends.,同时进行的保存数量。其余的排队等候，每完成一个就开始下一个.
 Saves right now,正在进行的保存
 Nothing is saving right now,目前没有正在保存的内容
+Earlier this session,本次会话中已结束的
+Stopped by an unexpected error,因意外错误而停止
 Cover,封面
 One at a time,一次一个
 Two at once,同时两个

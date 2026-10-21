@@ -2216,6 +2216,8 @@ Saves at once	Salvamentos ao mesmo tempo
 How many saves run at the same time. The others wait in line and start as each one ends.	Quantos salvamentos rodam ao mesmo tempo. Os outros esperam na fila e começam conforme cada um termina.
 Saves right now	Salvamentos em andamento
 Nothing is saving right now	Nada está sendo salvo agora
+Earlier this session	Antes nesta sessão
+Stopped by an unexpected error	Parou por um erro inesperado
 Cover	Capa
 One at a time	Um de cada vez
 Two at once	Dois ao mesmo tempo

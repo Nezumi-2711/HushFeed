@@ -2219,6 +2219,8 @@ Saves at once	Gleichzeitige Speicherungen
 How many saves run at the same time. The others wait in line and start as each one ends.	Wie viele Speicherungen gleichzeitig laufen. Die anderen warten in der Schlange und starten, sobald eine davon fertig ist.
 Saves right now	Laufende Speicherungen
 Nothing is saving right now	Gerade wird nichts gespeichert
+Earlier this session	Früher in dieser Sitzung
+Stopped by an unexpected error	Durch einen unerwarteten Fehler gestoppt
 Cover	Titelbild
 One at a time	Eine nach der anderen
 Two at once	Zwei gleichzeitig

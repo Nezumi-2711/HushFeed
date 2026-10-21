@@ -2216,6 +2216,8 @@ Saves at once	Aynı anda kayıt sayısı
 How many saves run at the same time. The others wait in line and start as each one ends.	Aynı anda kaç kaydın süreceği. Diğerleri sırada bekler ve her biri bittikçe başlar.
 Saves right now	Şu anki kayıtlar
 Nothing is saving right now	Şu anda hiçbir şey kaydedilmiyor
+Earlier this session	Bu oturumda daha önce
+Stopped by an unexpected error	Beklenmeyen bir hata nedeniyle durdu
 Cover	Kapak
 One at a time	Teker teker
 Two at once	Aynı anda iki

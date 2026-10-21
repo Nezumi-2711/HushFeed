@@ -2216,6 +2216,8 @@ Saves at once	Eyni anda saxlamalar
 How many saves run at the same time. The others wait in line and start as each one ends.	Eyni anda neçə saxlamanın işlədiyi. Digərləri növbədə gözləyir və hər biri bitdikcə başlayır.
 Saves right now	Hazırkı saxlamalar
 Nothing is saving right now	Hazırda heç nə saxlanılmır
+Earlier this session	Bu seansda əvvəl
+Stopped by an unexpected error	Gözlənilməz xəta ilə dayandı
 Cover	Örtük
 One at a time	Bir-bir
 Two at once	Eyni anda iki

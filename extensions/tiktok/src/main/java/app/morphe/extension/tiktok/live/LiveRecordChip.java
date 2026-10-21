@@ -284,6 +284,12 @@ public final class LiveRecordChip {
         return L10n.t("Saving the recording");
     }
 
+    /** For the tests: the recorder the chip holds, and whether it's being saved; null for none. */
+    public static void holdForTests(LiveRecorder held, boolean beingSaved) {
+        recorder = held;
+        saving = beingSaved;
+    }
+
     // ---- start and stop -------------------------------------------------------------------
 
     private static void onChipTap() {

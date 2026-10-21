@@ -2396,6 +2396,8 @@ Saves at once	Сохранений одновременно
 How many saves run at the same time. The others wait in line and start as each one ends.	Сколько сохранений идёт одновременно. Остальные ждут в очереди и начинаются по мере завершения каждого.
 Saves right now	Текущие сохранения
 Nothing is saving right now	Сейчас ничего не сохраняется
+Earlier this session	Ранее в этом сеансе
+Stopped by an unexpected error	Остановлено из-за непредвиденной ошибки
 Cover	Обложка
 One at a time	По одному
 Two at once	Два одновременно

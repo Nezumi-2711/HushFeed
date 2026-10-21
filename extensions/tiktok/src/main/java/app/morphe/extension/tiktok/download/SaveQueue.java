@@ -19,6 +19,7 @@ import java.util.List;
  * line is taken out of it; one that runs stops after its file the way its progress row's Cancel
  * does, and one that can't be stopped mid-file, a single video, shows no Cancel. A LIVE being
  * recorded or saved is listed too, without a Cancel, since its file is already being written.
+ * Under them, the last few saves that ended this session, each with how it went.
  */
 public final class SaveQueue {
     private SaveQueue() {}
@@ -77,6 +78,25 @@ public final class SaveQueue {
         String live = LiveRecordChip.queueStatus();
         if (live != null) entries.add(new Entry(LIVE, L10n.t(context, "LIVE"), live, null));
         return entries;
+    }
+
+    /**
+     * The saves that ended this session, newest first, each with how it went: what it last told
+     * the reader (its count, or why it stopped), or that it was cancelled before it started.
+     */
+    public static List<Entry> endedEntries(Context context) {
+        List<Entry> entries = new ArrayList<>();
+        for (MediaJobScheduler.Ended ended : MediaJobScheduler.ended()) {
+            String title = UnfinishedSaves.kindLabel(context, ended.label);
+            entries.add(new Entry(ended, title, outcome(context, ended), null));
+        }
+        return entries;
+    }
+
+    static String outcome(Context context, MediaJobScheduler.Ended ended) {
+        if (ended.cancelled) return L10n.t(context, "Save cancelled. Nothing was saved.");
+        if (ended.failed) return L10n.t(context, "Stopped by an unexpected error");
+        return ended.said != null ? ended.said : L10n.t(context, "Done");
     }
 
     /**

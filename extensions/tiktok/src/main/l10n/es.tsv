@@ -2216,6 +2216,8 @@ Saves at once	Guardados a la vez
 How many saves run at the same time. The others wait in line and start as each one ends.	Cuántos guardados se hacen a la vez. Los demás esperan en la cola y empiezan a medida que termina cada uno.
 Saves right now	Guardados en curso
 Nothing is saving right now	Ahora no se está guardando nada
+Earlier this session	Antes en esta sesión
+Stopped by an unexpected error	Se detuvo por un error inesperado
 Cover	Portada
 One at a time	De uno en uno
 Two at once	Dos a la vez

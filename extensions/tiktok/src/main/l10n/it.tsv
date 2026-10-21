@@ -2216,6 +2216,8 @@ Saves at once	Salvataggi contemporanei
 How many saves run at the same time. The others wait in line and start as each one ends.	Quanti salvataggi sono in corso contemporaneamente. Gli altri aspettano in coda e partono man mano che ognuno finisce.
 Saves right now	Salvataggi in corso
 Nothing is saving right now	Al momento non si sta salvando nulla
+Earlier this session	In precedenza in questa sessione
+Stopped by an unexpected error	Interrotto da un errore imprevisto
 Cover	Copertina
 One at a time	Uno alla volta
 Two at once	Due alla volta

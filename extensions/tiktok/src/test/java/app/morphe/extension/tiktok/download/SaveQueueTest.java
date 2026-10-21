@@ -7,14 +7,23 @@ package app.morphe.extension.tiktok.download;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Looper;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.tiktok.SettingsContextRule;
+import app.morphe.extension.tiktok.live.LiveRecordChip;
 import app.morphe.extension.tiktok.settings.Settings;
+import app.morphe.extension.tiktok.settings.preference.SavesNowPreference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +41,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowToast;
 
 /**
@@ -53,6 +63,7 @@ public class SaveQueueTest {
         SaveProgress.announcementsForTests = new ArrayList<>();
         // The media pool is process-wide, so an earlier class's jobs would sit in this one's list.
         drainPool();
+        MediaJobScheduler.clearEndedForTests();
         ShadowToast.reset();
     }
 
@@ -299,5 +310,183 @@ public class SaveQueueTest {
             finish.countDown();
             waitFor(ended, 1);
         }
+    }
+
+    /**
+     * A save that ended stays listed under Earlier this session with the last thing it told the
+     * reader, its count or its reason, newest first and the last few only. A word said off the
+     * save's own thread belongs to no save.
+     */
+    @Test public void anEndedSaveStaysListedWithItsLastWord() throws Exception {
+        AtomicInteger ended = new AtomicInteger();
+        CountDownLatch started = new CountDownLatch(1);
+        CountDownLatch finish = new CountDownLatch(1);
+        holds.add(finish);
+        MediaJobScheduler.Job video = MediaJobScheduler.submit("video", null, () -> {
+            Utils.showToastShort("Writing the caption in didn't work, so the video was saved without it");
+            Utils.showToastShort("Saved one video");
+            started.countDown();
+            await(finish);
+        }, ended::incrementAndGet);
+        assertNotNull(video);
+        assertTrue(started.await(5, TimeUnit.SECONDS));
+        // Said on this thread while the save still runs on its own: not the save's word.
+        Utils.showToastShort("A word from somewhere else");
+        finish.countDown();
+        waitFor(ended, 1);
+        idle();
+        // Cancel on a save that's over does nothing, and lists it no second time.
+        assertFalse(video.cancel());
+        assertTrue(SaveQueue.entries(context).isEmpty());
+        List<SaveQueue.Entry> earlier = SaveQueue.endedEntries(context);
+        assertEquals(1, earlier.size());
+        assertEquals("Video", earlier.get(0).title);
+        assertEquals("Saved one video", earlier.get(0).detail);
+        assertFalse(earlier.get(0).canCancel());
+
+        // A save whose result is a banner with Retry says it without a toast.
+        assertNotNull(MediaJobScheduler.submit(BatchSave.LABEL, null,
+                () -> SaveNotice.saved("Saved 2 of 3, 1 skipped", null, () -> { }), ended::incrementAndGet));
+        waitFor(ended, 2);
+        assertEquals("Saved 2 of 3, 1 skipped", SaveQueue.endedEntries(context).get(0).detail);
+        assertEquals("Picked videos", SaveQueue.endedEntries(context).get(0).title);
+
+        for (int index = 0; index < MediaJobScheduler.MAX_ENDED; index++) {
+            String word = "Sound " + index;
+            assertNotNull(MediaJobScheduler.submit("sound", null, () -> Utils.showToastShort(word), ended::incrementAndGet));
+            waitFor(ended, index + 3);
+        }
+        earlier = SaveQueue.endedEntries(context);
+        assertEquals(MediaJobScheduler.MAX_ENDED, earlier.size());
+        assertEquals("Sound " + (MediaJobScheduler.MAX_ENDED - 1), earlier.get(0).detail);
+        assertEquals("Sound 0", earlier.get(MediaJobScheduler.MAX_ENDED - 1).detail);
+    }
+
+    /** One taken out of line says so, one an error stopped says that, and one that said nothing reads as done. */
+    @Test public void aCancelledFailedOrSilentSaveSaysHowItEnded() throws Exception {
+        CountDownLatch release = holdWorkers();
+        MediaJobScheduler.Job waiting = MediaJobScheduler.submit("story", null, () -> { }, null);
+        assertTrue(waiting.cancel());
+        SaveQueue.Entry cancelled = SaveQueue.endedEntries(context).get(0);
+        assertEquals("Story", cancelled.title);
+        assertEquals("Save cancelled. Nothing was saved.", cancelled.detail);
+        release.countDown();
+        drainPool();
+
+        AtomicInteger ended = new AtomicInteger();
+        assertNotNull(MediaJobScheduler.submit("sound", null, () -> {
+            Utils.showToastShort("Saving the sound");
+            throw new IllegalStateException("a failure the save didn't expect");
+        }, ended::incrementAndGet));
+        waitFor(ended, 1);
+        assertNotNull(MediaJobScheduler.submit("video", null, () -> { }, ended::incrementAndGet));
+        waitFor(ended, 2);
+        List<SaveQueue.Entry> earlier = SaveQueue.endedEntries(context);
+        assertEquals("Video", earlier.get(0).title);
+        assertEquals("Done", earlier.get(0).detail);
+        assertEquals("Sound", earlier.get(1).title);
+        assertEquals("Stopped by an unexpected error", earlier.get(1).detail);
+    }
+
+    /**
+     * A sticker's result and the already-saved offer both speak from the main thread, after the
+     * save is over, so each tells the list itself what happened.
+     */
+    @Test public void aStickerOrAnAlreadySavedVideoSaysWhatHappened() throws Exception {
+        AtomicInteger ended = new AtomicInteger();
+        assertNotNull(MediaJobScheduler.submit("sticker", null, StickerGallerySaver.stickerSaveWork(context,
+                new StickerGallerySaver.StickerAsset(List.of(), false)), ended::incrementAndGet));
+        waitFor(ended, 1);
+        idle();
+        SaveQueue.Entry sticker = SaveQueue.endedEntries(context).get(0);
+        assertEquals("Sticker", sticker.title);
+        assertEquals("The sticker couldn't be saved. Try again.", sticker.detail);
+
+        MediaFileWriter.Saved previous = new MediaFileWriter.Saved("tiktok_1.mp4", null, null);
+        assertNotNull(MediaJobScheduler.submit("video", null,
+                () -> SavedVideoArchive.offer(previous, () -> { }, () -> { }), ended::incrementAndGet));
+        waitFor(ended, 2);
+        idle();
+        SaveQueue.Entry video = SaveQueue.endedEntries(context).get(0);
+        assertEquals("Video", video.title);
+        assertEquals("This video is already saved", video.detail);
+    }
+
+    /**
+     * The open list: Earlier this session stays hidden until a save ends, then shows it without a
+     * Cancel, and the refresh after keeps the same line rather than drawing it again.
+     */
+    @Test public void theOpenListShowsAnEndedSaveUnderItsOwnHeader() throws Exception {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            activity.setTheme(android.R.style.Theme_Material_Light);
+            SavesNowPreference row = new SavesNowPreference(activity);
+            row.getOnPreferenceClickListener().onPreferenceClick(row);
+            AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestAlertDialog();
+            View root = dialog.getWindow().getDecorView();
+            TextView header = findText(root, "Earlier this session");
+            assertNotNull(header);
+            assertEquals(View.GONE, header.getVisibility());
+            assertEquals(View.VISIBLE, findText(root, "Nothing is saving right now").getVisibility());
+
+            AtomicInteger ended = new AtomicInteger();
+            assertNotNull(MediaJobScheduler.submit("sound", null,
+                    () -> Utils.showToastShort("Saved the sound"), ended::incrementAndGet));
+            waitFor(ended, 1);
+            Shadows.shadowOf(Looper.getMainLooper()).idleFor(600, TimeUnit.MILLISECONDS);
+            assertEquals(View.VISIBLE, header.getVisibility());
+            TextView detail = findText(root, "Saved the sound");
+            assertNotNull(detail);
+            ViewGroup line = (ViewGroup) detail.getParent().getParent();
+            TextView cancel = findText(line, "Cancel");
+            assertEquals(View.GONE, cancel.getVisibility());
+
+            Shadows.shadowOf(Looper.getMainLooper()).idleFor(1100, TimeUnit.MILLISECONDS);
+            assertSame(detail, findText(root, "Saved the sound"));
+            dialog.dismiss();
+            idle();
+        }
+    }
+
+    private static TextView findText(View view, String text) {
+        if (view instanceof TextView && text.contentEquals(((TextView) view).getText())) return (TextView) view;
+        if (!(view instanceof ViewGroup)) return null;
+        ViewGroup group = (ViewGroup) view;
+        for (int index = 0; index < group.getChildCount(); index++) {
+            TextView found = findText(group.getChildAt(index), text);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    /** A LIVE recording being saved is listed last, after the saves, and offers no Cancel. */
+    @Test public void aLiveRecordingBeingSavedIsListedLast() throws Exception {
+        holdWorkers();
+        assertNotNull(MediaJobScheduler.submit("video", null, () -> { }, null));
+        LiveRecordChip.holdForTests(new LiveRecorder(null, null, null, null, null), true);
+        try {
+            List<SaveQueue.Entry> entries = SaveQueue.entries(context);
+            SaveQueue.Entry live = entries.get(entries.size() - 1);
+            assertEquals("LIVE", live.title);
+            assertEquals("Saving the recording", live.detail);
+            assertFalse(live.canCancel());
+            assertEquals("Video", entries.get(entries.size() - 2).title);
+            assertTrue(SaveQueue.summary(context, entries).endsWith(", Video, LIVE"));
+        } finally {
+            LiveRecordChip.holdForTests(null, false);
+        }
+        List<SaveQueue.Entry> after = SaveQueue.entries(context);
+        assertEquals("Video", after.get(after.size() - 1).title);
+    }
+
+    /** A save the full line refused was never accepted, so it isn't listed as one that ended. */
+    @Test public void aRefusedSaveIsNotListed() throws Exception {
+        holdWorkers();
+        for (int index = 0; index < MediaJobScheduler.MAX_QUEUED_JOBS; index++) {
+            assertNotNull(MediaJobScheduler.submit("video", null, () -> { }, null));
+        }
+        MediaJobScheduler.clearEndedForTests();
+        assertNull(MediaJobScheduler.submit("sound", null, () -> { }, null));
+        assertTrue(SaveQueue.endedEntries(context).isEmpty());
     }
 }
