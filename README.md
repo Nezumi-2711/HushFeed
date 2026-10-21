@@ -30,9 +30,9 @@ Most switches start off, so a freshly patched TikTok looks and works the way it 
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, version [47.4.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-4-3-release/tiktok-47-4-3-2-android-apk-download/). Use that exact APK when patching. See [Supported target](#supported-target) for the build details.
 
-Hushfeed v0.76.0 contains 135 patches for TikTok 47.4.3. New in this one: it moves to TikTok 47.4.3, so patch that build instead of 47.1.4. Profile grids can show each video's length, and a new switch hides the reply TikTok opens under every comment. It needs Morphe Manager 1.34.0 or newer.
+Hushfeed v0.77.0 contains 136 patches for TikTok 47.4.3. New in this one: fixes for things TikTok 47.4.3 broke, like the Inbox switches and the faded video controls, and PineDrama moves to 47.4.3. New switches add a glass look for the floating bar, caption height and boldness, a filter for subscriber-only videos and dark LIVE panels. It needs Morphe Manager 1.34.0 or newer.
 
-The main branch contains 136 patches, one more than v0.76.0.
+The main branch contains 136 patches, the same set as v0.77.0.
 
 ## What it changes
 
