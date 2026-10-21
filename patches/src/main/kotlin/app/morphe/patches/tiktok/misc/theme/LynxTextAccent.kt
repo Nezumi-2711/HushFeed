@@ -10,6 +10,7 @@ import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
+import app.morphe.util.addInstructions
 import app.morphe.util.addInstructionsAtControlFlowLabel
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
@@ -30,6 +31,12 @@ internal const val LYNX_TEXT_SHADOW_NODE = "Lcom/lynx/tasm/behavior/shadow/text/
 
 /** The packed props newer Lynx pages send, whose reader stores a text color of its own. */
 internal const val LYNX_COMPACT_BUFFER = "Lcom/lynx/react/bridge/mapbuffer/ReadableCompactArrayBuffer;"
+
+/**
+ * The base of every Lynx view, whose `background-color` setter most views end in. The tab bar's own
+ * setter, keyframe frames and inline text span backgrounds skip it, and keep the page's red.
+ */
+internal const val LYNX_BASE_UI = "Lcom/lynx/tasm/behavior/ui/LynxBaseUI;"
 
 private const val INTEGER = "Ljava/lang/Integer;"
 
@@ -90,14 +97,33 @@ internal fun MutableMethod.accentLynxColors(stores: List<Int>) {
     }
 }
 
+/** Lynx's view `setBackgroundColor(I)V` with code, or null. */
+internal fun ClassDef.lynxBackgroundSetter(): Method? = methods.singleOrNull {
+    it.name == "setBackgroundColor" && it.parameterTypes.map(Any::toString) == listOf("I") &&
+        it.returnType == "V" && it.implementation != null
+}
+
+/** Runs the color handed to a view's background setter through the extension before the setter reads it. */
+internal fun MutableMethod.accentLynxBackground() {
+    addInstructions(
+        0,
+        """
+            invoke-static/range { p1 .. p1 }, $LYNX_ACCENT_EXTENSION->color(I)I
+            move-result p1
+        """,
+    )
+}
+
 /**
  * The text on TikTok's Lynx pages takes the accent too (#163). The "You may like" words in search
  * are Lynx text in #FF576F on dark and #E10543 on light, colors a Lynx page brings with it, so no
  * resource holds them. Lynx turns each text color into a number and keeps it in one field of the
  * text's attributes, both from the `color` property setter and from the compact prop buffer newer
  * pages send. Each of those stores now asks the extension first, which answers with the color the
- * resource side wrote under that red's name, or the number unchanged. With [active] false (TikTok's
- * own red and no wallpaper choice) nothing is changed.
+ * resource side wrote under that red's name, or the number unchanged. A view's background color
+ * (the dot before each of those words) goes through the same question at the top of the one setter
+ * every Lynx view inherits. With [active] false (TikTok's own red and no wallpaper choice) nothing
+ * is changed.
  */
 internal fun lynxTextAccentPatch(active: () -> Boolean) = bytecodePatch {
     dependsOn(sharedExtensionPatch)
@@ -125,6 +151,10 @@ internal fun lynxTextAccentPatch(active: () -> Boolean) = bytecodePatch {
         if (!setter) throw PatchException("Accent color: Lynx's text color setter stores no color to follow the accent.")
         // Newer pages send their props packed, so missing this writer would leave half the words red.
         if (!compact) throw PatchException("Accent color: Lynx's packed props store no text color to follow the accent.")
-        println("[Accent color] Lynx text colors follow the accent at $hooked stores.")
+        if (classDefByOrNull(LYNX_BASE_UI)?.lynxBackgroundSetter() == null) {
+            throw PatchException("Accent color: couldn't find Lynx's view background color setter.")
+        }
+        (mutableClassDefBy(LYNX_BASE_UI).lynxBackgroundSetter() as MutableMethod).accentLynxBackground()
+        println("[Accent color] Lynx text colors follow the accent at $hooked stores, and Lynx view backgrounds too.")
     }
 }

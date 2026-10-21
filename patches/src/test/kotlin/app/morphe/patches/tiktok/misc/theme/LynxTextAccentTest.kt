@@ -95,6 +95,35 @@ class LynxTextAccentTest {
     }
 
     @Test
+    fun `each declared build's Lynx view background setter asks the extension before it reads the color`() {
+        Fixtures.forEachDeclared { apk ->
+            val version = Fixtures.versionOf(apk)
+            val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
+            val base = container.dexEntryNames.flatMap { container.getEntry(it)!!.dexFile.classes }
+                .singleOrNull { it.type == LYNX_BASE_UI }
+            assertNotNull("$version: no $LYNX_BASE_UI", base)
+            val setter = base!!.lynxBackgroundSetter()
+            assertNotNull("$version: no setBackgroundColor(I)V with code", setter)
+            val before = setter!!.implementation!!.instructions.toList()
+            val color = setter.implementation!!.registerCount - 1
+
+            val hooked = MutableMethod(setter)
+            hooked.accentLynxBackground()
+            val after = hooked.implementation!!.instructions.toList()
+            assertEquals("$version: two instructions in front", before.size + 2, after.size)
+            assertEquals(Opcode.INVOKE_STATIC_RANGE, after[0].opcode)
+            val call = after[0] as RegisterRangeInstruction
+            assertEquals("$version: the color parameter goes in", color, call.startRegister)
+            assertEquals(1, call.registerCount)
+            val target = call.getReference<MethodReference>()!!
+            assertEquals("$LYNX_ACCENT_EXTENSION->color(I)I", "${target.definingClass}->${target.name}(${target.parameterTypes.joinToString("")})${target.returnType}")
+            assertEquals(Opcode.MOVE_RESULT, after[1].opcode)
+            assertEquals("$version: the answer replaces the parameter", color, (after[1] as OneRegisterInstruction).registerA)
+            assertEquals("$version: TikTok's own instructions follow unchanged", before.map { it.opcode }, after.drop(2).map { it.opcode })
+        }
+    }
+
+    @Test
     fun `the Lynx reds are the palette's text reds on each declared build`() {
         Fixtures.forEachDeclared { apk ->
             val table = FixtureResourceTable(apk)

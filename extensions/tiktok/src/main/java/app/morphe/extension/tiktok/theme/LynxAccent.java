@@ -18,7 +18,8 @@ import app.morphe.extension.shared.Utils;
  *
  * <p>Lynx pages carry their own colors and hand each one to the text as a number, so the style
  * rewrite of Accent color never reaches them. The patch calls {@link #color(int)} where Lynx
- * stores a text color, and writes a {@code hushfeed_lynx_<rrggbb>} color for each red it changes:
+ * stores a text color and where a Lynx view takes its background color (the dot before each of
+ * those words), and writes a {@code hushfeed_lynx_<rrggbb>} color for each red it changes:
  * the preset's shade, or with Follow the wallpaper the system accent step on Android 12 and up.
  * A color without such a name, or one that isn't solid, stays as the page asked. Like the rest
  * of Accent color this is part of the build, so pausing Hushfeed leaves it.
@@ -43,7 +44,7 @@ public final class LynxAccent {
 
     private LynxAccent() {}
 
-    /** Called with the color Lynx is about to store for a piece of text, and answers the one to store. */
+    /** Called with the color Lynx is about to use for a piece of text or a view's background, and answers the one to use. */
     public static int color(int argb) {
         if ((argb >>> 24) != 0xFF) return argb;
         try {
