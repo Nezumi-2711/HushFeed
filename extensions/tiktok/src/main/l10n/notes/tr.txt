@@ -1,4 +1,4 @@
-## Unreleased
+## 0.77.0 (2026-10-20)
 
 * **TikTok:** PineDrama 47.4.3'e geçiyor ve 47.1.4 bırakılıyor. Aynı 90 yama onda da geçerli (#156).
 

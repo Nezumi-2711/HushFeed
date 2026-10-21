@@ -1,4 +1,4 @@
-## Unreleased
+## 0.77.0 (2026-10-20)
 
 * **TikTok:** PineDrama pindah ke 47.4.3 dan 47.1.4 tidak didukung lagi. 90 patch yang sama berlaku untuknya (#156).
 

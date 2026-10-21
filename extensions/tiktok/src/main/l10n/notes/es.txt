@@ -1,4 +1,4 @@
-## Unreleased
+## 0.77.0 (2026-10-20)
 
 * **TikTok:** PineDrama pasa a 47.4.3 y se deja 47.1.4. Se le aplican los mismos 90 parches (#156).
 
