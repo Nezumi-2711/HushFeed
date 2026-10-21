@@ -428,6 +428,45 @@ public class SeeThroughBottomBarTest {
         assertEquals(864 - inset, lens.lensBounds().right, 0.001f);
     }
 
+    /**
+     * Picking a tab can hand the bar a new lens. It slides on from where the bar's last lens was
+     * moments ago, and a lens that comes back after a while just appears behind its tab.
+     */
+    @Test
+    public void aNewLensSlidesOnFromWhereTheBarsLastLensWas() {
+        animatorScale(1f);
+        float density = context.getResources().getDisplayMetrics().density;
+        float inset = SeeThroughBottomBar.LENS_INSET_DP * density;
+        SeeThroughBottomBar.GlassLensBackground first = new SeeThroughBottomBar.GlassLensBackground(density);
+        LinearLayout bar = tabBar(context, first);
+        android.graphics.Canvas canvas = new android.graphics.Canvas(
+                android.graphics.Bitmap.createBitmap(1080, 150, android.graphics.Bitmap.Config.ARGB_8888));
+        first.draw(canvas);
+        assertEquals(216 + inset, first.lensBounds().left, 0.001f);
+
+        select(bar, 3);
+        SeeThroughBottomBar.GlassLensBackground second = new SeeThroughBottomBar.GlassLensBackground(density);
+        bar.setBackground(second);
+        second.setBounds(0, 0, 1080, 150);
+        second.draw(canvas);
+        assertEquals("the new lens jumped instead of sliding on", 216 + inset, second.lensBounds().left, 0.001f);
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
+                .idleFor(java.time.Duration.ofMillis(SeeThroughBottomBar.LENS_SLIDE_MS));
+        second.draw(canvas);
+        assertEquals(648 + inset, second.lensBounds().left, 0.001f);
+
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
+                .idleFor(java.time.Duration.ofMillis(SeeThroughBottomBar.LENS_MEMORY_MS + 1));
+        select(bar, 0);
+        SeeThroughBottomBar.GlassLensBackground third = new SeeThroughBottomBar.GlassLensBackground(density);
+        bar.setBackground(third);
+        third.setBounds(0, 0, 1080, 150);
+        third.draw(canvas);
+        Rect pill = third.getDrawable().getBounds();
+        assertEquals("a lens back after a while slid in from an old spot",
+                pill.left + inset, third.lensBounds().left, 0.001f);
+    }
+
     @Test
     public void aBackgroundTikTokSetInTheMeantimeIsNotOverwrittenOnTheWayBack() {
         Settings.SEE_THROUGH_BOTTOM_BAR.save(true);

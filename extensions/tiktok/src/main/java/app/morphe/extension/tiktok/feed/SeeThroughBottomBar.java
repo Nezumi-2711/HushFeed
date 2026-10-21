@@ -200,6 +200,8 @@ final class SeeThroughBottomBar {
     static final int LENS_INSET_DP = 4;
     /** How long the lens takes to slide to a newly picked tab. */
     static final long LENS_SLIDE_MS = 280;
+    /** How long a bar remembers where its last lens was, for the lens that replaces it. */
+    static final long LENS_MEMORY_MS = 1000;
 
     /**
      * Glass lens (#231): the glass pill with a smaller piece of glass behind the tab you're on,
@@ -209,8 +211,14 @@ final class SeeThroughBottomBar {
      * the bar's background, so it sits under the tabs and never takes a tap. A selection change
      * redraws no background by itself, so a pre-draw listener on the bar's window asks for one
      * when the selected tab moved, and drops itself once the bar has another background.
+     * Picking a tab can also hand the bar a new lens (the overlay pass swaps the background when
+     * the bar's look changes), and a new lens has no slide of its own to continue, so each bar
+     * remembers where its last lens was drawn and a new one slides on from there when that was
+     * moments ago (S22, 2026-10-21: the lens jumped between tabs with animations on).
      */
     static final class GlassLensBackground extends GlassBackground {
+        /** Where each bar's lens was last drawn, kept only as long as the bar is. */
+        private static final Map<View, LensSpot> LAST_SPOT = new WeakHashMap<>();
         private final float inset;
         private final Paint lensFill = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Paint lensRim = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -259,10 +267,21 @@ final class SeeThroughBottomBar {
             }
             long now = SystemClock.uptimeMillis();
             if (Float.isNaN(drawnLeft)) {
-                // The first tab found, or the first since none was: no slide in from nowhere.
-                fromLeft = toLeft = left;
-                fromRight = toRight = right;
-                slideStart = now - LENS_SLIDE_MS;
+                LensSpot last = LAST_SPOT.get(bar);
+                toLeft = left;
+                toRight = right;
+                if (last != null && now - last.at < LENS_MEMORY_MS
+                        && (last.left != left || last.right != right)) {
+                    // A lens this bar showed moments ago: carry on from where that one was.
+                    fromLeft = last.left;
+                    fromRight = last.right;
+                    slideStart = now;
+                } else {
+                    // The first tab found, or the first in a while: no slide in from nowhere.
+                    fromLeft = left;
+                    fromRight = right;
+                    slideStart = now - LENS_SLIDE_MS;
+                }
             } else if (left != toLeft || right != toRight) {
                 // From wherever the lens is now, so a tap mid-slide turns it around smoothly.
                 float done = progress(now);
@@ -276,6 +295,11 @@ final class SeeThroughBottomBar {
             drawnRight = span.right;
             float done = progress(now);
             shown.set(lerp(fromLeft, toLeft, done), pill.top + inset, lerp(fromRight, toRight, done), pill.bottom - inset);
+            LensSpot spot = LAST_SPOT.get(bar);
+            if (spot == null) LAST_SPOT.put(bar, spot = new LensSpot());
+            spot.left = shown.left;
+            spot.right = shown.right;
+            spot.at = now;
             int alpha = getDrawable().getAlpha();
             lensFill.setColor((LENS_FILL & 0x00FFFFFF) | ((Color.alpha(LENS_FILL) * alpha / 255) << 24));
             lensRim.setAlpha(alpha);
@@ -340,6 +364,12 @@ final class SeeThroughBottomBar {
 
         private static float lerp(float from, float to, float done) {
             return from + (to - from) * done;
+        }
+
+        /** A lens's last drawn sides and the uptime it was drawn at. */
+        private static final class LensSpot {
+            float left, right;
+            long at;
         }
     }
 
