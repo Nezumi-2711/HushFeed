@@ -23,8 +23,8 @@ try {
         [IO.File]::WriteAllText($walkPath, ($walk | ConvertTo-Json -Depth 4))
     }
 
-    # Either release phone or an emulator walks for a release.
-    foreach ($walker in @(@{}, @{ device = 'SM-S938B' }, @{ serial = 'emulator-5554'; device = 'sdk_gphone64_x86_64'; emulator = $true })) {
+    # The release phone or an emulator walks for a release.
+    foreach ($walker in @(@{}, @{ serial = 'emulator-5554'; device = 'sdk_gphone64_x86_64'; emulator = $true })) {
         Write-Walk $walker
         $good = Test-WalkReceipt -Path $walkPath -BundlePath $bundle
         Assert-WalkContract ($good.Valid -and $good.Receipt.screens -eq 40) "A full PASS walk of the bundle was refused: $($good.Reason)"
@@ -39,6 +39,7 @@ try {
             @(@{ crashes = 1 }, '*recorded a TikTok or PineDrama crash*'),
             @(@{ device = $null }, "*doesn't say which device walked it*"),
             @(@{ device = 'Pixel 9' }, "*Pixel 9 isn't one of the release walk phones*"),
+            @(@{ device = 'SM-S938B' }, "*SM-S938B isn't one of the release walk phones (SM-S908U1)*"),
             @(@{ device = 'Pixel 9'; emulator = $true }, "*Pixel 9 isn't one of the release walk phones*"),
             @(@{ bundleSha256 = ('5' * 64) }, '*patched with bundle*and this one is*'),
             @(@{ schema = 2 }, "*isn't schema 1*"))) {

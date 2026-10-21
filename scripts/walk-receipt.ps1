@@ -14,7 +14,9 @@
 #>
 
 # The phones release walks run on, by ro.product.model. An emulator passes by its serial.
-$WalkReceiptPhones = @('SM-S908U1', 'SM-S938B')
+# Only the S22: TikTok on the S25 (SM-S938B) is a personal account, and Hushfeed is never
+# walked there.
+$WalkReceiptPhones = @('SM-S908U1')
 
 function New-WalkReceipt {
     <#
