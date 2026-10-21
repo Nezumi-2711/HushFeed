@@ -186,6 +186,12 @@
     "row": "Download original photos"
    },
    {
+    "key": "keep_photos_as_sent",
+    "default": false,
+    "type": "bool",
+    "row": "Keep photos as TikTok sent them"
+   },
+   {
     "key": "download_audio_track",
     "default": false,
     "type": "bool",

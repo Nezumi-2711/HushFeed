@@ -971,6 +971,8 @@ Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and n
 Save a profile picture on a long press	Uzun basmaqla profil şəklini saxlayın
 Save a story on a long press	Uzun basmaqla hekayəni saxlayın
 Save every photo in the post at full size as a JPEG, not as the screen shows it.	Paylaşımdakı hər fotonu ekranda göründüyü kimi deyil, tam ölçüdə JPEG kimi saxlayın.
+Keep photos as TikTok sent them	Fotoları TikTok-un göndərdiyi kimi saxla
+Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Saxlanılan fotolar, örtüklər və hekayə fotoları JPEG-ə çevrilmir, HEIF və ya WebP kimi qalır. Bəzi qalereyalar və kompüterlər onları aça bilmir.
 Save field values	Sahə dəyərlərini saxlayın
 Save full report	Tam hesabatı saxlayın
 Save media	Medianı saxlayın

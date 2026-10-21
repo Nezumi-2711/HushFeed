@@ -935,6 +935,8 @@ Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and n
 Save a profile picture on a long press	Guardar una foto de perfil con una pulsación larga
 Save a story on a long press	Guardar una historia con una pulsación larga
 Save every photo in the post at full size as a JPEG, not as the screen shows it.	Guardar cada foto de la publicación a tamaño completo como JPEG, no como la muestra la pantalla.
+Keep photos as TikTok sent them	Mantener las fotos como las envía TikTok
+Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Las fotos, portadas y fotos de historias guardadas se quedan en HEIF o WebP en lugar de convertirse en JPEG. Algunas galerías y computadoras no pueden abrirlas.
 Save field values	Guardar los valores de los campos
 Save full report	Guardar informe completo
 Save media	Guardar el contenido

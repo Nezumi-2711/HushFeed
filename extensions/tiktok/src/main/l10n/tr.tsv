@@ -971,6 +971,8 @@ Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and n
 Save a profile picture on a long press	Uzun basınca profil fotoğrafını kaydet
 Save a story on a long press	Uzun basınca hikayeyi kaydet
 Save every photo in the post at full size as a JPEG, not as the screen shows it.	Gönderideki her fotoğrafı ekranın gösterdiği gibi değil, tam boyutta JPEG olarak kaydet.
+Keep photos as TikTok sent them	Fotoğrafları TikTok'un gönderdiği gibi tut
+Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Kaydedilen fotoğraflar, kapaklar ve hikaye fotoğrafları JPEG'e dönüştürülmez, HEIF veya WebP olarak kalır. Bazı galeriler ve bilgisayarlar bunları açamaz.
 Save field values	Alan değerlerini kaydet
 Save full report	Raporun tamamını kaydet
 Save media	Medyayı kaydet

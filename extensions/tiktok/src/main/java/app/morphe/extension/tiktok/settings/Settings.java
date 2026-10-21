@@ -141,6 +141,8 @@ public class Settings extends BaseSettings {
     /** Download lists the video's renditions and saves the one picked, for that save alone. */
     public static final BooleanSetting DOWNLOAD_ASK_QUALITY = new BooleanSetting("download_ask_quality", FALSE);
     public static final BooleanSetting DOWNLOAD_ORIGINAL_PHOTOS = new BooleanSetting("download_original_photos", FALSE);
+    /** Saved photos keep TikTok's HEIF or WebP instead of becoming a JPEG (#229). Read on each save. */
+    public static final BooleanSetting KEEP_PHOTOS_AS_SENT = new BooleanSetting("keep_photos_as_sent", FALSE);
     public static final BooleanSetting DOWNLOAD_PHOTOS_AS_VIDEO = new BooleanSetting("download_photos_as_video", FALSE);
     public static final IntegerSetting PHOTO_VIDEO_SECONDS = new IntegerSetting("photo_video_seconds", 3, false,
             Setting.parent(DOWNLOAD_PHOTOS_AS_VIDEO)).withRange(1, 10);

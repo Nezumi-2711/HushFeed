@@ -1409,6 +1409,8 @@ Save cover button in the share sheet,在共享表中保存封面按钮
 Save details as JSON,将详细信息保存为 JSON
 Save details beside the video,在视频旁边保存详细信息
 "Save every photo in the post at full size as a JPEG, not as the screen shows it.",将帖子中的每张照片以全尺寸保存为 JPEG，而不是屏幕显示的那样.
+Keep photos as TikTok sent them,照片保持 TikTok 发送时的格式
+"Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.",保存的照片、封面和故事照片保持 HEIF 或 WebP 格式，不转换为 JPEG。部分图库和电脑无法打开这些格式.
 Save field values,保存字段值
 Save full report,保存完整报告
 Save in which quality?,以哪种质量保存?
