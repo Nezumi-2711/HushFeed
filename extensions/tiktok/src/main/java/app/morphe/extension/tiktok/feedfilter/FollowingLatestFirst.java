@@ -154,12 +154,12 @@ final class FollowingLatestFirst {
         return result;
     }
 
-    /** Each slot with its post time in seconds, for the debug log. */
+    /** Each slot with its post time (epoch seconds, as postedAt gives it), for the debug log. */
     private static String slots(List<Integer> slots, long[] postedAt) {
         StringBuilder out = new StringBuilder("[");
         for (int slot : slots) {
             if (out.length() > 1) out.append(", ");
-            out.append(slot).append('@').append(postedAt[slot] / 1000);
+            out.append(slot).append('@').append(postedAt[slot]);
         }
         return out.append(']').toString();
     }
