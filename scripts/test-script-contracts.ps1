@@ -3807,6 +3807,7 @@ Write-Host '[scripts] adb device lease contracts passed'
 & (Join-Path $Root 'scripts/test-storage-probe.ps1') -Root $Root
 & (Join-Path $Root 'scripts/test-fixture-jobs.ps1') -Root $Root
 & (Join-Path $Root 'scripts/test-release-publication.ps1') -Root $Root
+& (Join-Path $Root 'scripts/test-walk-receipt.ps1')
 & (Join-Path $Root 'scripts/test-device-lease.ps1')
 & (Join-Path $Root 'audit/test-evidence.ps1')
 
