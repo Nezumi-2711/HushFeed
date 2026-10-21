@@ -12,6 +12,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** New `Latest first on Following` switch under Feed filter. Each batch of posts the Following feed loads now plays newest first. TikTok still decides what goes in each batch, so a post from the next batch can be newer than the ones before it, and ads and LIVEs stay where TikTok put them. Restart TikTok after turning it on (#226).
 
+* **TikTok:** On a Galaxy, a font picked in Settings > Display > Font size and style now shows on Watch history, Activity center and TikTok's other web pages too while `Use system font` is on. Those pages kept Android's standard font before, even though the rest of TikTok followed your pick (#7).
+
 * **TikTok:** With `See-through bottom bar` on by itself, a portrait video now reaches the bottom of the screen behind the tabs. TikTok kept centering the picture in the taller space, so it stopped short and the bottom of the bar sat over a black band. The picture grows just enough to cover it, the same way `See-through status bar` fills the top (#145, #218).
 
 ## 0.77.0 (2026-10-20)
