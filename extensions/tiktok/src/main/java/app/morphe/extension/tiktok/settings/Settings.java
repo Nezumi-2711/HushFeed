@@ -1102,6 +1102,12 @@ public class Settings extends BaseSettings {
      * post is prepared, so no restart.
      */
     public static final BooleanSetting ALWAYS_UPLOAD_HD = new BooleanSetting("always_upload_hd", FALSE);
+    /**
+     * Takes the AI Cast button (AI Self, AI Theater inside TikTok) off the camera's side toolbar;
+     * the Feed filter patch. TikTok asks as the camera builds its toolbar, so the next camera
+     * opened follows the switch.
+     */
+    public static final BooleanSetting HIDE_AI_CAST = new BooleanSetting("hide_ai_cast", FALSE);
     public static final StringSetting CUSTOM_SHARE_DOMAIN = new StringSetting("custom_share_domain", "");
     // Opens a short vt/vm.tiktok.com share link once to swap the full link onto the clipboard.
     public static final BooleanSetting EXPAND_SHORT_SHARE_LINKS = new BooleanSetting("expand_short_share_links", FALSE);

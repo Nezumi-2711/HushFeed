@@ -4395,6 +4395,12 @@
     "restart": true
    },
    {
+    "key": "hide_ai_cast",
+    "default": false,
+    "type": "bool",
+    "row": "Hide the AI Cast button"
+   },
+   {
     "key": "hide_paid_partnership",
     "default": false,
     "type": "bool",

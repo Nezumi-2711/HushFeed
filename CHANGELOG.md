@@ -8,6 +8,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Turning on `See-through bottom bar` while TikTok is open now keeps the video running behind the tabs as you swipe. Before, the first swipe brought the black strip under the video back, and it stayed until TikTok was restarted. Hushfeed measured the next video while it was still sliding into place and took it for a caption pushed under the tabs (#145).
 
+* **TikTok:** New `Hide the AI Cast button` switch under Hushfeed settings > App > Posting. It takes TikTok's AI Cast button off the camera's side toolbar, the same way TikTok already leaves it out of duets, stories and the DM camera. It starts off.
+
 ## 0.77.0 (2026-10-20)
 
 ### Supported apps

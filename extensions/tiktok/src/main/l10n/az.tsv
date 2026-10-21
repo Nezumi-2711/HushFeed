@@ -1755,6 +1755,9 @@ Pause	Fasilə
 Posting	Paylaşım
 Always upload in HD	Həmişə HD keyfiyyətdə yüklə
 Post every video as if you'd turned on TikTok's own HD upload on the post page. A clip TikTok doesn't count as high quality posts as before.	Hər videonu paylaşım səhifəsində TikTok-un öz HD yükləməsini açmısınız kimi paylaşın. TikTok-un yüksək keyfiyyətli saymadığı klip əvvəlki kimi paylaşılır.
+# context: a switch under Posting. AI Cast is TikTok's own name for the button on the camera's side toolbar; keep it as TikTok shows it
+Hide the AI Cast button	AI Cast düyməsini gizlət
+Takes TikTok's AI Cast button off the camera's side toolbar. Open the camera again to see the change.	TikTok-un AI Cast düyməsini kameranın yan alət panelindən götürür. Dəyişikliyi görmək üçün kameranı yenidən açın.
 Keeps logging until you turn it off, even after a restart. TikTok can feel slower while it's on.	Siz söndürənə qədər, hətta yenidən başladıqdan sonra da qeyd etməyə davam edir. Açıq olduqda TikTok daha yavaş işləyə bilər.
 Log diagnostics for 15 minutes	Diaqnostikanı 15 dəqiqə qeyd edin
 Logs for 15 minutes, then stops on its own. Restarting TikTok doesn't move the end, and the switch above stays as you set it.	15 dəqiqə qeyd edir, sonra özü dayanır. TikTok-u yenidən başlatmaq bitmə vaxtını dəyişmir, yuxarıdakı açar isə sizin qoyduğunuz kimi qalır.

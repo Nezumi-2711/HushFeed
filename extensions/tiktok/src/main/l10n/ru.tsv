@@ -1896,6 +1896,9 @@ Pause	Пауза
 Posting	Публикация
 Always upload in HD	Всегда загружать в HD
 Post every video as if you'd turned on TikTok's own HD upload on the post page. A clip TikTok doesn't count as high quality posts as before.	Публиковать каждое видео так, будто вы сами включили HD-загрузку TikTok на странице публикации. Ролик, который TikTok не считает высококачественным, публикуется как раньше.
+# context: a switch under Posting. AI Cast is TikTok's own name for the button on the camera's side toolbar; keep it as TikTok shows it
+Hide the AI Cast button	Скрыть кнопку AI Cast
+Takes TikTok's AI Cast button off the camera's side toolbar. Open the camera again to see the change.	Убирает кнопку AI Cast TikTok с боковой панели камеры. Откройте камеру заново, чтобы увидеть изменение.
 Keeps logging until you turn it off, even after a restart. TikTok can feel slower while it's on.	Записывает, пока вы не выключите, даже после перезапуска. Пока это включено, TikTok может работать медленнее.
 Log diagnostics for 15 minutes	Записывать диагностику 15 минут
 Logs for 15 minutes, then stops on its own. Restarting TikTok doesn't move the end, and the switch above stays as you set it.	Записывает 15 минут, затем останавливается само. Перезапуск TikTok не сдвигает окончание, а переключатель выше остаётся таким, как вы его поставили.
