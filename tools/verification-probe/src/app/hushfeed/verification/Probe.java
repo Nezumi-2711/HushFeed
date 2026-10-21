@@ -710,7 +710,10 @@ public final class Probe extends Instrumentation {
                                 + " authorDuet=" + optional(creator, "getDuetSetting")
                                 + " authorStitch=" + optional(creator, "getStitchSetting")
                                 + " permDuet=" + optional(optional(aweme, "getInteractPermission"), "getDuet")
-                                + " permStitch=" + optional(optional(aweme, "getInteractPermission"), "getStitch"));
+                                + " permStitch=" + optional(optional(aweme, "getInteractPermission"), "getStitch")
+                                // How long ago it was posted, in seconds, for checking an order
+                                // by date (Latest first on Following).
+                                + " postedAgo=" + postedAgo(optional(aweme, "getCreateTime")));
                         break;
                     }
                     case "labreport": {
@@ -4227,6 +4230,12 @@ public final class Probe extends Instrumentation {
             if (!(count instanceof Number)) return "unknown";
             long value = ((Number) count).longValue();
             return value <= 100 ? "100orFewer" : value <= 1000 ? "1000orFewer" : value < 10000 ? "over1000" : "over10000";
+        }
+
+        /** Seconds since {@code createTime} (TikTok's post time in seconds), or "unknown". */
+        private static String postedAgo(Object createTime) {
+            if (!(createTime instanceof Number) || ((Number) createTime).longValue() <= 0) return "unknown";
+            return String.valueOf(System.currentTimeMillis() / 1000 - ((Number) createTime).longValue());
         }
 
         /** TikTok's caption strip shown, with the view that draws its cue visible at a height. */
