@@ -1,5 +1,6 @@
 package app.morphe.extension.tiktok.feedfilter;
 
+import app.morphe.extension.shared.Logger;
 import app.morphe.extension.tiktok.publishdate.AlwaysShowPublishDatePatch;
 import app.morphe.extension.tiktok.settings.Settings;
 import com.ss.android.ugc.aweme.feed.model.Aweme;
@@ -143,12 +144,24 @@ final class FollowingLatestFirst {
         if (run.size() < 2) return order;
         List<Integer> sorted = new ArrayList<>(run);
         Collections.sort(sorted, (a, b) -> Long.compare(postedAt[b], postedAt[a]));
+        Logger.printDebug(() -> "Latest first on Following: " + run.size() + " new posts at "
+            + slots(run, postedAt) + " play as " + slots(sorted, postedAt));
         if (sorted.equals(run)) return order;
         List result = order != null ? order : new ArrayList(snapshot);
         for (int k = 0; k < run.size(); k++) {
             result.set(run.get(k), snapshot.get(sorted.get(k)));
         }
         return result;
+    }
+
+    /** Each slot with its post time in seconds, for the debug log. */
+    private static String slots(List<Integer> slots, long[] postedAt) {
+        StringBuilder out = new StringBuilder("[");
+        for (int slot : slots) {
+            if (out.length() > 1) out.append(", ");
+            out.append(slot).append('@').append(postedAt[slot] / 1000);
+        }
+        return out.append(']').toString();
     }
 
     private static boolean sortable(Aweme post) {
