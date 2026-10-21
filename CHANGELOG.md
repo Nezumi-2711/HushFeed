@@ -4,6 +4,10 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+### Features and fixes
+
+* **TikTok:** Turning on `See-through bottom bar` while TikTok is open now keeps the video running behind the tabs as you swipe. Before, the first swipe brought the black strip under the video back, and it stayed until TikTok was restarted. Hushfeed measured the next video while it was still sliding into place and took it for a caption pushed under the tabs (#145).
+
 ## 0.77.0 (2026-10-20)
 
 ### Supported apps
