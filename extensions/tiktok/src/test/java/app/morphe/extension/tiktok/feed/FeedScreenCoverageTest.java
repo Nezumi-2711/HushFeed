@@ -226,6 +226,8 @@ public class FeedScreenCoverageTest {
         put("floating_bottom_bar", YES, NONE, NONE);
         // And of that pill (#218).
         put("liquid_glass_bottom_bar", YES, NONE, NONE);
+        // And of the lens inside it (#231).
+        put("glass_tab_lens", YES, NONE, NONE);
         // The main feed only: an opened video keeps the strip under its own top bar (#145).
         put("see_through_status_bar", YES, NONE, NONE);
         // The guard runs with the overlay pass, which walks both windows and no LIVE room.

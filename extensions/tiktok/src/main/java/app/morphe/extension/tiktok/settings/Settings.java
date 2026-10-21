@@ -878,6 +878,13 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting LIQUID_GLASS_BOTTOM_BAR = new BooleanSetting(
             "liquid_glass_bottom_bar", FALSE, false, Setting.parent(FLOATING_BOTTOM_BAR));
     /**
+     * With Liquid glass look, draws a smaller piece of glass behind the selected tab that slides
+     * to the next tab picked (#231). Part of the bar's background, so the tabs and their taps
+     * don't move. Read on each layout.
+     */
+    public static final BooleanSetting GLASS_TAB_LENS = new BooleanSetting(
+            "glass_tab_lens", FALSE, false, Setting.parent(LIQUID_GLASS_BOTTOM_BAR));
+    /**
      * Lets the main feed's video draw up under the status bar, with the clock over it (#145).
      * VideoOverlayHider collapses the spacer TikTok keeps above each video for the bar and
      * SeeThroughStatusBar clears the bar's color while the feed is in front; both go back when
