@@ -97,7 +97,7 @@ public class SearchSettingsClarityTest {
      * leave it out while the LIVE half applies.
      */
     @Test public void sideMenuSwipeRowNamesTheSwipeAndNeedsItsOwnHook() {
-        assertRow("INTERFACE", "disable_feed_sidebar_swipe", "Turn off the swipe to the side menu", "Swiping right on For You");
+        assertRow("INTERFACE", "disable_feed_sidebar_swipe", "Turn off the swipe to the side menu", "Swiping right on the For You feed");
         assertRow("INTERFACE", "disable_feed_sidebar_swipe", "Turn off the swipe to the side menu", "TikTok Minis");
 
         SettingsStatus.feedSidebarSwipeEnabled = false;

@@ -379,7 +379,7 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             addPreference(new TogglePreference(
                     context,
                     "Turn off the swipe to the side menu",
-                    "Swiping right on For You no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.",
+                    "Swiping right on the For You feed no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.",
                     Settings.DISABLE_FEED_SIDEBAR_SWIPE
             ));
         }

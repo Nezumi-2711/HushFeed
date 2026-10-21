@@ -157,6 +157,8 @@ public class FeedScreenCoverageTest {
         // Profile grids only.
         put("publish_date_on_grid", NONE, NONE, NONE);
         put("video_length_on_grid", NONE, NONE, NONE);
+        // The order of the profile and Liked grids, which neither window draws (#180).
+        put("profile_grid_sort", NONE, NONE, NONE);
         put("show_author_region", YES, YES, NONE);
         // Only how the region label shows its code, so it reaches where the label does (#157).
         put("region_as_flag", YES, YES, NONE);
@@ -169,6 +171,8 @@ public class FeedScreenCoverageTest {
         // which an opened video doesn't have.
         put("hide_live_entrance", YES, NONE, NONE);
         put("hide_feed_sidebar_button", YES, NONE, NONE);
+        // The swipe to that same side menu, which an opened video doesn't have (#213).
+        put("disable_feed_sidebar_swipe", YES, NONE, NONE);
         // Whether an opened video shows a search button of its own is the open part.
         put("hide_feed_search_button", YES, UNCHECKED, NONE);
         put("hide_fullscreen_button", YES, YES, NONE);
