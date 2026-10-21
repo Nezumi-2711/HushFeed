@@ -713,7 +713,13 @@ public final class Probe extends Instrumentation {
                                 + " permStitch=" + optional(optional(aweme, "getInteractPermission"), "getStitch")
                                 // How long ago it was posted, in seconds, for checking an order
                                 // by date (Latest first on Following).
-                                + " postedAgo=" + postedAgo(optional(aweme, "getCreateTime")));
+                                + " postedAgo=" + postedAgo(optional(aweme, "getCreateTime"))
+                                // The country TikTok says the video was posted from, two letters,
+                                // for comparing For You's mix under a SIM override.
+                                + " region=" + optional(aweme, "getRegion")
+                                // TikTok Subs' paywalled posts, the ones Hide subscriber-only
+                                // videos drops (47.4.3).
+                                + " subOnly=" + optional(aweme, "isSubOnlyVideo"));
                         break;
                     }
                     case "labreport": {
