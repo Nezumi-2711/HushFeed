@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** The diagnostic report can now say which LIVE room a comment went to. Turn on `Log diagnostics`, and each LIVE comment line carries a short code for its room and for the room you entered last, so two comments can be compared without showing any room id (#110).
 * **TikTok:** `Hide CAPTCHA popups`, `Comment tools` and `Look like the store app` are ready for Morphe Manager 2.0, which is stricter about how a patch finds its spot in TikTok's code. Nothing changes with the Manager you have now.
 * **TikTok:** New `Hide Balance in the profile menu` switch under Hushfeed settings > App. It takes Balance out of the menu your profile's top right button opens. Your coins and gifts don't change. It's off by default (#194).
 
