@@ -52,6 +52,7 @@ public final class HomeTabSettingsShortcut {
 
         @Override public void onGone(Activity activity) {
             LAYOUT.detach();
+            ProfileTabWatchHistory.release();
         }
     });
     /** The tab the listener is on, so a rebuilt tab gets it again and an old one is let go. */

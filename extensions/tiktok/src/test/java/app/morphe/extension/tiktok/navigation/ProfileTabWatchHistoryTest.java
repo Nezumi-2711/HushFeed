@@ -41,6 +41,7 @@ public class ProfileTabWatchHistoryTest {
     private ActivityController<Activity> owner;
     private Activity activity;
     private View profile;
+    private boolean destroyed;
     private final AtomicInteger taps = new AtomicInteger();
 
     @Before public void setUp() {
@@ -67,7 +68,7 @@ public class ProfileTabWatchHistoryTest {
         FeedVisibility.resolveForTests(activity.getPackageName(), "47.4.3:onj", 0);
         ReflectionHelpers.setStaticField(SettingsStatus.class, "feedNavigationEnabled", false);
         Settings.PROFILE_TAB_OPENS_WATCH_HISTORY.resetToDefault();
-        owner.pause().stop().destroy();
+        if (!destroyed) owner.pause().stop().destroy();
     }
 
     @Test public void aLongPressOnProfileOpensWatchHistory() {
@@ -133,8 +134,48 @@ public class ProfileTabWatchHistoryTest {
 
         Settings.PROFILE_TAB_OPENS_WATCH_HISTORY.save(false);
         layoutPass();
+        // performLongClick runs a listener on a view that isn't long-clickable; a finger doesn't.
+        assertTrue("TikTok's later long press came back dead", profile.isLongClickable());
         assertTrue(profile.performLongClick());
         assertEquals("TikTok's later listener was lost", 1, own.get());
+    }
+
+    @Test public void aLongPressTikTokClearsWhileOnStaysGoneWhenOff() {
+        AtomicInteger own = new AtomicInteger();
+        profile.setOnLongClickListener(view -> {
+            own.incrementAndGet();
+            return true;
+        });
+        Settings.PROFILE_TAB_OPENS_WATCH_HISTORY.save(true);
+        installAndResume();
+        profile.setOnLongClickListener(null);
+        layoutPass();
+
+        assertTrue("TikTok clearing its listener took ours too", profile.performLongClick());
+        assertNotNull(nextStarted());
+
+        Settings.PROFILE_TAB_OPENS_WATCH_HISTORY.save(false);
+        layoutPass();
+        assertFalse("a long press TikTok removed came back", profile.isLongClickable());
+        assertFalse(profile.performLongClick());
+        assertEquals(0, own.get());
+    }
+
+    @Test public void tikToksLongPressIsGivenBackWhenTheActivityCloses() {
+        AtomicInteger own = new AtomicInteger();
+        profile.setOnLongClickListener(view -> {
+            own.incrementAndGet();
+            return true;
+        });
+        Settings.PROFILE_TAB_OPENS_WATCH_HISTORY.save(true);
+        installAndResume();
+
+        owner.pause().stop().destroy();
+        destroyed = true;
+        assertTrue(profile.isLongClickable());
+        assertTrue(profile.performLongClick());
+        assertEquals("the closed activity's tab kept Watch history", 1, own.get());
+        assertNull(nextStarted());
     }
 
     @Test public void switchedOffAfterwardsTheTabHasNoLongPress() {

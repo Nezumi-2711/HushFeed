@@ -79,18 +79,25 @@ public final class ProfileTabWatchHistory {
     /** Called on each layout pass of the main activity in front. */
     static void apply(Activity activity) {
         try {
-            View profile = FeedVisibility.profileTabView(activity);
-            boolean wanted = Settings.PROFILE_TAB_OPENS_WATCH_HISTORY.get();
             View current = attached.get();
-            if (current != null && (current != profile || !wanted)) giveBack(current);
-            if (!wanted || profile == null || refused.get() == profile) return;
+            // Off, the tab isn't even looked up.
+            if (!Settings.PROFILE_TAB_OPENS_WATCH_HISTORY.get()) {
+                if (current != null) giveBack(current);
+                return;
+            }
+            View profile = FeedVisibility.profileTabView(activity);
+            if (current != null && current != profile) giveBack(current);
+            if (profile == null || refused.get() == profile) return;
 
             if (attached.get() == profile) {
                 View.OnLongClickListener now = longClickListener(profile);
                 if (listenerUnreadable || now == OPEN_WATCH_HISTORY) return;
-                if (now != null) original = now;
+                // TikTok set its long press again, or cleared it: that is what goes back on the
+                // tab when the switch goes off.
+                original = now;
+                originalLongClickable = now != null;
                 profile.setOnLongClickListener(OPEN_WATCH_HISTORY);
-                Logger.printInfo(() -> "TikTok set the Profile tab's long press again; took it back");
+                Logger.printInfo(() -> "TikTok changed the Profile tab's long press; took it back");
                 return;
             }
             if (!profile.isClickable()) {
@@ -109,6 +116,17 @@ public final class ProfileTabWatchHistory {
         } catch (Throwable error) {
             Logger.printException(() -> "Could not set the Profile tab's long press", error);
         }
+    }
+
+    /**
+     * The main activity followed was destroyed: its tab goes with it, and TikTok's listener (which
+     * can hold that activity) isn't kept here past it.
+     */
+    static void release() {
+        View current = attached.get();
+        if (current != null) giveBack(current);
+        original = null;
+        originalLongClickable = false;
     }
 
     private static void giveBack(View tab) {
