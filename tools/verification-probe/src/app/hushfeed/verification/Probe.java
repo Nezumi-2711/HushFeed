@@ -1855,7 +1855,8 @@ public final class Probe extends Instrumentation {
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
                         java.util.Map<Integer, String> wanted = new java.util.HashMap<>();
-                        for (String name : new String[]{"llj", "desc", "bqv", "ll8", "videomusiccoverblock", "g85"}) {
+                        // llj is the rail column up to 47.1.x, ljn on 47.4.3.
+                        for (String name : new String[]{"llj", "ljn", "desc", "bqv", "ll8", "videomusiccoverblock", "g85"}) {
                             int id = resources.getIdentifier(name, "id", activity.getPackageName());
                             if (id != 0) wanted.put(id, name);
                         }
