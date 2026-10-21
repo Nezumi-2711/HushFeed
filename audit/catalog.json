@@ -4470,6 +4470,13 @@
     "row": "Hide unpersonalized For You videos"
    },
    {
+    "key": "following_latest_first",
+    "default": false,
+    "type": "bool",
+    "row": "Latest first on Following",
+    "restart": true
+   },
+   {
     "key": "feed_filter_count_pill",
     "default": false,
     "type": "bool",

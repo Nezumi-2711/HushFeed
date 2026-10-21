@@ -10,6 +10,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** New `Hide the AI Cast button` switch under Hushfeed settings > App > Posting. It takes TikTok's AI Cast button off the camera's side toolbar, the same way TikTok already leaves it out of duets, stories and the DM camera. It starts off.
 
+* **TikTok:** New `Latest first on Following` switch under Feed filter. Each batch of posts the Following feed loads now plays newest first. TikTok still decides what goes in each batch, so a post from the next batch can be newer than the ones before it, and ads and LIVEs stay where TikTok put them. Restart TikTok after turning it on (#226).
+
 ## 0.77.0 (2026-10-20)
 
 ### Supported apps

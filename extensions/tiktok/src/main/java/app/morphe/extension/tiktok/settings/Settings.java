@@ -386,6 +386,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_UNPERSONALIZED_FOR_YOU = new BooleanSetting("hide_unpersonalized_for_you", FALSE);
     /** Read on every Friends tab response, so it applies from the next page on. */
     public static final BooleanSetting FRIENDS_MUTUALS_ONLY = new BooleanSetting("friends_mutuals_only", FALSE);
+    /** Each batch the Following feed loads plays newest first (#226). Read once per run of the app. */
+    public static final BooleanSetting FOLLOWING_LATEST_FIRST = new BooleanSetting("following_latest_first", FALSE, true);
     public static final BooleanSetting HIDE_SHARE_CHANNELS = new BooleanSetting("hide_share_channels", FALSE);
     public static final BooleanSetting HIDE_SHARE_ACTIONS = new BooleanSetting("hide_share_actions", FALSE);
     public static final BooleanSetting SHARE_BLOCK_AUTHOR = new BooleanSetting("share_block_author", FALSE);
