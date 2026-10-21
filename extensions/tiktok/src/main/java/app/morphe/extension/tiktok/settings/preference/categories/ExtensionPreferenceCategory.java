@@ -291,6 +291,15 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                         Settings.HIDE_PROFILE_THOUGHTS
                 ));
             }
+            if (SettingsStatus.profileMenuCellsEnabled) {
+                addPreference(new TogglePreference(
+                        context,
+                        "Hide Balance in the profile menu",
+                        "Hide Balance from the menu your profile's top right button opens. Your coins "
+                                + "and gifts stay as they are.",
+                        Settings.HIDE_PROFILE_MENU_BALANCE
+                ));
+            }
         }
         if (SettingsStatus.profileBackgroundEnabled) {
             addPreference(new TogglePreference(

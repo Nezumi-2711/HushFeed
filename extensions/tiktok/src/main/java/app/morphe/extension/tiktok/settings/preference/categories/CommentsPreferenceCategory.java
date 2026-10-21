@@ -29,6 +29,7 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
         return SettingsStatus.commentToolsEnabled
                 || SettingsStatus.commentTranslationEnabled
                 || SettingsStatus.doNotAutoTranslateEnabled
+                || SettingsStatus.videoAutoTranslateEnabled
                 || SettingsStatus.translateIntoEnabled
                 || SettingsStatus.commentTranslateButtonEnabled
                 || SettingsStatus.languagePageTranslationsEnabled
@@ -52,6 +53,7 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
     public void addPreferences(Context context) {
         boolean reading = SettingsStatus.commentTranslationEnabled
                 || SettingsStatus.doNotAutoTranslateEnabled
+                || SettingsStatus.videoAutoTranslateEnabled
                 || SettingsStatus.translateIntoEnabled
                 || SettingsStatus.commentTranslateButtonEnabled
                 || SettingsStatus.languagePageTranslationsEnabled
@@ -83,6 +85,16 @@ public class CommentsPreferenceCategory extends ConditionalPreferenceCategory {
                     Settings.DONT_AUTO_TRANSLATE_LANGUAGES)
                     .withCheck(app.morphe.extension.tiktok.translation.DoNotAutoTranslate::languageProblem)
                     .withNameKeyboard());
+        }
+        if (SettingsStatus.videoAutoTranslateEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Don't auto translate videos",
+                    "Descriptions, captions and text on videos stay in the language they were made in, "
+                            + "even with TikTok's Always translate on. See translation still works when "
+                            + "you tap it. Comments have their own switch above.",
+                    Settings.NO_VIDEO_AUTO_TRANSLATE
+            ));
         }
         if (SettingsStatus.translateIntoEnabled) {
             addPreference(new InputTextPreference(

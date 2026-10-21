@@ -499,6 +499,7 @@ Deletes %1$s from TikTok's storage.,Deletes %1$s from TikTok's storage.
 Delivery unconfirmed: %1$d/%2$d chats. Remaining chats still need a message.,Delivery unconfirmed: %1$d/%2$d chats. Remaining chats still need a message.
 Delivery unconfirmed: %1$d/%2$d chats. Those chats won't be retried today.,Delivery unconfirmed: %1$d/%2$d chats. Those chats won't be retried today.
 Description text size,Description text size
+"Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.","Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above."
 Destination updated,Destination updated
 Details: %1$s,Details: %1$s
 Device access,Device access
@@ -518,6 +519,7 @@ Display name last changed,Display name last changed
 Do nothing,Do nothing
 Doesn't follow you back,Doesn't follow you back
 Don't auto translate these languages,Don't auto translate these languages
+Don't auto translate videos,Don't auto translate videos
 Don't decode animated frames ahead,Don't decode animated frames ahead
 Don't open a reply under each comment. View replies still shows all of them.,Don't open a reply under each comment. View replies still shows all of them.
 Don't save new searches,Don't save new searches
@@ -667,6 +669,8 @@ Hidden: %1$s,Hidden: %1$s
 Hide,Hide
 Hide AI-generated videos,Hide AI-generated videos
 Hide Add friends,Hide Add friends
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.,Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.
+Hide Balance in the profile menu,Hide Balance in the profile menu
 Hide Bulletin board,Hide Bulletin board
 Hide CAPTCHA popups,Hide CAPTCHA popups
 Hide Check your sources warnings,Hide Check your sources warnings

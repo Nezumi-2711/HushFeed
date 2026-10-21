@@ -497,6 +497,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting RECEIVED_DM_TRANSLATION_PREVIEW = new BooleanSetting("received_dm_translation_preview", FALSE);
     /** Languages TikTok's automatic translation leaves alone, added to its own Don't translate list (#121). */
     public static final StringSetting DONT_AUTO_TRANSLATE_LANGUAGES = new StringSetting("dont_auto_translate_languages", "");
+    /** Videos left in their own language while TikTok's Always translate is on (#194). TikTok builds the state at launch. */
+    public static final BooleanSetting NO_VIDEO_AUTO_TRANSLATE = new BooleanSetting("no_video_auto_translate", FALSE, true);
     /** The one language TikTok translates into instead of its own choice, empty for TikTok's (TranslateInto). */
     public static final StringSetting TRANSLATE_INTO = new StringSetting("translate_into", "");
     /**
@@ -1106,6 +1108,8 @@ public class Settings extends BaseSettings {
     /** The profile views button and Add friends at the top of your Profile tab (#158). Read on each layout. */
     public static final BooleanSetting HIDE_PROFILE_VIEWS_BUTTON = new BooleanSetting("hide_profile_views_button", FALSE);
     public static final BooleanSetting HIDE_PROFILE_ADD_FRIENDS = new BooleanSetting("hide_profile_add_friends", FALSE);
+    /** The Balance cell in your profile's menu (#194). Read each time the menu is built. */
+    public static final BooleanSetting HIDE_PROFILE_MENU_BALANCE = new BooleanSetting("hide_profile_menu_balance", FALSE);
     public static final BooleanSetting HIDE_VISUAL_SEARCH = new BooleanSetting("hide_visual_search", FALSE);
     public static final BooleanSetting HIDE_FULLSCREEN_BUTTON = new BooleanSetting("hide_fullscreen_button", FALSE, true);
     // Read each time TikTok asks, so it doesn't need a restart.

@@ -275,6 +275,13 @@ public class SettingsStatus {
         feedTranslationsEnabled = true;
     }
 
+    /** Translate comments hooked the read of TikTok's Always translate that every video decision asks. */
+    public static boolean videoAutoTranslateEnabled = false;
+
+    public static void enableVideoAutoTranslate() {
+        videoAutoTranslateEnabled = true;
+    }
+
     public static void enableHideCommentQuickReactions() {
         hideCommentQuickReactionsEnabled = true;
     }
@@ -632,6 +639,13 @@ public class SettingsStatus {
 
     public static void enableProfileThoughts() {
         profileThoughtsEnabled = true;
+    }
+
+    /** Hide profile shortcuts found the question your profile's menu asks about each cell, and hooked it. */
+    public static boolean profileMenuCellsEnabled = false;
+
+    public static void enableProfileMenuCells() {
+        profileMenuCellsEnabled = true;
     }
 
     /** Skip the splash ad put its switch in front of the splash tasks and gates. */

@@ -2138,6 +2138,8 @@ Paused	На паузе
 Budgets and reminders	Лимиты и напоминания
 Don't auto translate these languages	Не переводить эти языки автоматически
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Разделяйте коды языков запятыми, например es, de. Когда TikTok переводит за вас, описания и комментарии на этих языках остаются как написаны. «Посмотреть перевод» по-прежнему работает, если нажать. Собственный список TikTok «Не переводить» остаётся как есть.
+Don't auto translate videos	Не переводить видео автоматически
+Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.	Описания, субтитры и текст в видео остаются на языке, на котором их сделали, даже когда в TikTok включено «Всегда переводить». «Посмотреть перевод» по-прежнему работает, если нажать. У комментариев есть свой переключатель выше.
 Performance	Производительность
 Skip the splash ad	Пропускать рекламу при запуске
 Stop the full-screen ad TikTok can show while it starts up.	Не даёт TikTok показывать полноэкранную рекламу при запуске.
@@ -2371,6 +2373,8 @@ Hide profile views	Скрывать просмотры профиля
 Hide the profile views button at the top of your profile. Your profile view history setting doesn't change.	Скрывать кнопку просмотров профиля вверху вашего профиля. Настройка истории просмотров профиля не меняется.
 Hide Add friends	Скрывать «Добавить друзей»
 Hide the Add friends button at the top of your profile. The menu button stays where it is.	Скрывать кнопку «Добавить друзей» вверху вашего профиля. Кнопка меню остаётся на месте.
+Hide Balance in the profile menu	Скрывать «Баланс» в меню профиля
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.	Скрывать «Баланс» в меню, которое открывает кнопка справа вверху вашего профиля. Ваши монеты и подарки остаются как есть.
 See-through status bar	Прозрачная строка состояния
 Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.	В основной ленте видео доходит до верхнего края экрана, а часы и значки состояния показываются поверх него. Вкладки вверху остаются на месте.
 Floating bottom bar	Плавающая нижняя панель

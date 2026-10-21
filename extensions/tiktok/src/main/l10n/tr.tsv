@@ -1970,6 +1970,8 @@ Paused	Duraklatıldı
 Budgets and reminders	Sınırlar ve hatırlatmalar
 Don't auto translate these languages	Bu dilleri otomatik çevirme
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Dil kodlarını virgülle ayır, örneğin es, de. TikTok senin için çevirdiğinde bu dillerdeki açıklamalar ve yorumlar yazıldığı gibi kalır. Çeviriyi gör'e dokunduğunda yine çalışır. TikTok'un kendi Çevirme listesi olduğu gibi kalır.
+Don't auto translate videos	Videoları otomatik çevirme
+Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.	Videolardaki açıklamalar, altyazılar ve metinler, TikTok'un Her zaman çevir seçeneği açık olsa bile yapıldıkları dilde kalır. Çeviriyi gör'e dokunduğunda yine çalışır. Yorumların yukarıda kendi anahtarı var.
 Performance	Performans
 Skip the splash ad	Açılış reklamını atla
 Stop the full-screen ad TikTok can show while it starts up.	TikTok'un açılırken gösterebileceği tam ekran reklamı durdurur.
@@ -2191,6 +2193,8 @@ Hide profile views	Profil görüntülemelerini gizle
 Hide the profile views button at the top of your profile. Your profile view history setting doesn't change.	Profilinin üstündeki profil görüntülemeleri düğmesini gizle. Profil görüntüleme geçmişi ayarın değişmez.
 Hide Add friends	Arkadaş ekle'yi gizle
 Hide the Add friends button at the top of your profile. The menu button stays where it is.	Profilinin üstündeki Arkadaş ekle düğmesini gizle. Menü düğmesi yerinde kalır.
+Hide Balance in the profile menu	Profil menüsünde Bakiye'yi gizle
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.	Profilinin sağ üstündeki düğmenin açtığı menüden Bakiye'yi gizle. Jetonların ve hediyelerin olduğu gibi kalır.
 See-through status bar	Şeffaf durum çubuğu
 Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.	Ana akışta videonun ekranın üstüne kadar uzanmasını sağlar, saat ve durum simgeleri videonun üzerinde görünür. Üstteki sekmeler yerinde kalır.
 Floating bottom bar	Yüzen alt çubuk

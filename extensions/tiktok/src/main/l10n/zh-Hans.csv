@@ -302,6 +302,8 @@ Blocking,阻塞
 Bottom tabs to keep,要保留的底部选项卡
 Brightness,亮度
 "Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.",对于仅在那里看到应用程序语言的帐户，在 TikTok 的语言页面上的“设置和隐私”下返回翻译行.
+"Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.",即使开启了 TikTok 的“始终翻译”，视频的描述、字幕和文字也会保持原来的语言。点击“查看翻译”仍然有效。评论在上方有自己的开关.
+Don't auto translate videos,不要自动翻译视频
 For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions. Restart TikTok to see the change.,适用于被 TikTok 取消翻译的帐户。恢复视频描述下方和字幕中的“查看翻译”。重新启动 TikTok 以查看更改.
 "For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions, and the translation rows on the Language page in Settings and privacy. Restart TikTok to see it on videos.",适用于被 TikTok 取消翻译的帐户。恢复视频描述下方和字幕中的“查看翻译”，以及“设置和隐私”下语言页面上的翻译行。重新启动 TikTok 以在视频中查看.
 Browse,浏览
@@ -741,6 +743,8 @@ Hide surveys,隐藏调查
 Hide tabs TikTok adds later unless you allow them.,隐藏选项卡 TikTok 稍后添加，除非您允许.
 "Hide the ""Search this image"" prompt shown over videos. The feed search button and suggestions above comments are separate settings.",隐藏视频上显示的“搜索此图片”提示。信息流搜索按钮和评论上方的建议是单独的设置.
 Hide the Add friends button at the top of your profile. The menu button stays where it is.,隐藏个人资料顶部的“添加朋友”按钮。菜单按钮保持在原来的位置.
+Hide Balance in the profile menu,在个人资料菜单中隐藏余额
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.,从个人资料右上角按钮打开的菜单中隐藏“余额”。你的金币和礼物保持不变.
 "Hide the Check sources banner TikTok puts on videos it marks as unverified, and the warnings it shows when you share one.",隐藏 TikTok 在其标记为未经验证的视频上放置的“检查来源”横幅，以及在您共享视频时显示的警告.
 "Hide the Check your sources banner TikTok puts across the top of some videos, and the prompt it shows when you share one.",隐藏某些视频顶部的“检查来源”横幅 TikTok 以及共享视频时显示的提示.
 Hide the Clear display controls,隐藏清除显示控件

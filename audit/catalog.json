@@ -7554,6 +7554,12 @@
     "type": "bool",
     "row": "Hide Thoughts on profiles",
     "restart": true
+   },
+   {
+    "key": "hide_profile_menu_balance",
+    "default": false,
+    "type": "bool",
+    "row": "Hide Balance in the profile menu"
    }
   ],
   "surface": "profile",
@@ -7631,6 +7637,10 @@
      {
       "probe": "report",
       "expect": "registered_switches:[^\\n]*\\bprofileThoughts\\b"
+     },
+     {
+      "probe": "report",
+      "expect": "registered_switches:[^\\n]*\\bprofileMenuCells\\b"
      }
     ],
     "auto": true
@@ -15675,6 +15685,7 @@
    "patches/src/main/kotlin/app/morphe/patches/tiktok/misc/translation/CommentTranslationPatch.kt",
    "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/translation/CommentBatchTranslator.java",
    "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/translation/DoNotAutoTranslate.java",
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/translation/VideoAutoTranslate.java",
    "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/translation/TranslateInto.java",
    "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/translation/CommentTranslateButton.java",
    "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/translation/LanguagePageTranslations.java"
@@ -15691,6 +15702,12 @@
     "default": "",
     "type": "string",
     "row": "Don't auto translate these languages"
+   },
+   {
+    "key": "no_video_auto_translate",
+    "default": false,
+    "type": "bool",
+    "row": "Don't auto translate videos"
    },
    {
     "key": "translate_into",

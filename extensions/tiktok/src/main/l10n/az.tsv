@@ -1970,6 +1970,8 @@ Paused	Dayandırılıb
 Budgets and reminders	Limitlər və xatırlatmalar
 Don't auto translate these languages	Bu dilləri avtomatik tərcümə etməyin
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Dil kodlarını vergüllə ayırın, məsələn es, de. TikTok sizin yerinizə tərcümə edəndə bu dillərdəki başlıqlar və şərhlər yazıldığı kimi qalır. Tərcüməyə bax düyməsinə toxunanda isə yenə işləyir. TikTok-un öz Tərcümə etmə siyahısı olduğu kimi qalır.
+Don't auto translate videos	Videoları avtomatik tərcümə etməyin
+Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.	Videolardakı təsvirlər, başlıqlar və mətn çəkildikləri dildə qalır, TikTok-un Həmişə tərcümə et seçimi açıq olsa belə. Tərcüməyə bax düyməsinə toxunanda isə yenə işləyir. Şərhlərin yuxarıda öz açarı var.
 Performance	Performans
 Skip the splash ad	Açılış reklamını ötür
 Stop the full-screen ad TikTok can show while it starts up.	TikTok-un açılarkən göstərə biləcəyi tam ekran reklamı dayandırır.
@@ -2191,6 +2193,8 @@ Hide profile views	Profil baxışlarını gizlədin
 Hide the profile views button at the top of your profile. Your profile view history setting doesn't change.	Profilinizin yuxarısındakı profil baxışları düyməsini gizlədin. Profil baxış tarixçəsi ayarınız dəyişmir.
 Hide Add friends	Add friends düyməsini gizlədin
 Hide the Add friends button at the top of your profile. The menu button stays where it is.	Profilinizin yuxarısındakı Add friends düyməsini gizlədin. Menyu düyməsi yerində qalır.
+Hide Balance in the profile menu	Profil menyusunda Balansı gizlədin
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.	Profilinizin sağ yuxarıdakı düyməsinin açdığı menyudan Balansı gizlədin. Sikkələriniz və hədiyyələriniz olduğu kimi qalır.
 See-through status bar	Şəffaf status paneli
 Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.	Videonun əsas lentdə ekranın yuxarısına qədər uzanmasına icazə verin, saat və status ikonları onun üzərində qalsın. Yuxarıdakı tablar yerində qalır.
 Floating bottom bar	Üzən alt panel
