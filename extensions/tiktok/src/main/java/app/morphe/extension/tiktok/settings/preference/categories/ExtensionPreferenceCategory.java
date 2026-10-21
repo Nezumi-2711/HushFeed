@@ -327,8 +327,9 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
         // the store check on Privacy, under a heading of its own.
         if (SettingsStatus.screenCaptureEnabled || SettingsStatus.videoOverlaysEnabled
                 || SettingsStatus.refreshRateEnabled || SettingsStatus.cameraBrightnessEnabled
-                || SettingsStatus.launcherShortcutsEnabled || SettingsStatus.firstLaunchSetupEnabled || SettingsStatus.storeIdentityEnabled
-                || SettingsStatus.passkeySignInEnabled || SettingsStatus.appLanguageEnabled) {
+                || SettingsStatus.launcherShortcutsEnabled || SettingsStatus.firstLaunchSetupEnabled
+                || SettingsStatus.storeIdentityEnabled || SettingsStatus.passkeySignInEnabled
+                || SettingsStatus.appLanguageEnabled) {
             addPreference(new SectionHeadingPreference(context, "System"));
         }
         if (SettingsStatus.screenCaptureEnabled) {
