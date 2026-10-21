@@ -9,6 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
@@ -17,6 +18,7 @@ import app.morphe.extension.shared.settings.PausedProcess;
 import app.morphe.extension.tiktok.SettingsContextRule;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
+import app.morphe.extension.tiktok.settings.preference.SectionHeadingPreference;
 import app.morphe.extension.tiktok.settings.preference.categories.CommentsPreferenceCategory;
 
 import org.junit.After;
@@ -85,8 +87,18 @@ public class CommentSheetHeightTest {
             SettingsStatus.commentsFullHeightEnabled = true;
             assertTrue(CommentsPreferenceCategory.isAvailable());
             PreferenceScreen screen = activity.getPreferenceManager().createPreferenceScreen(activity);
-            new CommentsPreferenceCategory(activity, screen);
+            CommentsPreferenceCategory category = new CommentsPreferenceCategory(activity, screen);
             assertNotNull(screen.findPreference("comments_full_height"));
+            // With only this patch in the APK, the row still opens under its own heading.
+            String heading = null;
+            boolean found = false;
+            for (int index = 0; index < category.getPreferenceCount() && !found; index++) {
+                Preference row = category.getPreference(index);
+                if (row instanceof SectionHeadingPreference) heading = String.valueOf(row.getTitle());
+                found = "comments_full_height".equals(row.getKey());
+            }
+            assertTrue("the row is not a direct child of the Comments page", found);
+            assertEquals("the row sits under the wrong heading", "Reading", heading);
         } finally {
             SettingsStatus.commentsFullHeightEnabled = false;
         }
