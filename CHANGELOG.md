@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** `Fit the video to the screen` now shows photo slideshows whole on a squarer screen too. Each slide sits centered with black above and below instead of losing the top and bottom, and swiping, the dots, the caption and the music line work as before. On a normal tall phone nothing changes (#188).
 * **TikTok:** `Keep faded controls in Clear display` keeps the like, comment, save and share buttons on screen again with TikTok 47.4.3. That version's Clear display hides the whole button column at once instead of each button, so the buttons stayed away even with the switch on (#209).
 * **TikTok:** The diagnostic report no longer calls the video controls broken for accounts without the Following stories button. TikTok only shows that button to some accounts, and every Clear display without it got counted as a missing part (#209).
 * **TikTok:** The diagnostic report can now say which LIVE room a comment went to. Turn on `Log diagnostics`, and each LIVE comment line carries a short code for its room and for the room you entered last, so two comments can be compared without showing any room id (#110).

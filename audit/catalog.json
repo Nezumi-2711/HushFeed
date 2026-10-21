@@ -5437,7 +5437,9 @@
   "kind": "runtime",
   "source": [
    "patches/src/main/kotlin/app/morphe/patches/tiktok/interaction/videofit/VideoFitPatch.kt",
-   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/interaction/VideoFit.java"
+   "patches/src/main/kotlin/app/morphe/patches/tiktok/interaction/videofit/PhotoSlideFit.kt",
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/interaction/VideoFit.java",
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/interaction/PhotoSlideFit.java"
   ],
   "settings": [
    {

@@ -218,7 +218,7 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                     "Show the whole video instead of cropping it to the window. Nothing changes "
                             + "on a tall phone, where it already fits. On a folding phone opened "
                             + "up, a squarer screen or a split view the sides or the ends stop "
-                            + "being cut off.",
+                            + "being cut off. Photo slideshows get the same treatment on a squarer screen.",
                     Settings.FIT_VIDEO_TO_SCREEN);
             TogglePreference fill = new TogglePreference(context, "Fill the screen with the video",
                     "Crop the video until it covers the whole window. On a tall phone the black "
