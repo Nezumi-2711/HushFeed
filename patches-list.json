@@ -2958,7 +2958,7 @@
     },
     {
       "name": "Hide feed LIVE button",
-      "description": "Removes the LIVE button and the side menu button from the top left of the feed, for a cleaner screen. Each has its own switch, and both start off. Turn them on in Hushfeed settings > Feed screen.",
+      "description": "Removes the LIVE button and the side menu button from the top left of the feed, for a cleaner screen, and can stop a right swipe on For You from opening the side menu. Each has its own switch, and all start off. Turn them on in Hushfeed settings > Feed screen.",
       "category": "Feed",
       "use": true,
       "dependencies": [
@@ -3351,7 +3351,7 @@
     },
     {
       "name": "Hide profile shortcuts",
-      "description": "Hides the shortcuts you pick from the row under a profile's bio, like TikTok Studio or Your orders, and can hide the Thoughts bubble and Balance in your profile's menu. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok.",
+      "description": "Hides the shortcuts you pick from the row under a profile's bio, like TikTok Studio or Your orders, and can hide the Thoughts bubble, and Balance and the TikTok Minis icons in your profile's menu. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok.",
       "category": "Feed",
       "use": true,
       "dependencies": [

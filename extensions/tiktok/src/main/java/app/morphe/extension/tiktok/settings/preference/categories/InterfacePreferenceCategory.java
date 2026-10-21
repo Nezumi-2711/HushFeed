@@ -54,6 +54,7 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                 || SettingsStatus.engagementRateEnabled
                 || SettingsStatus.hideFeedLiveButtonEnabled
                 || SettingsStatus.hideFeedSidebarButtonEnabled
+                || SettingsStatus.feedSidebarSwipeEnabled
                 || SettingsStatus.hideFeedSearchButtonEnabled
                 || SettingsStatus.feedFilterEnabled
                 || SettingsStatus.promotionalBannersEnabled
@@ -342,6 +343,7 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
         boolean any = SettingsStatus.videoOverlaysEnabled
                 || SettingsStatus.hideFeedLiveButtonEnabled
                 || SettingsStatus.hideFeedSidebarButtonEnabled
+                || SettingsStatus.feedSidebarSwipeEnabled
                 || SettingsStatus.hideFeedSearchButtonEnabled
                 || SettingsStatus.feedFilterEnabled;
         if (!any) return;
@@ -363,6 +365,14 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "Hide the side menu button",
                     "Hide the button at the top left of the feed that opens TikTok's side menu, with Your orders, TikTok Minis and more.",
                     Settings.HIDE_FEED_SIDEBAR_BUTTON
+            ));
+        }
+        if (SettingsStatus.feedSidebarSwipeEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Turn off the swipe to the side menu",
+                    "Swiping right on For You no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.",
+                    Settings.DISABLE_FEED_SIDEBAR_SWIPE
             ));
         }
         if (SettingsStatus.hideFeedSearchButtonEnabled) {

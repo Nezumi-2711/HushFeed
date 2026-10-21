@@ -1119,6 +1119,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_PROFILE_ADD_FRIENDS = new BooleanSetting("hide_profile_add_friends", FALSE);
     /** The Balance cell in your profile's menu (#194). Read each time the menu is built. */
     public static final BooleanSetting HIDE_PROFILE_MENU_BALANCE = new BooleanSetting("hide_profile_menu_balance", FALSE);
+    /** The row of app icons under TikTok Minis in your profile's menu (#230). Read each time the menu is built. */
+    public static final BooleanSetting HIDE_PROFILE_MENU_MINIS_ICONS = new BooleanSetting("hide_profile_menu_minis_icons", FALSE);
     public static final BooleanSetting HIDE_VISUAL_SEARCH = new BooleanSetting("hide_visual_search", FALSE);
     public static final BooleanSetting HIDE_FULLSCREEN_BUTTON = new BooleanSetting("hide_fullscreen_button", FALSE, true);
     // Read each time TikTok asks, so it doesn't need a restart.
@@ -1149,6 +1151,10 @@ public class Settings extends BaseSettings {
     // top bar, so a change needs a restart.
     public static final BooleanSetting HIDE_FEED_SIDEBAR_BUTTON =
             new BooleanSetting("hide_feed_sidebar_button", FALSE, true);
+    // A right swipe from For You opens that same side menu (#213). TikTok asks on each swipe, so
+    // a change applies at once.
+    public static final BooleanSetting DISABLE_FEED_SIDEBAR_SWIPE =
+            new BooleanSetting("disable_feed_sidebar_swipe", FALSE);
     // Comment tools.
     public static final BooleanSetting COMMENT_KEYWORD_FILTER = new BooleanSetting("comment_keyword_filter", FALSE);
     public static final StringSetting COMMENT_BLOCKED_KEYWORDS = new StringSetting("comment_blocked_keywords", "");

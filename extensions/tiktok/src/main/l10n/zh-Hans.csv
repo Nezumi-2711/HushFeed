@@ -2215,3 +2215,7 @@ Long-press Profile for Watch history,长按“个人主页”打开观看历史
 "Press and hold the Profile tab to open your Watch history. A tap on Profile works as before. If holding Profile switches accounts for you, this takes that press, and the name at the top of your profile still switches accounts.",按住“个人主页”选项卡可打开观看历史。点击“个人主页”仍像以前一样工作。如果按住“个人主页”会为您切换账号，此选项会接管该操作，个人主页顶部的名称仍可切换账号.
 Open the comments at full height,以全高打开评论
 "Opens the comment sheet at the full height of the screen instead of part way up. Drag it down to close it, as before.",以整个屏幕的高度打开评论，而不是只打开一部分。像以前一样向下拖动即可关闭.
+Hide the TikTok Minis icons in the profile menu,在个人资料菜单中隐藏 TikTok 迷你图标
+"Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.",保留个人资料右上角按钮所打开菜单中的 TikTok 迷你条目，并隐藏其下方的应用图标行，让菜单更短.
+Turn off the swipe to the side menu,关闭滑向侧面菜单的手势
+"Swiping right on For You no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.",在“为您推荐”上向右滑动不再打开 TikTok 的侧面菜单，其中包含您的订单、TikTok 迷你等.

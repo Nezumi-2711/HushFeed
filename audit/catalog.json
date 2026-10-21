@@ -6327,7 +6327,8 @@
   "source": [
    "patches/src/main/kotlin/app/morphe/patches/tiktok/interaction/feedtoolbar/HideFeedLiveButtonPatch.kt",
    "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/featurecontrols/FeatureControls.java",
-   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/featurecontrols/LiveButtonReport.java"
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/featurecontrols/LiveButtonReport.java",
+   "patches/src/main/kotlin/app/morphe/patches/tiktok/interaction/feedtoolbar/SidebarSwipe.kt"
   ],
   "settings": [
    {
@@ -6342,6 +6343,12 @@
     "type": "bool",
     "row": "Hide the side menu button",
     "restart": true
+   },
+   {
+    "key": "disable_feed_sidebar_swipe",
+    "default": false,
+    "type": "bool",
+    "row": "Turn off the swipe to the side menu"
    }
   ],
   "surface": "feed",
@@ -7568,6 +7575,12 @@
     "default": false,
     "type": "bool",
     "row": "Hide Balance in the profile menu"
+   },
+   {
+    "key": "hide_profile_menu_minis_icons",
+    "default": false,
+    "type": "bool",
+    "row": "Hide the TikTok Minis icons in the profile menu"
    }
   ],
   "surface": "profile",

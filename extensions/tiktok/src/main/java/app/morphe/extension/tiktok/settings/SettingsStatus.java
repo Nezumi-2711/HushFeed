@@ -596,6 +596,13 @@ public class SettingsStatus {
         hideFeedSidebarButtonEnabled = true;
     }
 
+    /** The right swipe that opens the side menu was found and hooked; a build that moved it leaves it out. */
+    public static boolean feedSidebarSwipeEnabled = false;
+
+    public static void enableFeedSidebarSwipe() {
+        feedSidebarSwipeEnabled = true;
+    }
+
     public static void enableHideFeedSearchButton() {
         hideFeedSearchButtonEnabled = true;
     }
