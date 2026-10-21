@@ -326,6 +326,8 @@ public final class LiveRecordChip {
             Utils.showToastShort(L10n.t("Couldn't find this LIVE's stream to record. Leave the room and open it again."));
             return;
         }
+        Logger.printInfo(() -> "LIVE record: " + pick.target.quality + " over " + pick.target.transport
+                + " (LIVE recording quality " + Settings.LIVE_RECORD_QUALITY.get() + ")");
         LiveRecorder started = LiveRecordingSaver.create(activity, pick.target, result ->
                 Utils.runOnMainThread(() -> onFinished(result)));
         recorder = started;
