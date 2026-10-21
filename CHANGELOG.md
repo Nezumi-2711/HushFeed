@@ -18,6 +18,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** New `Where the time goes` choice under `Show the time beside the progress bar` in Playback. Pick `Above the bar` and, in the main feed, the caption and the buttons on the right (the music disc too) move up a little so the time fits over the right end of the bar. If something else still sits on that spot, the time stays beside the bar. Picking `Beside the bar` again or turning the time off puts everything back where TikTok had it, and so does pausing Hushfeed (#173).
 
+* **TikTok:** With `Accent color` on, the "You may like" words on the search page now take your color too, whether it's a preset or the wallpaper's. TikTok sends those words with a red of their own instead of using the app's colors, so they stayed red before (#163).
+
 ## 0.77.0 (2026-10-20)
 
 ### Supported apps
