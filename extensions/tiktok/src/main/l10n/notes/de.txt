@@ -1,4 +1,4 @@
-## Unreleased
+## 0.78.0 (2026-10-22)
 
 * **TikTok:** Hushfeed wechselt zu TikTok 47.5.3, 47.4.3 fällt weg. Patche die APK von 47.5.3 mit demselben Signaturschlüssel, dann bleiben Login und Einstellungen erhalten. PineDrama bleibt bei 47.4.3.
 

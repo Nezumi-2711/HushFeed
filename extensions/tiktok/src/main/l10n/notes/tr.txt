@@ -1,4 +1,4 @@
-## Unreleased
+## 0.78.0 (2026-10-22)
 
 * **TikTok:** Hushfeed TikTok 47.5.3'e geçiyor, 47.4.3 bırakılıyor. 47.5.3 APK'sını aynı imza anahtarıyla yamalarsan girişin ve ayarların kalır. PineDrama 47.4.3'te kalıyor.
 
