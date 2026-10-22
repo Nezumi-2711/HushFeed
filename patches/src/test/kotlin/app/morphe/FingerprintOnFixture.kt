@@ -2,6 +2,7 @@ package app.morphe
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.InstructionLocation
+import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
@@ -21,9 +22,9 @@ import com.android.tools.smali.dexlib2.iface.reference.StringReference
  * list hid the 46.x keep-list failure until a full apply). Instruction filters that may each sit
  * anywhere after the one before are judged by the filters' own `matches`, which is the patcher's
  * code: the method takes them when its instructions hold them in order, with gaps, and taking
- * each filter's earliest instruction is enough to know. Filters placed any other way and class
- * fingerprints are not modelled, and a fingerprint using either is refused rather than half
- * judged.
+ * each filter's earliest instruction is enough to know. Filters placed any other way are not
+ * modelled, and a fingerprint using them is refused rather than half judged. A class fingerprint
+ * is judged on [classDef]'s own methods, and patcher 2.0's `isStatic` on the method's flags.
  */
 internal fun Fingerprint.takes(method: Method, classDef: ClassDef): Boolean {
     classFingerprint?.let { cf ->
@@ -37,6 +38,7 @@ internal fun Fingerprint.takes(method: Method, classDef: ClassDef): Boolean {
     declaredDefiningClass?.let { if (!typeMatches(method.definingClass, it)) return false }
     declaredName?.let { if (method.name != it) return false }
     declaredAccessFlags?.let { if (method.accessFlags != it) return false }
+    declaredIsStatic?.let { if (AccessFlags.STATIC.isSet(method.accessFlags) != it) return false }
     declaredReturnType?.let { if (!typeMatches(method.returnType, it)) return false }
     declaredParameters?.let { wanted ->
         val actual = method.parameterTypes.map(CharSequence::toString)
@@ -77,6 +79,7 @@ internal fun Fingerprint.takes(method: Method, classDef: ClassDef): Boolean {
 internal val Fingerprint.declaredDefiningClass: String? get() = declared("definingClass")
 internal val Fingerprint.declaredName: String? get() = declared("name")
 internal val Fingerprint.declaredAccessFlags: Int? get() = declared("accessFlags")
+internal val Fingerprint.declaredIsStatic: Boolean? get() = declared("isStatic")
 internal val Fingerprint.declaredReturnType: String? get() = declared("returnType")
 internal val Fingerprint.declaredParameters: List<String>? get() = declared("parameters")
 
