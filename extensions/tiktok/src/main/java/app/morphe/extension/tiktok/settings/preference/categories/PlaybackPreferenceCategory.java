@@ -128,6 +128,10 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
             addPreference(new TogglePreference(context, "Record LIVEs you watch",
                     "Adds a Record button to LIVE rooms. A recording starts when you tap it and ends when you tap Stop or leave the room. Nothing before that is saved.",
                     Settings.RECORD_LIVE));
+            addPreference(new ChoicePreference(context, "LIVE recording quality", Settings.LIVE_RECORD_QUALITY,
+                    new String[]{"Same as the room", "Highest", "Lowest"}, new String[]{"room", "highest", "lowest"})
+                    .withNote("Same as the room records the quality you're watching. Highest records "
+                            + "the best stream the room has, even while you watch it lower."));
         }
         if (SettingsStatus.stopVideoLoopingEnabled) {
             addPreference(new TogglePreference(
@@ -169,8 +173,13 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                             + "while it's on screen.",
                     Settings.SEEKBAR_TIME
             ));
-            // Where the time goes (Settings.SEEKBAR_TIME_PLACEMENT) has no row until the time is seen
-            // above the bar: on 47.1.4 the caption or the rail always sits over both ends (#173).
+            addPreference(new ChoicePreference(context, "Where the time goes",
+                    Settings.SEEKBAR_TIME_PLACEMENT,
+                    new String[]{"Beside the bar", "Above the bar"},
+                    new String[]{"beside", "above"})
+                    .withNote("Above moves the caption and the buttons up a little so the time fits "
+                            + "over the right end of the bar. When something else is in the way, the "
+                            + "time goes beside the bar."));
             addPreference(new TogglePreference(
                     context,
                     "Full-width progress bar",
@@ -196,6 +205,16 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                     Settings.STORY_SEEKBAR
             ));
         }
+        if (SettingsStatus.showSeekbarEnabled && SettingsStatus.soundSeekbarEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Seek bar on sound previews",
+                    "Add a line along the bottom of a sound's cover while its preview plays, with "
+                            + "the time played and the preview's length. Tap or drag it to move "
+                            + "through the preview.",
+                    Settings.SOUND_SEEKBAR
+            ));
+        }
         if (SettingsStatus.seekbarThumbnailEnabled) {
             addPreference(new TogglePreference(
                     context,
@@ -209,7 +228,7 @@ public final class PlaybackPreferenceCategory extends ConditionalPreferenceCateg
                     "Show the whole video instead of cropping it to the window. Nothing changes "
                             + "on a tall phone, where it already fits. On a folding phone opened "
                             + "up, a squarer screen or a split view the sides or the ends stop "
-                            + "being cut off.",
+                            + "being cut off. Photo slideshows get the same treatment on a squarer screen.",
                     Settings.FIT_VIDEO_TO_SCREEN);
             TogglePreference fill = new TogglePreference(context, "Fill the screen with the video",
                     "Crop the video until it covers the whole window. On a tall phone the black "

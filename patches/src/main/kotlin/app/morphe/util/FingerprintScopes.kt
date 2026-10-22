@@ -10,27 +10,6 @@ import app.morphe.patcher.methodCall
 import app.morphe.patcher.patch.BytecodePatchContext
 
 /**
- * Every match of [fingerprint] in the classes whose type ends with [suffix], like `/StoryApi;`,
- * the same suffix the fingerprint declares as its definingClass.
- *
- * <p>Morphe patcher's `matchAll` (1.14 and 1.15) narrows its search by instruction filters alone.
- * Without one it runs the fingerprint over every method of TikTok, whatever `definingClass` says,
- * which cost about half a second a fingerprint on a desktop and far more on a phone (#54). A
- * single match does use the suffix; this gives `matchAll` the same. Patcher 1.15 no longer lets a
- * patch read a fingerprint's definingClass, so the caller passes it.
- */
-internal fun BytecodePatchContext.matchAllInDefiningClasses(fingerprint: Fingerprint, suffix: String): List<Match> {
-    require(!suffix.startsWith("L") && suffix.startsWith("/") && suffix.endsWith(";")) {
-        "matchAllInDefiningClasses needs a definingClass suffix like /Name;, not $suffix"
-    }
-    val matches = mutableListOf<Match>()
-    classDefForEach { classDef ->
-        if (classDef.type.endsWith(suffix)) matches += fingerprint.matchAllOrNull(classDef).orEmpty()
-    }
-    return matches
-}
-
-/**
  * The types of the classes holding a call to some method of one of [owners], each an exact type
  * (`Lpkg/Type;`).
  *
@@ -49,6 +28,32 @@ internal fun BytecodePatchContext.classesCalling(owners: Collection<String>): Se
     for (owner in owners.toSet()) {
         require(owner.startsWith("L") && owner.endsWith(";")) { "classesCalling needs an exact type, not $owner" }
         Fingerprint(filters = listOf(methodCall(definingClass = owner)))
+            .matchAllOrNull().orEmpty()
+            .mapTo(types) { it.originalClassDef.type }
+    }
+    return types
+}
+
+/**
+ * The types of the classes holding a call to one of [targets], each a full method descriptor
+ * (`Lpkg/Type;->name(params)ret`), looked up by the owner and the method's name together.
+ *
+ * <p>A lookup by owner alone makes the patcher build a match for every method that calls any
+ * method of that owner, then a set of all of them to drop repeats. For `View` that is most of
+ * TikTok, and Turn off haptics ran a desktop patcher out of heap right there (#220). With the name
+ * in the filter the patcher's index narrows to the classes that name both, so each lookup holds a
+ * few hundred matches instead.
+ */
+internal fun BytecodePatchContext.classesCallingMethods(targets: Collection<String>): Set<String> {
+    val pairs = targets.mapTo(LinkedHashSet()) { target ->
+        require(target.startsWith("L") && ";->" in target && "(" in target) {
+            "classesCallingMethods needs a full method descriptor, not $target"
+        }
+        target.substringBefore("->") to target.substringAfter("->").substringBefore('(')
+    }
+    val types = HashSet<String>()
+    for ((owner, name) in pairs) {
+        Fingerprint(filters = listOf(methodCall(definingClass = owner, name = name)))
             .matchAllOrNull().orEmpty()
             .mapTo(types) { it.originalClassDef.type }
     }

@@ -7,11 +7,14 @@
 package app.morphe.patches.tiktok.misc.spoof.region
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.anyInstruction
+import app.morphe.patcher.methodCall
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.shared.compat.AppCompatibilities
+import app.morphe.patches.tiktok.misc.extension.HostApplicationAttachBaseContextFingerprint
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.patches.tiktok.misc.spoof.sim.simSpoofPatch
@@ -312,11 +315,67 @@ internal fun proxyFill(method: Method): ProxyFill? {
     return ProxyFill(fillAt, url, owner, field)
 }
 
+internal const val PROCESS_ZONE_CALL = "invoke-static {}, $EXTENSION->applyProcessZone()V"
+
+/**
+ * Where the preset's time zone becomes the whole process's default (#184, #198): right after the
+ * host application's one call to Application.attachBaseContext, before TikTok builds a formatter.
+ * The shared extension puts Utils.setContext at that same index when the patches finalize, so it
+ * runs first and the settings and the pause are known by the time this call reads them.
+ */
+internal fun processZoneIndex(method: Method): Int {
+    if (AccessFlags.STATIC.isSet(method.accessFlags)) {
+        throw PatchException("Region spoof: the host application's attachBaseContext is static.")
+    }
+    val instructions = method.implementation?.instructions?.toList()
+        ?: throw PatchException("Region spoof: the host application's attachBaseContext has no code.")
+    val superCalls = instructions.indices.filter { index ->
+        instructions[index].getReference<MethodReference>()?.let { reference ->
+            reference.definingClass == "Landroid/app/Application;" &&
+                reference.name == "attachBaseContext" &&
+                reference.parameterTypes.map { it.toString() } == listOf("Landroid/content/Context;")
+        } == true
+    }
+    if (superCalls.size != 1) {
+        throw PatchException(
+            "Region spoof: expected one call to Application.attachBaseContext in the host application, found ${superCalls.size}.",
+        )
+    }
+    return superCalls.single() + 1
+}
+
 private fun writes(instruction: Instruction, register: Int): Boolean {
     if (!instruction.opcode.setsRegister()) return false
     val target = (instruction as? OneRegisterInstruction)?.registerA ?: return false
     return target == register || (instruction.opcode.setsWideRegister() && target + 1 == register)
 }
+
+private object ProxyFillFingerprint : Fingerprint(
+    returnType = "Ljava/lang/Object;",
+    parameters = listOf("L"),
+    filters = listOf(
+        methodCall(
+            definingClass = COMMON_API,
+            name = "doPost",
+        ),
+    ),
+    custom = { method, _ -> proxyFill(method) != null },
+)
+
+private object LocaleOrTimeZoneGetDefaultFingerprint : Fingerprint(
+    filters = listOf(
+        anyInstruction(
+            methodCall(
+                definingClass = "Ljava/util/Locale;",
+                name = "getDefault",
+            ),
+            methodCall(
+                definingClass = "Ljava/util/TimeZone;",
+                name = "getDefault",
+            ),
+        ),
+    ),
+)
 
 @Suppress("unused")
 val regionSpoofPatch = bytecodePatch(
@@ -356,38 +415,37 @@ val regionSpoofPatch = bytecodePatch(
         if (appLogUrlEntry.funnel.toString() != appLogBuilderEntry.funnel.toString()) {
             throw PatchException("Region spoof: AppLog's two URL entry points no longer share one funnel.")
         }
-        val proxyHelpers = mutableListOf<Method>()
-        classDefForEach { definition ->
-            definition.methods.forEach { method -> if (proxyFill(method) != null) proxyHelpers += method }
-        }
+        val proxyHelpers = ProxyFillFingerprint.matchAll().map { it.originalMethod }
         if (proxyHelpers.isEmpty()) {
             throw PatchException("Region spoof: no JS request helper fills a POST body off a URL the way it did.")
         }
+        val host = HostApplicationAttachBaseContextFingerprint.method
+        processZoneIndex(host) // Throws here, before any write, if the start-up call moved.
 
         val replacements = mapOf("Ljava/util/Locale;" to "locale", "Ljava/util/TimeZone;" to "timeZone")
         val counts = mutableMapOf<String, Int>()
-        classDefForEach { definition ->
-            if (definition.type.startsWith("Lapp/morphe/extension/")) return@classDefForEach
-            definition.methods.forEach { method ->
-                val instructions = method.implementation?.instructions?.toList() ?: return@forEach
-                val calls = instructions.withIndex().mapNotNull { (index, instruction) ->
-                    if (instruction.opcode != Opcode.INVOKE_STATIC && instruction.opcode != Opcode.INVOKE_STATIC_RANGE) return@mapNotNull null
-                    val reference = instruction.getReference<MethodReference>() ?: return@mapNotNull null
-                    val wrapper = replacements[reference.definingClass] ?: return@mapNotNull null
-                    if (reference.name != "getDefault" || reference.returnType != reference.definingClass) return@mapNotNull null
-                    val result = instructions.getOrNull(index + 1)
-                    if (result?.opcode != Opcode.MOVE_RESULT_OBJECT) return@mapNotNull null
-                    counts[wrapper] = (counts[wrapper] ?: 0) + 1
-                    Triple(index + 2, (result as OneRegisterInstruction).registerA, wrapper to reference.returnType)
-                }
-                if (calls.isNotEmpty()) {
-                    val mutable = mutableClassDefBy(method.definingClass).findMutableMethodOf(method)
-                    calls.asReversed().forEach { (index, register, target) ->
-                        mutable.addInstructions(index, """
-                            invoke-static/range { v$register .. v$register }, $EXTENSION->${target.first}(${target.second})${target.second}
-                            move-result-object v$register
-                        """)
-                    }
+        val matches = LocaleOrTimeZoneGetDefaultFingerprint.matchAll()
+            .filterNot { it.originalClassDef.type.startsWith("Lapp/morphe/extension/") }
+        for (match in matches) {
+            val method = match.originalMethod
+            val instructions = method.implementation?.instructions?.toList() ?: continue
+            val calls = instructions.withIndex().mapNotNull { (index, instruction) ->
+                if (instruction.opcode != Opcode.INVOKE_STATIC && instruction.opcode != Opcode.INVOKE_STATIC_RANGE) return@mapNotNull null
+                val reference = instruction.getReference<MethodReference>() ?: return@mapNotNull null
+                val wrapper = replacements[reference.definingClass] ?: return@mapNotNull null
+                if (reference.name != "getDefault" || reference.returnType != reference.definingClass) return@mapNotNull null
+                val result = instructions.getOrNull(index + 1)
+                if (result?.opcode != Opcode.MOVE_RESULT_OBJECT) return@mapNotNull null
+                counts[wrapper] = (counts[wrapper] ?: 0) + 1
+                Triple(index + 2, (result as OneRegisterInstruction).registerA, wrapper to reference.returnType)
+            }
+            if (calls.isNotEmpty()) {
+                val mutable = match.method
+                calls.asReversed().forEach { (index, register, target) ->
+                    mutable.addInstructions(index, """
+                        invoke-static/range { v$register .. v$register }, $EXTENSION->${target.first}(${target.second})${target.second}
+                        move-result-object v$register
+                    """)
                 }
             }
         }
@@ -539,6 +597,11 @@ val regionSpoofPatch = bytecodePatch(
                 """,
             )
         }
+
+        // The framework's formatters read the process default rather than TikTok's hooked calls,
+        // so the preset's zone is made the default as the app starts. The index is found again
+        // here, since the getDefault hooks above may have added code in front of it.
+        host.addInstruction(processZoneIndex(host), PROCESS_ZONE_CALL)
         SettingsStatusLoadFingerprint.method.addInstruction(0,
             "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableRegionSpoof()V")
     }

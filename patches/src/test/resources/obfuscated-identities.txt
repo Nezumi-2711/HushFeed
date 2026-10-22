@@ -18,6 +18,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/accountmanagement/Na
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/blockauthor/FeedVisibility.java|ong
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/blockauthor/FeedVisibility.java|onh
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/blockauthor/FeedVisibility.java|oni
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/blockauthor/FeedVisibility.java|onj
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/blockauthor/FeedVisibility.java|pwm
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/blockauthor/FeedVisibility.java|wla
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/captions/CaptionStyle.java|dly
@@ -32,6 +33,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/AnimatedWeb
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/AnimatedWebpMp4Converter.java|LIZIZ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/featurecontrols/CaptchaGate.java|LJIIJ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|bqr
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|ci3
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|cnc
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|cnj
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|d4
@@ -57,7 +59,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHid
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|kyn
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|l6j
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|ljb
-extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|mud
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|ljn
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|nf6
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|o7a
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/feed/VideoOverlayHider.java|o94
@@ -79,7 +81,7 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.ja
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|fy6
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|kp7
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|l7j
-extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|l92
+extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|l7h
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|omm
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|q4f
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxFilter.java|u2n

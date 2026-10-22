@@ -5,6 +5,7 @@
 package app.morphe.patches.tiktok.misc.commenttools
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.methodCall
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.util.addInstructions
@@ -68,15 +69,16 @@ internal object CommentMenuListFingerprint : Fingerprint(
 )
 
 /**
- * The coroutine that builds the comment menu's rows. Its log names the panel's
- * `loadLongPressItems`, and the Report row it builds carries the icon the block row matches.
- * One string, not two: the log is a single literal ("CommentLongPressFragment@922.loadLongPressItems$2"
- * on 47.1.4), and the patcher lets one string load answer one wanted string only.
+ * The coroutine that builds the comment menu's rows. It asks CommentLongPressRepository for them
+ * and builds a Report row ("report") carrying the icon the block row matches. The whole literal
+ * and a call filter, not the log's `loadLongPressItems` piece: the string index finds whole
+ * literals fast, and patcher 2.0 holds a `strings` entry to the whole literal.
  */
 internal object CommentMenuItemsFingerprint : Fingerprint(
     name = "invokeSuspend",
     returnType = "Ljava/lang/Object;",
-    strings = listOf(".loadLongPressItems"),
+    strings = listOf("report"),
+    filters = listOf(methodCall(definingClass = "Lcom/ss/android/ugc/aweme/comment/longpresspanel/repo/CommentLongPressRepository;")),
     custom = { method, _ -> method.reportRowIcon() != null },
 )
 

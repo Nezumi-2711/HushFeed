@@ -5,6 +5,7 @@
 package app.morphe.patches.tiktok.feedfilter
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.fieldAccess
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
 import app.morphe.util.addInstructionsWithLabels
@@ -53,6 +54,7 @@ private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/fee
 private const val PROFILE_DETAIL_PANEL_DESCRIPTOR =
     "Lcom/ss/android/ugc/aweme/detail/panel/ProfileDetailFragmentPanel;"
 private const val TAKO_AI_FILTER_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/feedfilter/TakoAiFilter;"
+private const val AI_CAST_FILTER_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/feedfilter/AiCastFilter;"
 private const val CARD_FILTERS_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/feedfilter/CardFilters;"
 private const val SEARCH_LYNX_CARDS_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/feedfilter/SearchLynxCards;"
 private const val LIVE_FEED_FILTER_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/feedfilter/LiveFeedFilter;"
@@ -471,11 +473,11 @@ val feedFilterPatch = bytecodePatch(
         }
         val cacheSuccessField = cacheSuccessFields.single()
 
-        val legacyCacheChain = CacheChainDeliveryFingerprint.methodOrNull
         val cacheNormalizer = CacheResultNormalizerFingerprint.methodOrNull
-        if ((legacyCacheChain == null) == (cacheNormalizer == null)) {
+        val legacyCacheChain = if (cacheNormalizer == null) CacheChainDeliveryFingerprint.methodOrNull else null
+        if (cacheNormalizer == null && legacyCacheChain == null) {
             throw PatchException(
-                "Expected exactly one cache delivery strategy, found legacy=" +
+                "Expected a cache delivery strategy, found legacy=" +
                     "${legacyCacheChain != null}, normalizer=${cacheNormalizer != null}",
             )
         }
@@ -771,6 +773,29 @@ val feedFilterPatch = bytecodePatch(
             """,
         )
 
+        // The camera's AI Cast button. The recorder adds the AI Theater toolbar component only
+        // when this gate says yes, and the gate already says no for stories, duets and the DM
+        // camera, so a no here builds a camera TikTok knows. Its row shows only where the gate was found.
+        val aiCastGate = if (declaredBuild) {
+            AiTheaterRecordEntranceFingerprint.method
+        } else {
+            AiTheaterRecordEntranceFingerprint.methodOrNull
+        }
+        aiCastGate?.let { gate ->
+            gate.guardAtEntry(
+                "Feed filter",
+                "invoke-static {}, $AI_CAST_FILTER_CLASS_DESCRIPTOR->shouldHideRecordEntrance()Z",
+                """
+                    const/4 v0, 0x0
+                    return v0
+                """,
+            )
+            SettingsStatusLoadFingerprint.method.addInstruction(
+                0,
+                "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableAiCastEntrance()V",
+            )
+        }
+
         // Issue #162. A caption tap (or "more") on some videos opens TikTok's search panel, with
         // "Discover more with Tako" and an "Ask Tako" box, instead of expanding the caption. The
         // caption's expand asks one gate before it hands the tap to that panel and expands in
@@ -911,16 +936,7 @@ val feedFilterPatch = bytecodePatch(
         // TikTok may remove this surface in a future build. If the marker still exists, its
         // insertion hook is mandatory; if the surface itself is absent, there is no card here
         // to suppress.
-        var recUserCardSurfacePresent = false
-        classDefForEach { classDef ->
-            if (!recUserCardSurfacePresent) {
-                recUserCardSurfacePresent = classDef.methods.any { method ->
-                    method.implementation?.instructions?.any { instruction ->
-                        instruction.getReference<StringReference>()?.string == "friend_recommend_card"
-                    } == true
-                }
-            }
-        }
+        val recUserCardSurfacePresent = RecUserCardSurfaceFingerprint.matchAllOrNull() != null
         selectRecUserCardInsertion(
             RecUserCardInsertFingerprint.methodOrNull,
             recUserCardSurfacePresent,
@@ -1009,22 +1025,16 @@ internal fun selectRecUserCardInsertion(
  * its target: the register holds the list only on the path that read it.
  */
 internal fun BytecodePatchContext.filterProfileAdResponseReads() {
-    val readers = mutableListOf<Pair<ClassDef, Method>>()
-    classDefForEach { classDef ->
-        if (classDef.type.startsWith("Lapp/morphe/extension/")) return@classDefForEach
-        classDef.methods.forEach { method ->
-            if (method.implementation?.instructions?.any(Instruction::readsProfileAdList) == true) {
-                readers += classDef to method
-            }
-        }
-    }
-    if (readers.isEmpty()) {
+    val matches = ProfileAdResponseReadFingerprint.matchAllOrNull()
+        ?.filterNot { it.originalClassDef.type.startsWith("Lapp/morphe/extension/") }
+        .orEmpty()
+    if (matches.isEmpty()) {
         throw PatchException(
             "Feed filter: nothing reads awemeList of $PROFILE_AD_RESPONSE_DESCRIPTOR any more.",
         )
     }
-    readers.forEach { (classDef, method) ->
-        val reader = mutableClassDefBy(classDef).findMutableMethodOf(method)
+    matches.forEach { match ->
+        val reader = match.method
         reader.implementation!!.instructions.withIndex()
             .filter { it.value.readsProfileAdList() }
             .map { it.index }

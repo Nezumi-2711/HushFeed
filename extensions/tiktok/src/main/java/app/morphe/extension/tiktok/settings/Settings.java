@@ -119,6 +119,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting KEEP_CAPTIONS_CLEAR_DISPLAY = new BooleanSetting("keep_captions_clear_display", FALSE);
     public static final IntegerSetting CAPTION_CLEAR_DISPLAY_OFFSET = new IntegerSetting(
             "caption_clear_display_offset", 0, Setting.parent(KEEP_CAPTIONS_CLEAR_DISPLAY)).withRange(0, 300);
+    /** The Accessibility page's Captions switch and the caption controls, where TikTok leaves them off (CaptionsAvailable). */
+    public static final BooleanSetting KEEP_CAPTIONS_AVAILABLE = new BooleanSetting("keep_captions_available", FALSE, true);
     public static final BooleanSetting ALLOW_SCREEN_CAPTURE = new BooleanSetting("allow_screen_capture", FALSE, true);
     public static final BooleanSetting SYSTEM_FONT = new BooleanSetting("system_font", FALSE, true);
     public static final BooleanSetting SYSTEM_EMOJI = new BooleanSetting("system_emoji", FALSE, true);
@@ -141,6 +143,8 @@ public class Settings extends BaseSettings {
     /** Download lists the video's renditions and saves the one picked, for that save alone. */
     public static final BooleanSetting DOWNLOAD_ASK_QUALITY = new BooleanSetting("download_ask_quality", FALSE);
     public static final BooleanSetting DOWNLOAD_ORIGINAL_PHOTOS = new BooleanSetting("download_original_photos", FALSE);
+    /** Saved photos keep TikTok's HEIF or WebP instead of becoming a JPEG (#229). Read on each save. */
+    public static final BooleanSetting KEEP_PHOTOS_AS_SENT = new BooleanSetting("keep_photos_as_sent", FALSE);
     public static final BooleanSetting DOWNLOAD_PHOTOS_AS_VIDEO = new BooleanSetting("download_photos_as_video", FALSE);
     public static final IntegerSetting PHOTO_VIDEO_SECONDS = new IntegerSetting("photo_video_seconds", 3, false,
             Setting.parent(DOWNLOAD_PHOTOS_AS_VIDEO)).withRange(1, 10);
@@ -160,7 +164,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting DOWNLOAD_WITHOUT_SOUND =
             new BooleanSetting("download_without_sound", FALSE);
     public static final BooleanSetting DOWNLOAD_PROGRESS = new BooleanSetting("download_progress", false);
-    public static final BooleanSetting DOWNLOAD_DETAILS = new BooleanSetting("download_details", FALSE);
+    /** How many of Hushfeed's saves run at once, "1" to "3"; the rest wait in line (#27). */
+    public static final StringSetting DOWNLOAD_SAVES_AT_ONCE = new StringSetting("download_saves_at_once", "3");
+    public static final BooleanSetting DOWNLOAD_DETAILS =new BooleanSetting("download_details", FALSE);
     /** The details file as JSON rather than plain text. */
     public static final BooleanSetting DOWNLOAD_DETAILS_JSON = new BooleanSetting(
             "download_details_json", FALSE, false, Setting.parent(DOWNLOAD_DETAILS));
@@ -277,6 +283,12 @@ public class Settings extends BaseSettings {
             new BooleanSetting("fill_video_to_screen", FALSE);
     public static final BooleanSetting UNCAP_REFRESH_RATE =
             new BooleanSetting("uncap_refresh_rate", FALSE);
+    /**
+     * Skips TikTok's brightness boost in the camera, editor and post screens (issue #200). The
+     * patch is in the default selection, so the switch starts off.
+     */
+    public static final BooleanSetting KEEP_CAMERA_BRIGHTNESS =
+            new BooleanSetting("keep_camera_brightness", FALSE);
     // The four Performance patches, in the default selection because each hook asks one of these
     // first. Off until the reader turns one on, and a paused build answers off. The splash, update
     // and traffic hooks act on TikTok's startup tasks, so they need a restart. The animated image
@@ -386,6 +398,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_UNPERSONALIZED_FOR_YOU = new BooleanSetting("hide_unpersonalized_for_you", FALSE);
     /** Read on every Friends tab response, so it applies from the next page on. */
     public static final BooleanSetting FRIENDS_MUTUALS_ONLY = new BooleanSetting("friends_mutuals_only", FALSE);
+    /** Each batch the Following feed loads plays newest first (#226). Read once per run of the app. */
+    public static final BooleanSetting FOLLOWING_LATEST_FIRST = new BooleanSetting("following_latest_first", FALSE, true);
     public static final BooleanSetting HIDE_SHARE_CHANNELS = new BooleanSetting("hide_share_channels", FALSE);
     public static final BooleanSetting HIDE_SHARE_ACTIONS = new BooleanSetting("hide_share_actions", FALSE);
     public static final BooleanSetting SHARE_BLOCK_AUTHOR = new BooleanSetting("share_block_author", FALSE);
@@ -471,6 +485,11 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting KEEP_FOR_YOU_ON_PULL_DOWN = new BooleanSetting("keep_for_you_on_pull_down", FALSE);
     /** A long press on the Home tab opens Hushfeed's settings (#45). TikTok gives that press nothing of its own. */
     public static final BooleanSetting HOME_TAB_OPENS_SETTINGS = new BooleanSetting("home_tab_opens_settings", TRUE);
+    /**
+     * A long press on the Profile tab opens TikTok's Watch history (#199). Off by default: on some
+     * accounts that press is TikTok's account switcher, which this takes over while it's on.
+     */
+    public static final BooleanSetting PROFILE_TAB_OPENS_WATCH_HISTORY = new BooleanSetting("profile_tab_opens_watch_history", FALSE);
     /** The tab TikTok opens on from its icon: tiktok (its own pick), for_you, following, friends, inbox or profile. */
     public static final StringSetting START_PAGE = new StringSetting("start_page", "tiktok");
     /** TikTok's previous, pause and next buttons on the feed, shown without a screen reader. Off by default. */
@@ -482,6 +501,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting RECEIVED_DM_TRANSLATION_PREVIEW = new BooleanSetting("received_dm_translation_preview", FALSE);
     /** Languages TikTok's automatic translation leaves alone, added to its own Don't translate list (#121). */
     public static final StringSetting DONT_AUTO_TRANSLATE_LANGUAGES = new StringSetting("dont_auto_translate_languages", "");
+    /** Videos left in their own language while TikTok's Always translate is on (#194). TikTok builds the state at launch. */
+    public static final BooleanSetting NO_VIDEO_AUTO_TRANSLATE = new BooleanSetting("no_video_auto_translate", FALSE, true);
     /** The one language TikTok translates into instead of its own choice, empty for TikTok's (TranslateInto). */
     public static final StringSetting TRANSLATE_INTO = new StringSetting("translate_into", "");
     /**
@@ -555,6 +576,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting SEEKBAR_BIG_HANDLE = new BooleanSetting("seekbar_big_handle", FALSE);
     /** A line along the bottom of a video story that can be dragged to seek (#72). */
     public static final BooleanSetting STORY_SEEKBAR = new BooleanSetting("story_seekbar", FALSE);
+    /** A line along the bottom of a sound page's cover while its preview plays, which seeks the preview (#185). */
+    public static final BooleanSetting SOUND_SEEKBAR = new BooleanSetting("sound_seekbar", FALSE);
     public static final BooleanSetting SHOW_SEEKBAR_THUMBNAIL = new BooleanSetting(
             "show_seekbar_thumbnail",
             TRUE
@@ -613,6 +636,11 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting RECORD_LIVE = new BooleanSetting("record_live", FALSE);
     /**
+     * Which of a room's streams a LIVE recording takes (#203): "room" for the quality being
+     * watched, "highest" or "lowest". Read as each recording starts, so no restart.
+     */
+    public static final StringSetting LIVE_RECORD_QUALITY = new StringSetting("live_record_quality", "room");
+    /**
      * Plays the audio TikTok mutes on a post whose sound was pulled; the Keep pulled sounds
      * patch. Read as each video starts, so no restart.
      */
@@ -638,6 +666,8 @@ public class Settings extends BaseSettings {
             "publish_date_short_date", FALSE, false, Setting.parent(PUBLISH_DATE_EXACT_TIME));
     public static final BooleanSetting PUBLISH_DATE_ON_GRID = new BooleanSetting("publish_date_on_grid", FALSE);
     public static final BooleanSetting VIDEO_LENGTH_ON_GRID = new BooleanSetting("video_length_on_grid", FALSE);
+    /** How loaded profile and Liked grids are ordered (#180): off, or one of the orders in GridSort. */
+    public static final StringSetting PROFILE_GRID_SORT = new StringSetting("profile_grid_sort", "off");
     public static final BooleanSetting SHOW_EXACT_COUNTS = new BooleanSetting("show_exact_counts", FALSE);
     public static final BooleanSetting CLEAR_DISPLAY = new BooleanSetting("clear_display", FALSE);
     public static final BooleanSetting COPY_COMMENTS_WITHOUT_USERNAME = new BooleanSetting("copy_comments_without_username", TRUE);
@@ -853,6 +883,13 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting LIQUID_GLASS_BOTTOM_BAR = new BooleanSetting(
             "liquid_glass_bottom_bar", FALSE, false, Setting.parent(FLOATING_BOTTOM_BAR));
+    /**
+     * With Liquid glass look, draws a smaller piece of glass behind the selected tab that slides
+     * to the next tab picked (#231). Part of the bar's background, so the tabs and their taps
+     * don't move. Read on each layout.
+     */
+    public static final BooleanSetting GLASS_TAB_LENS = new BooleanSetting(
+            "glass_tab_lens", FALSE, false, Setting.parent(LIQUID_GLASS_BOTTOM_BAR));
     /**
      * Lets the main feed's video draw up under the status bar, with the clock over it (#145).
      * VideoOverlayHider collapses the spacer TikTok keeps above each video for the bar and
@@ -1086,6 +1123,10 @@ public class Settings extends BaseSettings {
     /** The profile views button and Add friends at the top of your Profile tab (#158). Read on each layout. */
     public static final BooleanSetting HIDE_PROFILE_VIEWS_BUTTON = new BooleanSetting("hide_profile_views_button", FALSE);
     public static final BooleanSetting HIDE_PROFILE_ADD_FRIENDS = new BooleanSetting("hide_profile_add_friends", FALSE);
+    /** The Balance cell in your profile's menu (#194). Read each time the menu is built. */
+    public static final BooleanSetting HIDE_PROFILE_MENU_BALANCE = new BooleanSetting("hide_profile_menu_balance", FALSE);
+    /** The row of app icons under TikTok Minis in your profile's menu (#230). Read each time the menu is built. */
+    public static final BooleanSetting HIDE_PROFILE_MENU_MINIS_ICONS = new BooleanSetting("hide_profile_menu_minis_icons", FALSE);
     public static final BooleanSetting HIDE_VISUAL_SEARCH = new BooleanSetting("hide_visual_search", FALSE);
     public static final BooleanSetting HIDE_FULLSCREEN_BUTTON = new BooleanSetting("hide_fullscreen_button", FALSE, true);
     // Read each time TikTok asks, so it doesn't need a restart.
@@ -1102,6 +1143,12 @@ public class Settings extends BaseSettings {
      * post is prepared, so no restart.
      */
     public static final BooleanSetting ALWAYS_UPLOAD_HD = new BooleanSetting("always_upload_hd", FALSE);
+    /**
+     * Takes the AI Cast button (AI Self, AI Theater inside TikTok) off the camera's side toolbar;
+     * the Feed filter patch. TikTok asks as the camera builds its toolbar, so the next camera
+     * opened follows the switch.
+     */
+    public static final BooleanSetting HIDE_AI_CAST = new BooleanSetting("hide_ai_cast", FALSE);
     public static final StringSetting CUSTOM_SHARE_DOMAIN = new StringSetting("custom_share_domain", "");
     // Opens a short vt/vm.tiktok.com share link once to swap the full link onto the clipboard.
     public static final BooleanSetting EXPAND_SHORT_SHARE_LINKS = new BooleanSetting("expand_short_share_links", FALSE);
@@ -1110,6 +1157,10 @@ public class Settings extends BaseSettings {
     // top bar, so a change needs a restart.
     public static final BooleanSetting HIDE_FEED_SIDEBAR_BUTTON =
             new BooleanSetting("hide_feed_sidebar_button", FALSE, true);
+    // A right swipe from For You opens that same side menu (#213). TikTok asks on each swipe, so
+    // a change applies at once.
+    public static final BooleanSetting DISABLE_FEED_SIDEBAR_SWIPE =
+            new BooleanSetting("disable_feed_sidebar_swipe", FALSE);
     // Comment tools.
     public static final BooleanSetting COMMENT_KEYWORD_FILTER = new BooleanSetting("comment_keyword_filter", FALSE);
     public static final StringSetting COMMENT_BLOCKED_KEYWORDS = new StringSetting("comment_blocked_keywords", "");
@@ -1152,6 +1203,7 @@ public class Settings extends BaseSettings {
             new BooleanSetting("larger_comment_like_target", FALSE, true);
     public static final BooleanSetting HIDE_COMMENT_EGGS = new BooleanSetting("hide_comment_eggs", FALSE);
     public static final BooleanSetting COMMENT_SORT_CONTROLS = new BooleanSetting("comment_sort_controls", FALSE);
+    public static final BooleanSetting COMMENTS_FULL_HEIGHT = new BooleanSetting("comments_full_height", FALSE);
     // Share sheet tools.
     public static final BooleanSetting HIDE_SHARE_CONTACTS = new BooleanSetting("hide_share_contacts", FALSE);
     public static final BooleanSetting SHARE_TAP_COPIES_LINK = new BooleanSetting("share_tap_copies_link", FALSE);

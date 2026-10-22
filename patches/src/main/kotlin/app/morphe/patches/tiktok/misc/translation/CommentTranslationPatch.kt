@@ -4,6 +4,7 @@
  */
 package app.morphe.patches.tiktok.misc.translation
 
+import app.morphe.patcher.Fingerprint
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
@@ -36,6 +37,11 @@ private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/tiktok/tra
 /** The line TikTok logs as a comment translation batch finishes. */
 private const val COMPLETION_ANCHOR = "MultiCommentTranslationTask startTranslate onComplete "
 
+/** Every method that loads the anchor, whatever its shape, so a wrong one is named rather than skipped. */
+private object CommentTranslationCompletionFingerprint : Fingerprint(
+    strings = listOf(COMPLETION_ANCHOR),
+)
+
 /**
  * Every method that carries the completion anchor.
  *
@@ -47,34 +53,30 @@ private const val COMPLETION_ANCHOR = "MultiCommentTranslationTask startTranslat
 private fun BytecodePatchContext.completionCarriers(): List<MutableMethod> {
     val carriers = mutableListOf<MutableMethod>()
     val wrongShape = mutableListOf<String>()
-    classDefForEach { classDef ->
-        for (method in classDef.methods) {
-            val carriesAnchor = method.implementation?.instructions?.any { instruction ->
-                instruction.getReference<StringReference>()?.string == COMPLETION_ANCHOR
-            } == true
-            if (!carriesAnchor) continue
+    for (match in CommentTranslationCompletionFingerprint.matchAll()) {
+        val method = match.originalMethod
+        val classDef = match.originalClassDef
 
-            // Two shapes carry the anchor. Up to 46.8.3 it is an R8-outlined static `(runner)V`
-            // taking the Runnable it was lifted out of; on 46.9.3 it is that Runnable's own
-            // `run()V`. Either way p0 is the runner the extension reads its two fields off.
-            val isStatic = AccessFlags.STATIC.isSet(method.accessFlags)
-            val outlined = isStatic && method.parameterTypes.size == 1 &&
-                method.parameterTypes.single().startsWith("L")
-            val own = !isStatic && method.name == "run" && method.parameterTypes.isEmpty()
-            if (method.returnType != "V" || !(outlined || own)) {
-                wrongShape += "${method.definingClass}->${method.name}"
-                continue
-            }
-            // A Runnable of its own is its own runner, so what the extension needs of it is
-            // asked here: exactly two instance reference fields, one of them the results List,
-            // the other the task. That is the shape the extension reads by kind, and a class
-            // that does not have it would be stood down at runtime on the first batch.
-            if (own && !classDef.holdsResultsAndTask()) {
-                wrongShape += "${method.definingClass}->${method.name}"
-                continue
-            }
-            carriers += mutableClassDefBy(classDef).findMutableMethodOf(method)
+        // Two shapes carry the anchor. Up to 46.8.3 it is an R8-outlined static `(runner)V`
+        // taking the Runnable it was lifted out of; on 46.9.3 it is that Runnable's own
+        // `run()V`. Either way p0 is the runner the extension reads its two fields off.
+        val isStatic = AccessFlags.STATIC.isSet(method.accessFlags)
+        val outlined = isStatic && method.parameterTypes.size == 1 &&
+            method.parameterTypes.single().startsWith("L")
+        val own = !isStatic && method.name == "run" && method.parameterTypes.isEmpty()
+        if (method.returnType != "V" || !(outlined || own)) {
+            wrongShape += "${method.definingClass}->${method.name}"
+            continue
         }
+        // A Runnable of its own is its own runner, so what the extension needs of it is
+        // asked here: exactly two instance reference fields, one of them the results List,
+        // the other the task. That is the shape the extension reads by kind, and a class
+        // that does not have it would be stood down at runtime on the first batch.
+        if (own && !classDef.holdsResultsAndTask()) {
+            wrongShape += "${method.definingClass}->${method.name}"
+            continue
+        }
+        carriers += match.method
     }
 
     if (wrongShape.isNotEmpty()) {
@@ -118,11 +120,9 @@ private const val COMMENT_DESCRIPTOR = "Lcom/ss/android/ugc/aweme/comment/model/
  */
 internal fun BytecodePatchContext.textTranslationCompletionCarriers(): List<MutableMethod> {
     val carriers = mutableListOf<MutableMethod>()
-    classDefForEach { classDef ->
-        for (method in classDef.methods) {
-            if (isTextTranslationCompletionCarrier(classDef, method)) {
-                carriers += mutableClassDefBy(classDef).findMutableMethodOf(method)
-            }
+    for (match in CommentTranslationCompletionFingerprint.matchAll()) {
+        if (isTextTranslationCompletionCarrier(match.originalClassDef, match.originalMethod)) {
+            carriers += match.method
         }
     }
     return carriers
@@ -168,8 +168,8 @@ val commentTranslationPatch = bytecodePatch(
     description = "Translates comments as they load, using TikTok's own translator, so you " +
         "don't have to tap Translate on each one. Starts off. Turn it on in Hushfeed settings > " +
         "Comments, where more rows list languages TikTok's automatic translation should leave alone, " +
-        "pick the language translations come out in, and add TikTok's translate button beside the " +
-        "comment count.",
+        "keep videos in the language they were made in, pick the language translations come out in, " +
+        "and add TikTok's translate button beside the comment count.",
     default = true,
 ) {
     category("Comments")
@@ -364,6 +364,23 @@ val commentTranslationPatch = bytecodePatch(
             SettingsStatusLoadFingerprint.method.addInstruction(
                 0,
                 "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableFeedTranslations()V",
+            )
+        }
+
+        // Videos kept in their own language while TikTok's Always translate is on (#194). Held to
+        // declared builds by VideoAutoTranslateAnchorsTest the same way.
+        val videoAutoTranslate = try {
+            hookVideoAutoTranslate()
+            true
+        } catch (problem: Exception) {
+            if (packageMetadata.versionName in declaredVersions()) throw problem
+            println("[Translate comments] Left out Don't auto translate videos on ${packageMetadata.versionName}: ${problem.message}")
+            false
+        }
+        if (videoAutoTranslate) {
+            SettingsStatusLoadFingerprint.method.addInstruction(
+                0,
+                "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableVideoAutoTranslate()V",
             )
         }
 

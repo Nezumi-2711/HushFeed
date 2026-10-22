@@ -477,6 +477,26 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok open-copied-video");
                         break;
                     }
+                    case "open-copied-photo": {
+                        // The copied link of a photo post, opened in TikTok's own page for it,
+                        // so one post can be looked at again after a setting changes (#188).
+                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
+                                app.getSystemService(Context.CLIPBOARD_SERVICE);
+                        android.content.ClipData clip = clipboard == null ? null : clipboard.getPrimaryClip();
+                        CharSequence value = clip == null || clip.getItemCount() == 0 ? null
+                                : clip.getItemAt(0).coerceToText(app);
+                        String link = value == null ? "" : value.toString().trim();
+                        android.net.Uri uri = android.net.Uri.parse(link);
+                        if (!link.startsWith("https://www.tiktok.com/") || !"photo".equals(linkPathShape(uri.getPath()))) {
+                            throw new IllegalStateException("no copied TikTok photo URL");
+                        }
+                        Intent photo = new Intent(Intent.ACTION_VIEW, uri);
+                        photo.setPackage("com.zhiliaoapp.musically");
+                        photo.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        app.startActivity(photo);
+                        Log.i(TAG, "ok open-copied-photo");
+                        break;
+                    }
                     case "open-public-video": {
                         String aid = required(intent, "aid");
                         if (!aid.matches("[0-9]+")) throw new IllegalArgumentException("invalid public video id");
@@ -710,7 +730,16 @@ public final class Probe extends Instrumentation {
                                 + " authorDuet=" + optional(creator, "getDuetSetting")
                                 + " authorStitch=" + optional(creator, "getStitchSetting")
                                 + " permDuet=" + optional(optional(aweme, "getInteractPermission"), "getDuet")
-                                + " permStitch=" + optional(optional(aweme, "getInteractPermission"), "getStitch"));
+                                + " permStitch=" + optional(optional(aweme, "getInteractPermission"), "getStitch")
+                                // How long ago it was posted, in seconds, for checking an order
+                                // by date (Latest first on Following).
+                                + " postedAgo=" + postedAgo(optional(aweme, "getCreateTime"))
+                                // The country TikTok says the video was posted from, two letters,
+                                // for comparing For You's mix under a SIM override.
+                                + " region=" + optional(aweme, "getRegion")
+                                // TikTok Subs' paywalled posts, the ones Hide subscriber-only
+                                // videos drops (47.4.3).
+                                + " subOnly=" + optional(aweme, "isSubOnlyVideo"));
                         break;
                     }
                     case "labreport": {
@@ -1724,6 +1753,24 @@ public final class Probe extends Instrumentation {
                                     out.append(" textPx=").append(label.getTextSize())
                                             .append(" textSp=").append(textSp(label, label.getTextSize()))
                                             .append(" lines=").append(label.getLineCount());
+                                    if (label.getLayout() != null) out.append(" layout:").append(layoutReport(label.getLayout()));
+                                }
+                                if (id == strip) {
+                                    // Caption height's lift and un-clip (#206): each group above the
+                                    // strip with its top, translation and whether it clips.
+                                    android.view.ViewParent up = view.getParent();
+                                    for (int depth = 0; depth < 5 && up instanceof android.view.ViewGroup; depth++) {
+                                        android.view.ViewGroup group = (android.view.ViewGroup) up;
+                                        out.append(" up").append(depth).append('=').append(group.getClass().getSimpleName())
+                                                .append(':').append(idName(group, resources))
+                                                .append("/top").append(group.getTop())
+                                                .append("/h").append(group.getHeight())
+                                                .append("/ty").append(group.getTranslationY())
+                                                .append("/tz").append(group.getTranslationZ())
+                                                .append("/clip").append(group.getClipChildren() ? 1 : 0)
+                                                .append("/pad").append(group.getClipToPadding() ? group.getPaddingTop() : -1);
+                                        up = group.getParent();
+                                    }
                                 }
                                 if (id == strip && view instanceof android.view.ViewGroup) {
                                     // On 47.0.3 the text view stays gone and a sibling draws the
@@ -1855,7 +1902,8 @@ public final class Probe extends Instrumentation {
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
                         java.util.Map<Integer, String> wanted = new java.util.HashMap<>();
-                        for (String name : new String[]{"llj", "desc", "bqv", "ll8", "videomusiccoverblock", "g85"}) {
+                        // llj is the rail column up to 47.1.x, ljn on 47.4.3.
+                        for (String name : new String[]{"llj", "ljn", "desc", "bqv", "ll8", "videomusiccoverblock", "g85"}) {
                             int id = resources.getIdentifier(name, "id", activity.getPackageName());
                             if (id != 0) wanted.put(id, name);
                         }
@@ -2124,6 +2172,20 @@ public final class Probe extends Instrumentation {
                         target.setAccessible(true);
                         Log.i(TAG, "ok countformat " + owner.getSimpleName() + "." + target.getName() + " count=" + count
                                 + " -> " + target.invoke(null, arguments));
+                        break;
+                    }
+                    case "timezone": {
+                        // The zone TikTok's process formats times in right now, as each of the
+                        // three time APIs sees it, and the current time each one prints. Region
+                        // spoof's Match locale and timezone (#184) moves the process default.
+                        long now = System.currentTimeMillis();
+                        java.text.DateFormat framework = android.text.format.DateFormat.getTimeFormat(app);
+                        android.icu.text.DateFormat icu = android.icu.text.DateFormat.getTimeInstance(android.icu.text.DateFormat.SHORT);
+                        Log.i(TAG, "ok timezone java=" + java.util.TimeZone.getDefault().getID()
+                                + " icu=" + android.icu.util.TimeZone.getDefault().getID()
+                                + " zoneId=" + java.time.ZoneId.systemDefault()
+                                + " framework=" + framework.format(new java.util.Date(now))
+                                + " icuTime=" + icu.format(new java.util.Date(now)));
                         break;
                     }
                     case "tiktoktheme": {
@@ -3275,7 +3337,9 @@ public final class Probe extends Instrumentation {
                 out.append(" child ").append(depth).append('.').append(i).append(' ')
                         .append(child.getClass().getSimpleName()).append(" id=")
                         .append(idName(child, resources)).append(" size=")
-                        .append(child.getWidth()).append('x').append(child.getHeight());
+                        .append(child.getWidth()).append('x').append(child.getHeight())
+                        // A video surface carries no id, and See-through status bar grows it.
+                        .append(" top=").append(child.getTop()).append(" scale=").append(child.getScaleY());
                 appendLayoutInfo(child, out);
                 out.append('\n');
                 if (depth < 2 && child instanceof android.view.ViewGroup) {
@@ -4228,6 +4292,12 @@ public final class Probe extends Instrumentation {
             return value <= 100 ? "100orFewer" : value <= 1000 ? "1000orFewer" : value < 10000 ? "over1000" : "over10000";
         }
 
+        /** Seconds since {@code createTime} (TikTok's post time in seconds), or "unknown". */
+        private static String postedAgo(Object createTime) {
+            if (!(createTime instanceof Number) || ((Number) createTime).longValue() <= 0) return "unknown";
+            return String.valueOf(System.currentTimeMillis() / 1000 - ((Number) createTime).longValue());
+        }
+
         /** TikTok's caption strip shown, with the view that draws its cue visible at a height. */
         private static boolean captionDrawn(int strip, int drawn) throws Exception {
             if (strip == 0 || drawn == 0) return false;
@@ -4435,7 +4505,10 @@ public final class Probe extends Instrumentation {
             return optional(address, "getWidth") + "x" + optional(address, "getHeight");
         }
 
-        /** Its lines, width and how many lines end inside a word, never the text itself. */
+        /**
+         * Its lines, width and how many lines end inside a word, never the text itself, then the
+         * weight it draws at: the typeface's and the paint's variation settings (Caption boldness).
+         */
         private static String layoutReport(android.text.Layout layout) {
             CharSequence text = layout.getText();
             int inWords = 0;
@@ -4444,7 +4517,14 @@ public final class Probe extends Instrumentation {
                 if (end > 0 && end < text.length() && Character.isLetterOrDigit(text.charAt(end - 1))
                         && Character.isLetterOrDigit(text.charAt(end))) inWords++;
             }
-            return "lines" + layout.getLineCount() + "/w" + layout.getWidth() + "/inWords" + inWords;
+            android.text.TextPaint paint = layout.getPaint();
+            android.graphics.Typeface face = paint.getTypeface();
+            String weight = face == null ? "none" : android.os.Build.VERSION.SDK_INT >= 28
+                    ? String.valueOf(face.getWeight()) : face.isBold() ? "bold" : "normal";
+            String variation = android.os.Build.VERSION.SDK_INT >= 26 ? paint.getFontVariationSettings() : null;
+            return "lines" + layout.getLineCount() + "/w" + layout.getWidth() + "/inWords" + inWords
+                    + "/weight" + weight + "/fakeBold" + paint.isFakeBoldText()
+                    + "/var" + (variation == null ? "none" : variation.replace(' ', '_'));
         }
 
         private static Object staticField(Class<?> owner, String name) throws ReflectiveOperationException {

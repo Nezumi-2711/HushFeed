@@ -58,7 +58,9 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                 || SettingsStatus.followStatusEnabled
                 || SettingsStatus.copyIdsEnabled
                 || SettingsStatus.hdUploadEnabled
+                || SettingsStatus.aiCastEntranceEnabled
                 || SettingsStatus.refreshRateEnabled
+                || SettingsStatus.cameraBrightnessEnabled
                 || SettingsStatus.launcherShortcutsEnabled
                 || SettingsStatus.firstLaunchSetupEnabled
                 || SettingsStatus.screenCaptureEnabled
@@ -289,6 +291,22 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                         Settings.HIDE_PROFILE_THOUGHTS
                 ));
             }
+            if (SettingsStatus.profileMenuCellsEnabled) {
+                addPreference(new TogglePreference(
+                        context,
+                        "Hide Balance in the profile menu",
+                        "Hide Balance from the menu your profile's top right button opens. Your coins "
+                                + "and gifts stay as they are.",
+                        Settings.HIDE_PROFILE_MENU_BALANCE
+                ));
+                addPreference(new TogglePreference(
+                        context,
+                        "Hide the TikTok Minis icons in the profile menu",
+                        "Keep the TikTok Minis entry in the menu your profile's top right button opens, "
+                                + "and hide the row of app icons under it so the menu is shorter.",
+                        Settings.HIDE_PROFILE_MENU_MINIS_ICONS
+                ));
+            }
         }
         if (SettingsStatus.profileBackgroundEnabled) {
             addPreference(new TogglePreference(
@@ -300,8 +318,10 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                     Settings.PROFILE_BACKGROUND
             ));
         }
-        if (SettingsStatus.hdUploadEnabled) {
+        if (SettingsStatus.hdUploadEnabled || SettingsStatus.aiCastEntranceEnabled) {
             addPreference(new SectionHeadingPreference(context, "Posting"));
+        }
+        if (SettingsStatus.hdUploadEnabled) {
             addPreference(new TogglePreference(
                     context,
                     "Always upload in HD",
@@ -310,12 +330,22 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                     Settings.ALWAYS_UPLOAD_HD
             ));
         }
+        if (SettingsStatus.aiCastEntranceEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Hide the AI Cast button",
+                    "Takes TikTok's AI Cast button off the camera's side toolbar. Open the camera "
+                            + "again to see the change.",
+                    Settings.HIDE_AI_CAST
+            ));
+        }
         // The whole app, not the feed: screenshots and the status bar used to be on Feed screen and
         // the store check on Privacy, under a heading of its own.
         if (SettingsStatus.screenCaptureEnabled || SettingsStatus.videoOverlaysEnabled
-                || SettingsStatus.refreshRateEnabled || SettingsStatus.launcherShortcutsEnabled
-                || SettingsStatus.firstLaunchSetupEnabled || SettingsStatus.storeIdentityEnabled
-                || SettingsStatus.passkeySignInEnabled || SettingsStatus.appLanguageEnabled) {
+                || SettingsStatus.refreshRateEnabled || SettingsStatus.cameraBrightnessEnabled
+                || SettingsStatus.launcherShortcutsEnabled || SettingsStatus.firstLaunchSetupEnabled
+                || SettingsStatus.storeIdentityEnabled || SettingsStatus.passkeySignInEnabled
+                || SettingsStatus.appLanguageEnabled) {
             addPreference(new SectionHeadingPreference(context, "System"));
         }
         if (SettingsStatus.screenCaptureEnabled) {
@@ -353,6 +383,14 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                             + "a 90 or 120 Hz phone, that request makes the whole app, "
                             + "scrolling too, run slower.",
                     Settings.UNCAP_REFRESH_RATE
+            ));
+        }
+        if (SettingsStatus.cameraBrightnessEnabled) {
+            addPreference(new TogglePreference(
+                    context,
+                    "Keep the screen's brightness in the camera",
+                    "Stops TikTok from turning your screen brighter while you film, edit or post a video.",
+                    Settings.KEEP_CAMERA_BRIGHTNESS
             ));
         }
         if (SettingsStatus.launcherShortcutsEnabled) {

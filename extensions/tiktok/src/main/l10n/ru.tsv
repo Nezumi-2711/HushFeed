@@ -250,7 +250,7 @@ Allow storage for TikTok in Android settings to save stories	Разрешите 
 Bottom tabs to keep	Нижние вкладки, которые нужно оставить
 Already marked as not interested	Уже отмечено как «не интересно»
 Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.	Также применять эти фильтры к загруженным видео, которые TikTok использует, когда ленте не хватает новых материалов.
-Also change the region TikTok reports internally. Keeps your interface language. Your IP address and your account's own rules still apply.	Также изменять регион, который TikTok сообщает внутри себя. Язык интерфейса остаётся прежним. Ваш IP-адрес и правила вашего аккаунта по-прежнему действуют.
+Also change the region TikTok reports internally and set TikTok to the country's time zone. Keeps your interface language. Your IP address and your account's own rules still apply.	Также изменять регион, который TikTok сообщает внутри себя, и переводить TikTok на часовой пояс страны. Язык интерфейса остаётся прежним. Ваш IP-адрес и правила вашего аккаунта по-прежнему действуют.
 Always show publish date	Всегда показывать дату публикации
 Always show the publish date in video author information. Restart TikTok to apply this.	Всегда показывать дату публикации в информации об авторе видео. Перезапустите TikTok, чтобы это применить.
 Type the other app's ID, like com.dv.adm. The save button sends the video's link there instead of saving. Leave empty to save here.	Введите идентификатор другого приложения, например com.dv.adm. Кнопка сохранения отправит туда ссылку на видео вместо сохранения. Оставьте пустым, чтобы сохранять здесь.
@@ -719,6 +719,8 @@ Keep a local record of what you have watched and hide those videos when the feed
 Keep a paused video paused	Оставлять видео на паузе
 Move to the next video when the current one ends. Pauses, open dialogs and screen-time holds stop it. Restart TikTok to apply this.	Переходить к следующему видео, когда текущее заканчивается. Паузы, открытые диалоги и ограничения экранного времени останавливают это. Перезапустите TikTok, чтобы это применить.
 Keep captions in Clear display	Оставлять субтитры в чистом виде
+Keep captions available	Сохранять доступ к субтитрам
+Bring back TikTok's captions switch in its accessibility settings, and the caption controls on videos, when TikTok leaves them out. Captions only show on videos that have them.	Возвращает переключатель субтитров в настройках специальных возможностей TikTok и управление субтитрами в видео, если TikTok их убирает. Субтитры показываются только в видео, где они есть.
 Keep going	Продолжить
 Keep the Favorites tab	Оставлять вкладку Избранное
 Dark Favorites popup	Тёмное окно Избранного
@@ -1007,6 +1009,8 @@ Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and n
 Save a profile picture on a long press	Сохранять фото профиля долгим нажатием
 Save a story on a long press	Сохранять историю долгим нажатием
 Save every photo in the post at full size as a JPEG, not as the screen shows it.	Сохранять каждое фото публикации в полном размере в формате JPEG, а не как оно показано на экране.
+Keep photos as TikTok sent them	Сохранять фото в формате TikTok
+Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Сохранённые фото, обложки и фото из историй остаются в HEIF или WebP и не превращаются в JPEG. Некоторые галереи и компьютеры не открывают такие файлы.
 Save field values	Сохранить значения полей
 Save full report	Сохранить полный отчёт
 Save media	Сохранение медиафайлов
@@ -1114,10 +1118,13 @@ Draw a larger handle and a slightly thicker line on the progress bar, so it's ea
 Seek bar on video stories	Ползунок перемотки в видеоисториях
 Add a thin line along the bottom of a video story that you can drag to go back or skip ahead. The time shows while you drag, and a tap on it still moves between stories.	Добавить тонкую линию внизу видеоистории, которую можно перетаскивать, чтобы перемотать назад или вперёд. Во время перетаскивания показывается время, а нажатие на неё по-прежнему переключает истории.
 Story position	Позиция в истории
+Seek bar on sound previews	Ползунок перемотки в превью звуков
+Add a line along the bottom of a sound's cover while its preview plays, with the time played and the preview's length. Tap or drag it to move through the preview.	Добавить линию внизу обложки звука, пока играет его превью, с прошедшим временем и длиной превью. Нажмите на неё или перетащите, чтобы перемещаться по превью.
+Sound position	Позиция в звуке
 %1$s of %2$s	%1$s из %2$s
 Show the progress bar thumbnail	Показывать превью на полосе прогресса
 Show the whole Activity and New followers lists instead of stopping at a View all button.	Показывать списки «Активность» и «Новые подписчики» целиком, не останавливаясь на кнопке «Смотреть все».
-Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.	Показывать видео целиком, не обрезая его по размеру окна. На вытянутом телефоне, где оно и так помещается, ничего не меняется. На развёрнутом складном телефоне, более квадратном экране или в режиме разделённого экрана края или концы видео перестают обрезаться.
+Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off. Photo slideshows get the same treatment on a squarer screen.	Показывать видео целиком, не обрезая его по размеру окна. На вытянутом телефоне, где оно и так помещается, ничего не меняется. На развёрнутом складном телефоне, более квадратном экране или в режиме разделённого экрана края или концы видео перестают обрезаться. Слайд-шоу из фотографий на более квадратном экране обрабатываются так же.
 Show what is left of the budget	Показывать остаток бюджета
 Show when the camera or microphone is in use	Показывать, когда используется камера или микрофон
 Show where a video was posted	Показывать, откуда опубликовано видео
@@ -1153,6 +1160,8 @@ Still saving the last one	Последнее всё ещё сохраняетс�
 The last one is still waiting to start	Последнее всё ещё ожидает начала
 Stops TikTok from sending usage reports, ad tracking and crash reports. TikTok's own diagnostic tools go quiet too.	TikTok перестаёт отправлять отчёты об использовании, данные для рекламы и отчёты о сбоях. Собственные средства диагностики TikTok тоже затихают.
 Stops TikTok from slowing your screen to match each video's frame rate. On a 90 or 120 Hz phone, that request makes the whole app, scrolling too, run slower.	Не даёт TikTok замедлять экран до частоты кадров каждого видео. На телефоне с 90 или 120 Гц из-за этого весь экран приложения, включая прокрутку, работает медленнее.
+Keep the screen's brightness in the camera	Сохранять яркость экрана в камере
+Stops TikTok from turning your screen brighter while you film, edit or post a video.	Не даёт TikTok делать экран ярче, пока вы снимаете, редактируете или публикуете видео.
 Stops TikTok from reading your phone's motion and compass sensors. Apps can use them to recognize your phone.	TikTok перестаёт считывать датчики движения и компас вашего телефона. По ним приложения могут узнавать телефон.
 Stop TikTok reading what you copied. Copying a link from TikTok still works.	Не позволять TikTok читать то, что вы скопировали. Копирование ссылки из TikTok по-прежнему работает.
 Stop a long press on Like from opening TikTok's repost action.	Не позволять долгому нажатию на «Нравится» открывать репост TikTok.
@@ -1775,6 +1784,8 @@ Lift text length limits	Снять ограничения длины текст�
 Let comments, repost notes and your bio run past the length TikTok's app stops at. TikTok's servers can still turn down a long one.	Комментарии, заметки к репостам и описание профиля могут быть длиннее, чем позволяет приложение TikTok. Серверы TikTok всё равно могут отклонить длинный текст.
 Show only mutual friends on the Friends tab	Показывать во вкладке «Друзья» только взаимных друзей
 On the Friends tab, hide posts, reposts and LIVEs from accounts that aren't a mutual follow, suggested accounts included. Your own posts stay.	Во вкладке «Друзья» скрывать публикации, репосты и LIVE аккаунтов без взаимной подписки, в том числе рекомендованных. Ваши собственные публикации остаются.
+Latest first on Following	Сначала новые в «Подписках»
+Play each batch the Following feed loads newest post first. TikTok still picks what each batch brings, and ads and LIVEs keep their place.	Воспроизводить каждую партию, которую загружает лента «Подписки», начиная с самой новой публикации. Что попадёт в партию, по-прежнему решает TikTok, а реклама и LIVE остаются на своих местах.
 Show follow status	Показывать статус подписки
 Under the @username on a profile, say whether it follows you or doesn't follow you back. Follower and following lists mark the accounts you follow that don't follow you back.	Под @именем пользователя в профиле показывать, подписан ли он на вас или не подписан в ответ. В списках подписчиков и подписок отмечаются аккаунты, на которые вы подписаны, но которые не подписаны на вас.
 Follows you	Подписан на вас
@@ -1896,6 +1907,9 @@ Pause	Пауза
 Posting	Публикация
 Always upload in HD	Всегда загружать в HD
 Post every video as if you'd turned on TikTok's own HD upload on the post page. A clip TikTok doesn't count as high quality posts as before.	Публиковать каждое видео так, будто вы сами включили HD-загрузку TikTok на странице публикации. Ролик, который TikTok не считает высококачественным, публикуется как раньше.
+# context: a switch under Posting. AI Cast is TikTok's own name for the button on the camera's side toolbar; keep it as TikTok shows it
+Hide the AI Cast button	Скрыть кнопку AI Cast
+Takes TikTok's AI Cast button off the camera's side toolbar. Open the camera again to see the change.	Убирает кнопку AI Cast TikTok с боковой панели камеры. Откройте камеру заново, чтобы увидеть изменение.
 Keeps logging until you turn it off, even after a restart. TikTok can feel slower while it's on.	Записывает, пока вы не выключите, даже после перезапуска. Пока это включено, TikTok может работать медленнее.
 Log diagnostics for 15 minutes	Записывать диагностику 15 минут
 Logs for 15 minutes, then stops on its own. Restarting TikTok doesn't move the end, and the switch above stays as you set it.	Записывает 15 минут, затем останавливается само. Перезапуск TikTok не сдвигает окончание, а переключатель выше остаётся таким, как вы его поставили.
@@ -2131,6 +2145,8 @@ Paused	На паузе
 Budgets and reminders	Лимиты и напоминания
 Don't auto translate these languages	Не переводить эти языки автоматически
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Разделяйте коды языков запятыми, например es, de. Когда TikTok переводит за вас, описания и комментарии на этих языках остаются как написаны. «Посмотреть перевод» по-прежнему работает, если нажать. Собственный список TikTok «Не переводить» остаётся как есть.
+Don't auto translate videos	Не переводить видео автоматически
+Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.	Описания, субтитры и текст в видео остаются на языке, на котором их сделали, даже когда в TikTok включено «Всегда переводить». «Посмотреть перевод» по-прежнему работает, если нажать. У комментариев есть свой переключатель выше.
 Performance	Производительность
 Skip the splash ad	Пропускать рекламу при запуске
 Stop the full-screen ad TikTok can show while it starts up.	Не даёт TikTok показывать полноэкранную рекламу при запуске.
@@ -2364,12 +2380,16 @@ Hide profile views	Скрывать просмотры профиля
 Hide the profile views button at the top of your profile. Your profile view history setting doesn't change.	Скрывать кнопку просмотров профиля вверху вашего профиля. Настройка истории просмотров профиля не меняется.
 Hide Add friends	Скрывать «Добавить друзей»
 Hide the Add friends button at the top of your profile. The menu button stays where it is.	Скрывать кнопку «Добавить друзей» вверху вашего профиля. Кнопка меню остаётся на месте.
+Hide Balance in the profile menu	Скрывать «Баланс» в меню профиля
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.	Скрывать «Баланс» в меню, которое открывает кнопка справа вверху вашего профиля. Ваши монеты и подарки остаются как есть.
 See-through status bar	Прозрачная строка состояния
 Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.	В основной ленте видео доходит до верхнего края экрана, а часы и значки состояния показываются поверх него. Вкладки вверху остаются на месте.
 Floating bottom bar	Плавающая нижняя панель
 Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.	Вкладки основной ленты показываются на скруглённой полупрозрачной тёмной плашке, которая парит над видео. Нужна «Прозрачная нижняя панель».
 Liquid glass look	Эффект жидкого стекла
 Draw the main feed's floating pill as glass, lighter and more see-through, with a bright rim along its top edge. Needs Floating bottom bar.	Плавающая плашка основной ленты рисуется как стекло, светлее и прозрачнее, с яркой кромкой по верхнему краю. Нужна «Плавающая нижняя панель».
+Glass lens on the current tab	Стеклянная линза на текущей вкладке
+On the main feed, a smaller piece of glass sits behind the tab you're on and slides to the next tab you pick. Needs Liquid glass look.	В основной ленте за открытой вкладкой лежит кусочек стекла поменьше, и он переезжает к следующей вкладке, которую вы выберете. Нужен «Эффект жидкого стекла».
 # context: a switch on the Comments page. Language, Settings and privacy and App language are TikTok's own labels: its language page, the menu that page sits in, and the page's first row
 Bring back TikTok's translation	Вернуть перевод TikTok
 Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.	Возвращает строки перевода на страницу «Язык» в TikTok (Настройки и конфиденциальность) для аккаунтов, которые видят там только «Язык приложения».
@@ -2377,9 +2397,43 @@ For accounts TikTok took translation away from. Brings back See translation unde
 For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions, and the translation rows on the Language page in Settings and privacy. Restart TikTok to see it on videos.	Для аккаунтов, у которых TikTok убрал перевод. Возвращает «Показать перевод» под описаниями видео и в субтитрах, а также строки перевода на странице «Язык» (Настройки и конфиденциальность). Перезапустите TikTok, чтобы увидеть это в видео.
 Only on the sides of the video	Только по бокам видео
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Выбранное действие для долгого нажатия работает только на левой и правой трети видео. Нажатие посередине по-прежнему открывает собственное меню TikTok. Нужен вариант долгого нажатия, отличный от стандарта TikTok.
+Where the time goes	Где показывать время
+Beside the bar	Рядом с полосой
+Above the bar	Над полосой
+Above moves the caption and the buttons up a little so the time fits over the right end of the bar. When something else is in the way, the time goes beside the bar.	Над полосой немного поднимает подпись и кнопки, чтобы время поместилось над правым краем полосы. Если мешает что-то другое, время показывается рядом с полосой.
 Full-width progress bar	Полоса прогресса во всю ширину
 Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	Полоса прогресса идёт от одного края экрана до другого, без зазора, который TikTok оставляет с каждого конца.
 New device identity	Новые идентификаторы устройства
 Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	Стирает данные TikTok и при следующем запуске выдаёт ему новый Android ID и рекламный ID, чтобы он видел незнакомый телефон. Вы выйдете из аккаунта, а черновики пропадут. Настройки Hushfeed сохранятся.
 TikTok starts as a new phone after the restart. Tap again to cancel.	После перезапуска TikTok запустится как на новом телефоне. Нажмите ещё раз, чтобы отменить.
 Couldn't set up a new device identity. Try again.	Не удалось задать новые идентификаторы устройства. Попробуйте ещё раз.
+Saves at once	Сохранений одновременно
+How many saves run at the same time. The others wait in line and start as each one ends.	Сколько сохранений идёт одновременно. Остальные ждут в очереди и начинаются по мере завершения каждого.
+Saves right now	Текущие сохранения
+Nothing is saving right now	Сейчас ничего не сохраняется
+Earlier this session	Ранее в этом сеансе
+Stopped by an unexpected error	Остановлено из-за непредвиденной ошибки
+Cover	Обложка
+One at a time	По одному
+Two at once	Два одновременно
+Three at once	Три одновременно
+LIVE recording quality	Качество записи LIVE
+Same as the room	Как в трансляции
+Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower.	«Как в трансляции» записывает качество, которое вы смотрите. «Самое высокое» записывает лучший поток трансляции, даже если вы смотрите её в более низком качестве.
+Long-press Profile for Watch history	Долгое нажатие на Профиль открывает историю просмотров
+Press and hold the Profile tab to open your Watch history. A tap on Profile works as before. If holding Profile switches accounts for you, this takes that press, and the name at the top of your profile still switches accounts.	Нажмите и удерживайте вкладку Профиль, чтобы открыть историю просмотров. Обычное нажатие на Профиль работает как раньше. Если удержание Профиля у вас переключает аккаунты, эта настройка занимает это нажатие, а имя вверху профиля по-прежнему переключает аккаунты.
+Open the comments at full height	Открывать комментарии на всю высоту
+Opens the comment sheet at the full height of the screen instead of part way up. Drag it down to close it, as before.	Открывает комментарии на всю высоту экрана, а не на часть. Чтобы закрыть, потяните их вниз, как раньше.
+Hide the TikTok Minis icons in the profile menu	Скрывать значки TikTok Minis в меню профиля
+Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.	Запись TikTok Minis остаётся в меню, которое открывает кнопка справа вверху вашего профиля, а ряд значков приложений под ней скрывается, и меню становится короче.
+Turn off the swipe to the side menu	Отключить свайп к боковому меню
+Swiping right on the For You feed no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.	Свайп вправо в ленте «Рекомендации» больше не открывает боковое меню TikTok с разделами «Ваши заказы», TikTok Minis и другими.
+Sort loaded videos on profile grids	Сортировать загруженные видео в сетках профиля
+Original order	Исходный порядок
+Newest first	Сначала новые
+Oldest first	Сначала старые
+Longest first	Сначала длинные
+Shortest first	Сначала короткие
+Most viewed first	Сначала самые просматриваемые
+Most liked first	Сначала с наибольшим числом лайков
+Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.	Сортирует видео, которые сетка профиля или раздела «Понравившиеся» уже загрузила, закреплённые остаются первыми. По мере прокрутки порядок охватывает больше видео. В следующий раз сетка откроется уже в этом порядке.

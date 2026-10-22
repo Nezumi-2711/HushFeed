@@ -205,7 +205,7 @@ Allow storage for TikTok in Android settings to save stories	Hace falta permiso 
 Bottom tabs to keep	Pestañas inferiores que mantener
 Already marked as not interested	Ya marcado como no me interesa
 Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.	Aplicar también estos filtros a los vídeos descargados que TikTok usa cuando el feed no consigue cargar suficientes elementos nuevos.
-Also change the region TikTok reports internally. Keeps your interface language. Your IP address and your account's own rules still apply.	Cambia también la región que TikTok informa internamente. Mantiene el idioma de la interfaz. Tu dirección IP y las reglas de tu cuenta siguen aplicándose.
+Also change the region TikTok reports internally and set TikTok to the country's time zone. Keeps your interface language. Your IP address and your account's own rules still apply.	Cambia también la región que TikTok informa internamente y pone TikTok en la zona horaria del país. Mantiene el idioma de la interfaz. Tu dirección IP y las reglas de tu cuenta siguen aplicándose.
 Always show publish date	Mostrar siempre la fecha de publicación
 Always show the publish date in video author information. Restart TikTok to apply this.	Mostrar siempre la fecha de publicación en la información del autor del vídeo. Reinicia TikTok para que se aplique.
 Type the other app's ID, like com.dv.adm. The save button sends the video's link there instead of saving. Leave empty to save here.	Escribe el ID de la otra app, como com.dv.adm. El botón de guardar le envía el enlace del video en lugar de guardarlo. Déjalo vacío para guardar aquí.
@@ -659,6 +659,8 @@ Keep a local record of what you have watched and hide those videos when the feed
 Keep a paused video paused	Mantener en pausa un vídeo pausado
 Move to the next video when the current one ends. Pauses, open dialogs and screen-time holds stop it. Restart TikTok to apply this.	Pasa al siguiente vídeo cuando termine el actual. Las pausas, los diálogos abiertos y los bloqueos de tiempo de pantalla lo detienen. Reinicia TikTok después de cambiar este ajuste.
 Keep captions in Clear display	Mantener los subtítulos con los controles ocultos
+Keep captions available	Mantener los subtítulos disponibles
+Bring back TikTok's captions switch in its accessibility settings, and the caption controls on videos, when TikTok leaves them out. Captions only show on videos that have them.	Recupera el interruptor de subtítulos de los ajustes de accesibilidad de TikTok y los controles de subtítulos en los videos cuando TikTok los quita. Los subtítulos solo aparecen en los videos que los tienen.
 Keep going	Seguir
 Keep the Favorites tab	Mantener la pestaña Favoritos
 Dark Favorites popup	Ventana de Favoritos oscura
@@ -935,6 +937,8 @@ Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and n
 Save a profile picture on a long press	Guardar una foto de perfil con una pulsación larga
 Save a story on a long press	Guardar una historia con una pulsación larga
 Save every photo in the post at full size as a JPEG, not as the screen shows it.	Guardar cada foto de la publicación a tamaño completo como JPEG, no como la muestra la pantalla.
+Keep photos as TikTok sent them	Mantener las fotos como las envía TikTok
+Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Las fotos, portadas y fotos de historias guardadas se quedan en HEIF o WebP en lugar de convertirse en JPEG. Algunas galerías y computadoras no pueden abrirlas.
 Save field values	Guardar los valores de los campos
 Save full report	Guardar informe completo
 Save media	Guardar el contenido
@@ -1036,10 +1040,13 @@ Draw a larger handle and a slightly thicker line on the progress bar, so it's ea
 Seek bar on video stories	Barra de reproducción en historias de vídeo
 Add a thin line along the bottom of a video story that you can drag to go back or skip ahead. The time shows while you drag, and a tap on it still moves between stories.	Añadir una línea fina en la parte inferior de una historia de vídeo que puedes arrastrar para retroceder o avanzar. El tiempo se muestra mientras arrastras, y un toque en ella sigue pasando de una historia a otra.
 Story position	Posición en la historia
+Seek bar on sound previews	Barra de reproducción en vistas previas de sonidos
+Add a line along the bottom of a sound's cover while its preview plays, with the time played and the preview's length. Tap or drag it to move through the preview.	Añadir una línea en la parte inferior de la portada de un sonido mientras suena su vista previa, con el tiempo reproducido y la duración de la vista previa. Tócala o arrástrala para moverte por la vista previa.
+Sound position	Posición en el sonido
 %1$s of %2$s	%1$s de %2$s
 Show the progress bar thumbnail	Mostrar la miniatura de la barra de progreso
 Show the whole Activity and New followers lists instead of stopping at a View all button.	Mostrar las listas completas de Actividad y Nuevos seguidores en vez de pararse en un botón de Ver todo.
-Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.	Mostrar el vídeo entero en vez de recortarlo a la ventana. En un móvil alto no cambia nada, porque ya cabe. En un plegable abierto, en una pantalla más cuadrada o en vista dividida dejan de cortarse los lados o los extremos.
+Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off. Photo slideshows get the same treatment on a squarer screen.	Mostrar el vídeo entero en vez de recortarlo a la ventana. En un móvil alto no cambia nada, porque ya cabe. En un plegable abierto, en una pantalla más cuadrada o en vista dividida dejan de cortarse los lados o los extremos. Las presentaciones de fotos reciben el mismo trato en una pantalla más cuadrada.
 Show what is left of the budget	Mostrar lo que queda del límite
 Show when the camera or microphone is in use	Mostrar cuando la cámara o el micrófono estén en uso
 Show where a video was posted	Mostrar desde dónde se publicó un vídeo
@@ -1075,6 +1082,8 @@ Still saving the last one	Todavía se está guardando el anterior
 The last one is still waiting to start	El anterior todavía está esperando para empezar
 Stops TikTok from sending usage reports, ad tracking and crash reports. TikTok's own diagnostic tools go quiet too.	Evita que TikTok envíe informes de uso, seguimiento publicitario e informes de fallos. Las herramientas de diagnóstico de TikTok también se quedan en silencio.
 Stops TikTok from slowing your screen to match each video's frame rate. On a 90 or 120 Hz phone, that request makes the whole app, scrolling too, run slower.	Evita que TikTok ralentice tu pantalla para igualar la tasa de fotogramas de cada video. En un teléfono de 90 o 120 Hz, esa petición hace que toda la app, el desplazamiento incluido, vaya más lenta.
+Keep the screen's brightness in the camera	Mantener el brillo de la pantalla en la cámara
+Stops TikTok from turning your screen brighter while you film, edit or post a video.	Evita que TikTok suba el brillo de tu pantalla mientras grabas, editas o publicas un video.
 Stops TikTok from reading your phone's motion and compass sensors. Apps can use them to recognize your phone.	Evita que TikTok lea los sensores de movimiento y de brújula de tu teléfono. Las apps pueden usarlos para reconocer tu teléfono.
 Stop TikTok reading what you copied. Copying a link from TikTok still works.	Impide que TikTok lea lo que copiaste. Copiar un enlace desde TikTok sigue funcionando.
 Stop a long press on Like from opening TikTok's repost action.	Impedir que mantener pulsado Me gusta abra la acción de republicar de TikTok.
@@ -1637,6 +1646,8 @@ Lift text length limits	Quitar los límites de longitud del texto
 Let comments, repost notes and your bio run past the length TikTok's app stops at. TikTok's servers can still turn down a long one.	Deja que los comentarios, las notas de reposts y tu biografía pasen del largo en el que se detiene la app de TikTok. Los servidores de TikTok aún pueden rechazar uno largo.
 Show only mutual friends on the Friends tab	Mostrar solo amigos mutuos en la pestaña Amigos
 On the Friends tab, hide posts, reposts and LIVEs from accounts that aren't a mutual follow, suggested accounts included. Your own posts stay.	En la pestaña Amigos, ocultar publicaciones, reposts y LIVE de cuentas con las que no os seguís mutuamente, incluidas las sugeridas. Tus propias publicaciones se quedan.
+Latest first on Following	Lo más reciente primero en Siguiendo
+Play each batch the Following feed loads newest post first. TikTok still picks what each batch brings, and ads and LIVEs keep their place.	Reproducir cada tanda que carga el feed Siguiendo empezando por la publicación más reciente. TikTok sigue eligiendo qué trae cada tanda, y los anuncios y los LIVE se quedan en su sitio.
 Show follow status	Mostrar el estado de seguimiento
 Under the @username on a profile, say whether it follows you or doesn't follow you back. Follower and following lists mark the accounts you follow that don't follow you back.	Bajo el @usuario de un perfil, indicar si te sigue o no te sigue de vuelta. Las listas de seguidores y seguidos marcan las cuentas que sigues que no te siguen de vuelta.
 Follows you	Te sigue
@@ -1755,6 +1766,9 @@ Pause	Pausar
 Posting	Publicar
 Always upload in HD	Subir siempre en HD
 Post every video as if you'd turned on TikTok's own HD upload on the post page. A clip TikTok doesn't count as high quality posts as before.	Publica cada video como si hubieras activado la subida en HD de TikTok en la página de publicación. Un clip que TikTok no considera de alta calidad se publica como antes.
+# context: a switch under Posting. AI Cast is TikTok's own name for the button on the camera's side toolbar; keep it as TikTok shows it
+Hide the AI Cast button	Ocultar el botón AI Cast
+Takes TikTok's AI Cast button off the camera's side toolbar. Open the camera again to see the change.	Quita el botón AI Cast de TikTok de la barra lateral de la cámara. Vuelve a abrir la cámara para ver el cambio.
 Keeps logging until you turn it off, even after a restart. TikTok can feel slower while it's on.	Sigue registrando hasta que lo apagues, incluso después de reiniciar. Mientras esté activado, TikTok puede ir más lento.
 Log diagnostics for 15 minutes	Registrar diagnósticos durante 15 minutos
 Logs for 15 minutes, then stops on its own. Restarting TikTok doesn't move the end, and the switch above stays as you set it.	Registra durante 15 minutos y luego se detiene solo. Reiniciar TikTok no cambia el final, y el interruptor de arriba se queda como lo dejaste.
@@ -1963,6 +1977,8 @@ Paused	En pausa
 Budgets and reminders	Límites y recordatorios
 Don't auto translate these languages	No traducir automáticamente estos idiomas
 Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.	Separa los códigos de idioma con comas, como es, de. Cuando TikTok traduce por ti, las descripciones y los comentarios en estos idiomas se quedan como se escribieron. Ver traducción sigue funcionando cuando lo tocas. La lista propia de TikTok de idiomas que no se traducen se queda como está.
+Don't auto translate videos	No traducir automáticamente los videos
+Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.	Las descripciones, los subtítulos y el texto de los videos se quedan en el idioma en que se hicieron, aunque Traducir siempre de TikTok esté activado. Ver traducción sigue funcionando cuando lo tocas. Los comentarios tienen su propio interruptor arriba.
 Performance	Rendimiento
 Skip the splash ad	Omitir el anuncio de inicio
 Stop the full-screen ad TikTok can show while it starts up.	Evita el anuncio a pantalla completa que TikTok puede mostrar al abrirse.
@@ -2184,12 +2200,16 @@ Hide profile views	Ocultar las visualizaciones del perfil
 Hide the profile views button at the top of your profile. Your profile view history setting doesn't change.	Oculta el botón de visualizaciones del perfil de la parte superior de tu perfil. Tu ajuste del historial de visualizaciones del perfil no cambia.
 Hide Add friends	Ocultar Añadir amigos
 Hide the Add friends button at the top of your profile. The menu button stays where it is.	Oculta el botón Añadir amigos de la parte superior de tu perfil. El botón de menú se queda donde está.
+Hide Balance in the profile menu	Ocultar Saldo en el menú del perfil
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.	Oculta Saldo del menú que abre el botón de arriba a la derecha de tu perfil. Tus monedas y regalos se quedan como están.
 See-through status bar	Barra de estado transparente
 Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.	Deja que el vídeo llegue en el feed principal hasta el borde superior de la pantalla, con el reloj y los iconos de estado encima. Las pestañas de arriba se quedan donde están.
 Floating bottom bar	Barra inferior flotante
 Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.	Muestra las pestañas del feed principal sobre una píldora oscura, redondeada y transparente que flota sobre el vídeo. Necesita Barra inferior transparente.
 Liquid glass look	Aspecto de cristal líquido
 Draw the main feed's floating pill as glass, lighter and more see-through, with a bright rim along its top edge. Needs Floating bottom bar.	Dibuja la píldora flotante del feed principal como cristal, más clara y más transparente, con un borde brillante en su parte superior. Necesita Barra inferior flotante.
+Glass lens on the current tab	Lente de cristal en la pestaña actual
+On the main feed, a smaller piece of glass sits behind the tab you're on and slides to the next tab you pick. Needs Liquid glass look.	En el feed principal, un trozo de cristal más pequeño queda detrás de la pestaña en la que estás y se desliza a la siguiente pestaña que elijas. Necesita Aspecto de cristal líquido.
 # context: a switch on the Comments page. Language, Settings and privacy and App language are TikTok's own labels: its language page, the menu that page sits in, and the page's first row
 Bring back TikTok's translation	Recuperar la traducción de TikTok
 Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.	Recupera las filas de traducción en la página Idioma de TikTok, en Ajustes y privacidad, para las cuentas que allí solo ven Idioma de la app.
@@ -2197,9 +2217,43 @@ For accounts TikTok took translation away from. Brings back See translation unde
 For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions, and the translation rows on the Language page in Settings and privacy. Restart TikTok to see it on videos.	Para cuentas a las que TikTok les quitó la traducción. Recupera Ver traducción bajo las descripciones de los videos y en los subtítulos, y las filas de traducción en la página Idioma, en Ajustes y privacidad. Reinicia TikTok para verlo en los videos.
 Only on the sides of the video	Solo en los lados del video
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.	Tu elección de Pulsación larga se aplica solo en el tercio izquierdo y derecho del video. Una pulsación en el centro sigue abriendo el menú propio de TikTok. Necesita una opción de Pulsación larga distinta de Predeterminado de TikTok.
+Where the time goes	Dónde se muestra el tiempo
+Beside the bar	Junto a la barra
+Above the bar	Encima de la barra
+Above moves the caption and the buttons up a little so the time fits over the right end of the bar. When something else is in the way, the time goes beside the bar.	Encima de la barra sube un poco la descripción y los botones para que el tiempo quepa sobre el extremo derecho de la barra. Si otra cosa estorba, el tiempo va junto a la barra.
 Full-width progress bar	Barra de progreso a todo el ancho
 Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.	La barra de progreso va de un borde de la pantalla al otro, sin el hueco que TikTok deja en cada extremo.
 New device identity	Nueva identidad del dispositivo
 Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.	Borra los datos de TikTok y le da un nuevo ID de Android y un nuevo ID de publicidad en el próximo inicio, para que vea un teléfono que no conoce. Se cerrará tu sesión y perderás tus borradores. Los ajustes de Hushfeed se mantienen.
 TikTok starts as a new phone after the restart. Tap again to cancel.	TikTok se inicia como un teléfono nuevo después del reinicio. Toca de nuevo para cancelar.
 Couldn't set up a new device identity. Try again.	No se pudo configurar una nueva identidad del dispositivo. Inténtalo de nuevo.
+Saves at once	Guardados a la vez
+How many saves run at the same time. The others wait in line and start as each one ends.	Cuántos guardados se hacen a la vez. Los demás esperan en la cola y empiezan a medida que termina cada uno.
+Saves right now	Guardados en curso
+Nothing is saving right now	Ahora no se está guardando nada
+Earlier this session	Antes en esta sesión
+Stopped by an unexpected error	Se detuvo por un error inesperado
+Cover	Portada
+One at a time	De uno en uno
+Two at once	Dos a la vez
+Three at once	Tres a la vez
+LIVE recording quality	Calidad de grabación de LIVE
+Same as the room	Igual que la sala
+Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower.	«Igual que la sala» graba la calidad que estás viendo. «La más alta» graba el mejor stream de la sala, aunque lo veas en una calidad más baja.
+Long-press Profile for Watch history	Mantener pulsado Perfil para abrir el historial de visualización
+Press and hold the Profile tab to open your Watch history. A tap on Profile works as before. If holding Profile switches accounts for you, this takes that press, and the name at the top of your profile still switches accounts.	Mantén pulsada la pestaña Perfil para abrir tu historial de visualización. Tocar Perfil funciona como antes. Si al mantener pulsado Perfil cambias de cuenta, esta opción ocupa ese gesto, y el nombre en la parte superior de tu perfil sigue cambiando de cuenta.
+Open the comments at full height	Abrir los comentarios a toda la altura
+Opens the comment sheet at the full height of the screen instead of part way up. Drag it down to close it, as before.	Abre los comentarios a toda la altura de la pantalla en lugar de solo una parte. Para cerrarlos, deslízalos hacia abajo como siempre.
+Hide the TikTok Minis icons in the profile menu	Ocultar los iconos de TikTok Minis en el menú del perfil
+Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.	Mantén la entrada de TikTok Minis en el menú que abre el botón de arriba a la derecha de tu perfil y oculta la fila de iconos de apps que tiene debajo para que el menú sea más corto.
+Turn off the swipe to the side menu	Desactivar el deslizamiento al menú lateral
+Swiping right on the For You feed no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.	Deslizar a la derecha en el feed Para ti ya no abre el menú lateral de TikTok, con Tus pedidos, TikTok Minis y más.
+Sort loaded videos on profile grids	Ordenar los vídeos cargados en las cuadrículas de perfil
+Original order	Orden original
+Newest first	Más recientes primero
+Oldest first	Más antiguos primero
+Longest first	Más largos primero
+Shortest first	Más cortos primero
+Most viewed first	Más vistos primero
+Most liked first	Con más me gusta primero
+Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.	Ordena los vídeos que una cuadrícula de perfil o de Me gusta ha cargado hasta ahora, y los fijados quedan primero. Al desplazarte, el orden abarca más vídeos. La próxima vez que se abra una cuadrícula, lo seguirá.

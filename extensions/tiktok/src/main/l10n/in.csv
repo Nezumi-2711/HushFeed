@@ -201,7 +201,7 @@ Allow storage for TikTok in Android settings to save stories,Izin penyimpanan di
 Bottom tabs to keep,Tab bawah yang dipertahankan
 Already marked as not interested,Sudah ditandai sebagai tidak tertarik
 Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.,Terapkan filter ini juga ke video terunduh yang TikTok pakai saat feed tidak bisa memuat cukup konten baru.
-Also change the region TikTok reports internally. Keeps your interface language. Your IP address and your account's own rules still apply.,Juga mengubah wilayah yang dilaporkan TikTok secara internal. Bahasa antarmuka tetap. Alamat IP dan aturan akun kamu tetap berlaku.
+Also change the region TikTok reports internally and set TikTok to the country's time zone. Keeps your interface language. Your IP address and your account's own rules still apply.,Juga mengubah wilayah yang dilaporkan TikTok secara internal dan mengatur TikTok ke zona waktu negara tersebut. Bahasa antarmuka tetap. Alamat IP dan aturan akun kamu tetap berlaku.
 Always show publish date,Selalu tampilkan tanggal unggah
 Always show the publish date in video author information. Restart TikTok to apply this.,Selalu tampilkan tanggal publikasi di informasi penulis video. Mulai ulang TikTok agar berlaku.
 "Type the other app's ID, like com.dv.adm. The save button sends the video's link there instead of saving. Leave empty to save here.","Ketik ID aplikasi lain, misalnya com.dv.adm. Tombol simpan mengirim tautan video ke sana, bukan menyimpannya. Kosongkan untuk menyimpan di sini."
@@ -654,6 +654,8 @@ Keep a local record of what you have watched and hide those videos when the feed
 Keep a paused video paused,Biarkan video yang dijeda tetap dijeda
 "Move to the next video when the current one ends. Pauses, open dialogs and screen-time holds stop it. Restart TikTok to apply this.","Pindah ke video berikutnya saat video saat ini berakhir. Jeda, dialog terbuka, dan batas waktu layar akan menghentikannya. Mulai ulang TikTok setelah mengubah setelan ini."
 Keep captions in Clear display,Pertahankan keterangan saat tampilan bersih
+Keep captions available,Biarkan keterangan tetap tersedia
+"Bring back TikTok's captions switch in its accessibility settings, and the caption controls on videos, when TikTok leaves them out. Captions only show on videos that have them.","Kembalikan sakelar keterangan di pengaturan aksesibilitas TikTok, dan kontrol keterangan di video, saat TikTok menghilangkannya. Keterangan hanya muncul di video yang memilikinya."
 Keep going,Lanjutkan
 Keep the Favorites tab,Pertahankan tab Favorit
 Keep the LIVE quality after TikTok restarts,Pertahankan kualitas LIVE setelah TikTok dimulai ulang
@@ -932,6 +934,8 @@ Save,Simpan
 Save a profile picture on a long press,Simpan foto profil dengan tekan lama
 Save a story on a long press,Simpan Story dengan tekan lama
 "Save every photo in the post at full size as a JPEG, not as the screen shows it.","Simpan setiap foto dalam unggahan dalam ukuran penuh sebagai JPEG, bukan seperti yang ditampilkan layar."
+Keep photos as TikTok sent them,Simpan foto seperti yang dikirim TikTok
+"Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.","Foto, sampul, dan foto Story yang disimpan tetap HEIF atau WebP, tidak diubah menjadi JPEG. Beberapa galeri dan komputer tidak bisa membukanya."
 Save field values,Simpan nilai bidang
 Save full report,Simpan laporan lengkap
 Save media,Simpan media
@@ -1033,10 +1037,13 @@ Bigger progress bar handle,Pegangan bilah progres lebih besar
 Seek bar on video stories,Bilah geser di story video
 "Add a thin line along the bottom of a video story that you can drag to go back or skip ahead. The time shows while you drag, and a tap on it still moves between stories.","Tambahkan garis tipis di bagian bawah story video yang bisa kamu geser untuk mundur atau maju. Waktunya tampil saat kamu menggeser, dan ketukan pada garis itu tetap berpindah antar-story."
 Story position,Posisi dalam story
+Seek bar on sound previews,Bilah geser di pratinjau suara
+"Add a line along the bottom of a sound's cover while its preview plays, with the time played and the preview's length. Tap or drag it to move through the preview.","Tambahkan garis di bagian bawah sampul suara saat pratinjaunya diputar, dengan waktu yang sudah diputar dan durasi pratinjau. Ketuk atau geser garis itu untuk berpindah di dalam pratinjau."
+Sound position,Posisi dalam suara
 %1$s of %2$s,%1$s dari %2$s
 Show the progress bar thumbnail,Tampilkan miniatur bilah progres
 Show the whole Activity and New followers lists instead of stopping at a View all button.,"Tampilkan seluruh daftar Aktivitas dan Pengikut baru, bukan berhenti di tombol Lihat semua."
-"Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off.","Tampilkan video secara utuh, bukan dipotong mengikuti jendela. Di ponsel yang tinggi tidak ada yang berubah karena videonya memang sudah pas. Di ponsel lipat yang dibuka, layar yang lebih persegi, atau mode layar terbagi, sisi atau ujung videonya tidak lagi terpotong."
+"Show the whole video instead of cropping it to the window. Nothing changes on a tall phone, where it already fits. On a folding phone opened up, a squarer screen or a split view the sides or the ends stop being cut off. Photo slideshows get the same treatment on a squarer screen.","Tampilkan video secara utuh, bukan dipotong mengikuti jendela. Di ponsel yang tinggi tidak ada yang berubah karena videonya memang sudah pas. Di ponsel lipat yang dibuka, layar yang lebih persegi, atau mode layar terbagi, sisi atau ujung videonya tidak lagi terpotong. Tayangan slide foto diperlakukan sama di layar yang lebih persegi."
 Show what is left of the budget,Tampilkan sisa batas harian
 Show when the camera or microphone is in use,Tampilkan saat kamera atau mikrofon dipakai
 Show where a video was posted,Tampilkan asal unggahan video
@@ -1072,6 +1079,8 @@ Still saving the last one,Yang sebelumnya masih disimpan
 The last one is still waiting to start,Yang sebelumnya masih menunggu untuk dimulai
 "Stops TikTok from sending usage reports, ad tracking and crash reports. TikTok's own diagnostic tools go quiet too.","Menghentikan TikTok mengirim laporan penggunaan, pelacakan iklan, dan laporan error. Alat diagnostik TikTok sendiri juga ikut diam."
 "Stops TikTok from slowing your screen to match each video's frame rate. On a 90 or 120 Hz phone, that request makes the whole app, scrolling too, run slower.","Menghentikan TikTok memperlambat layarmu agar sesuai frame rate tiap video. Di ponsel 90 atau 120 Hz, permintaan itu membuat seluruh aplikasi, termasuk menggulir, berjalan lebih lambat."
+Keep the screen's brightness in the camera,Pertahankan kecerahan layar di kamera
+"Stops TikTok from turning your screen brighter while you film, edit or post a video.","Mencegah TikTok membuat layarmu lebih terang saat kamu merekam, mengedit, atau memposting video."
 Stops TikTok from reading your phone's motion and compass sensors. Apps can use them to recognize your phone.,Menghentikan TikTok membaca sensor gerak dan kompas ponselmu. Aplikasi bisa memakainya untuk mengenali ponselmu.
 Stop TikTok reading what you copied. Copying a link from TikTok still works.,Mencegah TikTok membaca apa yang kamu salin. Menyalin tautan dari TikTok tetap berfungsi.
 Stop a long press on Like from opening TikTok's repost action.,Cegah tekan lama pada Suka membuka aksi posting ulang TikTok.
@@ -1630,6 +1639,8 @@ Lift text length limits,Lepas batas panjang teks
 "Let comments, repost notes and your bio run past the length TikTok's app stops at. TikTok's servers can still turn down a long one.","Biarkan komentar, catatan repost, dan bio kamu melewati panjang yang dibatasi aplikasi TikTok. Server TikTok tetap bisa menolak teks yang panjang."
 Show only mutual friends on the Friends tab,Hanya tampilkan teman yang saling mengikuti di tab Teman
 "On the Friends tab, hide posts, reposts and LIVEs from accounts that aren't a mutual follow, suggested accounts included. Your own posts stay.","Di tab Teman, sembunyikan postingan, repost, dan LIVE dari akun yang tidak saling mengikuti dengan Anda, termasuk akun yang disarankan. Postingan Anda sendiri tetap ada."
+Latest first on Following,Terbaru dulu di Mengikuti
+"Play each batch the Following feed loads newest post first. TikTok still picks what each batch brings, and ads and LIVEs keep their place.","Putar setiap kelompok yang dimuat feed Mengikuti mulai dari postingan terbaru. TikTok tetap memilih isi setiap kelompok, dan iklan serta LIVE tetap di tempatnya."
 Show follow status,Tampilkan status mengikuti
 "Under the @username on a profile, say whether it follows you or doesn't follow you back. Follower and following lists mark the accounts you follow that don't follow you back.","Di bawah @nama pengguna pada profil, tampilkan apakah akun itu mengikuti Anda atau tidak mengikuti balik. Daftar pengikut dan yang diikuti menandai akun yang Anda ikuti tetapi tidak mengikuti balik."
 Follows you,Mengikuti Anda
@@ -1743,6 +1754,8 @@ Pause,Jeda
 Posting,Memposting
 Always upload in HD,Selalu unggah dalam HD
 Post every video as if you'd turned on TikTok's own HD upload on the post page. A clip TikTok doesn't count as high quality posts as before.,Posting setiap video seolah kamu menyalakan unggahan HD milik TikTok sendiri di halaman posting. Klip yang tidak dianggap TikTok berkualitas tinggi diposting seperti sebelumnya.
+Hide the AI Cast button,Sembunyikan tombol AI Cast
+Takes TikTok's AI Cast button off the camera's side toolbar. Open the camera again to see the change.,Menghapus tombol AI Cast TikTok dari bilah alat samping kamera. Buka kamera lagi untuk melihat perubahannya.
 "Keeps logging until you turn it off, even after a restart. TikTok can feel slower while it's on.","Terus mencatat sampai Anda mematikannya, bahkan setelah dimulai ulang. TikTok bisa terasa lebih lambat selama menyala."
 Log diagnostics for 15 minutes,Catat diagnostik selama 15 menit
 "Logs for 15 minutes, then stops on its own. Restarting TikTok doesn't move the end, and the switch above stays as you set it.","Mencatat selama 15 menit, lalu berhenti sendiri. Memulai ulang TikTok tidak menggeser waktu berakhirnya, dan sakelar di atas tetap seperti yang Anda atur."
@@ -1950,6 +1963,8 @@ Paused,Dijeda
 Budgets and reminders,Batas dan pengingat
 Don't auto translate these languages,Jangan terjemahkan otomatis bahasa ini
 "Separate language codes with commas, like es, de. When TikTok translates for you, captions and comments in these languages stay as they were written. See translation still works when you tap it. TikTok's own Don't translate list stays the way it is.","Pisahkan kode bahasa dengan koma, misalnya es, de. Saat TikTok menerjemahkan untukmu, keterangan dan komentar dalam bahasa ini tetap seperti saat ditulis. Lihat terjemahan tetap berfungsi saat kamu mengetuknya. Daftar Jangan terjemahkan milik TikTok sendiri tetap seperti semula."
+Don't auto translate videos,Jangan terjemahkan video secara otomatis
+"Descriptions, captions and text on videos stay in the language they were made in, even with TikTok's Always translate on. See translation still works when you tap it. Comments have their own switch above.","Deskripsi, teks, dan tulisan di video tetap dalam bahasa aslinya, meskipun Selalu terjemahkan di TikTok aktif. Lihat terjemahan tetap berfungsi saat kamu mengetuknya. Komentar punya sakelar sendiri di atas."
 Performance,Performa
 Skip the splash ad,Lewati iklan pembuka
 Stop the full-screen ad TikTok can show while it starts up.,Hentikan iklan layar penuh yang bisa ditampilkan TikTok saat dibuka.
@@ -2162,12 +2177,16 @@ Hide profile views,Sembunyikan tayangan profil
 Hide the profile views button at the top of your profile. Your profile view history setting doesn't change.,Sembunyikan tombol tayangan profil di bagian atas profilmu. Pengaturan riwayat tayangan profilmu tidak berubah.
 Hide Add friends,Sembunyikan Tambah teman
 Hide the Add friends button at the top of your profile. The menu button stays where it is.,Sembunyikan tombol Tambah teman di bagian atas profilmu. Tombol menu tetap di tempatnya.
+Hide Balance in the profile menu,Sembunyikan Saldo di menu profil
+Hide Balance from the menu your profile's top right button opens. Your coins and gifts stay as they are.,Sembunyikan Saldo dari menu yang dibuka tombol kanan atas di profilmu. Koin dan hadiahmu tetap seperti semula.
 See-through status bar,Bilah status transparan
 "Let the video reach the top of the screen on the main feed, with the clock and status icons over it. The tabs at the top stay where they are.","Biarkan video di feed utama menjangkau bagian atas layar, dengan jam dan ikon status di atasnya. Tab di bagian atas tetap di tempatnya."
 Floating bottom bar,Bilah bawah mengambang
 "Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.","Tampilkan tab feed utama di atas kapsul gelap yang membulat dan transparan, yang mengambang di atas video. Perlu Bilah bawah transparan."
 Liquid glass look,Tampilan kaca cair
 "Draw the main feed's floating pill as glass, lighter and more see-through, with a bright rim along its top edge. Needs Floating bottom bar.","Gambar kapsul mengambang di feed utama sebagai kaca, lebih terang dan lebih transparan, dengan tepi terang di sisi atasnya. Perlu Bilah bawah mengambang."
+Glass lens on the current tab,Lensa kaca di tab saat ini
+"On the main feed, a smaller piece of glass sits behind the tab you're on and slides to the next tab you pick. Needs Liquid glass look.","Di feed utama, sepotong kaca yang lebih kecil ada di belakang tab yang sedang kamu buka dan bergeser ke tab berikutnya yang kamu pilih. Perlu Tampilan kaca cair."
 Bring back TikTok's translation,Kembalikan terjemahan TikTok
 "Brings back the translation rows on TikTok's Language page, under Settings and privacy, for accounts that only see App language there.","Mengembalikan baris terjemahan di halaman Bahasa TikTok, di Pengaturan dan privasi, untuk akun yang di sana hanya melihat Bahasa aplikasi."
 For accounts TikTok took translation away from. Brings back See translation under video descriptions and in captions. Restart TikTok to see the change.,Untuk akun yang terjemahannya dihapus TikTok. Mengembalikan Lihat terjemahan di bawah deskripsi video dan di teks video. Mulai ulang TikTok untuk melihat perubahannya.
@@ -2176,9 +2195,43 @@ Only on the sides of the video,Hanya di sisi video
 Your Long press choice runs only on the left and right thirds of the video. A press in the middle still opens TikTok's own menu. It needs a Long press choice other than TikTok default.,Pilihan Tekan lama hanya berjalan di sepertiga kiri dan kanan video. Tekan di tengah tetap membuka menu bawaan TikTok. Perlu pilihan Tekan lama selain Bawaan TikTok.
 "Dark LIVE panels in dark mode","Panel LIVE gelap di mode gelap"
 "With TikTok in dark mode, a LIVE room still opens its share menu, fan club and other panels in light colors. This opens them dark.","Saat TikTok dalam mode gelap, ruang LIVE tetap membuka menu bagikan, klub penggemar, dan panel lainnya dengan warna terang. Ini membukanya dalam warna gelap."
+Where the time goes,Posisi waktu
+Beside the bar,Di samping bilah
+Above the bar,Di atas bilah
+"Above moves the caption and the buttons up a little so the time fits over the right end of the bar. When something else is in the way, the time goes beside the bar.","Di atas bilah sedikit menaikkan keterangan dan tombol agar waktu muat di atas ujung kanan bilah. Jika ada hal lain yang menghalangi, waktu ditampilkan di samping bilah."
 Full-width progress bar,Bilah progres selebar layar
 "Run the progress bar from one screen edge to the other, without the gap TikTok leaves at each end.","Bilah progres membentang dari satu tepi layar ke tepi lainnya, tanpa celah yang disisakan TikTok di kedua ujung."
 New device identity,Identitas perangkat baru
 "Wipe TikTok's data and give it a new Android ID and advertising ID on the next start, so it sees a phone it hasn't met. You'll be signed out and lose your drafts. Hushfeed's settings stay.","Hapus data TikTok dan beri ID Android serta ID iklan baru saat mulai berikutnya, agar TikTok melihat ponsel yang belum pernah dikenalnya. Kamu akan keluar dari akun dan kehilangan draf. Pengaturan Hushfeed tetap ada."
 TikTok starts as a new phone after the restart. Tap again to cancel.,TikTok mulai sebagai ponsel baru setelah dimulai ulang. Ketuk lagi untuk membatalkan.
 Couldn't set up a new device identity. Try again.,Tidak bisa menyiapkan identitas perangkat baru. Coba lagi.
+Saves at once,Penyimpanan sekaligus
+How many saves run at the same time. The others wait in line and start as each one ends.,Berapa penyimpanan yang berjalan bersamaan. Sisanya menunggu dalam antrean dan dimulai setiap kali satu selesai.
+Saves right now,Penyimpanan saat ini
+Nothing is saving right now,Tidak ada yang sedang disimpan
+Earlier this session,Sebelumnya di sesi ini
+Stopped by an unexpected error,Berhenti karena kesalahan tak terduga
+Cover,Sampul
+One at a time,Satu per satu
+Two at once,Dua sekaligus
+Three at once,Tiga sekaligus
+LIVE recording quality,Kualitas rekaman LIVE
+Same as the room,Sama seperti di ruang
+"Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower.","""Sama seperti di ruang"" merekam kualitas yang sedang kamu tonton. ""Tertinggi"" merekam stream terbaik di ruang itu, meski kamu menontonnya dengan kualitas lebih rendah."
+Long-press Profile for Watch history,Tekan lama Profil untuk riwayat tontonan
+"Press and hold the Profile tab to open your Watch history. A tap on Profile works as before. If holding Profile switches accounts for you, this takes that press, and the name at the top of your profile still switches accounts.","Tekan lama tab Profil untuk membuka riwayat tontonanmu. Mengetuk Profil tetap berfungsi seperti biasa. Jika menekan lama Profil mengganti akunmu, opsi ini mengambil alih tekanan itu, dan nama di bagian atas profilmu tetap bisa mengganti akun."
+Open the comments at full height,Buka komentar dengan tinggi penuh
+"Opens the comment sheet at the full height of the screen instead of part way up. Drag it down to close it, as before.","Membuka komentar setinggi layar penuh, bukan hanya sebagian. Untuk menutupnya, tarik ke bawah seperti biasa."
+Hide the TikTok Minis icons in the profile menu,Sembunyikan ikon TikTok Minis di menu profil
+"Keep the TikTok Minis entry in the menu your profile's top right button opens, and hide the row of app icons under it so the menu is shorter.","Biarkan entri TikTok Minis di menu yang dibuka tombol kanan atas di profilmu, dan sembunyikan baris ikon aplikasi di bawahnya agar menunya lebih pendek."
+Turn off the swipe to the side menu,Matikan usapan ke menu samping
+"Swiping right on the For You feed no longer opens TikTok's side menu, with Your orders, TikTok Minis and more.","Mengusap ke kanan di feed Untuk Kamu tidak lagi membuka menu samping TikTok, berisi Pesananmu, TikTok Minis, dan lainnya."
+Sort loaded videos on profile grids,Urutkan video yang dimuat di kisi profil
+Original order,Urutan asli
+Newest first,Terbaru dulu
+Oldest first,Terlama dulu
+Longest first,Terpanjang dulu
+Shortest first,Terpendek dulu
+Most viewed first,Paling banyak ditonton dulu
+Most liked first,Paling banyak disukai dulu
+"Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.","Mengurutkan video yang sudah dimuat kisi profil atau Disukai, dan video yang disematkan tetap di depan. Saat kamu menggulir, urutannya mencakup lebih banyak video. Kisi yang dibuka berikutnya mengikuti ini."

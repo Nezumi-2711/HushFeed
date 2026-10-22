@@ -42,7 +42,7 @@ feed/VideoOverlayHider.java|VISUAL_SEARCH_PILL_IDS|d4|df_search_biz|com.ss.andro
 feed/VideoOverlayHider.java|LIVE_ENTRANCE_IDS|47.4.3:k_d|app|com.bytedance.tiktok.homepage.mainfragment.inflate.HomepageIconServiceImpl|on:TuxIconView#1
 feed/VideoOverlayHider.java|CAPTION_IDS|desc|app|com.ss.android.ugc.aweme.feed.assem.desc.VideoDescAssem|on:View
 feed/VideoOverlayHider.java|MUSIC_IDS|47.4.3:o7a|app|com.ss.android.ugc.aweme.feed.assem.music.VideoMusicTitleAssem|on:LinearLayout#1
-feed/VideoOverlayHider.java|ACTION_BAR_IDS|47.4.3:mud|app|com.ss.android.ugc.feed.platform.cell.interact.InteractAreaComponent|on:View#4
+feed/VideoOverlayHider.java|ACTION_BAR_IDS|47.4.3:ljn|app|com.ss.android.ugc.feed.platform.cell.interact.InteractAreaComponent|on:View#6
 feed/VideoOverlayHider.java|SURVEY_IDS|47.4.3:f92|app|layout:com.by.andInflater.common_feed_item_feed|tag:RelativeLayout#1
 feed/VideoOverlayHider.java|TAB_STRIP_IDS|47.4.3:uwq|app|com.ss.android.ugc.aweme.homepage.ui.view.tab.top.TopTabLayoutAbility|on:View
 feed/VideoOverlayHider.java|BOTTOM_TABS_IDS|47.4.3:onp|app|com.ss.android.ugc.aweme.main.assems.mainfragment.BottomTabAssemBase|-
@@ -90,7 +90,7 @@ feed/FeedOverlayControls.java|inline|feed_multi_tag_layout|app|com.ss.android.ug
 feed/AuthorRegion.java|NAME_ID|title|app|com.by.andInflater.common_feed_layout_video_title|at:4
 feed/AuthorRegion.java|POST_TIME_ID|tv_post_time|app|com.ss.android.ugc.aweme.feed.assem.videoauthorinfo.VideoAuthorInfoRelationAssem|on:TuxTextView#1
 feed/LiveStatusBar.java|VIDEO_CONTAINER|video_view_container|app|com.bytedance.android.livesdk.chatroom.ui.LivePlayFragment|on:ViewGroup#2
-inbox/InboxFilter.java|LIST_IDS|47.4.3:l92|app|com.ss.android.ugc.aweme.inbox.BaseInboxFragment|at:2
+inbox/InboxFilter.java|LIST_IDS|47.4.3:l7h|app|com.ss.android.ugc.aweme.inbox.BaseInboxFragment|at:1
 inbox/InboxFilter.java|SYSTEM_ROW_IDS|47.4.3:uyv|app|layout:com.ss.android.ugc.aweme.inbox.lego.PreloadInboxTask|tag:MultiSelectConstraintLayout
 inbox/InboxFilter.java|CHAT_ROW_IDS|47.4.3:w24|app|com.by.andInflater.im_item_session_inbox_single_chat_cell|on:MultiSelectConstraintLayout
 inbox/InboxFilter.java|MESSAGE_REQUESTS_IDS|tv_request_unread_count|app|com.by.andInflater.im_item_session_inbox_message_request_cell|at:11
@@ -111,6 +111,7 @@ share/ShareSheetTools.java|ACTIONS_LIST_IDS|47.4.3:a5x|app|method-string:share_p
 blockauthor/FeedVisibility.java|HOME_TAB_RESOURCE_NAMES|47.4.3:onh|app|com.ss.android.ugc.aweme.homepage.ui.view.tab.bottom.hometab.HomeTabProtocol|-
 blockauthor/FeedVisibility.java|FRIENDS_TAB_RESOURCE_NAMES|47.4.3:ong|app|com.ss.android.ugc.aweme.tab.FriendsTabProtocol|at:2
 blockauthor/FeedVisibility.java|INBOX_TAB_RESOURCE_NAMES|47.4.3:oni|app|com.ss.android.ugc.aweme.notification.view.NotificationTabProtocol|-
+blockauthor/FeedVisibility.java|PROFILE_TAB_RESOURCE_NAMES|47.4.3:onj|app|com.ss.android.ugc.profile.platform.framework.aweme.profile.ui.profiletab.ProfileTabProtocol|-
 blockauthor/FeedVisibility.java|COMMENT_SHEET_RESOURCE_NAMES|47.4.3:pwm|app|layout:com.ss.android.ugc.aweme.commentv2.commentpage.commonvideo.DefaultCommentPageContainerFragment|tag:LinearLayout#1
 blockauthor/FeedVisibility.java|COMMENT_TITLE_RESOURCE_NAMES|47.4.3:wla|app|com.ss.android.ugc.aweme.commentv2.actionbar.CommentPageActionBarAssem|on:TuxTextView#1
 blockauthor/FeedVisibility.java|STORY_PAGER_RESOURCE_NAME|vp_story_collection|app|com.by.andInflater.story_layout_immersive_play_area|at:2

@@ -20,6 +20,8 @@ public class SettingsStatus {
     public static void enableFoldableSplitView() { foldableSplitViewEnabled = true; }
     public static boolean subtitleToolsEnabled;
     public static void enableSubtitleTools() { subtitleToolsEnabled = true; }
+    public static boolean captionsAvailableEnabled;
+    public static void enableCaptionsAvailable() { captionsAvailableEnabled = true; }
     public static boolean screenCaptureEnabled;
     public static void enableScreenCapture() { screenCaptureEnabled = true; }
     // Volatile because FeatureGateLearnMode reads it before taking its monitor, on TikTok's own
@@ -77,6 +79,8 @@ public class SettingsStatus {
     public static boolean hideSearchSuggestionsEnabled = false;
     public static boolean searchAutoplayEnabled = false;
     public static boolean hdUploadEnabled = false;
+    /** Feed filter found the camera's AI Cast gate, so Hide the AI Cast button has a hook. */
+    public static boolean aiCastEntranceEnabled = false;
     public static boolean liveSearchEnabled = false;
     public static boolean seekbarThumbnailEnabled = false;
     public static boolean stopVideoLoopingEnabled = false;
@@ -117,6 +121,7 @@ public class SettingsStatus {
     public static boolean inboxFilterEnabled = false;
     public static boolean videoFitEnabled = false;
     public static boolean refreshRateEnabled = false;
+    public static boolean cameraBrightnessEnabled = false;
     public static boolean launcherShortcutsEnabled = false;
     public static boolean firstLaunchSetupEnabled = false;
     public static boolean duetStitchEnabled = false;
@@ -130,6 +135,7 @@ public class SettingsStatus {
     public static boolean commentToolsEnabled = false;
     public static boolean hideCommentEggsEnabled = false;
     public static boolean commentSortControlsEnabled = false;
+    public static boolean commentsFullHeightEnabled = false;
     public static boolean videoOverlaysEnabled = false;
     public static boolean feedTextSizeEnabled = false;
     public static boolean shareSheetEnabled = false;
@@ -152,9 +158,11 @@ public class SettingsStatus {
     public static boolean hideFeedSearchButtonEnabled = false;
     public static boolean showSeekbarEnabled = false;
     /** Show the progress bar's extras, which a build other than the declared one can leave out
-     *  while the bar itself still applies: the time and the bigger handle, and the story seek bar. */
+     *  while the bar itself still applies: the time and the bigger handle, the story seek bar and
+     *  the sound preview seek bar. */
     public static boolean seekbarExtrasEnabled = false;
     public static boolean storySeekbarEnabled = false;
+    public static boolean soundSeekbarEnabled = false;
     public static boolean sanitizeShareUrlsEnabled = false;
     public static boolean contactListBlockerEnabled = false;
     public static boolean searchHistoryEnabled = false;
@@ -271,6 +279,13 @@ public class SettingsStatus {
         feedTranslationsEnabled = true;
     }
 
+    /** Translate comments hooked the read of TikTok's Always translate that every video decision asks. */
+    public static boolean videoAutoTranslateEnabled = false;
+
+    public static void enableVideoAutoTranslate() {
+        videoAutoTranslateEnabled = true;
+    }
+
     public static void enableHideCommentQuickReactions() {
         hideCommentQuickReactionsEnabled = true;
     }
@@ -356,6 +371,10 @@ public class SettingsStatus {
         hdUploadEnabled = true;
     }
 
+    public static void enableAiCastEntrance() {
+        aiCastEntranceEnabled = true;
+    }
+
     public static void enableLiveSearch() {
         liveSearchEnabled = true;
     }
@@ -374,6 +393,10 @@ public class SettingsStatus {
 
     public static void enableStorySeekbar() {
         storySeekbarEnabled = true;
+    }
+
+    public static void enableSoundSeekbar() {
+        soundSeekbarEnabled = true;
     }
 
     public static void enableSanitizeShareUrls() {
@@ -476,6 +499,10 @@ public class SettingsStatus {
         refreshRateEnabled = true;
     }
 
+    public static void enableCameraBrightness() {
+        cameraBrightnessEnabled = true;
+    }
+
     public static void enableLauncherShortcuts() {
         launcherShortcutsEnabled = true;
     }
@@ -514,6 +541,10 @@ public class SettingsStatus {
 
     public static void enableCommentSortControls() {
         commentSortControlsEnabled = true;
+    }
+
+    public static void enableCommentsFullHeight() {
+        commentsFullHeightEnabled = true;
     }
 
     public static void enableSeenVideoFilter() {
@@ -573,6 +604,20 @@ public class SettingsStatus {
         hideFeedSidebarButtonEnabled = true;
     }
 
+    /** The right swipe that opens the side menu was found and hooked; a build that moved it leaves it out. */
+    public static boolean feedSidebarSwipeEnabled = false;
+
+    /** The profile grid adapter was found and hooked to sort its loaded videos (#180). */
+    public static boolean gridSortEnabled = false;
+
+    public static void enableGridSort() {
+        gridSortEnabled = true;
+    }
+
+    public static void enableFeedSidebarSwipe() {
+        feedSidebarSwipeEnabled = true;
+    }
+
     public static void enableHideFeedSearchButton() {
         hideFeedSearchButtonEnabled = true;
     }
@@ -616,6 +661,13 @@ public class SettingsStatus {
 
     public static void enableProfileThoughts() {
         profileThoughtsEnabled = true;
+    }
+
+    /** Hide profile shortcuts found the question your profile's menu asks about each cell, and hooked it. */
+    public static boolean profileMenuCellsEnabled = false;
+
+    public static void enableProfileMenuCells() {
+        profileMenuCellsEnabled = true;
     }
 
     /** Skip the splash ad put its switch in front of the splash tasks and gates. */
