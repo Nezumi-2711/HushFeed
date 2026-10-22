@@ -38,19 +38,19 @@ class LocalProfileCountAnchorsTest {
         private const val STRING = "Ljava/lang/String;"
     }
 
-    @Test fun `47 4 3 has one older count bind and four formatter results delivered to profile TextViews`() {
+    @Test fun `47 5 3 has one older count bind and four formatter results delivered to profile TextViews`() {
         Fixtures.forEachDeclared { apk ->
-            assertEquals("47.4.3", Fixtures.versionOf(apk))
+            assertEquals("47.5.3", Fixtures.versionOf(apk))
             val found = find(apk)
-            assertEquals("gr", found.legacy.first.name)
+            assertEquals("fr", found.legacy.first.name)
             assertEquals("V", found.legacy.first.returnType)
             assertTrue(found.legacy.first.parameterTypes.isEmpty())
             assertEquals(mapOf(
-                ProfileCountMetric.FOLLOWERS to listOf("LJJLIL(Z)V", "LJLJJL(I)V"),
+                ProfileCountMetric.FOLLOWERS to listOf("LJJLJ(Z)V", "LJLJJI(I)V"),
                 ProfileCountMetric.FOLLOWING to listOf("LJJLIIIJJI()Z"),
                 ProfileCountMetric.LIKES to listOf("LJJLIIIJJI()Z"),
             ), found.sites.mapValues { (_, sites) -> sites.map { (method, _) -> signature(method) }.sorted() })
-            assertEquals("LX/0OSF;->LIZ(I${NUMBER}${STRING})$TEXT", found.formatter.toString())
+            assertEquals("LX/0MVp;->LIZ(I${NUMBER}${STRING})$TEXT", found.formatter.toString())
             val formatter = found.classes.getValue(found.formatter.definingClass).methods.single {
                 it.name == found.formatter.name && it.parameterTypes.map(CharSequence::toString) == listOf("I", NUMBER, STRING) && it.returnType == TEXT
             }
@@ -67,7 +67,7 @@ class LocalProfileCountAnchorsTest {
                 assertEquals(STRING, getName.returnType)
                 assertEquals(listOf(metric.component), getName.implementation!!.instructions.mapNotNull { it.getReference<StringReference>()?.string })
             }
-            assertEquals("uq", found.classes.getValue(BASE_UI_COMPONENT).commonInfoGetter()!!.name)
+            assertEquals("wq", found.classes.getValue(BASE_UI_COMPONENT).commonInfoGetter()!!.name)
             assertEquals("LJIJI", found.classes.getValue(PROFILE_PROTOCOL).commonInfoGetter()!!.name)
             for ((owner, name, type) in listOf(Triple(PROFILE_COMMON_INFO, "getUserProfileInfo", PROFILE_INFO), Triple(PROFILE_INFO, "getUid", STRING))) {
                 val method = found.classes.getValue(owner).methods.single { it.name == name && it.parameterTypes.isEmpty() }
@@ -76,7 +76,7 @@ class LocalProfileCountAnchorsTest {
             }
             val identity = found.legacy.first.legacyCountIdentity()
             assertEquals("LLL", identity.attached.name)
-            assertEquals("LX/0ON5;", identity.attached.type)
+            assertEquals("LX/0MQL;", identity.attached.type)
             assertEquals("LLJJI", identity.holder.name)
             assertEquals("componentId", identity.key.name)
             assertEquals("LLJLLIL", identity.fallback.name)
@@ -91,7 +91,7 @@ class LocalProfileCountAnchorsTest {
             }
             val code = method.implementation!!.instructions.toList()
             assertTrue(code.none { it.opcode.name.startsWith("IPUT") || it.opcode.name.startsWith("SPUT") })
-            assertEquals(setOf("Ljava/lang/Number;", "LX/01Qa;", "LX/01OU;"),
+            assertEquals(setOf("Ljava/lang/Number;", "LX/01Qm;", "LX/01Oe;"),
                 code.mapNotNull { it.getReference<MethodReference>()?.definingClass }.toSet())
             assertTrue(code.any { it.opcode == Opcode.NEW_INSTANCE })
         }
@@ -207,7 +207,8 @@ class LocalProfileCountAnchorsTest {
 
     private fun find(apk: File): Found = synchronized(cache) {
         cache.getOrPut(apk.absolutePath) {
-            val classes = Fixtures.dexContainer(apk, Opcodes.getDefault()).getEntry("classes12.dex")!!.dexFile.classes.associateBy { it.type }
+            val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
+            val classes = container.dexEntryNames.flatMap { container.getEntry(it)!!.dexFile.classes }.associateBy { it.type }
             val legacy = classes.getValue(RELATION_COMPONENT).methods.flatMap { method -> method.profileCountTexts().map { method to it } }
             assertEquals("older count sites", 1, legacy.size)
             val sites = ProfileCountMetric.entries.associateWith { metric ->
