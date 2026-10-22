@@ -109,7 +109,8 @@ internal fun resolveFeedText(classOf: (String) -> ClassDef?): FeedTextMembers {
             it.returnType == "V" && it.hasLiteral(DESCRIPTION_IDS) && it.hasCall(AWEME, "getDesc")
     }.one("description component bind")
     val controller = descBind.calls().mapNotNull { reference ->
-        if (reference.parameterTypes != listOf(AWEME) || reference.returnType != "V") return@mapNotNull null
+        // The bind reaches the controller through a one-Aweme call on 47.4.3 and a no-argument one on 47.5.3.
+        if (reference.parameterTypes.let { it != listOf(AWEME) && it.isNotEmpty() } || reference.returnType != "V") return@mapNotNull null
         val owner = classOf(reference.definingClass) ?: return@mapNotNull null
         if (component.fields.none { it.type == owner.type } || owner.fields.none { it.type == DESCRIPTION } ||
             !owner.method(reference).isInstance()
