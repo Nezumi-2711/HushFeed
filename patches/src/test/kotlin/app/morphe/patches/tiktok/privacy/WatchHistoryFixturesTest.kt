@@ -1,7 +1,7 @@
 package app.morphe.patches.tiktok.privacy
 
 import app.morphe.Fixtures
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
+import app.morphe.util.addInstructionsWithLabels
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
@@ -25,7 +25,7 @@ class WatchHistoryFixturesTest {
     @Test
     fun `each declared host has exactly one view report and one batch send`() {
         val items = mapOf(
-            "47.4.3" to "LX/09aI;",
+            "47.5.3" to "LX/09m5;",
         )
         assertEquals(Fixtures.declaredVersions().toSet(), items.keys)
         Fixtures.forEachDeclared { apk ->

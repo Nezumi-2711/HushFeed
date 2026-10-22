@@ -2,7 +2,7 @@ package app.morphe.patches.tiktok.misc.inbox
 
 import app.morphe.Fixtures
 import app.morphe.takes
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.util.addInstructions
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
@@ -30,7 +30,7 @@ private const val PUSH_SERVICE = "Lcom/ss/android/ugc/awemepushlib/interaction/P
 class SuggestedVideoPushBlockFixturesTest {
     @Test
     fun `each declared host posts its 22 notifications through the filter, the push handler among them`() {
-        val expected = mapOf("47.4.3" to 22)
+        val expected = mapOf("47.5.3" to 22)
         assertEquals(Fixtures.declaredVersions().toSet(), expected.keys)
         Fixtures.forEachDeclared { apk ->
             val version = Fixtures.versionOf(apk)

@@ -103,7 +103,9 @@ public class FeedScreenCoverageTest {
             "hide_playlist_bar", "hide_event_badge", "hide_inserted_cards", "hide_share_guide",
             "caption_text_size", "caption_background", "keep_captions_clear_display", "caption_font_weight",
             "caption_bottom_offset", "caption_landscape_offset", "caption_clear_display_offset",
-            "double_tap_action", "confirm_quick_repost");
+            "double_tap_action", "double_tap_split_zones", "double_tap_top_left_action",
+            "double_tap_top_right_action", "double_tap_bottom_left_action", "double_tap_bottom_right_action",
+            "confirm_quick_repost");
 
     static final Map<String, Coverage> TABLE = new LinkedHashMap<>();
 
@@ -223,6 +225,7 @@ public class FeedScreenCoverageTest {
         // Clear display follows TikTok's own mode in either window (#84).
         put("automatic_clear_display", YES, YES, NONE);
         put("automatic_clear_display_delay", YES, YES, NONE);
+        put("remember_clear_display_on_scroll", YES, YES, NONE);
         put("hide_clear_display_controls", YES, YES, NONE);
         put("fade_controls_opacity", YES, YES, NONE);
         put("fade_in_clear_display", YES, YES, NONE);
@@ -245,6 +248,11 @@ public class FeedScreenCoverageTest {
         put("swipe_levels_right", YES, YES, NONE);
         put("swipe_levels_strip_percent", YES, YES, NONE);
         put("double_tap_action", YES, UNCHECKED, NONE);
+        // The same tap hook, read by where the tap landed (#232).
+        for (String corner : new String[]{"double_tap_split_zones", "double_tap_top_left_action",
+                "double_tap_top_right_action", "double_tap_bottom_left_action", "double_tap_bottom_right_action"}) {
+            put(corner, YES, UNCHECKED, NONE);
+        }
         put("swipe_left_action", YES, YES, NONE);
         put("long_press_action", YES, YES, NONE);
         // The same press hook as the choice it narrows, so it reaches the same windows (#136).
@@ -412,14 +420,14 @@ public class FeedScreenCoverageTest {
         int cellId = 0x7f0a1c01;
         Map<String, Integer> ids = new LinkedHashMap<>();
         ids.put("desc", 0x7f0a1c02);
-        ids.put("47.4.3:o7a", 0x7f0a1c03);
-        ids.put("47.4.3:ljn", 0x7f0a1c04);
-        ids.put("47.4.3:f92", 0x7f0a1c05);
+        ids.put("47.5.3:o8s", 0x7f0a1c03);
+        ids.put("47.5.3:lke", 0x7f0a1c04);
+        ids.put("47.5.3:f8p", 0x7f0a1c05);
         Map<BooleanSetting, String> switches = new LinkedHashMap<>();
         switches.put(Settings.HIDE_FEED_CAPTION, "desc");
-        switches.put(Settings.HIDE_FEED_MUSIC, "47.4.3:o7a");
-        switches.put(Settings.HIDE_FEED_ACTION_BAR, "47.4.3:ljn");
-        switches.put(Settings.HIDE_FEED_SURVEYS, "47.4.3:f92");
+        switches.put(Settings.HIDE_FEED_MUSIC, "47.5.3:o8s");
+        switches.put(Settings.HIDE_FEED_ACTION_BAR, "47.5.3:lke");
+        switches.put(Settings.HIDE_FEED_SURVEYS, "47.5.3:f8p");
         for (BooleanSetting setting : switches.keySet()) {
             Coverage coverage = TABLE.get(setting.key);
             assertNotNull(setting.key, coverage);

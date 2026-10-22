@@ -75,16 +75,19 @@ val accentColorPatch = resourcePatch(
         val wallpaper = followWallpaper == true
         val packageRoot = get("res").parentFile
         val decodedRoots = decodedPackageRoots(packageRoot)
+        val decodable by lazy { listDecodableFiles("res/**").toSet() }
         val collisions = renamedPathCollisions(
             entries = listApkEntries("res/"),
             decodedDirectories = decodedResourceDirectories(decodedRoots),
-            aliasOf = { name -> get(name).relativeTo(packageRoot).invariantSeparatorsPath },
-            isDecoded = { name -> decodedRoots.any { it.resolve(name).isFile } },
+            aliasOf = { name -> get(name, false).relativeTo(packageRoot).invariantSeparatorsPath },
+            isDecoded = { name -> name in decodable || decodedRoots.any { it.resolve(name).isFile } },
         )
         if (collisions.isNotEmpty()) throw PatchException(renamedPathsRefusal(collisions.size, "Accent color"))
         if (wallpaper || target != TIKTOK_ACCENT) {
             // This build's accent tokens, or a refusal: a name carried over from another build is a guess.
             val tokens = accentTokens(packageMetadata.versionName)
+            val iconNames = accentIcons(packageMetadata.versionName)
+            decode("res/values*/styles.xml")
             val files = get("res").listFiles().orEmpty()
                 .filter { it.isDirectory && it.name.startsWith("values") }
                 .map { it.resolve("styles.xml") }.filter { it.exists() }
@@ -96,8 +99,9 @@ val accentColorPatch = resourcePatch(
             // Icons with the red drawn in, each recolored in memory first for the same reason. A picture
             // can't take a color the phone picks later, so with the wallpaper choice each one splits into
             // a white layer and a red one the phone tints.
+            decode(*iconNames.map { "res/drawable*/$it.png" }.toTypedArray())
             val drawables = get("res").listFiles().orEmpty().filter { it.isDirectory && it.name.startsWith("drawable") }
-            val pictures = accentIcons(packageMetadata.versionName).map { name ->
+            val pictures = iconNames.map { name ->
                 name to drawables.map { it.resolve("$name.png") }.filter { it.isFile }
                     .ifEmpty { throw PatchException(missingAccentIconRefusal(name)) }
             }
@@ -109,6 +113,8 @@ val accentColorPatch = resourcePatch(
             }
             // The unread dots and counts fill with a color that much else shares, warnings among
             // them, so each badge's own fill takes the accent instead (#192). Read first, like the rest.
+            decode("res/values/$WALLPAPER_COLORS_FILE", "res/values-v31/$WALLPAPER_COLORS_FILE")
+            decode(*accentBadges(packageMetadata.versionName).map { "res/drawable*/$it.xml" }.toTypedArray())
             val colorsFile = get("res").resolve("values").resolve(WALLPAPER_COLORS_FILE)
             val namedColors = if (colorsFile.isFile) colorLiterals(readXml(colorsFile)) else emptyMap()
             val badges = accentBadges(packageMetadata.versionName).flatMap { name ->
@@ -152,7 +158,7 @@ val accentColorPatch = resourcePatch(
 
 /**
  * The accent tokens per build, by the name TikTok's TUX token table gives each (the method that
- * returns an attr id per token name maps "UIShapePrimary" to attr a0x on 47.4.3): its dark palette
+ * returns an attr id per token name maps "UIShapePrimary" to attr a0z on 47.5.3): its dark palette
  * literal, then its light one. The semantic attrs point at `?attr/<dark>` in the dark themes and
  * `?attr/<light>` in the light ones, and a few themes send UIShapePrimary and UITextPrimaryDisplay
  * to `?attr/e7`, a green of their own that stays. UIShapeDanger (agt and aw2) is red too and isn't
@@ -160,14 +166,14 @@ val accentColorPatch = resourcePatch(
  * AccentColorPaletteTest holds each declared build's fixture to its entry here.
  */
 internal val ACCENT_TOKENS: Map<String, Map<String, Pair<String, String>>> = linkedMapOf(
-    "47.4.3" to linkedMapOf(
-        "UIShapePrimary" to ("ah5" to "awd"),
-        "UIShapePrimary2" to ("ah6" to "awe"),
-        "UIShapePrimary3" to ("ah7" to "awf"),
-        "UIShapePrimary4" to ("ah8" to "awg"),
-        "UIShapePrimary5" to ("ah9" to "awh"),
-        "UITextPrimary" to ("aix" to "ay6"),
-        "UITextPrimaryDisplay" to ("aiy" to "ay7"),
+    "47.5.3" to linkedMapOf(
+        "UIShapePrimary" to ("ah9" to "awj"),
+        "UIShapePrimary2" to ("ah_" to "awk"),
+        "UIShapePrimary3" to ("aha" to "awl"),
+        "UIShapePrimary4" to ("ahb" to "awm"),
+        "UIShapePrimary5" to ("ahc" to "awn"),
+        "UITextPrimary" to ("aj1" to "ayb"),
+        "UITextPrimaryDisplay" to ("aj2" to "ayc"),
     ),
 )
 
@@ -188,13 +194,13 @@ internal fun unreadAccentRefusal(versionName: String?): String {
 
 /**
  * Drawables with TikTok's red drawn into their pixels, per build, which the palette rewrite can't
- * reach. On 47.4.3 `bty` is the follow plus under each feed avatar (FeedAvatarDefaultAssem sets it
+ * reach. On 47.5.3 `buw` is the follow plus under each feed avatar (FeedAvatarDefaultAssem sets it
  * as an icon res, or as a TuxIcon behind a flag) and on a DM's profile card (#84). Each is a
  * palette PNG of TikTok's red, white and the blends between them, so only its palette changes.
  * AccentColorPaletteTest holds each declared build's fixture to its entry here.
  */
 internal val ACCENT_ICONS: Map<String, List<String>> = linkedMapOf(
-    "47.4.3" to listOf("bty"),
+    "47.5.3" to listOf("buw"),
 )
 
 /** The drawables to recolor on this build, or a refusal. */
@@ -208,14 +214,14 @@ internal fun missingAccentIconRefusal(name: String): String =
 /**
  * The unread badges per build: shape drawables filled with TikTok's red through a color that many
  * other views use, warnings among them, so the palette rewrite can't reach them and the color itself
- * can't change. On 47.4.3 `bvk` is the count pill the bottom bar puts on the Inbox tab (the tab
- * logic builds it in code and loads it through PreDrawableInflate) and `bwq` is the plain dot on a
+ * can't change. On 47.5.3 `bwi` is the count pill the bottom bar puts on the Inbox tab (the tab
+ * logic builds it in code and loads it through PreDrawableInflate) and `bxo` is the plain dot on a
  * tab or beside a list row. The LIVE bubble over the Inbox tab reads UIShapePrimary, so without
  * these it took the accent while the count under it stayed red (#192). AccentColorPaletteTest holds
  * each declared build's fixture to its entry here.
  */
 internal val ACCENT_BADGES: Map<String, List<String>> = linkedMapOf(
-    "47.4.3" to listOf("bvk", "bwq"),
+    "47.5.3" to listOf("bwi", "bxo"),
 )
 
 /** The badge drawables to recolor on this build, or a refusal. */

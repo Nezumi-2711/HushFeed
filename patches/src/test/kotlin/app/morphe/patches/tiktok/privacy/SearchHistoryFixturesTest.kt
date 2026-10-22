@@ -1,7 +1,7 @@
 package app.morphe.patches.tiktok.privacy
 
 import app.morphe.Fixtures
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
+import app.morphe.util.addInstructionsWithLabels
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.util.getReference
@@ -27,7 +27,7 @@ class SearchHistoryFixturesTest {
     @Test
     fun `each declared host has exactly one history recorder and one manual search log`() {
         val expected = mapOf(
-            "47.4.3" to "LX/0CzL;",
+            "47.5.3" to "LX/0CW9;",
         )
         assertEquals(Fixtures.declaredVersions().toSet(), expected.keys)
         Fixtures.forEachDeclared { apk ->
