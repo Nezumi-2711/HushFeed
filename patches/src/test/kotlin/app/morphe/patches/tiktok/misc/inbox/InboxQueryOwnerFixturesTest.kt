@@ -7,6 +7,8 @@ import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.iface.ClassDef
+import com.android.tools.smali.dexlib2.iface.DexFile
+import com.android.tools.smali.dexlib2.iface.MultiDexContainer
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
@@ -22,30 +24,35 @@ private const val CELL = "Lcom/bytedance/ies/powerlist/PowerCell;"
 private const val STUB = "Lcom/bytedance/ies/powerlist/PowerStub;"
 private const val FRAGMENT = "Lcom/ss/android/ugc/aweme/notification/v2/NotificationResultFragment;"
 private const val WIDGET = "Lcom/ss/android/ugc/aweme/notification/v2/widget/NotificationWidget;"
+private const val MUS_NOTICE = "Lcom/ss/android/ugc/aweme/notice/repo/list/bean/MusNotice;"
 
 /** The current notification cell and VM identity contracts used by loaded-only search. */
 class InboxQueryOwnerFixturesTest {
     @Test
     fun `both current native bind variants capture after success without replacing a listener or model`() {
-        assertEquals(listOf("47.4.3"), Fixtures.declaredVersions())
+        assertEquals(listOf("47.5.3"), Fixtures.declaredVersions())
         Fixtures.forEachDeclared { apk ->
             val dex = Fixtures.dexContainer(apk, Opcodes.getDefault())
-            val cell = dex.getEntry("classes39.dex")!!.dexFile.classes.single { it.type == TEMPLATE_NOTIFICATION_CELL }
-            val variants = listOf(InboxNotificationNormalBind to listOf("LX/05u8;"),
-                InboxNotificationPayloadBind to listOf("LX/05u8;", "Ljava/util/List;"))
-            variants.forEach { (fingerprint, parameters) ->
-                val native = cell.methods.single { it.name == "onBindItemView" && it.parameterTypes.map(CharSequence::toString) == parameters }
-                assertTrue(fingerprint.takes(native, cell))
-                assertBindUnchanged(native)
-            }
+            val cell = dex.classOf(TEMPLATE_NOTIFICATION_CELL)
+            // PowerCell's item is a renamed class (47.4.3 LX/05u8;, 47.5.3 LX/05w2;): the binds are
+            // told apart by the payload list alone, and each fingerprint takes its own and only it.
+            val binds = cell.methods.filter { it.name == "onBindItemView" }
+            assertEquals(2, binds.size)
+            val item = dex.classOf(CELL).method("getItem").references<FieldReference>().single().type
+            listOf(InboxNotificationNormalBind to listOf(item), InboxNotificationPayloadBind to listOf(item, "Ljava/util/List;"))
+                .forEach { (fingerprint, parameters) ->
+                    val native = binds.single { it.parameterTypes.map(CharSequence::toString) == parameters }
+                    assertEquals(listOf(native), binds.filter { fingerprint.takes(it, cell) })
+                    assertBindUnchanged(native)
+                }
             // The current model getter is what native clicks read after a payload rebind/recycle.
-            val powerCell = dex.getEntry("classes4.dex")!!.dexFile.classes.single { it.type == CELL }
+            val powerCell = dex.classOf(CELL)
             assertEquals("item", powerCell.method("getItem").references<FieldReference>().single().name)
             assertEquals("attachView", powerCell.method("getAttachView\$powerlist_release").references<FieldReference>().single().name)
             assertEquals("stub", powerCell.method("getStub").references<FieldReference>().single().name)
-            val currentNotice = cell.method("c6").references<MethodReference>()
-            assertTrue(currentNotice.any { it.definingClass == CELL && it.name == "getItem" })
-            assertTrue(cell.method("onClick").references<MethodReference>().any { it.definingClass == cell.type && it.name == "c6" })
+            val noticeGetter = cell.methods.single { it.parameterTypes.isEmpty() && it.returnType == MUS_NOTICE }
+            assertTrue(noticeGetter.references<MethodReference>().any { it.definingClass == CELL && it.name == "getItem" })
+            assertTrue(cell.method("onClick").references<MethodReference>().any { it.definingClass == cell.type && it.name == noticeGetter.name })
         }
     }
 
@@ -53,9 +60,8 @@ class InboxQueryOwnerFixturesTest {
     fun `the observed VM is the native returned object and its lazy getter runs only once`() {
         Fixtures.forEachDeclared { apk ->
             val dex = Fixtures.dexContainer(apk, Opcodes.getDefault())
-            val widget = dex.getEntry("classes39.dex")!!.dexFile.classes.single { it.type == WIDGET }
-            val native = widget.method("hq")
-            assertTrue(InboxNotificationVmGetter.takes(native, widget))
+            val widget = dex.classOf(WIDGET)
+            val native = widget.methods.single { InboxNotificationVmGetter.takes(it, widget) }
             val mutable = MutableMethod(native)
             val original = mutable.implementation!!.instructions.toList()
             val receiver = mutable.implementation!!.registerCount - 1
@@ -83,27 +89,29 @@ class InboxQueryOwnerFixturesTest {
     fun `native owner state and manager identities have the exact current signatures`() {
         Fixtures.forEachDeclared { apk ->
             val dex = Fixtures.dexContainer(apk, Opcodes.getDefault())
-            val stub = dex.getEntry("classes4.dex")!!.dexFile.classes.single { it.type == STUB }
-            assertEquals("LX/09Mx;", stub.method("LJIIZILJ").returnType)
-            assertEquals("LX/09MC;", stub.fields.single { it.name == "LLJJIII" }.type)
-            val recycler = dex.getEntry("classes5.dex")!!.dexFile.classes.single { it.type == "LX/09LW;" }
-            assertEquals("LX/09Mx;", recycler.method("getState").returnType)
-            val state = dex.getEntry("classes5.dex")!!.dexFile.classes.single { it.type == "LX/09Mx;" }
+            // 47.5.3 renamed the PowerList classes (47.4.3 LX/09Mx; LX/09MC; LX/09LW; LX/09Nj;
+            // LX/09Ni; LX/0NaB; and BX for the recycler getter) and kept the member names.
+            val stub = dex.classOf(STUB)
+            assertEquals("LX/09En;", stub.method("LJIIZILJ").returnType)
+            assertEquals("LX/09EA;", stub.fields.single { it.name == "LLJJIII" }.type)
+            val recycler = dex.classOf("LX/09Dy;")
+            assertEquals("LX/09En;", recycler.method("getState").returnType)
+            val state = dex.classOf("LX/09En;")
             assertEquals("Lcom/bytedance/ies/powerlist/ListState;", state.superclass)
             assertEquals("Ljava/util/List;", state.fields.single { it.name == "LJ" }.type)
             assertEquals("Ljava/util/concurrent/locks/ReentrantLock;", state.fields.single { it.name == "LJFF" }.type)
-            val fragment = dex.getEntry("classes39.dex")!!.dexFile.classes.single { it.type == FRAGMENT }
-            assertEquals(recycler.type, fragment.method("BX").returnType)
-            val spring = dex.getEntry("classes5.dex")!!.dexFile.classes.single { it.type == "LX/09Nj;" }
+            val fragment = dex.classOf(FRAGMENT)
+            assertEquals(recycler.type, fragment.method("AX").returnType)
+            val spring = dex.classOf("LX/09FB;")
             assertEquals(spring.type, fragment.method("zX").returnType)
-            assertEquals("LX/09Ni;", spring.superclass)
-            val constrainedParent = dex.getEntry("classes5.dex")!!.dexFile.classes.single { it.type == spring.superclass }
+            assertEquals("LX/09FA;", spring.superclass)
+            val constrainedParent = dex.classOf(spring.superclass!!)
             assertEquals("Landroid/widget/FrameLayout;", constrainedParent.superclass)
             assertTrue(constrainedParent.method("getNestedChild").references<MethodReference>()
                 .any { it.name == "getChildCount" })
             assertTrue(constrainedParent.method("getNestedChild").references<MethodReference>()
                 .any { it.definingClass == "Ljava/lang/IllegalArgumentException;" && it.name == "<init>" })
-            assertEquals("LX/0NaB;", fragment.method("yX").returnType)
+            assertEquals("LX/0LdM;", fragment.method("yX").returnType)
             assertEquals("Lcom/ss/android/ugc/aweme/inbox/widget/v2/InboxWidgetContainer;",
                 fragment.fields.single { it.name == "LLJJIJIL" }.type)
         }
@@ -130,5 +138,7 @@ class InboxQueryOwnerFixturesTest {
     }
 
     private fun ClassDef.method(name: String): Method = methods.single { it.name == name }
+    private fun MultiDexContainer<out DexFile>.classOf(type: String): ClassDef =
+        dexEntryNames.flatMap { getEntry(it)!!.dexFile.classes }.single { it.type == type }
     private inline fun <reified T : Reference> Method.references(): List<T> = implementation!!.instructions.mapNotNull { it.getReference<T>() }
 }
