@@ -25,8 +25,8 @@
     left the foreground, and the installed APK is the one patched from -Bundle.
 
 .EXAMPLE
-    ./scripts/walk-app.ps1 -Serial R5CT139QJ5F -Bundle build/release-assets/0.78.0/patches-0.78.0.mpp `
-        -PatchArgs @{ Apk = 'C:/fixtures/tiktok.apk'; Keystore = 'C:/keys/s22.keystore'; KeyAlias = 'Morphe' }
+    ./scripts/walk-app.ps1 -Serial $env:HUSHFEED_DEVICE_SERIAL -Bundle build/release-assets/0.78.0/patches-0.78.0.mpp `
+        -PatchArgs @{ Apk = 'C:/fixtures/tiktok.apk'; Keystore = 'C:/keys/device.keystore'; KeyAlias = 'Morphe' }
 #>
 [CmdletBinding()]
 param(
@@ -314,7 +314,10 @@ try {
     Write-WalkLog "$device, TikTok $appVersion, APK $installedSha256"
 
     Invoke-WalkAdb shell am force-stop $WalkPackage | Out-Null
-    Invoke-WalkAdb logcat -b all -c | Out-Null
+    # Other sessions read this phone's logs too, so the walk reads only what follows its start
+    # (the phone's own clock, which logcat's -t takes as seconds.millis) and never clears them.
+    $logSince = ((Invoke-WalkAdb shell date +%s) -join '').Trim()
+    if ($logSince -notmatch '^\d+$') { throw "The phone's clock read '$logSince', not seconds." }
     Invoke-WalkAdb shell monkey -p $WalkPackage -c android.intent.category.LAUNCHER 1 | Out-Null
     $script:appPid = ''
     for ($i = 0; $i -lt 20 -and -not $script:appPid; $i++) { Start-Sleep -Seconds 1; $script:appPid = Get-WalkPid }
@@ -474,7 +477,8 @@ try {
     Start-Sleep -Seconds 5
     [void](Test-WalkAlive 'the end of the walk')
 
-    $logcat = @(Invoke-WalkAdb logcat -d -b crash) + @(Invoke-WalkAdb logcat -d -b main -b system -s 'AndroidRuntime:E' 'ActivityManager:E' 'libc:F' 'DEBUG:F')
+    $logcat = @(Invoke-WalkAdb logcat -d -b crash -t "$logSince.000") +
+        @(Invoke-WalkAdb logcat -d -b main -b system -t "$logSince.000" -s 'AndroidRuntime:E' 'ActivityManager:E' 'libc:F' 'DEBUG:F')
     Set-Content -LiteralPath (Join-Path $work 'logcat-crashes.txt') -Value $logcat -Encoding UTF8
     $crashes = @(Get-WalkCrashes -Lines $logcat)
 } catch {
