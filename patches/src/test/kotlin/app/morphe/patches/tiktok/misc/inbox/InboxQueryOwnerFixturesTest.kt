@@ -18,10 +18,12 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.Reference
 import org.junit.Assert.*
 import org.junit.Test
+import java.io.File
 
 private const val FILTER = "Lapp/morphe/extension/tiktok/inbox/InboxFilter;"
 private const val CELL = "Lcom/bytedance/ies/powerlist/PowerCell;"
 private const val STUB = "Lcom/bytedance/ies/powerlist/PowerStub;"
+private const val ADAPTER = "Lcom/bytedance/ies/powerlist/PowerAdapter;"
 private const val FRAGMENT = "Lcom/ss/android/ugc/aweme/notification/v2/NotificationResultFragment;"
 private const val WIDGET = "Lcom/ss/android/ugc/aweme/notification/v2/widget/NotificationWidget;"
 private const val MUS_NOTICE = "Lcom/ss/android/ugc/aweme/notice/repo/list/bean/MusNotice;"
@@ -90,10 +92,17 @@ class InboxQueryOwnerFixturesTest {
         Fixtures.forEachDeclared { apk ->
             val dex = Fixtures.dexContainer(apk, Opcodes.getDefault())
             // 47.5.3 renamed the PowerList classes (47.4.3 LX/09Mx; LX/09MC; LX/09LW; LX/09Nj;
-            // LX/09Ni; LX/0NaB; and BX for the recycler getter) and kept the member names.
+            // LX/09Ni; LX/0NaB; and BX for the recycler getter). The member names come from the
+            // extension itself: the 47.4.3 retarget left them on 47.1.4 and search went quiet.
+            val names = extensionNames()
             val stub = dex.classOf(STUB)
-            assertEquals("LX/09En;", stub.method("LJIIZILJ").returnType)
-            assertEquals("LX/09EA;", stub.fields.single { it.name == "LLJJIII" }.type)
+            assertEquals("LX/09En;", stub.method(names.getValue("STUB_STATE")).returnType)
+            assertEquals("LX/09EA;", stub.fields.single { it.name == names.getValue("STUB_ADAPTER") }.type)
+            val adapter = dex.classOf(ADAPTER)
+            assertEquals(STUB, adapter.methods.single { it.name == names.getValue("ADAPTER_PRIMARY_STUB") && it.parameterTypes.isEmpty() }.returnType)
+            assertEquals("LX/09EW;", adapter.fields.single { it.name == names.getValue("ADAPTER_DIFF") }.type)
+            assertEquals("Lcom/bytedance/ies/powerlist/page/PowerPageLoader;",
+                adapter.fields.single { it.name == names.getValue("ADAPTER_PAGER") }.type)
             val recycler = dex.classOf("LX/09Dy;")
             assertEquals("LX/09En;", recycler.method("getState").returnType)
             val state = dex.classOf("LX/09En;")
@@ -101,9 +110,9 @@ class InboxQueryOwnerFixturesTest {
             assertEquals("Ljava/util/List;", state.fields.single { it.name == "LJ" }.type)
             assertEquals("Ljava/util/concurrent/locks/ReentrantLock;", state.fields.single { it.name == "LJFF" }.type)
             val fragment = dex.classOf(FRAGMENT)
-            assertEquals(recycler.type, fragment.method("AX").returnType)
+            assertEquals(recycler.type, fragment.method(names.getValue("FRAGMENT_LIST")).returnType)
             val spring = dex.classOf("LX/09FB;")
-            assertEquals(spring.type, fragment.method("zX").returnType)
+            assertEquals(spring.type, fragment.method(names.getValue("FRAGMENT_SPRING")).returnType)
             assertEquals("LX/09FA;", spring.superclass)
             val constrainedParent = dex.classOf(spring.superclass!!)
             assertEquals("Landroid/widget/FrameLayout;", constrainedParent.superclass)
@@ -113,7 +122,7 @@ class InboxQueryOwnerFixturesTest {
                 .any { it.definingClass == "Ljava/lang/IllegalArgumentException;" && it.name == "<init>" })
             assertEquals("LX/0LdM;", fragment.method("yX").returnType)
             assertEquals("Lcom/ss/android/ugc/aweme/inbox/widget/v2/InboxWidgetContainer;",
-                fragment.fields.single { it.name == "LLJJIJIL" }.type)
+                fragment.fields.single { it.name == names.getValue("FRAGMENT_CONTAINER") }.type)
         }
     }
 
@@ -135,6 +144,16 @@ class InboxQueryOwnerFixturesTest {
             assertEquals(Opcode.RETURN_VOID, after[index + 1].opcode)
         }
         assertEquals(original.size, source)
+    }
+
+    /** The TikTok member names InboxQueryOwners declares, each of which this test checks. */
+    private fun extensionNames(): Map<String, String> {
+        val repo = if (File("src/main/kotlin").isDirectory) File("..") else File(".")
+        val source = File(repo, "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/inbox/InboxQueryOwners.java").readText()
+        val names = Regex("""static final String (\w+) = "(\w+)";""").findAll(source).associate { it.groupValues[1] to it.groupValues[2] }
+        assertEquals(setOf("FRAGMENT_LIST", "FRAGMENT_SPRING", "FRAGMENT_CONTAINER", "ADAPTER_PRIMARY_STUB",
+            "ADAPTER_DIFF", "ADAPTER_PAGER", "STUB_STATE", "STUB_ADAPTER"), names.keys)
+        return names
     }
 
     private fun ClassDef.method(name: String): Method = methods.single { it.name == name }
