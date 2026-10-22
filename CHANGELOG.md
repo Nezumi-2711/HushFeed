@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ### Features and fixes
 
+* **TikTok:** Hushfeed now supports TikTok 47.5.3, and only that one. 47.4.3 isn't supported anymore, so grab the 47.5.3 APK from APKMirror and patch it with the same signing key, so your login and settings carry over. PineDrama stays on 47.4.3.
+* **PineDrama:** `Remove unused language packs` now patches PineDrama 47.4.3. Its language files list the same 25 languages as TikTok's but word the list differently, and the patch stopped at that instead of trimming them.
 * **TikTok:** New `Double tap by corner` switch under `Double tap` in Hushfeed settings > Feed screen. Turn it on and each quarter of the video gets its own double tap choice, so the top left can open the comments while the bottom right keeps TikTok's like. Off, `Double tap` works like before. The idea and first version came from @OmerKurdi79 (#232).
 * **TikTok:** Settings search remembers what you looked for. With the box empty it lists your last ten searches, newest first. Tap one to run it again, tap the bin to forget it, or clear the list at the bottom. A search is kept once you press search on the keyboard, open one of its results or flip a switch it found, and the list stays out of backups (#232).
 * **TikTok:** New `Keep Clear display across videos` switch in the Clear display part of Hushfeed settings > Feed screen. It's on by default, which is how Clear display has carried over until now. Turn it off and a Clear display you turn on by hand lasts for that video only, so the next one starts with its buttons showing (#232).
