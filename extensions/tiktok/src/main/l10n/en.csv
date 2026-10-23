@@ -1227,6 +1227,7 @@ Operator name,Operator name
 "Opus (.ogg), a smaller file","Opus (.ogg), a smaller file"
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.,Opus didn't work on this phone. Saving the sound as TikTok sent it instead.
 "Opus needs Android 10 or later, so sounds save as TikTok sent them.","Opus needs Android 10 or later, so sounds save as TikTok sent them."
+Original,Original
 Original language,Original language
 Original message,Original message
 Original order,Original order
@@ -1433,7 +1434,7 @@ SIM country preset,SIM country preset
 SOCKS5,SOCKS5
 STEM,STEM
 Same as the room,Same as the room
-"Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower.","Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower."
+"Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower. A number records that quality, or the closest one the room has when it isn't offered.","Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower. A number records that quality, or the closest one the room has when it isn't offered."
 Sample caption to test,Sample caption to test
 Sample category to test,Sample category to test
 Save,Save

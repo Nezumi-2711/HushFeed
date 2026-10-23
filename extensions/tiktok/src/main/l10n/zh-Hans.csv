@@ -1206,6 +1206,7 @@ Operator name,操作员名称
 "Opus (.ogg), a smaller file",Opus (.ogg)，较小的文件
 Opus didn't work on this phone. Saving the sound as TikTok sent it instead.,Opus 无法在这款手机上运行。将声音保存为 TikTok 来发送.
 "Opus needs Android 10 or later, so sounds save as TikTok sent them.",Opus 需要 Android 10 或更高版本，因此声音保存为 TikTok 发送.
+Original,原画
 Original language,原语言
 Original message,原始消息
 Original photos,原始照片
@@ -2226,7 +2227,7 @@ Two at once,同时两个
 Three at once,同时三个
 LIVE recording quality,LIVE 录制画质
 Same as the room,与直播间相同
-"Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower.",“与直播间相同”会录制您正在观看的画质。“最高”会录制直播间最好的流，即使您以较低画质观看.
+"Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower. A number records that quality, or the closest one the room has when it isn't offered.",“与直播间相同”会录制您正在观看的画质。“最高”会录制直播间最好的流，即使您以较低画质观看.数字表示录制该画质，直播间没有时录制最接近的一档.
 Long-press Profile for Watch history,长按“个人主页”打开观看历史
 "Press and hold the Profile tab to open your Watch history. A tap on Profile works as before. If holding Profile switches accounts for you, this takes that press, and the name at the top of your profile still switches accounts.",按住“个人主页”选项卡可打开观看历史。点击“个人主页”仍像以前一样工作。如果按住“个人主页”会为您切换账号，此选项会接管该操作，个人主页顶部的名称仍可切换账号.
 Open the comments at full height,以全高打开评论
