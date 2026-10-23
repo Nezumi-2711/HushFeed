@@ -13,9 +13,11 @@ import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -32,6 +34,10 @@ import com.bytedance.android.live.design.resource.theme.LiveThemeAwareDialogFrag
 import com.bytedance.android.live.design.resource.theme.LiveThemeAwareFragment;
 import com.bytedance.android.live.design.view.sheet.LiveSheetFragment;
 import com.bytedance.android.live.rank.impl.list.RankListDialog;
+import com.bytedance.android.livesdk.fansclub.FansClubPanel;
+import com.bytedance.android.livesdk.profile.ProfilePanel;
+
+import androidx.cardview.widget.CardView;
 import com.bytedance.android.live.rank.impl.list.view.PopularityRankingEducationDialog;
 
 import org.junit.After;
@@ -891,6 +897,105 @@ public class LivePanelThemeTest {
         RankPage loop = page(null);
         loop.parent = loop;
         assertSame("a parent loop ends", null, LivePanelTheme.stockPanel(loop));
+    }
+
+    /** A custom drawn tab strip with three paints of its own, the way the fan club's is built. */
+    static final class StripView extends View {
+        final Paint selected = new Paint();
+        final Paint other = new Paint();
+        final Paint unselected = new Paint();
+
+        StripView(Context context) {
+            super(context);
+            selected.setColor(Color.WHITE);
+            other.setColor(Color.WHITE);
+            unselected.setColor(0x0D000000);
+        }
+    }
+
+    private Dialog dialogWith(View content) {
+        Dialog dialog = new Dialog(dark);
+        dialog.setContentView(content);
+        // Shown, so the decor is attached and keeps the system UI flags it is given.
+        dialog.show();
+        return dialog;
+    }
+
+    @Test public void aPanelsNavigationBarGoesDarkInDarkModeWithTheSwitch() {
+        FansClubPanel panel = new FansClubPanel();
+        panel.overlay = OVERLAY;
+        panel.dialog = dialogWith(new FrameLayout(dark));
+        android.view.WindowInsetsController bars = panel.dialog.getWindow().getInsetsController();
+        bars.setSystemBarsAppearance(android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertTrue((bars.getSystemBarsAppearance() & android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS) != 0);
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(light));
+        assertTrue((bars.getSystemBarsAppearance() & android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS) != 0);
+
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertEquals(0, bars.getSystemBarsAppearance() & android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+    }
+
+    @Test public void theProfileCardsInnerTilesGoDarkButItsLabelsAndSeeThroughTilesStay() {
+        FrameLayout root = new FrameLayout(dark);
+        View tile = new View(dark);
+        tile.setBackground(new ColorDrawable(Color.WHITE));
+        View see = new View(dark);
+        see.setBackground(new ColorDrawable(0x29FFFFFF));
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(0xFFF2F2F2);
+        View rounded = new View(dark);
+        rounded.setBackground(shape);
+        ViewGroup strip = new FrameLayout(dark);
+        strip.setBackground(new ColorDrawable(Color.WHITE));
+        root.addView(tile);
+        root.addView(see);
+        root.addView(rounded);
+        root.addView(strip);
+        ProfilePanel panel = new ProfilePanel();
+        panel.overlay = OVERLAY;
+        panel.dialog = dialogWith(root);
+
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertEquals("the switch starts off", Color.WHITE, ((ColorDrawable) tile.getBackground()).getColor());
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        LivePanelTheme.cardLabels(Arrays.asList(), strip);
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertEquals(LivePanelTheme.DARK_FILL, ((ColorDrawable) tile.getBackground()).getColor());
+        assertEquals(0x29FFFFFF, ((ColorDrawable) see.getBackground()).getColor());
+        assertEquals(LivePanelTheme.DARK_FILL, ((GradientDrawable) rounded.getBackground()).getColor().getDefaultColor());
+        assertEquals("the label strip stays light", Color.WHITE, ((ColorDrawable) strip.getBackground()).getColor());
+        assertTrue("an ordinary panel keeps its fills", !LivePanelTheme.fillPanel(ShareDialog.class));
+    }
+
+    @Test public void theFanClubTabStripAndItsCardGoDarkInDarkModeWithTheSwitch() {
+        FrameLayout root = new FrameLayout(dark);
+        CardView card = new CardView(dark);
+        card.setCardBackgroundColor(Color.WHITE);
+        StripView strip = new StripView(dark);
+        card.addView(strip);
+        root.addView(card);
+        FansClubPanel panel = new FansClubPanel();
+        panel.overlay = OVERLAY;
+        panel.dialog = dialogWith(root);
+
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertEquals("the switch starts off", Color.WHITE, card.getCardBackgroundColor().getDefaultColor());
+        assertEquals(Color.WHITE, strip.selected.getColor());
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(light));
+        assertEquals("TikTok Light stays stock", Color.WHITE, strip.selected.getColor());
+
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertEquals(LivePanelTheme.DARK_FILL, card.getCardBackgroundColor().getDefaultColor());
+        assertEquals(LivePanelTheme.DARK_FILL, strip.selected.getColor());
+        assertEquals(LivePanelTheme.DARK_FILL, strip.other.getColor());
+        assertEquals(LivePanelTheme.DARK_TAB, strip.unselected.getColor());
     }
 
     /** A ranking built on the daily one, the way TikTok splits its list dialogs into variants. */

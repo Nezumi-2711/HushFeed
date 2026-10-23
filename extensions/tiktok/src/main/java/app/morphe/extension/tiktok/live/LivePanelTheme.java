@@ -11,14 +11,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowInsetsController;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.lang.reflect.Constructor;
@@ -76,6 +86,23 @@ public final class LivePanelTheme {
     private static final int EVENT_BOX = 0x29FFFFFF;
     /** How far into the event box the light text check looks. */
     private static final int MAX_BOX_DEPTH = 3;
+    /** The navigation bar under a darkened panel. */
+    static final int NAV_BAR = 0xFF161616;
+    /** The fill that replaces a light one on a darkened panel, about the dark card's own tiles. */
+    static final int DARK_FILL = 0xFF2A2A2E;
+    /** What the fan club strip's translucent black unselected tab becomes. */
+    static final int DARK_TAB = 0x14FFFFFF;
+    /** A fill is only swapped when it's at least this opaque, so the card's translucent tiles stay. */
+    private static final int MIN_FILL_ALPHA = 0x80;
+    /** Class name pieces of the panels whose own fixed light fills get swapped, the profile card and the fan club. */
+    private static final String[] FILL_PANELS = {".fansclub.", ".superfan.", ".livesdk.profile."};
+    private static final int LIGHT_NAVIGATION_BAR_FLAG = 0x10;
+    private static final int SETTLE_TRIES = 5;
+    private static final long SETTLE_DELAY_MS = 100;
+    /** Views already watched for light fills, so a panel isn't hooked twice. */
+    private static final Map<View, Boolean> WATCHED = Collections.synchronizedMap(new WeakHashMap<>());
+    /** Views, such as the profile card's label strip, that keep their light look on purpose. */
+    private static final Map<View, Boolean> KEEP_LIGHT = Collections.synchronizedMap(new WeakHashMap<>());
     private static volatile boolean overlayFailureLogged;
     private static volatile boolean rowFailureLogged;
     private static volatile boolean viewContextFailureLogged;
@@ -122,10 +149,201 @@ public final class LivePanelTheme {
             if (overlay == 0) {
                 return inflater;
             }
+            settle(panel);
             return inflater.cloneInContext(new ContextThemeWrapper(context, overlay));
         } catch (Throwable failure) {
             Logger.printException(() -> "Could not darken a LIVE panel", failure);
             return inflater;
+        }
+    }
+
+    /**
+     * Darkens the pieces of a dark panel its theme overlay can't reach (#159): the navigation
+     * bar under its window, and for the profile card and the fan club the fixed light fills their
+     * views paint themselves. The views don't exist yet when the inflater is asked for, so the
+     * fills are swapped on each layout of the panel's window until it goes.
+     */
+    static void settle(Object panel) {
+        settle(panel, 0);
+    }
+
+    private static void settle(Object panel, int attempt) {
+        try {
+            Object dialog = Reflect.invoke(panel, "getDialog");
+            Window window = dialog instanceof android.app.Dialog ? ((android.app.Dialog) dialog).getWindow() : null;
+            View root = window != null ? window.getDecorView() : null;
+            if (root == null) {
+                Object view = Reflect.invoke(panel, "getView");
+                root = view instanceof View ? (View) view : null;
+            }
+            if (root == null) {
+                if (attempt < SETTLE_TRIES) {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> settle(panel, attempt + 1), SETTLE_DELAY_MS);
+                }
+                return;
+            }
+            if (window != null) {
+                darkNavigationBar(window);
+            }
+            if (!fillPanel(panel.getClass()) || WATCHED.put(root, Boolean.TRUE) != null) {
+                return;
+            }
+            View watched = root;
+            Window under = window;
+            darkFills(watched);
+            watched.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    try {
+                        if (under != null) {
+                            darkNavigationBar(under);
+                        }
+                        darkFills(watched);
+                    } catch (Throwable failure) {
+                        Logger.printException(() -> "Could not darken a LIVE panel's fills", failure);
+                    }
+                }
+            });
+        } catch (Throwable failure) {
+            Logger.printException(() -> "Could not settle a LIVE panel", failure);
+        }
+    }
+
+    /** True for the panels whose own fixed light fills get swapped, by their class names. */
+    static boolean fillPanel(Class<?> type) {
+        for (Class<?> current = type; current != null && current != Object.class; current = current.getSuperclass()) {
+            String name = current.getName();
+            for (String piece : FILL_PANELS) {
+                if (name.contains(piece)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Takes the light navigation bar flag off a panel window and paints the bar dark. TikTok
+     * targets a version where the bar's color is ignored and the flag alone picks the icon
+     * shade, so a bottom sheet kept the light gray scrim under it (S22, 2026-10-23).
+     */
+    static void darkNavigationBar(Window window) {
+        window.setNavigationBarColor(NAV_BAR);
+        View decor = window.getDecorView();
+        if (Build.VERSION.SDK_INT >= 26) {
+            int flags = decor.getSystemUiVisibility();
+            if ((flags & LIGHT_NAVIGATION_BAR_FLAG) != 0) {
+                decor.setSystemUiVisibility(flags & ~LIGHT_NAVIGATION_BAR_FLAG);
+            }
+        }
+        if (Build.VERSION.SDK_INT >= 30) {
+            WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                controller.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+            }
+        }
+    }
+
+    /**
+     * Swaps the light fills under the view for dark ones: solid and gradient backgrounds, a card
+     * view's color and the paints of a custom drawn view such as the fan club's tab strip. Images,
+     * layered badge tiles and anything marked to stay light are left alone, and so are fills
+     * that are mostly see-through.
+     */
+    static void darkFills(View view) {
+        if (view == null || KEEP_LIGHT.containsKey(view)) {
+            return;
+        }
+        if (!(view instanceof ImageView)) {
+            darkBackground(view);
+        }
+        darkCard(view);
+        darkPaints(view);
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                darkFills(group.getChildAt(i));
+            }
+        }
+    }
+
+    private static boolean lightFill(int color) {
+        return Color.alpha(color) >= MIN_FILL_ALPHA && isLight(color);
+    }
+
+    private static void darkBackground(View view) {
+        Drawable background = view.getBackground();
+        if (background instanceof ColorDrawable) {
+            if (lightFill(((ColorDrawable) background).getColor())) {
+                view.setBackground(new ColorDrawable(DARK_FILL));
+            }
+        } else if (background instanceof GradientDrawable && Build.VERSION.SDK_INT >= 24) {
+            ColorStateList colors = ((GradientDrawable) background).getColor();
+            if (colors != null && lightFill(colors.getDefaultColor())) {
+                ((GradientDrawable) background).mutate();
+                ((GradientDrawable) background).setColor(DARK_FILL);
+            }
+        }
+    }
+
+    /** A card view keeps its fill outside the background, so it's read and written by its own methods. */
+    private static void darkCard(View view) {
+        if (!"CardView".equals(view.getClass().getSimpleName()) && !hasSuperName(view.getClass(), "CardView")) {
+            return;
+        }
+        Object colors = Reflect.invoke(view, "getCardBackgroundColor");
+        if (colors instanceof ColorStateList && lightFill(((ColorStateList) colors).getDefaultColor())) {
+            try {
+                view.getClass().getMethod("setCardBackgroundColor", int.class).invoke(view, DARK_FILL);
+            } catch (ReflectiveOperationException failure) {
+                Logger.printException(() -> "Could not darken a LIVE card view", failure);
+            }
+        }
+    }
+
+    private static boolean hasSuperName(Class<?> type, String simpleName) {
+        for (Class<?> current = type.getSuperclass(); current != null; current = current.getSuperclass()) {
+            if (simpleName.equals(current.getSimpleName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** A view that draws with paints of its own, like the fan club's tab strip, gets its light paints swapped. */
+    private static void darkPaints(View view) {
+        if (view instanceof ViewGroup || view instanceof TextView || view instanceof ImageView) {
+            return;
+        }
+        Class<?> type = view.getClass();
+        if (type.getName().startsWith("android.")) {
+            return;
+        }
+        boolean changed = false;
+        for (Field field : type.getDeclaredFields()) {
+            if (field.getType() != Paint.class || Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            try {
+                field.setAccessible(true);
+                Paint paint = (Paint) field.get(view);
+                if (paint == null) {
+                    continue;
+                }
+                int color = paint.getColor();
+                if (lightFill(color)) {
+                    paint.setColor(DARK_FILL);
+                    changed = true;
+                } else if (Color.alpha(color) < MIN_FILL_ALPHA && Color.alpha(color) > 0 && !isLight(color)) {
+                    paint.setColor(DARK_TAB);
+                    changed = true;
+                }
+            } catch (ReflectiveOperationException | RuntimeException failure) {
+                Logger.printException(() -> "Could not darken a LIVE tab strip", failure);
+            }
+        }
+        if (changed) {
+            view.invalidate();
         }
     }
 
@@ -231,6 +449,8 @@ public final class LivePanelTheme {
                     || !LiveControls.darkLivePanels(((View) strip).getContext())) {
                 return;
             }
+            // The chips stay light on purpose, so the fill pass leaves the strip alone.
+            KEEP_LIGHT.put((View) strip, Boolean.TRUE);
             for (Object label : (Iterable<?>) labels) {
                 if (label != null && "ProfileCardLabel".equals(label.getClass().getSimpleName())) {
                     lightLabel(label);
