@@ -986,9 +986,9 @@ Save	Saxla
 Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.	Altyazı (SRT) fayllarını videoyla birlikdə saxlayır. Android 11 və daha yenisində Movies-ə, Android 10-da Download-a, daha köhnə versiyalarda isə video qovluğunuza düşür. Android 11 və daha yenisində Save details açıqdırsa, video Download və ya Documents-ə keçir, altyazılar isə Movies-də qalır.
 Save a profile picture on a long press	Uzun basmaqla profil şəklini saxlayın
 Save a story on a long press	Uzun basmaqla hekayəni saxlayın
-Save every photo in the post at full size as a JPEG, not as the screen shows it.	Paylaşımdakı hər fotonu ekranda göründüyü kimi deyil, tam ölçüdə JPEG kimi saxlayın.
+Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.	Paylaşımdakı hər fotonu ekranda göründüyü kimi deyil, tam ölçüdə saxlayın. "Fotoları TikTok-un göndərdiyi kimi saxla" açıq deyilsə, hər biri JPEG olur.
 Keep photos as TikTok sent them	Fotoları TikTok-un göndərdiyi kimi saxla
-Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Saxlanılan fotolar, örtüklər və hekayə fotoları JPEG-ə çevrilmir, HEIF və ya WebP kimi qalır. Bəzi qalereyalar və kompüterlər onları aça bilmir.
+Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.	Saxlanılan fotolar, örtüklər, hekayə fotoları və hərəkətsiz stikerlər yeni JPEG və ya PNG deyil, TikTok-un göndərdiyi faylların özüdür. Bəzi qalereyalar və kompüterlər HEIF və ya WebP faylları aça bilmir.
 Save field values	Sahə dəyərlərini saxlayın
 Save full report	Tam hesabatı saxlayın
 Save media	Medianı saxlayın

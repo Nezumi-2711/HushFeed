@@ -950,9 +950,9 @@ Save	Guardar
 Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.	Guarda los archivos de subtítulos (SRT) junto con el video. Van a Movies en Android 11 y posteriores, a Download en Android 10 y a tu carpeta de videos en versiones anteriores. En Android 11 y posteriores con Guardar detalles activado, el video pasa a Download o Documents y los subtítulos se quedan en Movies.
 Save a profile picture on a long press	Guardar una foto de perfil con una pulsación larga
 Save a story on a long press	Guardar una historia con una pulsación larga
-Save every photo in the post at full size as a JPEG, not as the screen shows it.	Guardar cada foto de la publicación a tamaño completo como JPEG, no como la muestra la pantalla.
+Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.	Guardar cada foto de la publicación a tamaño completo, no como la muestra la pantalla. Cada una se guarda como JPEG salvo que Mantener las fotos como las envía TikTok esté activado.
 Keep photos as TikTok sent them	Mantener las fotos como las envía TikTok
-Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Las fotos, portadas y fotos de historias guardadas se quedan en HEIF o WebP en lugar de convertirse en JPEG. Algunas galerías y computadoras no pueden abrirlas.
+Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.	Las fotos, portadas, fotos de historias y stickers sin movimiento que guardes son exactamente los archivos que envió TikTok, no un JPEG o PNG nuevo. Algunas galerías y computadoras no pueden abrir HEIF o WebP.
 Save field values	Guardar los valores de los campos
 Save full report	Guardar informe completo
 Save media	Guardar el contenido

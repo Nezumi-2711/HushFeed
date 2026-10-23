@@ -986,9 +986,9 @@ Save	Kaydet
 Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.	Altyazı (SRT) dosyalarını videoyla birlikte kaydeder. Android 11 ve üzerinde Movies, Android 10'da Download, daha eski sürümlerde video klasörüne gider. Android 11 ve üzerinde Ayrıntıları kaydet açıkken video Download veya Documents içine taşınır, altyazılar Movies'te kalır.
 Save a profile picture on a long press	Uzun basınca profil fotoğrafını kaydet
 Save a story on a long press	Uzun basınca hikayeyi kaydet
-Save every photo in the post at full size as a JPEG, not as the screen shows it.	Gönderideki her fotoğrafı ekranın gösterdiği gibi değil, tam boyutta JPEG olarak kaydet.
+Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.	Gönderideki her fotoğrafı ekranın gösterdiği gibi değil, tam boyutta kaydet. Fotoğrafları TikTok'un gönderdiği gibi tut açık değilse her biri JPEG olur.
 Keep photos as TikTok sent them	Fotoğrafları TikTok'un gönderdiği gibi tut
-Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Kaydedilen fotoğraflar, kapaklar ve hikaye fotoğrafları JPEG'e dönüştürülmez, HEIF veya WebP olarak kalır. Bazı galeriler ve bilgisayarlar bunları açamaz.
+Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.	Kaydedilen fotoğraflar, kapaklar, hikaye fotoğrafları ve hareketsiz çıkartmalar yeni bir JPEG veya PNG değil, TikTok'un gönderdiği dosyaların ta kendisidir. Bazı galeriler ve bilgisayarlar HEIF veya WebP açamaz.
 Save field values	Alan değerlerini kaydet
 Save full report	Raporun tamamını kaydet
 Save media	Medyayı kaydet

@@ -3040,8 +3040,8 @@ final class L10nTranslationsIt {
                 "Salva i dettagli come JSON");
         table.put("Save details beside the video",
                 "Salva i dettagli insieme al video");
-        table.put("Save every photo in the post at full size as a JPEG, not as the screen shows it.",
-                "Salva ogni foto del post a dimensione piena in JPEG, non come la mostra lo schermo.");
+        table.put("Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.",
+                "Salva ogni foto del post a dimensione piena, non come la mostra lo schermo. Ognuna diventa un JPEG, a meno che Mantieni le foto come le invia TikTok sia attivo.");
         table.put("Save field values",
                 "Salva i valori dei campi");
         table.put("Save full report",
@@ -3114,8 +3114,8 @@ final class L10nTranslationsIt {
                 "Salvata una foto originale");
         table.put("Saved one video",
                 "Salvato un video");
-        table.put("Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.",
-                "Foto, copertine e foto delle storie salvate restano in HEIF o WebP invece di diventare JPEG. Alcune gallerie e alcuni computer non riescono ad aprirle.");
+        table.put("Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.",
+                "Foto, copertine, foto delle storie e sticker fissi salvati sono esattamente i file inviati da TikTok, non un nuovo JPEG o PNG. Alcune gallerie e alcuni computer non riescono ad aprire HEIF o WebP.");
         table.put("Saved post",
                 "Post salvato");
         table.put("Saved posts",

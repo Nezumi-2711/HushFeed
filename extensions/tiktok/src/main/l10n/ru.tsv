@@ -1022,9 +1022,9 @@ Save	Сохранить
 Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.	Сохраняет файлы субтитров (SRT) вместе с видео. Они попадают в Movies на Android 11 и новее, в Download на Android 10 и в вашу папку видео на более старых версиях. На Android 11 и новее при включённом «Сохранять подробности» видео переходит в Download или Documents, а субтитры остаются в Movies.
 Save a profile picture on a long press	Сохранять фото профиля долгим нажатием
 Save a story on a long press	Сохранять историю долгим нажатием
-Save every photo in the post at full size as a JPEG, not as the screen shows it.	Сохранять каждое фото публикации в полном размере в формате JPEG, а не как оно показано на экране.
+Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.	Сохранять каждое фото публикации в полном размере, а не как оно показано на экране. Каждое сохраняется в JPEG, если не включено «Сохранять фото в формате TikTok».
 Keep photos as TikTok sent them	Сохранять фото в формате TikTok
-Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Сохранённые фото, обложки и фото из историй остаются в HEIF или WebP и не превращаются в JPEG. Некоторые галереи и компьютеры не открывают такие файлы.
+Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.	Сохранённые фото, обложки, фото из историй и неподвижные стикеры остаются ровно теми файлами, которые прислал TikTok, а не новыми JPEG или PNG. Некоторые галереи и компьютеры не открывают HEIF или WebP.
 Save field values	Сохранить значения полей
 Save full report	Сохранить полный отчёт
 Save media	Сохранение медиафайлов

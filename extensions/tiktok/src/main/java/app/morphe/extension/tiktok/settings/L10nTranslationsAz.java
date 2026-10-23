@@ -3040,8 +3040,8 @@ final class L10nTranslationsAz {
                 "Təfərrüatları JSON kimi saxlayın");
         table.put("Save details beside the video",
                 "Təfərrüatları videonun yanında saxlayın");
-        table.put("Save every photo in the post at full size as a JPEG, not as the screen shows it.",
-                "Paylaşımdakı hər fotonu ekranda göründüyü kimi deyil, tam ölçüdə JPEG kimi saxlayın.");
+        table.put("Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.",
+                "Paylaşımdakı hər fotonu ekranda göründüyü kimi deyil, tam ölçüdə saxlayın. \"Fotoları TikTok-un göndərdiyi kimi saxla\" açıq deyilsə, hər biri JPEG olur.");
         table.put("Save field values",
                 "Sahə dəyərlərini saxlayın");
         table.put("Save full report",
@@ -3114,8 +3114,8 @@ final class L10nTranslationsAz {
                 "Bir orijinal foto saxlanıldı");
         table.put("Saved one video",
                 "Bir video saxlanıldı");
-        table.put("Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.",
-                "Saxlanılan fotolar, örtüklər və hekayə fotoları JPEG-ə çevrilmir, HEIF və ya WebP kimi qalır. Bəzi qalereyalar və kompüterlər onları aça bilmir.");
+        table.put("Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.",
+                "Saxlanılan fotolar, örtüklər, hekayə fotoları və hərəkətsiz stikerlər yeni JPEG və ya PNG deyil, TikTok-un göndərdiyi faylların özüdür. Bəzi qalereyalar və kompüterlər HEIF və ya WebP faylları aça bilmir.");
         table.put("Saved post",
                 "Yadda saxlanmış paylaşım");
         table.put("Saved posts",

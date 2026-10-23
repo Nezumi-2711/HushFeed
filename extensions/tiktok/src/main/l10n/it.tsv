@@ -953,9 +953,9 @@ Save	Salva
 Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.	Salva i file dei sottotitoli (SRT) insieme al video. Vanno in Movies da Android 11 in poi, in Download su Android 10 e nella tua cartella video sulle versioni precedenti. Da Android 11 in poi con Salva dettagli attivo, il video passa in Download o Documents e i sottotitoli restano in Movies.
 Save a profile picture on a long press	Salva la foto del profilo con una pressione prolungata
 Save a story on a long press	Salva una storia con una pressione prolungata
-Save every photo in the post at full size as a JPEG, not as the screen shows it.	Salva ogni foto del post a dimensione piena in JPEG, non come la mostra lo schermo.
+Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.	Salva ogni foto del post a dimensione piena, non come la mostra lo schermo. Ognuna diventa un JPEG, a meno che Mantieni le foto come le invia TikTok sia attivo.
 Keep photos as TikTok sent them	Mantieni le foto come le invia TikTok
-Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	Foto, copertine e foto delle storie salvate restano in HEIF o WebP invece di diventare JPEG. Alcune gallerie e alcuni computer non riescono ad aprirle.
+Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.	Foto, copertine, foto delle storie e sticker fissi salvati sono esattamente i file inviati da TikTok, non un nuovo JPEG o PNG. Alcune gallerie e alcuni computer non riescono ad aprire HEIF o WebP.
 Save field values	Salva i valori dei campi
 Save full report	Salva il rapporto completo
 Save media	Salva i media

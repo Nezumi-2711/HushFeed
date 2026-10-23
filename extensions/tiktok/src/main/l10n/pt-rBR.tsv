@@ -950,9 +950,9 @@ Save	Salvar
 Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.	Salva os arquivos de legenda (SRT) junto com o vídeo. Eles vão para Movies no Android 11 e posteriores, para Download no Android 10 e para a sua pasta de vídeos em versões mais antigas. No Android 11 e posteriores com Salvar detalhes ligado, o vídeo vai para Download ou Documents e as legendas ficam em Movies.
 Save a profile picture on a long press	Salvar uma foto de perfil com um toque longo
 Save a story on a long press	Salvar um story com um toque longo
-Save every photo in the post at full size as a JPEG, not as the screen shows it.	Salvar cada foto da publicação em tamanho completo como JPEG, não como a tela a mostra.
+Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.	Salvar cada foto da publicação em tamanho completo, não como a tela a mostra. Cada uma vira JPEG, a menos que Manter as fotos como o TikTok as enviou esteja ativado.
 Keep photos as TikTok sent them	Manter as fotos como o TikTok as enviou
-Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.	As fotos, capas e fotos de stories salvas continuam em HEIF ou WebP em vez de virar JPEG. Algumas galerias e computadores não abrem esses formatos.
+Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.	As fotos, capas, fotos de stories e stickers sem movimento salvos são exatamente os arquivos que o TikTok enviou, não um novo JPEG ou PNG. Algumas galerias e computadores não abrem HEIF ou WebP.
 Save field values	Salvar os valores dos campos
 Save full report	Salvar relatório completo
 Save media	Salvar a mídia

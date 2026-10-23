@@ -1454,7 +1454,7 @@ Save cover,Save cover
 Save cover button in the share sheet,Save cover button in the share sheet
 Save details as JSON,Save details as JSON
 Save details beside the video,Save details beside the video
-"Save every photo in the post at full size as a JPEG, not as the screen shows it.","Save every photo in the post at full size as a JPEG, not as the screen shows it."
+"Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.","Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on."
 Save field values,Save field values
 Save full report,Save full report
 Save in which quality?,Save in which quality?
@@ -1491,7 +1491,7 @@ Saved %1$s videos,Saved %1$s videos
 Saved 1 seen video to the file,Saved 1 seen video to the file
 Saved one original photo,Saved one original photo
 Saved one video,Saved one video
-"Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.","Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those."
+"Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.","Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP."
 Saved post,Saved post
 Saved posts,Saved posts
 Saved the photos as a video in %1$s,Saved the photos as a video in %1$s

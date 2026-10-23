@@ -3040,8 +3040,8 @@ final class L10nTranslationsZh_Hans {
                 "将详细信息保存为 JSON");
         table.put("Save details beside the video",
                 "在视频旁边保存详细信息");
-        table.put("Save every photo in the post at full size as a JPEG, not as the screen shows it.",
-                "将帖子中的每张照片以全尺寸保存为 JPEG，而不是屏幕显示的那样.");
+        table.put("Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.",
+                "将帖子中的每张照片以全尺寸保存，而不是屏幕显示的那样。除非开启了“照片保持 TikTok 发送时的格式”，否则每张都保存为 JPEG.");
         table.put("Save field values",
                 "保存字段值");
         table.put("Save full report",
@@ -3114,8 +3114,8 @@ final class L10nTranslationsZh_Hans {
                 "保存了一张原始照片");
         table.put("Saved one video",
                 "已保存一个视频");
-        table.put("Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.",
-                "保存的照片、封面和故事照片保持 HEIF 或 WebP 格式，不转换为 JPEG。部分图库和电脑无法打开这些格式.");
+        table.put("Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.",
+                "保存的照片、封面、故事照片和静态贴纸就是 TikTok 发送的原始文件，而不是新的 JPEG 或 PNG。部分图库和电脑无法打开 HEIF 或 WebP.");
         table.put("Saved post",
                 "已保存的帖子");
         table.put("Saved posts",

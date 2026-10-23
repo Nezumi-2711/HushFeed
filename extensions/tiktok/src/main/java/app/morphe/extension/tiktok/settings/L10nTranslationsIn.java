@@ -3040,8 +3040,8 @@ final class L10nTranslationsIn {
                 "Simpan detail sebagai JSON");
         table.put("Save details beside the video",
                 "Simpan detail di samping video");
-        table.put("Save every photo in the post at full size as a JPEG, not as the screen shows it.",
-                "Simpan setiap foto dalam unggahan dalam ukuran penuh sebagai JPEG, bukan seperti yang ditampilkan layar.");
+        table.put("Save every photo in the post at full size, not as the screen shows it. Each one is a JPEG unless Keep photos as TikTok sent them is on.",
+                "Simpan setiap foto dalam unggahan dalam ukuran penuh, bukan seperti yang ditampilkan layar. Setiap foto menjadi JPEG kecuali Simpan foto seperti yang dikirim TikTok aktif.");
         table.put("Save field values",
                 "Simpan nilai bidang");
         table.put("Save full report",
@@ -3114,8 +3114,8 @@ final class L10nTranslationsIn {
                 "Satu foto asli disimpan");
         table.put("Saved one video",
                 "Satu video disimpan");
-        table.put("Saved photos, covers and story photos stay HEIF or WebP instead of becoming a JPEG. Some galleries and computers can't open those.",
-                "Foto, sampul, dan foto Story yang disimpan tetap HEIF atau WebP, tidak diubah menjadi JPEG. Beberapa galeri dan komputer tidak bisa membukanya.");
+        table.put("Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.",
+                "Foto, sampul, foto Story, dan stiker diam yang disimpan adalah file persis seperti yang dikirim TikTok, bukan JPEG atau PNG baru. Beberapa galeri dan komputer tidak bisa membuka HEIF atau WebP.");
         table.put("Saved post",
                 "Postingan tersimpan");
         table.put("Saved posts",
