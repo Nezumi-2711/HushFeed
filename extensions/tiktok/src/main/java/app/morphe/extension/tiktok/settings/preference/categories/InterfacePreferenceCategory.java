@@ -299,9 +299,11 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                 addPreference(new ChoicePreference(context, "Sort loaded videos on profile grids",
                         Settings.PROFILE_GRID_SORT,
                         new String[]{"Original order", "Newest first", "Oldest first", "Longest first",
-                                "Shortest first", "Most viewed first", "Most liked first"},
-                        new String[]{"off", "newest", "oldest", "longest", "shortest", "most_viewed", "most_liked"})
-                        .withNote("Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this."));
+                                "Shortest first", "Most viewed first", "Least viewed first",
+                                "Most liked first", "Least liked first"},
+                        new String[]{"off", "newest", "oldest", "longest", "shortest", "most_viewed",
+                                "least_viewed", "most_liked", "least_liked"})
+                        .withNote("Sorts a profile or Liked grid with pinned videos first. While an order is on, the grid keeps loading by itself up to 300 videos, so the order covers more than the first screen. A button in the grid's top corner changes the order right there."));
             }
         }
         if (SettingsStatus.authorRegionEnabled) {

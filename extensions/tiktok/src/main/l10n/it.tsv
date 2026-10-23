@@ -2267,5 +2267,8 @@ Oldest first	Prima i più vecchi
 Longest first	Prima i più lunghi
 Shortest first	Prima i più corti
 Most viewed first	Prima i più visti
+Least viewed first	Prima i meno visti
 Most liked first	Prima i più piaciuti
-Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.	Ordina i video che una griglia del profilo o dei Mi piace ha caricato finora, con quelli in evidenza davanti. Scorrendo, l'ordine copre più video. La prossima volta che si apre una griglia, lo seguirà.
+Least liked first	Prima i meno piaciuti
+Sorts a profile or Liked grid with pinned videos first. While an order is on, the grid keeps loading by itself up to 300 videos, so the order covers more than the first screen. A button in the grid's top corner changes the order right there.	Ordina una griglia del profilo o dei Mi piace, con i video in evidenza davanti. Finché è scelto un ordine, la griglia continua a caricare da sola fino a 300 video, così l'ordine copre più della prima schermata. Un pulsante nell'angolo in alto della griglia cambia l'ordine lì stesso.
+Sort this grid	Ordina questa griglia

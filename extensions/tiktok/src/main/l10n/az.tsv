@@ -2267,5 +2267,8 @@ Oldest first	Əvvəlcə ən köhnələr
 Longest first	Əvvəlcə ən uzunlar
 Shortest first	Əvvəlcə ən qısalar
 Most viewed first	Əvvəlcə ən çox baxılanlar
+Least viewed first	Əvvəlcə ən az baxılanlar
 Most liked first	Əvvəlcə ən çox bəyənilənlər
-Sorts the videos a profile or Liked grid has loaded so far, with pinned videos first, and the order covers more videos as you scroll. The next time a grid opens, it follows this.	Profil və ya bəyənilənlər şəbəkəsinin indiyə qədər yüklədiyi videoları sıralayır, sancılmış videolar əvvəldə qalır. Aşağı sürüşdükcə sıra daha çox videonu əhatə edir. Şəbəkə növbəti dəfə açılanda bunu izləyir.
+Least liked first	Əvvəlcə ən az bəyənilənlər
+Sorts a profile or Liked grid with pinned videos first. While an order is on, the grid keeps loading by itself up to 300 videos, so the order covers more than the first screen. A button in the grid's top corner changes the order right there.	Profil və ya bəyənilənlər şəbəkəsini sıralayır, sancılmış videolar əvvəldə qalır. Sıra seçiləndə şəbəkə 300 videoya qədər özü yüklənməyə davam edir, beləliklə sıra ilk ekrandan daha çoxunu əhatə edir. Şəbəkənin yuxarı küncündəki düymə sıranı elə oradaca dəyişir.
+Sort this grid	Bu şəbəkəni sırala
