@@ -26,6 +26,9 @@ Every Hushfeed release, newest first.
 * **TikTok:** `Latest first` on the Following tab now keeps everything below the video you're watching in date order as more posts load. A newer post that shows up late moves up right after your video, and nothing you've already scrolled past moves (#226).
 * **TikTok:** Sorting a profile or Liked grid now has Least viewed first and Least liked first. While an order is on, the grid keeps loading by itself (up to 300 videos) so the order covers more than the first screen, and a button in the grid's corner changes the order right there (#180).
 * **TikTok:** New switch under `Remove avatar rings`: `Open the Story when a creator is LIVE`. When someone who's LIVE also has a Story, tapping their picture on their profile opens the Story, and tapping it again joins the LIVE. It starts off (#233).
+* **TikTok:** With `Record LIVEs you watch` on, a LIVE room's Share sheet has a `LIVE recording quality` row. Tap it to pick the quality the next recording uses without going to Hushfeed settings (#203).
+* **TikTok:** With `Offer LIVE quality in more rooms` on, Share > Video quality also shows in gaming and football LIVE rooms. TikTok left it out of LIVE Studio rooms and rooms that support low latency (#37).
+* **TikTok:** With `Dark LIVE panels in dark mode` on, a LIVE room stays dark when your phone switches between light and dark while the room is open. Before, its Share sheet opened white until you left and came back (#159).
 
 ## 0.78.0 (2026-10-22)
 
