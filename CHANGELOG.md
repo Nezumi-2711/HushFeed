@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** `Hide TikTok's Auto scroll button` also hides the Auto scroll switch that tablets and unfolded foldables show beside the avatar on each video, and it works with `Auto-advance videos` off now. Before, it only took the action out of the long-press panel, and only while Auto-advance was on (#234).
+
 ## 0.78.0 (2026-10-22)
 
 ### Features and fixes
