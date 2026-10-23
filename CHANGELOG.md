@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** New `Blur the video behind the bar` switch under `Liquid glass look`. It frosts the glass pill with a soft blur of the video behind it, off by default, on Android 12 and up (#231).
 * **TikTok:** With `Dark LIVE panels in dark mode` on, three light pieces left in a LIVE room go dark too: the navigation bar under the long-press sheet, the tiles inside the host's profile card, and the fan club's tab strip and card (#159).
 * **TikTok:** `Tag saved videos with their details` now tags the videos TikTok actually sends. Their files carry a short list of TikTok's own fields where the tags go, and the switch left those files alone, so every save came out with no title, creator, date or link. The tags go in now, and TikTok's fields stay in the file beside them.
 * **TikTok:** `Hide TikTok's Auto scroll button` also hides the Auto scroll switch that tablets and unfolded foldables show beside the avatar on each video, and it works with `Auto-advance videos` off now. Before, that switch stayed, and the hide only worked while Auto-advance was on (#234).
