@@ -5,6 +5,7 @@ Every Hushfeed release, newest first.
 ## Unreleased
 
 * **TikTok:** `Hide TikTok's Auto scroll button` also hides the Auto scroll switch that tablets and unfolded foldables show beside the avatar on each video, and it works with `Auto-advance videos` off now. Before, that switch stayed, and the hide only worked while Auto-advance was on (#234).
+* **TikTok:** The README's install steps now say which 47.5.3 file to get. Morphe Manager on a phone should patch the bundle (`.apkm`), because on a device with 3 GB Manager ran out of memory on the APK and patched the bundle in about a minute. A computer should patch the APK. The out of memory tip under Patching stalls partway points to the bundle too, and step 6 says to uninstall the Google Play TikTok first, which logs you out.
 
 ## 0.78.0 (2026-10-22)
 
