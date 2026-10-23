@@ -14,6 +14,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** The `Show how many were filtered` label and the `Show what is left of the budget` label stay off the Shop tab and the Nearby tab now. Both showed there because the Home tab stays selected on those tabs, and the filtered count sat right over their search boxes. They still show on For You and Following.
 * **TikTok:** With `Dark LIVE panels in dark mode` on, a room's viewer ranking opens dark again. A shop room's Top customers ranking still keeps TikTok's light look, because its tab titles came out dark on dark (#159).
 * **TikTok:** The README says how much memory morphe-desktop needs on a computer. With every patch picked on 47.5.3 it runs out at 1 GB, Java's default on a 4 GB machine, and finishes at 1.5 GB, so start it with `java -Xmx2g` (#220).
+* **TikTok:** With `Double tap` set to `Do nothing`, or every corner of `Double tap by corner` set to it, a tap on a video pauses or plays the moment your finger lifts. TikTok used to hold each tap for a beat in case a second one followed, and two quick taps counted as a double tap that did nothing. Now each one counts (#239).
 
 ## 0.78.0 (2026-10-22)
 
