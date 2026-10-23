@@ -851,6 +851,36 @@ internal fun roomThemeJoin(instructions: List<Instruction>): Int {
 }
 
 /**
+ * The LIVE room activity's onConfigurationChanged (#159). The room handles a dark mode flip itself
+ * (uiMode is in its configChanges), so androidx's AppCompat reworks its theme inside the super
+ * call: it moves the room's resources to the new night mode, calls setTheme with the room's last
+ * theme, which reaches the room hook, then applies that same theme again with force, putting the
+ * room's light style back over the dark app theme the hook just added. A room left open while
+ * the system theme flipped opened Share white (S22, 2026-10-23).
+ */
+internal object LivePlayActivityConfigurationFingerprint : Fingerprint(
+    definingClass = LIVE_PLAY_ACTIVITY,
+    name = "onConfigurationChanged",
+    returnType = "V",
+    parameters = listOf("Landroid/content/res/Configuration;"),
+)
+
+/** Hands the room to the room hook again right after its super onConfigurationChanged returns. */
+internal fun hookRoomConfiguration(changed: MutableMethod) {
+    val instructions = changed.implementation?.instructions?.toList()
+        ?: throw PatchException("LIVE controls: the room's onConfigurationChanged has no body")
+    val parent = instructions.indexOfFirst {
+        val call = (it as? ReferenceInstruction)?.reference as? MethodReference
+        it.opcode == Opcode.INVOKE_SUPER && call?.name == "onConfigurationChanged"
+    }
+    if (parent < 0) throw PatchException("LIVE controls: the room's onConfigurationChanged never calls its super")
+    changed.addInstruction(
+        parent + 1,
+        "invoke-static/range {p0 .. p0}, $PANEL_THEME->darkLiveRoom(Landroid/app/Activity;)V",
+    )
+}
+
+/**
  * Spark's light or dark decision for one page, SparkContext.LJIIZILJ(Context) on 47.5.3 (#159).
  * It takes the page schema's force_theme_style first, then asks TikTok's theme name lookup with
  * the page's own fragment, popup or activity context, and the page's container color (LJJJJI)
@@ -1787,6 +1817,10 @@ val liveControlsPatch = bytecodePatch(
             it.name == "darkAppTheme" && it.returnType == "I" && it.parameterTypes.isEmpty()
         }.returnEarly(darkTheme)
         hookRoomTheme(LivePlayActivityThemeFingerprint.method)
+        // A dark mode flip with a room open doesn't recreate it: AppCompat re-applies the room's
+        // last light theme with force after setTheme, so the room hook runs again once the
+        // change is through.
+        hookRoomConfiguration(LivePlayActivityConfigurationFingerprint.method)
         // TikTok's Spark pages read light or dark from the theme name of the context they open
         // in, so over the darkened room they draw dark, which suits them, except a shop room's
         // viewer ranking with a Top customers tab: its native tab titles kept their light colors
