@@ -916,6 +916,14 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting GLASS_TAB_LENS = new BooleanSetting(
             "glass_tab_lens", FALSE, false, Setting.parent(LIQUID_GLASS_BOTTOM_BAR));
     /**
+     * With Liquid glass look on Android 12 and newer, blurs the strip of video behind the glass
+     * pill instead of drawing a frost over it (#231). The strip is read back from the player's
+     * surface a few times a second while the pill is on screen. Without a surface to read, the
+     * plain glass stays. Read on each layout.
+     */
+    public static final BooleanSetting GLASS_VIDEO_BLUR = new BooleanSetting(
+            "glass_video_blur", FALSE, false, Setting.parent(LIQUID_GLASS_BOTTOM_BAR));
+    /**
      * Lets the main feed's video draw up under the status bar, with the clock over it (#145).
      * VideoOverlayHider collapses the spacer TikTok keeps above each video for the bar and
      * SeeThroughStatusBar clears the bar's color while the feed is in front; both go back when

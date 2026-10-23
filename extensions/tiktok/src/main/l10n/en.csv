@@ -304,6 +304,8 @@ Blocked sound ids,Blocked sound ids
 Blocked sound names,Blocked sound names
 Blocked sounds,Blocked sounds
 Blocking,Blocking
+"Blur the part of the video that sits behind the glass pill on the main feed, so it looks like frosted glass. Needs Liquid glass look and Android 12 and up.","Blur the part of the video that sits behind the glass pill on the main feed, so it looks like frosted glass. Needs Liquid glass look and Android 12 and up."
+Blur the video behind the bar,Blur the video behind the bar
 Bold,Bold
 Bottom left double tap,Bottom left double tap
 Bottom right double tap,Bottom right double tap
