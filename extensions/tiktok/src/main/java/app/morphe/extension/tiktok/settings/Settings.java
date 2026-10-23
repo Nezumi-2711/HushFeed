@@ -301,8 +301,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting UNCAP_REFRESH_RATE =
             new BooleanSetting("uncap_refresh_rate", FALSE);
     /**
-     * Skips TikTok's brightness boost in the camera, editor and post screens (issue #200). The
-     * patch is in the default selection, so the switch starts off.
+     * Skips TikTok's brightness boost in the camera, editor and post screens, and the full
+     * brightness the cameras' front flash and fill light store (issue #200). The patch is in the
+     * default selection, so the switch starts off.
      */
     public static final BooleanSetting KEEP_CAMERA_BRIGHTNESS =
             new BooleanSetting("keep_camera_brightness", FALSE);
