@@ -91,6 +91,15 @@ val hideProfileShortcutsPatch = bytecodePatch(
             println("[$PATCH_NAME] Left out Hide Balance in the profile menu on ${packageMetadata.versionName}: ${problem.message}")
             null
         }
+        // Turn on Thoughts (#186), the other way round from hiding them: TikTok's two Thoughts
+        // gates answer yes behind a switch that starts off. Held by SwitchedReturnFixturesTest.
+        val thoughtsGates = try {
+            resolveThoughtsGates()
+        } catch (problem: Exception) {
+            if (packageMetadata.versionName in declaredVersions()) throw problem
+            println("[$PATCH_NAME] Left out Turn on Thoughts on ${packageMetadata.versionName}: ${problem.message}")
+            null
+        }
         OwnProfileConversionFingerprint.method.filterProfileUserParameter(0)
         ProfileConversionFingerprint.method.filterProfileUserParameter(1)
 
@@ -108,6 +117,13 @@ val hideProfileShortcutsPatch = bytecodePatch(
             SettingsStatusLoadFingerprint.method.addInstruction(
                 0,
                 "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableProfileMenuCells()V",
+            )
+        }
+        if (thoughtsGates != null) {
+            thoughtsGates.installThoughtsSwitch()
+            SettingsStatusLoadFingerprint.method.addInstruction(
+                0,
+                "invoke-static {}, Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableThoughtsSwitch()V",
             )
         }
     }

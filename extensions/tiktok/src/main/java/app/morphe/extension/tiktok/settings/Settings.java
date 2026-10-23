@@ -1251,6 +1251,8 @@ public class Settings extends BaseSettings {
     public static final StringSetting PROFILE_SHORTCUT_CATALOG = new StringSetting("profile_shortcut_catalog", "");
     /** The Thoughts bubble above a profile picture (#122). Read when a profile's picture is built. */
     public static final BooleanSetting HIDE_PROFILE_THOUGHTS = new BooleanSetting("hide_profile_thoughts", FALSE, true);
+    /** TikTok's two Thoughts gates answer yes (#186). A restart, since TikTok keeps what it built. */
+    public static final BooleanSetting ENABLE_THOUGHTS = new BooleanSetting("enable_thoughts", FALSE, true);
     // Popup labels (TikTok's own popup layer): the labels ticked in the checklist, and the ones
     // TikTok has tried to show on this phone, which the checklist offers.
     public static final StringSetting POPUP_LABEL_PICKS = new StringSetting("popup_label_picks", "");

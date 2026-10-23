@@ -779,6 +779,8 @@ Hide the Share via row.,隐藏共享通过行.
 Hide the Tako bubble,隐藏 Tako 气泡
 Hide the Tako chat,隐藏 Tako 聊天记录
 "Hide the Thoughts bubble TikTok shows above a profile picture, and the prompt to share one on your own profile. Restart TikTok to apply this.",隐藏个人资料图片上方显示的想法气泡 TikTok，以及在您自己的个人资料上分享一张的提示。重新启动 TikTok 以应用此操作.
+Turn on Thoughts,开启想法
+"Show Thoughts on profiles and in your inbox, and the prompt to share one, for accounts TikTok hasn't turned them on for. TikTok's servers may still refuse to post one. Restart TikTok to apply this.",为 TikTok 尚未开启想法的账号，在个人资料和收件箱中显示想法，以及分享想法的提示。TikTok 的服务器仍可能拒绝发布。重新启动 TikTok 以应用此操作.
 Hide the actions row of the share sheet.,隐藏共享表的操作行.
 Hide the add people icon,隐藏添加人员图标
 Hide the bottom tab names,隐藏底部选项卡名称

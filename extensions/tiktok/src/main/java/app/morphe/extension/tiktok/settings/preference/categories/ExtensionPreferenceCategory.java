@@ -291,6 +291,16 @@ public class ExtensionPreferenceCategory extends ConditionalPreferenceCategory {
                         Settings.HIDE_PROFILE_THOUGHTS
                 ));
             }
+            if (SettingsStatus.thoughtsSwitchEnabled) {
+                addPreference(new TogglePreference(
+                        context,
+                        "Turn on Thoughts",
+                        "Show Thoughts on profiles and in your inbox, and the prompt to share one, "
+                                + "for accounts TikTok hasn't turned them on for. TikTok's servers may "
+                                + "still refuse to post one. Restart TikTok to apply this.",
+                        Settings.ENABLE_THOUGHTS
+                ));
+            }
             if (SettingsStatus.profileMenuCellsEnabled) {
                 addPreference(new TogglePreference(
                         context,

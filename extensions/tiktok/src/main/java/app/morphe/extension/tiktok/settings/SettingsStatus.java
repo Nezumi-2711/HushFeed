@@ -672,6 +672,13 @@ public class SettingsStatus {
         profileThoughtsEnabled = true;
     }
 
+    /** Hide profile shortcuts found TikTok's two Thoughts gates on this build and put the switch in front. */
+    public static boolean thoughtsSwitchEnabled = false;
+
+    public static void enableThoughtsSwitch() {
+        thoughtsSwitchEnabled = true;
+    }
+
     /** Hide profile shortcuts found the question your profile's menu asks about each cell, and hooked it. */
     public static boolean profileMenuCellsEnabled = false;
 
