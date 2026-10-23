@@ -661,6 +661,11 @@ public class Settings extends BaseSettings {
      */
     public static final StringSetting LIVE_RECORD_QUALITY = new StringSetting("live_record_quality", "room");
     /**
+     * What a LIVE recording is made from (#37): "stream" saves the room's own video, "screen" records
+     * the phone's screen. Read as each recording starts, so no restart.
+     */
+    public static final StringSetting LIVE_RECORD_SOURCE = new StringSetting("live_record_source", "stream");
+    /**
      * Plays the audio TikTok mutes on a post whose sound was pulled; the Keep pulled sounds
      * patch. Read as each video starts, so no restart.
      */

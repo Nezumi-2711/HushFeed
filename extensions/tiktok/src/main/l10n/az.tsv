@@ -2280,3 +2280,12 @@ Sorts a profile or Liked grid with pinned videos first. While an order is on, th
 Sort this grid	Bu şəbəkəni sırala
 Blur the video behind the bar	Panelin arxasındakı videonu bulanıqlaşdırın
 Blur the part of the video that sits behind the glass pill on the main feed, so it looks like frosted glass. Needs Liquid glass look and Android 12 and up.	Əsas lentdə şüşə həbin arxasında qalan video hissəsini bulanıqlaşdırın ki, buzlu şüşə kimi görünsün. Maye şüşə görünüşü və Android 12 və yuxarı tələb olunur.
+LIVE recording source	LIVE yazısının mənbəyi
+Stream only	Yalnız yayım
+Screen	Ekran
+Stream only saves the room's own video, as before. Screen records what your phone shows while you watch, with the sound the app plays when TikTok has the microphone permission. Android asks you to allow screen recording each time, and shows its own notice while it records.	Yalnız yayım otağın videosunu əvvəlki kimi saxlayır. Ekran izləyərkən telefonunuzun göstərdiyini yazır, TikTok-un mikrofon icazəsi varsa tətbiqin səsi ilə. Android hər dəfə ekran yazısına icazə istəyir və yazarkən öz bildirişini göstərir.
+Recording this LIVE's screen	Bu LIVE-ın ekranı yazılır
+Open the room and tap Stop to save it.	Otağı açın və saxlamaq üçün Dayandır düyməsinə toxunun.
+Screen recording wasn't allowed	Ekran yazısına icazə verilmədi
+Recording this LIVE's screen from now	Bu LIVE-ın ekranı indi yazılır
+Recording this LIVE's screen from now, without sound	Bu LIVE-ın ekranı indi səssiz yazılır

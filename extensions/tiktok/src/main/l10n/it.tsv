@@ -2280,3 +2280,12 @@ Sorts a profile or Liked grid with pinned videos first. While an order is on, th
 Sort this grid	Ordina questa griglia
 Blur the video behind the bar	Sfoca il video dietro la barra
 Blur the part of the video that sits behind the glass pill on the main feed, so it looks like frosted glass. Needs Liquid glass look and Android 12 and up.	Sfoca nel feed principale la parte del video che sta dietro la pillola di vetro, così sembra vetro smerigliato. Richiede Aspetto vetro liquido e Android 12 o successivo.
+LIVE recording source	Origine della registrazione LIVE
+Stream only	Solo stream
+Screen	Schermo
+Stream only saves the room's own video, as before. Screen records what your phone shows while you watch, with the sound the app plays when TikTok has the microphone permission. Android asks you to allow screen recording each time, and shows its own notice while it records.	Solo stream salva il video della stanza, come prima. Schermo registra ciò che mostra il telefono mentre guardi, con l'audio dell'app se TikTok ha il permesso del microfono. Android chiede ogni volta di consentire la registrazione dello schermo e mostra un suo avviso mentre registra.
+Recording this LIVE's screen	Registrazione dello schermo di questa LIVE
+Open the room and tap Stop to save it.	Apri la stanza e tocca Stop per salvarla.
+Screen recording wasn't allowed	La registrazione dello schermo non è stata consentita
+Recording this LIVE's screen from now	Registro lo schermo di questa LIVE da ora
+Recording this LIVE's screen from now, without sound	Registro lo schermo di questa LIVE da ora, senza audio
