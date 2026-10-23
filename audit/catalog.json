@@ -13720,7 +13720,7 @@
       "expect": "ok seed-commenter-region AQ for [1-9][0-9]* commenters, rebound 1 list"
      },
      {
-      "log": "Commenter region: the comment's account carried (one|none), showing (?-i:[A-Z]{2})\\b",
+      "log": "Commenter region: the comment's account carried none, showing (?-i:AQ)\\b",
       "within": 4000
      },
      {

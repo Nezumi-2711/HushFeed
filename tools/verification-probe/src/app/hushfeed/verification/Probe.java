@@ -2238,6 +2238,8 @@ public final class Probe extends Instrumentation {
                         int rebound = 0;
                         for (android.view.View root : windowRoots()) rebound += rebindCommentList(root, shown);
                         if (rebound == 0) {
+                            // A failed step skips the check's clear, so don't leave the seed behind.
+                            regions.getMethod("forgetSeenRegions").invoke(null);
                             throw new IllegalStateException("no comment list on screen shows a bound commenter");
                         }
                         Log.i(TAG, "ok seed-commenter-region " + region + " for " + handles.size()
