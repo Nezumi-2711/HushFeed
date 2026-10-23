@@ -10,6 +10,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** With `Keep Clear display across videos` off, the tabs, the caption and the buttons now come back as your swipe lets go, so the next video arrives with them. Before, it settled full screen first and then jumped when they showed up again. A Clear display you turn on from TikTok's long-press menu also stays on now instead of switching itself off as the menu closes (#232).
 * **TikTok:** With `See-through bottom bar` on, the caption, the buttons and the search bar don't drop down over the tabs for a moment after each swipe anymore (#232).
 * **TikTok:** Long press set to `Save the frame on screen as a photo` works again on 47.5.3. TikTok's player now draws each video into a layer of its own under the feed, so the save only found an empty view and said the frame couldn't be read. It reads the player's layer now, and the photo comes out at the video's own size with no caption or buttons, on the feed and on videos opened from a profile.
+* **TikTok:** `Remove feed ads` also takes out the smaller Lemon8 card in For You, the one titled "Your daily dose of inspiration" with a Lemon8 post and Open Lemon8 under it. It's built differently from the full-screen Lemon8 card the switch already removed, so it slipped through on 47.5.3.
 * **TikTok:** With `Dark LIVE panels in dark mode` on, a room's viewer ranking opens dark again. A shop room's Top customers ranking still keeps TikTok's light look, because its tab titles came out dark on dark (#159).
 
 ## 0.78.0 (2026-10-22)
