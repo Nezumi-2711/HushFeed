@@ -188,7 +188,7 @@ class LiveDarkPanelsAnchorsTest {
 
             // What the hook answers: AppCompat's night mode update calls setTheme with the
             // activity's theme and then applies that theme again with force.
-            val rework = classes["Landroidx/appcompat/app/AppCompatDelegateImpl;"]?.methods.orEmpty().filter { method ->
+            val rework = classes["Landroidx/appcompat/app/AppCompatDelegateImpl;"]?.methods?.toList().orEmpty().filter { method ->
                 val names = method.implementation?.instructions?.mapNotNull {
                     ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let { ref -> "${ref.definingClass}->${ref.name}" }
                 }.orEmpty()
