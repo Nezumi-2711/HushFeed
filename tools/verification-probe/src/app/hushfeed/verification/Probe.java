@@ -1721,7 +1721,7 @@ public final class Probe extends Instrumentation {
                         break;
                     }
                     case "captionstate": {
-                        // The caption strip (dlk) and its text (dlr) in one read. A caption line is
+                        // The caption strip (dln) and its text (dlu) in one read. A caption line is
                         // on screen only while it is spoken, and separate reads kept landing after
                         // it had gone. For each shown view with either id: place, size and
                         // background, and for the text its size in pixels and its line count.
@@ -1729,11 +1729,11 @@ public final class Probe extends Instrumentation {
                                 .getMethod("getActivity").invoke(null);
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
-                        // 47.1.4 renamed them to dm5 and dmb: -e strip dm5 -e text dmb.
+                        // 47.5.3 names them dln and dlu (47.1.4 had dm5 and dmb): -e strip dm5 -e text dmb.
                         String stripName = intent.getStringExtra("strip");
                         String textName = intent.getStringExtra("text");
-                        if (stripName == null) stripName = "dlk";
-                        if (textName == null) textName = "dlr";
+                        if (stripName == null) stripName = "dln";
+                        if (textName == null) textName = "dlu";
                         int strip = resources.getIdentifier(stripName, "id", activity.getPackageName());
                         int text = resources.getIdentifier(textName, "id", activity.getPackageName());
                         StringBuilder out = new StringBuilder();
@@ -1902,8 +1902,8 @@ public final class Probe extends Instrumentation {
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
                         java.util.Map<Integer, String> wanted = new java.util.HashMap<>();
-                        // llj is the rail column up to 47.1.x, ljn on 47.4.3.
-                        for (String name : new String[]{"llj", "ljn", "desc", "bqv", "ll8", "videomusiccoverblock", "g85"}) {
+                        // The 47.5.3 names: lke rail column, bqj anchor, lk3 search bar, g90 like button.
+                        for (String name : new String[]{"lke", "desc", "bqj", "lk3", "videomusiccoverblock", "g90"}) {
                             int id = resources.getIdentifier(name, "id", activity.getPackageName());
                             if (id != 0) wanted.put(id, name);
                         }
@@ -1965,7 +1965,7 @@ public final class Probe extends Instrumentation {
                                 .getMethod("isClearDisplayNow");
                         android.content.res.Resources resources = activity.getResources();
                         int[] ids = new int[3];
-                        String[] names = {"llj", "bqv", "videomusiccoverblock"};
+                        String[] names = {"lke", "bqj", "videomusiccoverblock"};
                         for (int i = 0; i < names.length; i++) {
                             ids[i] = resources.getIdentifier(names[i], "id", activity.getPackageName());
                         }
@@ -2031,8 +2031,8 @@ public final class Probe extends Instrumentation {
                         Method clearNow = loader.loadClass("app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch")
                                 .getMethod("isClearDisplayNow");
                         android.content.res.Resources resources = activity.getResources();
-                        int strip = resources.getIdentifier("dlk", "id", activity.getPackageName());
-                        int drawn = resources.getIdentifier("dls", "id", activity.getPackageName());
+                        int strip = resources.getIdentifier("dln", "id", activity.getPackageName());
+                        int drawn = resources.getIdentifier("dlu", "id", activity.getPackageName());
                         int[] counts = new int[9];
                         android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
                         long start = android.os.SystemClock.uptimeMillis();
@@ -2070,7 +2070,7 @@ public final class Probe extends Instrumentation {
                                         + " strip=" + counts[2] + " line=" + counts[3] + " cue=" + counts[4]
                                         + " clearedStrip=" + counts[5] + " clearedLine=" + counts[6]
                                         + " clearedCue=" + counts[7] + " lineWithControls=" + counts[8]
-                                        + (strip == 0 || drawn == 0 ? " dlk/dls=missing" : ""));
+                                        + (strip == 0 || drawn == 0 ? " dln/dlu=missing" : ""));
                             }
                         });
                         break;
