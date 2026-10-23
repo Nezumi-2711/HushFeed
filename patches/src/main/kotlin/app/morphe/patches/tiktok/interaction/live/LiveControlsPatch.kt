@@ -15,6 +15,9 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.shared.compat.AppCompatibilities
+import app.morphe.patches.tiktok.interaction.sharesheet.SHARE_LIVE_QUALITY
+import app.morphe.patches.tiktok.interaction.sharesheet.addOwnedShareAction
+import app.morphe.patches.tiktok.interaction.sharesheet.ownedShareActionsPatch
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
@@ -1734,7 +1737,7 @@ val liveControlsPatch = bytecodePatch(
         "and can add a Record button to a LIVE room that saves what you watch from when you tap it.",
 ) {
     category("Playback")
-    dependsOn(settingsPatch, sharedExtensionPatch)
+    dependsOn(settingsPatch, sharedExtensionPatch, ownedShareActionsPatch)
     compatibleWith(*AppCompatibilities.tiktok())
 
     execute {
@@ -1995,6 +1998,9 @@ val liveControlsPatch = bytecodePatch(
             "invoke-static/range {v${stored.register} .. v${stored.register}}, " +
                 "$EXTENSION->noteLiveQualityPick(Ljava/lang/String;)V",
         )
+        // A LIVE room's share sheet is the regular one with itemType "live", so the recording
+        // quality row rides the same finished-row hook Block this creator and Save cover use (#203).
+        addOwnedShareAction(SHARE_LIVE_QUALITY)
     }
 }
 
