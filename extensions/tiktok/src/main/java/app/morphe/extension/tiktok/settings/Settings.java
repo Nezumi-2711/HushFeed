@@ -344,6 +344,8 @@ public class Settings extends BaseSettings {
             new BooleanSetting("launcher_shortcuts_removed", FALSE, false, false);
     public static final BooleanSetting ALLOW_DUET_AND_STITCH =
             new BooleanSetting("allow_duet_and_stitch", FALSE);
+    public static final BooleanSetting ALLOW_ADD_TO_STORY =
+            new BooleanSetting("allow_add_to_story", FALSE);
     public static final BooleanSetting HIDE_FOLLOWER_NOTIFICATIONS =
             new BooleanSetting("hide_follower_notifications", FALSE);
     /**

@@ -198,6 +198,7 @@ All available languages	Todos os idiomas disponíveis
 All events	Todos os eventos
 All loaded tabs	Todas as abas carregadas
 Allow Duet and Stitch anyway	Permitir Dueto e Costura mesmo assim
+Allow Add to Story anyway	Permitir Adicionar ao story mesmo assim
 Allow screenshots and Circle to Search	Permitir capturas de tela e Círculo para pesquisar
 Allow storage for TikTok in Android settings to save profile pictures	É preciso permissão de armazenamento para salvar uma foto de perfil
 Allow storage for TikTok in Android settings to save sounds	É preciso permissão de armazenamento para salvar um som
@@ -656,6 +657,7 @@ Hushfeed can't read the creator pattern %1$s	O Hushfeed não consegue ler o padr
 Hushfeed hid a TikTok CAPTCHA. Turn off Hide CAPTCHA popups if something stops working.	O Hushfeed escondeu um CAPTCHA do TikTok. Desligue Esconder as janelas de CAPTCHA se alguma coisa parar de funcionar.
 Hushfeed is active	O Hushfeed está ativo
 Shows the Duet and Stitch options even when the creator turned them off. TikTok may still refuse to accept the result.	Mostra as opções Dueto e Stitch mesmo quando o criador as desativou. O TikTok ainda pode recusar o resultado.
+Shows Add to Story on a story whose creator turned off content reuse. TikTok may still refuse to post it.	Mostra Adicionar ao story em um story cujo criador desativou a reutilização de conteúdo. O TikTok ainda pode recusar a publicação.
 Import finished	Importação concluída
 Import loaded values	Importar os valores carregados
 Imported %1$d values	%1$d valores importados

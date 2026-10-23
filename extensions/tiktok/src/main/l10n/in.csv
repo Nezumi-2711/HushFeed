@@ -194,6 +194,7 @@ All available languages,Semua bahasa yang tersedia
 All events,Semua peristiwa
 All loaded tabs,Semua tab yang dimuat
 Allow Duet and Stitch anyway,Tetap izinkan Duet dan Stitch
+Allow Add to Story anyway,Tetap izinkan Tambahkan ke Cerita
 Allow screenshots and Circle to Search,Izinkan tangkapan layar dan Circle to Search
 Allow storage for TikTok in Android settings to save profile pictures,Izin penyimpanan dibutuhkan untuk menyimpan foto profil
 Allow storage for TikTok in Android settings to save sounds,Izin penyimpanan dibutuhkan untuk menyimpan suara
@@ -651,6 +652,7 @@ Hushfeed can't read the creator pattern %1$s,Hushfeed tidak bisa membaca pola kr
 Hushfeed hid a TikTok CAPTCHA. Turn off Hide CAPTCHA popups if something stops working.,Hushfeed menyembunyikan satu CAPTCHA TikTok. Matikan Sembunyikan popup CAPTCHA kalau ada yang berhenti berfungsi.
 Hushfeed is active,Hushfeed aktif
 Shows the Duet and Stitch options even when the creator turned them off. TikTok may still refuse to accept the result.,Menampilkan opsi Duet dan Stitch meskipun kreator mematikannya. TikTok masih bisa menolak hasilnya.
+Shows Add to Story on a story whose creator turned off content reuse. TikTok may still refuse to post it.,Menampilkan Tambahkan ke Cerita pada cerita yang kreatornya mematikan penggunaan ulang konten. TikTok masih bisa menolak mengunggahnya.
 Import finished,Impor selesai
 Import loaded values,Impor nilai yang dimuat
 Imported %1$d values,%1$d nilai diimpor

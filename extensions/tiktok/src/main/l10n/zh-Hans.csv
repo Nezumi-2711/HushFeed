@@ -201,6 +201,7 @@ All available languages,所有可用语言
 All events,所有活动
 All loaded tabs,所有加载的选项卡
 Allow Duet and Stitch anyway,无论如何都允许 Duet 和 Stitch
+Allow Add to Story anyway,无论如何都允许添加到故事
 Allow screenshots and Circle to Search,允许截图和圈选即搜
 Allow storage for TikTok in Android settings to record LIVEs,允许在 Android 设置中存储 TikTok 以录制 LIVE
 Allow storage for TikTok in Android settings to save covers,允许在 Android 设置中存储 TikTok 以保存封面
@@ -1654,6 +1655,7 @@ Shows TikTok's text in your phone's font instead of TikTok Sans. Icons and gift 
 "Shows a small count under TikTok's top tabs of what the feed filter has removed since TikTok started. It shows only on the feed, and taps on it go through to the video under it.",在 TikTok 的顶部选项卡下显示自 TikTok 启动以来信息流过滤器已删除的内容的少量计数。它仅显示在信息流上，点击它即可查看其下方的视频.
 Shows every emoji in your phone's own emoji font. The newest emoji your phone doesn't have yet may show as a box or in pieces.,以手机自带的表情符号字体显示每个表情符号。您的手机尚未安装的最新表情符号可能会显示为盒子或碎片.
 Shows the Duet and Stitch options even when the creator turned them off. TikTok may still refuse to accept the result.,即使创建者关闭了 Duet 和 Stitch 选项，也会显示它们。 TikTok 仍可能拒绝接受结果.
+Shows Add to Story on a story whose creator turned off content reuse. TikTok may still refuse to post it.,在创建者关闭了内容再利用的故事上显示“添加到故事”。 TikTok 仍可能拒绝发布.
 "Shows the country's flag in place of its two letters, by the creator's name and by a commenter's time.",在两个字母的位置显示该国的国旗，并按创建者的姓名和评论者的时间.
 Sign in to TikTok before importing watch history.,导入观看历史记录之前，请登录 TikTok.
 Sign in to TikTok before saving or restoring seen history.,在保存或恢复查看的历史记录之前，请登录 TikTok.

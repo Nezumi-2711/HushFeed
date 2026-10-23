@@ -202,6 +202,7 @@ All,All
 All available languages,All available languages
 All events,All events
 All loaded tabs,All loaded tabs
+Allow Add to Story anyway,Allow Add to Story anyway
 Allow Duet and Stitch anyway,Allow Duet and Stitch anyway
 Allow screenshots and Circle to Search,Allow screenshots and Circle to Search
 Allow storage for TikTok in Android settings to record LIVEs,Allow storage for TikTok in Android settings to record LIVEs
@@ -1674,6 +1675,7 @@ Show where a video was posted,Show where a video was posted
 Show where commenters are from,Show where commenters are from
 Showing %1$s again,Showing %1$s again
 Shown. Tap to hide it.,Shown. Tap to hide it.
+Shows Add to Story on a story whose creator turned off content reuse. TikTok may still refuse to post it.,Shows Add to Story on a story whose creator turned off content reuse. TikTok may still refuse to post it.
 "Shows TikTok's full sort menu on every post, with hot, newest, media and creator options, instead of the shorter one your account got. Restart TikTok to see the change.","Shows TikTok's full sort menu on every post, with hot, newest, media and creator options, instead of the shorter one your account got. Restart TikTok to see the change."
 "Shows TikTok's play, pause, previous and next buttons on the feed. TikTok normally shows them only to people who use a screen reader. TikTok can see when you use them.","Shows TikTok's play, pause, previous and next buttons on the feed. TikTok normally shows them only to people who use a screen reader. TikTok can see when you use them."
 "Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows.","Shows TikTok's text in the font file you import below. While both are on, this one wins over Use system font. If the file is removed or can't be read, the text goes back to what Use system font shows."
