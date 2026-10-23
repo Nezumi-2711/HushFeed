@@ -671,7 +671,7 @@
     "auto": true
    }
   ],
-  "notes": "SecurePopupProbe builds one of TikTok's own Compose popups with its obfuscated classes (X.011R, X.01oO, X.011P, X.01tC), so a TikTok build that renames them makes the action fail with an exception line instead of 'ok'; that means the probe needs updating, not that the patch is broken. The popup is shown on top of the feed for a moment and removed by secure-popup-close; it is a controlled test view, not a screen capture. Circle to Search itself is a system gesture and is a review item."
+  "notes": "SecurePopupProbe builds one of TikTok's own Compose popups with its obfuscated classes (X.011c, X.01oI, X.011a, X.01tG on 47.5.3), so a TikTok build that renames them makes the action fail with an exception line instead of 'ok'; that means the probe needs updating, not that the patch is broken. The popup is shown on top of the feed for a moment and removed by secure-popup-close; it is a controlled test view, not a screen capture. Circle to Search itself is a system gesture and is a review item."
  },
  {
   "name": "Always show publish date",
@@ -1090,8 +1090,8 @@
      {
       "probe": "startwatch",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "seconds": "45"
       },
       "expect": "video 2 current@",
@@ -1120,8 +1120,8 @@
      {
       "probe": "startwatch",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "seconds": "45"
       },
       "expect": "video 1 current@",
@@ -8898,8 +8898,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "1200"
       },
       "expect": "speed=2\\.0 then 2\\.0.*rate=(1\\.[6-9]\\d|2\\.\\d\\d)",
@@ -8961,8 +8961,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "1200"
       },
       "expect": "speed=1\\.0 then 1\\.0",
@@ -9283,8 +9283,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "1500"
       },
       "expect": "moved=(-\\d{3,}|[6-9]\\d\\d|\\d{4,})ms",
@@ -10105,8 +10105,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "1500"
       },
       "expect": "moved=(-\\d{3,}|[6-9]\\d\\d|\\d{4,})ms",
@@ -11015,8 +11015,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "1500"
       },
       "expect": "moved=(-\\d{3,}|[6-9]\\d\\d|\\d{4,})ms",
@@ -11301,8 +11301,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "1000"
       },
       "expect": "speed=1\\.5 then 1\\.5",
@@ -11330,8 +11330,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "1000"
       },
       "expect": "speed=1\\.0 then 1\\.0",
@@ -12640,8 +12640,8 @@
      {
       "probe": "playerspeed",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "gap": "300"
       },
       "expect": "from=([3-9]\\d{3}|\\d{5,})ms",
@@ -13943,7 +13943,7 @@
      {
       "probe": "countformat",
       "extras": {
-       "class": "X.0EYv",
+       "class": "X.0EV9",
        "method": "LIZIZ",
        "count": "123456"
       },
@@ -13952,7 +13952,7 @@
      {
       "probe": "countformat",
       "extras": {
-       "class": "X.0HAE",
+       "class": "X.0FRP",
        "method": "LIZ",
        "count": "123456"
       },
@@ -13966,7 +13966,7 @@
      {
       "probe": "countformat",
       "extras": {
-       "class": "X.0EYv",
+       "class": "X.0EV9",
        "method": "LIZIZ",
        "count": "123456"
       },
@@ -13975,7 +13975,7 @@
      {
       "probe": "countformat",
       "extras": {
-       "class": "X.0HAE",
+       "class": "X.0FRP",
        "method": "LIZ",
        "count": "123456"
       },
@@ -15411,8 +15411,8 @@
      {
       "probe": "startwatch",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "seconds": "25"
       },
       "expect": "video 1 current@",
@@ -15449,8 +15449,8 @@
      {
       "probe": "startwatch",
       "extras": {
-       "holder": "X.037t",
-       "getter": "LJIILIIL",
+       "holder": "X.037e",
+       "getter": "LJIILL",
        "seconds": "25"
       },
       "expect": "restart@",

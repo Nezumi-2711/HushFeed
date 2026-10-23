@@ -2145,7 +2145,7 @@ public final class Probe extends Instrumentation {
                     }
                     case "countformat": {
                         // One of TikTok's static count formatters run with a count the check
-                        // picks, and the text it wrote: -e class X.0EYv -e method LIZIZ -e count
+                        // picks, and the text it wrote: -e class X.0EV9 -e method LIZIZ -e count
                         // 123456. One that takes (long) gets just the count, one that takes
                         // (Aweme, long) the video on screen as well. A check can read what Show
                         // exact counts makes of a big count whatever the feed serves. The class
@@ -2194,12 +2194,12 @@ public final class Probe extends Instrumentation {
                         // Without it set to dark, TikTok stays light whatever the phone's night
                         // mode is (seen on the S22, 2026-10-16). Read through TikTok's own store
                         // factory, the static (int, Context, String) -> SharedPreferences method
-                        // TikTok reads it with (-e store X.02s6 -e method LIZJ on 47.1.4), since
+                        // TikTok reads it with (-e store X.02rD -e method LIZJ on 47.5.3), since
                         // that one may route the store to Keva rather than a plain file; its
                         // sibling LIZIZ skips that. -e set N writes N, which the next start applies;
                         // -e set unset removes it.
                         String storeClass = intent.getStringExtra("store");
-                        if (storeClass == null) storeClass = "X.02s6";
+                        if (storeClass == null) storeClass = "X.02rD";
                         String storeMethod = intent.getStringExtra("method");
                         if (storeMethod == null) storeMethod = "LIZJ";
                         Method factory = loader.loadClass(storeClass)
@@ -2334,8 +2334,8 @@ public final class Probe extends Instrumentation {
                         // logs, per video, when it became current, when its position first moved,
                         // every hold of 250 ms or more after that, every jump the position made
                         // that playing doesn't explain, and every sample the main thread was late
-                        // for. Same holder and getter extras as playerspeed (47.1.4: -e holder
-                        // X.037t -e getter LJIILIIL). No id, caption or creator leaves.
+                        // for. Same holder and getter extras as playerspeed (47.5.3: -e holder
+                        // X.037e -e getter LJIILL). No id, caption or creator leaves.
                         Method getter = loader.loadClass(required(intent, "holder"))
                                 .getDeclaredMethod(required(intent, "getter"));
                         getter.setAccessible(true);
@@ -4349,9 +4349,9 @@ public final class Probe extends Instrumentation {
                 Class<?> register = loader.loadClass("com.ss.android.deviceregister.DeviceRegisterManager");
                 Log.i(TAG, "ok idreset before" + registeredIds(context, appLog, register));
                 if (readOnly) return;
-                // 47.4.3's reset callback: LIZ() when the timeout runs out, LIZIZ(installInfo)
+                // 47.5.3's reset callback: LIZ() when the timeout runs out, LIZIZ(installInfo)
                 // when new install info arrives.
-                Class<?> callbackType = loader.loadClass("X.0Ncl");
+                Class<?> callbackType = loader.loadClass("X.0LRh");
                 final java.util.concurrent.CountDownLatch answered = new java.util.concurrent.CountDownLatch(1);
                 final String[] outcome = {"no answer"};
                 Object callback = java.lang.reflect.Proxy.newProxyInstance(loader, new Class<?>[]{callbackType},
