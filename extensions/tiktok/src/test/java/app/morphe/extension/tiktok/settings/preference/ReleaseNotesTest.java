@@ -152,6 +152,15 @@ public class ReleaseNotesTest {
         }
     }
 
+    /** The release versions {@code notes} has headings for, none when it's null. */
+    private static java.util.Set<String> versions(String notes) {
+        java.util.Set<String> versions = new java.util.TreeSet<>();
+        if (notes == null) return versions;
+        java.util.regex.Matcher heading = java.util.regex.Pattern.compile("(?m)^## (\\d+\\.\\d+\\.\\d+) ").matcher(notes);
+        while (heading.find()) versions.add(heading.group(1));
+        return versions;
+    }
+
     /** The newest release the bundle carries, which a release build always has notes for. */
     private static String newestBundled() {
         java.util.regex.Matcher heading = java.util.regex.Pattern.compile("^## (\\d+\\.\\d+\\.\\d+) ")
@@ -442,21 +451,23 @@ public class ReleaseNotesTest {
 
     /** Every table carries the same releases, so no language is a release ahead of another. */
     @Test
-    public void everyTableTranslatesTheSameReleases() {
-        java.util.regex.Pattern heading = java.util.regex.Pattern.compile("(?m)^## (\\d+\\.\\d+\\.\\d+) ");
+    public void everyTableTranslatesTheSameReleases() throws Exception {
         java.util.Set<String> expected = null;
         for (String tag : new String[]{"az", "de", "es", "in", "it", "pt-rbr", "ru", "tr"}) {
-            java.util.Set<String> versions = new java.util.TreeSet<>();
-            String notes = ReleaseNotesData.translated(tag);
-            if (notes != null) {
-                java.util.regex.Matcher match = heading.matcher(notes);
-                while (match.find()) versions.add(match.group(1));
-            }
+            java.util.Set<String> versions = versions(ReleaseNotesData.translated(tag));
             if (expected == null) expected = versions;
             assertEquals(tag + " translates different releases", expected, versions);
         }
-        // Release prepare's translation check holds every release to all eight tables.
-        assertTrue(newestBundled() + " isn't translated", expected.contains(newestBundled()));
+        // Release prepare holds each release to all eight tables or none, so the newest can be
+        // English only. The tables carry each bundled release the notes files translate.
+        Path cursor = Path.of(System.getProperty("user.dir")).toAbsolutePath();
+        while (!Files.isDirectory(cursor.resolve("extensions/tiktok/src/main/l10n/notes"))) {
+            cursor = cursor.getParent();
+        }
+        java.util.Set<String> translated = versions(new String(Files.readAllBytes(
+                cursor.resolve("extensions/tiktok/src/main/l10n/notes/de.txt")), StandardCharsets.UTF_8));
+        translated.retainAll(versions(ReleaseNotesData.TEXT));
+        assertEquals(translated, expected);
         assertEquals(ReleaseNotesData.translated("in"), ReleaseNotesData.translated("id"));
         assertEquals(null, ReleaseNotesData.translated("fr"));
         assertEquals(null, ReleaseNotesData.translated(null));
@@ -464,7 +475,11 @@ public class ReleaseNotesTest {
 
     @Test @Config(manifest = Config.NONE, sdk = 28, qualifiers = "de")
     public void aGermanPhoneReadsATranslatedReleaseWithoutTheEnglishLabel() {
-        String newest = newestBundled();
+        // The newest bundled release can be English only, so take the newest the table carries.
+        java.util.regex.Matcher heading = java.util.regex.Pattern.compile("^## (\\d+\\.\\d+\\.\\d+) ")
+                .matcher(String.valueOf(ReleaseNotesData.translated("de")));
+        org.junit.Assume.assumeTrue("no bundled release is translated", heading.find());
+        String newest = heading.group(1);
         java.util.List<TextView> texts = dialogTexts(newest, null, null, null);
         assertEquals("a translated release needs no English label", 1, texts.size());
         android.text.Spanned notes = (android.text.Spanned) texts.get(0).getText();
