@@ -897,6 +897,89 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok addrs " + out);
                         break;
                     }
+                    case "covers": {
+                        // Every cover the current video's model holds, read from its fields so a
+                        // getter that swaps in another cover can't hide one: url count and frame
+                        // size only, which says whether Save cover could fetch a bigger image.
+                        Object aweme = loader.loadClass(
+                                "app.morphe.extension.tiktok.blockauthor.CurrentVideoAuthor")
+                                .getMethod("getAweme").invoke(null);
+                        if (aweme == null) throw new IllegalStateException("no current video");
+                        Object video = optional(aweme, "getVideo");
+                        if (video == null) throw new IllegalStateException("no video model");
+                        StringBuilder out = new StringBuilder("video=")
+                                .append(optional(video, "getWidth")).append('x').append(optional(video, "getHeight"));
+                        for (String name : new String[]{"originCoverValue", "cover", "lowResCover", "dynamicCover",
+                                "animatedCover", "aiCover", "aiDynamicCover", "aiDynamicCoverBak", "cachedOuterCoverUrl"}) {
+                            Object model;
+                            try {
+                                Field field = video.getClass().getDeclaredField(name);
+                                field.setAccessible(true);
+                                model = field.get(video);
+                            } catch (NoSuchFieldException missing) {
+                                out.append(' ').append(name).append("=nofield");
+                                continue;
+                            }
+                            Object urls = optional(model, "getUrlList");
+                            out.append(' ').append(name).append('=').append(model == null ? "null"
+                                    : (urls instanceof List ? ((List<?>) urls).size() : -1) + "urls," + frame(model));
+                            // The image template the CDN renders, the part of the last path
+                            // segment after its '~': it names the size actually served.
+                            if (urls instanceof List && !((List<?>) urls).isEmpty()) {
+                                String segment = android.net.Uri.parse(String.valueOf(((List<?>) urls).get(0)))
+                                        .getLastPathSegment();
+                                int tilde = segment == null ? -1 : segment.indexOf('~');
+                                out.append(',').append(tilde < 0 ? "notemplate" : segment.substring(tilde + 1));
+                            }
+                        }
+                        Log.i(TAG, "ok covers " + out);
+                        break;
+                    }
+                    case "coversizes": {
+                        // Fetches each cover the current video's model holds and reads the size
+                        // the image server actually sent, off the main thread. Sizes only.
+                        Object aweme = loader.loadClass(
+                                "app.morphe.extension.tiktok.blockauthor.CurrentVideoAuthor")
+                                .getMethod("getAweme").invoke(null);
+                        if (aweme == null) throw new IllegalStateException("no current video");
+                        final Object video = optional(aweme, "getVideo");
+                        if (video == null) throw new IllegalStateException("no video model");
+                        new Thread(() -> {
+                            StringBuilder out = new StringBuilder();
+                            for (String name : new String[]{"originCoverValue", "cover", "dynamicCover"}) {
+                                try {
+                                    Field field = video.getClass().getDeclaredField(name);
+                                    field.setAccessible(true);
+                                    Object urls = optional(field.get(video), "getUrlList");
+                                    if (!(urls instanceof List) || ((List<?>) urls).isEmpty()) {
+                                        out.append(' ').append(name).append("=nourls");
+                                        continue;
+                                    }
+                                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection)
+                                            new java.net.URL(String.valueOf(((List<?>) urls).get(0))).openConnection();
+                                    connection.setConnectTimeout(10000);
+                                    connection.setReadTimeout(15000);
+                                    byte[] body;
+                                    try (java.io.InputStream in = connection.getInputStream()) {
+                                        java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+                                        byte[] chunk = new byte[16384];
+                                        for (int read; (read = in.read(chunk)) > 0; ) bytes.write(chunk, 0, read);
+                                        body = bytes.toByteArray();
+                                    }
+                                    android.graphics.BitmapFactory.Options bounds = new android.graphics.BitmapFactory.Options();
+                                    bounds.inJustDecodeBounds = true;
+                                    android.graphics.BitmapFactory.decodeByteArray(body, 0, body.length, bounds);
+                                    out.append(' ').append(name).append('=').append(connection.getResponseCode())
+                                            .append(',').append(bounds.outWidth).append('x').append(bounds.outHeight)
+                                            .append(',').append(bounds.outMimeType).append(',').append(body.length).append('B');
+                                } catch (Throwable failure) {
+                                    out.append(' ').append(name).append("=failed:").append(failure.getClass().getSimpleName());
+                                }
+                            }
+                            Log.i(TAG, "ok coversizes" + out);
+                        }).start();
+                        break;
+                    }
                     case "collect": {
                         // Adds or removes one favourite through TikTok's own AwemeCollectionAgent,
                         // found by its parameter shape since the method's name changes by build,
@@ -1282,6 +1365,67 @@ public final class Probe extends Instrumentation {
                                         + hold + "ms on " + activity.getClass().getSimpleName());
                             }, hold);
                         }, gap);
+                        break;
+                    }
+                    case "tapwatch": {
+                        // Taps on TikTok's window and when, counted from the first lift, the video
+                        // went between playing and paused, for #239: TikTok holds a tap for its
+                        // double-tap window before pausing, unless a double tap does nothing.
+                        // -e taps 2 -e gap 150 sends two taps 150 ms apart (lift to next touch).
+                        // Polls the player every 5 ms on the main thread until 1.5 s after the
+                        // last lift and logs every change, e.g. flips=[paused@11ms, playing@190ms].
+                        float x = Float.parseFloat(required(intent, "x"));
+                        float y = Float.parseFloat(required(intent, "y"));
+                        String holdText = intent.getStringExtra("hold");
+                        long hold = holdText == null ? 30L : Long.parseLong(holdText);
+                        String tapsText = intent.getStringExtra("taps");
+                        int taps = tapsText == null ? 1 : Integer.parseInt(tapsText);
+                        String gapText = intent.getStringExtra("gap");
+                        long gap = gapText == null ? 150L : Long.parseLong(gapText);
+                        android.app.Activity activity = (android.app.Activity) loader.loadClass(UTILS)
+                                .getMethod("getActivity").invoke(null);
+                        if (activity == null) throw new IllegalStateException("no current activity");
+                        android.view.View decor = activity.getWindow().getDecorView();
+                        Method playing = loader.loadClass("app.morphe.extension.tiktok.wellbeing.SessionPlaybackHold")
+                                .getMethod("currentPlaying");
+                        Object before = playing.invoke(null);
+                        android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
+                        long start = android.os.SystemClock.uptimeMillis();
+                        long firstUp = start + hold;
+                        long lastUp = start + (taps - 1) * (hold + gap) + hold;
+                        for (int i = 0; i < taps; i++) {
+                            long down = start + i * (hold + gap);
+                            main.postAtTime(() -> touch(decor, down, android.os.SystemClock.uptimeMillis(),
+                                    android.view.MotionEvent.ACTION_DOWN, x, y), down);
+                            main.postAtTime(() -> touch(decor, down, android.os.SystemClock.uptimeMillis(),
+                                    android.view.MotionEvent.ACTION_UP, x, y), down + hold);
+                        }
+                        StringBuilder flips = new StringBuilder();
+                        Object[] last = {before};
+                        Runnable[] poll = new Runnable[1];
+                        poll[0] = () -> {
+                            long now = android.os.SystemClock.uptimeMillis();
+                            Object state;
+                            try {
+                                state = playing.invoke(null);
+                            } catch (Exception e) {
+                                Log.i(TAG, "failed tapwatch " + e);
+                                return;
+                            }
+                            if (state != null && !state.equals(last[0])) {
+                                if (flips.length() > 0) flips.append(", ");
+                                flips.append(Boolean.TRUE.equals(state) ? "playing@" : "paused@")
+                                        .append(now - firstUp).append("ms");
+                                last[0] = state;
+                            }
+                            if (now - lastUp >= 1500L) {
+                                Log.i(TAG, "ok tapwatch taps=" + taps + " gap=" + gap + "ms hold=" + hold
+                                        + "ms before=" + before + " flips=[" + flips + "] after=" + state);
+                            } else {
+                                main.postDelayed(poll[0], 5L);
+                            }
+                        };
+                        main.post(poll[0]);
                         break;
                     }
                     case "report": {
@@ -1721,7 +1865,7 @@ public final class Probe extends Instrumentation {
                         break;
                     }
                     case "captionstate": {
-                        // The caption strip (dlk) and its text (dlr) in one read. A caption line is
+                        // The caption strip (dln) and its text (dlu) in one read. A caption line is
                         // on screen only while it is spoken, and separate reads kept landing after
                         // it had gone. For each shown view with either id: place, size and
                         // background, and for the text its size in pixels and its line count.
@@ -1729,11 +1873,11 @@ public final class Probe extends Instrumentation {
                                 .getMethod("getActivity").invoke(null);
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
-                        // 47.1.4 renamed them to dm5 and dmb: -e strip dm5 -e text dmb.
+                        // 47.5.3 names them dln and dlu (47.1.4 had dm5 and dmb): -e strip dm5 -e text dmb.
                         String stripName = intent.getStringExtra("strip");
                         String textName = intent.getStringExtra("text");
-                        if (stripName == null) stripName = "dlk";
-                        if (textName == null) textName = "dlr";
+                        if (stripName == null) stripName = "dln";
+                        if (textName == null) textName = "dlu";
                         int strip = resources.getIdentifier(stripName, "id", activity.getPackageName());
                         int text = resources.getIdentifier(textName, "id", activity.getPackageName());
                         StringBuilder out = new StringBuilder();
@@ -1902,8 +2046,8 @@ public final class Probe extends Instrumentation {
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
                         java.util.Map<Integer, String> wanted = new java.util.HashMap<>();
-                        // llj is the rail column up to 47.1.x, ljn on 47.4.3.
-                        for (String name : new String[]{"llj", "ljn", "desc", "bqv", "ll8", "videomusiccoverblock", "g85"}) {
+                        // The 47.5.3 names: lke rail column, bqj anchor, lk3 search bar, g90 like button.
+                        for (String name : new String[]{"lke", "desc", "bqj", "lk3", "videomusiccoverblock", "g90"}) {
                             int id = resources.getIdentifier(name, "id", activity.getPackageName());
                             if (id != 0) wanted.put(id, name);
                         }
@@ -1965,7 +2109,7 @@ public final class Probe extends Instrumentation {
                                 .getMethod("isClearDisplayNow");
                         android.content.res.Resources resources = activity.getResources();
                         int[] ids = new int[3];
-                        String[] names = {"llj", "bqv", "videomusiccoverblock"};
+                        String[] names = {"lke", "bqj", "videomusiccoverblock"};
                         for (int i = 0; i < names.length; i++) {
                             ids[i] = resources.getIdentifier(names[i], "id", activity.getPackageName());
                         }
@@ -2031,8 +2175,8 @@ public final class Probe extends Instrumentation {
                         Method clearNow = loader.loadClass("app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch")
                                 .getMethod("isClearDisplayNow");
                         android.content.res.Resources resources = activity.getResources();
-                        int strip = resources.getIdentifier("dlk", "id", activity.getPackageName());
-                        int drawn = resources.getIdentifier("dls", "id", activity.getPackageName());
+                        int strip = resources.getIdentifier("dln", "id", activity.getPackageName());
+                        int drawn = resources.getIdentifier("dlu", "id", activity.getPackageName());
                         int[] counts = new int[9];
                         android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
                         long start = android.os.SystemClock.uptimeMillis();
@@ -2070,7 +2214,7 @@ public final class Probe extends Instrumentation {
                                         + " strip=" + counts[2] + " line=" + counts[3] + " cue=" + counts[4]
                                         + " clearedStrip=" + counts[5] + " clearedLine=" + counts[6]
                                         + " clearedCue=" + counts[7] + " lineWithControls=" + counts[8]
-                                        + (strip == 0 || drawn == 0 ? " dlk/dls=missing" : ""));
+                                        + (strip == 0 || drawn == 0 ? " dln/dlu=missing" : ""));
                             }
                         });
                         break;
@@ -2121,6 +2265,48 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok call " + target.getName() + " -> " + shown);
                         break;
                     }
+                    case "seed-commenter-region": {
+                        // TikTok 47.5.3 sends comment accounts with no country, so a commenter's
+                        // country can only come from the feed's cache of creators it has shown.
+                        // This files -e region XX under every commenter Hushfeed has bound, as if
+                        // each one's own video had played in the feed, then has the open sheet
+                        // bind its rows again so they take that path. Reopening the sheet would
+                        // not do it: TikTok shows a video's cached rows without binding them.
+                        // -e region clear forgets the cache again. The handles stay in TikTok's
+                        // process, only their count is logged.
+                        String region = required(intent, "region");
+                        Class<?> regions = loader.loadClass("app.morphe.extension.tiktok.feed.AuthorRegion");
+                        if ("clear".equals(region)) {
+                            regions.getMethod("forgetSeenRegions").invoke(null);
+                            Log.i(TAG, "ok seed-commenter-region cleared");
+                            break;
+                        }
+                        Field bound = loader.loadClass("app.morphe.extension.tiktok.comment.CommenterDetails")
+                                .getDeclaredField("HANDLE_BY_UID");
+                        bound.setAccessible(true);
+                        Map<?, ?> byUid = (Map<?, ?>) bound.get(null);
+                        List<String> handles = new ArrayList<>();
+                        synchronized (byUid) {
+                            for (Object handle : byUid.values()) handles.add((String) handle);
+                        }
+                        if (handles.isEmpty()) {
+                            throw new IllegalStateException("no commenter bound yet, open a comment sheet first");
+                        }
+                        Method remember = regions.getMethod("rememberSeen", String.class, String.class);
+                        for (String handle : handles) remember.invoke(null, handle, region);
+                        java.util.Set<String> shown = new java.util.HashSet<>();
+                        for (String handle : handles) shown.add("@" + handle);
+                        int rebound = 0;
+                        for (android.view.View root : windowRoots()) rebound += rebindCommentList(root, shown);
+                        if (rebound == 0) {
+                            // A failed step skips the check's clear, so don't leave the seed behind.
+                            regions.getMethod("forgetSeenRegions").invoke(null);
+                            throw new IllegalStateException("no comment list on screen shows a bound commenter");
+                        }
+                        Log.i(TAG, "ok seed-commenter-region " + region + " for " + handles.size()
+                                + " commenters, rebound " + rebound + " list");
+                        break;
+                    }
                     case "idreset": {
                         // The device-ID reset experiment (ROADMAP "Reset the device identifiers
                         // TikTok registers"), for a throwaway emulator install. Reads the ids TikTok
@@ -2145,7 +2331,7 @@ public final class Probe extends Instrumentation {
                     }
                     case "countformat": {
                         // One of TikTok's static count formatters run with a count the check
-                        // picks, and the text it wrote: -e class X.0EYv -e method LIZIZ -e count
+                        // picks, and the text it wrote: -e class X.0EV9 -e method LIZIZ -e count
                         // 123456. One that takes (long) gets just the count, one that takes
                         // (Aweme, long) the video on screen as well. A check can read what Show
                         // exact counts makes of a big count whatever the feed serves. The class
@@ -2194,12 +2380,12 @@ public final class Probe extends Instrumentation {
                         // Without it set to dark, TikTok stays light whatever the phone's night
                         // mode is (seen on the S22, 2026-10-16). Read through TikTok's own store
                         // factory, the static (int, Context, String) -> SharedPreferences method
-                        // TikTok reads it with (-e store X.02s6 -e method LIZJ on 47.1.4), since
+                        // TikTok reads it with (-e store X.02rD -e method LIZJ on 47.5.3), since
                         // that one may route the store to Keva rather than a plain file; its
                         // sibling LIZIZ skips that. -e set N writes N, which the next start applies;
                         // -e set unset removes it.
                         String storeClass = intent.getStringExtra("store");
-                        if (storeClass == null) storeClass = "X.02s6";
+                        if (storeClass == null) storeClass = "X.02rD";
                         String storeMethod = intent.getStringExtra("method");
                         if (storeMethod == null) storeMethod = "LIZJ";
                         Method factory = loader.loadClass(storeClass)
@@ -2334,8 +2520,8 @@ public final class Probe extends Instrumentation {
                         // logs, per video, when it became current, when its position first moved,
                         // every hold of 250 ms or more after that, every jump the position made
                         // that playing doesn't explain, and every sample the main thread was late
-                        // for. Same holder and getter extras as playerspeed (47.1.4: -e holder
-                        // X.037t -e getter LJIILIIL). No id, caption or creator leaves.
+                        // for. Same holder and getter extras as playerspeed (47.5.3: -e holder
+                        // X.037e -e getter LJIILL). No id, caption or creator leaves.
                         Method getter = loader.loadClass(required(intent, "holder"))
                                 .getDeclaredMethod(required(intent, "getter"));
                         getter.setAccessible(true);
@@ -3466,6 +3652,47 @@ public final class Probe extends Instrumentation {
             throw new IllegalStateException("WindowManagerGlobal returned no root list");
         }
 
+        /**
+         * Has the innermost shown list holding one of these '@handle' names bind its rows again,
+         * and answers how many lists it asked. Innermost, because the feed's pager is a list too
+         * and must not be the one picked.
+         */
+        private static int rebindCommentList(android.view.View view, java.util.Set<String> shown) throws Exception {
+            if (!view.isShown()) return 0;
+            int rebound = 0;
+            if (view instanceof android.view.ViewGroup) {
+                android.view.ViewGroup group = (android.view.ViewGroup) view;
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    rebound += rebindCommentList(group.getChildAt(i), shown);
+                }
+            }
+            if (rebound > 0 || !isRecyclerView(view.getClass()) || !showsAny(view, shown)) return rebound;
+            Object adapter = view.getClass().getMethod("getAdapter").invoke(view);
+            if (adapter == null) return 0;
+            adapter.getClass().getMethod("notifyDataSetChanged").invoke(adapter);
+            return 1;
+        }
+
+        private static boolean isRecyclerView(Class<?> type) {
+            for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+                if ("androidx.recyclerview.widget.RecyclerView".equals(c.getName())) return true;
+            }
+            return false;
+        }
+
+        private static boolean showsAny(android.view.View view, java.util.Set<String> texts) {
+            if (view instanceof android.widget.TextView) {
+                CharSequence text = ((android.widget.TextView) view).getText();
+                return text != null && texts.contains(withoutFormatMarks(text.toString()).trim());
+            }
+            if (!(view instanceof android.view.ViewGroup)) return false;
+            android.view.ViewGroup group = (android.view.ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                if (showsAny(group.getChildAt(i), texts)) return true;
+            }
+            return false;
+        }
+
         /** Opens the settings screen the same way the row inside TikTok's own settings does. */
         private void openSettings() throws Exception {
             Intent intent = new Intent(app, loader.loadClass(SETTINGS_ACTIVITY));
@@ -4349,9 +4576,9 @@ public final class Probe extends Instrumentation {
                 Class<?> register = loader.loadClass("com.ss.android.deviceregister.DeviceRegisterManager");
                 Log.i(TAG, "ok idreset before" + registeredIds(context, appLog, register));
                 if (readOnly) return;
-                // 47.4.3's reset callback: LIZ() when the timeout runs out, LIZIZ(installInfo)
+                // 47.5.3's reset callback: LIZ() when the timeout runs out, LIZIZ(installInfo)
                 // when new install info arrives.
-                Class<?> callbackType = loader.loadClass("X.0Ncl");
+                Class<?> callbackType = loader.loadClass("X.0LRh");
                 final java.util.concurrent.CountDownLatch answered = new java.util.concurrent.CountDownLatch(1);
                 final String[] outcome = {"no answer"};
                 Object callback = java.lang.reflect.Proxy.newProxyInstance(loader, new Class<?>[]{callbackType},
