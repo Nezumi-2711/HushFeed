@@ -32,6 +32,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** New switch under Share sheet: `Allow Add to Story anyway`. It shows Add to Story on stories whose creator turned off content reuse, like `Allow Duet and Stitch` does for those two. TikTok may still refuse the post (#88).
 * **TikTok:** With Region spoof's `Match locale and timezone` on, chat date headers follow the preset's time zone now instead of the phone's clock (#184, #198).
 * **TikTok:** New `Turn on Thoughts` switch in Hushfeed settings > App. It shows Thoughts on profiles and in your inbox, plus the prompt to share one, for accounts TikTok left out. It starts off, and TikTok's servers can still refuse a post (#186).
+* **TikTok:** `Keep photos as TikTok sent them` now also covers stickers that don't move, and `Download original photos` keeps TikTok's own file when it's on (#229).
 
 ## 0.78.0 (2026-10-22)
 
