@@ -2677,12 +2677,12 @@ final class L10nTranslationsAz {
                 "HDR əvəzinə SDR oynat");
         table.put("Play Store",
                 "Play Store");
-        table.put("Play each batch the Following feed loads newest post first. TikTok still picks what each batch brings, and ads and LIVEs keep their place.",
-                "İzlənilənlər lentinin yüklədiyi hər dəstəni ən yeni paylaşımdan başlayaraq oynadın. Hər dəstədə nələrin gələcəyini yenə TikTok seçir, reklamlar və LIVE-lar yerində qalır.");
         table.put("Play feed videos without sound and leave the phone's volume alone. Music from another app keeps playing while it's on. DMs, stories and LIVE keep their sound.",
                 "Lent videolarını səssiz oxudun və telefonun səs səviyyəsinə toxunmayın. Bu açıq olduqda başqa tətbiqin musiqisi çalmağa davam edir. Birbaşa mesajlar, hekayələr və LIVE səsini saxlayır.");
         table.put("Play sounds TikTok pulled",
                 "TikTok-un çıxardığı səsləri oynat");
+        table.put("Play the Following feed newest post first. A newer post that loads later moves up to right after the video you're watching, and nothing you've already scrolled past moves. Ads and LIVEs keep their place.",
+                "İzlənilənlər lentini ən yeni paylaşımdan başlayaraq oynadın. Sonradan yüklənən daha yeni paylaşım izlədiyiniz videodan dərhal sonraya keçir, artıq keçdiyiniz heç nə yerini dəyişmir. Reklamlar və LIVE-lar yerində qalır.");
         table.put("Play the audio on videos TikTok silenced because their sound was pulled for copyright or in your region. TikTok may still say the sound isn't available.",
                 "Səsi müəllif hüququna görə və ya bölgənizdə çıxarıldığı üçün TikTok-un səssizləşdirdiyi videolarda səsi oynadır. TikTok yenə də səsin əlçatan olmadığını göstərə bilər.");
         table.put("Playback",

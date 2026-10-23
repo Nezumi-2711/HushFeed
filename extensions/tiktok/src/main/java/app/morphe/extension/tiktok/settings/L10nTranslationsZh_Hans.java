@@ -2677,12 +2677,12 @@ final class L10nTranslationsZh_Hans {
                 "播放 SDR 而不是 HDR");
         table.put("Play Store",
                 "Play 商店");
-        table.put("Play each batch the Following feed loads newest post first. TikTok still picks what each batch brings, and ads and LIVEs keep their place.",
-                "“正在关注”每次加载的一批内容按发布时间从新到旧播放。每批包含哪些内容仍由 TikTok 决定，广告和直播保持原位.");
         table.put("Play feed videos without sound and leave the phone's volume alone. Music from another app keeps playing while it's on. DMs, stories and LIVE keep their sound.",
                 "播放没有声音的信息流视频，不要管手机的音量。另一个应用程序中的音乐在打开时会继续播放。私信、故事和 LIVE 保持其声音.");
         table.put("Play sounds TikTok pulled",
                 "播放声音 TikTok 拉动");
+        table.put("Play the Following feed newest post first. A newer post that loads later moves up to right after the video you're watching, and nothing you've already scrolled past moves. Ads and LIVEs keep their place.",
+                "“正在关注”按发布时间从新到旧播放。稍后加载的较新内容会排到你正在看的视频之后，你已经划过的内容不会变动。广告和直播保持原位.");
         table.put("Play the audio on videos TikTok silenced because their sound was pulled for copyright or in your region. TikTok may still say the sound isn't available.",
                 "播放视频 TikTok 上的音频，该视频被静音，因为它们的声音因版权原因或在您所在的地区而被拉取。 TikTok 可能仍然会说声音不可用.");
         table.put("Playback",

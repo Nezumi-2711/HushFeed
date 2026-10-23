@@ -2677,12 +2677,12 @@ final class L10nTranslationsIt {
                 "Riproduci in SDR invece che in HDR");
         table.put("Play Store",
                 "Play Store");
-        table.put("Play each batch the Following feed loads newest post first. TikTok still picks what each batch brings, and ads and LIVEs keep their place.",
-                "Riproduci ogni blocco caricato dal feed Seguiti partendo dal post più recente. È sempre TikTok a scegliere cosa contiene ogni blocco, e annunci e LIVE restano al loro posto.");
         table.put("Play feed videos without sound and leave the phone's volume alone. Music from another app keeps playing while it's on. DMs, stories and LIVE keep their sound.",
                 "Riproduce i video del feed senza audio, lasciando inalterato il volume del telefono. La musica di un'altra app continua a essere riprodotta mentre questa opzione è attiva. I messaggi diretti, le storie e le LIVE mantengono il loro audio.");
         table.put("Play sounds TikTok pulled",
                 "Riproduci i suoni rimossi da TikTok");
+        table.put("Play the Following feed newest post first. A newer post that loads later moves up to right after the video you're watching, and nothing you've already scrolled past moves. Ads and LIVEs keep their place.",
+                "Riproduci il feed Seguiti partendo dal post più recente. Un post più nuovo che arriva dopo sale subito dopo il video che stai guardando, e niente di quello che hai già scorso cambia posto. Annunci e LIVE restano al loro posto.");
         table.put("Play the audio on videos TikTok silenced because their sound was pulled for copyright or in your region. TikTok may still say the sound isn't available.",
                 "Riproduce l'audio dei video che TikTok ha silenziato perché il loro suono è stato rimosso per copyright o nella tua regione. TikTok potrebbe continuare a indicare il suono come non disponibile.");
         table.put("Playback",
