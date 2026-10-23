@@ -19,6 +19,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** The README now lists the parts of Hushfeed's settings that an add-on bundle patched in beside it can count on, and a test fails if one of them changes. Anything else in the settings code can still move between releases.
 * **TikTok:** What's new now carries only the newest releases' notes, and its Full changelog button has the rest. Every release since 0.60.0 used to be built in, in all nine languages, and those notes alone were about 14% of the extension's size.
 * **TikTok:** `Glass lens on the current tab` slides to the next tab even after you've sat on one tab for a while, or when TikTok takes a moment to open a tab for the first time. Before, it only slid when you tapped quickly, and in both of those cases it jumped instead (#231).
+* **TikTok:** With `Automatic Clear display` on, a search result you open again from TikTok's own search clears again, even when you brought its buttons back by hand the last time you watched it. Before, it remembered that and stayed uncleared (#84).
 
 ## 0.78.0 (2026-10-22)
 
