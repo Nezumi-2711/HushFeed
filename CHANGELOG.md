@@ -30,6 +30,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** With `Offer LIVE quality in more rooms` on, Share > Video quality also shows in gaming and football LIVE rooms. TikTok left it out of LIVE Studio rooms and rooms that support low latency (#37).
 * **TikTok:** With `Dark LIVE panels in dark mode` on, a LIVE room stays dark when your phone switches between light and dark while the room is open. Before, its Share sheet opened white until you left and came back (#159).
 * **TikTok:** New switch under Share sheet: `Allow Add to Story anyway`. It shows Add to Story on stories whose creator turned off content reuse, like `Allow Duet and Stitch` does for those two. TikTok may still refuse the post (#88).
+* **TikTok:** With Region spoof's `Match locale and timezone` on, chat date headers follow the preset's time zone now instead of the phone's clock (#184, #198).
 
 ## 0.78.0 (2026-10-22)
 
