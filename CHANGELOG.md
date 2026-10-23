@@ -20,6 +20,9 @@ Every Hushfeed release, newest first.
 * **TikTok:** What's new now carries only the newest releases' notes, and its Full changelog button has the rest. Every release since 0.60.0 used to be built in, in all nine languages, and those notes alone were about 14% of the extension's size.
 * **TikTok:** `Glass lens on the current tab` slides to the next tab even after you've sat on one tab for a while, or when TikTok takes a moment to open a tab for the first time. Before, it only slid when you tapped quickly, and in both of those cases it jumped instead (#231).
 * **TikTok:** With `Automatic Clear display` on, a search result you open again from TikTok's own search clears again, even when you brought its buttons back by hand the last time you watched it. Before, it remembered that and stayed uncleared (#84).
+* **TikTok:** `LIVE recording quality` also offers the presets from a LIVE room's own quality menu: Original, 1080p, 720p, 540p and 360p. If the room doesn't have the one you picked, the recording takes the closest one below it, or the closest above when nothing lower is there (#203).
+* **TikTok:** When the Download quality list stops below 720p, it now also offers the video's own H.264 or HEVC version if that one is taller. The diagnostic report has a new section for the last video you opened the list on, with each quality it offered and why any others were left out (#240).
+* **TikTok:** `Show where commenters are from` finds a country more often. It remembers someone's country from their earlier comments and from videos of theirs you scrolled past, and it reads one more of the country fields TikTok sends with an account (#201).
 
 ## 0.78.0 (2026-10-22)
 
