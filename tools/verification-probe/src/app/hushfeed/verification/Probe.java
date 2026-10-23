@@ -1367,6 +1367,67 @@ public final class Probe extends Instrumentation {
                         }, gap);
                         break;
                     }
+                    case "tapwatch": {
+                        // Taps on TikTok's window and when, counted from the first lift, the video
+                        // went between playing and paused, for #239: TikTok holds a tap for its
+                        // double-tap window before pausing, unless a double tap does nothing.
+                        // -e taps 2 -e gap 150 sends two taps 150 ms apart (lift to next touch).
+                        // Polls the player every 5 ms on the main thread until 1.5 s after the
+                        // last lift and logs every change, e.g. flips=[paused@11ms, playing@190ms].
+                        float x = Float.parseFloat(required(intent, "x"));
+                        float y = Float.parseFloat(required(intent, "y"));
+                        String holdText = intent.getStringExtra("hold");
+                        long hold = holdText == null ? 30L : Long.parseLong(holdText);
+                        String tapsText = intent.getStringExtra("taps");
+                        int taps = tapsText == null ? 1 : Integer.parseInt(tapsText);
+                        String gapText = intent.getStringExtra("gap");
+                        long gap = gapText == null ? 150L : Long.parseLong(gapText);
+                        android.app.Activity activity = (android.app.Activity) loader.loadClass(UTILS)
+                                .getMethod("getActivity").invoke(null);
+                        if (activity == null) throw new IllegalStateException("no current activity");
+                        android.view.View decor = activity.getWindow().getDecorView();
+                        Method playing = loader.loadClass("app.morphe.extension.tiktok.wellbeing.SessionPlaybackHold")
+                                .getMethod("currentPlaying");
+                        Object before = playing.invoke(null);
+                        android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
+                        long start = android.os.SystemClock.uptimeMillis();
+                        long firstUp = start + hold;
+                        long lastUp = start + (taps - 1) * (hold + gap) + hold;
+                        for (int i = 0; i < taps; i++) {
+                            long down = start + i * (hold + gap);
+                            main.postAtTime(() -> touch(decor, down, android.os.SystemClock.uptimeMillis(),
+                                    android.view.MotionEvent.ACTION_DOWN, x, y), down);
+                            main.postAtTime(() -> touch(decor, down, android.os.SystemClock.uptimeMillis(),
+                                    android.view.MotionEvent.ACTION_UP, x, y), down + hold);
+                        }
+                        StringBuilder flips = new StringBuilder();
+                        Object[] last = {before};
+                        Runnable[] poll = new Runnable[1];
+                        poll[0] = () -> {
+                            long now = android.os.SystemClock.uptimeMillis();
+                            Object state;
+                            try {
+                                state = playing.invoke(null);
+                            } catch (Exception e) {
+                                Log.i(TAG, "failed tapwatch " + e);
+                                return;
+                            }
+                            if (state != null && !state.equals(last[0])) {
+                                if (flips.length() > 0) flips.append(", ");
+                                flips.append(Boolean.TRUE.equals(state) ? "playing@" : "paused@")
+                                        .append(now - firstUp).append("ms");
+                                last[0] = state;
+                            }
+                            if (now - lastUp >= 1500L) {
+                                Log.i(TAG, "ok tapwatch taps=" + taps + " gap=" + gap + "ms hold=" + hold
+                                        + "ms before=" + before + " flips=[" + flips + "] after=" + state);
+                            } else {
+                                main.postDelayed(poll[0], 5L);
+                            }
+                        };
+                        main.post(poll[0]);
+                        break;
+                    }
                     case "report": {
                         // The diagnostic export, which is the extension's own record of what it
                         // did. Logcat is not: the release extension is minified and its Log calls
