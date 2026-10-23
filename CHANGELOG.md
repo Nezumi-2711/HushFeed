@@ -13,6 +13,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** `Remove feed ads` also takes out the smaller Lemon8 card in For You, the one titled "Your daily dose of inspiration" with a Lemon8 post and Open Lemon8 under it. It's built differently from the full-screen Lemon8 card the switch already removed, so it slipped through on 47.5.3.
 * **TikTok:** The `Show how many were filtered` label and the `Show what is left of the budget` label stay off the Shop tab and the Nearby tab now. Both showed there because the Home tab stays selected on those tabs, and the filtered count sat right over their search boxes. They still show on For You and Following.
 * **TikTok:** With `Dark LIVE panels in dark mode` on, a room's viewer ranking opens dark again. A shop room's Top customers ranking still keeps TikTok's light look, because its tab titles came out dark on dark (#159).
+* **TikTok:** The README says how much memory morphe-desktop needs on a computer. With every patch picked on 47.5.3 it runs out at 1 GB, Java's default on a 4 GB machine, and finishes at 1.5 GB, so start it with `java -Xmx2g` (#220).
 
 ## 0.78.0 (2026-10-22)
 
