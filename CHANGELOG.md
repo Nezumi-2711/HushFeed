@@ -18,7 +18,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** The build uses Gradle 9.8.2, up from 9.7.1. The build files now name the Guava advisory by its CVE number, CVE-2026-102554, because GitHub's global advisory database doesn't list its GHSA id.
 * **TikTok:** The README now lists the parts of Hushfeed's settings that an add-on bundle patched in beside it can count on, and a test fails if one of them changes. Anything else in the settings code can still move between releases.
 * **TikTok:** What's new now carries only the newest releases' notes, and its Full changelog button has the rest. Every release since 0.60.0 used to be built in, in all nine languages, and those notes alone were about 14% of the extension's size.
-* **TikTok:** `Glass lens on the current tab` slides to the next tab even after you've sat on one tab for a while. Before, it only slid when you tapped quickly, and after a second or so on a tab it jumped instead (#231).
+* **TikTok:** `Glass lens on the current tab` slides to the next tab even after you've sat on one tab for a while, or when TikTok takes a moment to open a tab for the first time. Before, it only slid when you tapped quickly, and in both of those cases it jumped instead (#231).
 
 ## 0.78.0 (2026-10-22)
 
