@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** New `LIVE recording source` choice under `Record LIVEs you watch`. `Stream only` saves the room's own video like before. `Screen` records what your phone shows while you watch. Android asks to allow screen recording each time, and Stop saves it. The app's sound comes along when TikTok has the microphone permission, otherwise the recording is video only (#37).
 * **TikTok:** New `Blur the video behind the bar` switch under `Liquid glass look`. It frosts the glass pill with a soft blur of the video behind it, off by default, on Android 12 and up (#231).
 * **TikTok:** With `Dark LIVE panels in dark mode` on, three light pieces left in a LIVE room go dark too: the navigation bar under the long-press sheet, the tiles inside the host's profile card, and the fan club's tab strip and card (#159).
 * **TikTok:** `Tag saved videos with their details` now tags the videos TikTok actually sends. Their files carry a short list of TikTok's own fields where the tags go, and the switch left those files alone, so every save came out with no title, creator, date or link. The tags go in now, and TikTok's fields stay in the file beside them.
