@@ -11,6 +11,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** With `See-through bottom bar` on, the caption, the buttons and the search bar don't drop down over the tabs for a moment after each swipe anymore (#232).
 * **TikTok:** Long press set to `Save the frame on screen as a photo` works again on 47.5.3. TikTok's player now draws each video into a layer of its own under the feed, so the save only found an empty view and said the frame couldn't be read. It reads the player's layer now, and the photo comes out at the video's own size with no caption or buttons, on the feed and on videos opened from a profile.
 * **TikTok:** `Remove feed ads` also takes out the smaller Lemon8 card in For You, the one titled "Your daily dose of inspiration" with a Lemon8 post and Open Lemon8 under it. It's built differently from the full-screen Lemon8 card the switch already removed, so it slipped through on 47.5.3.
+* **TikTok:** The `Show how many were filtered` label and the `Show what is left of the budget` label stay off the Shop tab and the Nearby tab now. Both showed there because the Home tab stays selected on those tabs, and the filtered count sat right over their search boxes. They still show on For You and Following.
 * **TikTok:** With `Dark LIVE panels in dark mode` on, a room's viewer ranking opens dark again. A shop room's Top customers ranking still keeps TikTok's light look, because its tab titles came out dark on dark (#159).
 
 ## 0.78.0 (2026-10-22)
