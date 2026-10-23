@@ -135,9 +135,29 @@ public class ReleaseNotesTest {
                 .replace("\r\n", "\n");
         java.util.regex.Matcher heading = java.util.regex.Pattern.compile("(?m)^## \\d+\\.\\d+\\.\\d+ ").matcher(summaries);
         assertTrue("release headings missing", heading.find());
-        assertEquals("run tools/gen-release-notes.py after summary edits",
-                summaries.substring(heading.start()).trim() + "\n", ReleaseNotesData.TEXT);
+        // Only the newest releases are bundled, so the text is whole sections from the top.
+        String all = summaries.substring(heading.start()).trim() + "\n";
+        String bundled = ReleaseNotesData.TEXT;
+        assertTrue("run tools/gen-release-notes.py after summary edits",
+                bundled.startsWith("## ") && (all.equals(bundled) || all.startsWith(bundled.trim() + "\n\n## ")));
         assertFalse(ReleaseNotesData.TEXT.contains("## Unreleased"));
+    }
+
+    /** Every release's notes in nine tables made the class 798 KB, about 14% of the bundle's extension. */
+    @Test
+    public void theBundledNotesStayUnder150KB() throws Exception {
+        try (var input = ReleaseNotesData.class.getResourceAsStream("ReleaseNotesData.class")) {
+            int size = input.readAllBytes().length;
+            assertTrue("ReleaseNotesData.class is " + size + " bytes", size < 150_000);
+        }
+    }
+
+    /** The newest release the bundle carries, which a release build always has notes for. */
+    private static String newestBundled() {
+        java.util.regex.Matcher heading = java.util.regex.Pattern.compile("^## (\\d+\\.\\d+\\.\\d+) ")
+                .matcher(ReleaseNotesData.TEXT);
+        assertTrue("the bundled notes have no release", heading.find());
+        return heading.group(1);
     }
 
     @Test
@@ -236,21 +256,29 @@ public class ReleaseNotesTest {
     /** English, and a language with no table, read English everywhere: no label needed. */
     @Test
     public void anEnglishPhoneGetsTheNotesAlone() {
-        assertEquals(1, dialogTexts().size());
+        assertEquals(1, dialogTexts("0.68.0", null, ENGLISH, null).size());
     }
 
     @Test @Config(manifest = Config.NONE, sdk = 28, qualifiers = "ja")
     public void aPhoneWithNoTableGetsTheNotesAlone() {
-        assertEquals(1, dialogTexts().size());
+        assertEquals(1, dialogTexts("0.68.0", null, ENGLISH, null).size());
     }
 
+    /**
+     * Two releases with only the newer one translated. The bundle keeps just the newest
+     * releases, which are all translated, so the label tests bring their own.
+     */
+    private static final String ENGLISH =
+            "## 0.68.0 (date)\n\n* **TikTok:** Newer.\n\n## 0.67.0 (date)\n\n* **TikTok:** Older.\n";
+    private static final String GERMAN = "## 0.68.0 (date)\n\n* **TikTok:** Neuer.\n";
+
     private static void assertEnglishLabel(String label) {
-        java.util.List<android.widget.TextView> texts = dialogTexts();
+        java.util.List<android.widget.TextView> texts = dialogTexts("0.68.0", null, ENGLISH, null);
         assertEquals("expected the label, then the notes", 2, texts.size());
         assertEquals(label, texts.get(0).getText().toString());
         android.widget.TextView body = texts.get(1);
         assertTrue("the notes are missing: " + body.getText(),
-                body.getText().toString().startsWith("Hushfeed 0.60.0"));
+                body.getText().toString().startsWith("Hushfeed 0.68.0"));
         android.text.Spanned notes = (android.text.Spanned) body.getText();
         android.text.style.LocaleSpan[] spans = notes.getSpans(0, notes.length(), android.text.style.LocaleSpan.class);
         assertEquals("the notes are not marked as English for a screen reader", 1, spans.length);
@@ -259,60 +287,44 @@ public class ReleaseNotesTest {
         assertEquals(notes.length(), notes.getSpanEnd(spans[0]));
     }
 
-    /** The text views in the What's new dialog's body, top to bottom. */
-    private static java.util.List<android.widget.TextView> dialogTexts() {
-        try (var owner = Robolectric.buildActivity(HostActivity.class).setup()) {
-            Activity activity = owner.get();
-            Utils.setContext(activity);
-            ReleaseNotes.show(activity, "0.60.0", () -> {});
-            AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
-            android.view.ViewGroup content = (android.view.ViewGroup)
-                    ((android.view.ViewGroup) org.robolectric.Shadows.shadowOf(dialog).getView()).getChildAt(0);
-            java.util.List<android.widget.TextView> texts = new java.util.ArrayList<>();
-            for (int index = 0; index < content.getChildCount(); index++) {
-                texts.add((android.widget.TextView) content.getChildAt(index));
-            }
-            dialog.dismiss();
-            return texts;
-        }
-    }
-
     @Test
     public void laterKeepsTheRowPendingAndGotItRemembersTheVersion() {
+        String newest = newestBundled();
         try (var owner = Robolectric.buildActivity(HostActivity.class).setup()) {
             Activity activity = owner.get();
             Utils.setContext(activity);
             Utils.setActivity(activity);
-            assertTrue(ReleaseNotes.pending(activity, "0.60.0"));
+            assertTrue(ReleaseNotes.pending(activity, newest));
 
-            ReleaseNotes.show(activity, "0.60.0", () -> {});
+            ReleaseNotes.show(activity, newest, () -> {});
             AlertDialog first = ShadowAlertDialog.getLatestAlertDialog();
             assertEquals("Later", first.getButton(AlertDialog.BUTTON_NEGATIVE).getText().toString());
             first.getButton(AlertDialog.BUTTON_NEGATIVE).performClick();
             org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
-            assertTrue(ReleaseNotes.pending(activity, "0.60.0"));
+            assertTrue(ReleaseNotes.pending(activity, newest));
 
             AtomicBoolean rowRemoved = new AtomicBoolean();
-            ReleaseNotes.show(activity, "0.60.0", () -> rowRemoved.set(true));
+            ReleaseNotes.show(activity, newest, () -> rowRemoved.set(true));
             AlertDialog second = ShadowAlertDialog.getLatestAlertDialog();
             assertEquals("Got it", second.getButton(AlertDialog.BUTTON_POSITIVE).getText().toString());
             second.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
             org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
             assertTrue(rowRemoved.get());
-            assertFalse(ReleaseNotes.pending(activity, "0.60.0"));
+            assertFalse(ReleaseNotes.pending(activity, newest));
             assertFalse(ReleaseNotes.pending(activity, "0.59.0"));
         }
     }
 
     @Test @Config(manifest = Config.NONE, sdk = 28, qualifiers = "de")
     public void fullChangelogOpensTheDetailsWithoutDismissingTheUpdate() {
+        String newest = newestBundled();
         try (var owner = Robolectric.buildActivity(HostActivity.class).setup()) {
             Activity activity = owner.get();
             Utils.setContext(activity);
             Utils.setActivity(activity);
             activity.getSharedPreferences(ReleaseNotes.PREFS_NAME, Context.MODE_PRIVATE).edit().clear().commit();
             AtomicBoolean rowRemoved = new AtomicBoolean();
-            ReleaseNotes.show(activity, "0.68.0", () -> rowRemoved.set(true));
+            ReleaseNotes.show(activity, newest, () -> rowRemoved.set(true));
             AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
             assertEquals("Alle Änderungen",
                     dialog.getButton(AlertDialog.BUTTON_NEUTRAL).getText().toString());
@@ -323,7 +335,7 @@ public class ReleaseNotesTest {
             assertNotNull(opened);
             assertEquals(Intent.ACTION_VIEW, opened.getAction());
             assertEquals("https://github.com/SysAdminDoc/hushfeed/blob/main/CHANGELOG.md", opened.getDataString());
-            assertTrue(ReleaseNotes.pending(activity, "0.68.0"));
+            assertTrue(ReleaseNotes.pending(activity, newest));
             assertFalse(rowRemoved.get());
             assertEquals(null, activity.getSharedPreferences(ReleaseNotes.PREFS_NAME, Context.MODE_PRIVATE)
                     .getString("dismissed_version", null));
@@ -443,7 +455,8 @@ public class ReleaseNotesTest {
             if (expected == null) expected = versions;
             assertEquals(tag + " translates different releases", expected, versions);
         }
-        assertTrue("0.68.0 isn't translated", expected.contains("0.68.0"));
+        // Release prepare's translation check holds every release to all eight tables.
+        assertTrue(newestBundled() + " isn't translated", expected.contains(newestBundled()));
         assertEquals(ReleaseNotesData.translated("in"), ReleaseNotesData.translated("id"));
         assertEquals(null, ReleaseNotesData.translated("fr"));
         assertEquals(null, ReleaseNotesData.translated(null));
@@ -451,12 +464,13 @@ public class ReleaseNotesTest {
 
     @Test @Config(manifest = Config.NONE, sdk = 28, qualifiers = "de")
     public void aGermanPhoneReadsATranslatedReleaseWithoutTheEnglishLabel() {
-        java.util.List<TextView> texts = dialogTexts("0.68.0", null);
+        String newest = newestBundled();
+        java.util.List<TextView> texts = dialogTexts(newest, null, null, null);
         assertEquals("a translated release needs no English label", 1, texts.size());
         android.text.Spanned notes = (android.text.Spanned) texts.get(0).getText();
-        assertTrue(notes.toString(), notes.toString().startsWith("Hushfeed 0.68.0"));
+        assertTrue(notes.toString(), notes.toString().startsWith("Hushfeed " + newest));
         assertFalse("the German phone got the English notes",
-                notes.toString().equals(ReleaseNotes.text("0.68.0", null)));
+                notes.toString().equals(ReleaseNotes.text(newest, null)));
         android.text.style.LocaleSpan[] spans = notes.getSpans(0, notes.length(), android.text.style.LocaleSpan.class);
         assertEquals(1, spans.length);
         assertEquals("de", spans[0].getLocale().getLanguage());
@@ -465,7 +479,7 @@ public class ReleaseNotesTest {
 
     @Test @Config(manifest = Config.NONE, sdk = 28, qualifiers = "de")
     public void olderEnglishReleasesUnderATranslatedOneAreLabelledAndMarked() {
-        java.util.List<TextView> texts = dialogTexts("0.68.0", "0.66.0");
+        java.util.List<TextView> texts = dialogTexts("0.68.0", "0.66.0", ENGLISH, GERMAN);
         assertEquals("expected the label, then the notes", 2, texts.size());
         assertEquals("Ein Teil dieser Hinweise ist auf Englisch.", texts.get(0).getText().toString());
         android.text.Spanned notes = (android.text.Spanned) texts.get(1).getText();
@@ -480,14 +494,20 @@ public class ReleaseNotesTest {
         assertEquals(notes.length(), notes.getSpanEnd(spans[1]));
     }
 
-    /** The What's new dialog's text views for {@code current}, after {@code dismissed} was. */
-    private static java.util.List<TextView> dialogTexts(String current, String dismissed) {
+    /**
+     * The What's new dialog's text views, top to bottom, for {@code current} after
+     * {@code dismissed} was, over {@code source} and the phone's {@code translated} table, or
+     * over the bundled notes and the phone's own table when {@code source} is null.
+     */
+    private static java.util.List<TextView> dialogTexts(String current, String dismissed,
+                                                        String source, String translated) {
         try (var owner = Robolectric.buildActivity(HostActivity.class).setup()) {
             Activity activity = owner.get();
             Utils.setContext(activity);
             activity.getSharedPreferences(ReleaseNotes.PREFS_NAME, Context.MODE_PRIVATE).edit()
                     .putString("dismissed_version", dismissed).commit();
-            ReleaseNotes.show(activity, current, () -> {});
+            if (source == null) ReleaseNotes.show(activity, current, () -> {});
+            else ReleaseNotes.show(activity, current, () -> {}, source, translated);
             AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
             ViewGroup content = (ViewGroup)
                     ((ViewGroup) org.robolectric.Shadows.shadowOf(dialog).getView()).getChildAt(0);
