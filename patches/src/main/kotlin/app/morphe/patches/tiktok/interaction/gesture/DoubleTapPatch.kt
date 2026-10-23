@@ -72,7 +72,8 @@ val doubleTapPatch = bytecodePatch(
 ) {
     category("Interaction")
     compatibleWith(*AppCompatibilities.tiktok())
-    dependsOn(settingsPatch, sharedExtensionPatch, blockAuthorPatch)
+    // The frame save the gestures offer reads the player's own layer where it draws into one.
+    dependsOn(settingsPatch, sharedExtensionPatch, blockAuthorPatch, playerLayerPatch)
     execute {
         doubleTapRouteMethods.forEach { (owner, name) ->
             doubleTapRoute(owner, name).method.apply {
