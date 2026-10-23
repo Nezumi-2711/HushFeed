@@ -401,6 +401,8 @@ public class AutoAdvanceTest {
         } finally {
             Settings.AUTO_ADVANCE_HIDE_PANEL_ACTION.resetToDefault();
         }
+        assertTrue("each video cell builds its rail once, so flipping the switch needs a restart",
+                Settings.AUTO_ADVANCE_HIDE_PANEL_ACTION.rebootApp);
     }
     @Test public void aCollectedFeedViewEndsTheControlsWork() {
         FeedView view = new FeedView();

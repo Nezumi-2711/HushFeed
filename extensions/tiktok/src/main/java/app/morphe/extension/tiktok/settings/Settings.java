@@ -710,7 +710,7 @@ public class Settings extends BaseSettings {
      * Auto-advance off (#234).
      */
     public static final BooleanSetting AUTO_ADVANCE_HIDE_PANEL_ACTION = new BooleanSetting(
-            "auto_advance_hide_panel_action", FALSE, false);
+            "auto_advance_hide_panel_action", FALSE, true);
     /**
      * Answers yes to TikTok's search_auto_scroll flag. Search results get auto scroll from that
      * flag rather than the For You one, and their feed runs the same component Auto-advance starts.
