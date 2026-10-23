@@ -82,6 +82,10 @@ public final class GridSort {
     static final int LOAD_CAP = 300;
     /** The pause before asking for the next page, so a long profile isn't fetched in one burst. */
     static final long NEXT_PAGE_DELAY_MS = 400;
+    /** How many videos a page asks for, TikTok's own count when nothing was flung. */
+    static final int PAGE_SIZE = 18;
+    /** The source TikTok's footer names when it asks for a page. */
+    static final String PAGE_SOURCE = "load_more_bind_footer";
 
     static final String CHIP_TAG = "hushfeed_grid_sort_chip";
 
@@ -184,9 +188,11 @@ public final class GridSort {
         try {
             View grid = gridView(adapter);
             showChip(adapter, grid);
-            if (wantsNextPage(Settings.PROFILE_GRID_SORT.get(), before, size, onScreen(grid))) {
-                askForNextPage(adapter);
-            }
+            boolean shown = onScreen(grid);
+            boolean next = wantsNextPage(Settings.PROFILE_GRID_SORT.get(), before, size, shown);
+            Logger.printDebug(() -> "Grid sort: page " + before + " -> " + size
+                    + (grid == null ? ", no grid" : shown ? "" : ", off screen") + (next ? ", asking for more" : ""));
+            if (next) askForNextPage(adapter);
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not finish a sorted grid page", ex);
         }
@@ -200,7 +206,10 @@ public final class GridSort {
         MAIN.postDelayed(() -> loadMore(adapter), NEXT_PAGE_DELAY_MS);
     }
 
-    /** Asks the grid for its next page through the listener its own footer calls. */
+    /**
+     * Asks the grid for its next page, through TikTok's page loader where the patch found one and
+     * otherwise through the listener its own footer calls.
+     */
     private static void loadMore(Object adapter) {
         try {
             String order = Settings.PROFILE_GRID_SORT.get();
@@ -208,19 +217,40 @@ public final class GridSort {
                 synchronized (ORIGINALS) {
                     ASKED.remove(adapter);
                 }
+                Logger.printDebug(() -> "Grid sort: next page dropped, order " + order + " or the grid left the screen");
                 return;
             }
             Object listener = Reflect.invoke(adapter, "getLoadMoreListener");
             if (listener == null) listener = Reflect.readField(adapter, "mmLoadMoreListener");
+            if (listener != null && loadPage(listener, 0, PAGE_SIZE, PAGE_SOURCE)) {
+                Object loaderShown = listener;
+                Logger.printDebug(() -> "Grid sort: asked " + loaderShown.getClass().getName() + "'s page loader for the next page");
+                return;
+            }
             Method next = listener == null ? null : Reflect.method(listener.getClass(), "loadMore");
             if (next == null) {
                 Logger.printDebug(() -> "Grid sort: no load more listener on " + adapter.getClass().getName());
                 return;
             }
+            Object listenerShown = listener;
+            Logger.printDebug(() -> "Grid sort: asking " + listenerShown.getClass().getName() + " for the next page");
             next.invoke(listener);
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not load the next page of a sorted grid", ex);
         }
+    }
+
+    /**
+     * Asks the grid's fragment for its next page through TikTok's own page loader, and says
+     * whether it could. The footer's listener runs a reach-bottom check first that only loads
+     * within eight rows of the end, so on its own a sorted grid stopped after its third page. The
+     * patch replaces this body with the loader call, made only when {@code fragment} is a grid
+     * fragment, with TikTok's load-more message in {@code message}. The loader drops an ask while
+     * the same load is queued or running. Where the patch found no loader this stays false.
+     */
+    @SuppressWarnings("unused")
+    static boolean loadPage(Object fragment, int message, int count, String source) {
+        return false;
     }
 
     /** The RecyclerView the adapter is attached to, or null. */
