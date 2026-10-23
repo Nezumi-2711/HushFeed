@@ -49,6 +49,7 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                 || SettingsStatus.hideFeedSaveButtonEnabled
                 || SettingsStatus.exactCountsEnabled
                 || SettingsStatus.avatarRingsEnabled
+                || SettingsStatus.storyOverLiveEnabled
                 || SettingsStatus.alwaysShowPublishDateEnabled
                 || SettingsStatus.authorRegionEnabled
                 || SettingsStatus.engagementRateEnabled
@@ -99,7 +100,8 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                 || SettingsStatus.hideFeedFollowButtonEnabled
                 || SettingsStatus.hideFeedSaveButtonEnabled
                 || SettingsStatus.exactCountsEnabled
-                || SettingsStatus.avatarRingsEnabled;
+                || SettingsStatus.avatarRingsEnabled
+                || SettingsStatus.storyOverLiveEnabled;
         if (!any) return;
         addPreference(new SectionHeadingPreference(context, "Right column"));
         if (SettingsStatus.videoOverlaysEnabled) {
@@ -182,6 +184,16 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "Remove the LIVE ring",
                     "Take the pulsing LIVE ring off profile pictures on the feed and in comments. Tapping the picture of a creator who's live opens their profile instead of the LIVE.",
                     Settings.HIDE_LIVE_RING
+            ));
+        }
+        if (SettingsStatus.storyOverLiveEnabled) {
+            // #233. TikTok's profile picture opens the LIVE over a Story. With this on the Story
+            // comes first, and the next tap on the same picture still joins the LIVE.
+            addPreference(new TogglePreference(
+                    context,
+                    "Open the Story when a creator is LIVE",
+                    "When a creator who's LIVE also has a Story, tapping their picture on their profile opens the Story. Tap the picture again to join the LIVE.",
+                    Settings.OPEN_STORY_OVER_LIVE
             ));
         }
     }
