@@ -15,6 +15,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** With `Dark LIVE panels in dark mode` on, a room's viewer ranking opens dark again. A shop room's Top customers ranking still keeps TikTok's light look, because its tab titles came out dark on dark (#159).
 * **TikTok:** The README says how much memory morphe-desktop needs on a computer. With every patch picked on 47.5.3 it runs out at 1 GB, Java's default on a 4 GB machine, and finishes at 1.5 GB, so start it with `java -Xmx2g` (#220).
 * **TikTok:** With `Double tap` set to `Do nothing`, or every corner of `Double tap by corner` set to it, a tap on a video pauses or plays the moment your finger lifts. TikTok used to hold each tap for a beat in case a second one followed, and two quick taps counted as a double tap that did nothing. Now each one counts (#239).
+* **TikTok:** The build uses Gradle 9.8.2, up from 9.7.1. The build files now name the Guava advisory by its CVE number, CVE-2026-102554, because GitHub's global advisory database doesn't list its GHSA id.
 
 ## 0.78.0 (2026-10-22)
 
