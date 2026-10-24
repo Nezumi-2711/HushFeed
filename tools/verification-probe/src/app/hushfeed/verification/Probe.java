@@ -700,6 +700,9 @@ public final class Probe extends Instrumentation {
                                 // creator with a story and can't see the drawable.
                                 + " storyStatus=" + (creator == null ? null : fieldValue(creator, "storyStatus"))
                                 + "/" + optional(creator, "getStoryStatus")
+                                // Whether the author is LIVE right now (a room id), yes or no:
+                                // with a story status it finds a creator for Story over LIVE.
+                                + " authorLive=" + authorLive(creator)
                                 // Whether TikTok serves it as separate video and audio (DASH),
                                 // the case a chosen-quality download muxes itself.
                                 + " dash=" + optional(video, "hasDashBitrate")
@@ -4634,6 +4637,14 @@ public final class Probe extends Instrumentation {
 
         private static boolean blank(Object value) {
             return value == null || String.valueOf(value).trim().isEmpty();
+        }
+
+        /** Whether the author has a LIVE room open, from the room id their model carries. */
+        private static Object authorLive(Object creator) {
+            if (creator == null) return "unknown";
+            Object room = optional(creator, "getRoomId");
+            if (!(room instanceof Number)) room = fieldValue(creator, "roomId");
+            return room instanceof Number ? ((Number) room).longValue() > 0 : "unknown";
         }
 
         /**
