@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+## 0.79.0 (2026-10-24)
+
 ### Features and fixes
 
 * **TikTok:** On PineDrama, Hushfeed's settings now tell you to restart PineDrama instead of TikTok. That covers the note under each switch, the restart button that shows up once you flip one, the saved message and the Feature Gate Lab, in English and all nine translations. Other mentions of TikTok, like its servers or the TikTok Sans font, stay as they are (#156).
