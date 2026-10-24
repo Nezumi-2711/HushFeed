@@ -492,6 +492,12 @@ $secondAppOwn = [pscustomobject]@{
 $secondOwnTarget = Get-PatchTarget -PatchList $secondAppOwn
 Assert-True ($secondOwnTarget.PackageName -eq 'com.example.app' -and (@($secondOwnTarget.OtherPackages) -join ',') -eq 'com.example.drama') `
     'A patch of the second app alone took the target away from the main app.'
+$dramaTarget = Get-PatchTarget -PatchList $secondAppOwn -PackageName 'com.example.drama'
+Assert-True ($dramaTarget.PackageName -eq 'com.example.drama' -and $dramaTarget.PackageVersion -eq '1.0.0' -and
+    (@($dramaTarget.OtherPackages) -join ',') -eq 'com.example.app') `
+    'A run asking for the second app was held to the main app.'
+Assert-Throws { Get-PatchTarget -PatchList $secondAppOwn -PackageName 'com.example.other' } '*No patch declares com.example.other*' `
+    'A run on an app no patch declares was accepted.'
 Assert-True ((@(Get-PackagePatchNames -PatchList $secondAppOwn -PackageName 'com.example.app') -join ',') -eq 'both apps,main app,main app too' -and
     (@(Get-PackagePatchNames -PatchList $secondAppOwn -PackageName 'com.example.drama') -join ',') -eq 'both apps,drama only') `
     'A run on one app selected a patch only the other app declares.'
