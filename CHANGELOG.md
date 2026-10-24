@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** `Hide videos you have already seen` takes watched videos out of For You again (#172). TikTok reads each new page once before handing it to the feed. The switch sits that first read out, as it does on lists you open yourself, but everything the read kept was then remembered as allowed and never checked again. Now the page gets checked against what you've watched once TikTok hands it over, and your watch record starts loading during that first read so it's ready in time.
 * **TikTok:** With AMOLED dark theme, the `Add comment...` bar under a photo post you open from search, a profile or a link is black now (#171). TikTok leaves that bar see-through, and a photo runs on underneath it, so the photo showed through where a video post shows black.
 * **TikTok:** `Use an imported font` now works on PineDrama (#243). PineDrama doesn't carry TikTok's own fonts, so its text fell back to your phone's font and the imported one never got used. It now draws in your font at the weight the app asked for, so bold text stays bold.
 * **TikTok:** Feature Gate Lab's `Scrolling comments on videos` preset tells you before you apply it that comments only scroll on videos TikTok has turned them on for. Each video carries its own flag from TikTok's server, so most videos look the same with the preset on (#98).
