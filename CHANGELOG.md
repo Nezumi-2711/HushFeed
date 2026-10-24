@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Feature Gate Lab's `Scrolling comments on videos` preset tells you before you apply it that comments only scroll on videos TikTok has turned them on for. Each video carries its own flag from TikTok's server, so most videos look the same with the preset on (#98).
 * **TikTok:** New `Allow photo comments` patch for PineDrama, with its switch off by default (#156). PineDrama hides the gallery tab in the comment box for everyone, even though TikTok's server allows photo comments. Turn the switch on in Hushfeed settings > Comments and restart, and the comment box asks the server like TikTok does.
 * **TikTok:** Six more patches now run on PineDrama 47.4.3 too: `Advanced downloads`, `Automatic video advance`, `Hide inbox items`, `Hide profile shortcuts`, `Open the comments at full height` and `Show the progress bar`. That makes 97 patches Morphe Manager offers for PineDrama. The rest still lean on TikTok's LIVE rooms, feed buttons or resources that PineDrama doesn't have (#156).
 * **TikTok:** New `Report a newer phone to effects` switch, off by default (#176). Effects ask TikTok's server whether your phone can run them, and on some older phones the answer is "This effect doesn't work on this device". With the switch on, the effects server is told you have a Galaxy S24 Ultra. Sign-in and everything else still see your real phone. An effect your phone really can't run may still fail or look wrong.
