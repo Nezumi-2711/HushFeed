@@ -479,8 +479,19 @@ $splitApps = [pscustomobject]@{
         [pscustomobject]@{ name = 'other'; compatiblePackages = [pscustomobject]@{ 'com.example.drama' = @('1.0.0') } }
     )
 }
-Assert-Throws { Get-PatchTarget -PatchList $splitApps } '*one package every patch declares*' `
-    'A catalog with no package every patch declares was accepted.'
+Assert-Throws { Get-PatchTarget -PatchList $splitApps } '*one package the most patches declare*' `
+    'A catalog whose two packages tie was accepted.'
+$secondAppOwn = [pscustomobject]@{
+    patches = @(
+        [pscustomobject]@{ name = 'both apps'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0'); 'com.example.drama' = @('1.0.0') } },
+        [pscustomobject]@{ name = 'main app'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0') } },
+        [pscustomobject]@{ name = 'main app too'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0') } },
+        [pscustomobject]@{ name = 'drama only'; compatiblePackages = [pscustomobject]@{ 'com.example.drama' = @('1.0.0') } }
+    )
+}
+$secondOwnTarget = Get-PatchTarget -PatchList $secondAppOwn
+Assert-True ($secondOwnTarget.PackageName -eq 'com.example.app' -and (@($secondOwnTarget.OtherPackages) -join ',') -eq 'com.example.drama') `
+    'A patch of the second app alone took the target away from the main app.'
 $unevenSecond = [pscustomobject]@{
     patches = @(
         [pscustomobject]@{ name = 'a'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0'); 'com.example.drama' = @('1.0.0') } },

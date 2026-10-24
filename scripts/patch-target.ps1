@@ -55,15 +55,16 @@ function Get-PatchTarget {
         }
     }
 
-    # The bundle's target is the package every patch declares. Another app built from the same code
-    # (PineDrama, #156) is declared only by the patches that apply to it, and is listed beside it.
+    # The bundle's target is the package the most patches declare. Another app built from the same
+    # code (PineDrama, #156) is declared by the patches that apply to it, a few of them its own
+    # (Allow photo comments), and is listed beside it. A tie names no target.
     $packages = @($targets.Keys | Sort-Object)
-    $everywhere = @($packages | Where-Object { $declaredBy[$_] -eq $patches.Count })
-    if ($everywhere.Count -ne 1) {
-        $found = if ($everywhere.Count -eq 0) { 'none' } else { $everywhere -join ', ' }
-        throw "Expected one package every patch declares, found $found among $($packages -join ', ')."
+    $most = ($packages | ForEach-Object { $declaredBy[$_] } | Measure-Object -Maximum).Maximum
+    $leading = @($packages | Where-Object { $declaredBy[$_] -eq $most })
+    if ($leading.Count -ne 1) {
+        throw "Expected one package the most patches declare, found a tie among $($leading -join ', ')."
     }
-    $packageName = $everywhere[0]
+    $packageName = $leading[0]
     foreach ($package in $packages) {
         if ($versionSets[$package].Count -ne 1) {
             $sets = @($versionSets[$package].Keys | Sort-Object | ForEach-Object { "$($versionSets[$package][$_]) declares $_" })
