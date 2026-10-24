@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** New `Load all saved stickers` patch, with no switch. PineDrama's sticker panel loaded only the first 100 stickers you saved and never asked for more, so the rest were missing from Saved. It now asks for all of them in one go. TikTok gets the same first request, and it still loads more by itself past that (#214).
 * **TikTok:** New `LIVE recording source` choice under `Record LIVEs you watch`. `Stream only` saves the room's own video like before. `Screen` records what your phone shows while you watch. Android asks to allow screen recording each time, and Stop saves it. The app's sound comes along when TikTok has the microphone permission, otherwise the recording is video only (#37).
 * **TikTok:** New `Blur the video behind the bar` switch under `Liquid glass look`. It frosts the glass pill with a soft blur of the video behind it, off by default, on Android 12 and up (#231).
 * **TikTok:** With `Dark LIVE panels in dark mode` on, the light pieces left in a LIVE room go dark too. The navigation bar under the long-press sheet stays dark now, even when TikTok turns it light again. The tiles in the host's profile card and the fan club's tab strip and card turn dark, and the text and icons on them turn light so they stay readable (#159).

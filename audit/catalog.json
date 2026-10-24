@@ -10134,6 +10134,36 @@
   "notes": "The effect (TikTok stops loading upcoming videos ahead of time, \"videos may take a moment longer to start\") has no stable on-screen sign; a data counter or the startwatch probe's first-frame delay on a cold cache would show it. The decision hook is PerformanceSwitches.limitBackgroundTraffic()."
  },
  {
+  "name": "Load all saved stickers",
+  "category": "Comments",
+  "default": true,
+  "kind": "runtime",
+  "source": [
+   "patches/src/main/kotlin/app/morphe/patches/tiktok/misc/comment/SavedStickersPatch.kt",
+   "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/comment/SavedStickers.java"
+  ],
+  "settings": [],
+  "surface": "comments",
+  "checks": [
+   {
+    "id": "injected",
+    "what": "The patched dex carries the saved stickers count seam and the patch registered itself. (The dex-string step shows the extension class is shipped; the registered-switch step is what shows the patch ran.)",
+    "steps": [
+     {
+      "apk": "dex-string",
+      "expect": "Lapp/morphe/extension/tiktok/comment/SavedStickers;"
+     },
+     {
+      "probe": "report",
+      "expect": "registered_switches:[^\\n]*\\bsavedStickers\\b"
+     }
+    ],
+    "auto": true
+   }
+  ],
+  "notes": "The effect shows only on an account with more saved stickers than the server's first page (refreshCount, 100 by default): PineDrama's comment sticker panel never pages, so without the patch its Saved tab stops at 100. Natural check: with about 113 saved, a cold start's Saved tab ends on a row of 1 (113 cells) instead of a full row at 100."
+ },
+ {
   "name": "Location access governor",
   "category": "Privacy",
   "default": true,

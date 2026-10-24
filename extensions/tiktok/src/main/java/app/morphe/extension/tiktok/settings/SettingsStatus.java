@@ -782,6 +782,8 @@ public class SettingsStatus {
     public static void enableCommentPublishDiagnostics() { commentPublishDiagnosticsEnabled = true; }
     public static boolean commentSendFixEnabled = false;
     public static void enableCommentSendFix() { commentSendFixEnabled = true; }
+    public static boolean savedStickersEnabled = false;
+    public static void enableSavedStickers() { savedStickersEnabled = true; }
     public static boolean followDiagnosticsEnabled = false;
     public static void enableFollowDiagnostics() { followDiagnosticsEnabled = true; }
     public static boolean repostDiagnosticsEnabled = false;
