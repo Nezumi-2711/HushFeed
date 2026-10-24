@@ -14,7 +14,7 @@
 
 * **TikTok:** Patch baru Allow photo comments untuk PineDrama mengembalikan tab galeri dan tombol foto di kotak komentar (#156).
 
-* **TikTok:** Enam patch lagi sekarang berjalan di PineDrama 47.4.3, jadi Morphe Manager menawarkan 98 patch untuknya (#156).
+* **TikTok:** PineDrama pindah ke 47.5.3. Enam patch lagi sekarang berjalan di sana, jadi Morphe Manager menawarkan 95 patch untuknya (#156).
 
 * **TikTok:** Sakelar baru Laporkan ponsel lebih baru ke efek membantu efek yang bilang tidak bisa berjalan di ponselmu (#176).
 

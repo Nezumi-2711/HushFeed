@@ -14,7 +14,7 @@
 
 * **TikTok:** La nuova patch Allow photo comments per PineDrama riporta la scheda della galleria e il pulsante foto nella casella dei commenti (#156).
 
-* **TikTok:** Altre sei patch ora funzionano su PineDrama 47.4.3, quindi Morphe Manager ne offre 98 (#156).
+* **TikTok:** PineDrama passa alla 47.5.3. Altre sei patch ora funzionano su PineDrama, quindi Morphe Manager ne offre 95 (#156).
 
 * **TikTok:** Il nuovo interruttore Segnala un telefono più recente agli effetti aiuta con gli effetti che dicono di non funzionare sul tuo telefono (#176).
 

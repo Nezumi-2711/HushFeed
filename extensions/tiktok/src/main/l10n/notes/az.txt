@@ -14,7 +14,7 @@
 
 * **TikTok:** PineDrama üçün yeni Allow photo comments yaması şərh qutusunda qalereya tabını və foto düyməsini geri qaytarır (#156).
 
-* **TikTok:** Daha altı yama artıq PineDrama 47.4.3 üzərində işləyir, beləliklə Morphe Manager onun üçün 98 yama təklif edir (#156).
+* **TikTok:** PineDrama 47.5.3-ə keçir. Daha altı yama artıq onun üzərində işləyir, beləliklə Morphe Manager onun üçün 95 yama təklif edir (#156).
 
 * **TikTok:** Yeni Effektlərə daha yeni telefon bildir açarı telefonunuzda işləmədiyini deyən effektlərə kömək edir (#176).
 

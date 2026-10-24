@@ -14,7 +14,7 @@
 
 * **TikTok:** Der neue Patch Allow photo comments für PineDrama bringt den Galerie-Tab und den Foto-Button im Kommentarfeld zurück (#156).
 
-* **TikTok:** Sechs weitere Patches laufen jetzt auf PineDrama 47.4.3, damit bietet Morphe Manager 98 Patches dafür an (#156).
+* **TikTok:** PineDrama wechselt zu 47.5.3. Sechs weitere Patches laufen jetzt darauf, damit bietet Morphe Manager 95 Patches dafür an (#156).
 
 * **TikTok:** Der neue Schalter Effekten ein neueres Telefon melden hilft bei Effekten, die sagen, dass sie auf deinem Telefon nicht funktionieren (#176).
 

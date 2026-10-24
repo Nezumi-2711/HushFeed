@@ -14,7 +14,7 @@
 
 * **TikTok:** A new Allow photo comments patch for PineDrama brings back the gallery tab and the photo button in the comment box (#156).
 
-* **TikTok:** Six more patches now run on PineDrama 47.4.3, so Morphe Manager offers 98 patches for it (#156).
+* **TikTok:** PineDrama moves to 47.5.3. Six more patches run on it now, so Morphe Manager offers 95 patches for it (#156).
 
 * **TikTok:** A new Report a newer phone to effects switch helps with effects that say they don't work on your phone (#176).
 
