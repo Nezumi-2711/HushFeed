@@ -82,6 +82,26 @@ function Get-PatchTarget {
 
 <#
 .SYNOPSIS
+    The names of the patches that declare a package, in catalog order. A run on the target's APK
+    selects these: a patch only another app declares (PineDrama's Allow photo comments, #156)
+    never applies to it, so the patcher leaves it out and a check expecting it would fail.
+#>
+function Get-PackagePatchNames {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)][object]$PatchList,
+        [Parameter(Mandatory = $true)][string]$PackageName
+    )
+
+    return @($PatchList.patches | Where-Object {
+            $compatible = $_.PSObject.Properties['compatiblePackages']
+            $null -ne $compatible -and $null -ne $compatible.Value -and
+                $null -ne $compatible.Value.PSObject.Properties[$PackageName]
+        } | ForEach-Object { [string]$_.name })
+}
+
+<#
+.SYNOPSIS
     Versions as a sentence names them: "47.1.4", "47.1.4 and 47.2.3", "a, b and c".
 #>
 function Format-VersionList {

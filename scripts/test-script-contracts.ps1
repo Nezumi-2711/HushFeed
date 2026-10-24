@@ -492,6 +492,9 @@ $secondAppOwn = [pscustomobject]@{
 $secondOwnTarget = Get-PatchTarget -PatchList $secondAppOwn
 Assert-True ($secondOwnTarget.PackageName -eq 'com.example.app' -and (@($secondOwnTarget.OtherPackages) -join ',') -eq 'com.example.drama') `
     'A patch of the second app alone took the target away from the main app.'
+Assert-True ((@(Get-PackagePatchNames -PatchList $secondAppOwn -PackageName 'com.example.app') -join ',') -eq 'both apps,main app,main app too' -and
+    (@(Get-PackagePatchNames -PatchList $secondAppOwn -PackageName 'com.example.drama') -join ',') -eq 'both apps,drama only') `
+    'A run on one app selected a patch only the other app declares.'
 $unevenSecond = [pscustomobject]@{
     patches = @(
         [pscustomobject]@{ name = 'a'; compatiblePackages = [pscustomobject]@{ 'com.example.app' = @('1.0.0'); 'com.example.drama' = @('1.0.0') } },
@@ -1537,7 +1540,7 @@ try {
     # And the release check hands the receipt that list, names and target both, rather than the
     # working one. A helper nothing calls would pass every case above.
     $factsSource = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'validate-release-facts.ps1') -Raw
-    Assert-True ($factsSource -match '-ExpectedPatchNames @\(\$resolvedList\.PatchList\.patches' -and
+    Assert-True ($factsSource -match '-ExpectedPatchNames @\(Get-PackagePatchNames -PatchList \$resolvedList\.PatchList -PackageName \$receiptTarget\.PackageName\)' -and
         $factsSource -match '\$receiptTarget = Get-PatchTarget -PatchList \$resolvedList\.PatchList' -and
         $factsSource -match '-ExpectedPackageName \$receiptTarget\.PackageName') `
         'validate-release-facts.ps1 no longer holds the receipt to the patch list its own commit carried.'
