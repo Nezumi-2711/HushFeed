@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Six more patches now run on PineDrama 47.4.3 too: `Advanced downloads`, `Automatic video advance`, `Hide inbox items`, `Hide profile shortcuts`, `Open the comments at full height` and `Show the progress bar`. That makes 97 patches Morphe Manager offers for PineDrama. The rest still lean on TikTok's LIVE rooms, feed buttons or resources that PineDrama doesn't have (#156).
 * **TikTok:** New `Load all saved stickers` patch, with no switch. PineDrama's sticker panel loaded only the first 100 stickers you saved and never asked for more, so the rest were missing from Saved. It now asks for all of them in one go. TikTok gets the same first request, and it still loads more by itself past that (#214).
 * **TikTok:** New `LIVE recording source` choice under `Record LIVEs you watch`. `Stream only` saves the room's own video like before. `Screen` records what your phone shows while you watch. Android asks to allow screen recording each time, and Stop saves it. The app's sound comes along when TikTok has the microphone permission, otherwise the recording is video only (#37).
 * **TikTok:** New `Blur the video behind the bar` switch under `Liquid glass look`. It frosts the glass pill with a soft blur of the video behind it, off by default, on Android 12 and up (#231).
