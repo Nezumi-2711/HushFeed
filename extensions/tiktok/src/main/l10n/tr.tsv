@@ -685,7 +685,7 @@ Hushfeed can't read the creator pattern %1$s	Hushfeed, %1$s içerik üreticisi k
 Hushfeed hid a TikTok CAPTCHA. Turn off Hide CAPTCHA popups if something stops working.	Hushfeed bir TikTok CAPTCHA'sını gizledi. Bir şey çalışmazsa CAPTCHA pencerelerini gizle ayarını kapat.
 Hushfeed is active	Hushfeed etkin
 Shows the Duet and Stitch options even when the creator turned them off. TikTok may still refuse to accept the result.	İçerik üreticisi kapatmış olsa bile Düet ve Stitch seçeneklerini gösterir. TikTok sonucu yine de kabul etmeyebilir.
-Shows Add to Story on a story whose creator turned off content reuse. TikTok may still refuse to post it.	İçerik üreticisi içeriğin yeniden kullanılmasını kapatmış olsa bile hikâyede Hikâyeye Ekle seçeneğini gösterir. TikTok paylaşımı yine de reddedebilir.
+Shows Add to Story in the share sheet and on stories even when the creator turned off content reuse. TikTok may still refuse to post it.	İçerik üreticisi içeriğin yeniden kullanılmasını kapatmış olsa bile paylaşım menüsünde ve hikâyelerde Hikâyeye Ekle seçeneğini gösterir. TikTok paylaşımı yine de reddedebilir.
 Import finished	İçe aktarma tamamlandı
 Import loaded values	Yüklenen değerleri içe aktar
 Imported %1$d values	%1$d değer içe aktarıldı

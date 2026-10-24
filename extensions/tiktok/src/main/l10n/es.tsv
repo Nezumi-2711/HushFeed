@@ -657,7 +657,7 @@ Hushfeed can't read the creator pattern %1$s	Hushfeed no puede leer el patrón d
 Hushfeed hid a TikTok CAPTCHA. Turn off Hide CAPTCHA popups if something stops working.	Hushfeed ocultó un CAPTCHA de TikTok. Desactiva Ocultar las ventanas de CAPTCHA si algo deja de funcionar.
 Hushfeed is active	Hushfeed está activo
 Shows the Duet and Stitch options even when the creator turned them off. TikTok may still refuse to accept the result.	Muestra las opciones Dúo y Stitch aunque el creador las haya desactivado. TikTok aún puede rechazar el resultado.
-Shows Add to Story on a story whose creator turned off content reuse. TikTok may still refuse to post it.	Muestra Añadir a la historia en una historia cuyo creador desactivó la reutilización del contenido. TikTok aún puede rechazar la publicación.
+Shows Add to Story in the share sheet and on stories even when the creator turned off content reuse. TikTok may still refuse to post it.	Muestra Añadir a la historia en el menú de compartir y en las historias aunque el creador haya desactivado la reutilización del contenido. TikTok aún puede rechazar la publicación.
 Import finished	Importación finalizada
 Import loaded values	Importar los valores cargados
 Imported %1$d values	%1$d valores importados
