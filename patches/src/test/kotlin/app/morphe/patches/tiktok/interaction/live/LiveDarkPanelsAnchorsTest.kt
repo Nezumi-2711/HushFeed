@@ -500,6 +500,37 @@ class LiveDarkPanelsAnchorsTest {
         }
     }
 
+    @Test
+    fun `each declared build keeps the long-press menu's dialog the menu hook hands over`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val menu = classes[LIVE_LONG_PRESS_MENU] ?: throw AssertionError("${apk.name}: no long-press menu")
+            val start = menu.methods.filter { LiveLongPressMenuStartFingerprint.takes(it, menu) }
+            assertEquals("${apk.name}: the menu's start", 1, start.size)
+            val fields = longPressMenuDialog(menu) { classes[it] }
+            assertNotNull("${apk.name}: one controller holding one dialog", fields)
+            if ("47.5.3" in apk.name) {
+                assertEquals("${apk.name}: X/10Jb holds the dialog (2026-10-24)",
+                    "$LIVE_LONG_PRESS_MENU->LLJJI:LX/10Jb;" to "LX/10Jb;->LJ:Landroid/app/Dialog;", fields)
+            }
+
+            // The hook as the patch writes it: the dialog goes to the extension before each return.
+            val hooked = MutableMethod(start.single())
+            hookLongPressMenu(hooked, fields)
+            val code = hooked.implementation!!.instructions.toList()
+            val returns = code.indices.filter { code[it].opcode == Opcode.RETURN_VOID }
+            assertTrue("${apk.name}: a return", returns.isNotEmpty())
+            returns.forEach { at ->
+                val call = (code[at - 1] as ReferenceInstruction).reference as MethodReference
+                assertEquals("${apk.name}: the hook before the return", "liveMenu", call.name)
+            }
+            assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
+        }
+        assertThrows(PatchException::class.java) {
+            hookLongPressMenu(badgeBind("nop"), null)
+        }
+    }
+
     /** A badge bind that reads its tile from [owner]'s lazy field and casts it to [cast], then runs [after]. */
     private fun badgeBind(
         after: String,

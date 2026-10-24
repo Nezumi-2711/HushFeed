@@ -1271,9 +1271,9 @@ private fun onlyReaches(method: Method, definition: Int, use: Int, register: Int
 
 /**
  * Hands each of the badge tile's backgrounds to the extension in place of TikTok's own call. While
- * Dark LIVE panels is on in dark mode, the extension lays a white copy of the tile's shape under
- * it, so the server's see-through art and text draw over white the way they do on the stock card.
- * The call takes the same two registers, so nothing else in the method moves.
+ * Dark LIVE panels is on in dark mode, the extension gives a solid light tile the dark fill and
+ * lays a see-through one over a dark copy of its shape, then lights the text over the tile. The
+ * call takes the same two registers, so nothing else in the method moves.
  */
 internal fun hookBadgeTiles(bind: MutableMethod) {
     val calls = badgeTileCalls(bind) ?: throw PatchException("LIVE controls: the profile card's badge tile wasn't found")
@@ -1283,6 +1283,62 @@ internal fun hookBadgeTiles(bind: MutableMethod) {
             at,
             "invoke-static {v${call.registerC}, v${call.registerD}}, " +
                 "$PANEL_THEME->badgeTile(Landroid/view/View;Landroid/graphics/drawable/Drawable;)V",
+        )
+    }
+}
+
+/** LIVE's long-press menu (share, report and the rest), a fragment shown in a plain dialog, real-named on 47.5.3. */
+internal const val LIVE_LONG_PRESS_MENU = "Lcom/ss/android/ugc/aweme/share/LongPressShareListDialogForLiveHost;"
+
+private const val DIALOG = "Landroid/app/Dialog;"
+
+/**
+ * The long-press menu starting (#159). Its controller, the menu's one field whose class holds a
+ * dialog, sets that dialog's window up here. The menu isn't one of LIVE's themed panels, so
+ * nothing reached its window and its navigation bar stayed light under the dark menu (S22,
+ * 2026-10-24).
+ */
+internal object LiveLongPressMenuStartFingerprint : Fingerprint(
+    definingClass = LIVE_LONG_PRESS_MENU,
+    name = "onStart",
+    returnType = "V",
+    parameters = listOf(),
+)
+
+/**
+ * The menu's controller field and the controller's dialog field, each as `Lclass;->name:Ltype;`:
+ * the one instance field of [menu] whose class has exactly one instance Dialog field. Null unless
+ * there's exactly one.
+ */
+internal fun longPressMenuDialog(menu: ClassDef, classOf: (String) -> ClassDef?): Pair<String, String>? =
+    menu.fields.filter { !AccessFlags.STATIC.isSet(it.accessFlags) }.mapNotNull { holder ->
+        val dialog = classOf(holder.type)?.fields
+            ?.filter { !AccessFlags.STATIC.isSet(it.accessFlags) && it.type == DIALOG }
+            ?.singleOrNull() ?: return@mapNotNull null
+        "${menu.type}->${holder.name}:${holder.type}" to "${dialog.definingClass}->${dialog.name}:${dialog.type}"
+    }.singleOrNull()
+
+/**
+ * Hands the menu's dialog, read through [fields] from [longPressMenuDialog], to the extension at
+ * each of onStart's returns, after the controller set the window up, on the return's own label.
+ * The hook borrows v0, which nothing reads at a return, and needs `this` at v15 or below for the
+ * field reads.
+ */
+internal fun hookLongPressMenu(start: MutableMethod, fields: Pair<String, String>?) {
+    val (holder, dialog) = fields ?: throw PatchException("LIVE controls: the long-press menu's dialog wasn't found")
+    val body = start.implementation ?: throw PatchException("LIVE controls: the long-press menu's start has no body")
+    val returns = body.instructions.withIndex().filter { it.value.opcode == Opcode.RETURN_VOID }.map { it.index }.reversed()
+    if (returns.isEmpty() || body.registerCount < 2 || body.registerCount - 1 > 15) {
+        throw PatchException("LIVE controls: the long-press menu's start doesn't fit the hook")
+    }
+    returns.forEach { at ->
+        start.addInstructionsAtControlFlowLabel(
+            at,
+            """
+                iget-object v0, p0, $holder
+                iget-object v0, v0, $dialog
+                invoke-static {v0}, $PANEL_THEME->liveMenu(Landroid/app/Dialog;)V
+            """,
         )
     }
 }
@@ -1847,9 +1903,14 @@ val liveControlsPatch = bytecodePatch(
         hookEventBox(LiveProfileEventFingerprint.method)
         // Its badge tiles carry server art and text drawn for the white card, the low levels'
         // tile see-through, so both went dark gray on the dark card (Login2, 2026-10-20). The
-        // extension lays a white copy of each tile's shape under it while the switch is on in
-        // dark mode.
+        // extension puts each tile on a dark copy of its shape while the switch is on in dark mode.
         hookBadgeTiles(LiveProfileBadgeFingerprint.method)
+        // The long-press menu is a fragment in a plain dialog, so its navigation bar stayed light
+        // under the dark menu (S22, 2026-10-24). Its start hands the dialog over.
+        hookLongPressMenu(
+            LiveLongPressMenuStartFingerprint.method,
+            longPressMenuDialog(classDefBy(LIVE_LONG_PRESS_MENU)) { classDefByOrNull(it) },
+        )
         // Its group chat row is the same kind of fixed white shape under text in the card theme's
         // colors (Login2, 2026-10-20), so the extension gives it the event box's fill.
         hookGroupChat(mutableClassDefBy(LiveProfileGroupChatFingerprint.method.definingClass).methods)
