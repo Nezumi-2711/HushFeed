@@ -250,6 +250,45 @@
       "options": []
     },
     {
+      "name": "Allow photo comments",
+      "description": "Lets you bring back the gallery tab in PineDrama's comment box, so you can add a photo to a comment like on TikTok. TikTok's server still decides whether your account can post one. Starts off. Turn it on in Hushfeed settings > Comments.",
+      "category": "Comments",
+      "use": true,
+      "dependencies": [
+        "BytecodePatch",
+        "Settings"
+      ],
+      "compatiblePackages": {
+        "com.ss.android.ttmd.video": [
+          "47.4.3"
+        ]
+      },
+      "compatibility": [
+        {
+          "name": "PineDrama",
+          "packageName": "com.ss.android.ttmd.video",
+          "description": null,
+          "appIconColor": 16657493,
+          "signatures": [
+            "e97ca0c8835c5a9e4f7702a0382b103ede9c5d51e5194c8db54f4c8833f54e18"
+          ],
+          "targets": [
+            {
+              "version": "47.4.3",
+              "experimental": false,
+              "versionCodes": {
+                "ARM64_V8A": 2024704030,
+                "ARMEABI_V7A": 2024704030,
+                "X86": 2024704030,
+                "X86_64": 2024704030
+              }
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Allow screenshots and Circle to Search",
       "description": "Lets screenshots, screen recordings and Circle to Search work on TikTok screens that would otherwise come out black. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok.",
       "category": "Downloads",
