@@ -115,6 +115,49 @@ class GridSortAnchorsTest {
     }
 
     @Test
+    fun `each declared build has one grid cell click and hands it the fragment first`() {
+        Fixtures.forEachDeclared { apk ->
+            val version = Fixtures.versionOf(apk)
+            val found = mutableListOf<Method>()
+            val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
+            for (entry in container.dexEntryNames) {
+                for (classDef in container.getEntry(entry)!!.dexFile.classes) {
+                    for (method in classDef.methods) {
+                        if (GridCellOpenFingerprint.takes(method, classDef)) found += method
+                    }
+                }
+            }
+            assertEquals("$version: ${found.map { "${it.definingClass}->${it.name}" }}", 1, found.size)
+
+            var checked = false
+            val probe = bytecodePatch(name = "grid open probe") {
+                execute {
+                    fun ops(m: Method) = m.implementation!!.instructions.filter { it.opcode != Opcode.NOP }.toList()
+                    val before = ops(GridCellOpenFingerprint.method).map { it.opcode }
+                    GridCellOpenFingerprint.clearMatch()
+                    assertTrue("$version: the hook went in", hookGridOpen(version))
+                    GridCellOpenFingerprint.clearMatch()
+                    val after = ops(GridCellOpenFingerprint.method)
+                    val call = after.first().getReference<MethodReference>()!!
+                    assertEquals(
+                        "Lapp/morphe/extension/tiktok/feed/GridSort;->beforeOpen(Ljava/lang/Object;)V",
+                        "${call.definingClass}->${call.name}(${call.parameterTypes.joinToString("")})${call.returnType}",
+                    )
+                    assertEquals(listOf(Opcode.INVOKE_STATIC_RANGE) + before, after.map { it.opcode })
+                    checked = true
+                }
+            }
+            GridCellOpenFingerprint.clearMatch()
+            Patcher(PatcherConfig(apk, temporary.newFolder())).use { patcher ->
+                patcher += setOf(probe)
+                runBlocking { patcher().collect { result -> result.exception?.let { throw it } } }
+            }
+            GridCellOpenFingerprint.clearMatch()
+            assertTrue("$version: the probe never ran", checked)
+        }
+    }
+
+    @Test
     fun `each declared build has one grid page loader with its load-more message`() {
         Fixtures.forEachDeclared { apk ->
             val version = Fixtures.versionOf(apk)

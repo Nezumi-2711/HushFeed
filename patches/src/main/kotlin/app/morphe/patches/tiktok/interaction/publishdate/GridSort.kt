@@ -54,6 +54,22 @@ internal object GridAdapterPageFingerprint : Fingerprint(
 )
 
 /**
+ * The profile grid fragment's cell click (#180), which opens the video page on the fragment's
+ * own list. It is the one method of the grid fragment taking a post, the cell and a string that
+ * routes to the video page with the profile source.
+ */
+internal object GridCellOpenFingerprint : Fingerprint(
+    definingClass = "Lcom/ss/android/ugc/profile/business/profile/tab/AwemeListFragmentImpl;",
+    returnType = "V",
+    parameters = listOf(
+        "Lcom/ss/android/ugc/aweme/feed/model/Aweme;",
+        "Landroid/view/View;",
+        "Ljava/lang/String;",
+    ),
+    strings = listOf("aweme://aweme/detail/", "from_profile_other"),
+)
+
+/**
  * The profile grid fragment's method that asks for the next page once a fresh list is in, the
  * one method in the app that logs both of these (#180). It calls TikTok's page loader with the
  * load-more message, which [gridPageLoaderIn] reads from it.
@@ -136,11 +152,29 @@ internal fun BytecodePatchContext.fillGridPageLoader(versionName: String): Boole
 internal fun BytecodePatchContext.hookGridSortOn(versionName: String): Boolean {
     if (!hookGridSort(versionName)) return false
     fillGridPageLoader(versionName)
+    hookGridOpen(versionName)
     SettingsStatusLoadFingerprint.method.addInstruction(
         0,
         "invoke-static {}, " +
             "Lapp/morphe/extension/tiktok/settings/SettingsStatus;->enableGridSort()V",
     )
+    return true
+}
+
+/**
+ * Hands the grid's fragment to the extension as a cell opens its video, so the video page swipes
+ * on in the grid's order (#180). The fragment is `p0` at the click's first instruction, and the
+ * range form takes it from any register. Required on a declared build. On any other, a click it
+ * can't find leaves the grid sorted and the video page in TikTok's order.
+ */
+internal fun BytecodePatchContext.hookGridOpen(versionName: String): Boolean {
+    val declared = versionName in declaredVersions()
+    val open = if (declared) GridCellOpenFingerprint.method else GridCellOpenFingerprint.methodOrNull
+    if (open == null) {
+        println("[$PATCH] The sorted grid on $versionName opens videos in TikTok's order: no grid cell click found.")
+        return false
+    }
+    open.addInstruction(0, "invoke-static/range { p0 .. p0 }, $GRID_SORT->beforeOpen(Ljava/lang/Object;)V")
     return true
 }
 
