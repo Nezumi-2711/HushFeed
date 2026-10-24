@@ -1101,21 +1101,26 @@ class LiveDarkPanelsAnchorsTest {
         generateSequence(type) { classes[it]?.superclass }.first { it !in classes }
 
     @Test
-    fun `each declared build keeps the quality list's view setup`() {
+    fun `each declared build keeps both quality lists' view setup`() {
         Fixtures.forEachDeclared { apk ->
             val classes = classes(apk)
-            val dialog = classes[LIVE_DEFINITION_DIALOG] ?: throw AssertionError("${apk.name}: $LIVE_DEFINITION_DIALOG is gone")
-            val found = dialog.methods.filter { LiveDefinitionListFingerprint.takes(it, dialog) }
-            assertEquals("${apk.name}: onViewCreated", 1, found.size)
-            // The view sits above v15 on 47.1.4, so the hook takes the range form; the inline
-            // compiler drops a four-bit call to a register that doesn't fit, silently.
-            val hooked = MutableMethod(found.single())
-            hookQualityList(hooked)
-            val first = hooked.implementation!!.instructions.first()
-            assertEquals("${apk.name}: the hook's call", Opcode.INVOKE_STATIC_RANGE, first.opcode)
-            val view = (first as com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction).startRegister
-            assertEquals("${apk.name}: the hook reads the view", found.single().implementation!!.registerCount - 2, view)
-            assertEquals("readableQualityList", ((first as ReferenceInstruction).reference as MethodReference).name)
+            listOf(
+                LIVE_DEFINITION_DIALOG to LiveDefinitionListFingerprint,
+                LIVE_TALENT_DEFINITION_DIALOG to LiveTalentDefinitionListFingerprint,
+            ).forEach { (type, fingerprint) ->
+                val dialog = classes[type] ?: throw AssertionError("${apk.name}: $type is gone")
+                val found = dialog.methods.filter { fingerprint.takes(it, dialog) }
+                assertEquals("${apk.name}: $type onViewCreated", 1, found.size)
+                // The view sits above v15 on 47.1.4, so the hook takes the range form; the inline
+                // compiler drops a four-bit call to a register that doesn't fit, silently.
+                val hooked = MutableMethod(found.single())
+                hookQualityList(hooked)
+                val first = hooked.implementation!!.instructions.first()
+                assertEquals("${apk.name}: $type the hook's call", Opcode.INVOKE_STATIC_RANGE, first.opcode)
+                val view = (first as com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction).startRegister
+                assertEquals("${apk.name}: $type the hook reads the view", found.single().implementation!!.registerCount - 2, view)
+                assertEquals("readableQualityList", ((first as ReferenceInstruction).reference as MethodReference).name)
+            }
         }
     }
 }

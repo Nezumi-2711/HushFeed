@@ -251,6 +251,22 @@ internal object LiveDefinitionListFingerprint : Fingerprint(
     parameters = listOf("Landroid/view/View;", "Landroid/os/Bundle;"),
 )
 
+/** The newer LIVE quality picker, a room menu's Video quality on 47.5.3, real-named. */
+internal const val LIVE_TALENT_DEFINITION_DIALOG =
+    "Lcom/bytedance/android/livesdk/definition/talent/LiveTalentDefinitionSelectionDialog;"
+
+/**
+ * The newer picker's view being set up. Its rows sit on a fixed white card inside the dark sheet,
+ * and their text follows the room's theme, so in dark mode they read light on white (S22,
+ * 2026-10-24, #57).
+ */
+internal object LiveTalentDefinitionListFingerprint : Fingerprint(
+    definingClass = LIVE_TALENT_DEFINITION_DIALOG,
+    name = "onViewCreated",
+    returnType = "V",
+    parameters = listOf("Landroid/view/View;", "Landroid/os/Bundle;"),
+)
+
 /**
  * Every return-object in [method], last first, with the register it returns. A return that
  * isn't a plain v0..v15 register, or a method whose `this` sits above v15, can't take the
@@ -1896,6 +1912,9 @@ val liveControlsPatch = bytecodePatch(
         // The older quality list's rows can read white on white in dark mode, switch or no
         // switch; the extension gives poorly contrasted text a readable color there.
         hookQualityList(LiveDefinitionListFingerprint.method)
+        // The newer picker puts its rows on a white card whose text follows the dark room, so
+        // the same check keeps them readable (#57).
+        hookQualityList(LiveTalentDefinitionListFingerprint.method)
 
         // The room page coming to the front: where the Record button goes and which room it records (#37).
         liveRoomField(classDefByOrNull(LIVE_PLAY_FRAGMENT)
