@@ -501,33 +501,32 @@ class LiveDarkPanelsAnchorsTest {
     }
 
     @Test
-    fun `each declared build keeps the long-press menu's dialog the menu hook hands over`() {
+    fun `each declared build hands the room's long-press menu to the extension before the room shows it`() {
         Fixtures.forEachDeclared { apk ->
             val classes = classes(apk)
-            val menu = classes[LIVE_LONG_PRESS_MENU] ?: throw AssertionError("${apk.name}: no long-press menu")
-            val start = menu.methods.filter { LiveLongPressMenuStartFingerprint.takes(it, menu) }
-            assertEquals("${apk.name}: the menu's start", 1, start.size)
-            val fields = longPressMenuDialog(menu) { classes[it] }
-            assertNotNull("${apk.name}: one controller holding one dialog", fields)
-            if ("47.5.3" in apk.name) {
-                assertEquals("${apk.name}: X/10Jb holds the dialog (2026-10-24)",
-                    "$LIVE_LONG_PRESS_MENU->LLJJI:LX/10Jb;" to "LX/10Jb;->LJ:Landroid/app/Dialog;", fields)
-            }
+            val share = classes[LIVE_HOST_SHARE] ?: throw AssertionError("${apk.name}: no LIVE host share")
+            val factory = share.methods.filter { LiveLongPressMenuFingerprint.takes(it, share) }
+            assertEquals("${apk.name}: the menu's factory", 1, factory.size)
 
-            // The hook as the patch writes it: the dialog goes to the extension before each return.
-            val hooked = MutableMethod(start.single())
-            hookLongPressMenu(hooked, fields)
+            // The hook as the patch writes it: each returned menu goes to the extension first,
+            // from the return's own register, and nothing else in the factory moves.
+            val original = factory.single().implementation!!.instructions.toList()
+            val hooked = MutableMethod(factory.single())
+            hookLongPressMenu(hooked)
             val code = hooked.implementation!!.instructions.toList()
-            val returns = code.indices.filter { code[it].opcode == Opcode.RETURN_VOID }
+            val returns = code.indices.filter { code[it].opcode == Opcode.RETURN_OBJECT }
             assertTrue("${apk.name}: a return", returns.isNotEmpty())
+            assertEquals("${apk.name}: one call per return", original.size + returns.size, code.size)
             returns.forEach { at ->
-                val call = (code[at - 1] as ReferenceInstruction).reference as MethodReference
-                assertEquals("${apk.name}: the hook before the return", "liveMenu", call.name)
+                val hook = code[at - 1] as FiveRegisterInstruction
+                assertEquals("${apk.name}: the hook before the return", "liveMenu",
+                    ((hook as ReferenceInstruction).reference as MethodReference).name)
+                assertEquals("${apk.name}: the menu it returns", (code[at] as OneRegisterInstruction).registerA, hook.registerC)
             }
             assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
         }
         assertThrows(PatchException::class.java) {
-            hookLongPressMenu(badgeBind("nop"), null)
+            hookLongPressMenu(badgeBind("nop"))
         }
     }
 

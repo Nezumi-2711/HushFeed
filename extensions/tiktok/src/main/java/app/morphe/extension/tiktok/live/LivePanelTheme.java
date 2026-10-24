@@ -110,6 +110,11 @@ public final class LivePanelTheme {
     private static final int LIGHT_NAVIGATION_BAR_FLAG = 0x10;
     private static final int SETTLE_TRIES = 5;
     private static final long SETTLE_DELAY_MS = 100;
+    /**
+     * How many times the long-press menu is looked for on screen, SETTLE_DELAY_MS apart: the room
+     * shows it right away, or after the dialog it's queued behind.
+     */
+    private static final int MENU_TRIES = 30;
     /** How deep the fill and ink walks go, past any real panel's tree. */
     private static final int MAX_TREE_DEPTH = 64;
     /** How far apart a gray ink's channels may be: TikTok's #161823 text is 13. */
@@ -264,13 +269,20 @@ public final class LivePanelTheme {
     }
 
     /**
-     * Called as LIVE's long-press menu (share, report and the rest) starts, with its dialog. The
-     * menu is a fragment in a plain dialog, not one of LIVE's themed panels, so nothing reached its
-     * window and its navigation bar stayed light under the dark menu (S22, 2026-10-24). While
-     * Dark LIVE panels is on in dark mode the bar is painted dark, and again before each frame,
-     * since the menu sets its window up again as it shows.
+     * Called with LIVE's long-press menu (share, report and the rest) as TikTok builds it for a
+     * room, just before the room shows it. The menu is a plain dialog, the same one a video's
+     * long press opens, not one of LIVE's themed panels, so nothing reached its window and its
+     * navigation bar stayed light under the dark menu (S22, 2026-10-24). While Dark LIVE panels
+     * is on in dark mode the bar is painted dark once the menu shows, and again before each
+     * frame, since the menu sets its window up again as it shows. The window's views are left
+     * alone until then: building them early would keep the menu from asking for its window
+     * features.
      */
     public static void liveMenu(android.app.Dialog dialog) {
+        liveMenu(dialog, 0);
+    }
+
+    private static void liveMenu(android.app.Dialog dialog, int attempt) {
         try {
             if (dialog == null || !LiveControls.darkLivePanels(dialog.getContext())) {
                 return;
@@ -279,11 +291,19 @@ public final class LivePanelTheme {
             if (window == null) {
                 return;
             }
+            View root = window.peekDecorView();
+            if (root == null || !dialog.isShowing()) {
+                if (attempt < MENU_TRIES) {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> liveMenu(dialog, attempt + 1),
+                            attempt == 0 ? 0 : SETTLE_DELAY_MS);
+                }
+                return;
+            }
             darkNavigationBar(window);
-            View root = window.getDecorView();
             if (WATCHED.put(root, Boolean.TRUE) != null) {
                 return;
             }
+            Logger.printDebug(() -> "Darkened the LIVE menu's navigation bar");
             root.getViewTreeObserver().addOnPreDrawListener(() -> {
                 try {
                     darkNavigationBar(window);

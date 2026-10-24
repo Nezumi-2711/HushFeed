@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.Shadows.shadowOf;
 
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.settings.Setting;
@@ -22,6 +23,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Looper;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -1093,6 +1095,24 @@ public class LivePanelThemeTest {
         nextFrame(menu);
         assertEquals(0, bars.getSystemBarsAppearance() & LIGHT_BAR);
         LivePanelTheme.liveMenu(null);
+    }
+
+    @Test public void theLongPressMenuIsDarkenedOnceItShowsNotBefore() {
+        Settings.DARK_LIVE_PANELS.save(true);
+        // TikTok hands the menu over before showing it, with no window views built yet.
+        Dialog menu = new Dialog(dark);
+        LivePanelTheme.liveMenu(menu);
+        assertNull("the window's views are left for the menu to build", menu.getWindow().peekDecorView());
+
+        menu.setContentView(new FrameLayout(dark));
+        menu.show();
+        android.view.WindowInsetsController bars = menu.getWindow().getInsetsController();
+        bars.setSystemBarsAppearance(LIGHT_BAR, LIGHT_BAR);
+        shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofSeconds(5));
+        assertEquals(0, bars.getSystemBarsAppearance() & LIGHT_BAR);
+        bars.setSystemBarsAppearance(LIGHT_BAR, LIGHT_BAR);
+        nextFrame(menu);
+        assertEquals(0, bars.getSystemBarsAppearance() & LIGHT_BAR);
     }
 
     @Test public void darkGrayTextOnASwappedFillTurnsLightAndStaysLight() {

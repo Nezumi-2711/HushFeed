@@ -1287,58 +1287,40 @@ internal fun hookBadgeTiles(bind: MutableMethod) {
     }
 }
 
-/** LIVE's long-press menu (share, report and the rest), a fragment shown in a plain dialog, real-named on 47.5.3. */
-internal const val LIVE_LONG_PRESS_MENU = "Lcom/ss/android/ugc/aweme/share/LongPressShareListDialogForLiveHost;"
-
-private const val DIALOG = "Landroid/app/Dialog;"
+/** The host side of LIVE's share calls, real-named on 47.5.3. */
+internal const val LIVE_HOST_SHARE = "Lcom/ss/android/ugc/aweme/live/livehostimpl/LiveHostShare;"
 
 /**
- * The long-press menu starting (#159). Its controller, the menu's one field whose class holds a
- * dialog, sets that dialog's window up here. The menu isn't one of LIVE's themed panels, so
- * nothing reached its window and its navigation bar stayed light under the dark menu (S22,
- * 2026-10-24).
+ * A viewer's long-press menu in a room (share, report and the rest) being built (#159): the
+ * plain dialog a video's long press opens, which the room shows as soon as this returns it.
+ * The menu isn't one of LIVE's themed panels, so nothing reached its window and its navigation
+ * bar stayed light under the dark menu (S22, 2026-10-24). Its share sheet controller gets a null
+ * dialog from both of TikTok's menus, so a hook reading that never saw a window.
  */
-internal object LiveLongPressMenuStartFingerprint : Fingerprint(
-    definingClass = LIVE_LONG_PRESS_MENU,
-    name = "onStart",
-    returnType = "V",
-    parameters = listOf(),
+internal object LiveLongPressMenuFingerprint : Fingerprint(
+    definingClass = LIVE_HOST_SHARE,
+    name = "getLongPressShareDialog",
+    returnType = "Landroid/app/Dialog;",
 )
 
 /**
- * The menu's controller field and the controller's dialog field, each as `Lclass;->name:Ltype;`:
- * the one instance field of [menu] whose class has exactly one instance Dialog field. Null unless
- * there's exactly one.
+ * Hands the menu each of the factory's returns gives the room to the extension first, on the
+ * return's own label and register, so nothing else in the factory moves.
  */
-internal fun longPressMenuDialog(menu: ClassDef, classOf: (String) -> ClassDef?): Pair<String, String>? =
-    menu.fields.filter { !AccessFlags.STATIC.isSet(it.accessFlags) }.mapNotNull { holder ->
-        val dialog = classOf(holder.type)?.fields
-            ?.filter { !AccessFlags.STATIC.isSet(it.accessFlags) && it.type == DIALOG }
-            ?.singleOrNull() ?: return@mapNotNull null
-        "${menu.type}->${holder.name}:${holder.type}" to "${dialog.definingClass}->${dialog.name}:${dialog.type}"
-    }.singleOrNull()
-
-/**
- * Hands the menu's dialog, read through [fields] from [longPressMenuDialog], to the extension at
- * each of onStart's returns, after the controller set the window up, on the return's own label.
- * The hook borrows v0, which nothing reads at a return, and needs `this` at v15 or below for the
- * field reads.
- */
-internal fun hookLongPressMenu(start: MutableMethod, fields: Pair<String, String>?) {
-    val (holder, dialog) = fields ?: throw PatchException("LIVE controls: the long-press menu's dialog wasn't found")
-    val body = start.implementation ?: throw PatchException("LIVE controls: the long-press menu's start has no body")
-    val returns = body.instructions.withIndex().filter { it.value.opcode == Opcode.RETURN_VOID }.map { it.index }.reversed()
-    if (returns.isEmpty() || body.registerCount < 2 || body.registerCount - 1 > 15) {
-        throw PatchException("LIVE controls: the long-press menu's start doesn't fit the hook")
+internal fun hookLongPressMenu(factory: MutableMethod) {
+    val body = factory.implementation ?: throw PatchException("LIVE controls: the long-press menu's factory has no body")
+    val returns = body.instructions.withIndex().filter { it.value.opcode == Opcode.RETURN_OBJECT }.reversed()
+    if (returns.isEmpty()) {
+        throw PatchException("LIVE controls: the long-press menu's factory doesn't return")
     }
-    returns.forEach { at ->
-        start.addInstructionsAtControlFlowLabel(
+    returns.forEach { (at, instruction) ->
+        val menu = (instruction as OneRegisterInstruction).registerA
+        if (menu > 15) {
+            throw PatchException("LIVE controls: the long-press menu's factory returns from v$menu")
+        }
+        factory.addInstructionsAtControlFlowLabel(
             at,
-            """
-                iget-object v0, p0, $holder
-                iget-object v0, v0, $dialog
-                invoke-static {v0}, $PANEL_THEME->liveMenu(Landroid/app/Dialog;)V
-            """,
+            "invoke-static {v$menu}, $PANEL_THEME->liveMenu(Landroid/app/Dialog;)V",
         )
     }
 }
@@ -1905,12 +1887,9 @@ val liveControlsPatch = bytecodePatch(
         // tile see-through, so both went dark gray on the dark card (Login2, 2026-10-20). The
         // extension puts each tile on a dark copy of its shape while the switch is on in dark mode.
         hookBadgeTiles(LiveProfileBadgeFingerprint.method)
-        // The long-press menu is a fragment in a plain dialog, so its navigation bar stayed light
-        // under the dark menu (S22, 2026-10-24). Its start hands the dialog over.
-        hookLongPressMenu(
-            LiveLongPressMenuStartFingerprint.method,
-            longPressMenuDialog(classDefBy(LIVE_LONG_PRESS_MENU)) { classDefByOrNull(it) },
-        )
+        // A viewer's long-press menu is a plain dialog, so its navigation bar stayed light under
+        // the dark menu (S22, 2026-10-24). The factory the room gets it from hands it over.
+        hookLongPressMenu(LiveLongPressMenuFingerprint.method)
         // Its group chat row is the same kind of fixed white shape under text in the card theme's
         // colors (Login2, 2026-10-20), so the extension gives it the event box's fill.
         hookGroupChat(mutableClassDefBy(LiveProfileGroupChatFingerprint.method.definingClass).methods)
