@@ -307,6 +307,12 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting KEEP_CAMERA_BRIGHTNESS =
             new BooleanSetting("keep_camera_brightness", FALSE);
+    /**
+     * Tells the effect platform the phone is a Galaxy S24 Ultra, so effects the server turns down
+     * on older phones ("This effect doesn't work on this device") get another chance (issue #176).
+     */
+    public static final BooleanSetting REPORT_NEWER_PHONE_TO_EFFECTS =
+            new BooleanSetting("report_newer_phone_to_effects", FALSE);
     // The four Performance patches, in the default selection because each hook asks one of these
     // first. Off until the reader turns one on, and a paused build answers off. The splash, update
     // and traffic hooks act on TikTok's startup tasks, so they need a restart. The animated image

@@ -122,6 +122,7 @@ public class SettingsStatus {
     public static boolean videoFitEnabled = false;
     public static boolean refreshRateEnabled = false;
     public static boolean cameraBrightnessEnabled = false;
+    public static boolean effectDeviceSpoofEnabled = false;
     public static boolean launcherShortcutsEnabled = false;
     public static boolean firstLaunchSetupEnabled = false;
     public static boolean duetStitchEnabled = false;
@@ -502,6 +503,10 @@ public class SettingsStatus {
 
     public static void enableCameraBrightness() {
         cameraBrightnessEnabled = true;
+    }
+
+    public static void enableEffectDeviceSpoof() {
+        effectDeviceSpoofEnabled = true;
     }
 
     public static void enableLauncherShortcuts() {
