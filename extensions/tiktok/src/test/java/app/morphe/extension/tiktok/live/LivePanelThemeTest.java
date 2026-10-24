@@ -998,6 +998,182 @@ public class LivePanelThemeTest {
         assertEquals(LivePanelTheme.DARK_TAB, strip.unselected.getColor());
     }
 
+    /** A plain LIVE sheet with a window, like the long-press menu: dark through its overlay, no fills of its own. */
+    public static final class MenuSheet extends LiveThemeAwareDialogFragment {
+        public Dialog dialog;
+
+        public Dialog getDialog() {
+            return dialog;
+        }
+    }
+
+    private static final int LIGHT_BAR = android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+
+    /** Runs the panel window's before-frame listeners, as the next frame would. */
+    private static void nextFrame(Dialog dialog) {
+        ReflectionHelpers.callInstanceMethod(dialog.getWindow().getDecorView().getViewTreeObserver(), "dispatchOnPreDraw");
+    }
+
+    private static void layOut(View root) {
+        root.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(600, View.MeasureSpec.EXACTLY));
+        root.layout(0, 0, 1080, 600);
+    }
+
+    private static TextView text(Context context, int color) {
+        TextView text = new TextView(context);
+        text.setText("Fan");
+        text.setTextColor(color);
+        return text;
+    }
+
+    @Test public void aSheetsNavigationBarStaysDarkWhenTikTokTurnsItLightAgain() {
+        MenuSheet stock = new MenuSheet();
+        stock.overlay = OVERLAY;
+        stock.dialog = dialogWith(new FrameLayout(dark));
+        android.view.WindowInsetsController stockBars = stock.dialog.getWindow().getInsetsController();
+        stockBars.setSystemBarsAppearance(LIGHT_BAR, LIGHT_BAR);
+        LivePanelTheme.darkLivePanel(stock, LayoutInflater.from(dark));
+        nextFrame(stock.dialog);
+        assertEquals("the switch starts off", LIGHT_BAR, stockBars.getSystemBarsAppearance() & LIGHT_BAR);
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        MenuSheet menu = new MenuSheet();
+        menu.overlay = OVERLAY;
+        menu.dialog = dialogWith(new FrameLayout(dark));
+        android.view.WindowInsetsController bars = menu.dialog.getWindow().getInsetsController();
+        LivePanelTheme.darkLivePanel(menu, LayoutInflater.from(dark));
+        assertEquals(0, bars.getSystemBarsAppearance() & LIGHT_BAR);
+
+        // TikTok's sheet puts the light bar back as it shows.
+        bars.setSystemBarsAppearance(LIGHT_BAR, LIGHT_BAR);
+        nextFrame(menu.dialog);
+        assertEquals(0, bars.getSystemBarsAppearance() & LIGHT_BAR);
+    }
+
+    @Test public void darkGrayTextOnASwappedFillTurnsLightAndStaysLight() {
+        android.widget.LinearLayout root = new android.widget.LinearLayout(dark);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        // The fan club's tabs: a strip that paints them, and the labels in an overlay drawn after it.
+        FrameLayout tabs = new FrameLayout(dark);
+        FrameLayout holder = new FrameLayout(dark);
+        holder.addView(new StripView(dark));
+        FrameLayout overlay = new FrameLayout(dark);
+        TextView fan = text(dark, Color.BLACK);
+        overlay.addView(fan);
+        tabs.addView(holder);
+        tabs.addView(overlay);
+        root.addView(tabs, new android.widget.LinearLayout.LayoutParams(1080, 100));
+        TextView below = text(dark, Color.BLACK);
+        root.addView(below, new android.widget.LinearLayout.LayoutParams(1080, 100));
+        // The profile card's showcase row: a white shape under black and pink text.
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(Color.WHITE);
+        android.widget.LinearLayout row = new android.widget.LinearLayout(dark);
+        row.setBackground(shape);
+        TextView title = text(dark, 0x80161823);
+        TextView pink = text(dark, 0xFFFE2C55);
+        FrameLayout chip = new FrameLayout(dark);
+        chip.setBackground(new ColorDrawable(0x29FFFFFF));
+        TextView onChip = text(dark, Color.BLACK);
+        chip.addView(onChip);
+        row.addView(title);
+        row.addView(pink);
+        row.addView(chip);
+        root.addView(row, new android.widget.LinearLayout.LayoutParams(1080, 100));
+        TextView pill = text(dark, Color.BLACK);
+        pill.setBackground(new ColorDrawable(Color.WHITE));
+        root.addView(pill, new android.widget.LinearLayout.LayoutParams(1080, 100));
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        FansClubPanel lightPanel = new FansClubPanel();
+        lightPanel.overlay = OVERLAY;
+        lightPanel.dialog = dialogWith(root);
+        layOut(root);
+        LivePanelTheme.darkLivePanel(lightPanel, LayoutInflater.from(light));
+        assertEquals("TikTok Light stays stock", Color.BLACK, fan.getCurrentTextColor());
+        assertEquals(Color.BLACK, pill.getCurrentTextColor());
+
+        LivePanelTheme.darkLivePanel(lightPanel, LayoutInflater.from(dark));
+        assertEquals("the label over the dark tab", Color.WHITE, fan.getCurrentTextColor());
+        assertEquals("text keeps how see-through it is", 0x80FFFFFF, title.getCurrentTextColor());
+        assertEquals("colored text keeps its color", 0xFFFE2C55, pink.getCurrentTextColor());
+        assertEquals("text on its own light chip keeps its ink", Color.BLACK, onChip.getCurrentTextColor());
+        assertEquals("a white pill's own text", Color.WHITE, pill.getCurrentTextColor());
+        assertEquals("text beside the tabs, not over them, keeps its ink", Color.BLACK, below.getCurrentTextColor());
+
+        // TikTok recolors the label as the pick changes.
+        fan.setTextColor(0x66000000);
+        nextFrame(lightPanel.dialog);
+        assertEquals(0x66FFFFFF, fan.getCurrentTextColor());
+    }
+
+    @Test @org.robolectric.annotation.GraphicsMode(org.robolectric.annotation.GraphicsMode.Mode.NATIVE)
+    public void aDarkIconOnASwappedFillIsDrawnWhiteButColoredArtAndPhotosStay() {
+        FrameLayout root = new FrameLayout(dark);
+        android.widget.LinearLayout row = new android.widget.LinearLayout(dark);
+        row.setBackground(new ColorDrawable(Color.WHITE));
+        android.widget.ImageView chevron = new android.widget.ImageView(dark);
+        chevron.setScaleType(android.widget.ImageView.ScaleType.FIT_XY);
+        chevron.setPadding(10, 10, 10, 10);
+        chevron.setImageDrawable(new ColorDrawable(0x59000000));
+        android.widget.ImageView art = new android.widget.ImageView(dark);
+        art.setScaleType(android.widget.ImageView.ScaleType.FIT_XY);
+        art.setPadding(10, 10, 10, 10);
+        art.setImageDrawable(new ColorDrawable(0xFFFE2C55));
+        android.widget.ImageView photo = new android.widget.ImageView(dark);
+        photo.setScaleType(android.widget.ImageView.ScaleType.FIT_XY);
+        photo.setImageDrawable(new ColorDrawable(0xFF202020));
+        android.widget.ImageView badge = new android.widget.ImageView(dark);
+        badge.setScaleType(android.widget.ImageView.ScaleType.FIT_XY);
+        badge.setPadding(10, 10, 10, 10);
+        badge.setBackground(new LayerDrawable(new Drawable[]{new ColorDrawable(Color.WHITE)}));
+        badge.setImageDrawable(new ColorDrawable(Color.BLACK));
+        for (View icon : new View[]{chevron, art, photo, badge}) {
+            row.addView(icon, new android.widget.LinearLayout.LayoutParams(40, 40));
+        }
+        root.addView(row);
+        FansClubPanel panel = new FansClubPanel();
+        panel.overlay = OVERLAY;
+        panel.dialog = dialogWith(root);
+        layOut(root);
+
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertNull("the switch starts off", chevron.getColorFilter());
+
+        Settings.DARK_LIVE_PANELS.save(true);
+        LivePanelTheme.darkLivePanel(panel, LayoutInflater.from(dark));
+        assertNotNull("the chevron goes white", chevron.getColorFilter());
+        assertNull("colored art stays", art.getColorFilter());
+        assertNull("a photo stays", photo.getColorFilter());
+        assertNull("an icon on its own tile stays", badge.getColorFilter());
+
+        // TikTok swaps the chevron's image for colored art: it shows as drawn.
+        chevron.setImageDrawable(new ColorDrawable(0xFFFE2C55));
+        nextFrame(panel.dialog);
+        assertNull(chevron.getColorFilter());
+    }
+
+    @Test public void anIconIsOneDarkGrayInkOnAClearGround() {
+        int clear = Color.TRANSPARENT;
+        assertTrue(LivePanelTheme.darkMonochrome(new int[]{clear, 0x66000000, 0x66000000, clear}));
+        assertTrue("anti-aliased edges are the same ink", LivePanelTheme.darkMonochrome(new int[]{clear, 0x20161823, 0xFF161823}));
+        assertTrue("a photo has no clear ground", !LivePanelTheme.darkMonochrome(new int[]{0xFF202020, 0xFF202020}));
+        assertTrue("two inks are art", !LivePanelTheme.darkMonochrome(new int[]{clear, 0xFF000000, 0xFF505050}));
+        assertTrue("a colored ink is art", !LivePanelTheme.darkMonochrome(new int[]{clear, 0xFF7A1020}));
+        assertTrue("light ink is already readable", !LivePanelTheme.darkMonochrome(new int[]{clear, Color.WHITE}));
+        assertTrue("nothing drawn", !LivePanelTheme.darkMonochrome(new int[]{clear, clear}));
+        assertTrue(LivePanelTheme.darkInk(0x80161823));
+        assertTrue("TikTok's pink isn't gray", !LivePanelTheme.darkInk(0xFFFE2C55));
+        assertEquals(0x59FFFFFF, LivePanelTheme.lightened(0x59000000));
+        assertTrue(!LivePanelTheme.ownBackdrop(null));
+        assertTrue(!LivePanelTheme.ownBackdrop(new ColorDrawable(Color.TRANSPARENT)));
+        assertTrue(!LivePanelTheme.ownBackdrop(new ColorDrawable(LivePanelTheme.DARK_FILL)));
+        assertTrue(LivePanelTheme.ownBackdrop(new ColorDrawable(0x29FFFFFF)));
+        assertTrue(LivePanelTheme.ownBackdrop(new LayerDrawable(new Drawable[]{new ColorDrawable(Color.WHITE)})));
+        assertTrue("a ripple with only its mask is clear", !LivePanelTheme.ownBackdrop(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(Color.GRAY), null, new ColorDrawable(Color.WHITE))));
+    }
+
     /** A ranking built on the daily one, the way TikTok splits its list dialogs into variants. */
     static class HourlyRanking extends RankListDialog { }
 }

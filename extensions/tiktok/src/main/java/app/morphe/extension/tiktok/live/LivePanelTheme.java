@@ -12,12 +12,20 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -31,13 +39,16 @@ import android.view.WindowInsetsController;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -99,10 +110,26 @@ public final class LivePanelTheme {
     private static final int LIGHT_NAVIGATION_BAR_FLAG = 0x10;
     private static final int SETTLE_TRIES = 5;
     private static final long SETTLE_DELAY_MS = 100;
-    /** Views already watched for light fills, so a panel isn't hooked twice. */
+    /** How deep the fill and ink walks go, past any real panel's tree. */
+    private static final int MAX_TREE_DEPTH = 64;
+    /** How far apart a gray ink's channels may be: TikTok's #161823 text is 13. */
+    private static final int MAX_GRAY_SPREAD = 0x30;
+    /** A pixel at least this opaque is ink, below it the icon's clear ground. */
+    private static final int MIN_INK_ALPHA = 0x10;
+    /** How far an icon's pixels may stray from its first one and still be one ink. */
+    private static final int MAX_INK_DRIFT = 0x20;
+    /** The longest side an icon is drawn at to judge it. */
+    private static final float SAMPLE_SIZE = 48f;
+    /** How many frames a still blank icon is looked at before it's left as it is. */
+    private static final int MAX_EMPTY_SAMPLES = 10;
+    /** Draws an icon's ink white, its see-through edges kept. */
+    private static final ColorFilter WHITE_INK = new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+    /** Views already watched, so a panel isn't hooked twice. */
     private static final Map<View, Boolean> WATCHED = Collections.synchronizedMap(new WeakHashMap<>());
     /** Views, such as the profile card's label strip, that keep their light look on purpose. */
     private static final Map<View, Boolean> KEEP_LIGHT = Collections.synchronizedMap(new WeakHashMap<>());
+    private static final Map<ImageView, IconCheck> ICONS = Collections.synchronizedMap(new WeakHashMap<>());
+    private static volatile boolean frameFailureLogged;
     private static volatile boolean overlayFailureLogged;
     private static volatile boolean rowFailureLogged;
     private static volatile boolean viewContextFailureLogged;
@@ -160,8 +187,11 @@ public final class LivePanelTheme {
     /**
      * Darkens the pieces of a dark panel its theme overlay can't reach (#159): the navigation
      * bar under its window, and for the profile card and the fan club the fixed light fills their
-     * views paint themselves. The views don't exist yet when the inflater is asked for, so the
-     * fills are swapped on each layout of the panel's window until it goes.
+     * views paint themselves, with the dark text and icons drawn over those fills turned light.
+     * The views don't exist yet when the inflater is asked for, so the fills are swapped on each
+     * layout of the panel's window until it goes. TikTok's sheets put the light navigation bar
+     * back after the panel inflates, and the fan club recolors its tab labels as the pick
+     * changes, so the bar and the ink are checked again before each frame (S22, 2026-10-23).
      */
     static void settle(Object panel) {
         settle(panel, 0);
@@ -185,23 +215,45 @@ public final class LivePanelTheme {
             if (window != null) {
                 darkNavigationBar(window);
             }
-            if (!fillPanel(panel.getClass()) || WATCHED.put(root, Boolean.TRUE) != null) {
+            boolean fills = fillPanel(panel.getClass());
+            if ((window == null && !fills) || WATCHED.put(root, Boolean.TRUE) != null) {
                 return;
             }
             View watched = root;
             Window under = window;
-            darkFills(watched);
-            watched.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            // The text and icons on a swapped fill, found again on each layout.
+            List<View> ink = new ArrayList<>();
+            ViewTreeObserver observer = watched.getViewTreeObserver();
+            if (fills) {
+                darkFills(watched, ink);
+                observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        try {
+                            darkFills(watched, ink);
+                        } catch (Throwable failure) {
+                            Logger.printException(() -> "Could not darken a LIVE panel's fills", failure);
+                        }
+                    }
+                });
+            }
+            observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
-                public void onGlobalLayout() {
+                public boolean onPreDraw() {
                     try {
                         if (under != null) {
                             darkNavigationBar(under);
                         }
-                        darkFills(watched);
+                        for (View view : ink) {
+                            lightInk(view);
+                        }
                     } catch (Throwable failure) {
-                        Logger.printException(() -> "Could not darken a LIVE panel's fills", failure);
+                        if (!frameFailureLogged) {
+                            frameFailureLogged = true;
+                            Logger.printException(() -> "Could not keep a LIVE panel dark", failure);
+                        }
                     }
+                    return true;
                 }
             });
         } catch (Throwable failure) {
@@ -225,10 +277,13 @@ public final class LivePanelTheme {
     /**
      * Takes the light navigation bar flag off a panel window and paints the bar dark. TikTok
      * targets a version where the bar's color is ignored and the flag alone picks the icon
-     * shade, so a bottom sheet kept the light gray scrim under it (S22, 2026-10-23).
+     * shade, so a bottom sheet kept the light gray scrim under it (S22, 2026-10-23). It runs
+     * before every frame of the panel, so it only writes what TikTok changed back.
      */
     static void darkNavigationBar(Window window) {
-        window.setNavigationBarColor(NAV_BAR);
+        if (window.getNavigationBarColor() != NAV_BAR) {
+            window.setNavigationBarColor(NAV_BAR);
+        }
         View decor = window.getDecorView();
         if (Build.VERSION.SDK_INT >= 26) {
             int flags = decor.getSystemUiVisibility();
@@ -238,7 +293,7 @@ public final class LivePanelTheme {
         }
         if (Build.VERSION.SDK_INT >= 30) {
             WindowInsetsController controller = window.getInsetsController();
-            if (controller != null) {
+            if (controller != null && (controller.getSystemBarsAppearance() & WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS) != 0) {
                 controller.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
             }
         }
@@ -248,21 +303,35 @@ public final class LivePanelTheme {
      * Swaps the light fills under the view for dark ones: solid and gradient backgrounds, a card
      * view's color and the paints of a custom drawn view such as the fan club's tab strip. Images,
      * layered badge tiles and anything marked to stay light are left alone, and so are fills
-     * that are mostly see-through.
+     * that are mostly see-through. The text and icons drawn over a dark fill, now or from an
+     * earlier pass, are gathered into the ink list and turned light.
      */
-    static void darkFills(View view) {
-        if (view == null || KEEP_LIGHT.containsKey(view)) {
+    static void darkFills(View root, List<View> ink) {
+        List<View> filled = new ArrayList<>();
+        darkFills(root, filled, 0);
+        ink.clear();
+        for (View view : filled) {
+            gatherInk(view, ink);
+        }
+        for (View view : ink) {
+            lightInk(view);
+        }
+    }
+
+    private static void darkFills(View view, List<View> filled, int depth) {
+        if (view == null || KEEP_LIGHT.containsKey(view) || depth > MAX_TREE_DEPTH) {
             return;
         }
-        if (!(view instanceof ImageView)) {
-            darkBackground(view);
+        boolean dark = !(view instanceof ImageView) && darkBackground(view);
+        dark |= darkCard(view);
+        dark |= darkPaints(view);
+        if (dark) {
+            filled.add(view);
         }
-        darkCard(view);
-        darkPaints(view);
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
             for (int i = 0; i < group.getChildCount(); i++) {
-                darkFills(group.getChildAt(i));
+                darkFills(group.getChildAt(i), filled, depth + 1);
             }
         }
     }
@@ -271,34 +340,52 @@ public final class LivePanelTheme {
         return Color.alpha(color) >= MIN_FILL_ALPHA && isLight(color);
     }
 
-    private static void darkBackground(View view) {
+    /** Swaps a light solid or gradient background; true when the view's background is the dark fill. */
+    private static boolean darkBackground(View view) {
         Drawable background = view.getBackground();
         if (background instanceof ColorDrawable) {
-            if (lightFill(((ColorDrawable) background).getColor())) {
+            int color = ((ColorDrawable) background).getColor();
+            if (lightFill(color)) {
                 view.setBackground(new ColorDrawable(DARK_FILL));
+                return true;
             }
-        } else if (background instanceof GradientDrawable && Build.VERSION.SDK_INT >= 24) {
+            return color == DARK_FILL;
+        }
+        if (background instanceof GradientDrawable && Build.VERSION.SDK_INT >= 24) {
             ColorStateList colors = ((GradientDrawable) background).getColor();
             if (colors != null && lightFill(colors.getDefaultColor())) {
                 ((GradientDrawable) background).mutate();
                 ((GradientDrawable) background).setColor(DARK_FILL);
+                return true;
             }
+            return colors != null && colors.getDefaultColor() == DARK_FILL;
         }
+        return false;
     }
 
-    /** A card view keeps its fill outside the background, so it's read and written by its own methods. */
-    private static void darkCard(View view) {
+    /**
+     * A card view keeps its fill outside the background, so it's read and written by its own
+     * methods; true when the card's fill is the dark one.
+     */
+    private static boolean darkCard(View view) {
         if (!"CardView".equals(view.getClass().getSimpleName()) && !hasSuperName(view.getClass(), "CardView")) {
-            return;
+            return false;
         }
         Object colors = Reflect.invoke(view, "getCardBackgroundColor");
-        if (colors instanceof ColorStateList && lightFill(((ColorStateList) colors).getDefaultColor())) {
+        if (!(colors instanceof ColorStateList)) {
+            return false;
+        }
+        int color = ((ColorStateList) colors).getDefaultColor();
+        if (lightFill(color)) {
             try {
                 view.getClass().getMethod("setCardBackgroundColor", int.class).invoke(view, DARK_FILL);
+                return true;
             } catch (ReflectiveOperationException failure) {
                 Logger.printException(() -> "Could not darken a LIVE card view", failure);
+                return false;
             }
         }
+        return color == DARK_FILL;
     }
 
     private static boolean hasSuperName(Class<?> type, String simpleName) {
@@ -310,16 +397,20 @@ public final class LivePanelTheme {
         return false;
     }
 
-    /** A view that draws with paints of its own, like the fan club's tab strip, gets its light paints swapped. */
-    private static void darkPaints(View view) {
+    /**
+     * A view that draws with paints of its own, like the fan club's tab strip, gets its light
+     * paints swapped; true when one of its paints is a dark one.
+     */
+    private static boolean darkPaints(View view) {
         if (view instanceof ViewGroup || view instanceof TextView || view instanceof ImageView) {
-            return;
+            return false;
         }
         Class<?> type = view.getClass();
         if (type.getName().startsWith("android.")) {
-            return;
+            return false;
         }
         boolean changed = false;
+        boolean dark = false;
         for (Field field : type.getDeclaredFields()) {
             if (field.getType() != Paint.class || Modifier.isStatic(field.getModifiers())) {
                 continue;
@@ -338,6 +429,7 @@ public final class LivePanelTheme {
                     paint.setColor(DARK_TAB);
                     changed = true;
                 }
+                dark |= paint.getColor() == DARK_FILL || paint.getColor() == DARK_TAB;
             } catch (ReflectiveOperationException | RuntimeException failure) {
                 Logger.printException(() -> "Could not darken a LIVE tab strip", failure);
             }
@@ -345,6 +437,284 @@ public final class LivePanelTheme {
         if (changed) {
             view.invalidate();
         }
+        return dark;
+    }
+
+    /**
+     * Gathers the text and icons drawn over a dark filled view: its own, and those of the views
+     * drawn after it that cover it. The fan club's tab labels are one of those, an overlay beside
+     * the strip that paints the tabs, so they read black on the dark tab (S22, 2026-10-23).
+     */
+    private static void gatherInk(View filled, List<View> ink) {
+        if (filled instanceof TextView && !ink.contains(filled)) {
+            ink.add(filled);
+        }
+        if (filled instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) filled;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                gatherInk(group.getChildAt(i), null, ink, 0);
+            }
+        }
+        Rect area = treeRect(filled);
+        View current = filled;
+        for (int depth = 0; depth <= MAX_TREE_DEPTH && current.getParent() instanceof ViewGroup; depth++) {
+            ViewGroup parent = (ViewGroup) current.getParent();
+            for (int i = parent.indexOfChild(current) + 1; i < parent.getChildCount(); i++) {
+                gatherInk(parent.getChildAt(i), area, ink, 0);
+            }
+            current = parent;
+        }
+    }
+
+    /**
+     * Gathers the text and icon views under the view, those covering the area when one is given.
+     * A view on a backdrop of its own, light or drawn, keeps the ink it was picked for, and so
+     * does anything marked to stay light.
+     */
+    private static void gatherInk(View view, Rect area, List<View> ink, int depth) {
+        if (view.getVisibility() != View.VISIBLE || KEEP_LIGHT.containsKey(view) || depth > MAX_TREE_DEPTH) {
+            return;
+        }
+        if ((area != null && !Rect.intersects(area, treeRect(view))) || ownBackdrop(view.getBackground())) {
+            return;
+        }
+        if (view instanceof TextView || view instanceof ImageView) {
+            if (!ink.contains(view)) {
+                ink.add(view);
+            }
+            return;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                gatherInk(group.getChildAt(i), area, ink, depth + 1);
+            }
+        }
+    }
+
+    /**
+     * Where the view sits in its tree, from its parents' positions, scrolls and shifts. The
+     * window's own answer is 0,0 for every view until the panel is attached, which would make
+     * every view cover every other.
+     */
+    private static Rect treeRect(View view) {
+        float left = 0;
+        float top = 0;
+        View current = view;
+        while (true) {
+            left += current.getLeft() + current.getTranslationX();
+            top += current.getTop() + current.getTranslationY();
+            if (!(current.getParent() instanceof View)) {
+                break;
+            }
+            current = (View) current.getParent();
+            left -= current.getScrollX();
+            top -= current.getScrollY();
+        }
+        int x = Math.round(left);
+        int y = Math.round(top);
+        return new Rect(x, y, x + view.getWidth(), y + view.getHeight());
+    }
+
+    /**
+     * True for a background that shows something of its own under a view's ink: anything but a
+     * clear or dark solid or gradient, a ripple with nothing but its mask, or a state list
+     * showing one of those.
+     */
+    static boolean ownBackdrop(Drawable background) {
+        if (background == null) {
+            return false;
+        }
+        if (background instanceof DrawableContainer) {
+            Drawable current = background.getCurrent();
+            return current != background && ownBackdrop(current);
+        }
+        if (background instanceof ColorDrawable) {
+            return !darkBackdrop(((ColorDrawable) background).getColor());
+        }
+        if (background instanceof GradientDrawable && Build.VERSION.SDK_INT >= 24) {
+            GradientDrawable shape = (GradientDrawable) background;
+            ColorStateList color = shape.getColor();
+            if (color != null) {
+                return !darkBackdrop(color.getDefaultColor());
+            }
+            int[] stops = shape.getColors();
+            if (stops == null) {
+                return false;
+            }
+            for (int stop : stops) {
+                if (!darkBackdrop(stop)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (background instanceof RippleDrawable) {
+            RippleDrawable ripple = (RippleDrawable) background;
+            for (int i = 0; i < ripple.getNumberOfLayers(); i++) {
+                if (ripple.getId(i) != android.R.id.mask) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean darkBackdrop(int color) {
+        return Color.alpha(color) == 0 || (Color.alpha(color) >= MIN_FILL_ALPHA && !isLight(color));
+    }
+
+    /**
+     * Turns a view's dark gray ink light on a dark fill: a text color keeps its see-through
+     * amount, and an icon of one dark ink on a clear ground is drawn white. Colored text, photos
+     * and colored art keep their look. It runs before every frame, so it only writes what TikTok
+     * changed back.
+     */
+    static void lightInk(View view) {
+        if (view instanceof TextView) {
+            TextView text = (TextView) view;
+            int color = text.getCurrentTextColor();
+            if (darkInk(color)) {
+                text.setTextColor(lightened(color));
+            }
+        } else if (view instanceof ImageView) {
+            lightIcon((ImageView) view);
+        }
+    }
+
+    /** True for a gray ink darker than mid gray, the kind a light panel draws its text and icons in. */
+    static boolean darkInk(int color) {
+        if (Color.alpha(color) == 0 || isLight(color)) {
+            return false;
+        }
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Math.max(red, Math.max(green, blue)) - Math.min(red, Math.min(green, blue)) <= MAX_GRAY_SPREAD;
+    }
+
+    /** White with the ink's own see-through amount. */
+    static int lightened(int color) {
+        return (color & 0xFF000000) | 0x00FFFFFF;
+    }
+
+    private static void lightIcon(ImageView image) {
+        Drawable drawable = image.getDrawable();
+        ColorFilter filter = image.getColorFilter();
+        IconCheck seen = ICONS.get(image);
+        if (seen != null && seen.shows(drawable, filter)) {
+            return;
+        }
+        if (drawable == null) {
+            ICONS.put(image, new IconCheck(null, filter, 0));
+            return;
+        }
+        if (filter == WHITE_INK) {
+            // A new image under the white ink, judged as TikTok draws it.
+            image.clearColorFilter();
+        }
+        int tries = seen != null && seen.drawable == null ? seen.emptyTries + 1 : 0;
+        int[] pixels;
+        try {
+            pixels = pixelsOf(image);
+        } catch (RuntimeException unreadable) {
+            // A hardware bitmap can't be drawn in software: it keeps its look and isn't tried again.
+            pixels = null;
+            tries = MAX_EMPTY_SAMPLES;
+        }
+        if ((pixels == null || inked(pixels) == 0) && tries < MAX_EMPTY_SAMPLES) {
+            // Not drawn yet: looked at again on the next frames, a few times.
+            ICONS.put(image, new IconCheck(null, image.getColorFilter(), tries));
+            return;
+        }
+        if (pixels != null && darkMonochrome(pixels)) {
+            image.setColorFilter(WHITE_INK);
+        }
+        ICONS.put(image, new IconCheck(image.getDrawable(), image.getColorFilter(), tries));
+    }
+
+    /**
+     * What an icon showed when last judged, so an unchanged one isn't drawn again each frame. No
+     * drawable means it was still blank and gets looked at again. The drawable is held weakly,
+     * since TikTok's can reach back to the view this is kept for.
+     */
+    private static final class IconCheck {
+        final WeakReference<Drawable> drawable;
+        final ColorFilter filter;
+        final int emptyTries;
+
+        IconCheck(Drawable drawable, ColorFilter filter, int emptyTries) {
+            this.drawable = drawable == null ? null : new WeakReference<>(drawable);
+            this.filter = filter;
+            this.emptyTries = emptyTries;
+        }
+
+        boolean shows(Drawable current, ColorFilter currentFilter) {
+            return drawable != null && drawable.get() == current && filter == currentFilter;
+        }
+    }
+
+    /** The view drawn small into a bitmap, its pixels, or null when it has no size yet. */
+    private static int[] pixelsOf(View view) {
+        int width = view.getWidth();
+        int height = view.getHeight();
+        if (width <= 0 || height <= 0) {
+            return null;
+        }
+        float scale = Math.min(1f, SAMPLE_SIZE / (float) Math.max(width, height));
+        int sampleWidth = Math.max(1, Math.round(width * scale));
+        int sampleHeight = Math.max(1, Math.round(height * scale));
+        Bitmap bitmap = Bitmap.createBitmap(sampleWidth, sampleHeight, Bitmap.Config.ARGB_8888);
+        try {
+            Canvas canvas = new Canvas(bitmap);
+            canvas.scale(scale, scale);
+            view.draw(canvas);
+            int[] pixels = new int[sampleWidth * sampleHeight];
+            bitmap.getPixels(pixels, 0, sampleWidth, 0, 0, sampleWidth, sampleHeight);
+            return pixels;
+        } finally {
+            bitmap.recycle();
+        }
+    }
+
+    private static int inked(int[] pixels) {
+        int inked = 0;
+        for (int pixel : pixels) {
+            if (Color.alpha(pixel) >= MIN_INK_ALPHA) {
+                inked++;
+            }
+        }
+        return inked;
+    }
+
+    /**
+     * True for an icon's pixels: one dark gray ink with clear pixels around it, the way a light
+     * panel's chevrons and tab labels are drawn. A photo has no clear pixels and colored art has
+     * more than one ink, so both stay as they are.
+     */
+    static boolean darkMonochrome(int[] pixels) {
+        int clear = 0;
+        int first = 0;
+        boolean inked = false;
+        for (int pixel : pixels) {
+            if (Color.alpha(pixel) < MIN_INK_ALPHA) {
+                clear++;
+                continue;
+            }
+            if (!darkInk(pixel)) {
+                return false;
+            }
+            if (!inked) {
+                inked = true;
+                first = pixel;
+            } else if (Math.abs(Color.red(pixel) - Color.red(first)) > MAX_INK_DRIFT
+                    || Math.abs(Color.green(pixel) - Color.green(first)) > MAX_INK_DRIFT
+                    || Math.abs(Color.blue(pixel) - Color.blue(first)) > MAX_INK_DRIFT) {
+                return false;
+            }
+        }
+        return inked && clear > 0;
     }
 
     /**
