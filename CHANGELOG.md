@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** `Use an imported font` now works on PineDrama (#243). PineDrama doesn't carry TikTok's own fonts, so its text fell back to your phone's font and the imported one never got used. It now draws in your font at the weight the app asked for, so bold text stays bold.
 * **TikTok:** Feature Gate Lab's `Scrolling comments on videos` preset tells you before you apply it that comments only scroll on videos TikTok has turned them on for. Each video carries its own flag from TikTok's server, so most videos look the same with the preset on (#98).
 * **TikTok:** New `Allow photo comments` patch for PineDrama, with its switch off by default (#156). PineDrama hides the gallery tab in the comment box for everyone, even though TikTok's server allows photo comments. Turn the switch on in Hushfeed settings > Comments and restart, and the comment box asks the server like TikTok does.
 * **TikTok:** Six more patches now run on PineDrama 47.4.3 too: `Advanced downloads`, `Automatic video advance`, `Hide inbox items`, `Hide profile shortcuts`, `Open the comments at full height` and `Show the progress bar`. That makes 97 patches Morphe Manager offers for PineDrama. The rest still lean on TikTok's LIVE rooms, feed buttons or resources that PineDrama doesn't have (#156).
