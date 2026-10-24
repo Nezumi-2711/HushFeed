@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** With AMOLED dark theme, the `Add comment...` bar under a photo post you open from search, a profile or a link is black now (#171). TikTok leaves that bar see-through, and a photo runs on underneath it, so the photo showed through where a video post shows black.
 * **TikTok:** `Use an imported font` now works on PineDrama (#243). PineDrama doesn't carry TikTok's own fonts, so its text fell back to your phone's font and the imported one never got used. It now draws in your font at the weight the app asked for, so bold text stays bold.
 * **TikTok:** Feature Gate Lab's `Scrolling comments on videos` preset tells you before you apply it that comments only scroll on videos TikTok has turned them on for. Each video carries its own flag from TikTok's server, so most videos look the same with the preset on (#98).
 * **TikTok:** New `Allow photo comments` patch for PineDrama, with its switch off by default (#156). PineDrama hides the gallery tab in the comment box for everyone, even though TikTok's server allows photo comments. Turn the switch on in Hushfeed settings > Comments and restart, and the comment box asks the server like TikTok does. The photo button in the comment box opens your photos now too. Before, it did nothing, because PineDrama's stand-in for TikTok's creation tools says no to everything. PineDrama also never asked Android for photo access, so the patch adds that, and the first tap shows Android's usual photos prompt.
