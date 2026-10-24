@@ -717,6 +717,10 @@ public final class Probe extends Instrumentation {
                                 + " following=" + (optional(creator, "getFollowStatus") instanceof Number
                                         ? ((Number) optional(creator, "getFollowStatus")).intValue() != 0 : "unknown")
                                 + " awemeType=" + awemeType
+                                // Whether it's a story, and the server's share-to-story number
+                                // (2 lets Add to Story show): finds a story for that switch.
+                                + " story=" + optional(aweme, "getIsTikTokStory")
+                                + " shareStory=" + optional(aweme, "getShareStoryStatus")
                                 + " ad=" + optional(aweme, "isAd")
                                 + " live=" + (liveId instanceof Number && ((Number) liveId).longValue() > 0)
                                 + " originalSound=" + originalSound
