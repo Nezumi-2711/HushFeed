@@ -115,7 +115,7 @@ private fun MutableMethod.swapExactly(expected: Int) {
 
 @Suppress("unused")
 val effectDevicePatch = bytecodePatch(
-    name = PATCH,
+    name = "Report a newer phone to effects",
     description = "Tells TikTok's effects server you have a newer phone, so effects it turns down " +
         "on older phones get another chance. Starts off. Turn it on in Hushfeed settings > App.",
 ) {
