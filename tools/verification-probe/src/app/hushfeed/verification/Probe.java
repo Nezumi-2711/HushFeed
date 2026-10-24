@@ -738,6 +738,10 @@ public final class Probe extends Instrumentation {
                                 + " authorStitch=" + optional(creator, "getStitchSetting")
                                 + " permDuet=" + optional(optional(aweme, "getInteractPermission"), "getDuet")
                                 + " permStitch=" + optional(optional(aweme, "getInteractPermission"), "getStitch")
+                                // The creator's content reuse choice for Add to Story in the share
+                                // sheet: 0 anyone. Allow Add to Story anyway answers everything as 0
+                                // while it is on, so read it with the switch off.
+                                + " permStory=" + optional(optional(aweme, "getInteractPermission"), "getAllowAddingToStory")
                                 // How long ago it was posted, in seconds, for checking an order
                                 // by date (Latest first on Following).
                                 + " postedAgo=" + postedAgo(optional(aweme, "getCreateTime"))
