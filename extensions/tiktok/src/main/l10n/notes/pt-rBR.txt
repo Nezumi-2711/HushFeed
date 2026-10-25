@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **TikTok:** A gravação de tela libera os recursos de áudio quando o som não consegue iniciar. O aviso de salvamento agora informa quando a gravação está sem som.
 * **TikTok:** A gravação de tela agora pede ao Android para capturar apenas o som do aplicativo modificado.
 * **TikTok:** A limpeza do Service+ agora verifica a primeira entrada da prévia da LIVE, como o próprio TikTok (#94).
 * **TikTok:** A pausa dos comentários pode identificar o primeiro quadro em reprodução antes da primeira atualização de progresso (#151).

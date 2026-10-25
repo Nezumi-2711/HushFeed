@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **TikTok:** Perekaman layar melepaskan sumber daya audio saat suara gagal dimulai. Pemberitahuan penyimpanan kini menyatakan jika rekaman tidak memiliki suara.
 * **TikTok:** Perekaman layar kini meminta Android menangkap suara aplikasi yang dipatch saja.
 * **TikTok:** Pembersihan Service+ kini memeriksa entri pertama pratinjau LIVE, sesuai dengan cara TikTok menampilkannya (#94).
 * **TikTok:** Jeda saat komentar dibuka dapat mengenali bingkai pertama yang sedang diputar sebelum laporan progres pertama tiba (#151).

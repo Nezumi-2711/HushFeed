@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **TikTok:** Screen recording releases audio resources when sound can't start. Its save notice now says when the recording has no sound.
 * **TikTok:** Screen recording now asks Android to capture only the patched app's sound.
 * **TikTok:** Service+ cleanup now checks the first entry in a LIVE preview, matching TikTok's own display logic (#94).
 * **TikTok:** The comment pause can identify a playing first frame before the first progress report arrives (#151).
