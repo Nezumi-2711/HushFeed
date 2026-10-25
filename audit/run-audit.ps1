@@ -399,7 +399,7 @@ function Write-Marker {
 function Get-LogAfter($Marker, [string[]]$Tags) {
     # The marker's own tag always comes along: without its line there is nowhere to start.
     $filter = if ($Tags) { '-s ' + ((@($Tags) + 'HushfeedAudit' | Select-Object -Unique | ForEach-Object { "${_}:V" }) -join ' ') } else { '' }
-    $lines = @(Invoke-DeviceShell "logcat -d -v tag -T $(ConvertTo-DeviceQuoted $Marker.since) $filter" | ForEach-Object { "$_".TrimEnd() })
+    $lines = @(Invoke-DeviceShell "logcat -d -v tag -T $(ConvertTo-DeviceQuoted $Marker.since) $filter" | ForEach-Object { "$_".TrimEnd([char]13) })
     $at = -1
     # Only the marker's own line: adbd also logs the shell command that wrote it.
     $own = "HushfeedAudit\s*: $([regex]::Escape($Marker.id))$"
@@ -428,19 +428,23 @@ function Invoke-AuditProbe([string]$Action, $Extras, [int]$WaitMs = 3000, [strin
         Start-Sleep -Milliseconds 400
         # "I/HushfeedProbe: text" opens each message; the message's other lines come bare.
         $answer = @(Get-LogAfter $marker @('HushfeedProbe') |
-            ForEach-Object { "$_" -replace '^[VDIWEF]/HushfeedProbe\s*: ', '' })
+            ForEach-Object { "$_" -replace '^[VDIWEF]/HushfeedProbe\s*: ?', '' })
         $finished = @($answer | Where-Object { "$_" -match $done }).Count -gt 0
     } until ($finished -or [DateTime]::UtcNow -gt $deadline)
     # "<action>[n] text" opens a piece; the lines after it belong to that piece. Pieces were cut
     # from one string, so they join with nothing between them.
     $pieces = New-Object System.Collections.Generic.List[string]
+    $pieceNumbers = New-Object System.Collections.Generic.List[string]
+    $pieceEncodings = New-Object System.Collections.Generic.List[bool]
     $plain = New-Object System.Collections.Generic.List[string]
     $current = $null
     foreach ($line in $answer) {
         [string]$text = $line
-        if ($text -match "^$([regex]::Escape($Action))\[\d+\] (.*)$") {
+        if ($text -match "^$([regex]::Escape($Action))(?<encoded>64)?\[(?<index>\d+)\] (?<payload>.*)$") {
             if ($null -ne $current) { $pieces.Add($current) }
-            $current = $Matches[1]
+            $pieceNumbers.Add($Matches['index'])
+            $pieceEncodings.Add([bool]$Matches['encoded'])
+            $current = $Matches['payload']
             continue
         }
         if ($null -ne $current -and $text -notmatch '^(ok|failed) ') { $current += "`n" + $text; continue }
@@ -448,7 +452,72 @@ function Invoke-AuditProbe([string]$Action, $Extras, [int]$WaitMs = 3000, [strin
         $plain.Add($text)
     }
     if ($null -ne $current) { $pieces.Add($current) }
-    return (($plain -join "`n") + "`n" + ($pieces -join '')).Trim()
+    $lf = [string][char]10
+    $payload = $pieces -join ''
+    if ($Action -eq 'report' -and -not (Test-Pattern ($plain -join $lf) '^failed report\b')) {
+        $completionLines = @($plain | Where-Object { $_ -match '^ok report\b' })
+        $completion = [regex]::Match(($plain -join $lf), '^ok report ([0-9]+) chars in ([0-9]+) pieces(?: encoding=base64-utf8 bytes=([0-9]+) sha256=([a-f0-9]{64}))?$', 'Multiline')
+        [long]$expectedCharacters = 0
+        [long]$expectedBytes = 0
+        [int]$expectedPieces = 0
+        $unavailable = ''
+        if (-not $completion.Success -or $completionLines.Count -ne 1) {
+            $unavailable = 'completion record missing or ambiguous'
+        } elseif (-not [long]::TryParse($completion.Groups[1].Value, [ref]$expectedCharacters) -or
+                -not [int]::TryParse($completion.Groups[2].Value, [ref]$expectedPieces)) {
+            $unavailable = 'completion counts invalid'
+        } elseif ($expectedCharacters -gt 1048576 -or $expectedPieces -gt 1865 -or $payload.Length -gt 5592408) {
+            $unavailable = 'report transport bound exceeded'
+        } elseif ($pieces.Count -ne $expectedPieces) {
+            $unavailable = "received $($pieces.Count) of $expectedPieces pieces"
+        } else {
+            $encodedReport = $completion.Groups[3].Success
+            for ($piece = 0; $piece -lt $pieceNumbers.Count; $piece++) {
+                if ($pieceNumbers[$piece] -cne [string]$piece) { $unavailable = 'piece sequence incomplete'; break }
+                if ($pieceEncodings[$piece] -ne $encodedReport) { $unavailable = 'piece transport disagrees with completion'; break }
+            }
+            if (-not $unavailable -and $encodedReport) {
+                if (-not [long]::TryParse($completion.Groups[3].Value, [ref]$expectedBytes) -or $expectedBytes -gt 4194304) {
+                    $unavailable = 'decoded byte bound exceeded'
+                } else {
+                    [int]$wireCharacters = 4 * [Math]::Ceiling($expectedBytes / 3.0)
+                    [int]$wirePieces = [Math]::Ceiling($wireCharacters / 3000.0)
+                    if ($payload.Length -ne $wireCharacters -or $expectedPieces -ne $wirePieces) {
+                        $unavailable = 'encoded payload dimensions mismatch'
+                    } else {
+                        for ($piece = 0; $piece -lt $pieces.Count; $piece++) {
+                            if ($pieces[$piece].Length -ne [Math]::Min(3000, $wireCharacters - $piece * 3000)) {
+                                $unavailable = 'encoded piece length mismatch'; break
+                            }
+                        }
+                    }
+                    if (-not $unavailable) {
+                        try {
+                            [byte[]]$bytes = [Convert]::FromBase64String($payload)
+                            if ([Convert]::ToBase64String($bytes) -cne $payload) {
+                                $unavailable = 'payload base64 not canonical'
+                            } else {
+                                $payload = ([Text.UTF8Encoding]::new($false, $true)).GetString($bytes)
+                                $sha = [Security.Cryptography.SHA256]::Create()
+                                try { $digest = ([BitConverter]::ToString($sha.ComputeHash($bytes))).Replace('-', '').ToLowerInvariant() }
+                                finally { $sha.Dispose() }
+                                if ($bytes.Length -ne $expectedBytes) { $unavailable = 'payload byte count mismatch' }
+                                elseif ($payload.Length -ne $expectedCharacters) { $unavailable = 'payload character count mismatch' }
+                                elseif ($digest -cne $completion.Groups[4].Value) { $unavailable = 'payload SHA-256 mismatch' }
+                            }
+                        } catch { $unavailable = 'payload base64 or UTF-8 invalid' }
+                    }
+                }
+            } elseif (-not $unavailable -and $payload.Length -ne $expectedCharacters) {
+                $unavailable = 'payload character count mismatch'
+            }
+        }
+        # Keep partial evidence, but never judge an absent switch from a damaged report.
+        if ($unavailable) { $plain.Insert(0, "unavailable report: $unavailable") }
+    }
+    $result = ($plain -join $lf) + $lf + $payload
+    if ($Action -eq 'report') { return $result }
+    return $result.Trim()
 }
 
 function Get-ScreenSize {
@@ -918,6 +987,13 @@ function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
                         while ($true) {
                             $answer = Invoke-AuditProbe ([string]$step.probe) $step.extras $wait ([string]$step.until)
                             $attempts += $answer
+                            if ($step.probe -eq 'report' -and (Test-Pattern $answer '^unavailable report:')) {
+                                throw [System.InvalidOperationException]::new("precondition: $(($answer -split "`n")[0])")
+                            }
+                            if ($step.precondition -and $step.probe -eq 'videoinfo' -and
+                                    (Test-Pattern $answer '^failed videoinfo\r?\njava\.lang\.IllegalStateException: no current video(?:\r?\n|$)')) {
+                                throw [System.InvalidOperationException]::new('precondition: no current video is available for videoinfo')
+                            }
                             if (Test-Pattern $answer "^failed $([regex]::Escape([string]$step.probe))") {
                                 throw "probe $($step.probe) failed: $((($answer -split "`n") | Where-Object { $_ -match '^failed |Exception' } | Select-Object -First 2) -join ' ')"
                             }

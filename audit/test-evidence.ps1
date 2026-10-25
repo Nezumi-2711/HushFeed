@@ -212,7 +212,7 @@ $runner = Join-Path $PSScriptRoot 'run-audit.ps1'
 $parseErrors = $null
 $syntax = [Management.Automation.Language.Parser]::ParseFile($runner, [ref]$null, [ref]$parseErrors)
 Assert-Audit (@($parseErrors).Count -eq 0) 'Runner failed to parse.'
-foreach ($name in 'Invoke-Check', 'Save-Evidence', 'Save-Shot', 'Start-ScreenRecord', 'Stop-ScreenRecord', 'Clear-ScreenRecord', 'Grant-AuditLease', 'Revoke-AuditLease', 'Test-AuditLeaseOwnership', 'Invoke-AuditAdb') {
+foreach ($name in 'Invoke-Check', 'Test-Pattern', 'Get-LogAfter', 'Invoke-AuditProbe', 'ConvertTo-DeviceQuoted', 'Save-Evidence', 'Save-Shot', 'Start-ScreenRecord', 'Stop-ScreenRecord', 'Clear-ScreenRecord', 'Grant-AuditLease', 'Revoke-AuditLease', 'Test-AuditLeaseOwnership', 'Invoke-AuditAdb') {
     $definition = $syntax.Find({ param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name }, $true)
     . ([scriptblock]::Create($definition.Extent.Text))
 }
@@ -231,6 +231,162 @@ foreach ($kind in 'tap', 'longpress') {
     Set-AuditCheckReceipt $tapResult $fixture
     Assert-Audit ($tapResult.receipt.files.Count -eq 1) "$kind could not bind file evidence."
 }
+# Probe prerequisites and report transport are availability checks, not feature verdicts.
+function Restart-TikTok { }
+function Save-Shot([string]$Name) { 'fixture-probe-shot.png' }
+function Invoke-AuditProbe { param($Action, $Extras, $WaitMs, $Until); return $script:fixtureProbeReply }
+$probeFixtures = @(
+    @{ id = 'missing-video'; action = 'videoinfo'; required = $true; status = 'inconclusive'; text = "failed videoinfo`njava.lang.IllegalStateException: no current video" },
+    @{ id = 'missing-video-crlf'; action = 'videoinfo'; required = $true; status = 'inconclusive'; text = "failed videoinfo`r`njava.lang.IllegalStateException: no current video`r`nat fixture" },
+    @{ id = 'missing-video-unguarded'; action = 'videoinfo'; required = $false; status = 'fail'; text = "failed videoinfo`njava.lang.IllegalStateException: no current video" },
+    @{ id = 'broken-reader'; action = 'videoinfo'; required = $true; status = 'fail'; text = "failed videoinfo`njava.lang.NoSuchMethodException: getDuration" },
+    @{ id = 'other-failure'; action = 'comments'; required = $true; status = 'fail'; text = "failed comments`njava.lang.IllegalStateException: no current video" },
+    @{ id = 'different-state'; action = 'videoinfo'; required = $true; status = 'fail'; text = "failed videoinfo`njava.lang.IllegalStateException: no current video decoder" },
+    @{ id = 'observed-mismatch'; action = 'videoinfo'; required = $false; status = 'fail'; text = 'ok videoinfo wrong' },
+    @{ id = 'observed-match'; action = 'videoinfo'; required = $false; status = 'pass'; text = 'ok videoinfo ready' }
+)
+foreach ($case in $probeFixtures) {
+    $script:fixtureProbeReply = $case.text
+    $probeStep = [ordered]@{ probe = $case.action; expect = '^ok videoinfo ready$'; precondition = $case.required }
+    $probeCheck = [pscustomobject]@{ id = $case.id; auto = $true; steps = @([pscustomobject]$probeStep) }
+    $restarted = $false
+    $probeResult = Invoke-Check $entry $probeCheck @{} ([ref]$restarted)
+    Assert-Audit ($probeResult.status -eq $case.status) "Probe prerequisite outcome changed for $($case.id): $($probeResult.status)."
+    $savedAnswer = Get-Content -LiteralPath (Join-Path $OutDir $probeResult.evidence[0]) -Raw
+    Assert-Audit ($savedAnswer.Trim() -ceq $case.text.Trim()) "Probe failure evidence was lost for $($case.id)."
+}
+$collectorDefinition = $syntax.Find({ param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Invoke-AuditProbe' }, $true)
+. ([scriptblock]::Create($collectorDefinition.Extent.Text))
+$script:fixtureCollector = ${function:Invoke-AuditProbe}
+# End this fixture read immediately. The canonical completion record is still mandatory.
+function Invoke-AuditProbe { param($Action, $Extras, $WaitMs, $Until); & $script:fixtureCollector $Action $Extras $WaitMs '.' }
+function Invoke-DeviceShell { param($Command); return $script:fixtureLogLines }
+$package = 'fixture.package'
+$prefix = "MORPHE DIAGNOSTIC REPORT`n`n[BUILD DETAILS]`nlabel: caf$([char]0x00e9)$([char]::ConvertFromUtf32(0x1f642)) "
+$switches = "`nregistered_switches_count: 2`nregistered_switches: other,copyCommentsWithoutUsername`n"
+$without = "`nregistered_switches_count: 1`nregistered_switches: other`n"
+$characters = ($prefix + $switches).Length
+$reportFixtures = @(
+    @{ id = 'complete'; pieces = @($prefix, $switches); indexes = @(0, 1); chars = $characters; count = 2; done = $true; status = 'pass' },
+    @{ id = 'complete-missing-switch'; pieces = @($prefix, $without); indexes = @(0, 1); chars = ($prefix + $without).Length; count = 2; done = $true; status = 'fail' },
+    @{ id = 'missing-completion'; pieces = @($prefix, $switches); indexes = @(0, 1); chars = $characters; count = 2; done = $false; status = 'inconclusive' },
+    @{ id = 'dropped-piece'; pieces = @($prefix, $switches); indexes = @(0, 2); chars = $characters; count = 3; done = $true; status = 'inconclusive' },
+    @{ id = 'truncated-piece'; pieces = @($prefix, $switches.Substring(0, $switches.Length - 20)); indexes = @(0, 1); chars = $characters; count = 2; done = $true; status = 'inconclusive' },
+    @{ id = 'repeated-piece'; pieces = @($prefix, $switches); indexes = @(0, 0); chars = $characters; count = 2; done = $true; status = 'inconclusive' },
+    @{ id = 'out-of-order'; pieces = @($prefix, $switches); indexes = @(1, 0); chars = $characters; count = 2; done = $true; status = 'inconclusive' },
+    @{ id = 'invalid-count'; pieces = @($prefix, $switches); indexes = @(0, 1); chars = '9223372036854775808'; count = 2; done = $true; status = 'inconclusive' },
+    @{ id = 'native-report-failure'; failed = $true; status = 'fail' }
+)
+foreach ($case in $reportFixtures) {
+    $script:fixtureLogLines = @('I/HushfeedAudit: fixture')
+    if ($case.failed) {
+        $script:fixtureLogLines += 'I/HushfeedProbe: failed report', 'java.lang.IllegalStateException: fixture export failure'
+    } else {
+        for ($piece = 0; $piece -lt $case.pieces.Count; $piece++) {
+            $rows = $case.pieces[$piece] -split "`n"
+            $script:fixtureLogLines += "I/HushfeedProbe: report[$($case.indexes[$piece])] $($rows[0])"
+            if ($rows.Count -gt 1) {
+                foreach ($row in $rows[1..($rows.Count - 1)]) {
+                    $script:fixtureLogLines += if ($row) { $row } else { 'I/HushfeedProbe:' }
+                }
+            }
+        }
+        if ($case.done) { $script:fixtureLogLines += "I/HushfeedProbe: ok report $($case.chars) chars in $($case.count) pieces" }
+    }
+    $reportCheck = [pscustomobject]@{ id = $case.id; auto = $true; steps = @([pscustomobject]@{
+        probe = 'report'; expect = 'registered_switches:[^\n]*\bcopyCommentsWithoutUsername\b'
+    }) }
+    $restarted = $false
+    $reportResult = Invoke-Check $entry $reportCheck @{} ([ref]$restarted)
+    Assert-Audit ($reportResult.status -eq $case.status) "Report transport outcome changed for $($case.id): $($reportResult.status)."
+    $savedReport = Get-Content -LiteralPath (Join-Path $OutDir $reportResult.evidence[0]) -Raw
+    Assert-Audit ($savedReport -match 'MORPHE DIAGNOSTIC REPORT|failed report') "Partial report evidence was lost for $($case.id)."
+    if ($case.id -eq 'complete') {
+        Assert-Audit ($savedReport.Contains($prefix + $switches.TrimEnd())) 'Report assembly lost Unicode, blank rows or a trailing piece-boundary space.'
+    }
+}
+# logcat suppresses an empty final line in a message; it cannot preserve a terminal LF.
+$legacyBody = "MORPHE DIAGNOSTIC REPORT" + [char]10 + 'registered_switches: copyCommentsWithoutUsername' + [char]10
+$script:fixtureLogLines = @('I/HushfeedAudit: fixture', 'I/HushfeedProbe: report[0] MORPHE DIAGNOSTIC REPORT', 'registered_switches: copyCommentsWithoutUsername',
+    "I/HushfeedProbe: ok report $($legacyBody.Length) chars in 1 pieces")
+$legacyDroppedLf = & $script:fixtureCollector 'report' $null 0 '.'
+Assert-Audit (Test-Pattern $legacyDroppedLf '^unavailable report:') 'A legacy report with a suppressed terminal LF was repaired without evidence.'
+
+function New-EncodedReportLines([string]$Text, [string]$Fault = '') {
+    [byte[]]$bytes = [Text.Encoding]::UTF8.GetBytes($Text)
+    if ($Fault -eq 'invalid-utf8') { $bytes = [byte[]]@(0xc3, 0x28) }
+    $wire = [Convert]::ToBase64String($bytes)
+    if ($Fault -eq 'invalid-base64') { $wire = '!' + $wire.Substring(1) }
+    if ($Fault -eq 'noncanonical-base64') { $wire = $wire.Insert(4, ' ') }
+    if ($Fault -eq 'truncated-piece') { $wire = $wire.Substring(0, $wire.Length - 4) }
+    $chunks = New-Object System.Collections.Generic.List[string]
+    for ($at = 0; $at -lt $wire.Length; $at += 3000) { $chunks.Add($wire.Substring($at, [Math]::Min(3000, $wire.Length - $at))) }
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try { $digest = ([BitConverter]::ToString($sha.ComputeHash($bytes))).Replace('-', '').ToLowerInvariant() }
+    finally { $sha.Dispose() }
+    if ($Fault -eq 'bad-hash') { $digest = '0' * 64 }
+    $length = $bytes.Length; $characters = $Text.Length
+    if ($Fault -eq 'bad-bytes') { $length++ }
+    if ($Fault -eq 'bad-characters') { $characters++ }
+    if ($Fault -eq 'oversized-bytes') { $length = 4194305 }
+    if ($Fault -eq 'oversized-characters') { $characters = 1048577 }
+    $lines = New-Object System.Collections.Generic.List[string]
+    $lines.Add('I/HushfeedAudit: fixture')
+    for ($piece = 0; $piece -lt $chunks.Count; $piece++) {
+        if ($Fault -eq 'dropped-piece' -and $piece -eq 1) { continue }
+        $index = $piece
+        if ($Fault -eq 'out-of-order' -and $piece -lt 2) { $index = 1 - $piece }
+        if ($Fault -eq 'repeated-piece' -and $piece -eq 1) { $index = 0 }
+        $kind = if ($Fault -eq 'mixed-transport' -and $piece -eq 0) { 'report' } else { 'report64' }
+        $lines.Add("I/HushfeedProbe: $kind[$index] $($chunks[$piece])")
+    }
+    if ($Fault -ne 'missing-completion') {
+        $completion = "I/HushfeedProbe: ok report $characters chars in $($chunks.Count) pieces encoding=base64-utf8 bytes=$length sha256=$digest"
+        if ($Fault -eq 'legacy-completion') { $completion = "I/HushfeedProbe: ok report $characters chars in $($chunks.Count) pieces" }
+        $lines.Add($completion)
+        if ($Fault -eq 'duplicate-completion') { $lines.Add($completion) }
+    }
+    return @($lines)
+}
+$longUnicodeReport = $prefix + (($([char]0x754c) + [char]::ConvertFromUtf32(0x1f642)) * 2000) + $switches
+foreach ($body in @($prefix + $switches, $longUnicodeReport, '')) {
+    $script:fixtureLogLines = @(New-EncodedReportLines $body)
+    $decoded = & $script:fixtureCollector 'report' $null 0 '.'
+    Assert-Audit (-not (Test-Pattern $decoded '^unavailable report:')) 'A complete encoded report was unavailable.'
+    $separator = $decoded.IndexOf([string][char]10)
+    Assert-Audit ($separator -ge 0 -and $decoded.Substring($separator + 1) -ceq $body) 'Encoded report lost Unicode, whitespace or terminal LF.'
+    foreach ($line in $script:fixtureLogLines) {
+        Assert-Audit ([Text.Encoding]::UTF8.GetByteCount($line) -lt 3900) 'Report frame can exceed the native logcat message byte limit.'
+    }
+}
+foreach ($fault in @('bad-bytes', 'bad-characters', 'bad-hash', 'invalid-utf8', 'invalid-base64', 'noncanonical-base64',
+        'truncated-piece', 'dropped-piece', 'out-of-order', 'repeated-piece', 'mixed-transport', 'legacy-completion',
+        'missing-completion', 'duplicate-completion', 'oversized-bytes', 'oversized-characters')) {
+    $script:fixtureLogLines = @(New-EncodedReportLines $longUnicodeReport $fault)
+    $damaged = & $script:fixtureCollector 'report' $null 0 '.'
+    Assert-Audit (Test-Pattern $damaged '^unavailable report:') "Damaged encoded report was accepted: $fault."
+    Assert-Audit ($damaged.Length -gt 60) "Damaged report evidence was discarded: $fault."
+}
+Remove-Item -LiteralPath 'Function:\New-EncodedReportLines'
+$regionCatalog = Get-Content -LiteralPath (Join-Path (Split-Path -Parent $runner) 'catalog.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$regionCheck = @($regionCatalog | Where-Object name -eq 'Show commenter handle and region')[0].checks | Where-Object id -eq 'sheet-text'
+$regionPattern = @($regionCheck.steps | Where-Object log)[0].log
+$seedModes = @($regionCheck.steps | Where-Object probe -eq 'seed-commenter-region' | ForEach-Object { $_.extras.region })
+Assert-Audit (($seedModes -join ',') -ceq 'clear,AQ,clear') 'The seeded handle fixture can be shadowed by an old UID country or survive the check.'
+foreach ($regionSource in 'uid', 'handle') {
+    Assert-Audit (Test-Pattern "Commenter region: remembered by $regionSource answered, showing AQ" $regionPattern) "The seeded $regionSource fallback no longer matches its audit check."
+}
+foreach ($line in @('Commenter region: remembered by handle answered, showing aq',
+        'Commenter region: remembered by handle answered, showing US',
+        'Commenter region: account region answered, showing AQ',
+        "Commenter region: the comment's account carried none, showing AQ")) {
+    Assert-Audit (-not (Test-Pattern $line $regionPattern)) 'A non-seeded or stale commenter-region log passed.'
+}
+foreach ($name in 'Save-Shot', 'Invoke-AuditProbe') {
+    $definition = $syntax.Find({ param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name }, $true)
+    . ([scriptblock]::Create($definition.Extent.Text))
+}
+Remove-Item -LiteralPath 'Function:\Invoke-DeviceShell', 'Function:\Restart-TikTok'
 $Serial = 'fixture-device'; $LeaseDir = $fixture; $ChatIdentity = 'audit-fixture'; $LeaseMinutes = 30
 $script:auditLease = $null
 Grant-AuditLease
