@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **TikTok:** Screen recordings keep their first video frames while the audio encoder starts.
 * **Build checks:** A patch audit now stops qualifying a build when its executable inputs change. Partial reruns leave older checks historical.
 * **TikTok:** Screen recording releases audio resources when sound can't start. Its save notice now says when the recording has no sound.
 * **TikTok:** Screen recording now asks Android to capture only the patched app's sound.

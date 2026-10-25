@@ -230,6 +230,8 @@ final class ScreenSource implements LiveRecorder.Source {
             if (videoDone) return false;
             boolean moved = false;
             while (true) {
+                // Keep the first frames in the codec until both track formats can start the muxer.
+                if (videoTrack >= 0 && !muxerStarted) return moved;
                 int index = videoCodec.dequeueOutputBuffer(info, 0);
                 if (index == MediaCodec.INFO_TRY_AGAIN_LATER) return moved;
                 moved = true;
@@ -285,6 +287,7 @@ final class ScreenSource implements LiveRecorder.Source {
             if (audioDone) return false;
             boolean moved = false;
             while (true) {
+                if (audioTrack >= 0 && !muxerStarted) return moved;
                 int index = audioCodec.dequeueOutputBuffer(info, 0);
                 if (index == MediaCodec.INFO_TRY_AGAIN_LATER) return moved;
                 moved = true;
