@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **TikTok:** Screen recordings check storage as they run and keep recovery files until the saved copy is verified. Interrupted recordings can be retried, exported or deleted.
 * **Build checks:** Patch audits now check the installed APK and selected patches. Results from a different package or an excluded patch stay historical.
 * **Build checks:** Patch audits check complete diagnostics before reporting missing switches. Missing videos leave dependent checks inconclusive, and the commenter-region check uses the current cache trace.
 * **TikTok:** Screen recording keeps distinct timestamps for its earliest frames while sound starts.
