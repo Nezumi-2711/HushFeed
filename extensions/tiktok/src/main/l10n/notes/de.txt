@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Diagnose:** Aufzeichnungen des ersten Bild-Callbacks behalten die Quellzuordnung und monotone Zeitstempel für Startprüfungen (#150).
 * **Build-Prüfungen:** Release-Prüfungen verlangen für jedes angegebene Paket passende APK- und native Prüfnachweise. Rundgänge prüfen den installierten Build und die Patch-Optionen.
 * **TikTok:** Recording recovery exports use bulk writes to avoid long waits when saving large files.
 * **TikTok:** Recovery Retry keeps the recording's original stop reason instead of saying TikTok closed. Recovery dialogs follow Hushfeed's theme.
