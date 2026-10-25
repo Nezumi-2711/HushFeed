@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **Build checks:** Release checks require matching APK and native evidence for every advertised package. Walks verify the installed build and patch options.
 * **TikTok:** Recording recovery exports use bulk writes to avoid long waits when saving large files.
 * **TikTok:** Recovery Retry keeps the recording's original stop reason instead of saying TikTok closed. Recovery dialogs follow Hushfeed's theme.
 * **TikTok:** Screen recordings check storage as they run and keep recovery files until the saved copy is verified. Interrupted recordings can be retried, exported or deleted.

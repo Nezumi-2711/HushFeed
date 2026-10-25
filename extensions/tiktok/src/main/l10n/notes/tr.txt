@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Derleme kontrolleri:** Sürüm kontrolleri, belirtilen her paket için eşleşen APK ve uygulama içi test kanıtı gerektirir. Gezinme testleri kurulu derlemeyi ve yama seçeneklerini doğrular.
 * **TikTok:** Recording recovery exports use bulk writes to avoid long waits when saving large files.
 * **TikTok:** Recovery Retry keeps the recording's original stop reason instead of saying TikTok closed. Recovery dialogs follow Hushfeed's theme.
 * **TikTok:** Screen recordings check storage as they run and keep recovery files until the saved copy is verified. Interrupted recordings can be retried, exported or deleted.
