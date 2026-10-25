@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Qurma yoxlamaları:** İcra olunan girişlər dəyişəndə yamaq auditi artıq qurmanı təsdiqləmir. Qismən təkrar yoxlamalar köhnə nəticələri tarixi saxlayır.
 * **TikTok:** Səs başlaya bilməyəndə ekran yazısı səs resurslarını azad edir. Saxlama bildirişi indi yazıda səs olmadığını göstərir.
 * **TikTok:** Ekran yazısı indi Android-dən yalnız yamaqlanmış tətbiqin səsini yazmağı istəyir.
 * **TikTok:** Service+ təmizlənməsi indi LIVE önizləməsinin ilk elementini TikTok-un göstərmə qaydasına uyğun yoxlayır (#94).
