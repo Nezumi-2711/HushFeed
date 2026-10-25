@@ -604,6 +604,7 @@
   "checks": [
    {
     "id": "stays-off-tiktok",
+    "patchSelection": "absent",
     "what": "PineDrama only, so on TikTok the patch must not run: the shared extension still ships the switch's class, but the probe's registered switches list has no commentPhotos, and TikTok's own comment box is left as TikTok built it. (The PineDrama side was checked by hand on the S22, since this audit drives TikTok.)",
     "steps": [
      {

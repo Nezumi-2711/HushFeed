@@ -73,15 +73,80 @@ $apkHash = 'a' * 64
 . (Join-Path (Split-Path -Parent $PSScriptRoot) 'scripts/release-receipt.ps1')
 $source = [pscustomobject]@{ commit = $inputCommit; clean = $true; startFingerprint = 'c' * 64; endFingerprint = 'c' * 64 }
 $build = [pscustomobject]@{ status = 'verified'; receiptSha256 = 'd' * 64; source = $source
-    executionInputs = Get-AuditExecutableInputs $inputRepo $source.commit }
+    executionInputs = Get-AuditExecutableInputs $inputRepo $source.commit
+    nativeBuildSchema = 2
+    apk = @{ package = 'com.zhiliaoapp.musically'; versionName = '47.1.4'; versionCode = '1'; sha256 = $apkHash }
+    sourceApk = @{ package = 'com.zhiliaoapp.musically'; versionName = '47.1.4'; versionCode = '1'; sha256 = 'f' * 64 }
+    sourceApkSha256 = 'f' * 64; bundle = @{ sha256 = 'b' * 64 }
+    patches = @('Example'); options = @(); patchReportSha256 = 'e' * 64 }
+$app = [pscustomobject]@{ package = 'com.zhiliaoapp.musically'; version = '47.1.4'; versionCode = '1' }
 [IO.File]::WriteAllText((Join-Path $fixture 'screen.png'), 'original evidence')
 $result = [ordered]@{ id = 'screen'; auto = $false; status = 'review'; definitionHash = $hash; evidence = @('screen.png'); review = @(@{ shot = 'screen.png'; criteria = 'Readable' }); build = $build; apkSha256 = $apkHash; installedApkSha256 = $apkHash }
 Set-AuditCheckReceipt $result $fixture
 $result = Copy-Json $result
-$run = [pscustomobject]@{ apk = @{ sha256 = $apkHash }; patches = @([pscustomobject]@{ name = 'Example'; checks = @($result) }) }
+$run = [pscustomobject]@{ app = $app; apk = @{ sha256 = $apkHash }; patches = @([pscustomobject]@{ name = 'Example'; checks = @($result) }) }
 $report = Get-AuditResultValidation $catalog $run $fixture $inputRepo
 Assert-Audit ($report.problems.Count -eq 0 -and $report.currentChecks -eq 1) 'Current bound result rejected.'
 
+
+# Re-seal each variant so selection and manifest validation, not a stale receipt hash, decides it.
+$missingPatch = Copy-Json $run
+$missingPatch.patches[0].checks[0].build.patches = @('Other patch')
+Set-AuditCheckReceipt $missingPatch.patches[0].checks[0] $fixture
+Assert-Audit ((Get-AuditResultValidation $catalog $missingPatch $fixture $inputRepo).currentChecks -eq 0) 'An excluded patch qualified its positive check.'
+$negativeEntry = Copy-Json $entry
+$negativeCheck = $negativeEntry.checks[0]
+$negativeCheck | Add-Member -NotePropertyName patchSelection -NotePropertyValue 'absent'
+$negative = Copy-Json $missingPatch
+$negative.patches[0].checks[0].definitionHash = Get-AuditDefinitionHash $negativeEntry $negativeCheck
+Set-AuditCheckReceipt $negative.patches[0].checks[0] $fixture
+Assert-Audit ((Get-AuditResultValidation @($negativeEntry) $negative $fixture $inputRepo).currentChecks -eq 1) 'An explicit negative selection check was refused.'
+$negative.patches[0].checks[0].build.patches = @('Example')
+Set-AuditCheckReceipt $negative.patches[0].checks[0] $fixture
+Assert-Audit ((Get-AuditResultValidation @($negativeEntry) $negative $fixture $inputRepo).currentChecks -eq 0) 'A selected patch qualified an absence check.'
+$badPolicy = Copy-Json $negativeEntry
+$badPolicy.checks[0].patchSelection = 'unknown'
+Assert-Audit (@(Get-AuditCatalogProblems @($badPolicy)).Count -gt 0) 'Unknown selection policy accepted.'
+$nativeVariants = [ordered]@{
+    missingSchema = { param($r) $r.patches[0].checks[0].build.PSObject.Properties.Remove('nativeBuildSchema') }
+    malformedSchema = { param($r) $r.patches[0].checks[0].build.nativeBuildSchema = $true }
+    historicalBuild = { param($r) $r.patches[0].checks[0].build.status = 'historical' }
+    wrongPackage = { param($r) $r.patches[0].checks[0].build.apk.package = 'com.ss.android.ttmd.video' }
+    wrongVersion = { param($r) $r.patches[0].checks[0].build.apk.versionName = '47.5.3' }
+    wrongCode = { param($r) $r.patches[0].checks[0].build.apk.versionCode = '2' }
+    wrongApkHash = { param($r) $r.patches[0].checks[0].build.apk.sha256 = '0' * 64 }
+    wrongSourceHash = { param($r) $r.patches[0].checks[0].build.sourceApk.sha256 = '0' * 64 }
+    missingBundle = { param($r) $r.patches[0].checks[0].build.bundle.sha256 = '' }
+    missingReport = { param($r) $r.patches[0].checks[0].build.patchReportSha256 = '' }
+    missingOptions = { param($r) $r.patches[0].checks[0].build.PSObject.Properties.Remove('options') }
+    duplicatePatch = { param($r) $r.patches[0].checks[0].build.patches = @('Example','Example') }
+    unrelatedOption = { param($r) $r.patches[0].checks[0].build.options = @('Other patch|enabled=true') }
+}
+foreach ($variant in $nativeVariants.Keys) {
+    $mutated = Copy-Json $run
+    & $nativeVariants[$variant] $mutated
+    Set-AuditCheckReceipt $mutated.patches[0].checks[0] $fixture
+    Assert-Audit ((Get-AuditResultValidation $catalog $mutated $fixture $inputRepo).currentChecks -eq 0) "Invalid native build facts remained current: $variant"
+}
+$maxCode = Copy-Json $run
+$maxCode.app.versionCode = '2147483647'
+$maxCode.patches[0].checks[0].build.apk.versionCode = '2147483647'
+Set-AuditCheckReceipt $maxCode.patches[0].checks[0] $fixture
+Assert-Audit ((Get-AuditResultValidation $catalog $maxCode $fixture $inputRepo).currentChecks -eq 1) 'A deliberately changed patched version code was equated with its stock code.'
+$unreviewedPackage = Copy-Json $run
+$unreviewedPackage.app.package = 'com.ss.android.ttmd.video'
+$unreviewedPackage.patches[0].checks[0].build.sourceApk.package = $unreviewedPackage.app.package
+$unreviewedPackage.patches[0].checks[0].build.apk.package = $unreviewedPackage.app.package
+Set-AuditCheckReceipt $unreviewedPackage.patches[0].checks[0] $fixture
+Assert-Audit ((Get-AuditResultValidation $catalog $unreviewedPackage $fixture $inputRepo).currentChecks -eq 0) 'The global profile qualified an unreviewed PineDrama build.'
+foreach ($oldStatus in @('fail','review','inconclusive')) {
+    $historicalNative = Copy-Json $run
+    $historicalNative.patches[0].checks[0].status = $oldStatus
+    $historicalNative.patches[0].checks[0].build.PSObject.Properties.Remove('nativeBuildSchema')
+    $beforeNative = Get-AuditHash $historicalNative
+    Assert-Audit ((Get-AuditResultValidation $catalog $historicalNative $fixture $inputRepo).currentChecks -eq 0) "Legacy native facts qualified $oldStatus."
+    Assert-Audit ((Get-AuditHash $historicalNative) -ceq $beforeNative) 'Invalidating native identity rewrote the recorded verdict.'
+}
 
 $runBeforeDirt = Get-AuditHash $run
 [IO.File]::WriteAllText((Join-Path $inputRepo 'Runtime.java'), 'dirty runtime')
@@ -176,9 +241,9 @@ Assert-Audit ((Get-AuditResultValidation $catalog $forged $fixture $inputRepo).c
 $failed = [ordered]@{ status = 'fail'; failures = @('Failed expectation'); auto = $true; definitionHash = $hash; evidence = @(); review = @(); build = $build; apkSha256 = $apkHash; installedApkSha256 = $apkHash }
 Set-AuditCheckReceipt $failed $fixture
 $failed.status = 'pass'
-Assert-Audit (-not (Test-AuditCheckBinding $entry $check $failed $apkHash $fixture $null $inputRepo)) 'Changing a failed status reused its receipt.'
+Assert-Audit (-not (Test-AuditCheckBinding $entry $check $failed $apkHash $fixture $null $inputRepo $app)) 'Changing a failed status reused its receipt.'
 $failed.status = 'fail'; $failed.failures = @()
-Assert-Audit (-not (Test-AuditCheckBinding $entry $check $failed $apkHash $fixture)) 'Removing execution failures reused its receipt.'
+Assert-Audit (-not (Test-AuditCheckBinding $entry $check $failed $apkHash $fixture $null $inputRepo $app)) 'Removing execution failures reused its receipt.'
 foreach ($case in 'wrongReceipt', 'automatic', 'staleDefinition', 'invalidStatus', 'missing', 'alreadyDecided', 'changedPayload', 'changedReview', 'changedFile', 'missingFile', 'wrongDirectory') {
     $attempt = Copy-Json $run
     $attempt.patches[0].checks[0].status = 'review'
@@ -216,6 +281,14 @@ foreach ($name in 'Invoke-Check', 'Test-Pattern', 'Get-LogAfter', 'Invoke-AuditP
     $definition = $syntax.Find({ param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name }, $true)
     . ([scriptblock]::Create($definition.Extent.Text))
 }
+$selectionTouched = $false
+function Invoke-AuditProbe { $script:selectionTouched = $true; throw 'A rejected check touched the app.' }
+$guardCheck = [pscustomobject]@{ id = 'selection'; auto = $true; steps = @([pscustomobject]@{ probe = 'report'; expect = 'report' }) }
+$guardBuild = Copy-Json $build
+$guardBuild.patches = @('Other patch')
+$guardRestarted = $false
+$guardResult = Invoke-Check $entry $guardCheck @{} ([ref]$guardRestarted) $guardBuild
+Assert-Audit ($guardResult.status -eq 'error' -and -not $selectionTouched -and $guardResult.evidence.Count -eq 0) 'A selection-mismatched check ran its steps.'
 function Write-Marker { [pscustomobject]@{ id = 'fixture'; since = 'fixture' } }
 function Invoke-DumpTap { 'tapped fixture at 10,20' }
 function Start-Sleep { param($Milliseconds) }
@@ -544,21 +617,64 @@ function New-FixtureZip([string]$Path, [string]$EntryName, [string]$Content) {
         "Hushfeed-Source-Start: $($source.startFingerprint)`nHushfeed-Source-End: $($source.endFingerprint)`n"
     New-FixtureZip $fixtureBundle 'META-INF/MANIFEST.MF' $manifest
     $receipt = [ordered]@{
-        schemaVersion = 1; kind = 'hushfeed-device-build'; source = $source
-        apk = @{ sha256 = (Get-FileHash $fixtureApk -Algorithm SHA256).Hash.ToLowerInvariant() }
+        schemaVersion = 2; kind = 'hushfeed-device-build'; source = $source
+        apk = @{ package = $app.package; versionName = $app.version; versionCode = $app.versionCode
+            sha256 = (Get-FileHash $fixtureApk -Algorithm SHA256).Hash.ToLowerInvariant() }
+        sourceApk = @{ package = $app.package; versionName = $app.version; versionCode = '1'; sha256 = 'f' * 64 }
+        sourceApkSha256 = 'f' * 64; patches = @('Static','Second'); options = @('Static|fixture=true')
+        patchReportSha256 = 'e' * 64
         bundle = @{ sha256 = (Get-FileHash $fixtureBundle -Algorithm SHA256).Hash.ToLowerInvariant() }
     }
     Write-FixtureJson $receiptPath $receipt
-    Assert-Audit ((Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo).status -eq 'verified') 'Valid build receipt rejected.'
-    Assert-Audit ((Get-AuditHash (Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo).executionInputs) -ceq
+    Assert-Audit ((Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo $app).status -eq 'verified') 'Valid build receipt rejected.'
+    Assert-Audit ((Get-AuditHash (Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo $app).executionInputs) -ceq
         (Get-AuditHash $build.executionInputs)) 'Build identity omitted its exact executable inputs.'
+    $nativeIdentity = Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo $app
+    foreach ($field in @('apk','sourceApk','sourceApkSha256','bundle','patches','options','patchReportSha256')) {
+        Assert-Audit ((Get-AuditHash $nativeIdentity.$field) -ceq (Get-AuditHash $receipt[$field])) "Build reader dropped or changed $field."
+    }
+    # Execute the producer's real receipt assignment with observed-manifest stand-ins and real hashes.
+    $producerErrors = $null
+    $producerAst = [Management.Automation.Language.Parser]::ParseFile(
+        (Join-Path (Split-Path -Parent $PSScriptRoot) 'scripts/patch-for-device.ps1'), [ref]$null, [ref]$producerErrors)
+    Assert-Audit (@($producerErrors).Count -eq 0) 'Device build producer failed to parse.'
+    $assignment = $producerAst.Find({ param($node)
+        $node -is [Management.Automation.Language.AssignmentStatementAst] -and
+        $node.Left -is [Management.Automation.Language.VariableExpressionAst] -and
+        $node.Left.VariablePath.UserPath -ceq 'auditBuildReceipt'
+    }, $true)
+    Assert-Audit ($null -ne $assignment) 'Device build producer has no receipt assignment.'
+    $producerReport = Join-Path $fixture 'producer-report.json'
+    [IO.File]::WriteAllText($producerReport, '{"appliedPatches":["Static","Second"]}')
+    $producedReceipt = & {
+        param($Definition, $OutputPath, $ReportPath, $Original, $BundleHash, $BuildSource, $AppFacts)
+        $sourceApkFacts = [pscustomobject]@{ package = $AppFacts.package; versionName = $AppFacts.version; versionCode = '1' }
+        $patchedApkFacts = [pscustomobject]@{ package = $AppFacts.package; versionName = $AppFacts.version; versionCode = '2147483647' }
+        $out = $OutputPath; $result = $ReportPath; $auditInputHash = $Original; $auditBundleHash = $BundleHash
+        $auditBundleSource = $BuildSource; $names = @('Static','Second'); $Option = @('Static|fixture=true')
+        . ([scriptblock]::Create($Definition))
+        return $auditBuildReceipt
+    } $assignment.Extent.Text $fixtureApk $producerReport ('f' * 64) $receipt.bundle.sha256 $source $app
+    Assert-Audit ($producedReceipt.schemaVersion -eq 2 -and $producedReceipt.sourceApk.versionCode -ceq '1' -and
+        $producedReceipt.apk.versionCode -ceq '2147483647') 'Producer lost separate stock and patched manifest identities.'
+    $producerApp = Copy-Json $app; $producerApp.versionCode = '2147483647'
+    Write-FixtureJson $receiptPath $producedReceipt
+    $roundtrip = Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo $producerApp
+    Assert-Audit ($roundtrip.status -ceq 'verified' -and $roundtrip.patchReportSha256 -ceq
+        (Get-FileHash -LiteralPath $producerReport -Algorithm SHA256).Hash.ToLowerInvariant()) 'Producer/reader roundtrip lost the actual report identity.'
+    Write-FixtureJson $receiptPath $receipt
+    $oldDeviceReceipt = Copy-Json $receipt
+    $oldDeviceReceipt.schemaVersion = 1
+    Write-FixtureJson $receiptPath $oldDeviceReceipt
+    Assert-Audit ((Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo $app).status -eq 'historical') 'A legacy device receipt was retroactively qualified.'
+    Write-FixtureJson $receiptPath $receipt
     Assert-Audit ((Read-AuditBuildIdentity $fixtureApk '' '' $inputRepo).status -eq 'unbound') 'Absent receipt invented source identity.'
     foreach ($mutation in 'apk', 'bundle', 'source') {
         $invalid = Copy-Json $receipt
         if ($mutation -eq 'source') { $invalid.source.clean = $false } else { $invalid.$mutation.sha256 = '0' * 64 }
         Write-FixtureJson $receiptPath $invalid
         $rejected = $false
-        try { [void](Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo) } catch { $rejected = $true }
+        try { [void](Read-AuditBuildIdentity $fixtureApk $receiptPath $fixtureBundle $inputRepo $app) } catch { $rejected = $true }
         Assert-Audit $rejected "Mismatched $mutation accepted."
     }
     Write-FixtureJson $receiptPath $receipt

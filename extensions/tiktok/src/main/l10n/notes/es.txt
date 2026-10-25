@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Build checks:** Patch audits now check the installed APK and selected patches. Results from a different package or an excluded patch stay historical.
 * **Comprobaciones de compilación:** Las auditorías comprueban que el diagnóstico esté completo antes de indicar que faltan interruptores. Sin un video, las comprobaciones dependientes quedan inconclusas. La región del comentarista usa el registro de caché actual.
 * **TikTok:** La grabación de pantalla conserva marcas de tiempo distintas para sus primeros fotogramas mientras se inicia el sonido.
 * **TikTok:** Las grabaciones de pantalla conservan sus primeros fotogramas mientras se inicia el codificador de audio.

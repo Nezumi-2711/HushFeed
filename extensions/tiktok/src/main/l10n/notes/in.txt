@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Build checks:** Patch audits now check the installed APK and selected patches. Results from a different package or an excluded patch stay historical.
 * **Pemeriksaan build:** Audit patch memeriksa kelengkapan diagnostik sebelum melaporkan sakelar yang hilang. Tanpa video, pemeriksaan terkait tetap tidak dapat disimpulkan. Pemeriksaan wilayah komentator memakai jejak cache saat ini.
 * **TikTok:** Rekaman layar mempertahankan waktu yang berbeda untuk frame awal saat perekaman suara dimulai.
 * **TikTok:** Rekaman layar mempertahankan frame video pertama saat encoder audio mulai bekerja.

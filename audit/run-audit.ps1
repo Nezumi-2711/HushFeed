@@ -274,6 +274,8 @@ if ($Only) {
 
 # What the APK is, read once.
 $badging = & $aapt2Exe dump badging $Apk 2>$null
+$apkPackage = if ("$badging" -match "package: name='([^']+)'") { $Matches[1] } else { '' }
+if ($apkPackage -cne $package) { throw "The APK is $apkPackage, but this audit profile only drives $package." }
 $versionName = if ("$badging" -match "versionName='([^']+)'") { $Matches[1] } else { 'unknown' }
 $versionCode = if ("$badging" -match "versionCode='([^']+)'") { $Matches[1] } else { 'unknown' }
 if (-not $Results) { $Results = Join-Path $PSScriptRoot "results\tiktok-$versionName.json" }
@@ -829,8 +831,15 @@ function Restore-TikTokTheme {
     return $true
 }
 
-function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted) {
+function Invoke-Check($Entry, $Check, [hashtable]$Originals, [ref]$Restarted, $Build) {
     $result = [ordered]@{ id = $Check.id; what = $Check.what; auto = [bool]$Check.auto; status = 'pass'; failures = @(); evidence = @(); review = @() }
+    if ($null -ne $Build -and $Build.status -ceq 'verified') {
+        $selectionProblem = Get-AuditPatchSelectionProblem $Entry $Check $Build
+        if ($selectionProblem) {
+            $result.status = 'error'; $result.failures = @($selectionProblem)
+            return $result
+        }
+    }
     $tag = "$($Entry.name)-$($Check.id)"
     $index = 0
     $lastMarker = $null
@@ -1078,7 +1087,8 @@ $run = [ordered]@{
     app = [ordered]@{ package = $package; version = $versionName; versionCode = $versionCode }
     apk = [ordered]@{ file = (Split-Path -Leaf $Apk); sha256 = (Get-FileHash -LiteralPath $Apk -Algorithm SHA256).Hash.ToLowerInvariant() }
     runner = [ordered]@{ commit = "$(git -C $root rev-parse HEAD 2>$null)"; catalog = (Get-FileHash -LiteralPath $Catalog -Algorithm SHA256).Hash.ToLowerInvariant() }
-    build = Read-AuditBuildIdentity -ApkPath $Apk -ReceiptPath $BuildReceipt -BundlePath $Bundle -GitRoot $root
+    build = Read-AuditBuildIdentity -ApkPath $Apk -ReceiptPath $BuildReceipt -BundlePath $Bundle -GitRoot $root `
+        -App ([pscustomobject]@{ package = $apkPackage; version = $versionName; versionCode = $versionCode })
     device = $null
     startedUtc = [DateTime]::UtcNow.ToString('o')
     finishedUtc = $null
@@ -1166,7 +1176,7 @@ try {
                 Write-Host "  (TikTok wasn't in front, so it starts again before $($check.id))"
                 Restart-TikTok
             }
-            $checkResult = Invoke-Check $entry $check $originals ([ref]$restarted)
+            $checkResult = Invoke-Check $entry $check $originals ([ref]$restarted) $run.build
             $checkResult.definitionHash = Get-AuditDefinitionHash $entry $check
             $checkResult.apkSha256 = $run.apk.sha256
             $checkResult.installedApkSha256 = $installedApkHash
