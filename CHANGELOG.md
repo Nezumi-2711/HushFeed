@@ -7,6 +7,7 @@ Every Hushfeed release, newest first.
 ### Fixes
 
 * **TikTok:** Service+ cleanup now checks the first entry in a LIVE preview, matching TikTok's own display logic (#94).
+* **TikTok:** The comment pause can identify a playing first frame before the first progress report arrives (#151).
 
 ## 0.79.0 (2026-10-24)
 
