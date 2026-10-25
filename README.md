@@ -284,9 +284,13 @@ Simple mode in Morphe Manager selects 122 of these patches. Each row says what t
 
 ### Patching stalls partway
 
-The manager has probably run short of memory. If it says the patcher ran out of memory with a 1024 MB heap, patch the bundle (`.apkm`) from [step 1](#install) instead of the APK. It needs less memory, and on a 3 GB device it finished where the APK failed. In Manager 2.0, also check that **Use embedded VM** is on under **Settings > Patcher**, close other apps and start again. If it stops while Manager is in the background, allow it under **Battery optimization** on that same page. On an older Manager, set **Settings > Process runtime** to 1,024 MB instead, or 512 MB if it still stalls. Hide Play Store update offer, Change app name and Custom launcher icon decode resources too, so they're the ones to leave out if memory stays tight.
+The manager has probably run short of memory. If it says the patcher ran out of memory with a 1024 MB heap, patch the bundle (`.apkm`) from [step 1](#install) instead of the APK. It needs less memory, and on a 3 GB device it finished where the APK failed. In Manager 2.0, also check that **Use embedded VM** is on under **Settings > Patcher**, close other apps and start again. If it stops while Manager is in the background, allow it under **Battery optimization** on that same page. On an older Manager, set **Settings > Process runtime** to 1,024 MB instead, or 512 MB if it still stalls. Change app name, Custom launcher icon and Hide Play Store update offer decode resources too. You can leave them out if memory stays tight, except for Hide Play Store update offer when the installed copy already used it.
 
-You can select every patch at once. Each release is patched with all of them selected before it ships, so none refuse to go in together.
+### Choosing patches
+
+Start with the recommended patches in Simple mode. Optional removal patches come with the feature losses listed in their descriptions. The release checks apply all compatible patches together. They don't cover every sign-in method or runtime combination.
+
+Pause can't put removed files back. To restore them, patch the original file from [step 1](#install) with those removal patches left out. Use the same signing key and the same package name as the installed copy, including the Clone app package name if you used it. Install over your existing copy without uninstalling it. If that copy used Hide Play Store update offer, keep it selected so the version code doesn't drop.
 
 ### TikTok stays in English after removing language packs
 
