@@ -148,8 +148,8 @@ final class ScreenSource implements LiveRecorder.Source {
         }
 
         void run(LiveRecorder.Control control) throws IOException {
-            setUp();
             originUs = System.nanoTime() / 1000L;
+            setUp();
             ScreenCapture.whenEnded(this::close);
             MediaCodec.BufferInfo videoInfo = new MediaCodec.BufferInfo();
             MediaCodec.BufferInfo audioInfo = new MediaCodec.BufferInfo();
