@@ -32,7 +32,7 @@ Most switches start off, so a freshly patched TikTok looks and works the way it 
 
 Hushfeed v0.79.0 contains 141 patches for TikTok 47.5.3 and PineDrama 47.5.3. New in this one: PineDrama moves to 47.5.3, six more patches run on it, and imported fonts work there. TikTok gets a spam comment filter, screen recording for LIVEs and a blur behind the glass bar, and Hide videos you have already seen works on For You again. It needs Morphe Manager 2.0.0 or newer.
 
-The main branch contains 141 patches, the same set as v0.79.0.
+The main branch contains 141 patches, the same set as v0.79.0. Bundles built from main require Morphe Manager 2.2.0 or newer, or morphe-desktop 1.19.1 or newer.
 
 ## What it changes
 
