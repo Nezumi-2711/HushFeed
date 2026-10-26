@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Feed:** Länderflaggen und Ländercodes bleiben neben Namen, die von rechts nach links geschrieben werden (#258).
 * **Raster:** Das Sortierfeld hat eine Berührungsfläche von mindestens 48 dp.
 * **Raster:** Das Sortierfeld wird ausgeblendet, solange sein Raster entfernt ist, und erscheint bei dessen Rückkehr wieder.
 * **Raster:** Wenn eine neue Sortierung nicht gespeichert werden kann, bleibt die bisherige Reihenfolge erhalten.

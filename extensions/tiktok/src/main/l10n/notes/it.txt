@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Feed:** Bandiere e codici paese restano accanto ai nomi scritti da destra a sinistra (#258).
 * **Griglie:** Il controllo di ordinamento ha un’area toccabile di almeno 48 dp.
 * **Griglie:** Il controllo di ordinamento si nasconde quando la griglia viene rimossa dalla vista e riappare al suo ritorno.
 * **Griglie:** Se il nuovo ordinamento non può essere salvato, resta quello attuale.

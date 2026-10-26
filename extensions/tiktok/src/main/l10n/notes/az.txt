@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Lent:** Ölkə bayraqları və kodları sağdan sola yazılan adların yanında qalır (#258).
 * **Tor görünüşü:** Sıralama düyməsinin toxunma sahəsi ən azı 48 dp olur.
 * **Tor görünüşü:** Tor ayrıldıqda sıralama düyməsi gizlənir, tor qayıdanda yenidən görünür.
 * **Tor görünüşü:** Yeni sıralama yadda saxlanmasa, cari sıra dəyişmir.
