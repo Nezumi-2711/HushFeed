@@ -8,6 +8,7 @@ Every Hushfeed release, newest first.
 
 * **Settings:** `Hide the Hushfeed row` takes Hushfeed out of TikTok's Settings and privacy. Press and hold For You at the top of the feed to open the settings after that, or Home when `Long-press Home for Hushfeed settings` is on. Pausing Hushfeed brings the row back (#264).
 * **Feed:** Add a floating glass pill to the main feed's bottom bar with a lens that slides across the tabs, a slide-along gesture, optional haptics, and new Interface settings for blur strength, glass opacity, pill height and corners (#259).
+* **Patching:** Every patch with settings now has Morphe options that pick its starting values, so a build can ship with the switches you want already on. Saved choices still win, and Reset goes back to the value you picked. Thanks to @XEGARE (#256).
 
 ### Fixes
 
