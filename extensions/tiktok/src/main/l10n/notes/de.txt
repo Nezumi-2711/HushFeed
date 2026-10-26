@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Posteingang:** Bei aktivierter Story-Priorität öffnet ein wiederverwendetes Chatbild beim ersten Tippen die Story des aktuell angezeigten Erstellers (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnose:** Benachrichtigungsberichte zählen die Schritte bei Registrierung und Anzeige, ohne Nachrichteninhalte aufzunehmen (#126, #222, #86).
 * **Bildschirmaufnahme:** TikTok bleibt ab Android 14 in der Auswahl der zuletzt verwendeten Apps für die Aufnahme verfügbar.

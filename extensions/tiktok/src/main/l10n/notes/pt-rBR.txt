@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Caixa de entrada:** Com a opção de abrir Stories primeiro, uma foto de conversa reutilizada abre o Story do criador atual no primeiro toque (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnóstico:** Os relatórios de notificações contam as etapas de registro e exibição sem incluir o conteúdo das mensagens (#126, #222, #86).
 * **Gravação de tela:** O TikTok continua disponível entre os apps recentes para gravação no Android 14 ou mais recente.

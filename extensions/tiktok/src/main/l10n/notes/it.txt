@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Posta in arrivo:** Con la priorità alle Storie attiva, una foto della chat riutilizzata apre la Storia del creator attuale al primo tocco (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnostica:** I rapporti sulle notifiche contano le fasi di registrazione e visualizzazione senza includere il contenuto dei messaggi (#126, #222, #86).
 * **Registrazione schermo:** TikTok resta tra le app recenti selezionabili per la registrazione su Android 14 e versioni successive.
