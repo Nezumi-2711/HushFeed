@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Şərhlər:** Videonun yanındakı şərhlər düzən və yenidən qurma yoxlamalarında eyni eni istifadə edir (#253).
 * **Gələnlər:** Hekayəni əvvəl aç seçimi aktiv olduqda, təkrar istifadə edilən söhbət şəkli ilk toxunuşda cari müəllifin Hekayəsini açır (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diaqnostika:** Bildiriş hesabatları mesaj məzmununu daxil etmədən qeydiyyat və göstərilmə mərhələlərini sayır (#126, #222, #86).

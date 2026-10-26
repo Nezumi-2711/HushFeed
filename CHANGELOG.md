@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **Comments:** Comments beside the video uses the same width for its layout and rebuild checks (#253).
 * **Inbox:** A reused chat picture now opens the current creator's Story on its first tap when Story-first is enabled (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnostics:** Notification reports count registration and posting stages without message contents (#126, #222, #86).

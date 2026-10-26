@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Yorumlar:** Videonun yanındaki yorumlar, yerleşim ve yeniden oluşturma kontrollerinde aynı genişliği kullanır (#253).
 * **Gelen kutusu:** Önce Hikaye seçeneği açıkken yeniden kullanılan sohbet resmi, ilk dokunuşta o an gösterilen içerik üreticisinin Hikayesini açar (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Tanılama:** Bildirim raporları, mesaj içeriğini kaydetmeden kayıt ve gösterim aşamalarını sayar (#126, #222, #86).

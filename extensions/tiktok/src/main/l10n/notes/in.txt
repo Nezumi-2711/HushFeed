@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Komentar:** Komentar di samping video memakai lebar yang sama untuk tata letak dan pemeriksaan pembentukan ulang (#253).
 * **Kotak masuk:** Jika Cerita didahulukan, foto chat yang digunakan ulang kini membuka Cerita kreator yang sedang ditampilkan pada ketukan pertama (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnostik:** Laporan notifikasi menghitung tahap pendaftaran dan penayangan tanpa menyertakan isi pesan (#126, #222, #86).
