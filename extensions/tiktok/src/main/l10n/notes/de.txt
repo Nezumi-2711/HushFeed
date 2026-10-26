@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Raster:** Wenn eine neue Sortierung nicht gespeichert werden kann, bleibt die bisherige Reihenfolge erhalten.
 * **Raster:** Bei Auswahl der ursprünglichen Reihenfolge bleibt das Sortiermenü des aktuellen Rasters erreichbar (#180).
 * **Kommentare:** Kommentare neben dem Video verwenden für Layout und Neuaufbau dieselbe Breite (#253).
 * **Posteingang:** Bei aktivierter Story-Priorität öffnet ein wiederverwendetes Chatbild beim ersten Tippen die Story des aktuell angezeigten Erstellers (#233).

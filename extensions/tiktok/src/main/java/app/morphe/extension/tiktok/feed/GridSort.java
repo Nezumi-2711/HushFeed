@@ -176,10 +176,18 @@ public final class GridSort {
         if (chosenFrom != null && !currentControl(adapter, chosenFrom)) return;
         View grid = gridView(adapter);
         SortChip control = controlOn(grid);
+        boolean saved;
         synchronized (Setting.class) {
+            boolean retainedOriginal = control != null && control.originalChosen;
             if (control != null) control.stopRetainingOriginal();
-            boolean saved = Settings.PROFILE_GRID_SORT.save(order);
-            if (saved && control != null && control == chosenFrom && OFF.equals(order)) control.retainOriginal();
+            saved = Settings.PROFILE_GRID_SORT.save(order);
+            if (control != null && (saved ? control == chosenFrom && OFF.equals(order) : retainedOriginal)) {
+                control.retainOriginal();
+            }
+        }
+        if (!saved) {
+            Utils.showToastShort(L10n.t("Couldn't save the change. Try again."));
+            return;
         }
         List<?> original;
         synchronized (ORIGINALS) {

@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Kisi:** Urutan saat ini tetap dipertahankan jika perubahan pengurutan gagal disimpan.
 * **Kisi:** Memilih Urutan asli membuat menu pengurutan kisi saat ini tetap tersedia (#180).
 * **Komentar:** Komentar di samping video memakai lebar yang sama untuk tata letak dan pemeriksaan pembentukan ulang (#253).
 * **Kotak masuk:** Jika Cerita didahulukan, foto chat yang digunakan ulang kini membuka Cerita kreator yang sedang ditampilkan pada ketukan pertama (#233).

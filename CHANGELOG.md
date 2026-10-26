@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **Grids:** Leave the current order in place when a sort change can't be saved.
 * **Grids:** Choosing Original order keeps the current grid's sort menu available (#180).
 * **Comments:** Comments beside the video uses the same width for its layout and rebuild checks (#253).
 * **Inbox:** A reused chat picture now opens the current creator's Story on its first tap when Story-first is enabled (#233).

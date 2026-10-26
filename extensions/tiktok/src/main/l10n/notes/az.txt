@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Tor görünüşü:** Yeni sıralama yadda saxlanmasa, cari sıra dəyişmir.
 * **Tor görünüşü:** İlkin sıra seçildikdə cari torun sıralama menyusu əlçatan qalır (#180).
 * **Şərhlər:** Videonun yanındakı şərhlər düzən və yenidən qurma yoxlamalarında eyni eni istifadə edir (#253).
 * **Gələnlər:** Hekayəni əvvəl aç seçimi aktiv olduqda, təkrar istifadə edilən söhbət şəkli ilk toxunuşda cari müəllifin Hekayəsini açır (#233).

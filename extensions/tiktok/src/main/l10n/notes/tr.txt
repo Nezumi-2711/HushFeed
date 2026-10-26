@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Izgaralar:** Sıralama değişikliği kaydedilemezse mevcut sıra korunur.
 * **Izgaralar:** Orijinal sıra seçildiğinde mevcut ızgaranın sıralama menüsü kullanılabilir kalır (#180).
 * **Yorumlar:** Videonun yanındaki yorumlar, yerleşim ve yeniden oluşturma kontrollerinde aynı genişliği kullanır (#253).
 * **Gelen kutusu:** Önce Hikaye seçeneği açıkken yeniden kullanılan sohbet resmi, ilk dokunuşta o an gösterilen içerik üreticisinin Hikayesini açar (#233).

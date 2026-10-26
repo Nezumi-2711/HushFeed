@@ -63,6 +63,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowDialog;
+import org.robolectric.shadows.ShadowToast;
 import org.robolectric.util.ReflectionHelpers;
 import org.robolectric.util.ReflectionHelpers.ClassParameter;
 
@@ -766,11 +767,31 @@ public class GridSortTest {
         final List<Runnable> pending = new ArrayList<>();
         volatile boolean defer;
         volatile boolean registrationsLocked = true;
+        volatile boolean failNextCommit;
+        int commits;
 
         PreferenceChanges() {
             store = (SharedPreferences) java.lang.reflect.Proxy.newProxyInstance(
                     SharedPreferences.class.getClassLoader(), new Class<?>[] {SharedPreferences.class},
                     (proxy, method, arguments) -> {
+                        if (method.getName().equals("edit")) {
+                            SharedPreferences.Editor editor = delegate.edit();
+                            return java.lang.reflect.Proxy.newProxyInstance(
+                                    SharedPreferences.Editor.class.getClassLoader(),
+                                    new Class<?>[] {SharedPreferences.Editor.class}, (editorProxy, call, values) -> {
+                                        boolean fail = false;
+                                        if (call.getName().equals("commit")) {
+                                            commits++;
+                                            fail = failNextCommit;
+                                            failNextCommit = false;
+                                            if (fail) return false;
+                                        }
+                                        Object result;
+                                        try { result = call.invoke(editor, values); }
+                                        catch (java.lang.reflect.InvocationTargetException ex) { throw ex.getCause(); }
+                                        return result instanceof SharedPreferences.Editor ? editorProxy : result;
+                                    });
+                        }
                         if (method.getName().equals("registerOnSharedPreferenceChangeListener")) {
                             registrationsLocked &= Thread.holdsLock(Setting.class);
                             SharedPreferences.OnSharedPreferenceChangeListener listener =
@@ -1174,6 +1195,134 @@ public class GridSortTest {
         } finally {
             ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
         }
+    }
+
+    private static void assertSamePosts(List<?> expected, List<?> actual) {
+        assertEquals(expected.size(), actual.size());
+        for (int i = 0; i < expected.size(); i++) assertSame("post at " + i, expected.get(i), actual.get(i));
+    }
+
+    @Test public void aFailedOriginalSaveKeepsTheSortedGridAndViewerUntilOneSuccessfulRetry() {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            GridFragment fragment = new GridFragment(adapter);
+            List<Aweme> model = grid();
+            List<Aweme> nativeOrder = new ArrayList<>(model);
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(GridSort.NEXT_PAGE_DELAY_MS + 100);
+            GridSort.beforeOpen(fragment);
+            List<?> displayed = adapter.mmItems;
+            List<?> viewerOrder = new ArrayList<>(model);
+            TextView control = chip(adapter);
+            int refreshes = adapter.refreshes;
+            int loads = adapter.listener.calls;
+            int commits = changes.commits;
+            changes.failNextCommit = true;
+            ShadowToast.reset();
+
+            selectOrder(adapter, "off");
+            assertSame("a failed save cannot replace the displayed list", displayed, adapter.mmItems);
+            assertSamePosts(viewerOrder, model);
+            assertSamePosts(displayed, adapter.mmItems);
+            assertEquals("newest", Settings.PROFILE_GRID_SORT.get());
+            assertEquals("newest", changes.delegate.getString(Settings.PROFILE_GRID_SORT.key, "off"));
+            assertEquals("one refused commit and its rollback", commits + 2, changes.commits);
+            assertEquals(refreshes, adapter.refreshes);
+            assertSame(control, chip(adapter));
+            assertEquals("Newest first", control.getText().toString());
+            assertEquals(0, changes.activeCount());
+            assertEquals("Couldn't save the change. Try again.", ShadowToast.getTextOfLatestToast());
+            assertEquals(1, ShadowToast.shownToastCount());
+            idle(GridSort.NEXT_PAGE_DELAY_MS + 100);
+            assertEquals("a failed selection starts no next page", loads, adapter.listener.calls);
+
+            selectOrder(adapter, "off");
+            assertEquals("off", Settings.PROFILE_GRID_SORT.get());
+            assertEquals(commits + 3, changes.commits);
+            assertEquals("only the successful retry refreshes", refreshes + 1, adapter.refreshes);
+            assertSamePosts(nativeOrder, adapter.mmItems);
+            GridSort.beforeOpen(fragment);
+            assertSamePosts(nativeOrder, model);
+            assertSame(control, chip(adapter));
+            assertEquals("Original order", control.getText().toString());
+            assertEquals(1, changes.activeCount());
+            assertEquals("retry adds no failure notice", 1, ShadowToast.shownToastCount());
+            idle(GridSort.NEXT_PAGE_DELAY_MS + 100);
+            assertEquals(loads, adapter.listener.calls);
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+        assertEquals(0, changes.activeCount());
+    }
+
+    @Test public void aFailedNewSortSaveRestoresOriginalRetentionAndIgnoresItsOldCallbacks() throws Exception {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            adapter.mmItems = GridSort.page(adapter, model);
+            idle(GridSort.NEXT_PAGE_DELAY_MS + 100);
+            TextView control = chip(adapter);
+            List<?> displayed = adapter.mmItems;
+            List<?> nativeOrder = new ArrayList<>(model);
+            int refreshes = adapter.refreshes;
+            int loads = adapter.listener.calls;
+            changes.defer = true;
+            onWorker(() -> {
+                Settings.PROFILE_GRID_SORT.save("oldest");
+                Settings.PROFILE_GRID_SORT.save("off");
+            });
+            idle(0);
+            assertTrue("old listener notifications are queued", changes.pendingCount() >= 2);
+            int commits = changes.commits;
+            changes.failNextCommit = true;
+            ShadowToast.reset();
+
+            selectOrder(adapter, "oldest");
+            assertSame("the failed save keeps Original's current route", control, chip(adapter));
+            assertSame(displayed, adapter.mmItems);
+            assertSamePosts(nativeOrder, model);
+            assertSamePosts(nativeOrder, adapter.mmItems);
+            assertEquals("off", Settings.PROFILE_GRID_SORT.get());
+            assertEquals("off", changes.delegate.getString(Settings.PROFILE_GRID_SORT.key, "off"));
+            assertEquals(commits + 2, changes.commits);
+            assertEquals(refreshes, adapter.refreshes);
+            assertEquals("Original order", control.getText().toString());
+            assertEquals("the failed save restores exactly one retention listener", 1, changes.activeCount());
+            assertEquals("Couldn't save the change. Try again.", ShadowToast.getTextOfLatestToast());
+            Map<?, ?> asked = ReflectionHelpers.getStaticField(GridSort.class, "ASKED");
+            assertFalse("a refused save cannot queue a next-page request", asked.containsKey(adapter));
+            changes.deliverPending();
+            idle(GridSort.NEXT_PAGE_DELAY_MS + 100);
+            assertSame("old callbacks cannot expire the restored retention", control, chip(adapter));
+            assertEquals(1, changes.activeCount());
+            assertEquals(loads, adapter.listener.calls);
+
+            changes.defer = false;
+            selectOrder(adapter, "oldest");
+            assertEquals("oldest", Settings.PROFILE_GRID_SORT.get());
+            assertEquals(commits + 3, changes.commits);
+            assertEquals("only one successful retry refreshes", refreshes + 1, adapter.refreshes);
+            assertEquals("apfcdeb", ids(adapter.mmItems));
+            assertSamePosts(nativeOrder, model);
+            assertSame(control, chip(adapter));
+            assertEquals("Oldest first", control.getText().toString());
+            assertEquals("a real sort removes the restored listener", 0, changes.activeCount());
+            idle(GridSort.NEXT_PAGE_DELAY_MS + 100);
+            assertEquals("only the successful retry asks for a page", loads + 1, adapter.listener.calls);
+            assertEquals(1, ShadowToast.shownToastCount());
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+        assertEquals(0, changes.activeCount());
     }
 
     @Test public void tiesAndMissingValuesKeepTikToksOrder() {
