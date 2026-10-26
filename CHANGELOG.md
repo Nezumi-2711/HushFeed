@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnostics:** Notification reports count registration and posting stages without message contents (#126, #222, #86).
 * **Screen recording:** Keep TikTok in Android's recent-apps recording choices on Android 14 and newer.
 * **Build checks:** Auto-advance audits follow native playback without per-video labels. Unfinished clips and unavailable playback stay inconclusive.

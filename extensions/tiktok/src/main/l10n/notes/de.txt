@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnose:** Benachrichtigungsberichte zählen die Schritte bei Registrierung und Anzeige, ohne Nachrichteninhalte aufzunehmen (#126, #222, #86).
 * **Bildschirmaufnahme:** TikTok bleibt ab Android 14 in der Auswahl der zuletzt verwendeten Apps für die Aufnahme verfügbar.
 * **Prüfungen:** Der Audit für den automatischen Videowechsel verfolgt TikToks Wiedergabe ohne einzelne Videos zu kennzeichnen. Nicht beendete Clips und nicht verfügbare Wiedergabedaten bleiben unentschieden.

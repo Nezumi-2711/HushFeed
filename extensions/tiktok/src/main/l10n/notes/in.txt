@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnostik:** Laporan notifikasi menghitung tahap pendaftaran dan penayangan tanpa menyertakan isi pesan (#126, #222, #86).
 * **Perekaman layar:** TikTok tetap tersedia dalam pilihan aplikasi terbaru untuk perekaman di Android 14 dan yang lebih baru.
 * **Pemeriksaan:** Audit perpindahan otomatis mengikuti pemutaran TikTok tanpa memberi label pada tiap video. Klip yang belum selesai dan pemutaran yang tidak tersedia tetap tidak dapat disimpulkan.

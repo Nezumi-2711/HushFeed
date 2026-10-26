@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
 * **Diagnóstico:** Los informes de notificaciones cuentan las etapas de registro y visualización sin incluir el contenido de los mensajes (#126, #222, #86).
 * **Grabación de pantalla:** TikTok sigue disponible entre las aplicaciones recientes al grabar una sola aplicación en Android 14 o posterior.
 * **Comprobaciones:** La auditoría del avance automático sigue la reproducción de TikTok sin etiquetar cada video. Los clips sin terminar y la reproducción no disponible quedan sin una conclusión.
