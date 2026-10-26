@@ -366,8 +366,6 @@ Copy the sound link	Copiar o link do som
 Copy the video link	Copiar o link do vídeo
 Couldn't change the Lab settings. Try again.	Não foi possível alterar as configurações do Lab. Tente de novo.
 Couldn't clear the suggested accounts. Reopen the Inbox and try again.	Não foi possível limpar as contas sugeridas. Abra a caixa de entrada de novo e tente outra vez.
-Couldn't open settings search. Reopen settings and try again.	Não foi possível abrir a busca de configurações. Abra as configurações de novo e tente outra vez.
-Couldn't open that settings section. Reopen settings and try again.	Não foi possível abrir essa seção de configurações. Abra as configurações de novo e tente outra vez.
 Couldn't open the file picker to export. Try again.	Não foi possível abrir o seletor de arquivos para exportar. Tente de novo.
 Couldn't open the file picker to import. Try again.	Não foi possível abrir o seletor de arquivos para importar. Tente de novo.
 Couldn't put back the diagnostic data. Try again.	Não foi possível trazer de volta os dados de diagnóstico. Tente de novo.
@@ -991,7 +989,6 @@ Search settings	Buscar nas configurações
 Search share actions	Buscar ações de compartilhamento
 Search within comments	Pesquisar nos comentários
 Search these comments	Buscar nestes comentários
-Search translated titles and descriptions, then open the original setting.	Buscar entre os títulos e descrições traduzidos e depois abrir a configuração original.
 Ask TikTok for search results that aren't personalized to your account. This changes results, not search buttons or suggestions.	Peça ao TikTok resultados de pesquisa que não sejam personalizados para sua conta. Isso muda os resultados, não os botões nem as sugestões de pesquisa.
 Search by name or gate key	Buscar por nome ou chave do gate
 Seconds. Zero keeps every length. If everything the feed just sent would be filtered out, the video closest to your limit is kept so the feed isn't empty.	Segundos. Zero aceita qualquer duração. Se tudo o que o feed acabou de enviar fosse filtrado, o vídeo mais perto do seu limite fica para o feed não ficar vazio.
@@ -2123,22 +2120,8 @@ Report a problem	Relatar um problema
 Opens a GitHub report with your versions and settings filled in. Add what happened.	Abre um relatório no GitHub com suas versões e configurações já preenchidas. Conte o que aconteceu.
 Support Hushfeed	Apoie o Hushfeed
 No app on this phone opens web links	Nenhum app deste celular abre links da web
-Quick setups	Configurações rápidas
-Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row.	Tranquilo oculta anúncios, Loja e LIVE. Privacidade oculta suas visualizações e quando você digita e para o rastreamento. Restaurar padrões volta cada chave ao original. Toque e segure para ocultar esta linha.
 # context: toast after a long press hides the Quick setups card from the settings home page; the page name is the one holding the row that brings it back
-Quick setups hidden. Bring it back from %1$s.	Configurações rápidas ocultas. Para trazê-las de volta, vá em %1$s.
 # context: row on the Backup and restore page; shows or hides the Quick setups card on the settings home page
-Quick setups on the home page	Configurações rápidas na página inicial
-Shown. Tap to hide it.	Visíveis. Toque para ocultar.
-Hidden. Tap to show it again.	Ocultas. Toque para mostrar de novo.
-Quiet	Tranquilo
-Back to defaults	Restaurar padrões
-Changed 1 setting	1 configuração alterada
-Changed %1$d settings	%1$d configurações alteradas
-Your settings already match	Suas configurações já estão assim
-That setup couldn't be applied. Nothing was changed.	Não foi possível aplicar essa configuração. Nada foi alterado.
-Quick setups couldn't start. Try again in a moment.	Não foi possível iniciar as configurações rápidas. Tente de novo em instantes.
-Your earlier settings are back	Suas configurações anteriores voltaram
 # context: a heading on the settings home page, over Feed filter, Feed tabs, Feed screen, Playback and Screen time
 Your feed	Seu feed
 # context: a heading on the settings home page, over Downloads and Share sheet
@@ -2307,3 +2290,11 @@ Some recording files remain. Try deleting them again.	Alguns arquivos de gravaç
 
 # context: Explicit recording Retry when the original stop reason was not retained.
 Recovered recording saved to %1$s	Gravação recuperada salva em %1$s
+
+# context: Settings search switch location action, gesture hint, and missing original row.
+Open setting location	Abrir local da configuração
+Expanded	Expandido
+Collapsed	Recolhido
+This setting isn't available. Search for another setting.	Esta configuração não está disponível. Procure outra configuração.
+Hide the Hushfeed row	Ocultar a linha do Hushfeed
+Take Hushfeed out of TikTok's Settings and privacy. To open these settings, press and hold For You at the top of the feed, or Home if Long-press Home for Hushfeed settings is on.	Tira o Hushfeed de Configurações e privacidade do TikTok. Para abrir estas configurações, toque e segure Para você no topo do feed, ou Início se Toque e segure Início para abrir as configurações do Hushfeed estiver ligado.

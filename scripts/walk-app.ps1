@@ -8,10 +8,10 @@
     with -AuditBuild, walks the build already installed from that receipt), then opens every
     screen the patches reach: For You and Following with swipes, the comment and share sheets,
     search, the Friends, Inbox and Profile tabs, Inbox's Activity page, and every Hushfeed
-    settings page scrolled to its end plus Search settings. After each step TikTok has to still
+    settings section expanded and scrolled to its end, then collapsed, plus Search settings. After each step TikTok has to still
     be the foreground app on the same process. Logcat's crash lines for TikTok decide the rest.
 
-    The walk only opens screens and leaves them with Back. Every tap targets a node from a dump
+    The walk only opens screens or inline sections and closes them without changing controls. Every tap targets a node from a dump
     taken after the last swipe, sheet or Back, and Test-WalkTapAllowed refuses anything labeled
     like a follow, like, message, post or quick setup. A playing video blocks uiautomator, so a
     feed dump that fails pauses the video with one tap on its long_press_layout (read from
@@ -37,6 +37,8 @@ param(
     # Walk the build already installed, described by the .audit-build.json patch-for-device.ps1
     # left beside its APK, instead of patching and installing a new one.
     [string]$AuditBuild,
+    # The exact signed APK beside -AuditBuild, or an explicit path if the receipt was renamed.
+    [string]$PatchedApk,
     [string]$LeaseDir = $env:HUSHFEED_DEVICE_LEASE_DIR,
     [string]$ChatIdentity = $env:HUSHFEED_CHAT_IDENTITY,
     [string]$Out,
@@ -99,7 +101,17 @@ $build = Get-Content -LiteralPath $AuditBuild -Raw | ConvertFrom-Json
 if ([string]$build.bundle.sha256 -ine $bundleSha256) {
     throw "The installed build was patched with bundle $($build.bundle.sha256), not $bundleSha256 ($Bundle)."
 }
-$apkSha256 = ([string]$build.apk.sha256).ToLowerInvariant()
+if ($build.schemaVersion -ne 2) { throw 'The walk needs a schema 2 device-build receipt with complete native APK identity.' }
+if (-not $PatchedApk) {
+    if (-not $AuditBuild.EndsWith('.audit-build.json', [StringComparison]::OrdinalIgnoreCase)) {
+        throw '-PatchedApk is required when the device-build receipt has been renamed.'
+    }
+    $PatchedApk = $AuditBuild.Substring(0, $AuditBuild.Length - '.audit-build.json'.Length)
+}
+$walkBuild = Read-AuditBuildIdentity -ApkPath $PatchedApk -ReceiptPath $AuditBuild -BundlePath $Bundle -GitRoot $root `
+    -App ([pscustomobject]@{ package = $WalkPackage; version = $build.apk.versionName; versionCode = $build.apk.versionCode })
+if ($walkBuild.status -cne 'verified') { throw 'The walk has no verified native build identity.' }
+$apkSha256 = ([string]$walkBuild.apk.sha256).ToLowerInvariant()
 
 $planned = [Collections.Generic.List[string]]::new()
 $reached = [Collections.Generic.List[string]]::new()
@@ -123,6 +135,19 @@ function Get-WalkForeground {
     $m = [regex]::Match($said, 'ActivityRecord\{\S+ \S+ ([\w.]+)/([\w.$]+)')
     if ($m.Success) { return "$($m.Groups[1].Value)/$($m.Groups[2].Value)" }
     return ''
+}
+
+
+function Get-WalkInstalledIdentity {
+    $paths = @(Invoke-WalkAdb shell pm path $WalkPackage | Where-Object { $_ -match '^package:' })
+    if ($paths.Count -ne 1 -or $paths[0] -notmatch '^package:.*base\.apk$') {
+        throw 'The walk needs one unambiguous installed base APK and no split APKs.'
+    }
+    $hash = ((Invoke-WalkAdb shell sha256sum $paths[0].Substring(8)) -join '').Trim().Split(' ')[0].ToLowerInvariant()
+    if ($hash -cnotmatch '^[a-f0-9]{64}$') { throw 'The installed APK hash could not be read.' }
+    $facts = ConvertFrom-WalkPackageDump -Text ((Invoke-WalkAdb shell dumpsys package $WalkPackage) -join [string][char]10)
+    $facts | Add-Member -NotePropertyName sha256 -NotePropertyValue $hash
+    return $facts
 }
 
 function Get-WalkPid {
@@ -283,17 +308,44 @@ function Find-WalkRow([string]$Label, [int]$Width, [int]$Height, [string]$Name, 
     return $null
 }
 
-function Invoke-WalkScrollToEnd([string]$Name, [int]$Width, [int]$Height) {
+function Get-WalkSectionView([string]$Label, [int]$Width, [int]$Height, [string]$Name) {
+    $row = Find-WalkRow $Label $Width $Height $Name 'title'
+    if (-not $row) { return $null }
+    if ($row.Top -gt $Height * 0.4) {
+        # Leave room below the header. Refresh the dump before the next tap.
+        $distance = [int][Math]::Min($row.Top - $Height * 0.25, $Height * 0.45)
+        Invoke-WalkAdb shell input swipe ([int]($Width / 2)) ([int]($Height * 0.7)) `
+            ([int]($Width / 2)) ([int]($Height * 0.7) - $distance) 450 | Out-Null
+        Start-Sleep -Milliseconds 1300
+    }
+    $nodes = Get-WalkScreen $Name
+    $row = @(Find-UiNode -Nodes $nodes -Label $Label -Id 'title' |
+            Where-Object { $_.Top -gt $Height * 0.12 -and $_.Bottom -lt $Height * 0.95 }) | Select-Object -First 1
+    if (-not $row) { return $null }
+    $next = @($nodes | Where-Object { $_.Id -ceq 'title' -and $_.Top -ge $row.Bottom -and
+            $_.Bottom -lt $Height * 0.95 -and $_.Text } | Sort-Object Top) | Select-Object -First 1
+    return [pscustomobject]@{ Row = $row; Next = $(if ($next) { $next.Text } else { '' }) }
+}
+
+function Invoke-WalkScrollToEnd([string]$Name, [int]$Width, [int]$Height, [string]$StopLabel, [string]$StartLabel) {
     $before = ''
     for ($i = 0; $i -lt 40; $i++) {
         $nodes = Get-WalkScreen "$Name-scroll"
+        if (-not $nodes) { return $false }
+        $cutoff = $Height * 0.12
+        if ($StartLabel) {
+            $header = @(Find-UiNode -Nodes $nodes -Label $StartLabel -Id 'title') | Select-Object -First 1
+            if ($header) { $cutoff = [Math]::Max($cutoff, $header.Bottom) }
+        }
+        if ($StopLabel -and @(Find-UiNode -Nodes $nodes -Label $StopLabel -Id 'title' |
+                Where-Object { $_.Top -ge $cutoff -and $_.Bottom -lt $Height * 0.95 })) { return $true }
         $print = Get-UiFingerprint $nodes
-        if ($print -ceq $before) { return $true }
+        if ($print -ceq $before) { return -not [bool]$StopLabel }
         $before = $print
         Invoke-WalkSwipe $Width $Height
         if (-not (Test-WalkAlive "$Name scroll")) { return $false }
     }
-    return $true
+    return $false
 }
 
 $hushfeedPages = @('Feed filter', 'Feed tabs', 'Feed screen', 'Playback', 'Screen time', 'Comments', 'Downloads',
@@ -305,20 +357,21 @@ foreach ($screen in @('launch', 'feed: For You', 'sheet: comments', 'sheet: shar
 foreach ($page in $hushfeedPages) { $planned.Add("settings: $page") }
 
 $started = [DateTimeOffset]::UtcNow
-$device = ''; $appVersion = ''; $installedSha256 = ''
+$device = ''; $appVersion = ''; $installedSha256 = ''; $installedPackage = ''; $installedVersionCode = ''
 $crashes = @()
 $script:lease = New-DeviceLease -LeaseDir $LeaseDir -Serial $Serial -Project 'hushfeed' -ChatIdentity $ChatIdentity `
     -Purpose 'whole-app walk' -LeaseMinutes 30
 try {
     Invoke-WalkAdb shell input keyevent KEYCODE_WAKEUP | Out-Null
     $device = ((Invoke-WalkAdb shell getprop ro.product.model) -join '').Trim()
-    $apkPath = (Invoke-WalkAdb shell pm path $WalkPackage | Where-Object { $_ -match '^package:.*base\.apk$' } | Select-Object -First 1)
-    if (-not $apkPath) { throw "$WalkPackage isn't installed on $Serial." }
-    $installedSha256 = ((Invoke-WalkAdb shell sha256sum $apkPath.Substring(8)) -join '').Trim().Split(' ')[0].ToLowerInvariant()
-    if ($installedSha256 -cne $apkSha256) { $faults.Add("the installed APK is $installedSha256, not the walked build $apkSha256") }
-    # grep -m1 closes the pipe early, so dumpsys's "Broken pipe" goes to /dev/null, not the version.
-    $said = (Invoke-WalkAdb shell "dumpsys package $WalkPackage 2>/dev/null | grep -m1 versionName") -join ''
-    $appVersion = [regex]::Match($said, 'versionName=(\S+)').Groups[1].Value
+    $installed = Get-WalkInstalledIdentity
+    $installedSha256 = $installed.sha256; $installedPackage = $installed.package
+    $appVersion = $installed.versionName; $installedVersionCode = $installed.versionCode
+    foreach ($field in @('package','versionName','versionCode','sha256')) {
+        if ([string]$installed.$field -cne [string]$walkBuild.apk.$field) {
+            throw "The installed app $field does not match the verified walked build."
+        }
+    }
     Write-WalkLog "$device, TikTok $appVersion, APK $installedSha256"
 
     Invoke-WalkAdb shell am force-stop $WalkPackage | Out-Null
@@ -424,7 +477,7 @@ try {
         }
     }
 
-    # Hushfeed settings: Profile menu, Settings and privacy, Hushfeed, then every page.
+    # Hushfeed settings: expand and collapse each section on the same main page.
     $nodes = Get-WalkScreen 'profile'
     $menu = @(Find-UiNode -Nodes $nodes -Label $WalkLabels.ProfileMenu | Where-Object { $_.Top -lt $H * 0.15 }) | Select-Object -First 1
     if (-not $menu) { Write-WalkLog 'no Profile menu button' }
@@ -440,25 +493,31 @@ try {
             if ($row) {
                 Invoke-WalkTap $row 'Hushfeed' 3000
                 $searchLabel = Get-WalkTitleLabel 'Search settings' $translations
-                $homeLabel = $searchLabel + '|' + (Get-WalkTitleLabel 'Feed filter' $translations)
                 $hub = Get-WalkScreen 'hushfeed home'
                 if (-not @(Find-UiNode -Nodes $hub -Label $searchLabel -Id 'title')) { Write-WalkLog "the Hushfeed row opened no Hushfeed home" }
                 else {
                     Complete-WalkScreen 'settings: Hushfeed'
+                    $boundaryTitles = @($hushfeedPages) + @('Feature Gate Lab', 'Hushfeed', 'Report a problem', 'Support Hushfeed')
+                    $boundaryLabel = (@($boundaryTitles | ForEach-Object { Get-WalkTitleLabel $_ $translations }) -join '|')
                     foreach ($title in $hushfeedPages) {
                         $label = Get-WalkTitleLabel $title $translations
-                        $row = Find-WalkRow $label $W $H "home for $title" 'title'
-                        if (-not $row) { Write-WalkLog "no row for $title"; continue }
-                        Invoke-WalkTap $row $title 2500 $label
-                        $page = Get-WalkScreen "page $title"
-                        # The page's own heading, not the home row it was opened from (id "title").
-                        $titled = @(Find-UiNode -Nodes $page -Label $label | Where-Object { $_.Id -cne 'title' -and $_.Top -lt $H * 0.25 })
-                        if ($titled -and (Invoke-WalkScrollToEnd $title $W $H)) { Complete-WalkScreen "settings: $title" }
-                        elseif (-not $titled) { Write-WalkLog "$title opened no page titled $title" }
-                        Invoke-WalkBack $title
-                        if (-not @(Find-UiNode -Nodes (Get-WalkScreen "back from $title") -Label $homeLabel -Id 'title')) {
-                            if (-not (Find-WalkRow $homeLabel $W $H "home after $title" 'title')) { $faults.Add("Back from $title didn't return to Hushfeed's home"); break }
-                        }
+                        $closed = Get-WalkSectionView $label $W $H "closed $title"
+                        if (-not $closed) { Write-WalkLog "no row for $title"; continue }
+                        if (-not $closed.Next -or $closed.Next -cnotmatch $boundaryLabel) { $faults.Add("$title was not collapsed before the walk"); break }
+                        Invoke-WalkTap $closed.Row "expand $title" 2500 $label
+                        $expanded = Get-WalkSectionView $label $W $H "expanded $title"
+                        if (-not $expanded -or -not $expanded.Next -or $expanded.Next -ceq $closed.Next -or
+                                $expanded.Next -cmatch $boundaryLabel) { $faults.Add("$title showed no inline controls"); break }
+                        # The exact following row is the boundary. About also has a child named Hushfeed.
+                        $stopLabel = '(?-i)^' + [regex]::Escape($closed.Next) + '$'
+                        if (-not (Invoke-WalkScrollToEnd $title $W $H $stopLabel $label)) { $faults.Add("$title did not reach its final controls"); break }
+                        Save-WalkShot "$title expanded"
+                        $row = Find-WalkRow $label $W $H "collapse $title" 'title'
+                        if (-not $row) { $faults.Add("$title lost its inline header"); break }
+                        Invoke-WalkTap $row "collapse $title" 2000 $label
+                        $collapsed = Get-WalkSectionView $label $W $H "collapsed $title"
+                        if (-not $collapsed -or $collapsed.Next -cne $closed.Next) { $faults.Add("$title did not hide its inline controls"); break }
+                        Complete-WalkScreen "settings: $title"
                     }
                     $row = Find-WalkRow $searchLabel $W $H 'home for search' 'title'
                     if ($row) {
@@ -485,6 +544,11 @@ try {
     Start-Sleep -Seconds 5
     [void](Test-WalkAlive 'the end of the walk')
 
+    $finishedInstall = Get-WalkInstalledIdentity
+    foreach ($field in @('package','versionName','versionCode','sha256')) {
+        if ([string]$finishedInstall.$field -cne [string]$installed.$field) { $faults.Add("the installed app $field changed during the walk") }
+    }
+
     $logcat = @(Invoke-WalkAdb logcat -d -b crash -t "$logSince.000") +
         @(Invoke-WalkAdb logcat -d -b main -b system -t "$logSince.000" -s 'AndroidRuntime:E' 'ActivityManager:E' 'libc:F' 'DEBUG:F')
     Set-Content -LiteralPath (Join-Path $work 'logcat-crashes.txt') -Value $logcat -Encoding UTF8
@@ -502,9 +566,10 @@ try {
 $verdict = Get-WalkVerdict -Planned $planned -Reached $reached -Crashes $crashes -Faults $faults
 if (-not $device) { $device = 'unknown' }
 $receipt = New-WalkReceipt -Result $verdict.Result -Full $verdict.Full -Serial $Serial -Device $device -AppVersion $appVersion `
+    -InstalledPackage $installedPackage -InstalledVersionCode $installedVersionCode -NativeBuild $walkBuild `
     -BundleSha256 $bundleSha256 -InstalledApkSha256 $installedSha256 -Started $started -Finished ([DateTimeOffset]::UtcNow) `
     -Screens $reached.Count -Crashes $crashes.Count -Problems $verdict.Problems
-[IO.File]::WriteAllText($Out, (($receipt | ConvertTo-Json -Depth 4) -replace "`r`n", "`n") + "`n", [Text.UTF8Encoding]::new($false))
+[IO.File]::WriteAllText($Out, (($receipt | ConvertTo-Json -Depth 20) -replace "`r`n", "`n") + "`n", [Text.UTF8Encoding]::new($false))
 foreach ($problem in $verdict.Problems) { Write-WalkLog "problem: $problem" }
 Write-WalkLog "$($reached.Count) of $($planned.Count) screens, $($crashes.Count) crashes. Receipt: $Out"
 Write-WalkLog $verdict.Result

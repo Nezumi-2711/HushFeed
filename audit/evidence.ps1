@@ -181,6 +181,16 @@ function Get-AuditDefinitionHash($Entry, $Check) {
     })
 }
 
+function Get-AuditProbePreconditionProblem($Step, [string]$Answer) {
+    $required = $Step.PSObject.Properties['preconditionExpect']
+    if ($null -eq $required) { return $null }
+    if ($required.Value -isnot [string] -or [string]::IsNullOrWhiteSpace($required.Value)) { throw 'Invalid probe precondition pattern.' }
+    if (-not [regex]::IsMatch($Answer, $required.Value, [Text.RegularExpressions.RegexOptions]::Multiline)) {
+        return "probe $($Step.probe) did not establish its required observation"
+    }
+    return $null
+}
+
 function Get-AuditCatalogProblems($Entries) {
     $names = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
     foreach ($entry in $Entries) {
@@ -189,6 +199,15 @@ function Get-AuditCatalogProblems($Entries) {
         } elseif (-not $names.Add([string]$entry.name)) { "duplicate patch '$($entry.name)'" }
         $ids = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
         foreach ($check in @($entry.checks)) {
+            foreach ($step in @($check.steps)) {
+                $required = $step.PSObject.Properties['preconditionExpect']
+                if ($null -eq $required) { continue }
+                if (@($step.PSObject.Properties.Name)[0] -cne 'probe' -or $required.Value -isnot [string] -or [string]::IsNullOrWhiteSpace($required.Value)) {
+                    "invalid probe precondition '$($entry.name)/$($check.id)'"
+                } else {
+                    try { [void][regex]::new($required.Value) } catch { "invalid probe precondition regex '$($entry.name)/$($check.id)'" }
+                }
+            }
             $selection = $check.PSObject.Properties['patchSelection']
             if ($null -ne $selection -and ($selection.Value -isnot [string] -or $selection.Value -cnotin @('selected','absent'))) {
                 "invalid patch selection policy '$($entry.name)/$($check.id)'"
@@ -220,7 +239,7 @@ function Set-AuditCheckReceipt($Result, [string]$Directory) {
     $Result.receiptId = Get-AuditHash $Result.receipt
 }
 
-function Get-AuditNativeBuildProblem($Build, [string]$ApkHash, $App) {
+function Get-DeviceNativeBuildProblem($Build, [string]$ApkHash, $App) {
     try {
         if ($Build.status -cne 'verified') { return 'The native build identity is not verified.' }
         if (($Build.nativeBuildSchema -isnot [int] -and $Build.nativeBuildSchema -isnot [long]) -or
@@ -228,8 +247,8 @@ function Get-AuditNativeBuildProblem($Build, [string]$ApkHash, $App) {
         $sourceCheck = Test-BuildSourceFacts -Source $Build.source -ExpectedCommit ([string]$Build.source.commit)
         if (-not $sourceCheck.Valid) { return $sourceCheck.Reason }
         if ([string]$Build.receiptSha256 -cnotmatch '^[a-f0-9]{64}$') { return 'The build has no device receipt identity.' }
-        if ($null -eq $App -or [string]$App.package -cne 'com.zhiliaoapp.musically') {
-            return 'This audit profile only qualifies the global TikTok package.'
+        if ($null -eq $App -or [string]::IsNullOrWhiteSpace([string]$App.package)) {
+            return 'The device build has no app package identity.'
         }
         foreach ($facts in @($Build.sourceApk, $Build.apk)) {
             if ($null -eq $facts -or [string]$facts.package -cne [string]$App.package -or
@@ -266,6 +285,14 @@ function Get-AuditNativeBuildProblem($Build, [string]$ApkHash, $App) {
         }
         return $null
     } catch { return 'The build has malformed native identity fields.' }
+}
+
+function Get-AuditNativeBuildProblem($Build, [string]$ApkHash, $App) {
+    # Artifact identity is package-neutral; the existing audit catalog remains global-only.
+    if ($null -eq $App -or [string]$App.package -cne 'com.zhiliaoapp.musically') {
+        return 'This audit profile only qualifies the global TikTok package.'
+    }
+    return Get-DeviceNativeBuildProblem $Build $ApkHash $App
 }
 
 function Get-AuditPatchSelectionProblem($Entry, $Check, $Build) {
@@ -456,7 +483,7 @@ function Set-AuditVerdicts($Entries, $Run, $Verdicts, [string]$Directory, [strin
     }
 }
 
-function Read-AuditBuildIdentity([string]$ApkPath, [string]$ReceiptPath, [string]$BundlePath, [string]$GitRoot, $App) {
+function Read-DeviceBuildIdentity([string]$ApkPath, [string]$ReceiptPath, [string]$BundlePath, [string]$GitRoot, $App) {
     if (-not $ReceiptPath) { return [pscustomobject]@{ status = 'unbound'; reason = 'No device-build receipt supplied.' } }
     if (-not $BundlePath) { throw 'A build receipt requires -Bundle to verify its source manifest.' }
     . (Join-Path (Split-Path -Parent $PSScriptRoot) 'scripts/release-receipt.ps1')
@@ -485,7 +512,16 @@ function Read-AuditBuildIdentity([string]$ApkPath, [string]$ReceiptPath, [string
     }
     $identity.nativeBuildSchema = 2
     $identity.status = 'verified'
-    $problem = Get-AuditNativeBuildProblem ([pscustomobject]$identity) ([string]$receipt.apk.sha256) $App
+    $problem = Get-DeviceNativeBuildProblem ([pscustomobject]$identity) ([string]$receipt.apk.sha256) $App
     if ($problem) { throw $problem }
     return [pscustomobject]$identity
+}
+
+function Read-AuditBuildIdentity([string]$ApkPath, [string]$ReceiptPath, [string]$BundlePath, [string]$GitRoot, $App) {
+    $identity = Read-DeviceBuildIdentity $ApkPath $ReceiptPath $BundlePath $GitRoot $App
+    if ($identity.status -ceq 'verified') {
+        $problem = Get-AuditNativeBuildProblem $identity ([string]$identity.apk.sha256) $App
+        if ($problem) { throw $problem }
+    }
+    return $identity
 }

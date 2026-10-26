@@ -372,8 +372,6 @@ Copy the sound link	Səsin keçidini kopyalayın
 Copy the video link	Videonun keçidini kopyalayın
 Couldn't change the Lab settings. Try again.	Lab ayarlarını dəyişmək alınmadı. Yenidən cəhd edin.
 Couldn't clear the suggested accounts. Reopen the Inbox and try again.	Təklif olunan hesabları təmizləmək alınmadı. Gələnləri yenidən açın və yenidən cəhd edin.
-Couldn't open settings search. Reopen settings and try again.	Ayar axtarışını açmaq alınmadı. Ayarları yenidən açın və yenidən cəhd edin.
-Couldn't open that settings section. Reopen settings and try again.	Həmin ayar bölməsini açmaq alınmadı. Ayarları yenidən açın və yenidən cəhd edin.
 Couldn't open the file picker to export. Try again.	İxrac üçün fayl seçicisini açmaq alınmadı. Yenidən cəhd edin.
 Couldn't open the file picker to import. Try again.	İdxal üçün fayl seçicisini açmaq alınmadı. Yenidən cəhd edin.
 Couldn't put back the diagnostic data. Try again.	Diaqnostik məlumatları geri qaytarmaq alınmadı. Yenidən cəhd edin.
@@ -1027,7 +1025,6 @@ Search hidden creators	Gizlədilən yaradıcıları axtarın
 Search settings	Ayarlarda axtarın
 Search share actions	Paylaşma əməliyyatlarını axtarın
 Search these comments	Bu şərhlərdə axtarın
-Search translated titles and descriptions, then open the original setting.	Tərcümə olunmuş başlıqları və təsvirləri axtarın, sonra orijinal ayarı açın.
 Search within comments	Şərhlər daxilində axtarın
 Seconds. Zero keeps every length. If everything the feed just sent would be filtered out, the video closest to your limit is kept so the feed isn't empty.	Saniyə. Sıfır bütün uzunluqları saxlayır. Lentin göndərdiyi hər şey süzüləcəksə, lent boş qalmasın deyə limitinizə ən yaxın video saxlanılır.
 Seconds. Zero keeps every length. Photo posts and videos without a known length stay. If everything the feed just sent would be filtered out, the video closest to your limit is kept.	Saniyə. Sıfır bütün uzunluqları saxlayır. Foto paylaşımlar və uzunluğu bilinməyən videolar qalır. Lentin göndərdiyi hər şey süzüləcəksə, limitinizə ən yaxın video saxlanılır.
@@ -2123,22 +2120,8 @@ Report a problem	Problem barədə bildirin
 Opens a GitHub report with your versions and settings filled in. Add what happened.	Versiyalarınız və ayarlarınız artıq doldurulmuş GitHub hesabatını açır. Nə baş verdiyini əlavə edin.
 Support Hushfeed	Hushfeed-i dəstəkləyin
 No app on this phone opens web links	Bu telefonda veb keçidləri açan tətbiq yoxdur
-Quick setups	Sürətli quruluşlar
-Quiet hides ads, Shop and LIVE. Privacy hides your views and typing and stops tracking. Back to defaults resets every switch. Press and hold to hide this row.	Sakit reklamları, Shop və LIVE-ı gizlədir. Məxfilik baxışlarınızı və yazmağınızı gizlədir, izləməni dayandırır. Defolta qaytarın hər açarı sıfırlayır. Bu sətri gizlətmək üçün basıb saxlayın.
 # context: toast after a long press hides the Quick setups card from the settings home page; the page name is the one holding the row that brings it back
-Quick setups hidden. Bring it back from %1$s.	Sürətli quruluşlar gizlədildi. Onları %1$s bölməsindən geri qaytara bilərsiniz.
 # context: row on the Backup and restore page; shows or hides the Quick setups card on the settings home page
-Quick setups on the home page	Ana səhifədə sürətli quruluşlar
-Shown. Tap to hide it.	Göstərilir. Gizlətmək üçün toxunun.
-Hidden. Tap to show it again.	Gizlidir. Yenidən göstərmək üçün toxunun.
-Quiet	Sakit
-Back to defaults	Defolta qaytarın
-Changed 1 setting	1 ayar dəyişdirildi
-Changed %1$d settings	%1$d ayar dəyişdirildi
-Your settings already match	Ayarlarınız artıq uyğundur
-That setup couldn't be applied. Nothing was changed.	Bu quruluşu tətbiq etmək mümkün olmadı. Heç nə dəyişdirilmədi.
-Quick setups couldn't start. Try again in a moment.	Sürətli quruluşları başlatmaq mümkün olmadı. Bir azdan yenidən cəhd edin.
-Your earlier settings are back	Əvvəlki ayarlarınız geri qayıtdı
 # context: a heading on the settings home page, over Feed filter, Feed tabs, Feed screen, Playback and Screen time
 Your feed	Sənin lentin
 # context: a heading on the settings home page, over Downloads and Share sheet
@@ -2307,3 +2290,11 @@ Some recording files remain. Try deleting them again.	Bəzi yazı faylları qal�
 
 # context: Explicit recording Retry when the original stop reason was not retained.
 Recovered recording saved to %1$s	Bərpa edilmiş çəkiliş %1$s qovluğunda saxlanıldı
+
+# context: Settings search switch location action, gesture hint, and missing original row.
+Open setting location	Parametrin yerini aç
+Expanded	Genişləndirilib
+Collapsed	Yığılıb
+This setting isn't available. Search for another setting.	Bu ayar əlçatan deyil. Başqa ayar axtarın.
+Hide the Hushfeed row	Hushfeed sətrini gizlət
+Take Hushfeed out of TikTok's Settings and privacy. To open these settings, press and hold For You at the top of the feed, or Home if Long-press Home for Hushfeed settings is on.	Hushfeed-i TikTok-un Parametrlər və məxfilik siyahısından çıxarın. Bu ayarları açmaq üçün lentin yuxarısında Sənin üçün düyməsini basılı saxlayın, ya da Hushfeed ayarları üçün Ana səhifəni uzun basın açıqdırsa, Ana səhifəni.

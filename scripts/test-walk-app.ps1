@@ -3,6 +3,7 @@
 param()
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'walk-receipt.ps1')
+. (Join-Path $PSScriptRoot 'fixtures/walk-native-fixture.ps1')
 . (Join-Path $PSScriptRoot 'walk-app-core.ps1')
 
 function Assert-WalkContract([bool]$Condition, [string]$Message) {
@@ -127,20 +128,189 @@ Assert-WalkContract ($faulted.Result -eq 'FAIL') "A walk where TikTok left the f
 Assert-WalkContract ((Get-WalkVerdict -Planned $planned -Reached @()).Result -eq 'FAIL') 'A walk that reached nothing was not FAIL.'
 Assert-WalkContract ((Get-WalkVerdict -Planned @() -Reached @('launch')).Result -eq 'PARTIAL') 'A walk with no plan passed.'
 
+# Read the installed package tuple rather than assuming the queried package/version.
+$packageDump = @('Packages:', '  Package [com.zhiliaoapp.musically] (fixture):',
+    '    versionCode=2147483647 minSdk=23 targetSdk=36', '    versionName=47.5.3') -join [string][char]10
+$installedFacts = ConvertFrom-WalkPackageDump $packageDump
+Assert-WalkContract ($installedFacts.package -ceq $WalkPackage -and $installedFacts.versionName -ceq '47.5.3' -and
+    $installedFacts.versionCode -ceq '2147483647') 'The installed package tuple lost the version-code override.'
+foreach ($badDump in @('', ($packageDump -replace 'com.zhiliaoapp.musically', 'com.ss.android.ttmd.video'),
+        ($packageDump -replace '2147483647', '0'), ($packageDump -replace '2147483647', '9223372036854775808'),
+        ($packageDump + [char]10 + 'versionName=47.5.3'), ($packageDump + [char]10 + 'Package [com.zhiliaoapp.musically] (duplicate):'))) {
+    $rejected = $false
+    try { $null = ConvertFrom-WalkPackageDump $badDump } catch { $rejected = $true }
+    Assert-WalkContract $rejected 'An ambiguous or wrong-package installed identity was accepted.'
+}
+$walkTokens = $null; $walkErrors = $null
+$walkSyntax = [Management.Automation.Language.Parser]::ParseFile((Join-Path $PSScriptRoot 'walk-app.ps1'), [ref]$walkTokens, [ref]$walkErrors)
+Assert-WalkContract ($walkErrors.Count -eq 0) 'The native walk producer has a syntax error.'
+$installedReader = $walkSyntax.Find({ param($n) $n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -eq 'Get-WalkInstalledIdentity' }, $true)
+. ([scriptblock]::Create($installedReader.Extent.Text))
+$script:fixtureApkPaths = @('package:/data/app/fixture/base.apk')
+$script:fixtureInstalledHash = '4' * 64
+$script:fixturePackageDump = $packageDump
+function Invoke-WalkAdb {
+    param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Call)
+    if ($Call[0] -cne 'shell') { throw 'No native command is permitted in this fixture.' }
+    switch ($Call[1]) {
+        'pm' { return $script:fixtureApkPaths }
+        'sha256sum' { return ($script:fixtureInstalledHash + '  /data/app/fixture/base.apk') }
+        'dumpsys' { return $script:fixturePackageDump }
+        default { throw 'Unexpected installed-identity request.' }
+    }
+}
+$observed = Get-WalkInstalledIdentity
+Assert-WalkContract ($observed.sha256 -ceq $script:fixtureInstalledHash -and $observed.package -ceq $WalkPackage -and
+    $observed.versionCode -ceq '2147483647') 'The walk discarded observed installed APK facts.'
+$script:fixtureApkPaths += 'package:/data/app/fixture/split.apk'
+$splitRejected = $false
+try { $null = Get-WalkInstalledIdentity } catch { $splitRejected = $true }
+Assert-WalkContract $splitRejected 'A base-only hash qualified an installed split APK set.'
+$script:fixtureApkPaths = @('package:/data/app/fixture/base.apk'); $script:fixtureInstalledHash = 'unknown'
+$hashRejected = $false
+try { $null = Get-WalkInstalledIdentity } catch { $hashRejected = $true }
+Assert-WalkContract $hashRejected 'An unreadable installed APK hash was accepted.'
+Remove-Item -LiteralPath 'Function:\Invoke-WalkAdb', 'Function:\Get-WalkInstalledIdentity'
+
+# Exercise the producer's inline section helpers with synthetic UI dumps and no device.
+& {
+    foreach ($name in @('Get-WalkSectionView', 'Invoke-WalkScrollToEnd')) {
+        $function = $walkSyntax.Find({ param($n) $n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -ceq $name }, $true)
+        . ([scriptblock]::Create($function.Extent.Text))
+    }
+    function New-InlineNode([string]$Text, [int]$Top) {
+        [pscustomobject]@{ Text = $Text; Desc = ''; Id = 'title'; Top = $Top; Bottom = $Top + 30
+            Left = 0; Right = 100; X = 50; Y = $Top + 15; Class = 'android.widget.TextView' }
+    }
+    $fixture = [pscustomobject]@{ Header = (New-InlineNode 'Comments' 750); Nodes = @(); Aligned = @(); Next = @()
+        Reads = 0; Aligns = 0; Swipes = 0; Progress = $false }
+    function Find-WalkRow { return $fixture.Header }
+    function Get-WalkScreen { $fixture.Reads++; return , $fixture.Nodes }
+    function Invoke-WalkAdb {
+        Assert-WalkContract (($args[0..2] -join ' ') -ceq 'shell input swipe') 'Section alignment attempted a non-scroll input.'
+        $fixture.Aligns++; $fixture.Nodes = $fixture.Aligned
+    }
+    function Start-Sleep { }
+    function Test-WalkAlive { return $true }
+    function Invoke-WalkSwipe {
+        $fixture.Swipes++
+        if ($fixture.Next.Count) { $fixture.Nodes = $fixture.Next }
+        elseif ($fixture.Progress) { $fixture.Nodes = @((New-InlineNode ('control-' + $fixture.Swipes) 300)) }
+    }
+    $fixture.Aligned = @((New-InlineNode 'Comments' 250), (New-InlineNode 'Downloads' 310))
+    $closed = Get-WalkSectionView '^Comments$' 500 1000 'closed Comments'
+    Assert-WalkContract ($closed.Row.Top -eq 250 -and $closed.Next -ceq 'Downloads' -and $fixture.Aligns -eq 1 -and
+        $fixture.Reads -eq 1) 'The section tap retained coordinates from before its alignment scroll.'
+    $fixture.Header = $closed.Row
+    $fixture.Nodes = @($closed.Row, (New-InlineNode 'Reading' 310), (New-InlineNode 'Downloads' 430))
+    $expanded = Get-WalkSectionView '^Comments$' 500 1000 'expanded Comments'
+    Assert-WalkContract ($expanded.Next -ceq 'Reading') 'Inline controls were mistaken for the following section.'
+    $fixture.Nodes = $fixture.Aligned
+    Assert-WalkContract ((Get-WalkSectionView '^Comments$' 500 1000 'collapsed Comments').Next -ceq $closed.Next) 'Collapse did not restore the following row.'
+
+    # About contains a Hushfeed child. Only the observed following row ends this section.
+    $fixture.Nodes = @((New-InlineNode 'Hushfeed' 150), (New-InlineNode 'About Hushfeed' 250), (New-InlineNode 'Build details' 310))
+    $fixture.Next = @((New-InlineNode 'Hushfeed' 250), (New-InlineNode 'Licenses' 310), (New-InlineNode 'Report a problem' 400))
+    $fixture.Swipes = 0
+    Assert-WalkContract ((Invoke-WalkScrollToEnd 'About Hushfeed' 500 1000 '^Report a problem$' '^About Hushfeed$') -and
+        $fixture.Swipes -eq 1) 'A duplicate Hushfeed title ended About before its final controls.'
+    $fixture.Nodes = @(); $fixture.Next = @()
+    Assert-WalkContract (-not (Invoke-WalkScrollToEnd Comments 500 1000 '^Downloads$' '^Comments$')) 'An empty dump qualified a section end.'
+    $fixture.Nodes = @((New-InlineNode 'Reading' 300)); $fixture.Swipes = 0
+    Assert-WalkContract (-not (Invoke-WalkScrollToEnd Comments 500 1000 '^Downloads$' '^Comments$')) 'A stalled list qualified an unseen section end.'
+    $fixture.Progress = $true; $fixture.Swipes = 0
+    Assert-WalkContract (-not (Invoke-WalkScrollToEnd Comments 500 1000 '^Downloads$' '^Comments$') -and
+        $fixture.Swipes -eq 40) 'The bounded scroll limit qualified an unseen section end.'
+}
+
+# Run the actual section loop. It may tap only the header and must observe collapse before completion.
+& {
+    $loop = $walkSyntax.Find({ param($n) $n -is [Management.Automation.Language.ForEachStatementAst] -and
+        $n.Variable.VariablePath.UserPath -ceq 'title' -and $n.Condition.Extent.Text -ceq '$hushfeedPages' }, $true)
+    Assert-WalkContract ($null -ne $loop) 'The inline walk loop is missing.'
+    $walkSection = [scriptblock]::Create($loop.Extent.Text)
+    $hushfeedPages = @('About Hushfeed'); $W = 500; $H = 1000; $translations = @{}
+    $boundaryLabel = '^(About Hushfeed|Report a problem)$'
+    $fixture = [pscustomobject]@{ Step = 0; Taps = 0; Case = ''; Stop = '' }
+    function Get-WalkSectionView {
+        $fixture.Step++
+        $next = if ($fixture.Step -eq 2 -or ($fixture.Step -eq 3 -and $fixture.Case -ceq 'still-expanded')) { 'Build details' } else { 'Report a problem' }
+        if ($fixture.Step -eq 2 -and $fixture.Case -ceq 'no-controls') { $next = 'Report a problem' }
+        return [pscustomobject]@{ Row = [pscustomobject]@{ Text = 'About Hushfeed'; Desc = '' }; Next = $next }
+    }
+    function Find-WalkRow { return [pscustomobject]@{ Text = 'About Hushfeed'; Desc = '' } }
+    function Invoke-WalkTap($Node) { Assert-WalkContract ($Node.Text -ceq 'About Hushfeed') 'The inline route tapped a control.'; $fixture.Taps++ }
+    function Invoke-WalkBack { throw 'The inline section route used Back.' }
+    function Invoke-WalkScrollToEnd($Name,$Width,$Height,$StopLabel,$StartLabel) { $fixture.Stop = $StopLabel; return $true }
+    function Save-WalkShot { }
+    function Complete-WalkScreen($Name) { $reached.Add($Name) }
+    function Write-WalkLog { }
+    foreach ($case in @('pass','no-controls','still-expanded')) {
+        $fixture.Case = $case; $fixture.Step = 0; $fixture.Taps = 0
+        $faults = [Collections.Generic.List[string]]::new(); $reached = [Collections.Generic.List[string]]::new()
+        & $walkSection
+        if ($case -ceq 'pass') {
+            Assert-WalkContract ($reached.Count -eq 1 -and $faults.Count -eq 0 -and $fixture.Taps -eq 2 -and
+                'Report a problem' -cmatch $fixture.Stop -and 'Hushfeed' -cnotmatch $fixture.Stop) 'The walk did not expand, reach the exact boundary and collapse before completion.'
+        } else { Assert-WalkContract ($reached.Count -eq 0 -and $faults.Count -eq 1) 'An unexpanded or uncollapsed section qualified.' }
+    }
+}
+
 $work = Join-Path ([IO.Path]::GetTempPath()) ('hushfeed-walk-app-contract-' + [guid]::NewGuid().ToString('N'))
 [void][IO.Directory]::CreateDirectory($work)
 try {
-    $bundle = Join-Path $work 'patches-0.78.0.mpp'
-    [IO.File]::WriteAllText($bundle, 'the signed bundle')
+    $native = New-WalkNativeFixture $work
+    $bundle = $native.Bundle
+    $expected = $native.Expected
     $sha = (Get-FileHash -LiteralPath $bundle -Algorithm SHA256).Hash
+    # Exercise the producer's actual preflight against synthetic APK bytes and a real bundle manifest.
+    function Test-WalkProducerPreflight([string]$Directory) {
+        $fixtureBuild = New-WalkNativeFixture $Directory
+        $localApk = Join-Path $Directory 'native.apk'
+        [IO.File]::WriteAllText($localApk, 'synthetic signed APK bytes, no native execution')
+        $receiptFile = $localApk + '.audit-build.json'
+        $nativeApk = $fixtureBuild.Installed | ConvertTo-Json | ConvertFrom-Json
+        $nativeApk.sha256 = (Get-FileHash -LiteralPath $localApk -Algorithm SHA256).Hash.ToLowerInvariant()
+        $rawBuild = [ordered]@{
+            schemaVersion = 2; kind = 'hushfeed-device-build'; apk = $nativeApk
+            sourceApk = $fixtureBuild.SourceApk; sourceApkSha256 = $fixtureBuild.SourceApk.sha256
+            bundle = $fixtureBuild.Build.bundle; source = $fixtureBuild.Build.source
+            patches = $fixtureBuild.Build.patches; options = @(); patchReportSha256 = $fixtureBuild.Build.patchReportSha256
+        }
+        [IO.File]::WriteAllText($receiptFile, ($rawBuild | ConvertTo-Json -Depth 20))
+        $source = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'walk-app.ps1'))
+        $first = $source.IndexOf('if (-not (Test-Path -LiteralPath $AuditBuild -PathType Leaf))')
+        $last = $source.IndexOf('$planned = ', $first)
+        Assert-WalkContract ($first -ge 0 -and $last -gt $first) 'The walk no longer has a pre-device build-identity preflight.'
+        $read = [scriptblock]::Create($source.Substring($first, $last - $first) + [char]10 + 'return $walkBuild')
+        function Get-AuditExecutableInputs { param($GitRoot, $Commit); return [pscustomobject]@{ schemaVersion = 1; scope = 'global-executable-v1'; fileCount = 1; sha256 = 'f' * 64 } }
+        $AuditBuild = $receiptFile; $PatchedApk = ''; $Bundle = $fixtureBuild.Bundle
+        $bundleSha256 = $fixtureBuild.Build.bundle.sha256; $root = Split-Path -Parent $PSScriptRoot
+        $verified = & $read
+        Assert-WalkContract ($verified.status -ceq 'verified' -and $verified.nativeBuildSchema -eq 2 -and
+            $verified.apk.sha256 -ceq $nativeApk.sha256 -and $verified.sourceApk.sha256 -ceq $fixtureBuild.SourceApk.sha256) 'The walk discarded the verified native build receipt.'
+        [IO.File]::AppendAllText($localApk, ' changed')
+        $changed = $false
+        try { $null = & $read } catch { $changed = $true }
+        Assert-WalkContract $changed 'The walk trusted a receipt for different local signed APK bytes.'
+        $rawBuild.schemaVersion = 1
+        [IO.File]::WriteAllText($receiptFile, ($rawBuild | ConvertTo-Json -Depth 20))
+        $legacy = $false
+        try { $null = & $read } catch { $legacy = $true }
+        Assert-WalkContract $legacy 'A schema 1 device-build receipt entered the native walk.'
+    }
+    Test-WalkProducerPreflight (Join-Path $work 'producer')
+    Remove-Item -LiteralPath 'Function:\Test-WalkProducerPreflight'
+
     foreach ($case in @(@($clean, $true), @($skipped, $false), @($crashed, $false))) {
         $verdict = $case[0]
         $receipt = New-WalkReceipt -Result $verdict.Result -Full $verdict.Full -Serial 'TESTPHONE01' -Device 'SM-S908U1' `
+            -InstalledPackage $native.Installed.package -InstalledVersionCode $native.Installed.versionCode -NativeBuild $native.Build `
             -AppVersion '47.5.3' -BundleSha256 $sha -InstalledApkSha256 ('4' * 64) -Started '2026-10-22T21:00:00Z' `
             -Finished '2026-10-22T21:20:00Z' -Screens 3 -Crashes $(if ($verdict.Result -eq 'FAIL') { 1 } else { 0 }) -Problems $verdict.Problems
         $path = Join-Path $work 'walk-receipt.json'
-        [IO.File]::WriteAllText($path, ($receipt | ConvertTo-Json -Depth 4))
-        $tested = Test-WalkReceipt -Path $path -BundlePath $bundle
+        [IO.File]::WriteAllText($path, ($receipt | ConvertTo-Json -Depth 20))
+        $tested = Test-WalkReceipt -Path $path -BundlePath $bundle @expected
         Assert-WalkContract ($tested.Valid -eq $case[1]) "Publish $(if ($case[1]) { 'refused' } else { 'took' }) a $($verdict.Result) walk: $($tested.Reason)"
     }
 } finally {

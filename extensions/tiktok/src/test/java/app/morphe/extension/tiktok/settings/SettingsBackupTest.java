@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceGroup;
 import android.os.Looper;
 import android.util.AtomicFile;
 import app.morphe.extension.shared.BackgroundPoolSaturation;
@@ -1276,14 +1277,23 @@ public class SettingsBackupTest {
         JSONObject root = new JSONObject(SettingsBackup.create(false));
         root.getJSONObject("settings").put("comment_translation_excluded_languages", "es");
         root.getJSONArray("setting_keys").put("comment_translation_excluded_languages");
+        root.getJSONObject("settings").put("hushfeed_hide_quick_setups", true);
+        root.getJSONArray("setting_keys").put("hushfeed_hide_quick_setups");
         Settings.MAX_VIDEO_SECONDS.save(0);
 
         SettingsBackup.restore(Utils.getContext(), root.toString(), true);
 
         assertEquals(81, (int) Settings.MAX_VIDEO_SECONDS.get());
-        assertEquals(1, SettingsBackup.settingsSkipped(root.toString()));
+        assertEquals(2, SettingsBackup.settingsSkipped(root.toString()));
         assertEquals(0, SettingsBackup.settingsNotInFile(root.toString()));
         assertFalse(Setting.preferences.preferences.contains("comment_translation_excluded_languages"));
+        assertNull(Setting.getSettingFromPath("hushfeed_hide_quick_setups"));
+        assertFalse(Setting.preferences.preferences.contains("hushfeed_hide_quick_setups"));
+        assertFalse(SettingsBackup.create(false).contains("hushfeed_hide_quick_setups"));
+
+        SettingsBackup.undo(Utils.getContext());
+        assertEquals(0, (int) Settings.MAX_VIDEO_SECONDS.get());
+        assertFalse(Setting.preferences.preferences.contains("hushfeed_hide_quick_setups"));
     }
 
     @Test public void skippedKeysAndMissingCurrentSettingsStaySeparateAcrossHostsAndUndo() throws Exception {
@@ -1925,10 +1935,17 @@ public class SettingsBackupTest {
     }
 
     private static Preference backupRow(TikTokPreferenceFragment fragment, String title) {
-        var screen = fragment.getPreferenceScreen();
+        return backupRow(fragment.getPreferenceScreen(), title);
+    }
+
+    private static Preference backupRow(PreferenceGroup screen, String title) {
         for (int index = 0; index < screen.getPreferenceCount(); index++) {
             Preference row = screen.getPreference(index);
             if (title.equals(String.valueOf(row.getTitle()))) return row;
+            if (row instanceof PreferenceGroup) {
+                Preference child = backupRow((PreferenceGroup) row, title);
+                if (child != null) return child;
+            }
         }
         return null;
     }
