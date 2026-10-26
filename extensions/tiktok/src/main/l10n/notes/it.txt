@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **TikTok:** Hushfeed ora richiede Morphe Manager 2.2.0 o successivo, oppure morphe-desktop 1.19.1 sul computer.
 * **Verifiche:** Aggiunto un percorso di base PineDrama per avvio, impostazioni e ritorno. La verifica completa resta incompleta.
 * **Feed:** Bandiere e codici paese restano accanto ai nomi scritti da destra a sinistra (#258).
 * **Feed:** Con la barra inferiore trasparente attiva, il nome e la riga "Tocca per guardare" delle anteprime LIVE e dei mini drama restano sopra le schede (#250).

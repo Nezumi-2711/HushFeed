@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **TikTok:** Hushfeed now needs Morphe Manager 2.2.0 or newer, or morphe-desktop 1.19.1 on a computer.
 * **Build checks:** Add a PineDrama core walk for launch, settings navigation and return. Full qualification stays incomplete.
 * **Feed:** Keep country flags and codes next to names written from right to left (#258).
 * **Feed:** With `See-through bottom bar` on, the name and "Tap to watch" line of LIVE previews and mini dramas stay above the tabs (#250).

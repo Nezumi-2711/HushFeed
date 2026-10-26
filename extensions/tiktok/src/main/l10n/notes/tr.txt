@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **TikTok:** Hushfeed artık Morphe Manager 2.2.0 ya da daha yenisini, bilgisayarda ise morphe-desktop 1.19.1 istiyor.
 * **Kontroller:** PineDrama için başlatma, ayarlarda gezinme ve geri dönme temel kontrolü eklendi. Tam doğrulama henüz tamamlanmadı.
 * **Akış:** Ülke bayrakları ve kodları, sağdan sola yazılan adların yanında kalır (#258).
 * **Akış:** Saydam alt çubuk açıkken LIVE önizlemelerinin ve mini dizilerin adı ile "İzlemek için dokun" satırı sekmelerin üstünde kalır (#250).

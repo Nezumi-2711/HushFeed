@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **TikTok:** Hushfeed kini butuh Morphe Manager 2.2.0 atau yang lebih baru, atau morphe-desktop 1.19.1 di komputer.
 * **Pemeriksaan:** Tambahkan pengujian alur dasar PineDrama untuk peluncuran, navigasi pengaturan, dan kembali. Verifikasi lengkap belum selesai.
 * **Feed:** Bendera dan kode negara tetap berada di samping nama yang ditulis dari kanan ke kiri (#258).
 * **Feed:** Dengan bilah bawah tembus pandang aktif, nama dan baris "Ketuk untuk menonton" pada pratinjau LIVE dan drama mini tetap di atas tab (#250).
