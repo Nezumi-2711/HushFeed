@@ -106,16 +106,6 @@ public class TikTokActivityHook {
             }
             base.getFragmentManager().beginTransaction()
                     .replace(fragmentId, preferenceFragment, SETTINGS_ROOT_TAG).commit();
-            // Back to the page a restart was pressed on, with the home page under it, so Back
-            // goes where it went before the restart rather than out of settings.
-            PreferenceFragment returned = section == null || section.isEmpty()
-                    ? TikTokPreferenceFragment.forPage(intent.getStringExtra(SETTINGS_PAGE_EXTRA)) : null;
-            if (returned != null) {
-                base.getFragmentManager().beginTransaction()
-                        .replace(fragmentId, returned)
-                        .addToBackStack("restart_return")
-                        .commit();
-            }
         }
 
         // Back here rode entirely on the host's onBackPressed, which stops being called once
@@ -140,6 +130,9 @@ public class TikTokActivityHook {
         if (activity.getFragmentManager().getBackStackEntryCount() > 0) {
             activity.getFragmentManager().popBackStack();
         } else {
+            Fragment root = activity.getFragmentManager().findFragmentByTag(SETTINGS_ROOT_TAG);
+            if (root instanceof TikTokPreferenceFragment
+                    && ((TikTokPreferenceFragment) root).closeInlineSearch()) return true;
             activity.finish();
         }
         return true;
