@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Kontroller:** PineDrama için başlatma, ayarlarda gezinme ve geri dönme temel kontrolü eklendi. Tam doğrulama henüz tamamlanmadı.
 * **Akış:** Ülke bayrakları ve kodları, sağdan sola yazılan adların yanında kalır (#258).
 * **Izgaralar:** Sıralama denetiminin dokunma alanı en az 48 dp olur.
 * **Izgaralar:** Izgara görünümden ayrıldığında sıralama denetimi gizlenir, geri döndüğünde yeniden görünür.

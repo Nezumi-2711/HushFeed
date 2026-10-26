@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Verificações:** Adicionado um percurso básico do PineDrama para abertura, navegação nas configurações e retorno. A validação completa continua pendente.
 * **Feed:** Bandeiras e códigos de país ficam ao lado dos nomes escritos da direita para a esquerda (#258).
 * **Grades:** O controle de ordenação tem uma área de toque de pelo menos 48 dp.
 * **Grades:** O controle de ordenação fica oculto enquanto a grade está fora da tela e reaparece quando ela retorna.
