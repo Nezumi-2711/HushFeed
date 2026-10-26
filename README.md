@@ -67,7 +67,7 @@ The patches that take files out of TikTok do it while patching, so Pause and a s
 
 Besides the row at the top of TikTok's **Settings and privacy**, two shortcuts skip Profile and work while you're signed out: press and hold **For You** at the top of the feed, or long-press **Home** on the bottom bar. A quick tap on either still does what it always did. The Home shortcut needs **Feed tab navigation** selected along with **Settings** when you patch, and it's the one to use if you've hidden the tab names at the top of the feed.
 
-The home page has a search box, which finds any row by its title or description and flips a plain switch right in the results. Under it, Quick setups turns on Quiet or Privacy, or puts every switch back to its default, in one tap with Undo. Every settings page sits right on the home page under a small heading, so nothing is more than one tap away:
+The home page has a search box, which finds any row by its title or description and flips a plain switch right in the results. In unreleased builds, hold a result switch to open its original page and highlight the setting. Back restores the search. Screen readers offer **Open setting location**. Under it, Quick setups turns on Quiet or Privacy, or puts every switch back to its default, in one tap with Undo. Every settings page sits right on the home page under a small heading, so nothing is more than one tap away:
 
 | Heading | Pages |
 | --- | --- |

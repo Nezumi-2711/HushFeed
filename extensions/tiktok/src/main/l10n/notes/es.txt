@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **TikTok:** Mantén pulsado un interruptor en la búsqueda de ajustes para abrirlo y resaltarlo en su página original. Atrás conserva la búsqueda y la posición (#248).
 * **Diagnóstico:** Los registros del primer fotograma conservan su fuente y marcas de tiempo monotónicas para comprobar el inicio (#150).
 * **Comprobaciones de compilación:** Las versiones requieren pruebas nativas y del APK de cada paquete anunciado. Los recorridos verifican la compilación instalada y las opciones de los parches.
 * **TikTok:** Recording recovery exports use bulk writes to avoid long waits when saving large files.
