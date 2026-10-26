@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Izgaralar:** Izgara görünümden ayrıldığında sıralama denetimi gizlenir, geri döndüğünde yeniden görünür.
 * **Izgaralar:** Sıralama değişikliği kaydedilemezse mevcut sıra korunur.
 * **Izgaralar:** Orijinal sıra seçildiğinde mevcut ızgaranın sıralama menüsü kullanılabilir kalır (#180).
 * **Yorumlar:** Videonun yanındaki yorumlar, yerleşim ve yeniden oluşturma kontrollerinde aynı genişliği kullanır (#253).

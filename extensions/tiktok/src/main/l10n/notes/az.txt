@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Tor görünüşü:** Tor ayrıldıqda sıralama düyməsi gizlənir, tor qayıdanda yenidən görünür.
 * **Tor görünüşü:** Yeni sıralama yadda saxlanmasa, cari sıra dəyişmir.
 * **Tor görünüşü:** İlkin sıra seçildikdə cari torun sıralama menyusu əlçatan qalır (#180).
 * **Şərhlər:** Videonun yanındakı şərhlər düzən və yenidən qurma yoxlamalarında eyni eni istifadə edir (#253).

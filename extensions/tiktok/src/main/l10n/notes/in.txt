@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Kisi:** Kontrol pengurutan disembunyikan saat kisi dilepas dari tampilan dan ditampilkan kembali saat kisi kembali.
 * **Kisi:** Urutan saat ini tetap dipertahankan jika perubahan pengurutan gagal disimpan.
 * **Kisi:** Memilih Urutan asli membuat menu pengurutan kisi saat ini tetap tersedia (#180).
 * **Komentar:** Komentar di samping video memakai lebar yang sama untuk tata letak dan pemeriksaan pembentukan ulang (#253).

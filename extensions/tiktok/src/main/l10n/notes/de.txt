@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Raster:** Das Sortierfeld wird ausgeblendet, solange sein Raster entfernt ist, und erscheint bei dessen Rückkehr wieder.
 * **Raster:** Wenn eine neue Sortierung nicht gespeichert werden kann, bleibt die bisherige Reihenfolge erhalten.
 * **Raster:** Bei Auswahl der ursprünglichen Reihenfolge bleibt das Sortiermenü des aktuellen Rasters erreichbar (#180).
 * **Kommentare:** Kommentare neben dem Video verwenden für Layout und Neuaufbau dieselbe Breite (#253).

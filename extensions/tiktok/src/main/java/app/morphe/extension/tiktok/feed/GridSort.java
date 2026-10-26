@@ -687,6 +687,7 @@ public final class GridSort {
             @Override
             public void onViewDetachedFromWindow(View view) {
                 unobserve();
+                chip.setVisibility(View.GONE);
                 chip.expireOriginal();
                 MAIN.post(this::update);
             }
@@ -701,7 +702,14 @@ public final class GridSort {
                 Object currentAdapter = Reflect.invoke(grid, "getAdapter");
                 if (Setting.isPaused() || (currentAdapter != null && currentAdapter != chip.adapter)
                         || (chip.originalChosen && !onScreen(grid))) remove();
+                if (chip.getParent() != null && grid.isAttachedToWindow()
+                        && chip.getParent() != grid.getParent()) {
+                    remove();
+                    showChip(chip.adapter, grid);
+                }
                 if (chip.getParent() != null) {
+                    if (!grid.isAttachedToWindow()) chip.setVisibility(View.GONE);
+                    else if (indexOf(Settings.PROFILE_GRID_SORT.get()) > 0) chip.setVisibility(View.VISIBLE);
                     placeChip(chip, grid);
                     return;
                 }

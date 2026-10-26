@@ -1116,6 +1116,145 @@ public class GridSortTest {
     }
 
     @Test @Config(sdk = {23, 28})
+    public void aCachedSortedControlHidesImmediatelyAndReturnsOnceWithoutRebinding() {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            View grid = adapter.mmRecyclerView;
+            FrameLayout frame = (FrameLayout) grid.getParent();
+            ViewTreeObserver window = frame.getViewTreeObserver();
+            int scrolls = observerListeners(window, "mOnScrollChangedListeners");
+            int layouts = observerListeners(window, "mOnGlobalLayoutListeners");
+            int attached = attachListeners(grid);
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, grid());
+            idle(50);
+            TextView control = chip(adapter);
+            assertNotNull(control);
+            List<?> displayed = adapter.mmItems;
+            int refreshes = adapter.refreshes;
+            for (int cycle = 0; cycle < 3; cycle++) {
+                assertTrue(control.isShown());
+                frame.removeView(grid);
+                assertEquals("hide during detach, before queued work", View.GONE, control.getVisibility());
+                assertFalse(control.isShown());
+                float x = control.getLeft() + control.getWidth() / 2f;
+                float y = control.getTop() + control.getHeight() / 2f;
+                android.view.MotionEvent down = android.view.MotionEvent.obtain(0, 0,
+                        android.view.MotionEvent.ACTION_DOWN, x, y, 0);
+                android.view.MotionEvent up = android.view.MotionEvent.obtain(0, 1,
+                        android.view.MotionEvent.ACTION_UP, x, y, 0);
+                try {
+                    assertFalse("the hidden control cannot receive a touch", frame.dispatchTouchEvent(down));
+                    assertFalse(frame.dispatchTouchEvent(up));
+                } finally {
+                    down.recycle();
+                    up.recycle();
+                }
+                idle(0);
+                assertSame("keep the sorted control for the cached tree", frame, control.getParent());
+                assertEquals(scrolls, observerListeners(window, "mOnScrollChangedListeners"));
+                assertEquals(layouts, observerListeners(window, "mOnGlobalLayoutListeners"));
+                assertEquals(attached + 1, attachListeners(grid));
+                assertEquals(0, changes.activeCount());
+
+                frame.addView(grid);
+                idle(50);
+                assertSame(control, chip(adapter));
+                assertTrue(control.isShown());
+                assertEquals("Newest first", control.getText().toString());
+                assertSame("no list rebind", displayed, adapter.mmItems);
+                assertEquals(refreshes, adapter.refreshes);
+                assertEquals(scrolls + 1, observerListeners(window, "mOnScrollChangedListeners"));
+                assertEquals(layouts + 1, observerListeners(window, "mOnGlobalLayoutListeners"));
+                assertEquals(attached + 1, attachListeners(grid));
+                assertEquals(0, changes.activeCount());
+                control.performClick();
+                idle(0);
+                AlertDialog menu = (AlertDialog) ShadowDialog.getLatestDialog();
+                assertTrue("the returned control opens its owned menu", menu.isShowing());
+                assertEquals(1, menu.getListView().getCheckedItemPosition());
+                menu.dismiss();
+            }
+            selectOrder(adapter, "off");
+            frame.removeView(grid);
+            frame.addView(grid);
+            idle(50);
+            assertNull("Original retention expires even on immediate reattach", chip(adapter));
+            assertEquals(scrolls, observerListeners(window, "mOnScrollChangedListeners"));
+            assertEquals(layouts, observerListeners(window, "mOnGlobalLayoutListeners"));
+            assertEquals(attached, attachListeners(grid));
+            assertEquals(0, changes.activeCount());
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+    }
+
+    @Test @Config(sdk = {23, 28})
+    public void aCachedSortedGridMovesItsControlToItsNewParentWithoutRebinding() {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            FrameLayout root = new FrameLayout(activity);
+            FrameLayout first = new FrameLayout(activity);
+            FrameLayout second = new FrameLayout(activity);
+            root.addView(first, new FrameLayout.LayoutParams(-1, -1));
+            root.addView(second, new FrameLayout.LayoutParams(-1, -1));
+            OwnedGrid grid = new OwnedGrid(activity);
+            first.addView(grid, new FrameLayout.LayoutParams(-1, -1));
+            GridAdapter adapter = new GridAdapter();
+            grid.setAdapter(adapter);
+            activity.setContentView(root);
+            idle(50);
+            ViewTreeObserver window = root.getViewTreeObserver();
+            int scrolls = observerListeners(window, "mOnScrollChangedListeners");
+            int layouts = observerListeners(window, "mOnGlobalLayoutListeners");
+            int attached = attachListeners(grid);
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, grid());
+            idle(50);
+            List<?> displayed = adapter.mmItems;
+            FrameLayout from = first;
+            FrameLayout to = second;
+            for (int cycle = 0; cycle < 3; cycle++) {
+                TextView oldControl = chip(adapter);
+                from.removeView(grid);
+                assertEquals(View.GONE, oldControl.getVisibility());
+                to.addView(grid, new FrameLayout.LayoutParams(-1, -1));
+                idle(50);
+                assertNull("no orphan control in the previous parent", from.findViewWithTag(GridSort.CHIP_TAG));
+                assertNull(oldControl.getParent());
+                TextView moved = chip(adapter);
+                assertNotNull("the new parent owns a control without a list bind", moved);
+                assertTrue(moved.isShown());
+                assertSame(to, moved.getParent());
+                assertSame(displayed, adapter.mmItems);
+                assertEquals(0, changes.activeCount());
+                assertEquals(scrolls + 1, observerListeners(window, "mOnScrollChangedListeners"));
+                assertEquals(layouts + 1, observerListeners(window, "mOnGlobalLayoutListeners"));
+                assertEquals(attached + 1, attachListeners(grid));
+                moved.performClick();
+                idle(0);
+                AlertDialog menu = (AlertDialog) ShadowDialog.getLatestDialog();
+                assertTrue(menu.isShowing());
+                assertEquals(1, menu.getListView().getCheckedItemPosition());
+                menu.dismiss();
+                FrameLayout swap = from;
+                from = to;
+                to = swap;
+            }
+            selectOrder(adapter, "oldest");
+            assertEquals("oldest", Settings.PROFILE_GRID_SORT.get());
+            assertEquals("apfcdeb", ids(adapter.mmItems));
+            assertEquals("Oldest first", chip(adapter).getText().toString());
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+    }
+
+    @Test @Config(sdk = {23, 28})
     public void aFloatingGridObserverMergesOnceAndCleansItsActualWindow() {
         PreferenceChanges changes = new PreferenceChanges();
         ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
