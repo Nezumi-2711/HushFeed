@@ -8,6 +8,8 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.fieldAccess
 import app.morphe.patcher.methodCall
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.string
+import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patches.tiktok.misc.settings.configurableBytecodePatch as bytecodePatch
 import app.morphe.patches.shared.compat.AppCompatibilities
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
@@ -92,6 +94,42 @@ internal object CommentPanelResizeFingerprint : Fingerprint(
     custom = { method, _ -> method.loadsLiteral(SHARE_68) },
 )
 
+/**
+ * TikTok's comment input check (`LX/0FD7;->LIZ(LX/0FDd;)V` on 47.5.3). Once the sheet is up it
+ * looks at the panel again, and a panel taller than its limit goes back to 68 or 73 percent of
+ * the screen, logged as "height was set to". That is the two thirds the first video after a cold
+ * start still opened at once the two passes above gave the full height (#261).
+ */
+internal object CommentInputCheckFingerprint : Fingerprint(
+    returnType = "V",
+    filters = listOf(
+        string("height was set to "),
+        fieldAccess(definingClass = "Landroid/view/ViewGroup\$LayoutParams;", name = "height"),
+    ),
+    custom = { method, _ -> method.loadsLiteral(SHARE_68) },
+)
+
+/** Where [method] writes [paramsClass]'s height, each with the register of the view whose params it is. */
+internal fun panelHeightWrites(method: Method, paramsClass: String): List<Triple<Int, Int, Int>> {
+    val instructions = method.implementation!!.instructions.toList()
+    return instructions.withIndex().filter { (_, instruction) ->
+        instruction.opcode == Opcode.IPUT &&
+            instruction.getReference<FieldReference>()?.let {
+                it.definingClass == paramsClass && it.name == "height"
+            } == true
+    }.map { (index, instruction) ->
+        val paramsCall = instructions.subList(0, index).indexOfLast {
+            it.opcode == Opcode.INVOKE_VIRTUAL && it.getReference<MethodReference>()?.name == "getLayoutParams"
+        }
+        if (paramsCall < 0) throw PatchException("$PATCH: ${method.definingClass}->${method.name} writes a height on no view")
+        Triple(
+            index,
+            (instruction as TwoRegisterInstruction).registerA,
+            (instructions[paramsCall] as FiveRegisterInstruction).registerC,
+        )
+    }
+}
+
 /** The other static `(Context)I` in the height method's class: the content view's full height. */
 internal fun fullHeightSibling(classDef: ClassDef, height: Method): Method {
     val siblings = classDef.methods.filter {
@@ -168,33 +206,27 @@ val commentSheetHeightPatch = bytecodePatch(
         // The second sizing pass writes its share over that height, so the height it writes is
         // swapped for the room between the system bars while the switch is on (#261). The panel
         // is the view whose layout params get the height.
+        // The input check shrinks it again later on, so both of its writes get the same swap.
+        // Writes are hooked last first so the earlier indexes still hold.
+        fun keepPanelHeight(method: MutableMethod, writes: List<Triple<Int, Int, Int>>) {
+            if (writes.isEmpty()) throw PatchException("$PATCH: ${method.definingClass}->${method.name} writes no panel height")
+            for ((index, heightRegister, panelRegister) in writes.sortedByDescending { it.first }) {
+                if (heightRegister > 15 || panelRegister > 15) {
+                    throw PatchException("$PATCH: ${method.definingClass}->${method.name} panel registers out of reach")
+                }
+                method.addInstructions(
+                    index,
+                    """
+                        invoke-static {v$panelRegister, v$heightRegister}, $EXTENSION->panelHeight(Landroid/view/View;I)I
+                        move-result v$heightRegister
+                    """,
+                )
+            }
+        }
         val resize = CommentPanelResizeFingerprint.method
-        val resizeInstructions = resize.implementation!!.instructions.toList()
-        val heightIndex = resizeInstructions.indexOfFirst { instruction ->
-            instruction.opcode == Opcode.IPUT &&
-                instruction.getReference<FieldReference>()?.let {
-                    it.definingClass == "Landroid/widget/FrameLayout\$LayoutParams;" && it.name == "height"
-                } == true
-        }
-        val paramsCall = resizeInstructions.subList(0, maxOf(heightIndex, 0)).indexOfLast { instruction ->
-            instruction.opcode == Opcode.INVOKE_VIRTUAL &&
-                instruction.getReference<MethodReference>()?.name == "getLayoutParams"
-        }
-        if (heightIndex < 0 || paramsCall < 0) {
-            throw PatchException("$PATCH: ${resize.definingClass}->${resize.name} writes no panel height")
-        }
-        val heightRegister = (resizeInstructions[heightIndex] as TwoRegisterInstruction).registerA
-        val panelRegister = (resizeInstructions[paramsCall] as FiveRegisterInstruction).registerC
-        if (heightRegister > 15 || panelRegister > 15) {
-            throw PatchException("$PATCH: ${resize.definingClass}->${resize.name} panel registers out of reach")
-        }
-        resize.addInstructions(
-            heightIndex,
-            """
-                invoke-static {v$panelRegister, v$heightRegister}, $EXTENSION->panelHeight(Landroid/view/View;I)I
-                move-result v$heightRegister
-            """,
-        )
+        keepPanelHeight(resize, panelHeightWrites(resize, "Landroid/widget/FrameLayout\$LayoutParams;").take(1))
+        val inputCheck = CommentInputCheckFingerprint.method
+        keepPanelHeight(inputCheck, panelHeightWrites(inputCheck, "Landroid/view/ViewGroup\$LayoutParams;"))
 
         SettingsStatusLoadFingerprint.method.addInstruction(
             0,

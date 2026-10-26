@@ -105,6 +105,29 @@ class CommentSheetHeightAnchorsTest {
                 "${apk.name}: the panel register is out of reach",
                 (resize[paramsIndex] as FiveRegisterInstruction).registerC <= 15,
             )
+
+            // #261: the input check is one method, and every height it writes goes on the
+            // params of the fragment's panel, read just before, in registers an invoke can name.
+            val checks = methods.filter { (classDef, method) -> CommentInputCheckFingerprint.takes(method, classDef) }
+            assertEquals("${apk.name}: input check took ${checks.map { "${it.first.type}->${it.second.name}" }}", 1, checks.size)
+            val check = checks.single().second
+            val checkInstructions = check.implementation!!.instructions.toList()
+            val writes = panelHeightWrites(check, "Landroid/view/ViewGroup\$LayoutParams;")
+            assertEquals("${apk.name}: the input check writes ${writes.size} panel heights", 2, writes.size)
+            for ((index, heightRegister, panelRegister) in writes) {
+                assertTrue("${apk.name}: the height register is out of reach", heightRegister <= 15)
+                assertTrue("${apk.name}: the panel register is out of reach", panelRegister <= 15)
+                val panelRead = checkInstructions.subList(0, index).last { instruction ->
+                    instruction.opcode == Opcode.IGET_OBJECT && (instruction as TwoRegisterInstruction).registerA == panelRegister
+                }
+                val field = (panelRead as ReferenceInstruction).reference as FieldReference
+                assertEquals(
+                    "${apk.name}: the input check sizes another view",
+                    "Lcom/ss/android/ugc/aweme/commentv2/commentpage/commonvideo/DefaultCommentPageContainerFragment;",
+                    field.definingClass,
+                )
+                assertEquals("Landroid/view/View;", field.type)
+            }
         }
     }
 
@@ -122,6 +145,10 @@ class CommentSheetHeightAnchorsTest {
         assertTrue(
             "the second sizing pass keeps its share (#261)",
             source.contains("panelHeight(Landroid/view/View;I)I"),
+        )
+        assertTrue(
+            "the input check keeps its share (#261)",
+            source.contains("keepPanelHeight(inputCheck, "),
         )
         assertTrue("the row's flag is not set", source.contains("SettingsStatus;->enableCommentsFullHeight()V"))
     }
