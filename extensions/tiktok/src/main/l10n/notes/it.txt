@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Impostazioni:** Un nuovo interruttore toglie la riga di Hushfeed da Impostazioni e privacy di TikTok. Dopo, tieni premuto Per te per aprire le impostazioni (#264).
 * **Impostazioni:** Le categorie si aprono e si chiudono subito sotto la loro riga nell'elenco principale. La ricerca mostra i controlli nello stesso elenco, e le categorie aperte restano aperte dopo una rotazione o un riavvio.
 * **Impostazioni:** Le grandi schede iniziali lasciano spazio a un elenco compatto a tutta larghezza. Le configurazioni rapide sono state rimosse.
 * **TikTok:** Hushfeed ora richiede Morphe Manager 2.2.0 o successivo, oppure morphe-desktop 1.19.1 sul computer.

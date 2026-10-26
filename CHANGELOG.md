@@ -4,6 +4,10 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+### Features
+
+* **Settings:** `Hide the Hushfeed row` takes Hushfeed out of TikTok's Settings and privacy. Press and hold For You at the top of the feed to open the settings after that, or Home when `Long-press Home for Hushfeed settings` is on. Pausing Hushfeed brings the row back (#264).
+
 ### Fixes
 
 * **Settings:** Categories expand and collapse beneath their main-list rows. Search reveals controls in the same list, and open categories survive rotation and a restart.

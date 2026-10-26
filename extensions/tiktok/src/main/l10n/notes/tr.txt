@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Ayarlar:** Yeni bir anahtar Hushfeed satırını TikTok'un Ayarlar ve gizlilik listesinden çıkarır. Ondan sonra ayarları açmak için Senin İçin'e basılı tut (#264).
 * **Ayarlar:** Kategoriler ana listedeki satırlarının hemen altında açılıp kapanır. Arama denetimleri aynı listede gösterir, açık kategoriler ekran döndürüldüğünde veya yeniden başlatıldığında açık kalır.
 * **Ayarlar:** Ana sayfadaki büyük kartlar yerine tam genişlikte kompakt bir liste kullanılır. Hızlı kurulumlar kaldırıldı.
 * **TikTok:** Hushfeed artık Morphe Manager 2.2.0 ya da daha yenisini, bilgisayarda ise morphe-desktop 1.19.1 istiyor.

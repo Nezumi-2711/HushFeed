@@ -15,7 +15,7 @@ final class L10nTranslationsTr {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4538);
+        Map<String, String> table = new HashMap<>(4542);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -1663,6 +1663,8 @@ final class L10nTranslationsTr {
                 "Tam ekran düğmesini gizle");
         table.put("Hide the Full screen button over videos. Playback and automatic rotation keep working as before.",
                 "Videoların üzerindeki Tam ekran düğmesini gizle. Oynatma ve otomatik döndürme eskisi gibi çalışmaya devam eder.");
+        table.put("Hide the Hushfeed row",
+                "Hushfeed satırını gizle");
         table.put("Hide the Inbox search button",
                 "Gelen Kutusu arama düğmesini gizle");
         table.put("Hide the LIVE bubble",
@@ -1775,11 +1777,11 @@ final class L10nTranslationsTr {
                 "Durum çubuğunu gizle");
         table.put("Hide the status bar in LIVE rooms",
                 "LIVE odalarında durum çubuğunu gizle");
-        table.put("Hide the streak button in a chat and the reminder message that goes with it.",
-                "Sohbetteki seri düğmesini ve onunla birlikte gelen hatırlatma mesajını gizle.");
     }
 
     private static void fill14(Map<String, String> table) {
+        table.put("Hide the streak button in a chat and the reminder message that goes with it.",
+                "Sohbetteki seri düğmesini ve onunla birlikte gelen hatırlatma mesajını gizle.");
         table.put("Hide the suggested-search strip above the bottom tabs and let video details and side controls use its space. The top search button and comments stay unchanged.",
                 "Alt sekmelerin üstündeki önerilen arama şeridini gizle ve video ayrıntılarıyla yan kontrollerin bu alanı kullanmasını sağla. Üstteki arama düğmesi ve yorumlar değişmez.");
         table.put("Hide the tab names above the feed",
@@ -1898,11 +1900,11 @@ final class L10nTranslationsTr {
                 "Bu ad alınmışsa Android yeni dosyaya bir sayı ekler.");
         table.put("If that name is taken, Hushfeed adds a number to the new file.",
                 "Bu ad alınmışsa Hushfeed yeni dosyaya bir sayı ekler.");
-        table.put("Import a font file",
-                "Yazı tipi dosyası içe aktar");
     }
 
     private static void fill15(Map<String, String> table) {
+        table.put("Import a font file",
+                "Yazı tipi dosyası içe aktar");
         table.put("Import finished",
                 "İçe aktarma tamamlandı");
         table.put("Import loaded values",
@@ -2021,11 +2023,11 @@ final class L10nTranslationsTr {
                 "CANLI takipçi aralığı");
         table.put("LIVE recording quality",
                 "LIVE kayıt kalitesi");
-        table.put("LIVE recording saved to %1$s",
-                "LIVE kaydı %1$s konumuna kaydedildi");
     }
 
     private static void fill16(Map<String, String> table) {
+        table.put("LIVE recording saved to %1$s",
+                "LIVE kaydı %1$s konumuna kaydedildi");
         table.put("LIVE recording source",
                 "LIVE kayıt kaynağı");
         table.put("LIVE replays",
@@ -2144,11 +2146,11 @@ final class L10nTranslationsTr {
                 "Canlı fotoğraf klibi %1$s konumuna kaydedildi");
         table.put("Live photo clips: %1$s",
                 "Canlı fotoğraf klipleri: %1$s");
-        table.put("Load more",
-                "Daha fazla yükle");
     }
 
     private static void fill17(Map<String, String> table) {
+        table.put("Load more",
+                "Daha fazla yükle");
         table.put("Loaded current values. Loading all known gates…",
                 "Geçerli değerler yüklendi. Bilinen tüm kapılar yükleniyor…");
         table.put("Loaded values are still being read. Try again in a moment.",
@@ -2267,11 +2269,11 @@ final class L10nTranslationsTr {
                 "Minimum");
         table.put("Minimum video length",
                 "Minimum video süresi");
-        table.put("More hashtags per post",
-                "Gönderi başına daha fazla etiket");
     }
 
     private static void fill18(Map<String, String> table) {
+        table.put("More hashtags per post",
+                "Gönderi başına daha fazla etiket");
         table.put("More items are available.",
                 "Daha fazla öğe var.");
         table.put("More opens the comments",
@@ -2390,11 +2392,11 @@ final class L10nTranslationsTr {
                 "Bu aramayla eşleşen paylaşım eylemi yok");
         table.put("No sound to block on this video",
                 "Bu videoda engellenecek ses yok");
-        table.put("No suggested accounts to clear",
-                "Temizlenecek önerilen hesap yok");
     }
 
     private static void fill19(Map<String, String> table) {
+        table.put("No suggested accounts to clear",
+                "Temizlenecek önerilen hesap yok");
         table.put("No video selected. Open a video first.",
                 "Video seçilmedi. Önce bir video aç.");
         table.put("Nobody was signed in to TikTok. Sign in, and it tries again at %1$s.",
@@ -2513,11 +2515,11 @@ final class L10nTranslationsTr {
                 "Her satıra bir değer");
         table.put("One video was recorded before each account kept its own list. It hides nothing until you add it here.",
                 "Her hesabın kendi listesi olmadan önce bir video kaydedildi. Buraya ekleyene kadar hiçbir şeyi gizlemez.");
-        table.put("One was already saved",
-                "Biri zaten kaydedilmişti");
     }
 
     private static void fill20(Map<String, String> table) {
+        table.put("One was already saved",
+                "Biri zaten kaydedilmişti");
         table.put("Only bottom tabs TikTok has loaded on this device are shown here. This doesn't force unavailable tabs to appear.",
                 "Burada yalnızca TikTok'un bu cihazda yüklediği alt sekmeler gösterilir. Bu, kullanılamayan sekmeleri görünmeye zorlamaz.");
         table.put("Only fields the Lab can check and copy safely are shown.",
@@ -2636,11 +2638,11 @@ final class L10nTranslationsTr {
                 "Geçersiz kılmalar etkinleştirildi. Bunu uygulamak için TikTok'u yeniden başlat.");
         table.put("Own profile counts",
                 "Kendi profil sayılarınız");
-        table.put("Paid partnerships",
-                "Ücretli ortaklıklar");
     }
 
     private static void fill21(Map<String, String> table) {
+        table.put("Paid partnerships",
+                "Ücretli ortaklıklar");
         table.put("Pass TikTok's install checks",
                 "TikTok'un yükleme kontrollerini geç");
         table.put("Pause",
@@ -2759,11 +2761,11 @@ final class L10nTranslationsTr {
                 "Önizleme kısaltıldı. \"Raporu kaydet\" raporun tamamını saklar.");
         table.put("Preview translation",
                 "Çeviriyi önizle");
-        table.put("Preview with a made-up post:",
-                "Uydurma bir gönderiyle önizleme:");
     }
 
     private static void fill22(Map<String, String> table) {
+        table.put("Preview with a made-up post:",
+                "Uydurma bir gönderiyle önizleme:");
         table.put("Privacy",
                 "Gizlilik");
         table.put("Privacy and app",
@@ -2882,11 +2884,11 @@ final class L10nTranslationsTr {
                 "Yarıda kalan bir ayar değişikliği kurtarıldı. Bunu uygulamak için TikTok'u yeniden başlat.");
         table.put("Recovered recording saved to %1$s",
                 "Kurtarılan kayıt %1$s konumuna kaydedildi");
-        table.put("Refresh values",
-                "Değerleri yenile");
     }
 
     private static void fill23(Map<String, String> table) {
+        table.put("Refresh values",
+                "Değerleri yenile");
         table.put("Refreshing TikTok's current values…",
                 "TikTok'un geçerli değerleri yenileniyor…");
         table.put("Region",
@@ -3005,11 +3007,11 @@ final class L10nTranslationsTr {
                 "TikTok %1$s için doğrulanmış hazır ayarlar");
         table.put("Right away",
                 "Hemen");
-        table.put("Right column",
-                "Sağ sütun");
     }
 
     private static void fill24(Map<String, String> table) {
+        table.put("Right column",
+                "Sağ sütun");
         table.put("Right edge strip",
                 "Sağ kenar şeridi");
         table.put("Rows",
@@ -3128,11 +3130,11 @@ final class L10nTranslationsTr {
                 "Dosyaya 1 görülen video kaydedildi");
         table.put("Saved one original photo",
                 "Bir orijinal fotoğraf kaydedildi");
-        table.put("Saved one video",
-                "Bir video kaydedildi");
     }
 
     private static void fill25(Map<String, String> table) {
+        table.put("Saved one video",
+                "Bir video kaydedildi");
         table.put("Saved photos, covers, story photos and stickers that don't move are the exact files TikTok sent, not a new JPEG or PNG. Some galleries and computers can't open HEIF or WebP.",
                 "Kaydedilen fotoğraflar, kapaklar, hikaye fotoğrafları ve hareketsiz çıkartmalar yeni bir JPEG veya PNG değil, TikTok'un gönderdiği dosyaların ta kendisidir. Bazı galeriler ve bilgisayarlar HEIF veya WebP açamaz.");
         table.put("Saved post",
@@ -3251,11 +3253,11 @@ final class L10nTranslationsTr {
                 "Saniye. Sıfır, her uzunluğu tutar. Fotoğraf gönderileri ve uzunluğu bilinmeyen videolar kalır. Akışın az önce gönderdiği her şey filtrelenecekse sınırına en yakın video tutulur.");
         table.put("See-through bottom bar",
                 "Şeffaf alt çubuk");
-        table.put("See-through status bar",
-                "Şeffaf durum çubuğu");
     }
 
     private static void fill26(Map<String, String> table) {
+        table.put("See-through status bar",
+                "Şeffaf durum çubuğu");
         table.put("Seek bar on sound previews",
                 "Ses önizlemelerinde sarma çubuğu");
         table.put("Seek bar on video stories",
@@ -3374,11 +3376,11 @@ final class L10nTranslationsTr {
                 "Göster");
         table.put("Show @username beside a video instead of the display name the creator chose.",
                 "Videonun yanında içerik üreticisinin seçtiği görünen ad yerine @kullanıcıadı göster.");
-        table.put("Show See translation",
-                "Çeviriyi gör seçeneğini göster");
     }
 
     private static void fill27(Map<String, String> table) {
+        table.put("Show See translation",
+                "Çeviriyi gör seçeneğini göster");
         table.put("Show Thoughts on profiles and in your inbox, and the prompt to share one, for accounts TikTok hasn't turned them on for. TikTok's servers may still refuse to post one. Restart TikTok to apply this.",
                 "TikTok'un Thoughts'u açmadığı hesaplarda Thoughts'u profillerde ve Gelen Kutusu'nda, bir tane paylaşma önerisiyle birlikte göster. TikTok'un sunucuları yine de paylaşımı reddedebilir. Bunu uygulamak için TikTok'u yeniden başlat.");
         table.put("Show TikTok's button for recording a spoken comment, on accounts that don't have it yet. It hasn't been tried on a real account, so it may not work.",
@@ -3497,11 +3499,11 @@ final class L10nTranslationsTr {
                 "Videoyu pencereye sığsın diye kırpmak yerine tamamını göster. Videonun zaten sığdığı uzun telefonlarda hiçbir şey değişmez. Açılmış katlanabilir bir telefonda, kareye yakın bir ekranda veya bölünmüş görünümde kenarlar ya da uçlar artık kesilmez. Fotoğraf slayt gösterileri daha kareye yakın bir ekranda aynı şekilde işlenir.");
         table.put("Show translation",
                 "Çeviriyi göster");
-        table.put("Show video length on profile grids",
-                "Profil ızgarasında video süresini göster");
     }
 
     private static void fill28(Map<String, String> table) {
+        table.put("Show video length on profile grids",
+                "Profil ızgarasında video süresini göster");
         table.put("Show what is left of the budget",
                 "Bütçeden kalanı göster");
         table.put("Show when a video was posted down to the second, with your time zone, in place of TikTok's short date by the creator's name.",
@@ -3620,11 +3622,11 @@ final class L10nTranslationsTr {
                 "Başka bir kayıttan sonra başlar");
         table.put("Stay on the video in full screen",
                 "Tam ekranda videoda kal");
-        table.put("Staying on a video",
-                "Videoda kalmak");
     }
 
     private static void fill29(Map<String, String> table) {
+        table.put("Staying on a video",
+                "Videoda kalmak");
         table.put("Sticker",
                 "Çıkartma");
         table.put("Sticker destination",
@@ -3743,11 +3745,11 @@ final class L10nTranslationsTr {
                 "Hikaye şuraya kaydedildi: %1$s");
         table.put("Streak",
                 "Seri");
-        table.put("Stream only",
-                "Yalnızca yayın");
     }
 
     private static void fill30(Map<String, String> table) {
+        table.put("Stream only",
+                "Yalnızca yayın");
         table.put("Stream only saves the room's own video, as before. Screen records what your phone shows while you watch, with the sound the app plays when TikTok has the microphone permission. Android asks you to allow screen recording each time, and shows its own notice while it records.",
                 "Yalnızca yayın, odanın videosunu eskisi gibi kaydeder. Ekran, izlerken telefonunuzun gösterdiği her şeyi kaydeder. TikTok'un mikrofon izni varsa uygulamanın sesi de eklenir. Android her seferinde ekran kaydına izin vermenizi ister ve kayıt sırasında kendi bildirimini gösterir.");
         table.put("Structured value observed",
@@ -3776,6 +3778,8 @@ final class L10nTranslationsTr {
                 "Sistem");
         table.put("Tag saved videos with their details",
                 "Kaydedilen videolara ayrıntılarını etiket olarak yaz");
+        table.put("Take Hushfeed out of TikTok's Settings and privacy. To open these settings, press and hold For You at the top of the feed, or Home if Long-press Home for Hushfeed settings is on.",
+                "Hushfeed'i TikTok'un Ayarlar ve gizlilik listesinden çıkarır. Bu ayarları açmak için akışın üstündeki Senin İçin'e basılı tut, ya da Hushfeed ayarları için Ana Sayfa'ya basılı tut açıksa Ana Sayfa'ya.");
         table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
                 "Bir profilden, hashtag'den, sesten veya aramadan açtığın videolardaki yorum yazma çubuğunu kaldır, böylece video ekranı en alta kadar doldurur. Sağdaki yorum düğmesi yorumları açmaya devam eder.");
         table.put("Take the pulsing LIVE ring off profile pictures on the feed and in comments. Tapping the picture of a creator who's live opens their profile instead of the LIVE.",
@@ -3864,13 +3868,13 @@ final class L10nTranslationsTr {
                 "Bu bir Hushfeed ayar yedeği değil. Hiçbir şey değiştirilmedi.");
         table.put("That isn't a seen-history file saved by Hushfeed. For TikTok's own data export, use Import watch history.",
                 "Bu, Hushfeed'in kaydettiği bir geçmiş dosyası değil. TikTok'un kendi veri dışa aktarımı için İzleme geçmişini içe aktar'ı kullanın.");
+    }
+
+    private static void fill31(Map<String, String> table) {
         table.put("That isn't an app name. Try something like com.example.downloader, or leave the box empty to keep saving in TikTok.",
                 "Bu bir uygulama adı değil. com.example.downloader gibi bir şey dene ya da TikTok'a kaydetmeye devam etmek için kutuyu boş bırak.");
         table.put("That isn't valid JSON. Check the brackets and quotes.",
                 "Bu geçerli bir JSON değil. Parantezleri ve tırnakları kontrol edin.");
-    }
-
-    private static void fill31(Map<String, String> table) {
         table.put("That list has too many entries. Keep it to %1$s or fewer.",
                 "Bu listede çok fazla giriş var. %1$s veya daha az olsun.");
         table.put("That list is too large. Keep it to %1$s KB or less.",
@@ -3987,13 +3991,13 @@ final class L10nTranslationsTr {
                 "Son rapor hâlâ kaydediliyor");
         table.put("The list changed while loading. Results are incomplete.",
                 "Liste yüklenirken değişti. Sonuçlar eksik.");
+    }
+
+    private static void fill32(Map<String, String> table) {
         table.put("The list reached its limit. More items may remain.",
                 "Liste sınırına ulaştı. Başka öğeler kalmış olabilir.");
         table.put("The list stopped making progress. Results are incomplete.",
                 "Liste ilerlemeyi bıraktı. Sonuçlar eksik.");
-    }
-
-    private static void fill32(Map<String, String> table) {
         table.put("The live photo's clip couldn't be saved. Try again.",
                 "Canlı fotoğrafın klibi kaydedilemedi. Tekrar deneyin.");
         table.put("The loaded-values file you chose couldn't be read. Try again.",
@@ -4110,13 +4114,13 @@ final class L10nTranslationsTr {
                 "Bu LIVE'ın yayını kaydedilemiyor");
         table.put("This catalog entry is no longer available. Refresh the Lab and try again.",
                 "Bu katalog girişi artık kullanılamıyor. Lab'i yenile ve yeniden dene.");
+    }
+
+    private static void fill33(Map<String, String> table) {
         table.put("This change couldn't be saved. Try again.",
                 "Bu değişiklik kaydedilemedi. Yeniden dene.");
         table.put("This configuration has no fields that can be copied and changed safely on this build.",
                 "Bu yapılandırmada, bu sürümde güvenle kopyalanıp değiştirilebilecek bir alan yok.");
-    }
-
-    private static void fill33(Map<String, String> table) {
         table.put("This file has no loaded values in it.",
                 "Bu dosyada hiç yüklenen değer yok.");
         table.put("This file isn't a loaded-values export from the Feature Gate Lab.",
@@ -4233,13 +4237,13 @@ final class L10nTranslationsTr {
                 "TikTok takibi %1$s koduyla reddetti. Nedeni gizlenmiş bir CAPTCHA olabilir.");
         table.put("TikTok refused the follow: %1$s",
                 "TikTok takibi reddetti: %1$s");
+    }
+
+    private static void fill34(Map<String, String> table) {
         table.put("TikTok refused the follow: %1$s A hidden CAPTCHA may be the cause.",
                 "TikTok takibi reddetti: %1$s Nedeni gizlenmiş bir CAPTCHA olabilir.");
         table.put("TikTok refused this request (%1$s).",
                 "TikTok bu isteği reddetti (%1$s).");
-    }
-
-    private static void fill34(Map<String, String> table) {
         table.put("TikTok removes videos saved for offline viewing after a set time, sometimes only two days, watched or not. With this on they stay until you delete them in TikTok's Offline videos settings. TikTok can still clear watched ones when your phone is low on space.",
                 "TikTok, çevrimdışı izlemek için kaydedilen videoları belirli bir süre sonra, bazen yalnızca iki gün sonra, izlenmiş olsun olmasın kaldırır. Bu açıkken videolar, TikTok'un Çevrimdışı videolar ayarlarında sen silene kadar kalır. Telefonunda yer azaldığında TikTok izlenmiş olanları yine de temizleyebilir.");
         table.put("TikTok reports additional filtered accounts. This list is incomplete.",
@@ -4356,13 +4360,13 @@ final class L10nTranslationsTr {
                 "Ekran geçişlerini kapat");
         table.put("Turn off swipe to reply",
                 "Yanıtlamak için kaydırmayı kapat");
+    }
+
+    private static void fill35(Map<String, String> table) {
         table.put("Turn off the swipe to the side menu",
                 "Yan menüye kaydırmayı kapat");
         table.put("Turn off the timer (TikTok closes at %1$s)",
                 "Zamanlayıcıyı kapat (TikTok'un kapanacağı saat: %1$s)");
-    }
-
-    private static void fill35(Map<String, String> table) {
         table.put("Turn on %1$s first.",
                 "Önce %1$s ayarını aç.");
         table.put("Turn on Keep a streak going first",
@@ -4479,13 +4483,13 @@ final class L10nTranslationsTr {
                 "Kendi çevrimdışı video sınırını kullan");
         table.put("Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.",
                 "Adı oluşturmak için {creator}, {date} ve {video_id} kullan. Her içerik üreticisini ayrı klasöre koymak için {creator}/ ile başla. Dosya uzantısı otomatik eklenir.");
+    }
+
+    private static void fill36(Map<String, String> table) {
         table.put("Use {creator}, {date}, {video_id} and {index} to build the name. {index} numbers the photos of a slideshow saved with Download original photos. TikTok's own save button numbers files by folder instead. The file ending is added for you.",
                 "Adı oluşturmak için {creator}, {date}, {video_id} ve {index} kullan. {index}, Orijinal fotoğrafları indir ile kaydedilen bir slayt gösterisinin fotoğraflarını numaralandırır. TikTok'un kendi kaydet düğmesi dosyaları klasöre göre numaralandırır. Dosya uzantısı otomatik eklenir.");
         table.put("Use {date} and {media_id} to build the name. Works for image and video stickers.",
                 "Adı oluşturmak için {date} ve {media_id} kullan. Görsel ve video çıkartmaları için çalışır.");
-    }
-
-    private static void fill36(Map<String, String> table) {
         table.put("User ID copied",
                 "Kullanıcı kimliği kopyalandı");
         table.put("Username copied",
@@ -4602,13 +4606,13 @@ final class L10nTranslationsTr {
                 "TikTok'u simgesinden açtığında akıştaki ilk video oynamadan önce bir dokunuş bekler. Bağlantı, bildirim veya kısayol her zamanki gibi açılır.");
         table.put("Where the time goes",
                 "Süre nerede görünsün");
+    }
+
+    private static void fill37(Map<String, String> table) {
         table.put("While Clear display is on, also hide the progress bar, the close button and the pause and speed buttons at the bottom. You can still drag along the bottom edge to move through the video. To leave Clear display, press and hold the video and tap Restore display, or pinch the screen.",
                 "Temiz ekran açıkken alttaki ilerleme çubuğunu, kapatma düğmesini, duraklatma ve hız düğmelerini de gizle. Videoda ileri geri gitmek için yine de alt kenar boyunca sürükleyebilirsin. Temiz ekrandan çıkmak için videoya basılı tut ve Ekranı geri yükle'ye dokun. Ekranda iki parmağını birbirine yaklaştırarak da çıkabilirsin.");
         table.put("While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.",
                 "Tanılama günlüğü açıkken bir mesaj, Hushfeed'in hata veren bölümünün adını söyler. Kapalıyken hatalar yalnızca raporda kalır.");
-    }
-
-    private static void fill37(Map<String, String> table) {
         table.put("Who to message",
                 "Kime yazılsın");
         table.put("Window width needed to enable the layout. Restart TikTok to apply this.",

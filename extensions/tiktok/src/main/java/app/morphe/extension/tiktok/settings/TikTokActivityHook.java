@@ -38,6 +38,19 @@ public class TikTokActivityHook {
     /** The page a restart left ({@link SettingsReturn}), opened over the home page. */
     private static final String SETTINGS_PAGE_EXTRA = "hushfeed_settings_page";
 
+    /**
+     * Whether Settings and privacy lists the Hushfeed row (#264). The patch asks each time the
+     * list is built, so the switch applies the next time that screen opens.
+     */
+    public static boolean showSettingsRow() {
+        try {
+            return !Settings.HIDE_SETTINGS_ROW.get();
+        } catch (Throwable failure) {
+            Logger.printException(() -> "showSettingsRow failure", failure);
+            return true;
+        }
+    }
+
     /***
      * Initialize the settings menu.
      * @param base The activity to initialize the settings menu on.
