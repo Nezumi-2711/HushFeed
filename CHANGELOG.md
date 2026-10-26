@@ -10,7 +10,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
-* **Comments:** With `Open the comments at full height` on, the sheet stops below the status bar instead of running under the clock and battery icons (#261).
+* **Comments:** With `Open the comments at full height` on, the sheet stops below the status bar instead of running under the clock and battery icons, and the first video after opening TikTok gets the full height too instead of the usual two thirds (#261).
 * **Settings:** Categories expand and collapse beneath their main-list rows. Search reveals controls in the same list, and open categories survive rotation and a restart.
 * **Settings:** Replace large home cards with a compact full-width list. Remove Quick setups.
 * **TikTok:** Hushfeed now needs Morphe Manager 2.2.0 or newer, or morphe-desktop 1.19.1 on a computer.

@@ -21,8 +21,11 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
+import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 private const val PATCH = "Open the comments at full height"
@@ -72,6 +75,21 @@ internal object CommentPanelSizeFingerprint : Fingerprint(
     returnType = "V",
     parameters = listOf("I", "Z"),
     filters = listOf(fieldAccess(definingClass = "Landroid/widget/LinearLayout\$LayoutParams;", name = "weight")),
+)
+
+/**
+ * The sheet's second sizing pass (`DefaultCommentPageContainerFragment.YX()V` on 47.5.3). It runs
+ * when the sheet has no comment source or opens with the video's description on top, the first
+ * video after a cold start among them, and sets the same panel to 68 or 73 percent of the screen
+ * after the method above gave it the full height (#261). The only method in the class that loads
+ * the 68 percent share.
+ */
+internal object CommentPanelResizeFingerprint : Fingerprint(
+    definingClass = "Lcom/ss/android/ugc/aweme/commentv2/commentpage/commonvideo/DefaultCommentPageContainerFragment;",
+    returnType = "V",
+    parameters = listOf(),
+    filters = listOf(fieldAccess(definingClass = "Landroid/widget/FrameLayout\$LayoutParams;", name = "height")),
+    custom = { method, _ -> method.loadsLiteral(SHARE_68) },
 )
 
 /** The other static `(Context)I` in the height method's class: the content view's full height. */
@@ -144,6 +162,37 @@ val commentSheetHeightPatch = bytecodePatch(
             """
                 invoke-static {v$register}, $EXTENSION->heightMode(I)I
                 move-result v$register
+            """,
+        )
+
+        // The second sizing pass writes its share over that height, so the height it writes is
+        // swapped for the room between the system bars while the switch is on (#261). The panel
+        // is the view whose layout params get the height.
+        val resize = CommentPanelResizeFingerprint.method
+        val resizeInstructions = resize.implementation!!.instructions.toList()
+        val heightIndex = resizeInstructions.indexOfFirst { instruction ->
+            instruction.opcode == Opcode.IPUT &&
+                instruction.getReference<FieldReference>()?.let {
+                    it.definingClass == "Landroid/widget/FrameLayout\$LayoutParams;" && it.name == "height"
+                } == true
+        }
+        val paramsCall = resizeInstructions.subList(0, maxOf(heightIndex, 0)).indexOfLast { instruction ->
+            instruction.opcode == Opcode.INVOKE_VIRTUAL &&
+                instruction.getReference<MethodReference>()?.name == "getLayoutParams"
+        }
+        if (heightIndex < 0 || paramsCall < 0) {
+            throw PatchException("$PATCH: ${resize.definingClass}->${resize.name} writes no panel height")
+        }
+        val heightRegister = (resizeInstructions[heightIndex] as TwoRegisterInstruction).registerA
+        val panelRegister = (resizeInstructions[paramsCall] as FiveRegisterInstruction).registerC
+        if (heightRegister > 15 || panelRegister > 15) {
+            throw PatchException("$PATCH: ${resize.definingClass}->${resize.name} panel registers out of reach")
+        }
+        resize.addInstructions(
+            heightIndex,
+            """
+                invoke-static {v$panelRegister, v$heightRegister}, $EXTENSION->panelHeight(Landroid/view/View;I)I
+                move-result v$heightRegister
             """,
         )
 

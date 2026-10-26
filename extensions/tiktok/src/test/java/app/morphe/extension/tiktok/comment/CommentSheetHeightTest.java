@@ -102,6 +102,31 @@ public class CommentSheetHeightTest {
         }
     }
 
+    @Test public void theSecondPassGivesThePanelTheRoomOnlyWithTheSwitchOn() {
+        // #261: the second sizing pass wrote 68 percent over the full height on a cold start.
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup().visible()) {
+            var activity = controller.get();
+            var decor = activity.getWindow().getDecorView();
+            decor.measure(
+                    android.view.View.MeasureSpec.makeMeasureSpec(720, android.view.View.MeasureSpec.EXACTLY),
+                    android.view.View.MeasureSpec.makeMeasureSpec(1600, android.view.View.MeasureSpec.EXACTLY));
+            decor.layout(0, 0, 720, 1600);
+            android.graphics.Rect bars = app.morphe.extension.tiktok.settings.SystemBarInsets.current(decor);
+            int room = 1600 - bars.top - bars.bottom;
+            var panel = new android.widget.LinearLayout(activity);
+            int share = (int) (1600 * 0.68f);
+
+            assertEquals("off, TikTok's share stands", share, CommentSheetHeight.panelHeight(panel, share));
+            Settings.COMMENTS_FULL_HEIGHT.save(true);
+            assertEquals("on, the panel gets the room between the bars", room, CommentSheetHeight.panelHeight(panel, share));
+            assertEquals("no panel, TikTok's share stands", share, CommentSheetHeight.panelHeight(null, share));
+            assertEquals("no window to measure, TikTok's share stands", share, CommentSheetHeight.panelHeight(
+                    new android.widget.LinearLayout(org.robolectric.RuntimeEnvironment.getApplication()), share));
+            PausedProcess.set(true);
+            assertEquals("paused, TikTok's share stands", share, CommentSheetHeight.panelHeight(panel, share));
+        }
+    }
+
     @Test public void withNoWindowTheSiblingsHeightStands() {
         assertEquals(2000, CommentSheetHeight.belowStatusBar(null, 2000));
         assertEquals(2000, CommentSheetHeight.belowStatusBar(
