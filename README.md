@@ -130,7 +130,7 @@ Simple mode in Morphe Manager selects 122 of these patches. Each row says what t
 | `Allow Duet and Stitch` | Shows the Duet and Stitch buttons on videos whose creator turned them off, so you can still make one, and Add to Story in the share sheet and on stories when the creator turned off content reuse. TikTok may still refuse some videos or the upload. Starts off. Turn it on in Hushfeed settings > Share sheet. |
 | `Allow photo comments` | Lets PineDrama's comment box ask TikTok's server about photo comments, like TikTok does. TikTok's server still decides whether your account can post one. Starts off. Turn it on in Hushfeed settings > Comments. |
 | `Allow screenshots and Circle to Search` | Lets screenshots, screen recordings and Circle to Search work on TikTok screens that would otherwise come out black. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok. |
-| `Always show publish date` | Shows the date a video was posted next to the creator's name, so you can tell how old it is. It can also show the exact time, dates and lengths on profile grids, or sort the videos a grid has loaded. Unreleased builds keep that grid's sort menu after you choose Original order. On by default. Turn it off in Hushfeed settings > Feed screen. |
+| `Always show publish date` | Shows the date a video was posted next to the creator's name, so you can tell how old it is. It can also show the exact time, dates and lengths on profile grids, or sort the videos a grid has loaded. On by default. Turn it off in Hushfeed settings > Feed screen. |
 | `Always upload in HD` | Posts every video you upload in HD, as if you'd turned on TikTok's own HD upload setting each time. Videos TikTok doesn't count as high quality post as usual. Starts off. Turn it on in Hushfeed settings > App. |
 | `AMOLED dark theme` | Makes TikTok's dark mode backgrounds pure black, or a dark color you pick in this patch's options. Black lets OLED screens switch those pixels off. Light mode doesn't change. It's built in while patching, so only patching again without it undoes it. |
 | `App lock` | Asks for your fingerprint, face or PIN before TikTok opens, and again when you come back after a time you pick, so nobody else can open it on your phone. Starts off. Turn it on in Hushfeed settings > Privacy. |
@@ -266,6 +266,8 @@ Simple mode in Morphe Manager selects 122 of these patches. Each row says what t
 | `Turn off screen transitions` | Opens and closes TikTok's screens without the sliding animation, so moving around feels quicker. Swipes still follow your finger. Starts off. Turn it on in Hushfeed settings > App. |
 | `Use non-personalized search` | Shows search results that aren't tailored to your account. Starts off. Turn it on in Hushfeed settings > App. |
 | `Use system font` | Shows TikTok's text in your phone's own font or in a .ttf or .otf font file you import, instead of TikTok's, and can use your phone's emoji too. Starts off. Turn it on in Hushfeed settings > App, then restart TikTok. |
+
+Unreleased builds keep a profile grid's sort menu available after you choose Original order.
 
 ## Help
 
