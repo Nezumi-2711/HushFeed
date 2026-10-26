@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Ekran kaydı:** TikTok, Android 14 ve sonraki sürümlerde kayıt için son uygulamalar arasında seçilebilir.
 * **Kontroller:** Otomatik geçiş denetimi, videoları tek tek etiketlemeden TikTok oynatımını izler. Bitmemiş klipler ve izlenemeyen oynatım için sonuç belirsiz kalır.
 * **TikTok:** Ayar aramasındaki bir anahtarı basılı tutarak asıl sayfasında açıp vurgulayın. Geri, aramayı ve kaydırma konumunu korur (#248).
 * **Tanılama:** İlk kare geri çağrısı kayıtları, başlangıç kontrolleri için kaynak bağını ve monoton zaman damgalarını korur (#150).

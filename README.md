@@ -328,6 +328,8 @@ If TikTok closes while saves are still going, the next time you open it the down
 
 In unreleased source builds, LIVE recordings keep recovery files inside the app until Hushfeed verifies the saved copy. After an interruption, Hushfeed tries to save the complete part. If it can't, Retry opens the retained recording's actions. You can retry saving it, export its files or delete them. Older files with an unknown save history and damaged recovery records offer export or deletion. Finish that recovery before starting another recording. Clearing the app's data or uninstalling it removes these files.
 
+For one-app recording on Android 14 or newer, unreleased builds keep TikTok in the recording prompt's recent-apps list. Choose its preview there. Each new recording opens Android's permission prompt again.
+
 ### A photo post saved as a video still has TikTok's watermark
 
 A post that's one photo with a sound has no video on TikTok's servers, so TikTok's own Download builds one on your phone and adds its logo, the creator's handle and an end card. Choose Download image for a clean copy of the photo. Or turn on **Save photo posts as a video** under **Hushfeed settings > Downloads**, and Download video makes the MP4 itself from the original photo and the post's sound, with no marks.
