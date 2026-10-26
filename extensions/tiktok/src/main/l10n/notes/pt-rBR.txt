@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Grades:** Ao escolher a ordem original, o menu de ordenação da grade atual continua disponível (#180).
 * **Comentários:** Os comentários ao lado do vídeo usam a mesma largura para o layout e a reconstrução da tela (#253).
 * **Caixa de entrada:** Com a opção de abrir Stories primeiro, uma foto de conversa reutilizada abre o Story do criador atual no primeiro toque (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).

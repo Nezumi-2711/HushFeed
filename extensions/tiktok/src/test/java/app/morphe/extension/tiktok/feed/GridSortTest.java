@@ -14,9 +14,11 @@ import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -28,7 +30,14 @@ import com.ss.android.ugc.aweme.feed.model.PhotoModeTextInfo;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.diagnostics.HookStatus;
@@ -254,6 +263,17 @@ public class GridSortTest {
         public void notifyDataSetChanged() { refreshes++; }
     }
 
+    /** RecyclerView's owner changes, while the former adapter keeps mmRecyclerView on 47.5.3. */
+    public static final class OwnedGrid extends View {
+        private GridAdapter currentAdapter;
+        OwnedGrid(Activity activity) { super(activity); }
+        public GridAdapter getAdapter() { return currentAdapter; }
+        void setAdapter(GridAdapter adapter) {
+            currentAdapter = adapter;
+            if (adapter != null) adapter.mmRecyclerView = this;
+        }
+    }
+
     private static List<Aweme> posts(int count) {
         List<Aweme> out = new ArrayList<>();
         for (int i = 0; i < count; i++) out.add(new Post("v" + i, 1_000 + i, 1_000, 1 + i, 1 + i, false));
@@ -405,6 +425,754 @@ public class GridSortTest {
             idle(0);
             assertEquals("apecdfb", ids(adapter.mmItems));
             assertEquals(1, column.getChildCount());
+        }
+    }
+
+    private static void selectOrder(GridAdapter adapter, String order) {
+        TextView control = chip(adapter);
+        assertNotNull("the current grid has a sort control", control);
+        assertTrue("the control remains clickable", control.performClick());
+        idle(0);
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        assertNotNull(dialog);
+        assertTrue(dialog.isShowing());
+        assertEquals("the menu marks the current order", GridSort.indexOf(Settings.PROFILE_GRID_SORT.get()),
+                dialog.getListView().getCheckedItemPosition());
+        Shadows.shadowOf(dialog).clickOnItem(GridSort.indexOf(order));
+        idle(0);
+        assertFalse("a choice closes the menu", dialog.isShowing());
+    }
+
+    @Test public void originalChosenFromTheMenuKeepsThatControlAndTheSameVideos() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            GridFragment fragment = new GridFragment(adapter);
+            List<Aweme> model = grid();
+            List<Aweme> identities = new ArrayList<>(model);
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            TextView originalControl = chip(adapter);
+            GridSort.beforeOpen(fragment);
+            assertEquals("the viewer had the sorted order", "apecdfb", ids(model));
+
+            selectOrder(adapter, "off");
+            assertEquals("off", Settings.PROFILE_GRID_SORT.get());
+            assertEquals("native order includes pinned and missing-value posts", "abcdefp", ids(adapter.mmItems));
+            assertSame("Original keeps the active control", originalControl, chip(adapter));
+            assertEquals("Original order", String.valueOf(chip(adapter).getText()));
+            assertEquals("Sort this grid", String.valueOf(chip(adapter).getContentDescription()));
+            assertTrue(chip(adapter).isShown());
+            GridSort.beforeOpen(fragment);
+            for (int i = 0; i < identities.size(); i++) {
+                assertSame("the original post at " + i, identities.get(i), model.get(i));
+                assertSame("the grid and viewer own the same post at " + i, model.get(i), adapter.mmItems.get(i));
+            }
+            idle(GridSort.NEXT_PAGE_DELAY_MS * 2);
+            assertEquals("Original leaves paging to TikTok", 0, adapter.listener.calls);
+
+            selectOrder(adapter, "off");
+            assertSame("selecting Original again keeps the route", originalControl, chip(adapter));
+            selectOrder(adapter, "most_liked");
+            assertEquals("apefcdb", ids(adapter.mmItems));
+            assertSame(originalControl, chip(adapter));
+            GridSort.apply(adapter, "off");
+            assertNull("an explicit disable still removes the control", chip(adapter));
+        }
+    }
+
+    @Test public void anOriginalControlSurvivesPagesButExpiresWhenItsGridIsHiddenOrDetached() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            TextView originalControl = chip(adapter);
+            assertNotNull("Original leaves its control on the current grid", originalControl);
+
+            model.add(new Post("g", 250, 1_000, 1, 1, false));
+            adapter.mmItems = GridSort.page(adapter, model);
+            idle(GridSort.NEXT_PAGE_DELAY_MS * 2);
+            assertSame(model, adapter.mmItems);
+            assertEquals("abcdefpg", ids(adapter.mmItems));
+            assertSame("the same grid's next page keeps its menu", originalControl, chip(adapter));
+            assertEquals(0, adapter.listener.calls);
+
+            adapter.mmRecyclerView.setVisibility(View.GONE);
+            idle(50);
+            assertNull("navigation away expires the retained control", chip(adapter));
+            adapter.mmRecyclerView.setVisibility(View.VISIBLE);
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(50);
+            assertNull("returning to Original is a native grid again", chip(adapter));
+
+            GridSort.apply(adapter, "newest");
+            selectOrder(adapter, "off");
+            FrameLayout frame = (FrameLayout) adapter.mmRecyclerView.getParent();
+            frame.removeView(adapter.mmRecyclerView);
+            idle(0);
+            assertNull("detaching the grid removes its retained control", frame.findViewWithTag(GridSort.CHIP_TAG));
+            frame.addView(adapter.mmRecyclerView);
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(50);
+            assertNull("reattachment doesn't revive an expired control", chip(adapter));
+
+            GridSort.apply(adapter, "newest");
+            selectOrder(adapter, "off");
+            frame.dispatchWindowVisibilityChanged(View.INVISIBLE);
+            idle(0);
+            assertNull("a hidden window expires Original retention", chip(adapter));
+            frame.dispatchWindowVisibilityChanged(View.VISIBLE);
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            assertNull("returning to the window doesn't revive the control", chip(adapter));
+        }
+    }
+
+    @Test public void pauseClearsAnOriginalControlWithoutChangingNativeOffGrids() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            assertNotNull("Original is reachable before Pause", chip(adapter));
+            setPaused(true);
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(50);
+            assertSame(model, adapter.mmItems);
+            assertNull("Pause leaves no retained overlay", chip(adapter));
+            setPaused(false);
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(50);
+            assertSame(model, adapter.mmItems);
+            assertNull("resuming Original doesn't enable a control", chip(adapter));
+
+            GridAdapter stock = gridOnScreen(controller.get());
+            stock.mmItems = GridSort.data(stock, model);
+            idle(50);
+            assertSame(model, stock.mmItems);
+            assertNull("a grid with no active sort stays native", chip(stock));
+            GridSort.apply(stock, "off");
+            assertNull("applying off doesn't create a control", chip(stock));
+
+            GridSort.apply(stock, "newest");
+            selectOrder(stock, "off");
+            Settings.PROFILE_GRID_SORT.save("oldest");
+            stock.mmItems = GridSort.data(stock, model);
+            idle(0);
+            Settings.PROFILE_GRID_SORT.save("off");
+            stock.mmItems = GridSort.data(stock, model);
+            idle(0);
+            assertNull("a later settings disable doesn't inherit an old menu choice", chip(stock));
+        }
+    }
+
+    @Test public void aReusedGridDoesNotGiveANewAdapterThePreviousOriginalControl() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter first = gridOnScreen(controller.get());
+            List<Aweme> firstModel = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            first.mmItems = GridSort.data(first, firstModel);
+            idle(0);
+            selectOrder(first, "off");
+            TextView oldControl = chip(first);
+            assertNotNull("Original remains reachable before recycling", oldControl);
+            oldControl.performClick();
+            idle(0);
+            AlertDialog staleMenu = (AlertDialog) ShadowDialog.getLatestDialog();
+
+            GridAdapter next = new GridAdapter();
+            next.mmRecyclerView = first.mmRecyclerView;
+            List<Aweme> nextModel = posts(3);
+            next.mmItems = GridSort.data(next, nextModel);
+            idle(0);
+            assertNull("retention belongs to the previous adapter", chip(next));
+            Shadows.shadowOf(staleMenu).clickOnItem(GridSort.indexOf("oldest"));
+            idle(0);
+            assertEquals("a menu for a removed control can't change the next grid", "off", Settings.PROFILE_GRID_SORT.get());
+            assertSame(nextModel, next.mmItems);
+            assertSame(firstModel, first.mmItems);
+
+            Settings.PROFILE_GRID_SORT.save("newest");
+            next.mmItems = GridSort.data(next, nextModel);
+            idle(0);
+            assertEquals("v2v1v0", ids(next.mmItems));
+            selectOrder(next, "oldest");
+            assertEquals("the new control targets the current adapter", "v0v1v2", ids(next.mmItems));
+            assertSame("the old adapter is untouched", firstModel, first.mmItems);
+
+            FrameLayout frame = (FrameLayout) next.mmRecyclerView.getParent();
+            GridAdapter replacement = new GridAdapter();
+            replacement.mmRecyclerView = new View(controller.get());
+            frame.addView(replacement.mmRecyclerView, new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            replacement.mmItems = GridSort.data(replacement, nextModel);
+            idle(50);
+            selectOrder(replacement, "off");
+            TextView replacementControl = chip(replacement);
+            next.mmRecyclerView.setVisibility(View.GONE);
+            idle(50);
+            assertSame("the previous view's callbacks can't remove the replacement control",
+                    replacementControl, chip(replacement));
+            assertNotNull(replacementControl);
+            next.mmItems = GridSort.page(next, nextModel);
+            idle(0);
+            assertSame("a late hidden-grid page cannot remove the visible grid control",
+                    replacementControl, chip(replacement));
+        }
+    }
+
+    @Test public void aNestedGridControlCannotInterceptItsParentsSortChoice() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter outer = gridOnScreen(controller.get());
+            List<Aweme> outerModel = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            outer.mmItems = GridSort.data(outer, outerModel);
+            idle(0);
+            TextView outerControl = chip(outer);
+
+            FrameLayout outerFrame = (FrameLayout) outer.mmRecyclerView.getParent();
+            FrameLayout nestedFrame = new FrameLayout(controller.get());
+            GridAdapter nested = new GridAdapter();
+            nested.mmRecyclerView = new View(controller.get());
+            nestedFrame.addView(nested.mmRecyclerView, new FrameLayout.LayoutParams(100, 100));
+            outerFrame.addView(nestedFrame, 0, new FrameLayout.LayoutParams(100, 100));
+            List<Aweme> nestedModel = posts(3);
+            nested.mmItems = GridSort.data(nested, nestedModel);
+            idle(50);
+            TextView nestedControl = chip(nested);
+            assertNotNull(nestedControl);
+
+            selectOrder(outer, "off");
+            assertEquals("the parent's menu must target its own control", "off", Settings.PROFILE_GRID_SORT.get());
+            assertSame(outerControl, chip(outer));
+            assertEquals("abcdefp", ids(outer.mmItems));
+            assertSame("the nested control is untouched", nestedControl, chip(nested));
+            assertEquals("the nested grid is untouched", "v2v1v0", ids(nested.mmItems));
+        }
+    }
+
+    @Test public void anExternalDisableBeforeTheNextBindExpiresOriginalRetention() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            assertNotNull(chip(adapter));
+            Settings.PROFILE_GRID_SORT.save("oldest");
+            Settings.PROFILE_GRID_SORT.save("off");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            assertNull("an external disable cannot reuse an old Original choice", chip(adapter));
+        }
+    }
+
+    @Test public void aLatePageCannotTakeTheCurrentAdaptersControlOnTheSameGridView() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter first = gridOnScreen(controller.get());
+            FrameLayout frame = (FrameLayout) first.mmRecyclerView.getParent();
+            frame.removeView(first.mmRecyclerView);
+            OwnedGrid grid = new OwnedGrid(controller.get());
+            frame.addView(grid, new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            grid.setAdapter(first);
+            idle(50);
+            List<Aweme> firstModel = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            first.mmItems = GridSort.data(first, firstModel);
+            idle(0);
+            GridAdapter next = new GridAdapter();
+            grid.setAdapter(next);
+            assertSame("the old adapter retains its native view reference", grid, first.mmRecyclerView);
+            assertSame(grid, next.mmRecyclerView);
+            List<Aweme> nextModel = posts(3);
+            next.mmItems = GridSort.data(next, nextModel);
+            idle(0);
+            selectOrder(next, "off");
+            TextView currentControl = chip(next);
+            assertNotNull(currentControl);
+
+            first.mmItems = GridSort.page(first, firstModel);
+            idle(0);
+            assertSame("a late page for the previous adapter can't remove the current route",
+                    currentControl, chip(next));
+            assertSame(nextModel, next.mmItems);
+            selectOrder(next, "oldest");
+            assertEquals("the current control still targets its own adapter", "v0v1v2", ids(next.mmItems));
+            assertSame("the late page leaves the former adapter in native order", firstModel, first.mmItems);
+        }
+    }
+
+    @Test public void aNativeAdapterReplacementInvalidatesAnOpenMenuBeforeItsFirstData() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter first = gridOnScreen(controller.get());
+            FrameLayout frame = (FrameLayout) first.mmRecyclerView.getParent();
+            frame.removeView(first.mmRecyclerView);
+            OwnedGrid grid = new OwnedGrid(controller.get());
+            frame.addView(grid, new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            grid.setAdapter(first);
+            idle(50);
+            Settings.PROFILE_GRID_SORT.save("newest");
+            first.mmItems = GridSort.data(first, grid());
+            idle(0);
+            List<?> previousItems = first.mmItems;
+            assertTrue(chip(first).performClick());
+            idle(0);
+            AlertDialog menu = (AlertDialog) ShadowDialog.getLatestDialog();
+            GridAdapter next = new GridAdapter();
+            grid.setAdapter(next);
+            Shadows.shadowOf(menu).clickOnItem(GridSort.indexOf("off"));
+            idle(0);
+            assertEquals("a menu for a detached native adapter cannot change the order",
+                    "newest", Settings.PROFILE_GRID_SORT.get());
+            assertSame(previousItems, first.mmItems);
+            List<Aweme> nextModel = posts(3);
+            next.mmItems = GridSort.data(next, nextModel);
+            idle(0);
+            selectOrder(next, "off");
+            assertNotNull("the new native owner's menu still works", chip(next));
+        }
+    }
+
+    @FunctionalInterface private interface WorkerAction {
+        void run() throws Exception;
+    }
+
+    private static void onWorker(WorkerAction action) throws Exception {
+        AtomicReference<Throwable> failure = new AtomicReference<>();
+        Thread worker = new Thread(() -> {
+            try { action.run(); } catch (Throwable ex) { failure.set(ex); }
+        }, "grid-sort-settings-test");
+        worker.setDaemon(true);
+        worker.start();
+        worker.join(5_000);
+        assertFalse("settings callbacks don't wait for the UI while holding Setting.class", worker.isAlive());
+        if (failure.get() != null) throw new AssertionError("background setting write failed", failure.get());
+    }
+
+    /** Real preference writes, with optional delivery of notifications captured before unregister. */
+    private static final class PreferenceChanges {
+        final SharedPreferences delegate = Setting.preferences.preferences;
+        SharedPreferences store;
+        final Map<SharedPreferences.OnSharedPreferenceChangeListener,
+                SharedPreferences.OnSharedPreferenceChangeListener> active = new IdentityHashMap<>();
+        final List<Runnable> pending = new ArrayList<>();
+        volatile boolean defer;
+        volatile boolean registrationsLocked = true;
+
+        PreferenceChanges() {
+            store = (SharedPreferences) java.lang.reflect.Proxy.newProxyInstance(
+                    SharedPreferences.class.getClassLoader(), new Class<?>[] {SharedPreferences.class},
+                    (proxy, method, arguments) -> {
+                        if (method.getName().equals("registerOnSharedPreferenceChangeListener")) {
+                            registrationsLocked &= Thread.holdsLock(Setting.class);
+                            SharedPreferences.OnSharedPreferenceChangeListener listener =
+                                    (SharedPreferences.OnSharedPreferenceChangeListener) arguments[0];
+                            SharedPreferences.OnSharedPreferenceChangeListener forwarded = (ignored, key) -> {
+                                Runnable delivery = () -> listener.onSharedPreferenceChanged(store, key);
+                                synchronized (pending) {
+                                    if (defer) { pending.add(delivery); return; }
+                                }
+                                delivery.run();
+                            };
+                            synchronized (active) { active.put(listener, forwarded); }
+                            delegate.registerOnSharedPreferenceChangeListener(forwarded);
+                            return null;
+                        }
+                        if (method.getName().equals("unregisterOnSharedPreferenceChangeListener")) {
+                            SharedPreferences.OnSharedPreferenceChangeListener forwarded;
+                            synchronized (active) { forwarded = active.remove(arguments[0]); }
+                            if (forwarded != null) delegate.unregisterOnSharedPreferenceChangeListener(forwarded);
+                            return null;
+                        }
+                        try { return method.invoke(delegate, arguments); }
+                        catch (java.lang.reflect.InvocationTargetException ex) { throw ex.getCause(); }
+                    });
+        }
+
+        int activeCount() { synchronized (active) { return active.size(); } }
+        int pendingCount() { synchronized (pending) { return pending.size(); } }
+
+        void deliverPending() {
+            List<Runnable> deliveries;
+            synchronized (pending) { deliveries = new ArrayList<>(pending); pending.clear(); }
+            for (Runnable delivery : deliveries) delivery.run();
+        }
+
+        void notifyNow(String key) {
+            List<SharedPreferences.OnSharedPreferenceChangeListener> listeners;
+            synchronized (active) { listeners = new ArrayList<>(active.keySet()); }
+            for (SharedPreferences.OnSharedPreferenceChangeListener listener : listeners) {
+                listener.onSharedPreferenceChanged(store, key);
+            }
+        }
+    }
+
+    @Test public void aBackgroundBatchRestoreBeforeTheNextBindExpiresOriginalRetention() throws Exception {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            assertNotNull(chip(adapter));
+            onWorker(() -> {
+                Setting.saveAll(Collections.singletonMap(Settings.PROFILE_GRID_SORT, "oldest"));
+                Setting.saveAll(Collections.singletonMap(Settings.PROFILE_GRID_SORT, "off"));
+            });
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            assertSame(model, adapter.mmItems);
+            assertNull("a restored disable doesn't inherit the earlier menu choice", chip(adapter));
+        }
+    }
+
+    @Test public void latePreferenceCallbacksCannotExpireANewerOriginalMenuChoice() throws Exception {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            TextView control = chip(adapter);
+            assertEquals(1, changes.activeCount());
+            changes.defer = true;
+            onWorker(() -> {
+                Settings.PROFILE_GRID_SORT.save("oldest");
+                Settings.PROFILE_GRID_SORT.save("off");
+            });
+            idle(0);
+            assertTrue("old notifications were captured", changes.pendingCount() >= 2);
+            selectOrder(adapter, "off");
+            assertEquals("repicking Original replaces its listener", 1, changes.activeCount());
+            changes.deliverPending();
+            idle(0);
+            assertSame("old callbacks can't remove a newer menu choice", control, chip(adapter));
+            assertEquals("Original order", chip(adapter).getText().toString());
+            assertEquals(1, changes.activeCount());
+
+            changes.defer = false;
+            control.performClick();
+            idle(0);
+            AlertDialog currentMenu = (AlertDialog) ShadowDialog.getLatestDialog();
+            Settings.PROFILE_GRID_SORT.save("oldest");
+            Settings.PROFILE_GRID_SORT.save("off");
+            Shadows.shadowOf(currentMenu).clickOnItem(0);
+            idle(0);
+            assertSame("an old UI cleanup can't cancel a newer genuine menu choice", control, chip(adapter));
+            assertEquals(1, changes.activeCount());
+            Settings.PROFILE_GRID_SORT.save("oldest");
+            Settings.PROFILE_GRID_SORT.save("off");
+            idle(0);
+            assertNull("the current listener still expires on a later external change", chip(adapter));
+            assertEquals(0, changes.activeCount());
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+        assertEquals("closing the window leaves no listener", 0, changes.activeCount());
+    }
+
+    @Test public void originalPreferenceWatchersFollowTheControlLifetimeAndKeepUiOnMain() throws Exception {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            assertEquals("ordinary sorted controls don't watch preferences", 0, changes.activeCount());
+            selectOrder(adapter, "off");
+            assertEquals(1, changes.activeCount());
+            changes.store.edit().putString("grid_sort_test_unrelated", "changed").commit();
+            assertEquals("unrelated preferences leave retention alone", 1, changes.activeCount());
+            selectOrder(adapter, "off");
+            assertEquals("only one listener belongs to this retention", 1, changes.activeCount());
+            assertTrue("save and listener registration share the existing settings lock", changes.registrationsLocked);
+            selectOrder(adapter, "oldest");
+            assertEquals("a real sort unregisters the retention listener", 0, changes.activeCount());
+            selectOrder(adapter, "off");
+            GridSort.apply(adapter, "off");
+            assertEquals("explicit disable unregisters the retention listener", 0, changes.activeCount());
+            GridSort.apply(adapter, "newest");
+            selectOrder(adapter, "off");
+
+            TextView control = chip(adapter);
+            changes.defer = true;
+            onWorker(() -> {
+                synchronized (Setting.class) {
+                    Settings.PROFILE_GRID_SORT.save("oldest");
+                    Settings.PROFILE_GRID_SORT.save("off");
+                    changes.notifyNow(Settings.PROFILE_GRID_SORT.key);
+                }
+            });
+            assertSame("a worker callback doesn't remove Android views", control, chip(adapter));
+            assertEquals(View.VISIBLE, control.getVisibility());
+            assertEquals("the worker immediately unregisters the expired listener", 0, changes.activeCount());
+            idle(0);
+            assertNull("main handles the expired control", chip(adapter));
+            changes.deliverPending();
+            changes.defer = false;
+
+            GridSort.apply(adapter, "newest");
+            selectOrder(adapter, "off");
+            assertEquals(1, changes.activeCount());
+            setPaused(true);
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            assertEquals("Pause unregisters the retention listener", 0, changes.activeCount());
+            setPaused(false);
+
+            GridSort.apply(adapter, "newest");
+            selectOrder(adapter, "off");
+            FrameLayout frame = (FrameLayout) adapter.mmRecyclerView.getParent();
+            frame.removeView(chip(adapter));
+            assertEquals("direct chip detachment unregisters its listener", 0, changes.activeCount());
+            idle(0);
+            GridSort.apply(adapter, "newest");
+            selectOrder(adapter, "off");
+            assertEquals(1, changes.activeCount());
+            frame.removeView(adapter.mmRecyclerView);
+            idle(0);
+            assertEquals("grid detachment unregisters its listener", 0, changes.activeCount());
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+        assertEquals(0, changes.activeCount());
+    }
+
+    @Test public void aGridBindWaitsForAWholeSettingsWriteBeforeChoosingItsControl() throws Exception {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            TextView control = chip(adapter);
+            assertNotNull(control);
+            changes.defer = true;
+            // Queue afterTikTok before the worker can queue either preference notification.
+            adapter.mmItems = GridSort.data(adapter, model);
+            Thread main = Thread.currentThread();
+            CountDownLatch firstWrite = new CountDownLatch(1);
+            AtomicBoolean mainBlocked = new AtomicBoolean();
+            AtomicReference<Throwable> failure = new AtomicReference<>();
+            Thread worker = new Thread(() -> {
+                try {
+                    synchronized (Setting.class) {
+                        Settings.PROFILE_GRID_SORT.save("oldest");
+                        firstWrite.countDown();
+                        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+                        while (main.getState() != Thread.State.BLOCKED && System.nanoTime() < deadline) {
+                            Thread.sleep(1);
+                        }
+                        if (main.getState() != Thread.State.BLOCKED) {
+                            throw new AssertionError("main never waited on the settings write lock");
+                        }
+                        mainBlocked.set(true);
+                        Settings.PROFILE_GRID_SORT.save("off");
+                    }
+                } catch (Throwable ex) {
+                    failure.set(ex);
+                } finally {
+                    firstWrite.countDown();
+                }
+            }, "grid-choice-write-test");
+            worker.setDaemon(true);
+            worker.start();
+            assertTrue(firstWrite.await(5, TimeUnit.SECONDS));
+            idle(0);
+            worker.join(5_000);
+            assertFalse(worker.isAlive());
+            if (failure.get() != null) throw new AssertionError("controlled settings write failed", failure.get());
+            assertTrue("the queued bind crossed the held settings lock", mainBlocked.get());
+            assertEquals("off", Settings.PROFILE_GRID_SORT.get());
+            assertTrue("both real preference notifications remain queued", changes.pendingCount() >= 2);
+            assertSame(control, chip(adapter));
+            assertEquals("render only the completed settings write", "Original order", chip(adapter).getText().toString());
+            assertEquals("the bind hasn't dropped the pending retention notifications", 1, changes.activeCount());
+
+            changes.deliverPending();
+            adapter.mmRecyclerView.getViewTreeObserver().dispatchOnGlobalLayout();
+            idle(0);
+            assertNull("external off leaves no stale sorted control", chip(adapter));
+            assertEquals(0, changes.activeCount());
+            assertSame(model, adapter.mmItems);
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+    }
+
+    private static int observerListeners(ViewTreeObserver observer, String field) {
+        Object listeners = ReflectionHelpers.getField(observer, field);
+        return listeners == null ? 0 : ((Number) ReflectionHelpers.callInstanceMethod(listeners, "size")).intValue();
+    }
+
+    private static int attachListeners(View view) {
+        Object info = ReflectionHelpers.getField(view, "mListenerInfo");
+        if (info == null) return 0;
+        List<?> listeners = ReflectionHelpers.getField(info, "mOnAttachStateChangeListeners");
+        return listeners == null ? 0 : listeners.size();
+    }
+
+    @Test @Config(sdk = {23, 28})
+    public void originalDetachCleansTheLiveWindowAndSortedControlsReattachWithoutABind() {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            GridAdapter adapter = gridOnScreen(controller.get());
+            View grid = adapter.mmRecyclerView;
+            FrameLayout frame = (FrameLayout) grid.getParent();
+            ViewTreeObserver window = frame.getViewTreeObserver();
+            int scrolls = observerListeners(window, "mOnScrollChangedListeners");
+            int layouts = observerListeners(window, "mOnGlobalLayoutListeners");
+            int attached = attachListeners(grid);
+            List<Aweme> model = grid();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, model);
+            idle(0);
+            selectOrder(adapter, "off");
+            assertEquals(scrolls + 1, observerListeners(window, "mOnScrollChangedListeners"));
+            assertEquals(layouts + 1, observerListeners(window, "mOnGlobalLayoutListeners"));
+            assertEquals(attached + 1, attachListeners(grid));
+            assertEquals(1, changes.activeCount());
+
+            frame.removeView(grid);
+            idle(0);
+            assertTrue("the former window is still live", window.isAlive());
+            assertTrue("the activity still owns that window", window == frame.getViewTreeObserver());
+            assertFalse("the detached view now exposes a floating observer", window == grid.getViewTreeObserver());
+            assertEquals("remove from the captured live window", scrolls, observerListeners(window, "mOnScrollChangedListeners"));
+            assertEquals(layouts, observerListeners(window, "mOnGlobalLayoutListeners"));
+            assertEquals(attached, attachListeners(grid));
+            assertEquals(0, changes.activeCount());
+            assertNull(frame.findViewWithTag(GridSort.CHIP_TAG));
+
+            frame.addView(grid);
+            idle(50);
+            assertNull("Original doesn't return when the cached view returns", chip(adapter));
+            GridSort.apply(adapter, "newest");
+            idle(0);
+            TextView sortedControl = chip(adapter);
+            for (int i = 0; i < 2; i++) {
+                frame.removeView(grid);
+                idle(0);
+                assertEquals("a detached sorted tree doesn't retain the window", scrolls,
+                        observerListeners(window, "mOnScrollChangedListeners"));
+                assertEquals(layouts, observerListeners(window, "mOnGlobalLayoutListeners"));
+                assertEquals("the cached sorted tree keeps one reattach listener", attached + 1, attachListeners(grid));
+                frame.addView(grid);
+                idle(50);
+                assertSame("reattach needs no native list bind", sortedControl, chip(adapter));
+                assertEquals(scrolls + 1, observerListeners(window, "mOnScrollChangedListeners"));
+                assertEquals(layouts + 1, observerListeners(window, "mOnGlobalLayoutListeners"));
+                assertEquals(attached + 1, attachListeners(grid));
+            }
+            selectOrder(adapter, "off");
+            frame.removeView(grid);
+            idle(0);
+            assertEquals(scrolls, observerListeners(window, "mOnScrollChangedListeners"));
+            assertEquals(layouts, observerListeners(window, "mOnGlobalLayoutListeners"));
+            assertEquals(attached, attachListeners(grid));
+            assertEquals(0, changes.activeCount());
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+    }
+
+    @Test @Config(sdk = {23, 28})
+    public void aFloatingGridObserverMergesOnceAndCleansItsActualWindow() {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            ViewTreeObserver window = activity.getWindow().getDecorView().getViewTreeObserver();
+            int scrolls = observerListeners(window, "mOnScrollChangedListeners");
+            int layouts = observerListeners(window, "mOnGlobalLayoutListeners");
+            FrameLayout frame = new FrameLayout(activity);
+            OwnedGrid grid = new OwnedGrid(activity);
+            frame.addView(grid, new FrameLayout.LayoutParams(-1, -1));
+            GridAdapter adapter = new GridAdapter();
+            grid.setAdapter(adapter);
+            ViewTreeObserver floating = grid.getViewTreeObserver();
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, grid());
+            idle(0);
+            assertFalse(grid.isAttachedToWindow());
+            assertEquals(1, observerListeners(floating, "mOnScrollChangedListeners"));
+            assertEquals(1, observerListeners(floating, "mOnGlobalLayoutListeners"));
+            assertEquals(1, attachListeners(grid));
+
+            activity.setContentView(frame);
+            idle(50);
+            assertFalse("Android merged and killed the floating observer", floating.isAlive());
+            assertTrue("the grid now uses the live window observer", window == grid.getViewTreeObserver());
+            assertEquals("merged scroll registration appears exactly once", scrolls + 1,
+                    observerListeners(window, "mOnScrollChangedListeners"));
+            assertEquals(layouts + 1, observerListeners(window, "mOnGlobalLayoutListeners"));
+            selectOrder(adapter, "off");
+            assertEquals(1, changes.activeCount());
+            frame.removeView(grid);
+            idle(0);
+            assertTrue(window.isAlive());
+            assertEquals(scrolls, observerListeners(window, "mOnScrollChangedListeners"));
+            assertEquals(layouts, observerListeners(window, "mOnGlobalLayoutListeners"));
+            assertEquals(0, attachListeners(grid));
+            assertEquals(0, changes.activeCount());
+            assertNull(frame.findViewWithTag(GridSort.CHIP_TAG));
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+    }
+
+    @Test @Config(sdk = {23, 28})
+    public void aNativeOwnerChangeExpiresTheOldControlOnLayoutWithoutANewBind() {
+        PreferenceChanges changes = new PreferenceChanges();
+        ReflectionHelpers.setField(Setting.preferences, "preferences", changes.store);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            GridAdapter first = gridOnScreen(controller.get());
+            FrameLayout frame = (FrameLayout) first.mmRecyclerView.getParent();
+            frame.removeView(first.mmRecyclerView);
+            OwnedGrid grid = new OwnedGrid(controller.get());
+            frame.addView(grid, new FrameLayout.LayoutParams(-1, -1));
+            grid.setAdapter(first);
+            idle(50);
+            ViewTreeObserver window = grid.getViewTreeObserver();
+            int scrolls = observerListeners(window, "mOnScrollChangedListeners");
+            int layouts = observerListeners(window, "mOnGlobalLayoutListeners");
+            int attached = attachListeners(grid);
+            Settings.PROFILE_GRID_SORT.save("newest");
+            first.mmItems = GridSort.data(first, grid());
+            idle(0);
+            selectOrder(first, "off");
+            assertNotNull(chip(first));
+            assertEquals(1, changes.activeCount());
+            GridAdapter next = new GridAdapter();
+            grid.setAdapter(next);
+            window.dispatchOnGlobalLayout();
+            idle(0);
+            assertNull("layout expires a control for a known former native owner", chip(next));
+            assertEquals(0, changes.activeCount());
+            assertEquals(scrolls, observerListeners(window, "mOnScrollChangedListeners"));
+            assertEquals(layouts, observerListeners(window, "mOnGlobalLayoutListeners"));
+            assertEquals(attached, attachListeners(grid));
+            assertNull("the replacement adapter hasn't bound a list", next.mmItems);
+        } finally {
+            ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
         }
     }
 

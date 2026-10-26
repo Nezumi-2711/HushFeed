@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Cuadrículas:** Al elegir el orden original, el menú para ordenar la cuadrícula actual sigue disponible (#180).
 * **Comentarios:** Los comentarios junto al video usan el mismo ancho para el diseño y la reconstrucción de la vista (#253).
 * **Bandeja de entrada:** Con la opción de abrir primero las historias, una imagen de chat reutilizada abre la historia del creador actual al primer toque (#233).
 * **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
