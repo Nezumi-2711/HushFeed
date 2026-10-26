@@ -8,6 +8,7 @@ Every Hushfeed release, newest first.
 
 * **Build checks:** Add a PineDrama core walk for launch, settings navigation and return. Full qualification stays incomplete.
 * **Feed:** Keep country flags and codes next to names written from right to left (#258).
+* **Feed:** With `See-through bottom bar` on, the name and "Tap to watch" line of LIVE previews and mini dramas stay above the tabs (#250).
 * **Grids:** Give the sort control a 48 dp touch target.
 * **Grids:** Hide the sort control while its grid is detached, then restore it when the grid returns.
 * **Grids:** Leave the current order in place when a sort change can't be saved.

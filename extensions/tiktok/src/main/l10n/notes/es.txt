@@ -2,6 +2,7 @@
 
 * **Comprobaciones:** Se añade un recorrido básico de PineDrama para el inicio, los ajustes y el regreso. La validación completa sigue pendiente.
 * **Feed:** Las banderas y los códigos de país permanecen junto a los nombres escritos de derecha a izquierda (#258).
+* **Feed:** Con la barra inferior transparente activada, el nombre y la línea "Toca para ver" de las vistas previas de LIVE y los minidramas quedan por encima de las pestañas (#250).
 * **Cuadrículas:** El control de orden tiene un área táctil de al menos 48 dp.
 * **Cuadrículas:** El control de orden se oculta mientras su cuadrícula está separada de la vista y reaparece cuando vuelve.
 * **Cuadrículas:** Si no se puede guardar un cambio de orden, se conserva el orden actual.

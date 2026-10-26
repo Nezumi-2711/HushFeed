@@ -2,6 +2,7 @@
 
 * **Kontroller:** PineDrama için başlatma, ayarlarda gezinme ve geri dönme temel kontrolü eklendi. Tam doğrulama henüz tamamlanmadı.
 * **Akış:** Ülke bayrakları ve kodları, sağdan sola yazılan adların yanında kalır (#258).
+* **Akış:** Saydam alt çubuk açıkken LIVE önizlemelerinin ve mini dizilerin adı ile "İzlemek için dokun" satırı sekmelerin üstünde kalır (#250).
 * **Izgaralar:** Sıralama denetiminin dokunma alanı en az 48 dp olur.
 * **Izgaralar:** Izgara görünümden ayrıldığında sıralama denetimi gizlenir, geri döndüğünde yeniden görünür.
 * **Izgaralar:** Sıralama değişikliği kaydedilemezse mevcut sıra korunur.

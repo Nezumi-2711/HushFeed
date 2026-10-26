@@ -2,6 +2,7 @@
 
 * **Yoxlamalar:** PineDrama üçün açılış, ayarlar və geri qayıtma üzrə əsas yoxlama əlavə edilib. Tam uyğunluq yoxlaması tamamlanmayıb.
 * **Lent:** Ölkə bayraqları və kodları sağdan sola yazılan adların yanında qalır (#258).
+* **Lent:** Şəffaf alt panel açıq olanda LIVE önizləmələrinin və mini dramların adı və "Baxmaq üçün toxunun" sətri tabların üstündə qalır (#250).
 * **Tor görünüşü:** Sıralama düyməsinin toxunma sahəsi ən azı 48 dp olur.
 * **Tor görünüşü:** Tor ayrıldıqda sıralama düyməsi gizlənir, tor qayıdanda yenidən görünür.
 * **Tor görünüşü:** Yeni sıralama yadda saxlanmasa, cari sıra dəyişmir.
