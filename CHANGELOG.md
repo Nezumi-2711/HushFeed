@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **Settings:** Replace large home cards with a compact full-width list. Remove Quick setups.
 * **TikTok:** Hushfeed now needs Morphe Manager 2.2.0 or newer, or morphe-desktop 1.19.1 on a computer.
 * **Build checks:** Add a PineDrama core walk for launch, settings navigation and return. Full qualification stays incomplete.
 * **Feed:** Keep country flags and codes next to names written from right to left (#258).

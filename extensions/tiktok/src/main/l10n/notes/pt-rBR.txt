@@ -1,3 +1,4 @@
+* **Configurações:** Os cartões grandes da página inicial dão lugar a uma lista compacta de largura total. As configurações rápidas foram removidas.
 ## Unreleased
 
 * **TikTok:** O Hushfeed agora exige o Morphe Manager 2.2.0 ou mais novo, ou o morphe-desktop 1.19.1 no computador.

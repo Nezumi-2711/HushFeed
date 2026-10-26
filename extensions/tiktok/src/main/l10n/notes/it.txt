@@ -1,3 +1,4 @@
+* **Impostazioni:** Le grandi schede iniziali lasciano spazio a un elenco compatto a tutta larghezza. Le configurazioni rapide sono state rimosse.
 ## Unreleased
 
 * **TikTok:** Hushfeed ora richiede Morphe Manager 2.2.0 o successivo, oppure morphe-desktop 1.19.1 sul computer.

@@ -1,3 +1,4 @@
+* **Parametrlər:** Böyük ana səhifə kartları yığcam, tam enli siyahı ilə əvəz edilib. Sürətli quruluşlar silinib.
 ## Unreleased
 
 * **TikTok:** Hushfeed indi Morphe Manager 2.2.0 və ya daha yenisini, kompüterdə isə morphe-desktop 1.19.1 tələb edir.

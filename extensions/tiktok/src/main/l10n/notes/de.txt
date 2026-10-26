@@ -1,3 +1,4 @@
+* **Einstellungen:** Große Karten auf der Startseite weichen einer kompakten Liste über die volle Breite. Die Schnelleinstellungen wurden entfernt.
 ## Unreleased
 
 * **TikTok:** Hushfeed braucht jetzt Morphe Manager 2.2.0 oder neuer, am Computer morphe-desktop 1.19.1.

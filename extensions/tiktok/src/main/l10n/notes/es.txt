@@ -1,3 +1,4 @@
+* **Ajustes:** Las tarjetas grandes de inicio se sustituyen por una lista compacta de ancho completo. Se eliminan los ajustes rápidos.
 ## Unreleased
 
 * **TikTok:** Hushfeed ahora necesita Morphe Manager 2.2.0 o superior, o morphe-desktop 1.19.1 en el ordenador.

@@ -1,3 +1,4 @@
+* **Settings:** Replace large home cards with a compact full-width list. Remove Quick setups.
 ## Unreleased
 
 * **TikTok:** Hushfeed now needs Morphe Manager 2.2.0 or newer, or morphe-desktop 1.19.1 on a computer.

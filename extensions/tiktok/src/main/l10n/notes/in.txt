@@ -1,3 +1,4 @@
+* **Pengaturan:** Kartu besar di halaman utama diganti daftar ringkas selebar layar. Pengaturan cepat dihapus.
 ## Unreleased
 
 * **TikTok:** Hushfeed kini butuh Morphe Manager 2.2.0 atau yang lebih baru, atau morphe-desktop 1.19.1 di komputer.

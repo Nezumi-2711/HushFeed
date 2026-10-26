@@ -67,15 +67,7 @@ The patches that take files out of TikTok do it while patching, so Pause and a s
 
 Besides the row at the top of TikTok's **Settings and privacy**, two shortcuts skip Profile and work while you're signed out: press and hold **For You** at the top of the feed, or long-press **Home** on the bottom bar. A quick tap on either still does what it always did. The Home shortcut needs **Feed tab navigation** selected along with **Settings** when you patch, and it's the one to use if you've hidden the tab names at the top of the feed.
 
-The home page has a search box, which finds any row by its title or description and flips a plain switch right in the results. In unreleased builds, hold a result switch to open its original page and highlight the setting. Back restores the search. Screen readers offer **Open setting location**. Under it, Quick setups turns on Quiet or Privacy, or puts every switch back to its default, in one tap with Undo. Every settings page sits right on the home page under a small heading, so nothing is more than one tap away:
-
-| Heading | Pages |
-| --- | --- |
-| Your feed | Feed filter, Feed tabs, Feed screen, Playback and Screen time |
-| Conversations | Comments and Inbox |
-| Saving and sharing | Downloads and Share sheet |
-| Privacy and app | Privacy, App, Region, Backup and restore, and Feature Gate Lab when it's installed |
-| Hushfeed | Status, Pause Hushfeed, Diagnostics, About Hushfeed, Report a problem and Support Hushfeed |
+The home page has a search box, which finds any row by its title or description and flips a plain switch right in the results. In unreleased builds, hold a result switch to open its original page and highlight the setting. Back restores the search. Screen readers offer **Open setting location**. Unreleased builds put every available page in one compact list beneath search. Quick setups has been removed.
 
 The status chip next to the Hushfeed title scrolls down to the full status card. About Hushfeed has the build details and the license notices. **Report a problem** opens a GitHub bug report with your versions and the switches you have on filled in, and **Support Hushfeed** opens Ko-fi. A few pages you'll want to know about:
 
@@ -87,7 +79,7 @@ The status chip next to the Hushfeed title scrolls down to the full status card.
 Unreleased builds add a PUSH DELIVERY section to exported diagnostics. Its counters cover stages observed in the current process. Zero means unobserved. During timed capture, actual notification attempts also record Android permission and channel state. Native registration tracing covers global TikTok 47.5.3; PineDrama marks it unsupported. Shared upload counters cover all transports, and cache hits aren't fresh server acknowledgments. Tokens and message contents stay out of the report.
 - **Feature Gate Lab** changes values TikTok reads for its own features. Its reviewed presets show each value before you apply it, and Undo last Lab change puts the old ones back. A gate outside those presets can break sign-in or the feed, so leave it alone unless you know what it does.
 
-Settings use the same rounded panels and controls across every page, in dark and light mode. The [page mockups and implementation notes](concepts/patch-development.md#settings-design-concepts) show the design behind them.
+Unreleased settings use flat rows with the same controls in dark and light mode.
 
 <img src="assets/settings/settings.png" alt="Hushfeed settings home" width="260" /> <img src="assets/settings/playback-sound.png" alt="The Player card on the Playback page" width="260" /> <img src="assets/settings/playback-sound-light.png" alt="The Player card on the Playback page in light mode" width="260" />
 

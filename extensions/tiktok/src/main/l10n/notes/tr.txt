@@ -1,3 +1,4 @@
+* **Ayarlar:** Ana sayfadaki büyük kartlar yerine tam genişlikte kompakt bir liste kullanılır. Hızlı kurulumlar kaldırıldı.
 ## Unreleased
 
 * **TikTok:** Hushfeed artık Morphe Manager 2.2.0 ya da daha yenisini, bilgisayarda ise morphe-desktop 1.19.1 istiyor.
