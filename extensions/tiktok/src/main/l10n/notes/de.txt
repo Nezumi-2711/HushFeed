@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Diagnose:** Benachrichtigungsberichte zählen die Schritte bei Registrierung und Anzeige, ohne Nachrichteninhalte aufzunehmen (#126, #222, #86).
 * **Bildschirmaufnahme:** TikTok bleibt ab Android 14 in der Auswahl der zuletzt verwendeten Apps für die Aufnahme verfügbar.
 * **Prüfungen:** Der Audit für den automatischen Videowechsel verfolgt TikToks Wiedergabe ohne einzelne Videos zu kennzeichnen. Nicht beendete Clips und nicht verfügbare Wiedergabedaten bleiben unentschieden.
 * **TikTok:** Halte einen Schalter in der Einstellungssuche gedrückt, um ihn auf seiner ursprünglichen Seite zu öffnen und hervorzuheben. Zurück behält Suche und Scrollposition bei (#248).
