@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **Grids:** Give the sort control a 48 dp touch target.
 * **Grids:** Hide the sort control while its grid is detached, then restore it when the grid returns.
 * **Grids:** Leave the current order in place when a sort change can't be saved.
 * **Grids:** Choosing Original order keeps the current grid's sort menu available (#180).

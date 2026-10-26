@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Cuadrículas:** El control de orden tiene un área táctil de al menos 48 dp.
 * **Cuadrículas:** El control de orden se oculta mientras su cuadrícula está separada de la vista y reaparece cuando vuelve.
 * **Cuadrículas:** Si no se puede guardar un cambio de orden, se conserva el orden actual.
 * **Cuadrículas:** Al elegir el orden original, el menú para ordenar la cuadrícula actual sigue disponible (#180).

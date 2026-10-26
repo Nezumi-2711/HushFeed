@@ -612,6 +612,9 @@ public final class GridSort {
             chip.setTag(CHIP_TAG);
             chip.setTextColor(SettingsUi.OVERLAY_TEXT);
             chip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsUi.TEXT_CAPTION);
+            chip.setMinWidth(SettingsUi.dp(context, 48));
+            chip.setMinHeight(SettingsUi.dp(context, 48));
+            chip.setGravity(Gravity.CENTER);
             int paddingX = SettingsUi.dp(context, 10);
             int paddingY = SettingsUi.dp(context, 5);
             chip.setPadding(paddingX, paddingY, paddingX, paddingY);

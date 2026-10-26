@@ -44,6 +44,8 @@ import app.morphe.extension.shared.diagnostics.HookStatus;
 import app.morphe.extension.shared.settings.Setting;
 import app.morphe.extension.tiktok.SettingsContextRule;
 import app.morphe.extension.tiktok.settings.Settings;
+import app.morphe.extension.tiktok.settings.L10n;
+import app.morphe.extension.tiktok.settings.preference.SettingsUi;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 import app.morphe.extension.tiktok.settings.preference.categories.InterfacePreferenceCategory;
 
@@ -1112,6 +1114,105 @@ public class GridSortTest {
             assertEquals(0, changes.activeCount());
         } finally {
             ReflectionHelpers.setField(Setting.preferences, "preferences", changes.delegate);
+        }
+    }
+
+    @Test @Config(sdk = {23, 28}, qualifiers = "w360dp-h640dp-port-mdpi")
+    public void gridSortTargetsCoverFortyEightDpAtDefaultText() {
+        exerciseGridSortTargets(false);
+    }
+
+    @Test @Config(sdk = {23, 28}, qualifiers = "w360dp-h640dp-port-mdpi", fontScale = 2f)
+    public void gridSortTargetsCoverFortyEightDpAtDoubleText() {
+        exerciseGridSortTargets(false);
+    }
+
+    @Test @Config(sdk = {23, 28}, qualifiers = "de-rDE-w320dp-h640dp-port-mdpi", fontScale = 2f)
+    public void gridSortTargetsFitNarrowGermanAtDoubleText() {
+        exerciseGridSortTargets(true);
+    }
+
+    private static boolean tap(FrameLayout frame, float x, float y) {
+        android.view.MotionEvent down = android.view.MotionEvent.obtain(0, 0,
+                android.view.MotionEvent.ACTION_DOWN, x, y, 0);
+        android.view.MotionEvent up = android.view.MotionEvent.obtain(0, 1,
+                android.view.MotionEvent.ACTION_UP, x, y, 0);
+        try {
+            boolean handled = frame.dispatchTouchEvent(down);
+            return frame.dispatchTouchEvent(up) || handled;
+        } finally {
+            down.recycle();
+            up.recycle();
+        }
+    }
+
+    private static void exerciseGridSortTargets(boolean german) {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            if (german) assertEquals("de", L10n.tableTag(activity));
+            FrameLayout frame = new FrameLayout(activity);
+            FrameLayout grid = new FrameLayout(activity);
+            frame.addView(grid, new FrameLayout.LayoutParams(-1, -1));
+            int[] nativeClicks = {0};
+            View cell = new View(activity);
+            cell.setOnClickListener(ignored -> nativeClicks[0]++);
+            FrameLayout.LayoutParams cells = new FrameLayout.LayoutParams(-1, -1);
+            cells.topMargin = SettingsUi.dp(activity, 72);
+            grid.addView(cell, cells);
+            TextView note = new TextView(activity);
+            note.setText("Only you can see your liked videos");
+            grid.addView(note, new FrameLayout.LayoutParams(-1, SettingsUi.dp(activity, 72)));
+            activity.setContentView(frame);
+            idle(50);
+            GridAdapter adapter = new GridAdapter();
+            adapter.mmRecyclerView = grid;
+            Settings.PROFILE_GRID_SORT.save("newest");
+            adapter.mmItems = GridSort.data(adapter, grid());
+            idle(50);
+            for (String order : GridSort.ORDERS) {
+                selectOrder(adapter, order);
+                idle(50);
+                TextView control = chip(adapter);
+                int target = SettingsUi.dp(activity, 48);
+                assertTrue(order + " touch width", control.getWidth() >= target);
+                assertTrue(order + " touch height", control.getHeight() >= target);
+                android.view.accessibility.AccessibilityNodeInfo node = control.createAccessibilityNodeInfo();
+                android.graphics.Rect bounds = new android.graphics.Rect();
+                node.getBoundsInScreen(bounds);
+                assertTrue(order + " accessibility width", bounds.width() >= target);
+                assertTrue(order + " accessibility height", bounds.height() >= target);
+                assertTrue(node.isClickable());
+                node.recycle();
+                assertTrue(control.getLeft() >= grid.getLeft());
+                assertTrue(control.getRight() <= grid.getRight());
+                assertTrue("the note stays uncovered", control.getY() >= note.getBottom());
+            }
+            TextView control = chip(adapter);
+            assertTrue("the bottom of the target opens the menu", tap(frame,
+                    control.getX() + control.getWidth() / 2f, control.getY() + control.getHeight() - 2));
+            idle(50);
+            AlertDialog menu = (AlertDialog) ShadowDialog.getLatestDialog();
+            assertTrue(menu.isShowing());
+            menu.dismiss();
+            idle(50);
+            float nativeY = grid.getHeight() - SettingsUi.dp(activity, 24);
+            assertTrue(tap(frame, SettingsUi.dp(activity, 16), nativeY));
+            idle(50);
+            assertEquals("a cell outside the target keeps its tap", 1, nativeClicks[0]);
+            GridSort.apply(adapter, "off");
+            idle(50);
+            assertNull(chip(adapter));
+            assertTrue(tap(frame, SettingsUi.dp(activity, 16), nativeY));
+            idle(50);
+            assertEquals(2, nativeClicks[0]);
+            GridSort.apply(adapter, "newest");
+            idle(50);
+            assertNotNull(chip(adapter));
+            setPaused(true);
+            grid.getViewTreeObserver().dispatchOnGlobalLayout();
+            idle(50);
+            assertNull("Pause removes the expanded control", chip(adapter));
         }
     }
 

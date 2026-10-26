@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Tor görünüşü:** Sıralama düyməsinin toxunma sahəsi ən azı 48 dp olur.
 * **Tor görünüşü:** Tor ayrıldıqda sıralama düyməsi gizlənir, tor qayıdanda yenidən görünür.
 * **Tor görünüşü:** Yeni sıralama yadda saxlanmasa, cari sıra dəyişmir.
 * **Tor görünüşü:** İlkin sıra seçildikdə cari torun sıralama menyusu əlçatan qalır (#180).

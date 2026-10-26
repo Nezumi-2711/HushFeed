@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Grades:** O controle de ordenação tem uma área de toque de pelo menos 48 dp.
 * **Grades:** O controle de ordenação fica oculto enquanto a grade está fora da tela e reaparece quando ela retorna.
 * **Grades:** Se não for possível salvar uma mudança de ordenação, a ordem atual é mantida.
 * **Grades:** Ao escolher a ordem original, o menu de ordenação da grade atual continua disponível (#180).

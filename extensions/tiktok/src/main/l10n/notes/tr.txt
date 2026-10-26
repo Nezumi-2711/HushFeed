@@ -1,5 +1,6 @@
 ## Unreleased
 
+* **Izgaralar:** Sıralama denetiminin dokunma alanı en az 48 dp olur.
 * **Izgaralar:** Izgara görünümden ayrıldığında sıralama denetimi gizlenir, geri döndüğünde yeniden görünür.
 * **Izgaralar:** Sıralama değişikliği kaydedilemezse mevcut sıra korunur.
 * **Izgaralar:** Orijinal sıra seçildiğinde mevcut ızgaranın sıralama menüsü kullanılabilir kalır (#180).
