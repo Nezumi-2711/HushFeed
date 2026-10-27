@@ -3318,7 +3318,7 @@
    },
    {
     "id": "fit-decision-recorded",
-    "what": "With Fit on, the feed cell sizing goes through VideoFit and the export records a Fit decision with TikTok's size, the space and the outcome.",
+    "what": "With Fit on, the feed cell sizing goes through VideoFit and the export records a Fit decision with TikTok's size, the space and the outcome. It swipes three times, since a photo post records no decision.",
     "steps": [
      {
       "set": {
@@ -3336,6 +3336,18 @@
       "wait": 2000
      },
      {
+      "swipe": "up"
+     },
+     {
+      "wait": 2000
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 2000
+     },
+     {
       "probe": "report",
       "expect": "Fit, feed: TikTok\\'s size \\d+x\\d+, space \\d+x\\d+, (left as it was|made \\d+x\\d+)",
       "waitMs": 10000
@@ -3345,13 +3357,25 @@
    },
    {
     "id": "fill-decision-recorded",
-    "what": "With Fill on (and Fit off) the export records a Fill decision instead.",
+    "what": "With Fill on (and Fit off) the export records a Fill decision instead. It swipes three times, since a photo post records no decision.",
     "steps": [
      {
       "set": {
        "fit_video_to_screen": "false",
        "fill_video_to_screen": "true"
       }
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 2000
+     },
+     {
+      "swipe": "up"
+     },
+     {
+      "wait": 2000
      },
      {
       "swipe": "up"
