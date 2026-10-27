@@ -549,6 +549,7 @@
       "default_speed",
       "custom_speeds",
       "hold_speed",
+      "hold_speed_slide",
       "remembered_speed_v2"
     ],
     "Prefer H.264 playback": [
@@ -2452,6 +2453,12 @@
       "key": "hold_speed",
       "type": "string",
       "default": "2"
+    },
+    "hold_speed_slide": {
+      "field": "HOLD_SPEED_SLIDE",
+      "key": "hold_speed_slide",
+      "type": "boolean",
+      "default": false
     },
     "home_tab_opens_settings": {
       "field": "HOME_TAB_OPENS_SETTINGS",

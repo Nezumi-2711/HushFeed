@@ -352,6 +352,13 @@ public class SettingsStatus {
         liveSpeedEnabled = true;
     }
 
+    /** The hold gesture's touch listener and apply call were found, so sliding can change its speed. */
+    public static boolean holdSpeedSlideEnabled = false;
+
+    public static void enableHoldSpeedSlide() {
+        holdSpeedSlideEnabled = true;
+    }
+
     public static void enableLongPressSpeedLock() {
         longPressSpeedLockEnabled = true;
     }
