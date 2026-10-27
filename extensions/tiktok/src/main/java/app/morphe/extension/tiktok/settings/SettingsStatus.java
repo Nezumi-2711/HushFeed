@@ -635,6 +635,13 @@ public class SettingsStatus {
         gridSortEnabled = true;
     }
 
+    /** The grid adapter hands over its tab number, so the Liked tab can have its own order (#180). */
+    public static boolean likedGridSortEnabled = false;
+
+    public static void enableLikedGridSort() {
+        likedGridSortEnabled = true;
+    }
+
     public static void enableFeedSidebarSwipe() {
         feedSidebarSwipeEnabled = true;
     }

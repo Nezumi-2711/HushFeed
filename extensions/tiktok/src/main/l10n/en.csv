@@ -1457,6 +1457,7 @@ Rows,Rows
 SIM country preset,SIM country preset
 SOCKS5,SOCKS5
 STEM,STEM
+Same as profile grids,Same as profile grids
 Same as the room,Same as the room
 "Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower. A number records that quality, or the closest one the room has when it isn't offered.","Same as the room records the quality you're watching. Highest records the best stream the room has, even while you watch it lower. A number records that quality, or the closest one the room has when it isn't offered."
 Sample caption to test,Sample caption to test
@@ -1728,6 +1729,7 @@ Soft tick,Soft tick
 Some of these notes are in English.,Some of these notes are in English.
 Some recording files remain. Try deleting them again.,Some recording files remain. Try deleting them again.
 Something is missing from %1$s. Tap for the whole report.,Something is missing from %1$s. Tap for the whole report.
+Sort loaded videos on Liked grids,Sort loaded videos on Liked grids
 Sort loaded videos on profile grids,Sort loaded videos on profile grids
 Sort this grid,Sort this grid
 "Sorts a profile or Liked grid with pinned videos first. While an order is on, the grid keeps loading by itself up to 300 videos, so the order covers more than the first screen. A button in the grid's top corner changes the order right there.","Sorts a profile or Liked grid with pinned videos first. While an order is on, the grid keeps loading by itself up to 300 videos, so the order covers more than the first screen. A button in the grid's top corner changes the order right there."

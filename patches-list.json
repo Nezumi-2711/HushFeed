@@ -800,6 +800,15 @@
           "type": "kotlin.String",
           "default": "off",
           "values": null
+        },
+        {
+          "key": "liked_grid_sort",
+          "title": "Default: liked grid sort",
+          "description": null,
+          "required": false,
+          "type": "kotlin.String",
+          "default": "profile",
+          "values": null
         }
       ]
     },

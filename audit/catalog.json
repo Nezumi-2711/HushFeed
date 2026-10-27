@@ -765,6 +765,12 @@
     "default": "off",
     "type": "string",
     "row": "Sort loaded videos on profile grids"
+   },
+   {
+    "key": "liked_grid_sort",
+    "default": "profile",
+    "type": "string",
+    "row": "Sort loaded videos on Liked grids"
    }
   ],
   "surface": "feed",

@@ -2273,6 +2273,8 @@ Least viewed first	Əvvəlcə ən az baxılanlar
 Most liked first	Əvvəlcə ən çox bəyənilənlər
 Least liked first	Əvvəlcə ən az bəyənilənlər
 Sorts a profile or Liked grid with pinned videos first. While an order is on, the grid keeps loading by itself up to 300 videos, so the order covers more than the first screen. A button in the grid's top corner changes the order right there.	Profil və ya bəyənilənlər şəbəkəsini sıralayır, sancılmış videolar əvvəldə qalır. Sıra seçiləndə şəbəkə 300 videoya qədər özü yüklənməyə davam edir, beləliklə sıra ilk ekrandan daha çoxunu əhatə edir. Şəbəkənin yuxarı küncündəki düymə sıranı elə oradaca dəyişir.
+Sort loaded videos on Liked grids	Bəyənilənlər şəbəkələrində yüklənmiş videoları sıralayın
+Same as profile grids	Profil şəbəkələri ilə eyni
 Sort this grid	Bu şəbəkəni sırala
 Blur the video behind the bar	Panelin arxasındakı videonu bulanıqlaşdırın
 Blur the part of the video that sits behind the glass pill on the main feed, so it looks like frosted glass. Needs Liquid glass look and Android 12 and up.	Əsas lentdə şüşə həbin arxasında qalan video hissəsini bulanıqlaşdırın ki, buzlu şüşə kimi görünsün. Maye şüşə görünüşü və Android 12 və yuxarı tələb olunur.

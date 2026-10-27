@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Features
 
+* **Profile:** Liked grids get their own sort. `Sort loaded videos on Liked grids` starts at `Same as profile grids`, so nothing changes until you pick something else, and the sort button on a Liked grid now changes only the Liked order. Posts, Favorites and private videos still follow the profile setting, and other kinds of grids keep TikTok's order (#180).
 * **Settings:** Every Hushfeed title (the settings bar, its dialogs, the Feature Gate Lab and the lock screen) now wears TikTok's cyan and red in a slow moving gradient, and it keeps moving even with Android's animations turned off.
 * **Settings:** The Calm feed preset is gone from the top of Feed filter. The filters it used to flip are all still there, and whatever you turned on with it stays on.
 * **Gestures:** `Double tap` and `Long press` can open TikTok's search page now. It works with `Hide feed search button` on too, so you can hide the button and still get to Search (#251).
