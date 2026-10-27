@@ -742,8 +742,11 @@ public final class VideoOverlayHider {
                 wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar || stripForBar;
                 wanted[CLEAR_EXIT_TARGET] = clearControls;
                 wanted[CLEAR_PLAYBACK_TARGET] = clearControls;
-                wanted[CLEAR_SEEK_BAR_TARGET] = clearControls;
-                wanted[LOADING_LINE_TARGET] = clearControls;
+                // Keep the progress bar (#237): TikTok's own bar and its loading line stay as
+                // TikTok draws them in Clear display, so they keep their drag and their listeners.
+                boolean clearSeekBar = clearControls && !Settings.KEEP_CLEAR_DISPLAY_SEEK_BAR.get();
+                wanted[CLEAR_SEEK_BAR_TARGET] = clearSeekBar;
+                wanted[LOADING_LINE_TARGET] = clearSeekBar;
                 wanted[CLEAR_PHOTO_EXIT_TARGET] = clearControls;
                 wanted[ANCHOR_TARGET] = anchor;
                 // Only ever faded, never hidden by a switch of its own.

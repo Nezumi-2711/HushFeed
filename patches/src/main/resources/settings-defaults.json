@@ -396,6 +396,7 @@
       "hide_following_live_row",
       "hide_detail_comment_bar",
       "hide_clear_display_controls",
+      "keep_clear_display_seek_bar",
       "fade_controls_opacity",
       "fade_in_clear_display",
       "see_through_bottom_bar",
@@ -2491,6 +2492,12 @@
     "keep_captions_clear_display": {
       "field": "KEEP_CAPTIONS_CLEAR_DISPLAY",
       "key": "keep_captions_clear_display",
+      "type": "boolean",
+      "default": false
+    },
+    "keep_clear_display_seek_bar": {
+      "field": "KEEP_CLEAR_DISPLAY_SEEK_BAR",
+      "key": "keep_clear_display_seek_bar",
       "type": "boolean",
       "default": false
     },

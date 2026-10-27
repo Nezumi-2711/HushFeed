@@ -6,6 +6,7 @@ Every Hushfeed release, newest first.
 
 ### Features
 
+* **Clear display:** `Hide the Clear display controls` has a new `Keep the progress bar` switch under it. The exit and pause buttons still go, but the progress bar stays on screen so you can see where you are and drag it (#237).
 * **Gestures:** `Double tap` has a new `Like or unlike the video` choice. A double tap on a video you've already liked takes the like back off, the same as tapping the heart, and `Confirm before liking` still asks first. TikTok's default double tap still only likes, and it works for each corner with `Double tap by corner` too (#248).
 * **Profile:** Liked grids get their own sort. `Sort loaded videos on Liked grids` starts at `Same as profile grids`, so nothing changes until you pick something else, and the sort button on a Liked grid now changes only the Liked order. Posts, Favorites and private videos still follow the profile setting, and other kinds of grids keep TikTok's order (#180).
 * **Settings:** Every Hushfeed title (the settings bar, its dialogs, the Feature Gate Lab and the lock screen) now wears TikTok's cyan and red in a slow moving gradient, and it keeps moving even with Android's animations turned off.

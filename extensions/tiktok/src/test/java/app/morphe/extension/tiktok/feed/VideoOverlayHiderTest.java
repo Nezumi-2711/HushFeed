@@ -2933,6 +2933,57 @@ public class VideoOverlayHiderTest {
     }
 
     /**
+     * Keep the progress bar (#237): the exit button and the playback row still go, but the
+     * progress bar stays fully in sight on a cleared screen.
+     */
+    @Test
+    public void keepTheProgressBarLeavesItInSightWhileTheOtherControlsGo() {
+        // The same ids as the test above: other ids left the exit button in place, read from
+        // the static id cache that test filled.
+        int exitId = 0x7f0a0c01;
+        int playbackId = 0x7f0a0c02;
+        int seekBarId = 0x7f0a0c03;
+        VideoOverlayHider.resolveForTests("47.5.3:e9s", exitId);
+        VideoOverlayHider.resolveForTests("47.5.3:l7a", playbackId);
+        VideoOverlayHider.resolveForTests("video_seek_bar", seekBarId);
+        Settings.HIDE_CLEAR_DISPLAY_CONTROLS.save(true);
+        Settings.KEEP_CLEAR_DISPLAY_SEEK_BAR.save(true);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            FrameLayout clearBar = new FrameLayout(activity);
+            View exit = new View(activity);
+            exit.setId(exitId);
+            clearBar.addView(exit);
+            LinearLayout playback = new LinearLayout(activity);
+            playback.setId(playbackId);
+            clearBar.addView(playback);
+            root.addView(clearBar);
+            View seekBar = new View(activity);
+            seekBar.setId(seekBarId);
+            root.addView(seekBar);
+            activity.setContentView(root);
+
+            clearBar.setVisibility(View.GONE);
+            VideoOverlayHider.applyTo(activity);
+            clearBar.setVisibility(View.VISIBLE);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, exit.getVisibility());
+            assertEquals(View.GONE, playback.getVisibility());
+            assertEquals(View.VISIBLE, seekBar.getVisibility());
+            assertEquals("the kept progress bar went see-through", 1f, seekBar.getAlpha(), 0f);
+
+            Settings.KEEP_CLEAR_DISPLAY_SEEK_BAR.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(0f, seekBar.getAlpha(), 0f);
+        } finally {
+            Settings.KEEP_CLEAR_DISPLAY_SEEK_BAR.save(false);
+            Settings.HIDE_CLEAR_DISPLAY_CONTROLS.save(false);
+        }
+    }
+
+    /**
      * TikTok's loading line grows along the bottom of a video while it buffers, and it was the
      * one bar left on a cleared screen (#84). Its frame goes see-through while TikTok's clear-mode
      * bar is up, whatever TikTok does to the line itself, and comes back with the bar.

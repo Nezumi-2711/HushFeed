@@ -675,6 +675,12 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "While Clear display is on, also hide the progress bar, the close button and the pause and speed buttons at the bottom. You can still drag along the bottom edge to move through the video. To leave Clear display, press and hold the video and tap Restore display, or pinch the screen.",
                     Settings.HIDE_CLEAR_DISPLAY_CONTROLS
             ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Keep the progress bar",
+                    "Hide the Clear display controls leaves the progress bar in sight, so you can still see and drag it.",
+                    Settings.KEEP_CLEAR_DISPLAY_SEEK_BAR
+            ));
         }
         // #232: below the controls row, which stays right under the automatic switch for #84.
         if (SettingsStatus.automaticClearDisplayEnabled) {

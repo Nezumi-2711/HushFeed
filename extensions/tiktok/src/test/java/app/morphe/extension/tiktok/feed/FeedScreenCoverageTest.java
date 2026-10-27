@@ -232,6 +232,7 @@ public class FeedScreenCoverageTest {
         put("automatic_clear_display_delay", YES, YES, NONE);
         put("remember_clear_display_on_scroll", YES, YES, NONE);
         put("hide_clear_display_controls", YES, YES, NONE);
+        put("keep_clear_display_seek_bar", YES, YES, NONE);
         put("fade_controls_opacity", YES, YES, NONE);
         put("fade_in_clear_display", YES, YES, NONE);
         // The tab bar belongs to the main feed; an opened video has none (#145).
