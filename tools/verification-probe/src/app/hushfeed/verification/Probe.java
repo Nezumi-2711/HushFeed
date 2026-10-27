@@ -2287,6 +2287,45 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok call " + target.getName() + " -> " + shown);
                         break;
                     }
+                    case "privacy-call": {
+                        // The blockers TikTok's rewired contact and app-list calls go through,
+                        // called with what those call sites pass. TikTok reads contacts and the
+                        // app list only when its own schedule says so, so waiting for it proved
+                        // nothing either way. -e which contacts queries the contacts provider,
+                        // -e which apps asks for the package list, the launcher enumeration and
+                        // the share targets. Only counts and the cursor's type are shown.
+                        String which = required(intent, "which");
+                        if ("contacts".equals(which)) {
+                            Method query = loader.loadClass("app.morphe.extension.tiktok.privacy.ContactListBlocker")
+                                    .getMethod("interceptQuery", android.content.ContentResolver.class, android.net.Uri.class,
+                                            String[].class, String.class, String[].class, String.class);
+                            android.database.Cursor cursor = (android.database.Cursor) query.invoke(null,
+                                    app.getContentResolver(), android.provider.ContactsContract.Contacts.CONTENT_URI,
+                                    new String[] {android.provider.ContactsContract.Contacts._ID}, null, null, null);
+                            int rows = cursor == null ? -1 : cursor.getCount();
+                            String kind = cursor == null ? "null" : cursor.getClass().getSimpleName();
+                            if (cursor != null) cursor.close();
+                            Log.i(TAG, "ok privacy-call contacts rows=" + rows + " cursor=" + kind);
+                        } else if ("apps".equals(which)) {
+                            Class<?> blocker = loader.loadClass("app.morphe.extension.tiktok.privacy.InstalledAppsBlocker");
+                            android.content.pm.PackageManager pm = app.getPackageManager();
+                            List<?> packages = (List<?>) blocker.getMethod("interceptGetInstalledPackages",
+                                    android.content.pm.PackageManager.class, int.class).invoke(null, pm, 0);
+                            List<?> applications = (List<?>) blocker.getMethod("interceptGetInstalledApplications",
+                                    android.content.pm.PackageManager.class, int.class).invoke(null, pm, 0);
+                            Method activities = blocker.getMethod("interceptQueryIntentActivities",
+                                    android.content.pm.PackageManager.class, Intent.class, int.class);
+                            List<?> launcher = (List<?>) activities.invoke(null, pm,
+                                    new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0);
+                            List<?> share = (List<?>) activities.invoke(null, pm,
+                                    new Intent(Intent.ACTION_SEND).setType("text/plain"), 0);
+                            Log.i(TAG, "ok privacy-call apps packages=" + packages.size() + " applications=" + applications.size()
+                                    + " launcher=" + launcher.size() + " share=" + share.size());
+                        } else {
+                            throw new IllegalArgumentException("-e which is contacts or apps, not " + which);
+                        }
+                        break;
+                    }
                     case "seed-commenter-region": {
                         // TikTok 47.5.3 sends comment accounts with no country, so a commenter's
                         // country can only come from the feed's cache of creators it has shown.
