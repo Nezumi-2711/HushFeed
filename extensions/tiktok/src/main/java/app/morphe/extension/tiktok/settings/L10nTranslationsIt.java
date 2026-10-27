@@ -15,7 +15,7 @@ final class L10nTranslationsIt {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4632);
+        Map<String, String> table = new HashMap<>(4634);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -4597,6 +4597,8 @@ final class L10nTranslationsIt {
                 "Account verificati");
         table.put("Version %1$s",
                 "Versione %1$s");
+        table.put("Version %1$s for PineDrama %2$s",
+                "Versione %1$s per PineDrama %2$s");
         table.put("Version %1$s for TikTok %2$s",
                 "Versione %1$s per TikTok %2$s");
         table.put("Version, changes and licenses",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsIt {
                 "Video");
         table.put("Video (MP4)",
                 "Video (MP4)");
-        table.put("Video ID copied",
-                "ID del video copiato");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Video ID copied",
+                "ID del video copiato");
         table.put("Video and details saved to %1$s",
                 "Video e dettagli salvati in %1$s");
         table.put("Video destination",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsIt {
                 "Scrivi nome utente e descrizione sul video");
         table.put("Write the video's sound beside it, in the format picked under Sound format. Android 10 and later file audio separately, so it lands in Music under the same folder name as your videos.",
                 "Salva l'audio del video a fianco, nel formato scelto in Formato audio. Da Android 10 in poi l'audio viene archiviato separatamente, quindi finisce in Music nella cartella con lo stesso nome della tua cartella video.");
-        table.put("Writes the date before the time to the second the short way your language does, like 10/7/25.",
-                "Scrive la data prima dell'ora al secondo nella forma breve della tua lingua, come 07/10/25.");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Writes the date before the time to the second the short way your language does, like 10/7/25.",
+                "Scrive la data prima dell'ora al secondo nella forma breve della tua lingua, come 07/10/25.");
         table.put("Writing",
                 "Scrittura");
         table.put("Writing the caption on the video",

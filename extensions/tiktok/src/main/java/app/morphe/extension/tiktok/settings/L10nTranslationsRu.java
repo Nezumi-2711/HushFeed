@@ -15,7 +15,7 @@ final class L10nTranslationsRu {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4986);
+        Map<String, String> table = new HashMap<>(4988);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -4957,6 +4957,8 @@ final class L10nTranslationsRu {
                 "Верифицированные аккаунты");
         table.put("Version %1$s",
                 "Версия %1$s");
+        table.put("Version %1$s for PineDrama %2$s",
+                "Версия %1$s для PineDrama %2$s");
         table.put("Version %1$s for TikTok %2$s",
                 "Версия %1$s для TikTok %2$s");
         table.put("Version, changes and licenses",
@@ -4977,11 +4979,11 @@ final class L10nTranslationsRu {
                 "Имя файла видео");
         table.put("Video frame",
                 "Кадр из видео");
-        table.put("Video info",
-                "Информация о видео");
     }
 
     private static void fill40(Map<String, String> table) {
+        table.put("Video info",
+                "Информация о видео");
         table.put("Video of photos",
                 "Видео из фото");
         table.put("Video playback quality",
@@ -5100,11 +5102,11 @@ final class L10nTranslationsRu {
                 "Написание");
         table.put("Writing the caption on the video",
                 "Описание пишется на видео");
-        table.put("Writing the caption on the video: %1$s",
-                "Описание пишется на видео: %1$s");
     }
 
     private static void fill41(Map<String, String> table) {
+        table.put("Writing the caption on the video: %1$s",
+                "Описание пишется на видео: %1$s");
         table.put("YTDLnis background mode",
                 "Фоновый режим YTDLnis");
         table.put("YTDLnis download type",

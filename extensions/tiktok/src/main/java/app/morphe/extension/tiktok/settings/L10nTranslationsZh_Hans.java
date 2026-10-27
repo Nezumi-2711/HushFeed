@@ -15,7 +15,7 @@ final class L10nTranslationsZh_Hans {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4632);
+        Map<String, String> table = new HashMap<>(4634);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -4597,6 +4597,8 @@ final class L10nTranslationsZh_Hans {
                 "已验证帐户");
         table.put("Version %1$s",
                 "版本%1$s");
+        table.put("Version %1$s for PineDrama %2$s",
+                "PineDrama %2$s 的版本 %1$s");
         table.put("Version %1$s for TikTok %2$s",
                 "TikTok %2$s 的版本 %1$s");
         table.put("Version, changes and licenses",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsZh_Hans {
                 "视频");
         table.put("Video (MP4)",
                 "视频 (MP4)");
-        table.put("Video ID copied",
-                "视频 ID 已复制");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Video ID copied",
+                "视频 ID 已复制");
         table.put("Video and details saved to %1$s",
                 "视频和详细信息保存到 %1$s");
         table.put("Video destination",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsZh_Hans {
                 "在视频上写下用户名和标题");
         table.put("Write the video's sound beside it, in the format picked under Sound format. Android 10 and later file audio separately, so it lands in Music under the same folder name as your videos.",
                 "按照在声音格式下选择的格式在其旁边写下视频的声音。 Android 10 及更高版本单独归档音频，因此它位于与视频相同的文件夹名称下的音乐中.");
-        table.put("Writes the date before the time to the second the short way your language does, like 10/7/25.",
-                "按照您的语言的缩写方式将时间之前的日期写成秒，例如 10/7/25.");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Writes the date before the time to the second the short way your language does, like 10/7/25.",
+                "按照您的语言的缩写方式将时间之前的日期写成秒，例如 10/7/25.");
         table.put("Writing",
                 "写作");
         table.put("Writing the caption on the video",

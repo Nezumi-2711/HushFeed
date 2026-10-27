@@ -27,6 +27,8 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **PineDrama:** The Inbox switches work in PineDrama now. `Hide the add people icon`, `Hide the Inbox search button` and `Hide activity status` clear the top of Inbox, and `Hide conversations` takes your chats off the list. Before this they only worked in TikTok (#156).
+* **PineDrama:** The version line on the settings page says "for PineDrama" with its build when you're in PineDrama, instead of naming TikTok (#156).
 * **Settings:** Opening a search result that lives far down a page, like `Double tap` or the Liked grid sort in Feed screen, now lands on that row. It used to open the page at its top, so you had to scroll a long way to find it.
 * **Feed:** With `See-through bottom bar` on, the "Swipe up to skip" line on a suggested account card in For You sits above the tabs again instead of behind them (#261).
 * **Interface:** The floating tab pill is a little taller now. It reaches just above the bar and the tabs sit in its middle, so the Home icon and its name stay inside the highlight instead of poking out over it. The caption and the video's progress line move up to match, so the line no longer rides on the pill (#259).
