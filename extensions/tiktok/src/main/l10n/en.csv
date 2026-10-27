@@ -1715,6 +1715,7 @@ Sign in to view this list,Sign in to view this list
 Sign in without a passkey,Sign in without a passkey
 Skip TikTok's setup screens,Skip TikTok's setup screens
 Skip content warnings,Skip content warnings
+Skip the Share to sheet after a save,Skip the Share to sheet after a save
 "Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off.","Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off."
 Skip the splash ad,Skip the splash ad
 Skip update checks,Skip update checks
@@ -2053,6 +2054,7 @@ TikTok isn't locked because this phone has no screen lock,TikTok isn't locked be
 "TikTok lets you pick a LIVE's quality only in some rooms. This adds Video quality to the menu in most of the others, and the next room opens at the quality you picked last.","TikTok lets you pick a LIVE's quality only in some rooms. This adds Video quality to the menu in most of the others, and the next room opens at the quality you picked last."
 "TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today.","TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today."
 "TikTok only had its watermarked copy of this story, so that copy was saved to %1$s","TikTok only had its watermarked copy of this story, so that copy was saved to %1$s"
+TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.,TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.
 TikTok read it,TikTok read it
 "TikTok read it, but the override couldn't be applied. Reset it and save it again.","TikTok read it, but the override couldn't be applied. Reset it and save it again."
 TikTok refused the follow with code %1$s,TikTok refused the follow with code %1$s

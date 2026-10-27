@@ -164,6 +164,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting DOWNLOAD_WITHOUT_SOUND =
             new BooleanSetting("download_without_sound", FALSE);
     public static final BooleanSetting DOWNLOAD_PROGRESS = new BooleanSetting("download_progress", false);
+    /** The Share to sheet TikTok opens a few seconds after its own downloader saves a video. */
+    public static final BooleanSetting SKIP_POST_DOWNLOAD_SHARE_SHEET =
+            new BooleanSetting("skip_post_download_share_sheet", FALSE);
     /** How many of Hushfeed's saves run at once, "1" to "3"; the rest wait in line (#27). */
     public static final StringSetting DOWNLOAD_SAVES_AT_ONCE = new StringSetting("download_saves_at_once", "3");
     public static final BooleanSetting DOWNLOAD_DETAILS =new BooleanSetting("download_details", FALSE);

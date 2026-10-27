@@ -1630,6 +1630,8 @@ The video was saved, but its record couldn't be updated. A later save may make a
 The already-saved check failed. Try again.	Проверка уже сохранённых не удалась. Повторите попытку.
 Show download progress	Показывать прогресс скачивания
 Show a progress bar while a video saves.	Показывать полосу прогресса во время сохранения видео.
+Skip the Share to sheet after a save	Не открывать меню «Поделиться» после сохранения
+TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.	Через несколько секунд после сохранения видео TikTok открывает меню «Поделиться». Эта настройка его отключает. Кнопка «Поделиться» и уведомление о сохранении остаются как есть.
 Saving video	Видео сохраняется
 Waiting to save video	Видео ожидает сохранения
 Saving video: %1$s	Видео сохраняется: %1$s

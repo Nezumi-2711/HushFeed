@@ -1492,6 +1492,8 @@ The video was saved, but its record couldn't be updated. A later save may make a
 The already-saved check failed. Try again.	No se pudieron comprobar los videos ya guardados. Inténtalo de nuevo.
 Show download progress	Mostrar progreso de descarga
 Show a progress bar while a video saves.	Muestra una barra de progreso mientras se guarda un vídeo.
+Skip the Share to sheet after a save	Omitir el panel de compartir tras guardar
+TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.	TikTok abre un panel de compartir unos segundos después de guardar un vídeo. Esto lo evita. El botón de compartir y el aviso de guardado se quedan como están.
 Saving video	Guardando vídeo
 Waiting to save video	Esperando para guardar el vídeo
 Saving video: %1$s	Guardando vídeo: %1$s

@@ -300,6 +300,13 @@ public class SettingsStatus {
         downloadEnabled = true;
     }
 
+    /** Downloads found the Share to sheet TikTok opens after its own saves and hooked it. */
+    public static boolean postDownloadShareSheetEnabled = false;
+
+    public static void enablePostDownloadShareSheet() {
+        postDownloadShareSheetEnabled = true;
+    }
+
     public static void enableCustomOfflineVideos() {
         customOfflineVideosEnabled = true;
     }

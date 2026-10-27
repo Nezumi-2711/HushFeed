@@ -1492,6 +1492,8 @@ The video was saved, but its record couldn't be updated. A later save may make a
 The already-saved check failed. Try again.	Artıq saxlanılıb yoxlaması alınmadı. Yenidən cəhd edin.
 Show download progress	Endirmə irəliləyişini göstərin
 Show a progress bar while a video saves.	Video saxlanılarkən irəliləyiş paneli göstərin.
+Skip the Share to sheet after a save	Saxladıqdan sonra paylaşma vərəqini keçin
+TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.	TikTok videonu saxladıqdan bir neçə saniyə sonra paylaşma vərəqi açır. Bu, onun qarşısını alır. Paylaş düyməsi və saxlanıldı bildirişi olduğu kimi qalır.
 Saving video	Video saxlanılır
 Waiting to save video	Video saxlamaq gözlənilir
 Saving video: %1$s	Video saxlanılır: %1$s

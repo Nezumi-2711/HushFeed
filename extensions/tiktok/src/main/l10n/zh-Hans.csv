@@ -1562,6 +1562,8 @@ Show TikTok's feed buttons,显示 TikTok 的信息流按钮
 Show TikTok's own progress bar on videos where it's normally hidden.,在通常隐藏的视频上显示 TikTok 自己的进度条.
 Show a LIVE under the status bar,在状态栏下显示 LIVE
 Show a progress bar while a video saves.,保存视频时显示进度条.
+Skip the Share to sheet after a save,保存后跳过分享面板
+TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.,TikTok 保存视频几秒后会打开分享面板。开启后就不再打开。分享按钮和已保存提示保持不变.
 Show a verified badge on your own profile on this phone. Other people see your real status.,在此手机上您自己的个人资料中显示经过验证的徽章。别人看到你的真实状态.
 Show a video preview thumbnail while dragging the progress bar.,拖动进度条时显示视频预览缩略图.
 Show chosen counts on your own profile on this phone. Other people see the real counts.,在这部手机上显示您自己的个人资料中选择的计数。其他人看到了真正的数字.

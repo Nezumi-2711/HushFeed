@@ -1487,6 +1487,8 @@ Video and details saved to %1$s,Video dan detail disimpan ke %1$s
 The already-saved check failed. Try again.,Pemeriksaan video tersimpan gagal. Coba lagi.
 Show download progress,Tampilkan progres unduhan
 Show a progress bar while a video saves.,Tampilkan bilah progres saat video disimpan.
+Skip the Share to sheet after a save,Lewati lembar berbagi setelah menyimpan
+TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.,TikTok membuka lembar berbagi beberapa detik setelah menyimpan video. Ini mencegahnya. Tombol bagikan dan pemberitahuan tersimpan tetap seperti biasa.
 Saving video,Menyimpan video
 Waiting to save video,Menunggu untuk menyimpan video
 Saving video: %1$s,Menyimpan video: %1$s

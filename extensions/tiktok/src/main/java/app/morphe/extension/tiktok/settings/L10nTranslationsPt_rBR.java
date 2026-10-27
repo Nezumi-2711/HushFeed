@@ -15,7 +15,7 @@ final class L10nTranslationsPt_rBR {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4570);
+        Map<String, String> table = new HashMap<>(4574);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3575,6 +3575,8 @@ final class L10nTranslationsPt_rBR {
                 "Pular as telas de configuração do TikTok");
         table.put("Skip content warnings",
                 "Pular os avisos de conteúdo");
+        table.put("Skip the Share to sheet after a save",
+                "Pular a folha de compartilhamento após salvar");
         table.put("Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off.",
                 "Pula o quebra-cabeça que o TikTok mostra enquanto você só está navegando. Um quebra-cabeça logo depois de curtir, seguir, comentar ou republicar continua aparecendo, assim como as verificações de login, SMS e em duas etapas. Se algo parar de funcionar, desligue isto.");
         table.put("Skip the splash ad",
@@ -3621,11 +3623,11 @@ final class L10nTranslationsPt_rBR {
                 "Som salvo em %1$s");
         table.put("Sound: %1$s",
                 "Som: %1$s");
-        table.put("Source",
-                "Origem");
     }
 
     private static void fill29(Map<String, String> table) {
+        table.put("Source",
+                "Origem");
         table.put("Speed",
                 "Velocidade");
         table.put("Speed menu choices",
@@ -3744,11 +3746,11 @@ final class L10nTranslationsPt_rBR {
                 "A espera pelo app de arquivos foi interrompida. Ele ainda não informou se a exportação foi salva.");
         table.put("Stopped waiting for the file app. Nothing was changed.",
                 "A espera pelo app de arquivos foi interrompida. Nada foi alterado.");
-        table.put("Stopped waiting for the file app. Nothing was exported.",
-                "A espera pelo app de arquivos foi interrompida. Nada foi exportado.");
     }
 
     private static void fill30(Map<String, String> table) {
+        table.put("Stopped waiting for the file app. Nothing was exported.",
+                "A espera pelo app de arquivos foi interrompida. Nada foi exportado.");
         table.put("Stopped waiting for the file app. Nothing was imported.",
                 "A espera pelo app de arquivos foi interrompida. Nada foi importado.");
         table.put("Stopping after this file",
@@ -3867,11 +3869,11 @@ final class L10nTranslationsPt_rBR {
                 "Esse padrão de criador pode travar o feed, então foi ignorado: %1$s");
         table.put("That creator pattern could stall the feed, so it wasn't added: %1$s",
                 "Esse padrão de criador pode travar o feed, então não foi adicionado: %1$s");
-        table.put("That creator pattern is too long to use, so it was skipped: %1$s",
-                "Esse padrão de criador é longo demais, então foi ignorado: %1$s");
     }
 
     private static void fill31(Map<String, String> table) {
+        table.put("That creator pattern is too long to use, so it was skipped: %1$s",
+                "Esse padrão de criador é longo demais, então foi ignorado: %1$s");
         table.put("That creator pattern is too long, so it wasn't added: %1$s",
                 "Esse padrão de criador é longo demais, então não foi adicionado: %1$s");
         table.put("That file has more than %1$s watch-history entries.",
@@ -3990,11 +3992,11 @@ final class L10nTranslationsPt_rBR {
                 "Não foi possível salvar o relatório de diagnóstico. Tente de novo.");
         table.put("The downloader app you chose isn't installed. Check Send links to another app under Downloads.",
                 "O aplicativo de download que voce escolheu nao esta instalado. Verifique Enviar links para outro aplicativo em Downloads.");
-        table.put("The export may be incomplete. The original recording files are still kept.",
-                "A exportação pode estar incompleta. Os arquivos originais da gravação continuam guardados.");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("The export may be incomplete. The original recording files are still kept.",
+                "A exportação pode estar incompleta. Os arquivos originais da gravação continuam guardados.");
         table.put("The export wasn't saved. Export again when the file app is ready.",
                 "A exportação não foi salva. Exporte de novo quando o app de arquivos estiver pronto.");
         table.put("The feed capture couldn't be saved. Tap the row to try again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsPt_rBR {
                 "O toque nas abas do feed principal. Pulso curto é uma batida rápida do motor. Clique do celular é o clique que o seu celular faz em outros lugares. Toque suave dura um pouco mais. Toque completo é o toque mais forte do celular.");
         table.put("The time of day the message goes out.",
                 "O horário do dia em que a mensagem é enviada.");
-        table.put("The video couldn't be made from these photos. Try again.",
-                "Não foi possível criar o vídeo com estas fotos. Tente novamente.");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The video couldn't be made from these photos. Try again.",
+                "Não foi possível criar o vídeo com estas fotos. Tente novamente.");
         table.put("The video couldn't be saved. Try again, or choose Automatic.",
                 "Não foi possível salvar o vídeo. Tente de novo, ou escolha Automático.");
         table.put("The video was saved, but its record couldn't be updated. A later save may make another copy.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsPt_rBR {
                 "O TikTok foi fechado. O que foi gravado está salvo em %1$s");
         table.put("TikTok closes at %1$s",
                 "O TikTok fecha às %1$s");
-        table.put("TikTok default",
-                "Padrão do TikTok");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("TikTok default",
+                "Padrão do TikTok");
         table.put("TikTok default (hold to speed up, quick share)",
                 "Padrão do TikTok (segurar para acelerar, compartilhamento rápido)");
         table.put("TikTok default (open the creator's profile)",
@@ -4269,6 +4271,8 @@ final class L10nTranslationsPt_rBR {
                 "O TikTok pode ter aceitado esta mensagem. A entrega não está confirmada, então não haverá outra tentativa hoje.");
         table.put("TikTok only had its watermarked copy of this story, so that copy was saved to %1$s",
                 "O TikTok só tinha a cópia com marca d'água deste story, então essa cópia foi salva em %1$s");
+        table.put("TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.",
+                "O TikTok abre uma folha de compartilhamento alguns segundos depois de salvar um vídeo. Isto impede que ela abra. O botão de compartilhar e o aviso de salvamento continuam como estão.");
         table.put("TikTok read it",
                 "O TikTok leu");
         table.put("TikTok read it, but the override couldn't be applied. Reset it and save it again.",
@@ -4357,13 +4361,13 @@ final class L10nTranslationsPt_rBR {
                 "Tarde demais para trazer os vídeos salvos de volta");
         table.put("Too many media saves are already running. Try again in a moment.",
                 "Muitos salvamentos de mídia já estão em andamento. Tente daqui a pouco.");
+    }
+
+    private static void fill35(Map<String, String> table) {
         table.put("Top left double tap",
                 "Toque duplo no canto superior esquerdo");
         table.put("Top right double tap",
                 "Toque duplo no canto superior direito");
-    }
-
-    private static void fill35(Map<String, String> table) {
         table.put("Tracking",
                 "Rastreamento");
         table.put("Tracking, device access and links",
@@ -4480,13 +4484,13 @@ final class L10nTranslationsPt_rBR {
                 "Vídeos do Para você não personalizados");
         table.put("Until you choose here, this sheet follows your choices under Hide share actions.",
                 "Até você escolher aqui, este menu segue suas escolhas em Esconder ações de compartilhamento.");
+    }
+
+    private static void fill36(Map<String, String> table) {
         table.put("Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this.",
                 "Até %1$d velocidades de %2$s a %3$s, separadas por vírgula. Por exemplo: 0.5, 1, 1.5, 2, 2.5, 3. Deixe vazio para a lista do TikTok. Reinicie o TikTok para aplicar.");
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.",
                 "Use 0 para o tamanho do TikTok, ou de %1$d a %2$d. Vale para a próxima legenda.");
-    }
-
-    private static void fill36(Map<String, String> table) {
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Sizes the author's name and the post date next to it, and keeps Android's font scaling.",
                 "Use 0 para o tamanho do TikTok, ou de %1$d a %2$d. Ajusta o nome do criador e a data de publicação ao lado dele, e mantém a escala de fontes do Android.");
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Sizes the description below the author's name and keeps Android's font scaling.",
@@ -4603,13 +4607,13 @@ final class L10nTranslationsPt_rBR {
                 "Aguardando o app de arquivos liberar o último arquivo. Reinicie o TikTok se ele não liberar.");
         table.put("Waiting to record. Go to the screen you want recorded.",
                 "Aguardando para gravar. Vá até a tela que você quer gravar.");
+    }
+
+    private static void fill37(Map<String, String> table) {
         table.put("Waiting to save %1$s files",
                 "Aguardando para salvar %1$s arquivos");
         table.put("Waiting to save one file",
                 "Aguardando para salvar um arquivo");
-    }
-
-    private static void fill37(Map<String, String> table) {
         table.put("Waiting to save video",
                 "Aguardando para salvar o vídeo");
         table.put("Watch history was imported for the account that chose the file. Switch back to see it.",
@@ -4726,13 +4730,13 @@ final class L10nTranslationsPt_rBR {
                 "Zero significa que a saída do bloqueio está sempre disponível. Qualquer outro número é quantas vezes por dia ela funciona. Quando acabam, o bloqueio fica até o dia recomeçar. É ignorado enquanto o orçamento está travado, pois isso tira a saída.");
         table.put("Zero shows the notice and leaves the feed alone. Anything else covers the feed for that many minutes once a budget is reached. Messages, profiles and search keep working, and nothing in the feed is thrown away.",
                 "Zero mostra o aviso e deixa o feed em paz. Qualquer outro valor cobre o feed por esses minutos assim que um limite é atingido. Mensagens, perfis e busca continuam funcionando, e nada do feed é descartado.");
+    }
+
+    private static void fill38(Map<String, String> table) {
         table.put("Zero switches this off. A short reminder after that many minutes of watching, and again after the same again. Time on messages, a profile or search doesn't count, and nothing is shown while the feed is on hold.",
                 "Zero desliga isso. Um lembrete curto depois desses minutos assistindo, e de novo após o mesmo intervalo. Tempo em mensagens, num perfil ou na busca não conta, e nada aparece enquanto o feed está em espera.");
         table.put("Zero switches this off. Count the minutes the player spends running in the feed. Time on messages, a profile or search doesn't count.",
                 "Zero desliga isso. Conta os minutos que o player passa rodando no feed. Tempo em mensagens, num perfil ou na busca não conta.");
-    }
-
-    private static void fill38(Map<String, String> table) {
         table.put("Zero switches this off. Counts every video that comes up in the feed and tells you when you reach the limit. Separate from the auto-advance session limit under Playback, which counts only videos Hushfeed moved past for you.",
                 "Zero desliga isto. Conta cada vídeo que aparece no feed e avisa quando você chega ao limite. É separado do limite de sessão do avanço automático em Reprodução, que conta só os vídeos que o Hushfeed passou por você.");
         table.put("collapsed",

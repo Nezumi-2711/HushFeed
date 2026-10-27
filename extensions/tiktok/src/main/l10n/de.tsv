@@ -1495,6 +1495,8 @@ The video was saved, but its record couldn't be updated. A later save may make a
 The already-saved check failed. Try again.	Die Prüfung bereits gespeicherter Videos ist fehlgeschlagen. Versuch es erneut.
 Show download progress	Downloadfortschritt anzeigen
 Show a progress bar while a video saves.	Beim Speichern eines Videos einen Fortschrittsbalken anzeigen.
+Skip the Share to sheet after a save	Teilen-Menü nach dem Speichern überspringen
+TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.	TikTok öffnet ein paar Sekunden nach dem Speichern eines Videos ein Teilen-Menü. Das verhindert es. Der Teilen-Button und der Hinweis zum Speichern bleiben, wie sie sind.
 Saving video	Video wird gespeichert
 Waiting to save video	Video wartet auf das Speichern
 Saving video: %1$s	Video wird gespeichert: %1$s

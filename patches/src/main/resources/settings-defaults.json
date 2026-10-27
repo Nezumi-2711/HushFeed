@@ -194,7 +194,8 @@
       "download_video_filename_template",
       "download_photo_filename_template",
       "download_comment_media_filename_template",
-      "down_watermark"
+      "down_watermark",
+      "skip_post_download_share_sheet"
     ],
     "Drop the animated image cache": [
       "drop_animated_image_cache"
@@ -3519,6 +3520,12 @@
     "skip_passkey_sign_in": {
       "field": "SKIP_PASSKEY_SIGN_IN",
       "key": "skip_passkey_sign_in",
+      "type": "boolean",
+      "default": false
+    },
+    "skip_post_download_share_sheet": {
+      "field": "SKIP_POST_DOWNLOAD_SHARE_SHEET",
+      "key": "skip_post_download_share_sheet",
       "type": "boolean",
       "default": false
     },

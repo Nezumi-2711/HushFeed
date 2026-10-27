@@ -15,7 +15,7 @@ final class L10nTranslationsTr {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4570);
+        Map<String, String> table = new HashMap<>(4574);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3575,6 +3575,8 @@ final class L10nTranslationsTr {
                 "TikTok'un kurulum ekranlarını atla");
         table.put("Skip content warnings",
                 "İçerik uyarılarını atla");
+        table.put("Skip the Share to sheet after a save",
+                "Kaydettikten sonra paylaşım menüsünü atla");
         table.put("Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off.",
                 "TikTok'un sen sadece gezinirken gösterdiği bulmacayı atlar. Beğeni, takip, yorum ya da yeniden paylaşımdan hemen sonra gelen bulmaca yine gösterilir; giriş, SMS ve iki adımlı doğrulamalar da öyle. Bir şey çalışmayı bırakırsa bunu kapat.");
         table.put("Skip the splash ad",
@@ -3621,11 +3623,11 @@ final class L10nTranslationsTr {
                 "Ses şuraya kaydedildi: %1$s");
         table.put("Sound: %1$s",
                 "Ses: %1$s");
-        table.put("Source",
-                "Kaynak");
     }
 
     private static void fill29(Map<String, String> table) {
+        table.put("Source",
+                "Kaynak");
         table.put("Speed",
                 "Hız");
         table.put("Speed menu choices",
@@ -3744,11 +3746,11 @@ final class L10nTranslationsTr {
                 "Dosya uygulaması artık beklenmiyor. Dışa aktarımın kaydedilip kaydedilmediğini henüz bildirmedi.");
         table.put("Stopped waiting for the file app. Nothing was changed.",
                 "Dosya uygulaması artık beklenmiyor. Hiçbir şey değiştirilmedi.");
-        table.put("Stopped waiting for the file app. Nothing was exported.",
-                "Dosya uygulaması artık beklenmiyor. Hiçbir şey dışa aktarılmadı.");
     }
 
     private static void fill30(Map<String, String> table) {
+        table.put("Stopped waiting for the file app. Nothing was exported.",
+                "Dosya uygulaması artık beklenmiyor. Hiçbir şey dışa aktarılmadı.");
         table.put("Stopped waiting for the file app. Nothing was imported.",
                 "Dosya uygulaması artık beklenmiyor. Hiçbir şey içe aktarılmadı.");
         table.put("Stopping after this file",
@@ -3867,11 +3869,11 @@ final class L10nTranslationsTr {
                 "Bu içerik üreticisi kalıbı akışı kilitleyebileceği için atlandı: %1$s");
         table.put("That creator pattern could stall the feed, so it wasn't added: %1$s",
                 "Bu içerik üreticisi kalıbı akışı kilitleyebileceği için eklenmedi: %1$s");
-        table.put("That creator pattern is too long to use, so it was skipped: %1$s",
-                "Bu içerik üreticisi kalıbı kullanılamayacak kadar uzun olduğu için atlandı: %1$s");
     }
 
     private static void fill31(Map<String, String> table) {
+        table.put("That creator pattern is too long to use, so it was skipped: %1$s",
+                "Bu içerik üreticisi kalıbı kullanılamayacak kadar uzun olduğu için atlandı: %1$s");
         table.put("That creator pattern is too long, so it wasn't added: %1$s",
                 "Bu içerik üreticisi kalıbı çok uzun olduğu için eklenmedi: %1$s");
         table.put("That file has more than %1$s watch-history entries.",
@@ -3990,11 +3992,11 @@ final class L10nTranslationsTr {
                 "Tanılama raporu kaydedilemedi. Yeniden dene.");
         table.put("The downloader app you chose isn't installed. Check Send links to another app under Downloads.",
                 "Seçtiğin indirme uygulaması yüklü değil. İndirmeler altındaki Bağlantıları başka bir uygulamaya gönder ayarını kontrol et.");
-        table.put("The export may be incomplete. The original recording files are still kept.",
-                "Dışa aktarma tamamlanmamış olabilir. Özgün kayıt dosyaları hâlâ saklanıyor.");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("The export may be incomplete. The original recording files are still kept.",
+                "Dışa aktarma tamamlanmamış olabilir. Özgün kayıt dosyaları hâlâ saklanıyor.");
         table.put("The export wasn't saved. Export again when the file app is ready.",
                 "Dışa aktarım kaydedilmedi. Dosya uygulaması hazır olduğunda yeniden dışa aktar.");
         table.put("The feed capture couldn't be saved. Tap the row to try again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsTr {
                 "Ana akıştaki sekmelerde çalan tık. Kısa darbe, motorun tek bir hızlı vuruşudur. Telefonun tıklaması, telefonunun başka yerlerde yaptığı tıklamadır. Yumuşak tık biraz daha uzun sürer. Tam tık, telefonun en güçlü tıkıdır.");
         table.put("The time of day the message goes out.",
                 "Mesajın gönderileceği saat.");
-        table.put("The video couldn't be made from these photos. Try again.",
-                "Bu fotoğraflardan video oluşturulamadı. Tekrar deneyin.");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The video couldn't be made from these photos. Try again.",
+                "Bu fotoğraflardan video oluşturulamadı. Tekrar deneyin.");
         table.put("The video couldn't be saved. Try again, or choose Automatic.",
                 "Video kaydedilemedi. Yeniden dene ya da Otomatik'i seç.");
         table.put("The video was saved, but its record couldn't be updated. A later save may make another copy.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsTr {
                 "TikTok kapandı. Kaydedilen kısım %1$s konumuna kaydedildi");
         table.put("TikTok closes at %1$s",
                 "TikTok'un kapanacağı saat: %1$s");
-        table.put("TikTok default",
-                "TikTok varsayılanı");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("TikTok default",
+                "TikTok varsayılanı");
         table.put("TikTok default (hold to speed up, quick share)",
                 "TikTok varsayılanı (hızlandırmak için basılı tut, hızlı paylaşım)");
         table.put("TikTok default (open the creator's profile)",
@@ -4269,6 +4271,8 @@ final class L10nTranslationsTr {
                 "TikTok bu mesajı kabul etmiş olabilir. Teslimat doğrulanmadığı için bugün tekrar denenmeyecek.");
         table.put("TikTok only had its watermarked copy of this story, so that copy was saved to %1$s",
                 "TikTok'ta bu hikayenin yalnızca filigranlı kopyası vardı, bu yüzden o kopya şuraya kaydedildi: %1$s");
+        table.put("TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.",
+                "TikTok bir videoyu kaydettikten birkaç saniye sonra bir paylaşım menüsü açar. Bu ayar onu engeller. Paylaş düğmesi ve kaydedildi bildirimi olduğu gibi kalır.");
         table.put("TikTok read it",
                 "TikTok bunu okudu");
         table.put("TikTok read it, but the override couldn't be applied. Reset it and save it again.",
@@ -4357,13 +4361,13 @@ final class L10nTranslationsTr {
                 "Kaydedilen videoları geri getirmek için artık çok geç");
         table.put("Too many media saves are already running. Try again in a moment.",
                 "Zaten çok fazla medya kaydı sürüyor. Birazdan yeniden dene.");
+    }
+
+    private static void fill35(Map<String, String> table) {
         table.put("Top left double tap",
                 "Sol üst çift dokunma");
         table.put("Top right double tap",
                 "Sağ üst çift dokunma");
-    }
-
-    private static void fill35(Map<String, String> table) {
         table.put("Tracking",
                 "İzlenme");
         table.put("Tracking, device access and links",
@@ -4480,13 +4484,13 @@ final class L10nTranslationsTr {
                 "Kişiselleştirilmemiş Senin İçin videoları");
         table.put("Until you choose here, this sheet follows your choices under Hide share actions.",
                 "Burada bir seçim yapana kadar bu menü, Paylaşım işlemlerini gizle altındaki seçimlerine uyar.");
+    }
+
+    private static void fill36(Map<String, String> table) {
         table.put("Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this.",
                 "%2$s ile %3$s arasında, virgülle ayrılmış en fazla %1$d hız. Örnek: 0.5, 1, 1.5, 2, 2.5, 3. TikTok'un listesi için boş bırak. Bunu uygulamak için TikTok'u yeniden başlat.");
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.",
                 "TikTok'un boyutu için 0, ya da %1$d ile %2$d arasında bir değer kullan. Bir sonraki altyazıya uygulanır.");
-    }
-
-    private static void fill36(Map<String, String> table) {
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Sizes the author's name and the post date next to it, and keeps Android's font scaling.",
                 "TikTok'un boyutu için 0, ya da %1$d ile %2$d arasında bir değer kullan. İçerik üreticisinin adını ve yanındaki paylaşım tarihini boyutlandırır, Android'in yazı tipi ölçeklendirmesini korur.");
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Sizes the description below the author's name and keeps Android's font scaling.",
@@ -4603,13 +4607,13 @@ final class L10nTranslationsTr {
                 "Dosya uygulamasının son dosyayı bırakması bekleniyor. Bırakmazsa TikTok'u yeniden başlat.");
         table.put("Waiting to record. Go to the screen you want recorded.",
                 "Kayıt bekleniyor. Kaydedilmesini istediğin ekrana git.");
+    }
+
+    private static void fill37(Map<String, String> table) {
         table.put("Waiting to save %1$s files",
                 "%1$s dosya kaydedilmeyi bekliyor");
         table.put("Waiting to save one file",
                 "Bir dosya kaydedilmeyi bekliyor");
-    }
-
-    private static void fill37(Map<String, String> table) {
         table.put("Waiting to save video",
                 "Video kaydedilmeyi bekliyor");
         table.put("Watch history was imported for the account that chose the file. Switch back to see it.",
@@ -4726,13 +4730,13 @@ final class L10nTranslationsTr {
                 "Sıfır, bekletmeden çıkış yolunun her zaman olduğu anlamına gelir. Başka bir sayı, bunun günde kaç kez işe yaradığıdır. Bittiğinde bekletme, gün yeniden başlayana kadar kalır. Bütçe kilitliyken yok sayılır, çünkü kilit çıkış yolunu kaldırır.");
         table.put("Zero shows the notice and leaves the feed alone. Anything else covers the feed for that many minutes once a budget is reached. Messages, profiles and search keep working, and nothing in the feed is thrown away.",
                 "Sıfır, bildirimi gösterir ve akışa dokunmaz. Başka bir değer, bir bütçeye ulaşıldığında akışın üstünü o kadar dakika boyunca örter. Mesajlar, profiller ve arama çalışmaya devam eder ve akıştaki hiçbir şey atılmaz.");
+    }
+
+    private static void fill38(Map<String, String> table) {
         table.put("Zero switches this off. A short reminder after that many minutes of watching, and again after the same again. Time on messages, a profile or search doesn't count, and nothing is shown while the feed is on hold.",
                 "Sıfır bunu kapatır. O kadar dakika izledikten sonra kısa bir hatırlatma gelir, aynı süre geçince bir tane daha. Mesajlarda, bir profilde veya aramada geçen süre sayılmaz ve akış bekletmedeyken hiçbir şey gösterilmez.");
         table.put("Zero switches this off. Count the minutes the player spends running in the feed. Time on messages, a profile or search doesn't count.",
                 "Sıfır bunu kapatır. Oynatıcının akışta çalışarak geçirdiği dakikaları say. Mesajlarda, bir profilde veya aramada geçen süre sayılmaz.");
-    }
-
-    private static void fill38(Map<String, String> table) {
         table.put("Zero switches this off. Counts every video that comes up in the feed and tells you when you reach the limit. Separate from the auto-advance session limit under Playback, which counts only videos Hushfeed moved past for you.",
                 "Sıfır bunu kapatır. Akışta çıkan her videoyu sayar ve sınıra ulaştığında sana haber verir. Oynatma altındaki otomatik ilerleme oturum sınırından ayrıdır; o yalnızca Hushfeed'in senin yerine geçtiği videoları sayar.");
         table.put("collapsed",

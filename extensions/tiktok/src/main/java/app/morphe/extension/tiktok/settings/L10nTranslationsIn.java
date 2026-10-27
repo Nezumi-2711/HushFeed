@@ -15,7 +15,7 @@ final class L10nTranslationsIn {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4570);
+        Map<String, String> table = new HashMap<>(4574);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3575,6 +3575,8 @@ final class L10nTranslationsIn {
                 "Lewati layar penyiapan TikTok");
         table.put("Skip content warnings",
                 "Lewati peringatan konten");
+        table.put("Skip the Share to sheet after a save",
+                "Lewati lembar berbagi setelah menyimpan");
         table.put("Skip the puzzle TikTok shows while you're just browsing. A puzzle right after you like, follow, comment or repost still shows, and so do sign-in, SMS and two-step checks. If something stops working, turn this off.",
                 "Lewati teka-teki yang ditampilkan TikTok saat kamu hanya menjelajah. Teka-teki tepat setelah kamu menyukai, mengikuti, berkomentar, atau memposting ulang tetap muncul, begitu juga pemeriksaan masuk, SMS, dan dua langkah. Jika ada yang berhenti berfungsi, matikan ini.");
         table.put("Skip the splash ad",
@@ -3621,11 +3623,11 @@ final class L10nTranslationsIn {
                 "Suara disimpan di %1$s");
         table.put("Sound: %1$s",
                 "Suara: %1$s");
-        table.put("Source",
-                "Sumber");
     }
 
     private static void fill29(Map<String, String> table) {
+        table.put("Source",
+                "Sumber");
         table.put("Speed",
                 "Kecepatan");
         table.put("Speed menu choices",
@@ -3744,11 +3746,11 @@ final class L10nTranslationsIn {
                 "Berhenti menunggu aplikasi file. Aplikasi itu belum memberi tahu apakah ekspor sudah tersimpan.");
         table.put("Stopped waiting for the file app. Nothing was changed.",
                 "Berhenti menunggu aplikasi file. Tidak ada yang diubah.");
-        table.put("Stopped waiting for the file app. Nothing was exported.",
-                "Berhenti menunggu aplikasi file. Tidak ada yang diekspor.");
     }
 
     private static void fill30(Map<String, String> table) {
+        table.put("Stopped waiting for the file app. Nothing was exported.",
+                "Berhenti menunggu aplikasi file. Tidak ada yang diekspor.");
         table.put("Stopped waiting for the file app. Nothing was imported.",
                 "Berhenti menunggu aplikasi file. Tidak ada yang diimpor.");
         table.put("Stopping after this file",
@@ -3867,11 +3869,11 @@ final class L10nTranslationsIn {
                 "Pola kreator itu bisa membuat feed macet, jadi dilewati: %1$s");
         table.put("That creator pattern could stall the feed, so it wasn't added: %1$s",
                 "Pola kreator itu bisa membuat feed macet, jadi tidak ditambahkan: %1$s");
-        table.put("That creator pattern is too long to use, so it was skipped: %1$s",
-                "Pola kreator itu terlalu panjang, jadi dilewati: %1$s");
     }
 
     private static void fill31(Map<String, String> table) {
+        table.put("That creator pattern is too long to use, so it was skipped: %1$s",
+                "Pola kreator itu terlalu panjang, jadi dilewati: %1$s");
         table.put("That creator pattern is too long, so it wasn't added: %1$s",
                 "Pola kreator itu terlalu panjang, jadi tidak ditambahkan: %1$s");
         table.put("That file has more than %1$s watch-history entries.",
@@ -3990,11 +3992,11 @@ final class L10nTranslationsIn {
                 "Laporan diagnostik tidak bisa disimpan. Coba lagi.");
         table.put("The downloader app you chose isn't installed. Check Send links to another app under Downloads.",
                 "Aplikasi pengunduh yang kamu pilih tidak terpasang. Periksa Kirim tautan ke aplikasi lain di Unduhan.");
-        table.put("The export may be incomplete. The original recording files are still kept.",
-                "Hasil ekspor mungkin tidak lengkap. File rekaman asli tetap disimpan.");
     }
 
     private static void fill32(Map<String, String> table) {
+        table.put("The export may be incomplete. The original recording files are still kept.",
+                "Hasil ekspor mungkin tidak lengkap. File rekaman asli tetap disimpan.");
         table.put("The export wasn't saved. Export again when the file app is ready.",
                 "Ekspor tidak tersimpan. Ekspor lagi saat aplikasi file sudah siap.");
         table.put("The feed capture couldn't be saved. Tap the row to try again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsIn {
                 "Getaran di tab feed utama. Denyut singkat adalah satu ketukan cepat dari motor. Klik bawaan HP adalah klik yang biasa dibuat HP kamu di tempat lain. Ketukan lembut bergetar sedikit lebih lama. Ketukan penuh adalah ketukan terkuat HP kamu.");
         table.put("The time of day the message goes out.",
                 "Jam berapa pesan dikirim setiap hari.");
-        table.put("The video couldn't be made from these photos. Try again.",
-                "Video tidak dapat dibuat dari foto ini. Coba lagi.");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The video couldn't be made from these photos. Try again.",
+                "Video tidak dapat dibuat dari foto ini. Coba lagi.");
         table.put("The video couldn't be saved. Try again, or choose Automatic.",
                 "Videonya tidak bisa disimpan. Coba lagi, atau pilih Otomatis.");
         table.put("The video was saved, but its record couldn't be updated. A later save may make another copy.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsIn {
                 "TikTok ditutup. Bagian yang terekam disimpan di %1$s");
         table.put("TikTok closes at %1$s",
                 "TikTok tutup pukul %1$s");
-        table.put("TikTok default",
-                "Bawaan TikTok");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("TikTok default",
+                "Bawaan TikTok");
         table.put("TikTok default (hold to speed up, quick share)",
                 "Bawaan TikTok (tahan untuk mempercepat, bagikan cepat)");
         table.put("TikTok default (open the creator's profile)",
@@ -4269,6 +4271,8 @@ final class L10nTranslationsIn {
                 "TikTok mungkin telah menerima pesan ini. Pengirimannya belum terkonfirmasi, jadi tidak akan dicoba lagi hari ini.");
         table.put("TikTok only had its watermarked copy of this story, so that copy was saved to %1$s",
                 "TikTok hanya punya salinan bertanda air dari Story ini, jadi salinan itu yang disimpan di %1$s");
+        table.put("TikTok opens a Share to sheet a few seconds after it saves a video. This stops it. The share button and the saved notice stay as they are.",
+                "TikTok membuka lembar berbagi beberapa detik setelah menyimpan video. Ini mencegahnya. Tombol bagikan dan pemberitahuan tersimpan tetap seperti biasa.");
         table.put("TikTok read it",
                 "TikTok sudah membacanya");
         table.put("TikTok read it, but the override couldn't be applied. Reset it and save it again.",
@@ -4357,13 +4361,13 @@ final class L10nTranslationsIn {
                 "Sudah terlambat untuk mengembalikan video tersimpan");
         table.put("Too many media saves are already running. Try again in a moment.",
                 "Terlalu banyak penyimpanan media yang sedang berjalan. Coba lagi sebentar.");
+    }
+
+    private static void fill35(Map<String, String> table) {
         table.put("Top left double tap",
                 "Ketuk dua kali kiri atas");
         table.put("Top right double tap",
                 "Ketuk dua kali kanan atas");
-    }
-
-    private static void fill35(Map<String, String> table) {
         table.put("Tracking",
                 "Pelacakan");
         table.put("Tracking, device access and links",
@@ -4480,13 +4484,13 @@ final class L10nTranslationsIn {
                 "Video Untuk Kamu yang tidak dipersonalisasi");
         table.put("Until you choose here, this sheet follows your choices under Hide share actions.",
                 "Sampai kamu memilih di sini, lembar ini mengikuti pilihan kamu di Sembunyikan tindakan berbagi.");
+    }
+
+    private static void fill36(Map<String, String> table) {
         table.put("Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this.",
                 "Sampai %1$d kecepatan dari %2$s hingga %3$s, dipisah koma. Contoh: 0.5, 1, 1.5, 2, 2.5, 3. Kosongkan untuk daftar TikTok. Mulai ulang TikTok agar berlaku.");
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.",
                 "Gunakan 0 untuk ukuran TikTok, atau %1$d sampai %2$d. Berlaku untuk teks berikutnya.");
-    }
-
-    private static void fill36(Map<String, String> table) {
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Sizes the author's name and the post date next to it, and keeps Android's font scaling.",
                 "Gunakan 0 untuk ukuran TikTok, atau %1$d hingga %2$d. Mengatur ukuran nama kreator dan tanggal unggah di sebelahnya, dan tetap mengikuti skala font Android.");
         table.put("Use 0 for TikTok's size, or %1$d to %2$d. Sizes the description below the author's name and keeps Android's font scaling.",
@@ -4603,13 +4607,13 @@ final class L10nTranslationsIn {
                 "Menunggu aplikasi file melepas file terakhir. Mulai ulang TikTok jika tidak dilepas.");
         table.put("Waiting to record. Go to the screen you want recorded.",
                 "Menunggu untuk merekam. Buka layar yang ingin kamu rekam.");
+    }
+
+    private static void fill37(Map<String, String> table) {
         table.put("Waiting to save %1$s files",
                 "Menunggu untuk menyimpan %1$s berkas");
         table.put("Waiting to save one file",
                 "Menunggu untuk menyimpan satu berkas");
-    }
-
-    private static void fill37(Map<String, String> table) {
         table.put("Waiting to save video",
                 "Menunggu untuk menyimpan video");
         table.put("Watch history was imported for the account that chose the file. Switch back to see it.",
@@ -4726,13 +4730,13 @@ final class L10nTranslationsIn {
                 "Nol berarti jalan keluar dari penahanan selalu tersedia. Angka lain adalah berapa kali sehari jalan keluar itu bisa dipakai. Setelah habis, penahanan tetap sampai hari dimulai ulang. Diabaikan saat anggaran terkunci, karena itu menghilangkan jalan keluar.");
         table.put("Zero shows the notice and leaves the feed alone. Anything else covers the feed for that many minutes once a budget is reached. Messages, profiles and search keep working, and nothing in the feed is thrown away.",
                 "Nol menampilkan pemberitahuan dan membiarkan feed apa adanya. Nilai lain menutupi feed selama sekian menit begitu batas tercapai. Pesan, profil, dan pencarian tetap berjalan, dan tidak ada isi feed yang dibuang.");
+    }
+
+    private static void fill38(Map<String, String> table) {
         table.put("Zero switches this off. A short reminder after that many minutes of watching, and again after the same again. Time on messages, a profile or search doesn't count, and nothing is shown while the feed is on hold.",
                 "Nol mematikan ini. Pengingat singkat setelah sekian menit menonton, lalu lagi setelah selang yang sama. Waktu di pesan, profil, atau pencarian tidak dihitung, dan tidak ada yang muncul selama feed ditahan.");
         table.put("Zero switches this off. Count the minutes the player spends running in the feed. Time on messages, a profile or search doesn't count.",
                 "Nol mematikan ini. Menghitung menit saat pemutar berjalan di feed. Waktu di pesan, profil, atau pencarian tidak dihitung.");
-    }
-
-    private static void fill38(Map<String, String> table) {
         table.put("Zero switches this off. Counts every video that comes up in the feed and tells you when you reach the limit. Separate from the auto-advance session limit under Playback, which counts only videos Hushfeed moved past for you.",
                 "Nol mematikan ini. Menghitung setiap video yang muncul di feed dan memberitahumu saat batas tercapai. Terpisah dari batas sesi maju otomatis di Pemutaran, yang hanya menghitung video yang dilewati Hushfeed untukmu.");
         table.put("collapsed",

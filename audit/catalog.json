@@ -3739,6 +3739,12 @@
     "default": false,
     "type": "bool",
     "row": "Show download progress"
+   },
+   {
+    "key": "skip_post_download_share_sheet",
+    "default": false,
+    "type": "bool",
+    "row": "Skip the Share to sheet after a save"
    }
   ],
   "surface": "downloads",

@@ -15,6 +15,7 @@ Every Hushfeed release, newest first.
 * **Feed:** Add a floating glass pill to the main feed's bottom bar with a lens that slides across the tabs, a slide-along gesture, optional haptics, and new Interface settings for blur strength, glass opacity, pill height and corners (#259).
 * **Patching:** Every patch with settings now has Morphe options that pick its starting values, so a build can ship with the switches you want already on. Saved choices still win, and Reset goes back to the value you picked. Thanks to @XEGARE (#256).
 * **Feed:** `Hide the LIVE row on Following` takes away the row of LIVE and story circles at the top of Following, along with the Story pill that opens it. The video starts right under the tabs with no empty band, and it stays that way after a swipe or Clear display. For You and the LIVE tab look the same as before (#262).
+* **Downloads:** `Skip the Share to sheet after a save` stops the Share to sheet TikTok pops up a few seconds after its own downloader saves a video. The share button works like before and the saved notice still shows. PineDrama gets it too.
 
 ### Fixes
 
