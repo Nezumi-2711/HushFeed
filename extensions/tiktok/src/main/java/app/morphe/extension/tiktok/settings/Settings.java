@@ -953,9 +953,9 @@ public class Settings extends BaseSettings {
     public static final StringSetting GLASS_OPACITY = new StringSetting(
             "glass_opacity", "standard", false, Setting.parent(LIQUID_GLASS_BOTTOM_BAR));
     /**
-     * With Floating bottom bar, how tall the pill is inside the bar: "standard" fills the bar but
-     * for a hairline above and under, "compact" is 4dp slimmer on each side. The bar keeps its
-     * size, so the tabs keep their taps. Read on each draw.
+     * With Floating bottom bar, how tall the pill is: "standard" fills the bar but for a hairline
+     * under it and stands 4dp above its top, "compact" is 2dp slimmer on each side. The bar keeps
+     * its size, so the tabs keep their taps. Read on each draw.
      */
     public static final StringSetting GLASS_BAR_HEIGHT = new StringSetting(
             "glass_bar_height", "standard", false, Setting.parent(FLOATING_BOTTOM_BAR));

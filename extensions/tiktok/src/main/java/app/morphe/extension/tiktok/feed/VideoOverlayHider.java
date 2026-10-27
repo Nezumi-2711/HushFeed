@@ -426,6 +426,10 @@ public final class VideoOverlayHider {
     private static boolean seeThroughBarNow;
     /** Whether that bar floats as a rounded pill this pass (#124). */
     private static boolean floatingBarNow;
+    /** How far that pill stands above the bar this pass, in px, 0 without one in sight. */
+    private static int pillRiseNow;
+    /** Seek bars lifted over the pill's rise, with the offset written. */
+    private static final Map<View, Float> SEEK_BARS_LIFTED = new WeakHashMap<>();
     /** Whether that pill is drawn as glass this pass (#218). */
     private static boolean glassBarNow;
     /** Whether that glass pill carries the lens behind the selected tab this pass (#231). */
@@ -691,6 +695,7 @@ public final class VideoOverlayHider {
                     || statusBar || seeThroughStatusBar || SeeThroughStatusBar.anyFilled()
                     || seeThroughBar || SeeThroughBottomBar.holdsBackground()
                     || anyRail || !HIDDEN_HERE.isEmpty() || !FADED_HERE.isEmpty() || !WIDGETS_LIFTED.isEmpty()
+                    || !SEEK_BARS_LIFTED.isEmpty()
                     || !LIVE_CAPTIONS_LIFTED.isEmpty()
                     || fadeLevel != 100 || !FADED_TO.isEmpty() || !BAR_ROWS_MOVED.isEmpty()
                     || !CAPTIONS_LIFTED.isEmpty() || !DISCS_LIFTED.isEmpty() || !RAILS_LIFTED.isEmpty()
@@ -784,9 +789,15 @@ public final class VideoOverlayHider {
                             resolveIdentifier(activity, activity.getPackageName(), LIVE_PREVIEW_TIPS_ID, false),
                             resolveIdentifier(activity, activity.getPackageName(), DRAMA_TIPS_ID, false),
                     } : new int[0];
+                    int cardHintId = seeThroughBar
+                            ? resolveIdentifier(activity, activity.getPackageName(), CARD_SWIPE_HINT_ID, false) : 0;
                     List<View> roomLayers = selectedViews(found, TRAVERSAL.selected, WIDGET_LAYER_TARGET);
+                    View tabs = floatingBarNow ? bottomBar(activity, root) : null;
+                    int rise = tabs != null && tabs.isShown() ? SeeThroughBottomBar.riseOver(tabs) : 0;
+                    pillRiseNow = rise;
                     // Before the guard, so it measures the caption where this pass leaves it.
-                    liftWidgetLayers(strips, seeThroughBar, layerId, cellId, infoIds, roomLayers, roomAbove);
+                    liftWidgetLayers(strips, seeThroughBar, layerId, cellId, infoIds, cardHintId, rise, roomLayers,
+                            roomAbove);
                     liftLiveCaptions(activity, root, seeThroughBar, cellId);
                     guardBottomSpacer(hidden, found, TRAVERSAL.selected, seeThroughBar, cellId);
                     gateClearControls(hidden, found, TRAVERSAL.selected, carry);
@@ -800,7 +811,8 @@ public final class VideoOverlayHider {
                     // frame is drawn, or the caption, the buttons and the search bar sat a strip's
                     // height low over the tabs until a later layout (#232).
                     if (settleStripColumns(strips) && seeThroughBar) {
-                        liftWidgetLayers(strips, true, layerId, cellId, infoIds, roomLayers, roomAbove);
+                        liftWidgetLayers(strips, true, layerId, cellId, infoIds, cardHintId, rise, roomLayers,
+                                roomAbove);
                     }
                     if (detailPager && detailCommentBar) noteColumnChildren(strips);
                     alignBarRows(found, TRAVERSAL.selected, hidden, cellId);
@@ -1491,6 +1503,13 @@ public final class VideoOverlayHider {
     private static final String LIVE_PREVIEW_NAME_ID = "tv_live_nickname";
     private static final String LIVE_PREVIEW_TIPS_ID = "tv_live_tips";
     private static final String DRAMA_TIPS_ID = "tv_drama_tips";
+    /**
+     * The "Swipe up to skip" line under a card For You puts between videos, such as a suggested
+     * account that follows you. The card is a pager page without the video cell's id, and the
+     * line sits on the page's bottom edge as a direct child of the page's one full-size layout
+     * (#261, S22 2026-10-27: `tv_swipe_up` at 2096 to 2147 behind tabs from about 2030).
+     */
+    private static final String CARD_SWIPE_HINT_ID = "tv_swipe_up";
     /** Widget layers lifted over the see-through bar, with the offset written. */
     private static final Map<View, Float> WIDGETS_LIFTED = new WeakHashMap<>();
 
@@ -1507,19 +1526,24 @@ public final class VideoOverlayHider {
      * layer goes up by [room] the same way, so the next video arrives already lifted. The time
      * measures that room from where TikTok laid the layer out, before either lift, so it already
      * counts the strip's height when both are on: the layer takes the larger of the two.
+     *
+     * <p>A floating pill stands {@code rise} px above the bar, and the layers go up by that much
+     * more, in step with the room reached (see {@link #withRise}).
      */
     private static void liftWidgetLayers(List<View> strips, boolean seeThroughBar, int layerId, int cellId,
-                                         int[] infoIds, List<View> roomLayers, int room) {
+                                         int[] infoIds, int cardHintId, int rise, List<View> roomLayers, int room) {
         Map<View, Float> lifts = new HashMap<>();
         if (seeThroughBar && layerId != 0 && cellId != 0) {
             for (View strip : strips) {
                 if (!HIDDEN_HERE.containsKey(strip) || !(strip.getParent() instanceof View)) continue;
                 List<View> layers = new ArrayList<>();
-                collectWidgetLayers((View) strip.getParent(), layerId, cellId, infoIds, 0, layers);
+                collectWidgetLayers((View) strip.getParent(), layerId, cellId, infoIds, cardHintId, 0, layers);
+                ViewGroup.LayoutParams params = strip.getLayoutParams();
+                float full = params == null ? 0f : params.height;
                 for (View layer : layers) {
                     if (!(layer.getParent() instanceof View)) continue;
                     float gained = roomReached(strip, (View) layer.getParent());
-                    if (gained > 0f) lifts.put(layer, gained);
+                    if (gained > 0f) lifts.put(layer, withRise(gained, full, rise));
                 }
             }
         }
@@ -1536,6 +1560,23 @@ public final class VideoOverlayHider {
         for (View layer : new ArrayList<>(WIDGETS_LIFTED.keySet())) {
             if (!lifts.containsKey(layer)) offsetOwned(WIDGETS_LIFTED, layer, 0f);
         }
+    }
+
+    /**
+     * A layer's lift for {@code gained} px of a {@code full} px strip's room with the pill
+     * {@code rise} px above the bar: the rise in the same share as the room, so a cell only partly
+     * over the strip's place doesn't jump by the whole rise at once.
+     */
+    static float withRise(float gained, float full, int rise) {
+        if (rise <= 0 || full <= 0f) return gained;
+        return Math.round(gained + rise * Math.min(1f, gained / full));
+    }
+
+    /** The main feed's bottom tabs under {@code root}, null where this build has none. */
+    @Nullable
+    private static View bottomBar(Activity activity, View root) {
+        int barId = identifier(activity, activity.getPackageName(), BOTTOM_TABS_IDS[0]);
+        return barId != 0 ? root.findViewById(barId) : null;
     }
 
     /** The id of the widget layer each cell holds, 0 where this build has none. */
@@ -1627,10 +1668,10 @@ public final class VideoOverlayHider {
     private static void liftLiveCaptions(Activity activity, View root, boolean seeThroughBar, int cellId) {
         Map<View, Float> lifts = new HashMap<>();
         int captionId = seeThroughBar && cellId != 0 ? identifier(activity, activity.getPackageName(), LIVE_CAPTION_IDS[0]) : 0;
-        int barId = captionId != 0 ? identifier(activity, activity.getPackageName(), BOTTOM_TABS_IDS[0]) : 0;
-        View bar = barId != 0 ? root.findViewById(barId) : null;
+        View bar = captionId != 0 ? bottomBar(activity, root) : null;
         if (bar != null && bar.isShown() && bar.getHeight() > 0) {
-            float barTop = SeeThroughBottomBar.topInWindow(bar);
+            // A floating pill's top, which can stand above the bar's.
+            float barTop = SeeThroughBottomBar.topInWindow(bar) - SeeThroughBottomBar.riseOver(bar);
             List<View> cells = new ArrayList<>();
             collectCells(root, cellId, 0, cells);
             for (View cell : cells) {
@@ -1669,10 +1710,11 @@ public final class VideoOverlayHider {
     /**
      * Each cell's widget layer under {@code view}: column, wrapper, pager, cell at the most. A
      * cell without one (a LIVE preview, a mini drama) gives the layer that holds its bottom info
-     * instead, the cell's child around one of {@code infoIds} (#250).
+     * instead, the cell's child around one of {@code infoIds} (#250). A card page between videos
+     * gives the layout that holds the shown {@code cardHintId} line itself (#261).
      */
-    private static void collectWidgetLayers(View view, int layerId, int cellId, int[] infoIds, int depth,
-                                            List<View> out) {
+    private static void collectWidgetLayers(View view, int layerId, int cellId, int[] infoIds, int cardHintId,
+                                            int depth, List<View> out) {
         if (!(view instanceof ViewGroup)) return;
         ViewGroup group = (ViewGroup) view;
         if (view.getId() == cellId) {
@@ -1684,10 +1726,36 @@ public final class VideoOverlayHider {
             if (info != null) out.add(info);
             return;
         }
+        View card = cardLayer(group, cellId, cardHintId);
+        if (card != null) {
+            out.add(card);
+            return;
+        }
         if (depth >= 4) return;
         for (int i = 0; i < group.getChildCount(); i++) {
-            collectWidgetLayers(group.getChildAt(i), layerId, cellId, infoIds, depth + 1, out);
+            collectWidgetLayers(group.getChildAt(i), layerId, cellId, infoIds, cardHintId, depth + 1, out);
         }
+    }
+
+    /**
+     * The child of {@code group} whose own child is the shown {@code hintId} line, null where none
+     * is. Only a direct child counts, so the column and the pager never match, and a video cell
+     * ({@code cellId}) is skipped: its own layers move it.
+     */
+    @Nullable
+    private static View cardLayer(ViewGroup group, int cellId, int hintId) {
+        if (hintId == 0) return null;
+        for (int i = 0; i < group.getChildCount(); i++) {
+            View child = group.getChildAt(i);
+            if (child.getVisibility() == View.GONE || child.getId() == cellId
+                    || !(child instanceof ViewGroup)) continue;
+            ViewGroup layout = (ViewGroup) child;
+            for (int j = 0; j < layout.getChildCount(); j++) {
+                View hint = layout.getChildAt(j);
+                if (hint.getId() == hintId && hint.getVisibility() != View.GONE) return child;
+            }
+        }
+        return null;
     }
 
     /**
@@ -2177,6 +2245,11 @@ public final class VideoOverlayHider {
                     if (target == PLAYER_VIEW_TARGET) {
                         SeeThroughStatusBar.fill(view, wanted);
                     } else if (target == CLEAR_SEEK_BAR_TARGET) {
+                        // TikTok lays the progress line on the bar's top edge, so a floating pill
+                        // standing above the bar would cover it: it goes up by the pill's rise
+                        // and a little more, clear of the pill's rim.
+                        offsetOwned(SEEK_BARS_LIFTED, view,
+                                -SeeThroughBottomBar.seekBarLift(pillRiseNow, view.getResources().getDisplayMetrics().density));
                         if (wanted) {
                             setFaded(view, 100);
                             setTransparent(view, true);
