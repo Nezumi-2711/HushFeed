@@ -16,13 +16,13 @@ Every Hushfeed release, newest first.
 * **Comments:** `Fold the search into a button` puts a magnifier at the top left of the comments in place of the search box. Tap it to search, and searching (or another tap) folds the box away again. Your search keeps filtering, and the result line stays so you can tell (#254).
 * **Settings:** `Hide the Hushfeed row` takes Hushfeed out of TikTok's Settings and privacy. Press and hold For You at the top of the feed to open the settings after that, or Home when `Long-press Home for Hushfeed settings` is on. Pausing Hushfeed brings the row back (#264).
 * **Profiles:** An @username typed into someone's bio is a link now, like the ones TikTok already links. Tap it and that profile opens. Tapping the rest of the bio still translates it, and a long press still copies it. A name right after "IG:" or "Snap" stays plain, since it belongs to another app. Turn it off with `Tap @names in bios` (#247).
-* **Feed:** Add a floating glass pill to the main feed's bottom bar with a lens that slides across the tabs, a slide-along gesture, optional haptics, and new Interface settings for blur strength, glass opacity, pill height and corners (#259).
+* **Feed:** The main feed's bottom bar can be a floating glass pill now. A lens slides across the tabs as you switch, you can slide along the pill to change tabs, and haptics are optional. Interface has new settings for the blur, the glass opacity, the pill's height and its corners (#259).
 * **Patching:** Every patch with settings now has Morphe options that pick its starting values, so a build can ship with the switches you want already on. Saved choices still win, and Reset goes back to the value you picked. Thanks to @XEGARE (#256).
 * **Feed:** `Hide the LIVE row on Following` takes away the row of LIVE and story circles at the top of Following, along with the Story pill that opens it. The video starts right under the tabs with no empty band, and it stays that way after a swipe or Clear display. For You and the LIVE tab look the same as before (#262).
 * **Downloads:** `Skip the Share to sheet after a save` stops the Share to sheet TikTok pops up a few seconds after its own downloader saves a video. The share button works like before and the saved notice still shows. PineDrama gets it too.
 * **Downloads:** `Save details beside the video` covers photo posts now. Saving a post's original photos also writes one file for the whole post with its caption, creator, link and post date, plus which photos you picked and which ones saved. `Save details as JSON` works for it too. A Retry after some photos failed updates that same file instead of adding a second one, and if the file can't be written you're told separately from the photos.
-* **Settings:** Search knows the everyday names for a few features now. Try "autoplay", "PiP", "AI" or "save photos". It also finds a choice row by any of its options, not only the one it's set to. Search "save the frame" and `Double tap` comes up, and tapping it opens its list of choices. Titles that match what you typed still come first.
-* **Screen time:** `Lock the feed at set times` locks the feed by itself during hours you pick, like `Mon-Fri 21:00-07:00; Sat Sun 13:00-15:00`. Leave the days out and it's every day, and a time that ends before it starts runs past midnight. It follows your phone's clock, daylight saving changes included. The lock panel says when it opens again, and the row shows when the next lock starts. Messages, profiles and search still work while it's on. A spent daily budget still wins, and Pause Hushfeed turns it off. When your budget changes wait a day, cutting hours waits too, and a locked day won't take fewer hours.
+* **Settings:** Search knows the everyday names for a few features now. Try "autoplay", "PiP", "AI" or "save photos". It also finds a choice row by any of its options, whichever one it's set to. Search "save the frame" and `Double tap` comes up, and tapping it opens its list of choices. Titles that match what you typed still come first.
+* **Screen time:** `Lock the feed at set times` locks the feed by itself during hours you pick, like `Mon-Fri 21:00-07:00; Sat Sun 13:00-15:00`. Leave the days out and it's every day, and a time that ends before it starts runs past midnight. It follows your phone's clock, daylight saving changes included. The lock panel says when it opens again, and the row shows when the next lock starts. Messages, profiles and search still work while it's on. A spent daily budget still wins, and Pause Hushfeed turns it off. Cutting hours waits a day, just like budget changes do, and you can't take hours off a day that's already locked.
 * **Downloads:** `Save only on Wi-Fi` keeps saves off mobile data. On a metered network, or when the phone can't tell, a save waits for Wi-Fi (or any network that isn't metered) for up to 30 minutes. A waiting save doesn't take one of the `Saves at once` spots, and you can cancel it from the Downloads page. Leave Wi-Fi in the middle of a save and it stops cleanly, with the finished files kept. Saving a frame still works anywhere. It's off by default.
 
 ### Fixes
@@ -37,39 +37,39 @@ Every Hushfeed release, newest first.
 * **Feed:** `Hide unverified content notices` also takes the "Caution · May contain inaccurate information" strip off videos people share with you in messages. That label travels inside the message itself, so the switch didn't reach it before (#258).
 * **Profiles:** A long press on someone else's bio copies it now. Before, it only got TikTok's translate bubble, because TikTok draws other people's bios with a different part of the app than your own (#247).
 * **Comments:** With `Open the comments at full height` on, the sheet stops below the status bar instead of running under the clock and battery icons, and the first video after opening TikTok gets the full height too instead of the usual two thirds (#261).
-* **Settings:** Categories expand and collapse beneath their main-list rows. Search reveals controls in the same list, and open categories survive rotation and a restart.
-* **Settings:** Replace large home cards with a compact full-width list. Remove Quick setups.
+* **Settings:** Categories open and close right under their rows in the main list. Search shows the matching controls in that same list, and a category you opened stays open after you rotate the phone or restart TikTok.
+* **Settings:** The big cards on the settings home page are a compact full-width list now, and Quick setups is gone.
 * **TikTok:** Hushfeed now needs Morphe Manager 2.2.0 or newer, or morphe-desktop 1.19.1 on a computer.
 * **Build checks:** The whole-app walk covers PineDrama too. It swipes Short Video, Following and Drama, opens the comment and share sheets, search, Discover, Rewards, Inbox and Profile, and expands every Hushfeed section, reaching settings by a long press on Home when Profile's menu has no Hushfeed row.
 * **Build checks:** PineDrama has its own patch audit now, with checks that use its own tabs and links. A release needs a clean audit and a whole-app walk for each app the bundle supports.
-* **Build checks:** Verify each LIVE preview and drama label used by See-through bottom bar against the supported TikTok APK.
-* **Feed:** Keep country flags and codes next to names written from right to left (#258).
+* **Build checks:** Every LIVE preview and drama label that See-through bottom bar moves is checked against the supported TikTok APK.
+* **Feed:** Country flags and codes stay next to names written right to left (#258).
 * **Feed:** With `See-through bottom bar` on, the name and "Tap to watch" line of LIVE previews and mini dramas stay above the tabs (#250).
-* **Grids:** Give the sort control a 48 dp touch target.
-* **Grids:** Hide the sort control while its grid is detached, then restore it when the grid returns.
-* **Grids:** Leave the current order in place when a sort change can't be saved.
+* **Grids:** The sort control has a 48 dp touch target, so it's easier to hit.
+* **Grids:** The sort control hides while its grid isn't showing and comes back with the grid.
+* **Grids:** If a sort change can't be saved, the grid keeps the order it had.
 * **Grids:** Choosing Original order keeps the current grid's sort menu available (#180).
-* **Comments:** Comments beside the video uses the same width for its layout and rebuild checks (#253).
-* **Inbox:** A reused chat picture now opens the current creator's Story on its first tap when Story-first is enabled (#233).
-* **Playback:** Keep the source video paused when a comment link opens another page. Leaving the tap-to-start cover for another tab also keeps its feed paused (#257).
-* **Diagnostics:** Notification reports count registration and posting stages without message contents (#126, #222, #86).
-* **Screen recording:** Keep TikTok in Android's recent-apps recording choices on Android 14 and newer.
-* **Build checks:** Auto-advance audits follow native playback without per-video labels. Unfinished clips and unavailable playback stay inconclusive.
+* **Comments:** Comments beside the video measures its width the same way when it lays out and when it decides whether to rebuild (#253).
+* **Inbox:** A reused chat picture now opens the current creator's Story on the first tap when Story-first is on (#233).
+* **Playback:** The video stays paused when a link in its comments opens another page. Leaving the tap-to-start cover for another tab keeps its feed paused too (#257).
+* **Diagnostics:** Notification reports count how many notifications were registered and posted, and leave out what the messages said (#126, #222, #86).
+* **Screen recording:** TikTok stays in the app list Android 14 and newer show when you record a single app.
+* **Build checks:** The auto-advance audit follows the video player itself instead of per-video labels. A clip that doesn't finish, or playback it can't read, leaves the check inconclusive.
 * **TikTok:** Hold a settings-search switch to reveal and highlight its control in the main list (#248).
-* **Diagnostics:** First-frame callback records keep source ownership and monotonic timestamps for startup checks (#150).
-* **Build checks:** Release checks require matching APK and native evidence for every advertised package. Walks verify the installed build and patch options.
-* **TikTok:** Recording recovery exports use bulk writes to avoid long waits when saving large files.
+* **Diagnostics:** Startup checks record which player drew the first frame, timed with a clock that never jumps backward (#150).
+* **Build checks:** A release needs matching APK and on-device evidence for every app it supports, and the walk checks the installed build and its patch options.
+* **TikTok:** Exporting a recovered recording writes in big chunks now, so a large file doesn't take ages to save.
 * **TikTok:** Recovery Retry keeps the recording's original stop reason instead of saying TikTok closed. Recovery dialogs follow Hushfeed's theme.
 * **TikTok:** Screen recordings check storage as they run and keep recovery files until the saved copy is verified. Interrupted recordings can be retried, exported or deleted.
-* **Build checks:** Patch audits now check the installed APK and selected patches. Results from a different package or an excluded patch stay historical.
-* **Build checks:** Patch audits check complete diagnostics before reporting missing switches. Missing videos leave dependent checks inconclusive, and the commenter-region check uses the current cache trace.
-* **TikTok:** Screen recording keeps distinct timestamps for its earliest frames while sound starts.
-* **TikTok:** Screen recordings keep their first video frames while the audio encoder starts.
-* **Build checks:** A patch audit now stops qualifying a build when its executable inputs change. Partial reruns leave older checks historical.
+* **Build checks:** Patch audits check the installed APK and which patches were picked. Results from another app, or from a patch left out of the build, only count as history.
+* **Build checks:** A patch audit waits for the full diagnostics report before it calls a switch missing. With no video to look at, the checks that need one stay inconclusive, and the commenter region check reads the current cache trace.
+* **TikTok:** The first frames of a screen recording each keep their own timestamp while the sound is starting.
+* **TikTok:** Screen recordings keep their first video frames while the sound is still starting up.
+* **Build checks:** A patch audit stops counting for a build once the code it ran against changes, and a partial rerun leaves the older checks as history.
 * **TikTok:** Screen recording releases audio resources when sound can't start. Its save notice now says when the recording has no sound.
 * **TikTok:** Screen recording now asks Android to capture only the patched app's sound.
-* **TikTok:** Service+ cleanup now checks the first entry in a LIVE preview, matching TikTok's own display logic (#94).
-* **TikTok:** The comment pause can identify a playing first frame before the first progress report arrives (#151).
+* **TikTok:** Service+ cleanup checks the first entry in a LIVE preview now, the same one TikTok decides to show (#94).
+* **TikTok:** The comment pause can tell the first frame is playing before TikTok sends its first progress update (#151).
 
 ## 0.79.0 (2026-10-24)
 
