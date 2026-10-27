@@ -2328,3 +2328,11 @@ search suggestions	arama önerileri
 AI chat	yapay zeka sohbeti
 AI Tako	yapay zeka Tako
 save photos	fotoğrafları kaydet
+Lock the feed at set times	Akışı belirli saatlerde kilitle
+The feed locks by itself during these hours, on your phone's clock. Write days and hours like Mon-Fri 21:00-07:00; Sat Sun 13:00-15:00. Leave the days out for every day. A time that ends earlier than it starts runs past midnight.	Akış bu saatlerde telefonunun saatine göre kendiliğinden kilitlenir. Günleri ve saatleri Mon-Fri 21:00-07:00; Sat Sun 13:00-15:00 gibi yaz. Her gün için günleri yazma. Başladığından önce biten bir süre gece yarısını geçer.
+Couldn't read %1$s. Write days and hours like Mon-Fri 21:00-07:00.	%1$s okunamadı. Günleri ve saatleri Mon-Fri 21:00-07:00 gibi yaz.
+%1$s starts and ends at the same time. Give it a different end time.	%1$s aynı saatte başlayıp bitiyor. Farklı bir bitiş saati ver.
+Locked all week	Tüm hafta kilitli
+Locked now, until %1$s	Şu an kilitli, bitiş: %1$s
+Next lock starts %1$s	Sonraki kilit başlangıcı: %1$s
+The feed is locked until %1$s. Messages, profiles and search still work.	Akış kilitli, açılış: %1$s. Mesajlar, profiller ve arama çalışmaya devam ediyor.

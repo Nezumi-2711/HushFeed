@@ -1250,6 +1250,15 @@
           "values": null
         },
         {
+          "key": "feed_lock_hours",
+          "title": "Default: feed lock hours",
+          "description": null,
+          "required": false,
+          "type": "kotlin.String",
+          "default": "",
+          "values": null
+        },
+        {
           "key": "shared_video_alone",
           "title": "Default: shared video alone",
           "description": null,
@@ -6483,6 +6492,15 @@
           "values": null
         },
         {
+          "key": "keep_clear_display_seek_bar",
+          "title": "Default: keep clear display seek bar",
+          "description": null,
+          "required": false,
+          "type": "kotlin.Boolean",
+          "default": false,
+          "values": null
+        },
+        {
           "key": "fade_controls_opacity",
           "title": "Default: fade controls opacity",
           "description": null,
@@ -8994,6 +9012,15 @@
           "required": false,
           "type": "kotlin.String",
           "default": "2",
+          "values": null
+        },
+        {
+          "key": "hold_speed_slide",
+          "title": "Default: hold speed slide",
+          "description": null,
+          "required": false,
+          "type": "kotlin.Boolean",
+          "default": false,
           "values": null
         },
         {

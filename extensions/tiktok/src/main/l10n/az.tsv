@@ -2328,3 +2328,11 @@ search suggestions	axtarış təklifləri
 AI chat	Sİ söhbəti
 AI Tako	Sİ Tako
 save photos	fotoları saxla
+Lock the feed at set times	Lenti müəyyən saatlarda kilidlə
+The feed locks by itself during these hours, on your phone's clock. Write days and hours like Mon-Fri 21:00-07:00; Sat Sun 13:00-15:00. Leave the days out for every day. A time that ends earlier than it starts runs past midnight.	Lent bu saatlarda telefonunun saatına görə özü kilidlənir. Günləri və saatları belə yaz: Mon-Fri 21:00-07:00; Sat Sun 13:00-15:00. Hər gün üçün günləri yazma. Başladığından tez bitən vaxt gecə yarısını keçir.
+Couldn't read %1$s. Write days and hours like Mon-Fri 21:00-07:00.	%1$s oxuna bilmədi. Günləri və saatları Mon-Fri 21:00-07:00 kimi yaz.
+%1$s starts and ends at the same time. Give it a different end time.	%1$s eyni vaxtda başlayır və bitir. Başqa bitmə vaxtı ver.
+Locked all week	Bütün həftə kilidlidir
+Locked now, until %1$s	İndi kilidlidir, açılır: %1$s
+Next lock starts %1$s	Növbəti kilid: %1$s
+The feed is locked until %1$s. Messages, profiles and search still work.	Lent kilidlidir, açılır: %1$s. Mesajlar, profillər və axtarış yenə işləyir.

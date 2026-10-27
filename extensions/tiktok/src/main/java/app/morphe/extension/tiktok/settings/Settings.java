@@ -844,6 +844,12 @@ public class Settings extends BaseSettings {
      */
     public static final BooleanSetting FEED_LOCK = new BooleanSetting("feed_lock", FALSE);
     /**
+     * Weekly hours the feed lock applies by itself, on the phone's clock, as typed: "Mon-Fri
+     * 21:00-07:00; Sat Sun 13:00-15:00". Empty by default, which locks nothing, and empty while
+     * paused like the rest. See FeedSchedule.
+     */
+    public static final StringSetting FEED_LOCK_HOURS = new StringSetting("feed_lock_hours", "");
+    /**
      * A link to one video plays that video alone: the feed's swipe is turned down while it is the
      * one playing, and Auto-advance doesn't move on from it. Off by default, and off while
      * paused like the rest. See FeedLock#linkVideoAlone.

@@ -81,6 +81,7 @@
       "session_budget_ramp",
       "session_budget_finish_video",
       "feed_lock",
+      "feed_lock_hours",
       "shared_video_alone",
       "session_budget_cue",
       "session_budget_notice_minutes",
@@ -1617,6 +1618,12 @@
       "key": "feed_lock",
       "type": "boolean",
       "default": false
+    },
+    "feed_lock_hours": {
+      "field": "FEED_LOCK_HOURS",
+      "key": "feed_lock_hours",
+      "type": "string",
+      "default": ""
     },
     "feed_mute_button": {
       "field": "FEED_MUTE_BUTTON",
