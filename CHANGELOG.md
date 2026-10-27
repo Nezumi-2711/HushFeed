@@ -17,6 +17,7 @@ Every Hushfeed release, newest first.
 
 ### Fixes
 
+* **Theme:** With `AMOLED dark theme` on, the activity center's card is black (or your picked color) instead of TikTok's dark gray. Those history pages are web pages inside TikTok, so the theme never reached them before (#263).
 * **Profiles:** A long press on someone else's bio copies it now. Before, it only got TikTok's translate bubble, because TikTok draws other people's bios with a different part of the app than your own (#247).
 * **Comments:** With `Open the comments at full height` on, the sheet stops below the status bar instead of running under the clock and battery icons, and the first video after opening TikTok gets the full height too instead of the usual two thirds (#261).
 * **Settings:** Categories expand and collapse beneath their main-list rows. Search reveals controls in the same list, and open categories survive rotation and a restart.
