@@ -8,6 +8,7 @@ Every Hushfeed release, newest first.
 
 * **Settings:** Every Hushfeed title (the settings bar, its dialogs, the Feature Gate Lab and the lock screen) now wears TikTok's cyan and red in a slow moving gradient, and it keeps moving even with Android's animations turned off.
 * **Settings:** The Calm feed preset is gone from the top of Feed filter. The filters it used to flip are all still there, and whatever you turned on with it stays on.
+* **Gestures:** `Double tap` and `Long press` can open TikTok's search page now. It works with `Hide feed search button` on too, so you can hide the button and still get to Search (#251).
 * **Settings:** `Hide the Hushfeed row` takes Hushfeed out of TikTok's Settings and privacy. Press and hold For You at the top of the feed to open the settings after that, or Home when `Long-press Home for Hushfeed settings` is on. Pausing Hushfeed brings the row back (#264).
 * **Feed:** Add a floating glass pill to the main feed's bottom bar with a lens that slides across the tabs, a slide-along gesture, optional haptics, and new Interface settings for blur strength, glass opacity, pill height and corners (#259).
 * **Patching:** Every patch with settings now has Morphe options that pick its starting values, so a build can ship with the switches you want already on. Saved choices still win, and Reset goes back to the value you picked. Thanks to @XEGARE (#256).
