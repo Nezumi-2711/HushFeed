@@ -1012,6 +1012,7 @@ Lift text length limits,Lift text length limits
 "Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d.","Lifts the kept caption above its usual spot in Clear display. Use 0 for the usual spot, or up to %1$d."
 Light,Light
 Like,Like
+Like or unlike the video,Like or unlike the video
 Like the video,Like the video
 Liked videos,Liked videos
 Likes,Likes

@@ -807,14 +807,16 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             // Long press's actions, which GestureActions runs the same way for both gestures. The
             // speed toggle changes the playing video's speed, so it needs the Playback speed patch's
             // player bridge, and Clear display posts TikTok's own event through Remember clear
-            // display's bridge (#136).
-            List<String> tapLabels = new ArrayList<>(Arrays.asList("TikTok default", "Do nothing", "Open comments",
+            // display's bridge (#136). Like or unlike is the double tap's own: TikTok's default
+            // already likes, and only ever likes (#248).
+            List<String> tapLabels = new ArrayList<>(Arrays.asList("TikTok default", "Do nothing",
+                    "Like or unlike the video", "Open comments",
                     "Save the original sound", "Copy the video link", "Copy the sound link",
                     "Find the sound on YouTube Music", "Set a sleep timer that closes TikTok",
                     "Save the frame on screen as a photo", "Save the video's cover", "Open the search page"));
-            List<String> tapValues = new ArrayList<>(Arrays.asList("default", "nothing", "comments", "original_sound",
-                    "copy_link", "copy_sound_link", "youtube_music", "sleep_timer", "save_frame", "save_cover",
-                    "open_search"));
+            List<String> tapValues = new ArrayList<>(Arrays.asList("default", "nothing", "like_toggle", "comments",
+                    "original_sound", "copy_link", "copy_sound_link", "youtube_music", "sleep_timer", "save_frame",
+                    "save_cover", "open_search"));
             if (SettingsStatus.liveSpeedEnabled) {
                 tapLabels.add("Speed up this video, double tap again to undo");
                 tapValues.add("speed_toggle");
