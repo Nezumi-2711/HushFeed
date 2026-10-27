@@ -1491,6 +1491,7 @@ Save field values,Save field values
 Save full report,Save full report
 Save in which quality?,Save in which quality?
 Save media,Save media
+Save only on Wi-Fi,Save only on Wi-Fi
 Save photo posts as a video,Save photo posts as a video
 Save photos,Save photos
 Save photos or a video?,Save photos or a video?
@@ -1516,6 +1517,7 @@ Saved %1$s of %2$s photos before the story failed,Saved %1$s of %2$s photos befo
 "Saved %1$s of %2$s, the rest cancelled","Saved %1$s of %2$s, the rest cancelled"
 "Saved %1$s of %2$s, the rest need more free space","Saved %1$s of %2$s, the rest need more free space"
 "Saved %1$s of %2$s, the rest ran out of time","Saved %1$s of %2$s, the rest ran out of time"
+Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.,Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.
 Saved %1$s of %2$s. The server asked us to wait. Try again later.,Saved %1$s of %2$s. The server asked us to wait. Try again later.
 Saved %1$s original photos,Saved %1$s original photos
 Saved %1$s seen videos to the file,Saved %1$s seen videos to the file
@@ -1539,6 +1541,7 @@ Saves right now,Saves right now
 "Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.","Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies."
 "Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.","Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed."
 Saves the details file in JSON format instead of plain text. Useful if another tool will read it.,Saves the details file in JSON format instead of plain text. Useful if another tool will read it.
+"Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere.","Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere."
 Saves your Hushfeed settings and Feature Gate Lab rules to a file.,Saves your Hushfeed settings and Feature Gate Lab rules to a file.
 Saving,Saving
 Saving %1$s of %2$s,Saving %1$s of %2$s
@@ -1810,6 +1813,7 @@ Stop waiting,Stop waiting
 Stopped after dismissing %1$s suggested accounts,Stopped after dismissing %1$s suggested accounts
 Stopped after dismissing one suggested account,Stopped after dismissing one suggested account
 Stopped by an unexpected error,Stopped by an unexpected error
+Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.,Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.
 Stopped waiting for the file app. It hasn't said yet whether the backup was saved.,Stopped waiting for the file app. It hasn't said yet whether the backup was saved.
 Stopped waiting for the file app. It hasn't said yet whether the export was saved.,Stopped waiting for the file app. It hasn't said yet whether the export was saved.
 Stopped waiting for the file app. Nothing was changed.,Stopped waiting for the file app. Nothing was changed.
@@ -1951,6 +1955,7 @@ The frame couldn't be read. Try again.,The frame couldn't be read. Try again.
 The frame couldn't be saved. Try again.,The frame couldn't be saved. Try again.
 "The hour both budgets reset, on a 24 hour clock. The default is 4 in the morning, so a late night still counts as the same day.","The hour both budgets reset, on a 24 hour clock. The default is 4 in the morning, so a late night still counts as the same day."
 The last feed capture wasn't saved. Tap to try again.,The last feed capture wasn't saved. Tap to try again.
+The last one is still waiting for Wi-Fi,The last one is still waiting for Wi-Fi
 The last one is still waiting to start,The last one is still waiting to start
 The last report is still being saved,The last report is still being saved
 The list changed while loading. Results are incomplete.,The list changed while loading. Results are incomplete.
@@ -1982,6 +1987,7 @@ The recovery record is damaged. Export a copy of the recording files or delete t
 The report couldn't be saved. Try again.,The report couldn't be saved. Try again.
 The request timed out. The list may be incomplete.,The request timed out. The list may be incomplete.
 The row of story avatars across the top of the Inbox goes. Stories still play from the feed and from profiles.,The row of story avatars across the top of the Inbox goes. Stories still play from the feed and from profiles.
+The save stopped when you left Wi-Fi. Save it again on Wi-Fi.,The save stopped when you left Wi-Fi. Save it again on Wi-Fi.
 The saved-video choice couldn't open. Try again.,The saved-video choice couldn't open. Try again.
 The saved-video choice is still open,The saved-video choice is still open
 The screen recording did not finish. Its files can be exported but may not play.,The screen recording did not finish. Its files can be exported but may not play.
@@ -2234,6 +2240,7 @@ Wait a day to loosen the budget,Wait a day to loosen the budget
 "Wait a day to loosen the budget is on, so Hushfeed stays on","Wait a day to loosen the budget is on, so Hushfeed stays on"
 Wait before hiding the controls.,Wait before hiding the controls.
 Wait for loading to finish,Wait for loading to finish
+Waiting for Wi-Fi,Waiting for Wi-Fi
 Waiting for the file app to let go of the last file. Restart TikTok if it doesn't.,Waiting for the file app to let go of the last file. Restart TikTok if it doesn't.
 Waiting to record. Go to the screen you want recorded.,Waiting to record. Go to the screen you want recorded.
 Waiting to save %1$s files,Waiting to save %1$s files

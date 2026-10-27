@@ -15,6 +15,7 @@
       "download_without_sound",
       "download_progress",
       "download_saves_at_once",
+      "download_unmetered_only",
       "download_details",
       "download_details_json",
       "download_tags",
@@ -189,6 +190,7 @@
     "Downloads": [
       "keep_photos_as_sent",
       "download_saves_at_once",
+      "download_unmetered_only",
       "download_sticker_format",
       "download_video_path",
       "download_photo_path",
@@ -1476,6 +1478,12 @@
     "download_tags": {
       "field": "DOWNLOAD_TAGS",
       "key": "download_tags",
+      "type": "boolean",
+      "default": false
+    },
+    "download_unmetered_only": {
+      "field": "DOWNLOAD_UNMETERED_ONLY",
+      "key": "download_unmetered_only",
       "type": "boolean",
       "default": false
     },

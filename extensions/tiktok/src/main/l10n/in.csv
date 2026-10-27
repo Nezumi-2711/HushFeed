@@ -2310,3 +2310,10 @@ Locked all week,Terkunci sepanjang minggu
 "Locked now, until %1$s","Terkunci sekarang, sampai %1$s"
 Next lock starts %1$s,Kunci berikutnya mulai %1$s
 "The feed is locked until %1$s. Messages, profiles and search still work.","Feed terkunci sampai %1$s. Pesan, profil, dan pencarian tetap berfungsi."
+Save only on Wi-Fi,Simpan hanya lewat Wi-Fi
+"Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere.","Penyimpanan menunggu Wi-Fi atau jaringan lain yang tidak berkuota hingga 30 menit, dan berhenti jika kamu keluar darinya. Menyimpan bingkai tetap bisa di mana saja."
+Waiting for Wi-Fi,Menunggu Wi-Fi
+The last one is still waiting for Wi-Fi,Yang sebelumnya masih menunggu Wi-Fi
+Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.,Berhenti menunggu Wi-Fi setelah 30 menit. Simpan lagi saat kamu terhubung ke Wi-Fi.
+Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.,Tersimpan %1$s dari %2$s. Sisanya berhenti saat kamu keluar dari Wi-Fi. Simpan lagi lewat Wi-Fi.
+The save stopped when you left Wi-Fi. Save it again on Wi-Fi.,Penyimpanan berhenti saat kamu keluar dari Wi-Fi. Simpan lagi lewat Wi-Fi.

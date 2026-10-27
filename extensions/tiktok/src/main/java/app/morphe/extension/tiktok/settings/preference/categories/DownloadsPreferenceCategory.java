@@ -76,6 +76,16 @@ public class DownloadsPreferenceCategory extends ConditionalPreferenceCategory {
                 return true;
             });
             addPreference(atOnce);
+            TogglePreference wifiOnly = new TogglePreference(context, "Save only on Wi-Fi",
+                    "Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, "
+                            + "and stop if you leave it. Saving a frame still works anywhere.",
+                    Settings.DOWNLOAD_UNMETERED_ONLY);
+            // Posted for the same reason: a save waiting for Wi-Fi goes once the switch is off.
+            wifiOnly.setOnPreferenceChangeListener((preference, value) -> {
+                Utils.runOnMainThread(SaveQueue::networkSettingChanged);
+                return true;
+            });
+            addPreference(wifiOnly);
             addPreference(new SectionHeadingPreference(context, "Files"));
             addPreference(new DownloadPathPreference(
                     context,

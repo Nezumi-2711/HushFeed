@@ -169,6 +169,8 @@ public class Settings extends BaseSettings {
             new BooleanSetting("skip_post_download_share_sheet", FALSE);
     /** How many of Hushfeed's saves run at once, "1" to "3"; the rest wait in line (#27). */
     public static final StringSetting DOWNLOAD_SAVES_AT_ONCE = new StringSetting("download_saves_at_once", "3");
+    /** Network saves wait for an unmetered network and stop when it turns metered; local saves still run. */
+    public static final BooleanSetting DOWNLOAD_UNMETERED_ONLY = new BooleanSetting("download_unmetered_only", FALSE);
     public static final BooleanSetting DOWNLOAD_DETAILS =new BooleanSetting("download_details", FALSE);
     /** The details file as JSON rather than plain text. */
     public static final BooleanSetting DOWNLOAD_DETAILS_JSON = new BooleanSetting(

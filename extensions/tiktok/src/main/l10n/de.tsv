@@ -2339,3 +2339,10 @@ Locked all week	Die ganze Woche gesperrt
 Locked now, until %1$s	Jetzt gesperrt, bis %1$s
 Next lock starts %1$s	Nächste Sperre beginnt %1$s
 The feed is locked until %1$s. Messages, profiles and search still work.	Der Feed ist bis %1$s gesperrt. Nachrichten, Profile und Suche funktionieren weiter.
+Save only on Wi-Fi	Nur über WLAN speichern
+Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere.	Speicherungen warten bis zu 30 Minuten auf WLAN oder ein anderes Netz ohne Volumenbegrenzung und stoppen, wenn du es verlässt. Ein Einzelbild lässt sich überall speichern.
+Waiting for Wi-Fi	Wartet auf WLAN
+The last one is still waiting for Wi-Fi	Das letzte wartet noch auf WLAN
+Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.	Nach 30 Minuten wird nicht mehr auf WLAN gewartet. Speichere es erneut, wenn du im WLAN bist.
+Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.	%1$s von %2$s gespeichert. Der Rest stoppte, als du das WLAN verlassen hast. Speichere erneut im WLAN.
+The save stopped when you left Wi-Fi. Save it again on Wi-Fi.	Das Speichern stoppte, als du das WLAN verlassen hast. Speichere es erneut im WLAN.

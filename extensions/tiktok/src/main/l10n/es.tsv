@@ -2336,3 +2336,10 @@ Locked all week	Bloqueado toda la semana
 Locked now, until %1$s	Bloqueado ahora, hasta %1$s
 Next lock starts %1$s	El próximo bloqueo empieza %1$s
 The feed is locked until %1$s. Messages, profiles and search still work.	El feed está bloqueado hasta %1$s. Los mensajes, perfiles y la búsqueda siguen funcionando.
+Save only on Wi-Fi	Guardar solo con Wi-Fi
+Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere.	Los guardados esperan hasta 30 minutos a una red Wi-Fi u otra sin límite de datos, y se detienen si sales de ella. Guardar un fotograma funciona en cualquier red.
+Waiting for Wi-Fi	Esperando Wi-Fi
+The last one is still waiting for Wi-Fi	El anterior todavía está esperando Wi-Fi
+Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.	Se dejó de esperar Wi-Fi tras 30 minutos. Vuelve a guardarlo cuando tengas Wi-Fi.
+Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.	Se guardaron %1$s de %2$s. El resto se detuvo al salir del Wi-Fi. Vuelve a guardar con Wi-Fi.
+The save stopped when you left Wi-Fi. Save it again on Wi-Fi.	El guardado se detuvo al salir del Wi-Fi. Vuelve a guardarlo con Wi-Fi.

@@ -2336,3 +2336,10 @@ Locked all week	Bütün həftə kilidlidir
 Locked now, until %1$s	İndi kilidlidir, açılır: %1$s
 Next lock starts %1$s	Növbəti kilid: %1$s
 The feed is locked until %1$s. Messages, profiles and search still work.	Lent kilidlidir, açılır: %1$s. Mesajlar, profillər və axtarış yenə işləyir.
+Save only on Wi-Fi	Yalnız Wi-Fi ilə saxla
+Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere.	Saxlamalar 30 dəqiqəyədək Wi-Fi və ya limitsiz başqa şəbəkə gözləyir, ondan çıxsanız dayanır. Kadrın saxlanması hər yerdə işləyir.
+Waiting for Wi-Fi	Wi-Fi gözlənilir
+The last one is still waiting for Wi-Fi	Sonuncu hələ Wi-Fi gözləyir
+Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.	30 dəqiqədən sonra Wi-Fi gözləməsi dayandırıldı. Wi-Fi-a qoşulanda yenidən saxlayın.
+Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.	%2$s fayldan %1$s saxlanıldı. Qalanları Wi-Fi-dan çıxanda dayandı. Wi-Fi ilə yenidən saxlayın.
+The save stopped when you left Wi-Fi. Save it again on Wi-Fi.	Wi-Fi-dan çıxanda saxlama dayandı. Wi-Fi ilə yenidən saxlayın.

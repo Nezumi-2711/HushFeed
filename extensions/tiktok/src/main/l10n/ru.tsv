@@ -2513,3 +2513,10 @@ Locked all week	Заблокировано всю неделю
 Locked now, until %1$s	Заблокировано сейчас, до %1$s
 Next lock starts %1$s	Следующая блокировка начнётся %1$s
 The feed is locked until %1$s. Messages, profiles and search still work.	Лента заблокирована до %1$s. Сообщения, профили и поиск работают как обычно.
+Save only on Wi-Fi	Сохранять только по Wi-Fi
+Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere.	Сохранения ждут Wi-Fi или другую безлимитную сеть до 30 минут и останавливаются, если вы из неё выйдете. Сохранение кадра работает везде.
+Waiting for Wi-Fi	Ожидание Wi-Fi
+The last one is still waiting for Wi-Fi	Последнее всё ещё ждёт Wi-Fi
+Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.	Ожидание Wi-Fi прекращено через 30 минут. Сохраните снова, когда будете в сети Wi-Fi.
+Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.	Сохранено %1$s из %2$s. Остальное остановилось, когда вы вышли из Wi-Fi. Сохраните снова по Wi-Fi.
+The save stopped when you left Wi-Fi. Save it again on Wi-Fi.	Сохранение остановилось, когда вы вышли из Wi-Fi. Сохраните снова по Wi-Fi.

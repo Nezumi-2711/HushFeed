@@ -2308,3 +2308,10 @@ Locked all week,整周锁定
 "Locked now, until %1$s",现已锁定，直到 %1$s
 Next lock starts %1$s,下次锁定开始于 %1$s
 "The feed is locked until %1$s. Messages, profiles and search still work.",信息流锁定到 %1$s。私信、个人主页和搜索仍可使用.
+Save only on Wi-Fi,仅在 Wi-Fi 下保存
+"Saves wait for Wi-Fi or another network that isn't metered, for up to 30 minutes, and stop if you leave it. Saving a frame still works anywhere.",保存会等待 Wi-Fi 或其他不计流量的网络，最多 30 分钟，离开该网络就会停止。保存画面在任何网络下都可以.
+Waiting for Wi-Fi,正在等待 Wi-Fi
+The last one is still waiting for Wi-Fi,上一个还在等待 Wi-Fi
+Stopped waiting for Wi-Fi after 30 minutes. Save it again when you're on Wi-Fi.,等待 Wi-Fi 30 分钟后已停止。连上 Wi-Fi 后再保存一次.
+Saved %1$s of %2$s. The rest stopped when you left Wi-Fi. Save again on Wi-Fi.,已保存 %1$s 个，共 %2$s 个。其余的在你离开 Wi-Fi 时停止了。请在 Wi-Fi 下再保存一次.
+The save stopped when you left Wi-Fi. Save it again on Wi-Fi.,你离开 Wi-Fi 时保存停止了。请在 Wi-Fi 下再保存一次.
