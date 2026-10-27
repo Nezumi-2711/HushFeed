@@ -7,6 +7,7 @@ package app.morphe.extension.tiktok.settings.preference;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.animation.ValueAnimator;
@@ -34,6 +35,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.annotation.GraphicsMode;
 import org.robolectric.shadows.ShadowLooper;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
@@ -174,6 +176,24 @@ public class ShimmerTitleTest {
         float[] values = new float[9];
         local.getValues(values);
         return values[Matrix.MTRANS_X];
+    }
+
+    /** A worn title doesn't keep itself, or the screen it belongs to, in memory. */
+    @Test
+    public void aWornTitleCanBeLetGo() {
+        WeakReference<TextView> gone = wornAndDropped();
+        for (int i = 0; i < 20 && gone.get() != null; i++) {
+            System.gc();
+            System.runFinalization();
+        }
+        assertNull("the gradient kept its title alive", gone.get());
+    }
+
+    private static WeakReference<TextView> wornAndDropped() {
+        TextView title = title("Hushfeed", Color.WHITE);
+        ShimmerTitle.wear(title);
+        assertTrue(ShimmerTitle.wears(title));
+        return new WeakReference<>(title);
     }
 
     private static TextView title(String text, int color) {

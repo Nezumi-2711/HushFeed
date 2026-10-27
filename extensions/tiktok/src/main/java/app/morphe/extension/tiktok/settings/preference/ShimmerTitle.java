@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -56,8 +57,12 @@ public final class ShimmerTitle implements Runnable, View.OnAttachStateChangeLis
     private static final int[] SHEEN_ON_DARK = {0x00FFFFFF, 0xB3FFFFFF, 0x00FFFFFF};
     /** Softer on the light theme, where a full sheen would wash the dark letters into the page. */
     private static final int[] SHEEN_ON_LIGHT = {0x00FFFFFF, 0x80FFFFFF, 0x00FFFFFF};
-    /** The titles wearing the gradient, so painting one twice doesn't run two loops. */
-    private static final Map<TextView, ShimmerTitle> WORN = new WeakHashMap<>();
+    /**
+     * The titles wearing the gradient, so painting one twice doesn't run two loops. The loop is held
+     * weakly too: it holds its title, and a value that holds its key keeps the entry, and with it
+     * the title's dialog and screen, for good. The title's own listener list keeps the loop alive.
+     */
+    private static final Map<TextView, WeakReference<ShimmerTitle>> WORN = new WeakHashMap<>();
 
     private final TextView title;
     private final int[] stops;
@@ -84,12 +89,12 @@ public final class ShimmerTitle implements Runnable, View.OnAttachStateChangeLis
      * page or the lock cover, dark ones on the light theme.
      */
     public static void wear(TextView title) {
-        if (WORN.containsKey(title)) return;
+        if (wears(title)) return;
         // Color.luminance(int) needs API 24, and the ink colours sit far either side of the middle.
         int ink = title.getCurrentTextColor();
         boolean onDark = Color.red(ink) * 299 + Color.green(ink) * 587 + Color.blue(ink) * 114 > 128_000;
         ShimmerTitle shimmer = new ShimmerTitle(title, onDark);
-        WORN.put(title, shimmer);
+        WORN.put(title, new WeakReference<>(shimmer));
         // The gradient replaces the colour, and a full-strength colour keeps it full strength.
         title.setTextColor(Color.WHITE);
         title.addOnAttachStateChangeListener(shimmer);
@@ -98,7 +103,13 @@ public final class ShimmerTitle implements Runnable, View.OnAttachStateChangeLis
 
     /** Whether [title] wears the gradient. */
     public static boolean wears(TextView title) {
-        return WORN.containsKey(title);
+        return wornBy(title) != null;
+    }
+
+    @Nullable
+    private static ShimmerTitle wornBy(TextView title) {
+        WeakReference<ShimmerTitle> worn = WORN.get(title);
+        return worn == null ? null : worn.get();
     }
 
     @Override
@@ -136,7 +147,7 @@ public final class ShimmerTitle implements Runnable, View.OnAttachStateChangeLis
 
     /** Shades [title], which wears the gradient, as it stands [sinceStart] ms after it opened. */
     static void frameFor(TextView title, long sinceStart) {
-        ShimmerTitle shimmer = WORN.get(title);
+        ShimmerTitle shimmer = wornBy(title);
         if (shimmer != null) shimmer.frame(sinceStart);
     }
 
