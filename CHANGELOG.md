@@ -41,6 +41,7 @@ Every Hushfeed release, newest first.
 * **Settings:** Replace large home cards with a compact full-width list. Remove Quick setups.
 * **TikTok:** Hushfeed now needs Morphe Manager 2.2.0 or newer, or morphe-desktop 1.19.1 on a computer.
 * **Build checks:** Add a PineDrama core walk for launch, inline settings expansion and collapse, and return. Full qualification stays incomplete.
+* **Build checks:** PineDrama has its own patch audit now, with checks that use its own tabs and links. A release needs a clean audit and a whole-app walk for each app the bundle supports.
 * **Build checks:** Verify each LIVE preview and drama label used by See-through bottom bar against the supported TikTok APK.
 * **Feed:** Keep country flags and codes next to names written from right to left (#258).
 * **Feed:** With `See-through bottom bar` on, the name and "Tap to watch" line of LIVE previews and mini dramas stay above the tabs (#250).
