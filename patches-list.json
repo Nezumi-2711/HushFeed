@@ -2071,6 +2071,15 @@
           "values": null
         },
         {
+          "key": "comment_search_folded",
+          "title": "Default: comment search folded",
+          "description": null,
+          "required": false,
+          "type": "kotlin.Boolean",
+          "default": false,
+          "values": null
+        },
+        {
           "key": "comment_links",
           "title": "Default: comment links",
           "description": null,

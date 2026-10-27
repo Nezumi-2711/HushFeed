@@ -119,6 +119,7 @@
       "block_from_comment_menu",
       "comment_search",
       "comment_export",
+      "comment_search_folded",
       "comment_links",
       "hide_comment_media",
       "hide_spam_comments",
@@ -1148,6 +1149,12 @@
     "comment_search": {
       "field": "COMMENT_SEARCH",
       "key": "comment_search",
+      "type": "boolean",
+      "default": false
+    },
+    "comment_search_folded": {
+      "field": "COMMENT_SEARCH_FOLDED",
+      "key": "comment_search_folded",
       "type": "boolean",
       "default": false
     },
