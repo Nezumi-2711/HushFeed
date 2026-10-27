@@ -585,6 +585,67 @@ public class VideoOverlayHiderTest {
         }
     }
 
+    /**
+     * Issue #262: the Following tab's LIVE row sits outside the cells and goes only with its own
+     * switch, comes back when the switch goes off, and its absence on For You isn't a broken build.
+     * The folded row's pill is a sibling and goes with it.
+     */
+    @Test
+    public void theFollowingLiveRowGoesWithItsSwitchAndComesBack() {
+        int cellId = 0x7f0a0b21;
+        int rowId = 0x7f0a0b22;
+        int pillId = 0x7f0a0b23;
+        VideoOverlayHider.resolveForTests("view_rootview", cellId);
+        VideoOverlayHider.resolveForTests("47.5.3:id9", rowId);
+        VideoOverlayHider.resolveForTests("47.5.3:wsy", pillId);
+        HookStatus.clear();
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout feed = new FrameLayout(activity);
+            FrameLayout cell = new FrameLayout(activity);
+            cell.setId(cellId);
+            feed.addView(cell);
+            activity.setContentView(feed);
+
+            Settings.HIDE_FOLLOWING_LIVE_ROW.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertTrue("For You, which has no row, called the overlay hooks broken: "
+                            + HookStatus.missing("overlay"),
+                    HookStatus.missing("overlay").stream().noneMatch(line -> line.contains("47.5.3:id9")));
+
+            FrameLayout row = new FrameLayout(activity);
+            row.setId(rowId);
+            feed.addView(row);
+            FrameLayout pill = new FrameLayout(activity);
+            pill.setId(pillId);
+            feed.addView(pill);
+            Settings.HIDE_FEED_SURVEYS.save(true);
+            Settings.HIDE_FOLLOWING_LIVE_ROW.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("another switch took the row", View.VISIBLE, row.getVisibility());
+            assertEquals("another switch took the pill", View.VISIBLE, pill.getVisibility());
+
+            Settings.HIDE_FEED_SURVEYS.save(false);
+            Settings.HIDE_FOLLOWING_LIVE_ROW.save(true);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, row.getVisibility());
+            assertEquals("the folded row's pill stayed", View.GONE, pill.getVisibility());
+
+            Settings.HIDE_FOLLOWING_LIVE_ROW.save(false);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals("the row stayed gone with its switch off", View.VISIBLE, row.getVisibility());
+            assertEquals("the pill stayed gone with its switch off", View.VISIBLE, pill.getVisibility());
+        } finally {
+            Settings.HIDE_FOLLOWING_LIVE_ROW.resetToDefault();
+            Settings.HIDE_FEED_SURVEYS.resetToDefault();
+            VideoOverlayHider.resolveForTests("view_rootview", 0);
+            VideoOverlayHider.resolveForTests("47.5.3:id9", 0);
+            VideoOverlayHider.resolveForTests("47.5.3:wsy", 0);
+            HookStatus.clear();
+        }
+    }
+
     @Test
     public void aPassHidesEveryCellsCaptionAndColumnAndPutsThemBack() {
         // The feed keeps the previous and next cells inflated beside the one on screen,

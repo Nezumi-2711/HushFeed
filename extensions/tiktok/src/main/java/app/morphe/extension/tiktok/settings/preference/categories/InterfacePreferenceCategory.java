@@ -455,6 +455,14 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                         Settings.HIDE_FOOTNOTES
                 ));
             }
+            if (SettingsStatus.followingSkylightEnabled) {
+                addPreference(new TogglePreference(
+                        context,
+                        "Hide the LIVE row on Following",
+                        "Hide the row of LIVE and story circles across the top of the Following feed, and the pill that counts them. For You is left as it is.",
+                        Settings.HIDE_FOLLOWING_LIVE_ROW
+                ));
+            }
             addPreference(new TogglePreference(
                     context,
                     "Hide Search this image prompts",

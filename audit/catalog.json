@@ -8279,6 +8279,12 @@
     "row": "Hide Footnotes"
    },
    {
+    "key": "hide_following_live_row",
+    "default": false,
+    "type": "bool",
+    "row": "Hide the LIVE row on Following"
+   },
+   {
     "key": "hide_feed_report_button",
     "default": false,
     "type": "bool",

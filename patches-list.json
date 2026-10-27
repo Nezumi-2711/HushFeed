@@ -6438,6 +6438,15 @@
           "values": null
         },
         {
+          "key": "hide_following_live_row",
+          "title": "Default: hide following live row",
+          "description": null,
+          "required": false,
+          "type": "kotlin.Boolean",
+          "default": false,
+          "values": null
+        },
+        {
           "key": "hide_detail_comment_bar",
           "title": "Default: hide detail comment bar",
           "description": null,

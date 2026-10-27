@@ -185,6 +185,8 @@ public class FeedScreenCoverageTest {
         put("hide_creation_tags", YES, YES, NONE);
         put("hide_feed_surveys", YES, YES, NONE);
         put("hide_footnotes", YES, YES, NONE);
+        // The Following tab's LIVE row is the main feed's; an opened video has none (#262).
+        put("hide_following_live_row", YES, NONE, NONE);
         put("hide_visual_search", YES, YES, NONE);
         // The bar is an opened post's: the detail pager's videos and, on 47.1.4, a photo from
         // search in the main activity. The main feed has the tabs there.

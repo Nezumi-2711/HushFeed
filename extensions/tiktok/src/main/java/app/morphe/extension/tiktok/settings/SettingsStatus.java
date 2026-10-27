@@ -655,6 +655,13 @@ public class SettingsStatus {
         footnotesEnabled = true;
     }
 
+    /** Hide video overlays found the Following tab's LIVE and stories row toggle and hooked it (#262). */
+    public static boolean followingSkylightEnabled = false;
+
+    public static void enableFollowingSkylight() {
+        followingSkylightEnabled = true;
+    }
+
     /** Hide video overlays found the music disc's two animation settings on this build and hooked them (#68). */
     public static boolean musicDiscSpinEnabled = false;
 

@@ -391,6 +391,7 @@
       "hide_feed_action_bar",
       "hide_feed_surveys",
       "hide_footnotes",
+      "hide_following_live_row",
       "hide_detail_comment_bar",
       "hide_clear_display_controls",
       "fade_controls_opacity",
@@ -1978,6 +1979,12 @@
     "hide_follower_notifications": {
       "field": "HIDE_FOLLOWER_NOTIFICATIONS",
       "key": "hide_follower_notifications",
+      "type": "boolean",
+      "default": false
+    },
+    "hide_following_live_row": {
+      "field": "HIDE_FOLLOWING_LIVE_ROW",
+      "key": "hide_following_live_row",
       "type": "boolean",
       "default": false
     },

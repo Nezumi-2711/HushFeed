@@ -885,6 +885,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_FEED_SURVEYS = new BooleanSetting("hide_feed_surveys", FALSE);
     /** The Footnotes banner TikTok lays over a video that carries a note. */
     public static final BooleanSetting HIDE_FOOTNOTES = new BooleanSetting("hide_footnotes", FALSE);
+    /** The LIVE and stories row across the top of the Following tab and its count pill (#262). */
+    public static final BooleanSetting HIDE_FOLLOWING_LIVE_ROW = new BooleanSetting("hide_following_live_row", FALSE);
     /** The Add comment bar under a video opened from a profile, a hashtag or a sound, and the strip kept for it (#50). */
     public static final BooleanSetting HIDE_DETAIL_COMMENT_BAR = new BooleanSetting("hide_detail_comment_bar", FALSE);
     /** The progress bar, close button and pause/speed pill TikTok draws while Clear display is on (#97). */

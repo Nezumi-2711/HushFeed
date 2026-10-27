@@ -142,8 +142,17 @@ public final class VideoOverlayHider {
      * frame that holds it goes see-through instead of the line itself.
      */
     private static final String[] LOADING_LINE_IDS = {"47.5.3:nfz"};
-    /** The story-count button is a sibling of the main feed, outside its tab strip and cells. */
+    /**
+     * The story-count button is a sibling of the main feed, outside its tab strip and cells. It's
+     * the folded LIVE row's pill, so the LIVE row switch takes it too (#262).
+     */
     private static final String[] FOLLOWING_STORY_IDS = {"47.5.3:wsy"};
+    /**
+     * The Following tab's LIVE and stories row: the root of feed_skylight_container_layout, which
+     * holds the row of circles (#262). Hidden only by its switch, whose hook already keeps the row
+     * folded; this takes away a row that was open before. The pill is wsy, beside it.
+     */
+    private static final String[] SKYLIGHT_IDS = {"47.5.3:id9"};
     /**
      * The bar TikTok shows only while Clear display is on: its round close button and the
      * pause and speed pill beside it, with the progress bar above them (#97). The main feed keeps
@@ -368,6 +377,7 @@ public final class VideoOverlayHider {
     private static final int DETAIL_MESSAGE_BAR_TARGET = PLAYER_VIEW_TARGET + 1;
     private static final int DETAIL_SOUND_BAR_TARGET = DETAIL_MESSAGE_BAR_TARGET + 1;
     private static final int WIDGET_LAYER_TARGET = DETAIL_SOUND_BAR_TARGET + 1;
+    private static final int SKYLIGHT_TARGET = WIDGET_LAYER_TARGET + 1;
     private static final String[][] TRAVERSAL_TARGET_IDS = traversalTargetIds();
     private static final int LOGICAL_TARGET_COUNT = TRAVERSAL_TARGET_IDS.length;
     private static final int TRAVERSAL_TARGET_COUNT = candidateCount(TRAVERSAL_TARGET_IDS);
@@ -690,7 +700,10 @@ public final class VideoOverlayHider {
             // The time over the bar asks the caption for room on the main feed (#173); an opened
             // video's caption already moves with its own bar (see alignBarRows), so none there.
             int roomAbove = detailPager ? 0 : SeekbarTime.roomAbove();
+            // The Following tab's LIVE row (#262) is the main feed's; an opened video has none.
+            boolean skylight = Settings.HIDE_FOLLOWING_LIVE_ROW.get() && !detailPager && !HushfeedPause.isPaused();
             if (caption || music || actionBar || surveys || tabStrip || carry || detailCommentBar || anchor
+                    || skylight
                     || clearControls || detailSearchBox
                     || statusBar || seeThroughStatusBar || SeeThroughStatusBar.anyFilled()
                     || seeThroughBar || SeeThroughBottomBar.holdsBackground()
@@ -717,13 +730,15 @@ public final class VideoOverlayHider {
                 wanted[BOTTOM_TABS_TARGET] = tabStrip && (FeedVisibility.isOnFeed(activity)
                         || FeedVisibility.isFeedPageScrolledAway(activity));
                 wanted[BOTTOM_TABS_DIVIDER_TARGET] = wanted[BOTTOM_TABS_TARGET];
-                wanted[FOLLOWING_STORY_TARGET] = tabStrip && !FeedVisibility.isStoryVisible(activity);
+                // The pill only opens the LIVE row, which its switch keeps folded (#262).
+                wanted[FOLLOWING_STORY_TARGET] = skylight || tabStrip && !FeedVisibility.isStoryVisible(activity);
                 wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;
                 wanted[DETAIL_MESSAGE_BAR_TARGET] = detailCommentBar;
                 // Only ever read; see pairDetailCommentBar.
                 wanted[DETAIL_SOUND_BAR_TARGET] = false;
                 // Only ever lifted; see liftWidgetLayers.
                 wanted[WIDGET_LAYER_TARGET] = false;
+                wanted[SKYLIGHT_TARGET] = skylight;
                 wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar || stripForBar;
                 wanted[CLEAR_EXIT_TARGET] = clearControls;
                 wanted[CLEAR_PLAYBACK_TARGET] = clearControls;
@@ -1031,7 +1046,7 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[WIDGET_LAYER_TARGET + 1][];
+        String[][] targets = new String[SKYLIGHT_TARGET + 1][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
@@ -1068,19 +1083,21 @@ public final class VideoOverlayHider {
         targets[DETAIL_SOUND_BAR_TARGET] = DETAIL_SOUND_BAR_IDS;
         // Built here: this runs before the fields further down are set.
         targets[WIDGET_LAYER_TARGET] = new String[] {WIDGET_LAYER_ID};
+        targets[SKYLIGHT_TARGET] = SKYLIGHT_IDS;
         return targets;
     }
 
     /**
-     * Main-feed tabs (top and bottom, with the bottom bar's hairline) and story count, the Clear
-     * display controls, and the detail pager's comment, Message and Use sound bars are outside
-     * the cells.
+     * Main-feed tabs (top and bottom, with the bottom bar's hairline), story count and the
+     * Following LIVE row, the Clear display controls, and the detail pager's comment, Message
+     * and Use sound bars are outside the cells.
      */
     private static boolean outsideCells(int target) {
         return (target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START) || target == BOTTOM_TABS_TARGET
                 || target == BOTTOM_TABS_DIVIDER_TARGET || target == TOP_SEARCH_BAR_TARGET
                 || target == TOP_SEARCH_SCRIM_TARGET || target == DETAIL_SEARCH_BOX_TARGET
-                || target == DETAIL_MESSAGE_BAR_TARGET || target == DETAIL_SOUND_BAR_TARGET;
+                || target == DETAIL_MESSAGE_BAR_TARGET || target == DETAIL_SOUND_BAR_TARGET
+                || target == SKYLIGHT_TARGET;
     }
 
     private static int candidateCount(String[][] targets) {
@@ -2322,10 +2339,12 @@ public final class VideoOverlayHider {
             // video cells, and the Message bar only on a mutual friend's video. The Following
             // stories button is there only for an account with stories to show, so once its id
             // resolves, its absence is the account's: every Clear display called the overlay
-            // hooks broken in #209's report. An id this build lacks is still reported.
+            // hooks broken in #209's report. The Following LIVE row is the same: it's inflated
+            // only on the Following tab. An id this build lacks is still reported.
             } else if (target != SURVEY_TARGET && target != DETAIL_SEARCH_BOX_TARGET
                     && target != PLAYER_VIEW_TARGET && target != DETAIL_MESSAGE_BAR_TARGET
-                    && !(target == FOLLOWING_STORY_TARGET && anyResolved(ids, candidateAt, names.length))
+                    && !((target == FOLLOWING_STORY_TARGET || target == SKYLIGHT_TARGET)
+                            && anyResolved(ids, candidateAt, names.length))
                     && (detailPager || (target != DETAIL_COMMENT_BAR_TARGET
                             && target != DETAIL_COMMENT_STRIP_TARGET))
                     && (wanted || (scaling
