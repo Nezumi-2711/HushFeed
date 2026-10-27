@@ -15,7 +15,7 @@ final class L10nTranslationsPt_rBR {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4600);
+        Map<String, String> table = new HashMap<>(4602);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3198,8 +3198,8 @@ final class L10nTranslationsPt_rBR {
                 "Salvamentos em andamento");
         table.put("Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.",
                 "Salva os arquivos de legenda (SRT) junto com o vídeo. Eles vão para Movies no Android 11 e posteriores, para Download no Android 10 e para a sua pasta de vídeos em versões mais antigas. No Android 11 e posteriores com Salvar detalhes ligado, o vídeo vai para Download ou Documents e as legendas ficam em Movies.");
-        table.put("Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
-                "Salva a legenda, o criador, o link e a data de publicação em um arquivo de texto ao lado do vídeo. No Android 10 e posteriores, o par vai para Download ou Documents com o mesmo nome de pasta. Vale para os salvamentos feitos pelo Hushfeed.");
+        table.put("Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
+                "Salva a legenda, o criador, o link e a data de publicação em um arquivo de texto ao lado do vídeo, ou em um único arquivo para as fotos originais de uma publicação de fotos. No Android 10 e posteriores, eles vão para Download ou Documents com o mesmo nome de pasta. Vale para os salvamentos feitos pelo Hushfeed.");
         table.put("Saves the details file in JSON format instead of plain text. Useful if another tool will read it.",
                 "Salva o arquivo de detalhes em formato JSON em vez de texto simples. Útil se outra ferramenta for ler o arquivo.");
         table.put("Saves your Hushfeed settings and Feature Gate Lab rules to a file.",
@@ -4075,6 +4075,8 @@ final class L10nTranslationsPt_rBR {
                 "Não foi possível remover o arquivo incompleto. Exclua-o da pasta que você escolheu.");
         table.put("The phone is running out of room. What was recorded is saved to %1$s",
                 "O espaço no telefone está acabando. O que foi gravado está salvo em %1$s");
+        table.put("The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.",
+                "As fotos foram salvas, mas não foi possível gravar o arquivo de detalhes delas. Verifique o armazenamento e salve a publicação de novo para obtê-lo.");
         table.put("The port the proxy listens on, like 8080 or 1080.",
                 "A porta em que o proxy escuta, como 8080 ou 1080.");
         table.put("The presets couldn't load. Open the Lab again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsPt_rBR {
                 "O servidor pediu para esperarmos. Tente novamente mais tarde.");
         table.put("The setting couldn't finish updating. Its saved value is shown.",
                 "Não foi possível concluir a atualização da configuração. O valor salvo está sendo exibido.");
-        table.put("The settings backup was rejected. Nothing was altered.",
-                "O backup das configurações foi recusado. Nada foi alterado.");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The settings backup was rejected. Nothing was altered.",
+                "O backup das configurações foi recusado. Nada foi alterado.");
         table.put("The smallest value is above the largest",
                 "O valor mínimo está acima do máximo");
         table.put("The sound couldn't be saved. Try again.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsPt_rBR {
                 "Este vídeo não está disponível como arquivo completo. Tente mais tarde.");
         table.put("This video's sound has no title to look for",
                 "O som deste vídeo não tem título para procurar");
-        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
-                "Não dá para tentar essas fotos de novo agora. Salve a publicação de novo para pegar o resto.");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Não dá para tentar essas fotos de novo agora. Salve a publicação de novo para pegar o resto.");
         table.put("Three at once",
                 "Três ao mesmo tempo");
         table.put("Thumbs down blocks the commenter",
@@ -4359,11 +4361,11 @@ final class L10nTranslationsPt_rBR {
                 "Hoje recomeçou. Toque de novo para trazer as contagens de volta.");
         table.put("Today starts again",
                 "Hoje começa de novo");
-        table.put("Today's budget is locked. The day starts over at %1$s.",
-                "O limite de hoje está travado. O dia recomeça às %1$s.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Today's budget is locked. The day starts over at %1$s.",
+                "O limite de hoje está travado. O dia recomeça às %1$s.");
         table.put("Today's budget is locked. The feed opens again at %1$s. Messages, profiles and search still work.",
                 "O limite de hoje está travado. O feed abre de novo às %1$s. As mensagens, os perfis e a busca continuam funcionando.");
         table.put("Today's budget is locked. This can be changed again at %1$s.",
@@ -4482,11 +4484,11 @@ final class L10nTranslationsPt_rBR {
                 "Desfazer não terminou. Algumas configurações podem ter mudado mesmo assim.");
         table.put("Undo didn't finish. Some settings may still be changed. Try Undo again.",
                 "Desfazer não terminou. Algumas configurações podem ter mudado mesmo assim. Tente Desfazer de novo.");
-        table.put("Undo forgetting saved videos",
-                "Desfazer o esquecimento dos vídeos salvos");
     }
 
     private static void fill36(Map<String, String> table) {
+        table.put("Undo forgetting saved videos",
+                "Desfazer o esquecimento dos vídeos salvos");
         table.put("Undo last Lab change",
                 "Desfazer a última mudança do Lab");
         table.put("Undo last restore or reset",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsPt_rBR {
                 "Vídeos não podem ser salvos na pasta desse arquivo, então sua pasta de vídeos foi mantida");
         table.put("Videos in search results show their cover and play when you open them. The feed and the videos you open play as usual.",
                 "Os vídeos nos resultados de busca mostram a capa e tocam quando você os abre. O feed e os vídeos que você abre tocam normalmente.");
-        table.put("Views range",
-                "Faixa de visualizações");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Views range",
+                "Faixa de visualizações");
         table.put("Visual search",
                 "Pesquisa visual");
         table.put("Volume",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsPt_rBR {
                 "Seu feed");
         table.put("Your feed. Your rules.",
                 "Seu feed. Suas regras.");
-        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
-                "Seus filtros esconderam tudo o que o TikTok acabou de enviar. A maior parte era %1$s.");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
+                "Seus filtros esconderam tudo o que o TikTok acabou de enviar. A maior parte era %1$s.");
         table.put("Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s.",
                 "Seus filtros esconderam tudo o que o TikTok enviou, %1$d vezes seguidas. A maior parte era %2$s.");
         table.put("Your network proxy was kept, since a backup can't change it",

@@ -15,7 +15,7 @@ final class L10nTranslationsTr {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4600);
+        Map<String, String> table = new HashMap<>(4602);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3198,8 +3198,8 @@ final class L10nTranslationsTr {
                 "Şu anki kayıtlar");
         table.put("Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.",
                 "Altyazı (SRT) dosyalarını videoyla birlikte kaydeder. Android 11 ve üzerinde Movies, Android 10'da Download, daha eski sürümlerde video klasörüne gider. Android 11 ve üzerinde Ayrıntıları kaydet açıkken video Download veya Documents içine taşınır, altyazılar Movies'te kalır.");
-        table.put("Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
-                "Açıklamayı, içerik üreticisini, bağlantıyı ve paylaşım tarihini videonun yanında bir metin dosyasına kaydeder. Android 10 ve üzerinde bu çift, aynı klasör adıyla Download veya Documents içine gider. Hushfeed'in yaptığı kayıtlar için geçerlidir.");
+        table.put("Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
+                "Açıklamayı, içerik üreticisini, bağlantıyı ve paylaşım tarihini videonun yanında bir metin dosyasına, fotoğraf gönderisinin orijinal fotoğrafları için ise tek bir dosyaya kaydeder. Android 10 ve üzerinde bunlar aynı klasör adıyla Download veya Documents içine gider. Hushfeed'in yaptığı kayıtlar için geçerlidir.");
         table.put("Saves the details file in JSON format instead of plain text. Useful if another tool will read it.",
                 "Ayrıntı dosyasını düz metin yerine JSON biçiminde kaydeder. Başka bir araç okuyacaksa işe yarar.");
         table.put("Saves your Hushfeed settings and Feature Gate Lab rules to a file.",
@@ -4075,6 +4075,8 @@ final class L10nTranslationsTr {
                 "Eksik dosya kaldırılamadı. Seçtiğin klasörden sil.");
         table.put("The phone is running out of room. What was recorded is saved to %1$s",
                 "Telefonda yer azalıyor. Kaydedilen kısım %1$s konumuna kaydedildi");
+        table.put("The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.",
+                "Fotoğraflar kaydedildi, ancak ayrıntı dosyaları yazılamadı. Depolama alanını kontrol edip almak için gönderiyi yeniden kaydet.");
         table.put("The port the proxy listens on, like 8080 or 1080.",
                 "Proxy'nin dinlediği bağlantı noktası, örneğin 8080 veya 1080.");
         table.put("The presets couldn't load. Open the Lab again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsTr {
                 "Sunucu beklememizi istedi. Daha sonra tekrar deneyin.");
         table.put("The setting couldn't finish updating. Its saved value is shown.",
                 "Ayarın güncellenmesi tamamlanamadı. Kayıtlı değeri gösteriliyor.");
-        table.put("The settings backup was rejected. Nothing was altered.",
-                "Ayar yedeği reddedildi. Hiçbir şey değiştirilmedi.");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The settings backup was rejected. Nothing was altered.",
+                "Ayar yedeği reddedildi. Hiçbir şey değiştirilmedi.");
         table.put("The smallest value is above the largest",
                 "En küçük değer en büyük değerden yüksek");
         table.put("The sound couldn't be saved. Try again.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsTr {
                 "Bu video tam bir dosya olarak mevcut değil. Daha sonra yeniden deneyin.");
         table.put("This video's sound has no title to look for",
                 "Bu videonun sesinin aranacak bir başlığı yok");
-        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
-                "Bu fotoğraflar şu an yeniden denenemez. Geri kalanını almak için gönderiyi yeniden kaydet.");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Bu fotoğraflar şu an yeniden denenemez. Geri kalanını almak için gönderiyi yeniden kaydet.");
         table.put("Three at once",
                 "Aynı anda üç");
         table.put("Thumbs down blocks the commenter",
@@ -4359,11 +4361,11 @@ final class L10nTranslationsTr {
                 "Bugün baştan başladı. Sayıları geri koymak için yeniden dokun.");
         table.put("Today starts again",
                 "Bugün yeniden başlıyor");
-        table.put("Today's budget is locked. The day starts over at %1$s.",
-                "Bugünün bütçesi kilitli. Gün %1$s saatinde baştan başlar.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Today's budget is locked. The day starts over at %1$s.",
+                "Bugünün bütçesi kilitli. Gün %1$s saatinde baştan başlar.");
         table.put("Today's budget is locked. The feed opens again at %1$s. Messages, profiles and search still work.",
                 "Bugünün bütçesi kilitli. Akış %1$s saatinde yeniden açılır. Mesajlar, profiller ve arama çalışmaya devam eder.");
         table.put("Today's budget is locked. This can be changed again at %1$s.",
@@ -4482,11 +4484,11 @@ final class L10nTranslationsTr {
                 "Geri alma tamamlanmadı. Bazı ayarlar yine de değişmiş olabilir.");
         table.put("Undo didn't finish. Some settings may still be changed. Try Undo again.",
                 "Geri alma tamamlanmadı. Bazı ayarlar yine de değişmiş olabilir. Geri al'ı tekrar dene.");
-        table.put("Undo forgetting saved videos",
-                "Kaydedilen videoları unutmayı geri al");
     }
 
     private static void fill36(Map<String, String> table) {
+        table.put("Undo forgetting saved videos",
+                "Kaydedilen videoları unutmayı geri al");
         table.put("Undo last Lab change",
                 "Son Lab değişikliğini geri al");
         table.put("Undo last restore or reset",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsTr {
                 "Videolar o dosyadaki klasöre kaydedilemiyor, bu yüzden video klasörün korundu");
         table.put("Videos in search results show their cover and play when you open them. The feed and the videos you open play as usual.",
                 "Arama sonuçlarındaki videolar kapaklarını gösterir ve onları açtığında oynar. Akış ve açtığın videolar her zamanki gibi oynar.");
-        table.put("Views range",
-                "Görüntülenme aralığı");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Views range",
+                "Görüntülenme aralığı");
         table.put("Visual search",
                 "Görsel arama");
         table.put("Volume",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsTr {
                 "Akışın");
         table.put("Your feed. Your rules.",
                 "Senin akışın. Senin kuralların.");
-        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
-                "Filtrelerin TikTok'un az önce gönderdiği her şeyi gizledi. En çok gizlenen: %1$s.");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
+                "Filtrelerin TikTok'un az önce gönderdiği her şeyi gizledi. En çok gizlenen: %1$s.");
         table.put("Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s.",
                 "Filtrelerin TikTok'un gönderdiği her şeyi art arda %1$d kez gizledi. En çok gizlenen: %2$s.");
         table.put("Your network proxy was kept, since a backup can't change it",

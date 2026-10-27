@@ -15,7 +15,7 @@ final class L10nTranslationsRu {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4954);
+        Map<String, String> table = new HashMap<>(4956);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3510,8 +3510,8 @@ final class L10nTranslationsRu {
                 "Текущие сохранения");
         table.put("Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.",
                 "Сохраняет файлы субтитров (SRT) вместе с видео. Они попадают в Movies на Android 11 и новее, в Download на Android 10 и в вашу папку видео на более старых версиях. На Android 11 и новее при включённом «Сохранять подробности» видео переходит в Download или Documents, а субтитры остаются в Movies.");
-        table.put("Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
-                "Сохраняет описание, автора, ссылку и дату публикации в текстовом файле рядом с видео. На Android 10 и новее эта пара попадает в Download или Documents под тем же именем папки. Действует для сохранений, сделанных Hushfeed.");
+        table.put("Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
+                "Сохраняет описание, автора, ссылку и дату публикации в текстовом файле рядом с видео или в одном файле для оригинальных фото фотопоста. На Android 10 и новее они попадают в Download или Documents под тем же именем папки. Действует для сохранений, сделанных Hushfeed.");
         table.put("Saves the details file in JSON format instead of plain text. Useful if another tool will read it.",
                 "Сохраняет файл с подробностями в формате JSON вместо обычного текста. Удобно, если файл будет читать другая программа.");
         table.put("Saves your Hushfeed settings and Feature Gate Lab rules to a file.",
@@ -4411,6 +4411,8 @@ final class L10nTranslationsRu {
                 "Не удалось удалить неполный файл. Удалите его из выбранной папки.");
         table.put("The phone is running out of room. What was recorded is saved to %1$s",
                 "На телефоне заканчивается место. Записанное сохранено в %1$s");
+        table.put("The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.",
+                "Фото сохранены, но файл с их данными записать не удалось. Проверьте память и сохраните публикацию ещё раз, чтобы получить его.");
         table.put("The port the proxy listens on, like 8080 or 1080.",
                 "Порт, на котором работает прокси, например 8080 или 1080.");
         table.put("The presets couldn't load. Open the Lab again.",
@@ -4485,11 +4487,11 @@ final class L10nTranslationsRu {
                 "Имена пользователей через запятую или с новой строки. У вас уже должен быть чат с каждым из них.");
         table.put("There is no Lab change to undo.",
                 "Нет изменений Lab, которые можно было бы отменить.");
-        table.put("There is no diagnostic data to clear",
-                "Нет диагностических данных для очистки");
     }
 
     private static void fill36(Map<String, String> table) {
+        table.put("There is no diagnostic data to clear",
+                "Нет диагностических данных для очистки");
         table.put("There is no diagnostic data to put back",
                 "Нет диагностических данных для восстановления");
         table.put("There isn't enough room on the phone to record",
@@ -4608,11 +4610,11 @@ final class L10nTranslationsRu {
                 "TikTok получает пустой рекламный ID, такой же, какой Android выдаёт после удаления вашего. Приложения не смогут по нему узнавать ваш телефон.");
         table.put("TikTok gets no location from your phone. The Region settings change your country and time zone. This switch stops the exact position.",
                 "TikTok не получает местоположение с вашего телефона. Настройки региона меняют страну и часовой пояс. Этот переключатель останавливает передачу точных координат.");
-        table.put("TikTok hasn't loaded this setting yet. Open the part of the app that uses it, then come back.",
-                "TikTok ещё не загрузил эту настройку. Откройте раздел приложения, который её использует, и вернитесь.");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("TikTok hasn't loaded this setting yet. Open the part of the app that uses it, then come back.",
+                "TikTok ещё не загрузил эту настройку. Откройте раздел приложения, который её использует, и вернитесь.");
         table.put("TikTok is locked",
                 "TikTok заблокирован");
         table.put("TikTok isn't locked because this phone has no screen lock",
@@ -4731,11 +4733,11 @@ final class L10nTranslationsRu {
                 "Двойное нажатие вверху справа");
         table.put("Tracking",
                 "Трекинг");
-        table.put("Tracking, device access and links",
-                "Трекинг, доступ к устройству и ссылки");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Tracking, device access and links",
+                "Трекинг, доступ к устройству и ссылки");
         table.put("Translate button in comments",
                 "Кнопка перевода в комментариях");
         table.put("Translate comments as they load, using TikTok's own translator.",
@@ -4854,11 +4856,11 @@ final class L10nTranslationsRu {
                 "Разрешение неизвестно");
         table.put("Unlock",
                 "Разблокировать");
-        table.put("Unlock TikTok",
-                "Разблокировать TikTok");
     }
 
     private static void fill39(Map<String, String> table) {
+        table.put("Unlock TikTok",
+                "Разблокировать TikTok");
         table.put("Unpersonalized For You videos",
                 "Неперсонализированные видео в Рекомендациях");
         table.put("Until you choose here, this sheet follows your choices under Hide share actions.",
@@ -4977,11 +4979,11 @@ final class L10nTranslationsRu {
                 "«Ждать день перед тем, как ослабить лимит» включено, поэтому Hushfeed остаётся включённым");
         table.put("Wait before hiding the controls.",
                 "Задержка перед скрытием элементов управления.");
-        table.put("Wait for loading to finish",
-                "Дождитесь завершения загрузки");
     }
 
     private static void fill40(Map<String, String> table) {
+        table.put("Wait for loading to finish",
+                "Дождитесь завершения загрузки");
         table.put("Waiting for the file app to let go of the last file. Restart TikTok if it doesn't.",
                 "Ждём, пока приложение для файлов отпустит последний файл. Если этого не произойдёт, перезапустите TikTok.");
         table.put("Waiting to record. Go to the screen you want recorded.",
@@ -5100,11 +5102,11 @@ final class L10nTranslationsRu {
                 "Ваши фильтры скрыли всё, что прислал TikTok, %1$d раз подряд. В основном это было %2$s.");
         table.put("Your network proxy was kept, since a backup can't change it",
                 "Ваш сетевой прокси сохранён, так как резервная копия не может его менять");
-        table.put("Your operator's name, like T-Mobile.",
-                "Название вашего оператора, например T-Mobile.");
     }
 
     private static void fill41(Map<String, String> table) {
+        table.put("Your operator's name, like T-Mobile.",
+                "Название вашего оператора, например T-Mobile.");
         table.put("Your operator's numeric code, like 310260.",
                 "Числовой код вашего оператора, например 310260.");
         table.put("Your seen history changed before the import finished. Choose the file again.",

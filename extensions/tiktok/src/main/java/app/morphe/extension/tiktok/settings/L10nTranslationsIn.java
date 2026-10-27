@@ -15,7 +15,7 @@ final class L10nTranslationsIn {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4600);
+        Map<String, String> table = new HashMap<>(4602);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3198,8 +3198,8 @@ final class L10nTranslationsIn {
                 "Penyimpanan saat ini");
         table.put("Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.",
                 "Menyimpan file subtitel (SRT) bersama video. File itu masuk ke Movies di Android 11 ke atas, Download di Android 10, dan folder videomu di versi yang lebih lama. Di Android 11 ke atas dengan Simpan detail menyala, video pindah ke Download atau Documents dan subtitel tetap di Movies.");
-        table.put("Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
-                "Menyimpan keterangan, kreator, tautan, dan tanggal unggah dalam file teks di samping video. Di Android 10 ke atas, pasangan file itu masuk ke Download atau Documents dengan nama folder yang sama. Berlaku untuk penyimpanan yang dilakukan Hushfeed.");
+        table.put("Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
+                "Menyimpan keterangan, kreator, tautan, dan tanggal unggah dalam file teks di samping video, atau satu file untuk foto asli dari unggahan foto. Di Android 10 ke atas, file itu masuk ke Download atau Documents dengan nama folder yang sama. Berlaku untuk penyimpanan yang dilakukan Hushfeed.");
         table.put("Saves the details file in JSON format instead of plain text. Useful if another tool will read it.",
                 "Menyimpan file detail dalam format JSON, bukan teks biasa. Berguna jika file akan dibaca oleh alat lain.");
         table.put("Saves your Hushfeed settings and Feature Gate Lab rules to a file.",
@@ -4075,6 +4075,8 @@ final class L10nTranslationsIn {
                 "File yang belum lengkap tidak dapat dihapus. Hapus dari folder yang kamu pilih.");
         table.put("The phone is running out of room. What was recorded is saved to %1$s",
                 "Ruang di ponsel hampir habis. Bagian yang terekam disimpan di %1$s");
+        table.put("The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.",
+                "Foto sudah tersimpan, tetapi file detailnya tidak dapat ditulis. Periksa penyimpanan dan simpan unggahan lagi untuk mendapatkannya.");
         table.put("The port the proxy listens on, like 8080 or 1080.",
                 "Port yang didengarkan proksi, seperti 8080 atau 1080.");
         table.put("The presets couldn't load. Open the Lab again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsIn {
                 "Server meminta kita menunggu. Coba lagi nanti.");
         table.put("The setting couldn't finish updating. Its saved value is shown.",
                 "Pengaturan ini tidak dapat selesai diperbarui. Nilai yang tersimpan ditampilkan.");
-        table.put("The settings backup was rejected. Nothing was altered.",
-                "Cadangan pengaturan ditolak. Tidak ada yang diubah.");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The settings backup was rejected. Nothing was altered.",
+                "Cadangan pengaturan ditolak. Tidak ada yang diubah.");
         table.put("The smallest value is above the largest",
                 "Nilai terkecil lebih besar daripada yang terbesar");
         table.put("The sound couldn't be saved. Try again.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsIn {
                 "Video ini belum tersedia sebagai file lengkap. Coba lagi nanti.");
         table.put("This video's sound has no title to look for",
                 "Suara video ini tidak punya judul untuk dicari");
-        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
-                "Foto itu tidak bisa dicoba lagi sekarang. Simpan postingan lagi untuk mendapatkan sisanya.");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "Foto itu tidak bisa dicoba lagi sekarang. Simpan postingan lagi untuk mendapatkan sisanya.");
         table.put("Three at once",
                 "Tiga sekaligus");
         table.put("Thumbs down blocks the commenter",
@@ -4359,11 +4361,11 @@ final class L10nTranslationsIn {
                 "Hari ini dimulai ulang. Ketuk lagi untuk mengembalikan hitungannya.");
         table.put("Today starts again",
                 "Hari ini dimulai lagi");
-        table.put("Today's budget is locked. The day starts over at %1$s.",
-                "Anggaran hari ini terkunci. Hari dimulai ulang pada %1$s.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Today's budget is locked. The day starts over at %1$s.",
+                "Anggaran hari ini terkunci. Hari dimulai ulang pada %1$s.");
         table.put("Today's budget is locked. The feed opens again at %1$s. Messages, profiles and search still work.",
                 "Anggaran hari ini terkunci. Feed terbuka lagi pada %1$s. Pesan, profil dan pencarian tetap berfungsi.");
         table.put("Today's budget is locked. This can be changed again at %1$s.",
@@ -4482,11 +4484,11 @@ final class L10nTranslationsIn {
                 "Urungkan tidak selesai. Beberapa pengaturan mungkin masih berubah.");
         table.put("Undo didn't finish. Some settings may still be changed. Try Undo again.",
                 "Urungkan tidak selesai. Beberapa pengaturan mungkin masih berubah. Coba Urungkan lagi.");
-        table.put("Undo forgetting saved videos",
-                "Batalkan melupakan video tersimpan");
     }
 
     private static void fill36(Map<String, String> table) {
+        table.put("Undo forgetting saved videos",
+                "Batalkan melupakan video tersimpan");
         table.put("Undo last Lab change",
                 "Batalkan perubahan Lab terakhir");
         table.put("Undo last restore or reset",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsIn {
                 "Video tidak bisa disimpan ke folder di file itu, jadi folder videomu tetap dipakai");
         table.put("Videos in search results show their cover and play when you open them. The feed and the videos you open play as usual.",
                 "Video di hasil pencarian menampilkan sampulnya dan diputar saat kamu membukanya. Feed dan video yang kamu buka diputar seperti biasa.");
-        table.put("Views range",
-                "Rentang tayangan");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Views range",
+                "Rentang tayangan");
         table.put("Visual search",
                 "Pencarian visual");
         table.put("Volume",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsIn {
                 "Feed kamu");
         table.put("Your feed. Your rules.",
                 "Feed kamu. Aturan kamu.");
-        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
-                "Filtermu menyembunyikan semua yang baru dikirim TikTok. Sebagian besar %1$s.");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
+                "Filtermu menyembunyikan semua yang baru dikirim TikTok. Sebagian besar %1$s.");
         table.put("Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s.",
                 "Filtermu menyembunyikan semua yang dikirim TikTok, %1$d kali berturut-turut. Sebagian besar %2$s.");
         table.put("Your network proxy was kept, since a backup can't change it",

@@ -176,9 +176,9 @@ public class DownloadsPreferenceCategory extends ConditionalPreferenceCategory {
                     Settings.PICK_GRID_VIDEOS));
             addPreference(new TogglePreference(context, "Save details beside the video",
                     "Saves the caption, creator, link and post date in a text file next to the "
-                            + "video. On Android 10 and later, the pair goes in Download or "
-                            + "Documents under the same folder name. Applies to saves made by "
-                            + "Hushfeed.",
+                            + "video, or one file for a photo post's original photos. On Android 10 "
+                            + "and later, they go in Download or Documents under the same folder "
+                            + "name. Applies to saves made by Hushfeed.",
                     Settings.DOWNLOAD_DETAILS));
             addPreference(new TogglePreference(context, "Save details as JSON",
                     "Saves the details file in JSON format instead of plain text. Useful if "

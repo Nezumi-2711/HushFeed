@@ -1462,7 +1462,8 @@ This preset doesn't match the installed gates. Nothing changed.,Preset ini tidak
 About overrides,Tentang penggantian
 "Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.","Pakai {creator}, {date}, dan {video_id} untuk menyusun nama. Awali dengan {creator}/ agar setiap kreator masuk ke foldernya sendiri. Ekstensi file ditambahkan otomatis."
 Save details beside the video,Simpan detail di samping video
-"Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.","Menyimpan keterangan, kreator, tautan, dan tanggal unggah dalam file teks di samping video. Di Android 10 ke atas, pasangan file itu masuk ke Download atau Documents dengan nama folder yang sama. Berlaku untuk penyimpanan yang dilakukan Hushfeed."
+"Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.","Menyimpan keterangan, kreator, tautan, dan tanggal unggah dalam file teks di samping video, atau satu file untuk foto asli dari unggahan foto. Di Android 10 ke atas, file itu masuk ke Download atau Documents dengan nama folder yang sama. Berlaku untuk penyimpanan yang dilakukan Hushfeed."
+"The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.","Foto sudah tersimpan, tetapi file detailnya tidak dapat ditulis. Periksa penyimpanan dan simpan unggahan lagi untuk mendapatkannya."
 Check for already-saved videos,Periksa video yang sudah disimpan
 Forget saved videos,Lupakan video tersimpan
 Undo forgetting saved videos,Batalkan melupakan video tersimpan

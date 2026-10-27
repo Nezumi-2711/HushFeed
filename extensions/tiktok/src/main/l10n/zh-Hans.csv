@@ -1459,7 +1459,8 @@ Saved videos put back,保存的视频放回
 Saved. Restart TikTok to apply this.,已保存。重新启动 TikTok 以应用此操作.
 Saves TikTok's latest crash report on this phone so it can go in the diagnostic report.,在此手机上保存 TikTok 的最新崩溃报告，以便将其纳入诊断报告中.
 "Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.",与视频一起保存字幕 (SRT) 文件。他们会在 Android 11 及更高版本上转到“电影”，在 Android 10 上转到“下载”，在旧版本上会转到您的视频文件夹。在 Android 11 及更高版本上，如果打开“保存详细信息”，视频将移至“下载”或“文档”，而字幕仍保留在“电影”中.
-"Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",将标题、创建者、链接和发布日期保存在视频旁边的文本文件中。在 Android 10 及更高版本上，该对将进入同一文件夹名称下的“下载”或“文档”。适用于 Hushfeed 进行的保存.
+"Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",将标题、创建者、链接和发布日期保存在视频旁边的文本文件中，图片帖子的原图则共用一个文件。在 Android 10 及更高版本上，它们会进入同一文件夹名称下的“下载”或“文档”。适用于 Hushfeed 进行的保存.
+"The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.",照片已保存，但无法写入它们的详情文件。请检查存储空间，然后重新保存该帖子以获取它.
 Saves the details file in JSON format instead of plain text. Useful if another tool will read it.,以 JSON 格式而不是纯文本格式保存详细信息文件。如果其他工具可以读取它，则很有用.
 Saves your Hushfeed settings and Feature Gate Lab rules to a file.,将 Hushfeed 设置和功能门实验室规则保存到文件中.
 Saving,节省

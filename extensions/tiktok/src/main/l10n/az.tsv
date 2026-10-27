@@ -1467,7 +1467,8 @@ This preset doesn't match the installed gates. Nothing changed.	Bu hazır ayar q
 About overrides	Əvəzləmələr haqqında
 Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.	Adı qurmaq üçün {creator}, {date} və {video_id} istifadə edin. Hər yaradıcını ayrıca qovluğa qoymaq üçün {creator}/ ilə başlayın. Fayl uzantısı sizin üçün əlavə olunur.
 Save details beside the video	Təfərrüatları videonun yanında saxlayın
-Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Başlığı, yaradıcını, linki və paylaşım tarixini videonun yanında mətn faylında saxlayır. Android 10 və daha yenisində cüt Download və ya Documents içində eyni qovluq adı ilə qalır. Hushfeed-in etdiyi saxlamalara aiddir.
+Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Başlığı, yaradıcını, linki və paylaşım tarixini videonun yanında mətn faylında, foto paylaşımının orijinal fotoları üçün isə bir faylda saxlayır. Android 10 və daha yenisində onlar Download və ya Documents içində eyni qovluq adı ilə qalır. Hushfeed-in etdiyi saxlamalara aiddir.
+The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.	Fotolar saxlanıldı, amma onların təfərrüat faylı yazıla bilmədi. Yaddaşı yoxlayın və onu almaq üçün paylaşımı yenidən saxlayın.
 Check for already-saved videos	Artıq saxlanılmış videoları yoxlayın
 Forget saved videos	Saxlanılmış videoları unudun
 Undo forgetting saved videos	Saxlanılmış videoların unudulmasını geri qaytarın

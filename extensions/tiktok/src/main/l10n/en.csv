@@ -1531,7 +1531,7 @@ Saves TikTok's latest crash report on this phone so it can go in the diagnostic 
 Saves at once,Saves at once
 Saves right now,Saves right now
 "Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.","Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies."
-"Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.","Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed."
+"Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.","Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed."
 Saves the details file in JSON format instead of plain text. Useful if another tool will read it.,Saves the details file in JSON format instead of plain text. Useful if another tool will read it.
 Saves your Hushfeed settings and Feature Gate Lab rules to a file.,Saves your Hushfeed settings and Feature Gate Lab rules to a file.
 Saving,Saving
@@ -1959,6 +1959,7 @@ The original photos aren't available. No video was saved.,The original photos ar
 "The override doesn't say what list to return. Edit the field values, or reset the override.","The override doesn't say what list to return. Edit the field values, or reset the override."
 The partial file couldn't be removed. Delete it from the folder you chose.,The partial file couldn't be removed. Delete it from the folder you chose.
 The phone is running out of room. What was recorded is saved to %1$s,The phone is running out of room. What was recorded is saved to %1$s
+"The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.","The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it."
 "The port the proxy listens on, like 8080 or 1080.","The port the proxy listens on, like 8080 or 1080."
 The presets couldn't load. Open the Lab again.,The presets couldn't load. Open the Lab again.
 The profile picture couldn't be saved. Try again.,The profile picture couldn't be saved. Try again.

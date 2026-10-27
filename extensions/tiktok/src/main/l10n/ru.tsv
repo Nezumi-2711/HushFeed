@@ -1605,7 +1605,8 @@ This preset doesn't match the installed gates. Nothing changed.	Эта пред�
 About overrides	О переопределениях
 Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.	Составьте имя из {creator}, {date} и {video_id}. Начните с {creator}/, чтобы класть каждого автора в отдельную папку. Расширение файла добавляется само.
 Save details beside the video	Сохранять детали рядом с видео
-Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Сохраняет описание, автора, ссылку и дату публикации в текстовом файле рядом с видео. На Android 10 и новее эта пара попадает в Download или Documents под тем же именем папки. Действует для сохранений, сделанных Hushfeed.
+Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Сохраняет описание, автора, ссылку и дату публикации в текстовом файле рядом с видео или в одном файле для оригинальных фото фотопоста. На Android 10 и новее они попадают в Download или Documents под тем же именем папки. Действует для сохранений, сделанных Hushfeed.
+The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.	Фото сохранены, но файл с их данными записать не удалось. Проверьте память и сохраните публикацию ещё раз, чтобы получить его.
 Check for already-saved videos	Проверять уже сохранённые видео
 Forget saved videos	Забыть сохранённые видео
 Undo forgetting saved videos	Отменить забывание сохранённых видео

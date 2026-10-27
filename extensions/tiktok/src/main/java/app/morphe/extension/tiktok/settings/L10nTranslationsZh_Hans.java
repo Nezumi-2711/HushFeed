@@ -15,7 +15,7 @@ final class L10nTranslationsZh_Hans {
     }
 
     static Map<String, String> build() {
-        Map<String, String> table = new HashMap<>(4600);
+        Map<String, String> table = new HashMap<>(4602);
         fill0(table);
         fill1(table);
         fill2(table);
@@ -3198,8 +3198,8 @@ final class L10nTranslationsZh_Hans {
                 "正在进行的保存");
         table.put("Saves subtitle (SRT) files with the video. They go to Movies on Android 11 and newer, Download on Android 10, and your video folder on older versions. On Android 11 and newer with Save details on, the video moves to Download or Documents and the subtitles stay in Movies.",
                 "与视频一起保存字幕 (SRT) 文件。他们会在 Android 11 及更高版本上转到“电影”，在 Android 10 上转到“下载”，在旧版本上会转到您的视频文件夹。在 Android 11 及更高版本上，如果打开“保存详细信息”，视频将移至“下载”或“文档”，而字幕仍保留在“电影”中.");
-        table.put("Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
-                "将标题、创建者、链接和发布日期保存在视频旁边的文本文件中。在 Android 10 及更高版本上，该对将进入同一文件夹名称下的“下载”或“文档”。适用于 Hushfeed 进行的保存.");
+        table.put("Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.",
+                "将标题、创建者、链接和发布日期保存在视频旁边的文本文件中，图片帖子的原图则共用一个文件。在 Android 10 及更高版本上，它们会进入同一文件夹名称下的“下载”或“文档”。适用于 Hushfeed 进行的保存.");
         table.put("Saves the details file in JSON format instead of plain text. Useful if another tool will read it.",
                 "以 JSON 格式而不是纯文本格式保存详细信息文件。如果其他工具可以读取它，则很有用.");
         table.put("Saves your Hushfeed settings and Feature Gate Lab rules to a file.",
@@ -4075,6 +4075,8 @@ final class L10nTranslationsZh_Hans {
                 "无法删除部分文件。从您选择的文件夹中将其删除.");
         table.put("The phone is running out of room. What was recorded is saved to %1$s",
                 "电话空间不足。录制的内容保存到 %1$s");
+        table.put("The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.",
+                "照片已保存，但无法写入它们的详情文件。请检查存储空间，然后重新保存该帖子以获取它.");
         table.put("The port the proxy listens on, like 8080 or 1080.",
                 "代理侦听的端口，例如 8080 或 1080.");
         table.put("The presets couldn't load. Open the Lab again.",
@@ -4113,11 +4115,11 @@ final class L10nTranslationsZh_Hans {
                 "服务员要求我们稍等。稍后再试.");
         table.put("The setting couldn't finish updating. Its saved value is shown.",
                 "该设置无法完成更新。显示其保存值.");
-        table.put("The settings backup was rejected. Nothing was altered.",
-                "设置备份被拒绝。一切都没有改变.");
     }
 
     private static void fill33(Map<String, String> table) {
+        table.put("The settings backup was rejected. Nothing was altered.",
+                "设置备份被拒绝。一切都没有改变.");
         table.put("The smallest value is above the largest",
                 "最小值高于最大值");
         table.put("The sound couldn't be saved. Try again.",
@@ -4236,11 +4238,11 @@ final class L10nTranslationsZh_Hans {
                 "该视频不提供完整文件。稍后再试.");
         table.put("This video's sound has no title to look for",
                 "该视频的声音没有可查找的标题");
-        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
-                "现在无法再次尝试这些照片。再次保存帖子以获取其余内容.");
     }
 
     private static void fill34(Map<String, String> table) {
+        table.put("Those photos can't be tried again now. Save the post again to get the rest.",
+                "现在无法再次尝试这些照片。再次保存帖子以获取其余内容.");
         table.put("Three at once",
                 "同时三个");
         table.put("Thumbs down blocks the commenter",
@@ -4359,11 +4361,11 @@ final class L10nTranslationsZh_Hans {
                 "今天又重新开始了。再次点击可恢复计数.");
         table.put("Today starts again",
                 "今天又开始了");
-        table.put("Today's budget is locked. The day starts over at %1$s.",
-                "今天的预算已锁定。这一天从 %1$s 开始.");
     }
 
     private static void fill35(Map<String, String> table) {
+        table.put("Today's budget is locked. The day starts over at %1$s.",
+                "今天的预算已锁定。这一天从 %1$s 开始.");
         table.put("Today's budget is locked. The feed opens again at %1$s. Messages, profiles and search still work.",
                 "今天的预算已锁定。该信息流在 %1$s 再次打开。消息、个人资料和搜索仍然有效.");
         table.put("Today's budget is locked. This can be changed again at %1$s.",
@@ -4482,11 +4484,11 @@ final class L10nTranslationsZh_Hans {
                 "撤消未完成。某些设置可能仍会更改.");
         table.put("Undo didn't finish. Some settings may still be changed. Try Undo again.",
                 "撤消未完成。某些设置可能仍会更改。再次尝试撤消.");
-        table.put("Undo forgetting saved videos",
-                "撤消忘记保存的视频");
     }
 
     private static void fill36(Map<String, String> table) {
+        table.put("Undo forgetting saved videos",
+                "撤消忘记保存的视频");
         table.put("Undo last Lab change",
                 "撤消上次实验室更改");
         table.put("Undo last restore or reset",
@@ -4605,11 +4607,11 @@ final class L10nTranslationsZh_Hans {
                 "视频无法保存到该文件中的文件夹中，因此您的视频文件夹被保留");
         table.put("Videos in search results show their cover and play when you open them. The feed and the videos you open play as usual.",
                 "搜索结果中的视频会显示其封面并在您打开时播放。您打开的信息流和视频照常播放.");
-        table.put("Views range",
-                "观看范围");
     }
 
     private static void fill37(Map<String, String> table) {
+        table.put("Views range",
+                "观看范围");
         table.put("Visual search",
                 "视觉搜索");
         table.put("Volume",
@@ -4728,11 +4730,11 @@ final class L10nTranslationsZh_Hans {
                 "你的信息流");
         table.put("Your feed. Your rules.",
                 "你的信息流。你的规则.");
-        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
-                "您的过滤器隐藏了刚刚发送的所有内容 TikTok。大多数是%1$s.");
     }
 
     private static void fill38(Map<String, String> table) {
+        table.put("Your filters hid everything TikTok just sent. Most were %1$s.",
+                "您的过滤器隐藏了刚刚发送的所有内容 TikTok。大多数是%1$s.");
         table.put("Your filters hid everything TikTok sent, %1$d times in a row. Most were %2$s.",
                 "您的过滤器连续 %1$d 次隐藏了 TikTok 发送的所有内容。大多数是%2$s.");
         table.put("Your network proxy was kept, since a backup can't change it",

@@ -1467,7 +1467,8 @@ This preset doesn't match the installed gates. Nothing changed.	Esta predefiniç
 About overrides	Sobre as substituições
 Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.	Use {creator}, {date} e {video_id} para montar o nome. Comece com {creator}/ para colocar cada criador em uma pasta. A extensão do arquivo é adicionada automaticamente.
 Save details beside the video	Salvar detalhes junto ao vídeo
-Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Salva a legenda, o criador, o link e a data de publicação em um arquivo de texto ao lado do vídeo. No Android 10 e posteriores, o par vai para Download ou Documents com o mesmo nome de pasta. Vale para os salvamentos feitos pelo Hushfeed.
+Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Salva a legenda, o criador, o link e a data de publicação em um arquivo de texto ao lado do vídeo, ou em um único arquivo para as fotos originais de uma publicação de fotos. No Android 10 e posteriores, eles vão para Download ou Documents com o mesmo nome de pasta. Vale para os salvamentos feitos pelo Hushfeed.
+The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.	As fotos foram salvas, mas não foi possível gravar o arquivo de detalhes delas. Verifique o armazenamento e salve a publicação de novo para obtê-lo.
 Check for already-saved videos	Verificar vídeos já salvos
 Forget saved videos	Esquecer os vídeos salvos
 Undo forgetting saved videos	Desfazer o esquecimento dos vídeos salvos

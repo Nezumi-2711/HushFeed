@@ -1470,7 +1470,8 @@ This preset doesn't match the installed gates. Nothing changed.	Diese Vorlage pa
 About overrides	Über Überschreibungen
 Use {creator}, {date} and {video_id} to build the name. Start with {creator}/ to put each creator in a folder. The file ending is added for you.	Baue den Namen aus {creator}, {date} und {video_id}. Beginne mit {creator}/, um jeden Creator in einen eigenen Ordner zu legen. Die Dateiendung wird automatisch angehängt.
 Save details beside the video	Details neben dem Video speichern
-Saves the caption, creator, link and post date in a text file next to the video. On Android 10 and later, the pair goes in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Speichert Beschreibung, Creator, Link und Veröffentlichungsdatum in einer Textdatei neben dem Video. Ab Android 10 landet das Paar in Download oder Documents unter demselben Ordnernamen. Gilt für Speicherungen durch Hushfeed.
+Saves the caption, creator, link and post date in a text file next to the video, or one file for a photo post's original photos. On Android 10 and later, they go in Download or Documents under the same folder name. Applies to saves made by Hushfeed.	Speichert Beschreibung, Creator, Link und Veröffentlichungsdatum in einer Textdatei neben dem Video, bei einem Fotobeitrag in einer Datei für die Originalfotos. Ab Android 10 landen sie in Download oder Documents unter demselben Ordnernamen. Gilt für Speicherungen durch Hushfeed.
+The photos saved, but their details file couldn't be written. Check your storage and save the post again to get it.	Die Fotos wurden gespeichert, aber ihre Detaildatei konnte nicht geschrieben werden. Prüf deinen Speicher und speichere den Beitrag noch einmal, um sie zu bekommen.
 Check for already-saved videos	Bereits gespeicherte Videos prüfen
 Forget saved videos	Gespeicherte Videos vergessen
 Undo forgetting saved videos	Vergessen der gespeicherten Videos rückgängig machen
