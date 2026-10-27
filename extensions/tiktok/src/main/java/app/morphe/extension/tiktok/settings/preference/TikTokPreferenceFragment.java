@@ -2064,6 +2064,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         list.post(() -> {
             if (!isAdded() || getView() == null) return;
             scrollToPreference(list, key);
+            scrollUntilLaidOut(list, key);
             Preference row = findPreference(key);
             if (row == null) {
                 SettingsActionBanner.showNotice(getActivity(), L10n.t(getActivity(),
@@ -2073,6 +2074,41 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
             if (member != null && row instanceof SwitchListPreference)
                 ((SwitchListPreference) row).showChoicesAt(member);
         });
+    }
+
+    /**
+     * A ListView scroll waits for the next layout, and a data change or a resize before then
+     * (the rows of the opened page arriving, the keyboard closing) makes the list keep the rows
+     * it was showing instead. A row deep in Feed screen opened at the page's top that way. Scroll
+     * again after each layout until the row has been laid out on screen; later changes keep it.
+     */
+    private static void scrollUntilLaidOut(ListView list, String key) {
+        long deadline = android.os.SystemClock.uptimeMillis() + 1000;
+        android.view.ViewTreeObserver.OnGlobalLayoutListener listener =
+                new android.view.ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override public void onGlobalLayout() {
+                int position = -1;
+                if (list.isAttachedToWindow() && list.getAdapter() != null)
+                    for (int i = 0; i < list.getCount(); i++) {
+                        Object item = list.getItemAtPosition(i);
+                        if (item instanceof Preference && key.equals(((Preference) item).getKey())) {
+                            position = i;
+                            break;
+                        }
+                    }
+                boolean shown = position >= list.getFirstVisiblePosition()
+                        && position <= list.getLastVisiblePosition();
+                if (shown || !list.isAttachedToWindow()
+                        || android.os.SystemClock.uptimeMillis() > deadline) {
+                    android.view.ViewTreeObserver observer = list.getViewTreeObserver();
+                    if (observer.isAlive()) observer.removeOnGlobalLayoutListener(this);
+                    return;
+                }
+                // Before the page's rows reach the adapter there is nothing to scroll to yet.
+                if (position >= 0) scrollToPreference(list, key, false);
+            }
+        };
+        list.getViewTreeObserver().addOnGlobalLayoutListener(listener);
     }
 
     /** Search consumes Back; expanded categories never create a navigation history. */
