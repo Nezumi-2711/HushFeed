@@ -2308,3 +2308,5 @@ TikTok's search page couldn't be opened. Restart TikTok and try again.	TikTok'un
 Fold the search into a button	Aramayı bir düğmeye katla
 Shows a search button at the top left of the comments instead of the box, so the comments get that room back. Tap it to search, and tap it again to put the box away. Search within comments must be on.	Kutu yerine yorumların sol üstünde bir arama düğmesi gösterir, böylece o alan yorumlara geri döner. Aramak için ona dokun, kutuyu kaldırmak için yeniden dokun. “Yorumların içinde ara” açık olmalı.
 Put the comment search away	Yorum aramasını kaldır
+Tap @names in bios	Biyografilerdeki @adlara dokun
+An @username in a profile's bio opens that profile when you tap it. The rest of the bio still translates on a tap.	Bir profilin biyografisindeki @kullanıcıadı, dokunduğunda o profili açar. Biyografinin geri kalanı dokununca yine çevrilir.
