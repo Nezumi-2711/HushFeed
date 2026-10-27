@@ -36,7 +36,7 @@ The main branch contains 141 patches, the same set as v0.79.0. Bundles built fro
 
 ## What it changes
 
-- **Feed:** Start with the Calm feed preset, or hide ads, Shop, LIVEs, stories, photo posts and any creator or video that matches your own rules. Your own posts are never hidden. TikTok can open on Following, Friends, Inbox or Profile instead of For You.
+- **Feed:** Hide ads, Shop, LIVEs, stories, photo posts and any creator or video that matches your own rules. Your own posts are never hidden. TikTok can open on Following, Friends, Inbox or Profile instead of For You.
 - **Touch controls:** Ask for a second tap before Follow, Like or a quick repost goes through. Remap or turn off long press and double tap, and keep For You where it is when you tap Home.
 - **Playback:** Choose the speed and quality, stop loops, pick up where you left off or move on by itself. A video can keep playing after you leave the app.
 - **Downloads:** Save videos without the watermark, full-size photos, the sound on its own and SRT subtitles, into folders and file names you choose. Saving works even when the creator turned downloads off.

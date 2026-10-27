@@ -214,7 +214,6 @@ Allow storage for TikTok in Android settings to save sounds,Allow storage for Ti
 Allow storage for TikTok in Android settings to save stories,Allow storage for TikTok in Android settings to save stories
 Allow storage for TikTok in Android settings to save the live photo's clip,Allow storage for TikTok in Android settings to save the live photo's clip
 Allow voice comments,Allow voice comments
-Already active,Already active
 Already marked as not interested,Already marked as not interested
 Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.,Also apply these filters to downloaded videos TikTok uses when the feed can't load enough new items.
 Also change the region TikTok reports internally and set TikTok to the country's time zone. Keeps your interface language. Your IP address and your account's own rules still apply.,Also change the region TikTok reports internally and set TikTok to the country's time zone. Keeps your interface language. Your IP address and your account's own rules still apply.
@@ -248,7 +247,6 @@ Apply,Apply
 Apply enables these overrides. Undo last Lab change puts your previous rules back until you change anything else in the Lab.,Apply enables these overrides. Undo last Lab change puts your previous rules back until you change anything else in the Lab.
 Apply overrides,Apply overrides
 "Apply saves these overrides. Turn on overrides in the Lab to use them. Turning them on is a Lab change too, so after that Undo turns them off rather than putting your previous rules back.","Apply saves these overrides. Turn on overrides in the Lab to use them. Turning them on is a Lab change too, so after that Undo turns them off rather than putting your previous rules back."
-Applying Calm feed,Applying Calm feed
 Around the video,Around the video
 Arrange your feed and bottom tabs,Arrange your feed and bottom tabs
 As TikTok sent it (M4A or MP3),As TikTok sent it (M4A or MP3)
@@ -321,11 +319,6 @@ Build details,Build details
 Build details copied to the clipboard,Build details copied to the clipboard
 Burn-in guard,Burn-in guard
 Buttons on videos,Buttons on videos
-Calm feed,Calm feed
-Calm feed couldn't be applied. Nothing was changed.,Calm feed couldn't be applied. Nothing was changed.
-Calm feed couldn't start. Try again in a moment.,Calm feed couldn't start. Try again in a moment.
-Calm feed is on.,Calm feed is on.
-Calm feed is on. Restart TikTok to apply all changes.,Calm feed is on. Restart TikTok to apply all changes.
 Camera and microphone in use,Camera and microphone in use
 Camera in use,Camera in use
 Can't check yet: %1$s,Can't check yet: %1$s
@@ -342,7 +335,6 @@ Captions,Captions
 "Captions, gestures and on-screen controls","Captions, gestures and on-screen controls"
 Capture crash reports locally,Capture crash reports locally
 Capture the feed,Capture the feed
-Changed,Changed
 Changes in Hushfeed %1$s,Changes in Hushfeed %1$s
 Changes to %1$s at %2$s,Changes to %1$s at %2$s
 Check for already-saved videos,Check for already-saved videos
@@ -717,7 +709,6 @@ Hide TikTok's wind-down screens,Hide TikTok's wind-down screens
 Hide a VPN connection,Hide a VPN connection
 Hide activity,Hide activity
 Hide activity status,Hide activity status
-"Hide ads, Shop posts, LIVE videos and replays, promotional music, and paid partnerships.","Hide ads, Shop posts, LIVE videos and replays, promotional music, and paid partnerships."
 Hide archive,Hide archive
 Hide bottom tabs TikTok adds later unless you allow them.,Hide bottom tabs TikTok adds later unless you allow them.
 Hide buttons in the right column,Hide buttons in the right column
@@ -1195,7 +1186,6 @@ Offer clear screen in every LIVE room,Offer clear screen in every LIVE room
 Offline videos,Offline videos
 Offline videos limit,Offline videos limit
 Oldest first,Oldest first
-On,On
 "On a one-photo post, Download video makes an MP4 with the post's sound and no TikTok logo or end card. On a post with several photos, Download asks if you want the originals or one video.","On a one-photo post, Download video makes an MP4 with the post's sound and no TikTok logo or end card. On a post with several photos, Download asks if you want the originals or one video."
 On mobile data,On mobile data
 On or off,On or off
@@ -1204,7 +1194,6 @@ On or off,On or off
 "On the main feed, a raised bubble of glass sits behind the tab you're on and slides to the next tab you pick. Needs Liquid glass look.","On the main feed, a raised bubble of glass sits behind the tab you're on and slides to the next tab you pick. Needs Liquid glass look."
 "On the main feed, slide a finger along the glass pill and the lens follows it. Let go and that tab opens. Taps and long presses work as before. Needs Glass lens on the current tab.","On the main feed, slide a finger along the glass pill and the lens follows it. Let go and that tab opens. Taps and long presses work as before. Needs Glass lens on the current tab."
 On. Hushfeed hasn't seen TikTok send any reports since it started.,On. Hushfeed hasn't seen TikTok send any reports since it started.
-On. Restore puts back the feed setup you had before.,On. Restore puts back the feed setup you had before.
 "Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out.","Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out."
 One area was checked and everything it needs is here.,One area was checked and everything it needs is here.
 One at a time,One at a time
@@ -1325,7 +1314,6 @@ Post dates in the feed,Post dates in the feed
 Post every video as if you'd turned on TikTok's own HD upload on the post page. A clip TikTok doesn't count as high quality posts as before.,Post every video as if you'd turned on TikTok's own HD upload on the post page. A clip TikTok doesn't count as high quality posts as before.
 Posting,Posting
 Prefer H.264 video,Prefer H.264 video
-Preset,Preset
 Preset applied. Restart TikTok to use it.,Preset applied. Restart TikTok to use it.
 Preset saved. Turn on overrides in the Lab to use it.,Preset saved. Turn on overrides in the Lab to use it.
 Press and hold a comment to find Block this commenter in its menu. Their comments leave the list right away and an undo banner follows.,Press and hold a comment to find Block this commenter in its menu. Their comments leave the list right away and an undo banner follows.
@@ -1375,7 +1363,6 @@ Putting the settings back to their defaults,Putting the settings back to their d
 Quality,Quality
 "Quality, files, subtitles and hand-off","Quality, files, subtitles and hand-off"
 "Quality, speed and auto-advance","Quality, speed and auto-advance"
-Quick setup,Quick setup
 Read-only list. Accounts won't be opened or unblocked.,Read-only list. Accounts won't be opened or unblocked.
 Reading,Reading
 Reading the font file,Reading the font file
@@ -1445,9 +1432,7 @@ Restore failed. Some settings may still be changed.,Restore failed. Some setting
 Restore failed. Some settings may still be changed. Use Undo to put them back.,Restore failed. Some settings may still be changed. Use Undo to put them back.
 Restore seen history from a file,Restore seen history from a file
 Restore settings,Restore settings
-Restore setup,Restore setup
 Restoring seen history,Restoring seen history
-Restoring setup,Restoring setup
 Restoring your settings,Restoring your settings
 Resume videos after scrolling,Resume videos after scrolling
 Retry,Retry
@@ -1732,7 +1717,6 @@ Sleep timer off,Sleep timer off
 Slide across the tabs,Slide across the tabs
 Soft blur,Soft blur
 Soft tick,Soft tick
-Some Calm feed settings changed. Restore still puts back your earlier setup.,Some Calm feed settings changed. Restore still puts back your earlier setup.
 Some of these notes are in English.,Some of these notes are in English.
 Some recording files remain. Try deleting them again.,Some recording files remain. Try deleting them again.
 Something is missing from %1$s. Tap for the whole report.,Something is missing from %1$s. Tap for the whole report.
@@ -2168,7 +2152,6 @@ Unpersonalized For You videos,Unpersonalized For You videos
 "Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.","Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption."
 "Use 0 for TikTok's size, or %1$d to %2$d. Sizes the author's name and the post date next to it, and keeps Android's font scaling.","Use 0 for TikTok's size, or %1$d to %2$d. Sizes the author's name and the post date next to it, and keeps Android's font scaling."
 "Use 0 for TikTok's size, or %1$d to %2$d. Sizes the description below the author's name and keeps Android's font scaling.","Use 0 for TikTok's size, or %1$d to %2$d. Sizes the description below the author's name and keeps Android's font scaling."
-Use Calm feed,Use Calm feed
 Use Save report for this large report,Use Save report for this large report
 Use TikTok for a while. A popup shows up here after TikTok first tries to show it.,Use TikTok for a while. A popup shows up here after TikTok first tries to show it.
 "Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another.","Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another."
@@ -2255,7 +2238,6 @@ Window width needed to enable the layout. Restart TikTok to apply this.,Window w
 "With the fade below 100, the buttons and caption stay on screen at that level in Clear display, and taps go through them to the video. Off, Clear display hides them the way it does at 100.","With the fade below 100, the buttons and caption stay on screen at that level in Clear display, and taps go through them to the video. Off, Clear display hides them the way it does at 100."
 "Word rules only, not every feed filter:","Word rules only, not every feed filter:"
 "Words, countries and languages","Words, countries and languages"
-Working,Working
 Works only with YTDLnis (com.deniscerri.ytdl). Picks audio or video when the save button sends it a link.,Works only with YTDLnis (com.deniscerri.ytdl). Picks audio or video when the save button sends it a link.
 Works only with YTDLnis (com.deniscerri.ytdl). Starts the download in the background without showing its download card.,Works only with YTDLnis (com.deniscerri.ytdl). Starts the download in the background without showing its download card.
 Write the username and caption on the video,Write the username and caption on the video
@@ -2274,7 +2256,6 @@ Your Long press choice runs only on the left and right thirds of the video. A pr
 Your TikTok account changed. Choose the file again for this account.,Your TikTok account changed. Choose the file again for this account.
 Your account changed. Close this list and open it again.,Your account changed. Close this list and open it again.
 Your account changed. Open the count editor again.,Your account changed. Open the count editor again.
-Your current settings already match Calm feed.,Your current settings already match Calm feed.
 Your feed,Your feed
 Your feed. Your rules.,Your feed. Your rules.
 Your filters hid everything TikTok just sent. Most were %1$s.,Your filters hid everything TikTok just sent. Most were %1$s.
@@ -2282,9 +2263,6 @@ Your filters hid everything TikTok just sent. Most were %1$s.,Your filters hid e
 "Your network proxy was kept, since a backup can't change it","Your network proxy was kept, since a backup can't change it"
 "Your operator's name, like T-Mobile.","Your operator's name, like T-Mobile."
 "Your operator's numeric code, like 310260.","Your operator's numeric code, like 310260."
-Your previous feed setup couldn't be restored. Nothing was changed.,Your previous feed setup couldn't be restored. Nothing was changed.
-Your previous feed setup is back.,Your previous feed setup is back.
-Your previous feed setup is back. Restart TikTok to apply all changes.,Your previous feed setup is back. Restart TikTok to apply all changes.
 Your seen history changed before the import finished. Choose the file again.,Your seen history changed before the import finished. Choose the file again.
 Your settings,Your settings
 "Zero means no limit. Counts the videos Hushfeed advanced past for you, not the ones you swiped yourself, and starts again when the feed is rebuilt or you change this number.","Zero means no limit. Counts the videos Hushfeed advanced past for you, not the ones you swiped yourself, and starts again when the feed is rebuilt or you change this number."
