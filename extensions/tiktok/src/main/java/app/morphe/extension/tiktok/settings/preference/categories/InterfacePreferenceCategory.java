@@ -317,6 +317,15 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                         new String[]{"off", "newest", "oldest", "longest", "shortest", "most_viewed",
                                 "least_viewed", "most_liked", "least_liked"})
                         .withNote("Sorts a profile or Liked grid with pinned videos first. While an order is on, the grid keeps loading by itself up to 300 videos, so the order covers more than the first screen. A button in the grid's top corner changes the order right there."));
+                if (SettingsStatus.likedGridSortEnabled) {
+                    addPreference(new ChoicePreference(context, "Sort loaded videos on Liked grids",
+                            Settings.LIKED_GRID_SORT,
+                            new String[]{"Same as profile grids", "Original order", "Newest first", "Oldest first",
+                                    "Longest first", "Shortest first", "Most viewed first", "Least viewed first",
+                                    "Most liked first", "Least liked first"},
+                            new String[]{"profile", "off", "newest", "oldest", "longest", "shortest", "most_viewed",
+                                    "least_viewed", "most_liked", "least_liked"}));
+                }
             }
         }
         if (SettingsStatus.authorRegionEnabled) {
@@ -453,6 +462,14 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                         "Hide Footnotes",
                         "Hide the Footnotes banner TikTok shows on a video that has a note attached. The video and its comments stay as they are.",
                         Settings.HIDE_FOOTNOTES
+                ));
+            }
+            if (SettingsStatus.followingSkylightEnabled) {
+                addPreference(new TogglePreference(
+                        context,
+                        "Hide the LIVE row on Following",
+                        "Hide the row of LIVE and story circles across the top of the Following feed, and the pill that counts them. For You is left as it is.",
+                        Settings.HIDE_FOLLOWING_LIVE_ROW
                 ));
             }
             addPreference(new TogglePreference(
@@ -658,6 +675,12 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "While Clear display is on, also hide the progress bar, the close button and the pause and speed buttons at the bottom. You can still drag along the bottom edge to move through the video. To leave Clear display, press and hold the video and tap Restore display, or pinch the screen.",
                     Settings.HIDE_CLEAR_DISPLAY_CONTROLS
             ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Keep the progress bar",
+                    "Hide the Clear display controls leaves the progress bar in sight, so you can still see and drag it.",
+                    Settings.KEEP_CLEAR_DISPLAY_SEEK_BAR
+            ));
         }
         // #232: below the controls row, which stays right under the automatic switch for #84.
         if (SettingsStatus.automaticClearDisplayEnabled) {
@@ -690,24 +713,56 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "Show the main feed's tabs on a rounded, see-through dark pill that floats over the video. Needs See-through bottom bar.",
                     Settings.FLOATING_BOTTOM_BAR
             ));
+            addPreference(new ChoicePreference(context, "Pill height", Settings.GLASS_BAR_HEIGHT,
+                    new String[]{"Compact", "Standard"},
+                    new String[]{"compact", "standard"})
+                    .withNote("How tall the main feed's floating pill is inside the bar. Compact leaves more of the video showing around it. The tabs keep their size and their taps."));
+            addPreference(new ChoicePreference(context, "Pill corners", Settings.GLASS_CORNERS,
+                    new String[]{"Standard", "Rounder", "Fully round"},
+                    new String[]{"standard", "rounder", "round"})
+                    .withNote("How round the main feed's floating pill and its glass lens are. Fully round gives them half circle ends."));
             addPreference(new TogglePreference(
                     context,
                     "Liquid glass look",
                     "Draw the main feed's floating pill as glass, lighter and more see-through, with a bright rim along its top edge. Needs Floating bottom bar.",
                     Settings.LIQUID_GLASS_BOTTOM_BAR
             ));
+            addPreference(new ChoicePreference(context, "Glass opacity", Settings.GLASS_OPACITY,
+                    new String[]{"Most see-through", "More see-through", "Standard", "Frosted"},
+                    new String[]{"clear", "light", "standard", "frosted"})
+                    .withNote("How much of the video shows through the glass pill on the main feed. Most see-through shows the most and Frosted the least."));
             addPreference(new TogglePreference(
                     context,
                     "Glass lens on the current tab",
-                    "On the main feed, a smaller piece of glass sits behind the tab you're on and slides to the next tab you pick. Needs Liquid glass look.",
+                    "On the main feed, a raised bubble of glass sits behind the tab you're on and slides to the next tab you pick. Needs Liquid glass look.",
                     Settings.GLASS_TAB_LENS
             ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Slide across the tabs",
+                    "On the main feed, slide a finger along the glass pill and the lens follows it. Let go and that tab opens. Taps and long presses work as before. Needs Glass lens on the current tab.",
+                    Settings.GLASS_TAB_SLIDE
+            ));
+            addPreference(new TogglePreference(
+                    context,
+                    "Haptics on the tabs",
+                    "On the main feed, a light tick each time the glass lens passes a tab, as it slides after a tap or under your finger. Needs Glass lens on the current tab.",
+                    Settings.GLASS_HAPTICS
+            ));
+            addPreference(new ChoicePreference(context, "Haptic style", Settings.GLASS_HAPTIC_STYLE,
+                    new String[]{"Short pulse", "Phone's click", "Soft tick", "Full tick"},
+                    new String[]{"short", "system", "soft", "full"})
+                    .withNote("The tick on the main feed's tabs. Short pulse is one quick tap of the motor. Phone's click is the click your phone makes elsewhere. Soft tick rings a little longer. Full tick is the phone's strongest tick."));
             addPreference(new TogglePreference(
                     context,
                     "Blur the video behind the bar",
                     "Blur the part of the video that sits behind the glass pill on the main feed, so it looks like frosted glass. Needs Liquid glass look and Android 12 and up.",
                     Settings.GLASS_VIDEO_BLUR
             ));
+            addPreference(new ChoicePreference(context, "Blur strength", Settings.GLASS_BLUR_STRENGTH,
+                    new String[]{"Soft blur", "Standard", "Strong blur"},
+                    new String[]{"light", "standard", "strong"})
+                    .withNote("How much the video behind the glass pill on the main feed is blurred."));
             addPreference(new TogglePreference(
                     context,
                     "See-through status bar",
@@ -758,13 +813,16 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             // Long press's actions, which GestureActions runs the same way for both gestures. The
             // speed toggle changes the playing video's speed, so it needs the Playback speed patch's
             // player bridge, and Clear display posts TikTok's own event through Remember clear
-            // display's bridge (#136).
-            List<String> tapLabels = new ArrayList<>(Arrays.asList("TikTok default", "Do nothing", "Open comments",
+            // display's bridge (#136). Like or unlike is the double tap's own: TikTok's default
+            // already likes, and only ever likes (#248).
+            List<String> tapLabels = new ArrayList<>(Arrays.asList("TikTok default", "Do nothing",
+                    "Like or unlike the video", "Open comments",
                     "Save the original sound", "Copy the video link", "Copy the sound link",
                     "Find the sound on YouTube Music", "Set a sleep timer that closes TikTok",
-                    "Save the frame on screen as a photo", "Save the video's cover"));
-            List<String> tapValues = new ArrayList<>(Arrays.asList("default", "nothing", "comments", "original_sound",
-                    "copy_link", "copy_sound_link", "youtube_music", "sleep_timer", "save_frame", "save_cover"));
+                    "Save the frame on screen as a photo", "Save the video's cover", "Open the search page"));
+            List<String> tapValues = new ArrayList<>(Arrays.asList("default", "nothing", "like_toggle", "comments",
+                    "original_sound", "copy_link", "copy_sound_link", "youtube_music", "sleep_timer", "save_frame",
+                    "save_cover", "open_search"));
             if (SettingsStatus.liveSpeedEnabled) {
                 tapLabels.add("Speed up this video, double tap again to undo");
                 tapValues.add("speed_toggle");
@@ -801,10 +859,10 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
                     "Do nothing", "Like the video", "Open comments", "Save the original sound",
                     "Copy the video link", "Copy the sound link", "Find the sound on YouTube Music",
                     "Set a sleep timer that closes TikTok", "Save the frame on screen as a photo",
-                    "Save the video's cover"));
+                    "Save the video's cover", "Open the search page"));
             List<String> pressValues = new ArrayList<>(Arrays.asList("default", "nothing", "like", "comments",
                     "original_sound", "copy_link", "copy_sound_link", "youtube_music", "sleep_timer", "save_frame",
-                    "save_cover"));
+                    "save_cover", "open_search"));
             if (SettingsStatus.automaticClearDisplayEnabled) {
                 pressLabels.add("Turn Clear display on or off");
                 pressValues.add("clear_display");
