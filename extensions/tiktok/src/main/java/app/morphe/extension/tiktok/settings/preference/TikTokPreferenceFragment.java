@@ -239,6 +239,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         final String normalizedTitle;
         /** A plain switch, which the results flip where it stands instead of opening its page. */
         boolean flipsInPlace;
+        /** The row's text without its choice labels, folded, to tell a hit on one of those apart. */
+        private final String normalizedShown;
 
         SearchResult(Section section, String key, String title, String summary, String category) {
             this(section, key, title, summary, category, "");
@@ -248,20 +250,33 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
          *  its title and description don't use. */
         SearchResult(Section section, String key, String title, String summary, String category,
                 String keywords) {
+            this(section, key, title, summary, category, keywords, "");
+        }
+
+        /** {@code choices} are a choice row's options, of which its summary names only the chosen one. */
+        SearchResult(Section section, String key, String title, String summary, String category,
+                String keywords, String choices) {
             this(section, key, null, title, summary, category,
-                    title + " " + summary + " " + category + " " + keywords);
+                    title + " " + summary + " " + category + " " + keywords, choices);
         }
 
         private SearchResult(Section section, String key, String member, String title,
-                String summary, String category, String searched) {
+                String summary, String category, String searched, String choices) {
             this.section = section;
             this.key = key;
             this.member = member;
             this.title = title;
             this.summary = summary;
             this.category = category;
-            this.normalized = normalizeSearchText(searched);
+            this.normalizedShown = normalizeSearchText(searched);
+            this.normalized = choices.isEmpty() ? normalizedShown : normalizeSearchText(searched + " " + choices);
             this.normalizedTitle = normalizeSearchText(title);
+        }
+
+        /** Found by an option other than the chosen one, which only the row's dialog shows. */
+        boolean foundByChoiceOnly(String query) {
+            String folded = normalizeSearchText(query == null ? "" : query);
+            return !folded.isEmpty() && normalized.contains(folded) && !normalizedShown.contains(folded);
         }
 
         /**
@@ -272,7 +287,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         static SearchResult member(Section section, String key, String member, String label,
                 String rowTitle, String category) {
             return new SearchResult(section, key, member, label, rowTitle, category,
-                    label + " " + category);
+                    label + " " + category, "");
         }
 
         String displaySummary() {
@@ -1185,6 +1200,8 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 } else if (BuildDetailsPreference.KEY.equals(result.key)
                         || ReleaseNotes.KEY.equals(result.key)) {
                     openHub(Hub.ABOUT, result.key);
+                } else if (result.foundByChoiceOnly(typed)) {
+                    openChoices(result.section, result.key);
                 } else {
                     openSection(result.section, result.key, result.member);
                 }
@@ -1363,13 +1380,22 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
                 continue;
             }
             CharSequence summary = preference.getSummary();
+            // A choice row's summary names only the chosen option, so "save the frame" found
+            // nothing while Double tap was set to anything else.
+            StringBuilder choices = new StringBuilder();
+            if (preference instanceof android.preference.ListPreference
+                    && ((android.preference.ListPreference) preference).getEntries() != null) {
+                for (CharSequence choice : ((android.preference.ListPreference) preference).getEntries())
+                    choices.append(choice).append(' ');
+            }
             SearchResult result = new SearchResult(
                     section,
                     preference.getKey(),
                     title.toString(),
                     summary == null ? "" : summary.toString(),
                     categoryTitle,
-                    searchKeywords(preference.getContext(), preference.getKey())
+                    searchKeywords(preference.getContext(), preference.getKey()),
+                    choices.toString().trim()
             );
             result.flipsInPlace = flipsInPlace(preference);
             results.add(result);
@@ -1403,9 +1429,26 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
      *  the templates and guides use. */
     static final String LOG_DIAGNOSTICS_KEYWORDS = "debug debugging logs logging";
 
+    /**
+     * The words people use for a feature that its row never says, by setting key: "autoplay"
+     * found nothing, and "picture in picture" missed Keep watching in a small window. Title hits
+     * still rank first, so an alias can't push an exact title down. A setting moved to another
+     * page gets its old page's name here, so the name people remember still finds it. Each
+     * alias needs a row in every l10n table.
+     */
+    static final java.util.Map<String, String> SEARCH_ALIASES = java.util.Map.of(
+            BaseSettings.DEBUG.key, LOG_DIAGNOSTICS_KEYWORDS,
+            Settings.STOP_SEARCH_AUTOPLAY.key, "autoplay auto play",
+            Settings.PICTURE_IN_PICTURE.key, "picture in picture PiP",
+            Settings.HIDE_SEARCH_SUGGESTIONS.key, "search suggestions",
+            Settings.HIDE_INBOX_TAKO.key, "AI chat",
+            Settings.HIDE_CHAT_AI_REPLIES.key, "AI Tako",
+            Settings.DOWNLOAD_ORIGINAL_PHOTOS.key, "save photos");
+
     private static String searchKeywords(Context context, String key) {
-        if (!BaseSettings.DEBUG.key.equals(key)) return "";
-        return LOG_DIAGNOSTICS_KEYWORDS + " " + L10n.t(context, LOG_DIAGNOSTICS_KEYWORDS);
+        String aliases = SEARCH_ALIASES.get(key);
+        if (aliases == null) return "";
+        return aliases + " " + L10n.t(context, aliases);
     }
 
     private static String normalizeSearchText(String value) {
@@ -2040,6 +2083,18 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     }
 
     private void openSection(Section section) { openSection(section, null, null); }
+
+    /** A row found by a choice it isn't set to opens with that list showing, so the match is visible. */
+    private void openChoices(Section section, String key) {
+        openSection(section, key, null);
+        View view = getView();
+        if (view == null) return;
+        view.post(() -> {
+            if (!isAdded() || getView() == null) return;
+            Preference row = findPreference(key);
+            if (row instanceof ChoicePreference) ((ChoicePreference) row).openChoices();
+        });
+    }
 
     private void openHub(Hub hub, String targetKey) {
         closeSearch();

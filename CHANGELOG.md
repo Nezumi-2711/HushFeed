@@ -19,6 +19,7 @@ Every Hushfeed release, newest first.
 * **Patching:** Every patch with settings now has Morphe options that pick its starting values, so a build can ship with the switches you want already on. Saved choices still win, and Reset goes back to the value you picked. Thanks to @XEGARE (#256).
 * **Feed:** `Hide the LIVE row on Following` takes away the row of LIVE and story circles at the top of Following, along with the Story pill that opens it. The video starts right under the tabs with no empty band, and it stays that way after a swipe or Clear display. For You and the LIVE tab look the same as before (#262).
 * **Downloads:** `Skip the Share to sheet after a save` stops the Share to sheet TikTok pops up a few seconds after its own downloader saves a video. The share button works like before and the saved notice still shows. PineDrama gets it too.
+* **Settings:** Search knows the everyday names for a few features now. Try "autoplay", "PiP", "AI" or "save photos". It also finds a choice row by any of its options, not only the one it's set to. Search "save the frame" and `Double tap` comes up, and tapping it opens its list of choices. Titles that match what you typed still come first.
 
 ### Fixes
 
