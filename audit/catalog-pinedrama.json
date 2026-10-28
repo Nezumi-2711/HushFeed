@@ -478,10 +478,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -507,10 +507,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -1541,10 +1541,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -1576,10 +1576,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -1624,10 +1624,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -1745,10 +1745,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -1780,10 +1780,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -1865,10 +1865,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -2813,10 +2813,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -2881,10 +2881,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -2947,10 +2947,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -3730,10 +3730,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -3834,10 +3834,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -3884,10 +3884,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -8719,10 +8719,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -8777,10 +8777,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -8829,10 +8829,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -10126,10 +10126,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -10158,10 +10158,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
@@ -10197,10 +10197,10 @@
      {
       "probe": "click",
       "extras": {
-       "find": "cgg",
+       "desc": "omment",
        "touch": "true"
       },
-      "expect": "^ok click .* touched=cgg"
+      "expect": "^ok click \\S+ at .* touched="
      },
      {
       "wait": 2000
