@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+## 0.80.0 (2026-10-27)
+
 ### Features
 
 * **TikTok:** `Hide the Clear display controls` has a new `Keep the progress bar` switch under it. The exit and pause buttons still go, but the progress bar stays on screen so you can see where you are and drag it (#237).
