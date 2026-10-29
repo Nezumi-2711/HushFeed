@@ -18,6 +18,7 @@
 * **TikTok:** A pesquisa das configurações conhece nomes do dia a dia, como autoplay, PiP e AI, e acha uma linha de escolha por qualquer uma das opções.
 * **TikTok:** Bloquear o feed em horários definidos bloqueia o feed sozinho nas horas que você escolher, e o painel de bloqueio diz quando ele abre de novo.
 * **TikTok:** Salvar só no Wi-Fi mantém os salvamentos longe dos dados móveis. Um salvamento espera o Wi-Fi por até 30 minutos, e você pode cancelar em Downloads.
+* **TikTok:** Uma nova chave desliga a janela Salvar a mídia do Hushfeed para stickers do chat (#274).
 * **TikTok:** No PineDrama, as chaves da Caixa de entrada agora funcionam, inclusive Esconder conversas (#156).
 * **TikTok:** No PineDrama, a linha de versão nas configurações agora cita o PineDrama e o build dele em vez do TikTok (#156).
 * **TikTok:** Um resultado da pesquisa das configurações lá embaixo numa página agora abre direto na sua linha.

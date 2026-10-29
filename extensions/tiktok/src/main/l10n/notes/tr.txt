@@ -18,6 +18,7 @@
 * **TikTok:** Ayar araması autoplay, PiP ve AI gibi günlük adları tanıyor ve bir seçim satırını seçeneklerinden herhangi biriyle buluyor.
 * **TikTok:** Akışı belirli saatlerde kilitle, seçtiğin saatlerde akışı kendiliğinden kilitliyor ve kilit paneli ne zaman yeniden açılacağını söylüyor.
 * **TikTok:** Yalnızca Wi-Fi'da kaydet, kayıtları mobil veriden uzak tutuyor. Bir kayıt Wi-Fi için en fazla 30 dakika bekler ve İndirmeler'den iptal edebilirsin.
+* **TikTok:** Yeni bir anahtar, sohbet çıkartmaları için Hushfeed'in Medyayı kaydet kutusunu kapatır (#274).
 * **TikTok:** PineDrama'da Gelen Kutusu anahtarları artık çalışıyor, Sohbetleri gizle de dahil (#156).
 * **TikTok:** PineDrama'da ayarlardaki sürüm satırı artık TikTok yerine PineDrama'yı ve derlemesini gösteriyor (#156).
 * **TikTok:** Bir sayfanın çok aşağısındaki ayar arama sonucu artık doğrudan kendi satırında açılıyor.
