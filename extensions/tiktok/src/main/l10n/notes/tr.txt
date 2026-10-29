@@ -92,7 +92,7 @@
 
 * **TikTok:** Kaydedilen videolara ayrıntılarını etiket olarak yaz artık başlığı, üreticiyi, tarihi ve bağlantıyı kaydedilen videolara gerçekten ekliyor.
 
-* **TikTok:** TikTok'un Otomatik kaydırma düğmesini gizle, tabletlerde ve açık katlanabilir telefonlarda Auto scroll anahtarını da gizler (#234).
+* **TikTok:** TikTok'un Otomatik kaydırma düğmesini gizle, tabletlerde ve açık katlanabilir telefonlarda Auto scroll anahtarını ve sağ üstteki yuvarlak Auto scroll düğmesini de gizler (#234).
 
 * **TikTok:** README artık telefonda 47.5.3 paketini, bilgisayarda ise APK'yı yamalamanı söylüyor.
 

@@ -92,7 +92,7 @@
 
 * **TikTok:** Marcar os vídeos salvos com seus detalhes agora adiciona de verdade o título, o criador, a data e o link aos vídeos salvos.
 
-* **TikTok:** Esconder o botão Auto scroll do TikTok também esconde a chave Auto scroll em tablets e dobráveis abertos (#234).
+* **TikTok:** Esconder o botão Auto scroll do TikTok também esconde a chave Auto scroll e o botão redondo de Auto scroll no canto superior direito em tablets e dobráveis abertos (#234).
 
 * **TikTok:** O README agora diz para aplicar o patch no bundle 47.5.3 no celular e no APK no computador.
 

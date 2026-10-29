@@ -92,7 +92,7 @@
 
 * **TikTok:** Tag saved videos with their details now really adds the title, creator, date and link to saved videos.
 
-* **TikTok:** Hide TikTok's Auto scroll button also hides the Auto scroll switch on tablets and unfolded foldables (#234).
+* **TikTok:** Hide TikTok's Auto scroll button also hides the Auto scroll switch and the round top-right Auto scroll button on tablets and unfolded foldables (#234).
 
 * **TikTok:** The README now says to patch the 47.5.3 bundle on a phone and the APK on a computer.
 

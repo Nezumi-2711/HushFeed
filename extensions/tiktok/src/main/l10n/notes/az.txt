@@ -92,7 +92,7 @@
 
 * **TikTok:** Saxlanılan videolara təfərrüatlarını etiket kimi yazın artıq başlığı, yaradıcını, tarixi və linki saxlanılan videolara həqiqətən əlavə edir.
 
-* **TikTok:** TikTok-un Auto scroll düyməsini gizlədin planşetlərdə və açılmış qatlanan telefonlarda Auto scroll açarını da gizlədir (#234).
+* **TikTok:** TikTok-un Auto scroll düyməsini gizlədin planşetlərdə və açılmış qatlanan telefonlarda Auto scroll açarını və sağ yuxarıdakı yumru Auto scroll düyməsini də gizlədir (#234).
 
 * **TikTok:** README artıq telefonda 47.5.3 paketini, kompüterdə isə APK-nı yamalamağı deyir.
 

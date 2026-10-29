@@ -92,7 +92,7 @@
 
 * **TikTok:** Etiquetar los vídeos guardados con sus detalles ahora sí añade el título, el creador, la fecha y el enlace a los vídeos guardados.
 
-* **TikTok:** Ocultar el botón Auto scroll de TikTok también oculta el interruptor Auto scroll en tabletas y plegables abiertos (#234).
+* **TikTok:** Ocultar el botón Auto scroll de TikTok también oculta el interruptor Auto scroll y el botón redondo de Auto scroll arriba a la derecha en tabletas y plegables abiertos (#234).
 
 * **TikTok:** El README ahora dice que parchees el paquete de 47.5.3 en el teléfono y el APK en el ordenador.
 

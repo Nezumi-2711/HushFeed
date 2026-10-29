@@ -92,7 +92,7 @@
 
 * **TikTok:** Aggiungi i dettagli ai video salvati come tag ora aggiunge davvero titolo, creator, data e link ai video salvati.
 
-* **TikTok:** Nascondi il pulsante Scorrimento automatico di TikTok nasconde anche l'interruttore Auto scroll su tablet e pieghevoli aperti (#234).
+* **TikTok:** Nascondi il pulsante Scorrimento automatico di TikTok nasconde anche l'interruttore Auto scroll e il pulsante tondo Auto scroll in alto a destra su tablet e pieghevoli aperti (#234).
 
 * **TikTok:** Il README ora dice di patchare il bundle di 47.5.3 sul telefono e l'APK sul computer.
 
