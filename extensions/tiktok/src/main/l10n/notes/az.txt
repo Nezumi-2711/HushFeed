@@ -62,6 +62,7 @@
 * **TikTok:** Ekran yazısı Android-dən yalnız yamaqlanmış tətbiqin səsini tutmağı istəyir.
 * **TikTok:** Service+ təmizlənməsi TikTok-un göstərdiyi eyni ilk LIVE önizləmə elementini yoxlayır (#94).
 * **TikTok:** Şərh fasiləsi TikTok-un ilk irəliləyiş yenilənməsindən əvvəl ilk kadrın oynadığını bilə bilir (#151).
+* **TikTok:** TikTok-un Auto scroll düyməsini gizlədin videonun sağ yuxarısındakı yumru Auto scroll düyməsini də gizlədir (#234).
 
 ## 0.79.0 (2026-10-24)
 
@@ -93,7 +94,7 @@
 
 * **TikTok:** Saxlanılan videolara təfərrüatlarını etiket kimi yazın artıq başlığı, yaradıcını, tarixi və linki saxlanılan videolara həqiqətən əlavə edir.
 
-* **TikTok:** TikTok-un Auto scroll düyməsini gizlədin planşetlərdə və açılmış qatlanan telefonlarda Auto scroll açarını və sağ yuxarıdakı yumru Auto scroll düyməsini də gizlədir (#234).
+* **TikTok:** TikTok-un Auto scroll düyməsini gizlədin planşetlərdə və açılmış qatlanan telefonlarda Auto scroll açarını da gizlədir (#234).
 
 * **TikTok:** README artıq telefonda 47.5.3 paketini, kompüterdə isə APK-nı yamalamağı deyir.
 

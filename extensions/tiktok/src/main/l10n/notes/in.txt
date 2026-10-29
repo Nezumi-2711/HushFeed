@@ -62,6 +62,7 @@
 * **TikTok:** Perekaman layar meminta Android menangkap suara aplikasi yang dipatch saja.
 * **TikTok:** Pembersihan Service+ memeriksa entri pertama pratinjau LIVE yang sama dengan yang ditampilkan TikTok (#94).
 * **TikTok:** Jeda komentar bisa mengetahui bahwa frame pertama sedang diputar sebelum pembaruan progres pertama dari TikTok (#151).
+* **TikTok:** Sembunyikan tombol Auto scroll TikTok juga menyembunyikan tombol bulat Auto scroll di kanan atas video (#234).
 
 ## 0.79.0 (2026-10-24)
 
@@ -93,7 +94,7 @@
 
 * **TikTok:** Beri tag detail pada video yang disimpan sekarang benar-benar menambahkan judul, kreator, tanggal, dan tautan ke video yang disimpan.
 
-* **TikTok:** Sembunyikan tombol Auto scroll TikTok juga menyembunyikan sakelar Auto scroll dan tombol bulat Auto scroll di kanan atas di tablet dan ponsel lipat yang terbuka (#234).
+* **TikTok:** Sembunyikan tombol Auto scroll TikTok juga menyembunyikan sakelar Auto scroll di tablet dan ponsel lipat yang terbuka (#234).
 
 * **TikTok:** README sekarang menyarankan mem-patch bundle 47.5.3 di ponsel dan APK di komputer.
 

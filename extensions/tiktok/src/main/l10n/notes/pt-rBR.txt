@@ -62,6 +62,7 @@
 * **TikTok:** A gravação de tela pede ao Android para capturar só o som do app modificado.
 * **TikTok:** A limpeza do Service+ confere a mesma primeira entrada de prévia de LIVE que o TikTok mostra (#94).
 * **TikTok:** A pausa dos comentários consegue saber que o primeiro quadro está tocando antes da primeira atualização de progresso do TikTok (#151).
+* **TikTok:** Esconder o botão Auto scroll do TikTok também esconde o botão redondo de Auto scroll no canto superior direito do vídeo (#234).
 
 ## 0.79.0 (2026-10-24)
 
@@ -93,7 +94,7 @@
 
 * **TikTok:** Marcar os vídeos salvos com seus detalhes agora adiciona de verdade o título, o criador, a data e o link aos vídeos salvos.
 
-* **TikTok:** Esconder o botão Auto scroll do TikTok também esconde a chave Auto scroll e o botão redondo de Auto scroll no canto superior direito em tablets e dobráveis abertos (#234).
+* **TikTok:** Esconder o botão Auto scroll do TikTok também esconde a chave Auto scroll em tablets e dobráveis abertos (#234).
 
 * **TikTok:** O README agora diz para aplicar o patch no bundle 47.5.3 no celular e no APK no computador.
 

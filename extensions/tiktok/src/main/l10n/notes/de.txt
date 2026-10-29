@@ -62,6 +62,7 @@
 * **TikTok:** Die Bildschirmaufnahme bittet Android, nur den Ton der gepatchten App aufzunehmen.
 * **TikTok:** Die Service+-Bereinigung prüft denselben ersten LIVE-Vorschau-Eintrag, den TikTok anzeigt (#94).
 * **TikTok:** Die Kommentarpause erkennt, dass das erste Bild läuft, noch vor TikToks erster Fortschrittsmeldung (#151).
+* **TikTok:** TikToks Auto-Scroll-Schaltfläche ausblenden blendet auch die runde Auto-Scroll-Taste oben rechts im Video aus (#234).
 
 ## 0.79.0 (2026-10-24)
 
@@ -93,7 +94,7 @@
 
 * **TikTok:** Gespeicherte Videos mit ihren Details versehen schreibt Titel, Creator, Datum und Link jetzt wirklich in gespeicherte Videos.
 
-* **TikTok:** TikToks Auto-Scroll-Schaltfläche ausblenden blendet auch den Auto-Scroll-Schalter und die runde Auto-Scroll-Taste oben rechts auf Tablets und aufgeklappten Foldables aus (#234).
+* **TikTok:** TikToks Auto-Scroll-Schaltfläche ausblenden blendet auch den Auto-Scroll-Schalter auf Tablets und aufgeklappten Foldables aus (#234).
 
 * **TikTok:** Die README sagt jetzt, dass du auf dem Telefon das Bundle von 47.5.3 patchst und am Computer die APK.
 

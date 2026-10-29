@@ -73,6 +73,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** Screen recording now asks Android to capture only the patched app's sound.
 * **TikTok:** Service+ cleanup checks the first entry in a LIVE preview now, the same one TikTok decides to show (#94).
 * **TikTok:** The comment pause can tell the first frame is playing before TikTok sends its first progress update (#151).
+* **TikTok:** `Hide TikTok's Auto scroll button` also hides the round Auto scroll button TikTok shows at the top right of the video on some devices (#234).
 
 ## 0.79.0 (2026-10-24)
 
@@ -92,7 +93,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** New `Blur the video behind the bar` switch under `Liquid glass look`. It frosts the glass pill with a soft blur of the video behind it, off by default, on Android 12 and up (#231).
 * **TikTok:** With `Dark LIVE panels in dark mode` on, the light pieces left in a LIVE room go dark too. The navigation bar under the menu a long press in a room opens stays dark now, even when TikTok turns it light again. The tiles in the host's profile card and the fan club's tab strip and card turn dark, and the text and icons on them turn light so they stay readable (#159).
 * **TikTok:** `Tag saved videos with their details` now tags the videos TikTok actually sends. Their files carry a short list of TikTok's own fields where the tags go, and the switch left those files alone, so every save came out with no title, creator, date or link. The tags go in now, and TikTok's fields stay in the file beside them.
-* **TikTok:** `Hide TikTok's Auto scroll button` also hides the Auto scroll switch that tablets and unfolded foldables show beside the avatar on each video, plus the round Auto scroll button some of them show at the video's top right. It works with `Auto-advance videos` off now. Before, both stayed, and the hide only worked while Auto-advance was on (#234).
+* **TikTok:** `Hide TikTok's Auto scroll button` also hides the Auto scroll switch that tablets and unfolded foldables show beside the avatar on each video, and it works with `Auto-advance videos` off now. Before, that switch stayed, and the hide only worked while Auto-advance was on (#234).
 * **TikTok:** The README's install steps now say which 47.5.3 file to get. Morphe Manager on a phone should patch the bundle (`.apkm`), because on a device with 3 GB Manager ran out of memory on the APK and patched the bundle in about a minute. A computer should patch the APK. The out of memory tip under Patching stalls partway points to the bundle too, and step 6 says to uninstall the Google Play TikTok first, which logs you out.
 * **TikTok:** With `Keep Clear display across videos` off, the tabs, the caption and the buttons now come back as your swipe lets go, so the next video arrives with them. Before, it settled full screen first and then jumped when they showed up again. A Clear display you turn on from TikTok's long-press menu also stays on now instead of switching itself off as the menu closes (#232).
 * **TikTok:** With `See-through bottom bar` on, the caption, the buttons and the search bar don't drop down over the tabs for a moment after each swipe anymore (#232).

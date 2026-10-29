@@ -62,6 +62,7 @@
 * **TikTok:** Screen recording asks Android to capture only the patched app's sound.
 * **TikTok:** Service+ cleanup checks the same first LIVE preview entry TikTok shows (#94).
 * **TikTok:** The comment pause can tell the first frame is playing before TikTok's first progress update (#151).
+* **TikTok:** Hide TikTok's Auto scroll button also hides the round Auto scroll button at the video's top right (#234).
 
 ## 0.79.0 (2026-10-24)
 
@@ -93,7 +94,7 @@
 
 * **TikTok:** Tag saved videos with their details now really adds the title, creator, date and link to saved videos.
 
-* **TikTok:** Hide TikTok's Auto scroll button also hides the Auto scroll switch and the round top-right Auto scroll button on tablets and unfolded foldables (#234).
+* **TikTok:** Hide TikTok's Auto scroll button also hides the Auto scroll switch on tablets and unfolded foldables (#234).
 
 * **TikTok:** The README now says to patch the 47.5.3 bundle on a phone and the APK on a computer.
 
