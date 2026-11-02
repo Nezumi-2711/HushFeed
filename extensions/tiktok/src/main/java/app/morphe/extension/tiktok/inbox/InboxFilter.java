@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,7 +31,9 @@ import app.morphe.extension.tiktok.blockauthor.FeedVisibility;
 import app.morphe.extension.tiktok.navigation.FrontWindow;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -66,20 +69,20 @@ import java.util.WeakHashMap;
  * </pre>
  */
 public final class InboxFilter {
-    private static final String[] LIST_IDS = {"47.5.3:l89"};
-    private static final String[] SYSTEM_ROW_IDS = {"47.5.3:v0g"};
-    private static final String[] CHAT_ROW_IDS = {"47.5.3:w3x"};
+    private static final String[] LIST_IDS = {"47.6.3:l7k"};
+    private static final String[] SYSTEM_ROW_IDS = {"47.6.3:uz0"};
+    private static final String[] CHAT_ROW_IDS = {"47.6.3:w22"};
     private static final String[] MESSAGE_REQUESTS_IDS = {"tv_request_unread_count"};
-    private static final String[] SAY_HI_ROW_IDS = {"47.5.3:oo6"};
-    private static final String[] SYSTEM_ROW_TITLE_IDS = {"47.5.3:br_"};
+    private static final String[] SAY_HI_ROW_IDS = {"47.6.3:on0"};
+    private static final String[] SYSTEM_ROW_TITLE_IDS = {"47.6.3:bt2"};
     private static final String[] USER_ROW_TITLE_IDS = {"user_name"};
-    private static final String[] STORIES_TITLE_IDS = {"47.5.3:wtk"};
-    private static final String[] SUGGESTED_HEADER_IDS = {"47.5.3:q5n"};
-    private static final String[] SUGGESTED_TITLE_IDS = {"47.5.3:u4_"};
-    private static final String[] SUGGESTED_REMOVE_IDS = {"47.5.3:fyu"};
-    private static final String[] HEADER_ADD_PEOPLE_IDS = {"47.5.3:fh0"};
-    private static final String[] HEADER_SEARCH_IDS = {"47.5.3:kpy"};
-    private static final String[] HEADER_ACTIVITY_STATUS_IDS = {"47.5.3:l8a"};
+    private static final String[] STORIES_TITLE_IDS = {"47.6.3:wrs"};
+    private static final String[] SUGGESTED_HEADER_IDS = {"47.6.3:q4m"};
+    private static final String[] SUGGESTED_TITLE_IDS = {"47.6.3:u35"};
+    private static final String[] SUGGESTED_REMOVE_IDS = {"47.6.3:fza"};
+    private static final String[] HEADER_ADD_PEOPLE_IDS = {"47.6.3:fhp"};
+    private static final String[] HEADER_SEARCH_IDS = {"47.6.3:kpb"};
+    private static final String[] HEADER_ACTIVITY_STATUS_IDS = {"47.6.3:l7m"};
 
     /** One dismissal at a time, so bulk clearing does not hammer TikTok's API. */
     private static final long DISMISS_INTERVAL_MS = 300L;
@@ -127,6 +130,8 @@ public final class InboxFilter {
 
     /** Rows recognised as the stories tray, retained until a recycled row changes shape. */
     private static final WeakHashMap<View, Boolean> STORY_ROWS = new WeakHashMap<>();
+    /** Each row class's answer, since asking a class that isn't the tray throws on every layout. */
+    private static final Map<Class<?>, Boolean> STORIES_TRAY_CLASSES = new HashMap<>();
 
     /** Header controls a switch hid, the only ones it brings back when turned off. */
     private static final WeakHashMap<View, Boolean> HIDDEN_HEADER_CONTROLS = new WeakHashMap<>();
@@ -367,7 +372,7 @@ public final class InboxFilter {
      * reuses it for another item.
      */
     private static void applyStoriesOnly(Activity activity, View row) {
-        boolean stories = findWithin(activity, row, STORIES_TITLE_IDS) != null;
+        boolean stories = isStoriesTray(activity, row);
         boolean wasStories = STORY_ROWS.remove(row) != null;
         if (stories) {
             STORY_ROWS.put(row, Boolean.TRUE);
@@ -377,9 +382,36 @@ public final class InboxFilter {
         }
     }
 
+    /**
+     * The tray is the row that holds the horizontal avatar titles. It's its own list inside the
+     * Inbox's list with no id, and on its first pass its cells aren't there yet, so the class is
+     * what recognizes it then: left for a later pass, the rows below it jump up when it goes (#315).
+     */
+    private static boolean isStoriesTray(Activity activity, View row) {
+        return findWithin(activity, row, STORIES_TITLE_IDS) != null || hasStoryHighlights(row.getClass());
+    }
+
+    private static boolean hasStoryHighlights(Class<?> rowClass) {
+        Boolean known = STORIES_TRAY_CLASSES.get(rowClass);
+        if (known != null) {
+            return known;
+        }
+        boolean found = false;
+        // TikTok declares it private, which getMethod can't see.
+        for (Class<?> type = rowClass; type != null && type != View.class && !found; type = type.getSuperclass()) {
+            try {
+                type.getDeclaredMethod("getStoryHighlightCount");
+                found = true;
+            } catch (NoSuchMethodException notHere) {
+                // The next class up may declare it.
+            }
+        }
+        STORIES_TRAY_CLASSES.put(rowClass, found);
+        return found;
+    }
+
     private static boolean shouldHideRow(Activity activity, View row) {
-        // The stories tray is the row that holds the horizontal avatar titles.
-        if (findWithin(activity, row, STORIES_TITLE_IDS) != null) {
+        if (isStoriesTray(activity, row)) {
             return Settings.HIDE_INBOX_STORIES.get();
         }
 
@@ -784,6 +816,7 @@ public final class InboxFilter {
                 row.setVisibility(View.GONE);
                 params.height = 0;
                 row.setLayoutParams(params);
+                skipThisFrame(row);
             }
         } else {
             int restored = original != null ? original : ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -793,6 +826,32 @@ public final class InboxFilter {
                 row.setLayoutParams(params);
             }
         }
+    }
+
+    /**
+     * This runs from the layout listener, after the list placed its rows around this one, and the
+     * frame that follows would draw that gap before the next pass closes it, which is the Inbox's
+     * flicker (#315). Android lays out again straight away when a pre-draw listener says no. The
+     * flag makes sure a listener that can't remove itself only says no the once.
+     */
+    private static void skipThisFrame(View row) {
+        if (!row.isAttachedToWindow()) {
+            return;
+        }
+        ViewTreeObserver observer = row.getViewTreeObserver();
+        observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            private boolean skipped;
+
+            @Override
+            public boolean onPreDraw() {
+                if (observer.isAlive()) {
+                    observer.removeOnPreDrawListener(this);
+                }
+                boolean draw = skipped;
+                skipped = true;
+                return draw;
+            }
+        });
     }
 
     private static void setHidden(View view, boolean hidden) {

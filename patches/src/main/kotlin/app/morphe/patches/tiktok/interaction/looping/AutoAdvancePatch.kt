@@ -16,6 +16,7 @@ import app.morphe.patcher.patch.PatchException
 import app.morphe.patches.tiktok.misc.settings.configurableBytecodePatch as bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patches.shared.compat.AppCompatibilities
+import app.morphe.patches.tiktok.interaction.resume.FeedPlayCompletedFingerprint
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
@@ -239,12 +240,12 @@ internal fun MutableMethod.answerTabletGate(gateName: String, services: Collecti
     return reads.size
 }
 
-// The feed gate and the panel entry are two different flags. Both are anchored on the string
-// rather than on the class that reads it, because those names change every build. Parameter and
-// return types match by prefix, so "L" is any object: the factory that builds the panel entry
-// takes one and returns one, and the facade gate beside it takes none and returns Z.
+// The feed gate and the panel entry are two different flags. The panel entry is anchored on the
+// string rather than on the class that reads it, because those names change every build.
+// Parameter and return types match by prefix, so "L" is any object: the factory that builds the
+// panel entry takes one and returns one. The bottom bar facade read the same flag through a ()Z
+// of its own through 47.5.3; 47.6.3 dropped that read, so the factory is the one place left.
 private object PanelAction : Fingerprint(returnType = "L", parameters = listOf("L"), strings = listOf("panel_auto_scroll"))
-private object PanelGate : Fingerprint(returnType = "Z", parameters = emptyList(), strings = listOf("panel_auto_scroll"))
 private object Completion : Fingerprint(definingClass = COMPONENT, name = "onPlayCompleted",
     returnType = "V", parameters = listOf("Ljava/lang/String;"))
 private object Stop : Fingerprint(definingClass = COMPONENT, returnType = "V",
@@ -447,6 +448,10 @@ val autoAdvancePatch = bytecodePatch(
             .addInstruction(0, "invoke-static/range {p0 .. p0}, $EXTENSION->onPageResume(Ljava/lang/Object;)V")
         completed.addInstruction(0,
             "invoke-static/range {p0 .. p1}, $EXTENSION->beforeCompletion(Ljava/lang/Object;Ljava/lang/String;)V")
+        // A video opened from a profile plays on a page with no component to hook, and the player
+        // reports its end all the same (#311).
+        FeedPlayCompletedFingerprint.method.addInstruction(0,
+            "invoke-static/range { p1 .. p1 }, Lapp/morphe/extension/tiktok/interaction/DetailAutoAdvance;->onPlayCompleted(Ljava/lang/String;)V")
         val available = Availability.method
         val returns = available.implementationOrPatchException("Auto advance").instructions
             .withIndex().filter { it.value.opcode == Opcode.RETURN }
@@ -461,8 +466,8 @@ val autoAdvancePatch = bytecodePatch(
             """)
         }
         // TikTok's own Auto scroll action in the video panel hangs off a second flag, so an
-        // account outside the rollout never sees the entry however the feed gate answers. Both
-        // reads go through the same switch.
+        // account outside the rollout never sees the entry however the feed gate answers. That
+        // read goes through the same switch.
         val panelAction = PanelAction.method
         val panelInstructions = panelAction.implementationOrPatchException("Auto advance").instructions.toList()
         val panelStringIndex = panelInstructions.indexOfFirst {
@@ -485,23 +490,6 @@ val autoAdvancePatch = bytecodePatch(
                 move-result v$panelRegister
             """,
         )
-
-        val panelGate = PanelGate.method
-        val panelReturns = panelGate.implementationOrPatchException("Auto advance").instructions.withIndex()
-            .filter { it.value.opcode == Opcode.RETURN }
-        check(panelReturns.isNotEmpty()) {
-            "Auto advance: ${panelGate.name} returns nothing this can answer for."
-        }
-        panelReturns.asReversed().forEach { (index, instruction) ->
-            val register = (instruction as OneRegisterInstruction).registerA
-            panelGate.addInstructionsAtControlFlowLabel(
-                index,
-                """
-                    invoke-static/range {v$register .. v$register}, $EXTENSION->panelAvailable(Z)Z
-                    move-result v$register
-                """,
-            )
-        }
 
         // Tablets and unfolded foldables get TikTok's Auto scroll as a switch or button in the
         // video's right-hand column, above or below the avatar. The column adds it only when the

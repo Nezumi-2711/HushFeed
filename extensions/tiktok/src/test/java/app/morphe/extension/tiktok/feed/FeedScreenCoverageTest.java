@@ -145,7 +145,7 @@ public class FeedScreenCoverageTest {
         // Buttons on videos: Hushfeed's own overlay, attached to whichever feed window is in
         // front, main or detail. It isn't drawn in a LIVE room.
         for (String button : new String[]{"block_author_button", "local_hide_button",
-                "block_sound_button", "not_interested_button", "feed_mute_button"}) {
+                "block_sound_button", "not_interested_button", "feed_mute_button", "download_button"}) {
             put(button, YES, YES, NONE);
         }
 
@@ -153,6 +153,8 @@ public class FeedScreenCoverageTest {
         // which both windows share.
         put("feed_description_text_size", YES, YES, NONE);
         put("feed_author_text_size", YES, YES, NONE);
+        put("feed_text_color", YES, YES, NONE);
+        put("feed_text_backdrop", YES, YES, NONE);
         put("always_show_publish_date", YES, YES, NONE);
         put("publish_date_exact_time", YES, YES, NONE);
         // Both only shape the exact time, so they reach where it does.
@@ -188,6 +190,11 @@ public class FeedScreenCoverageTest {
         put("hide_footnotes", YES, YES, NONE);
         // The Following tab's LIVE row is the main feed's; an opened video has none (#262).
         put("hide_following_live_row", YES, NONE, NONE);
+        // All and Create sit in the Following row (and the Inbox's, which is no video window).
+        put("hide_following_all_button", YES, NONE, NONE);
+        put("hide_story_create", YES, NONE, NONE);
+        // The chip is a cell component, and the feed and the detail pager build the same cell (#319).
+        put("hide_repost_chip", YES, YES, NONE);
         put("hide_visual_search", YES, YES, NONE);
         // The bar is an opened post's: the detail pager's videos and, on 47.1.4, a photo from
         // search in the main activity. The main feed has the tabs there.
@@ -437,14 +444,14 @@ public class FeedScreenCoverageTest {
         int cellId = 0x7f0a1c01;
         Map<String, Integer> ids = new LinkedHashMap<>();
         ids.put("desc", 0x7f0a1c02);
-        ids.put("47.5.3:o8s", 0x7f0a1c03);
-        ids.put("47.5.3:lke", 0x7f0a1c04);
-        ids.put("47.5.3:f8p", 0x7f0a1c05);
+        ids.put("47.6.3:o7p", 0x7f0a1c03);
+        ids.put("47.6.3:ljl", 0x7f0a1c04);
+        ids.put("47.6.3:f9f", 0x7f0a1c05);
         Map<BooleanSetting, String> switches = new LinkedHashMap<>();
         switches.put(Settings.HIDE_FEED_CAPTION, "desc");
-        switches.put(Settings.HIDE_FEED_MUSIC, "47.5.3:o8s");
-        switches.put(Settings.HIDE_FEED_ACTION_BAR, "47.5.3:lke");
-        switches.put(Settings.HIDE_FEED_SURVEYS, "47.5.3:f8p");
+        switches.put(Settings.HIDE_FEED_MUSIC, "47.6.3:o7p");
+        switches.put(Settings.HIDE_FEED_ACTION_BAR, "47.6.3:ljl");
+        switches.put(Settings.HIDE_FEED_SURVEYS, "47.6.3:f9f");
         for (BooleanSetting setting : switches.keySet()) {
             Coverage coverage = TABLE.get(setting.key);
             assertNotNull(setting.key, coverage);

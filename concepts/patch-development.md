@@ -1,6 +1,6 @@
 # App and patch development map
 
-This guide maps the TikTok app Hushfeed modifies to the code and release checks that make a patch. Its version and patch counts were last synced with the source on 2026-10-31. The generated [patch catalog](../patches-list.json) is the current source of truth for patch names and compatibility.
+This guide maps the TikTok app Hushfeed modifies to the code and release checks that make a patch. Its version and patch counts were last synced with the source on 2026-11-01. The generated [patch catalog](../patches-list.json) is the current source of truth for patch names and compatibility.
 
 ## What Hushfeed ships
 
@@ -8,7 +8,7 @@ Hushfeed is a Morphe patch bundle, not a TikTok APK. Morphe Manager takes a TikT
 
 Source snapshot: version 0.80.0, 143 patch entries. Those come from gradle.properties and patches-list.json.
 
-Published bundle: version 0.79.0, 141 patches. Those come from patches-bundle.json and the release it names.
+Published bundle: version 0.80.0, 143 patches. Those come from patches-bundle.json and the release it names.
 
 The source runs ahead of the published bundle until the next release ships. The index moves only after a new bundle is published and verified, which is the release sequence described in CONTRIBUTING.md. Do not hand-edit the index to make the two match.
 
@@ -20,8 +20,8 @@ Keep every Unreleased bullet under a `###` group. The release cutter preserves t
 | --- | --- |
 | App | Global TikTok |
 | Package | com.zhiliaoapp.musically |
-| Supported version | 47.5.3 |
-| Version code | 2024705030 |
+| Supported version | 47.6.3 |
+| Version code | 2024706030 |
 | APK signer SHA-256 | 9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba |
 | Extension minimum Android API | 23 |
 
