@@ -658,6 +658,8 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting STOP_VIDEO_LOOPING = new BooleanSetting("stop_video_looping", FALSE, true);
     /** Keeps the full-screen viewer on a video when it ends; the Stay on the video in full screen patch. */
     public static final BooleanSetting FULL_SCREEN_HOLD = new BooleanSetting("full_screen_hold", FALSE, true);
+    /** Brings the videos after this one along into the full screen viewer. */
+    public static final BooleanSetting FULL_SCREEN_NEXT_VIDEOS = new BooleanSetting("full_screen_next_videos", FALSE);
     /** Replays a story instead of moving on when it ends; the Story controls patch. */
     public static final BooleanSetting STORY_LOOP = new BooleanSetting("story_loop", FALSE, true);
     /** Keeps a photo story on screen until you tap or swipe; the Story controls patch. */
@@ -1185,6 +1187,8 @@ public class Settings extends BaseSettings {
      */
     public static final IntegerSetting SEEN_VIDEO_MARK_PERCENT =
             new IntegerSetting("seen_video_mark_percent", 0).withRange(0, 90);
+    /** A list of the videos watched, with who posted them and their captions, on the phone (#172). */
+    public static final BooleanSetting LOCAL_WATCH_HISTORY = new BooleanSetting("local_watch_history", FALSE);
     public static final BooleanSetting HIDE_PLAYLIST_BAR = new BooleanSetting("hide_playlist_bar", FALSE, true);
     public static final BooleanSetting HIDE_EVENT_BADGE = new BooleanSetting("hide_event_badge", FALSE, true);
     public static final BooleanSetting HIDE_INSERTED_CARDS = new BooleanSetting("hide_inserted_cards", FALSE, true);
@@ -1215,6 +1219,14 @@ public class Settings extends BaseSettings {
     // Ghost mode is on, so it sits under that switch.
     public static final BooleanSetting GHOST_HIDE_ONLINE_STATUS =
             new BooleanSetting("ghost_hide_online_status", FALSE, false, Setting.parent(GHOST_MODE));
+    // One switch per report Ghost mode holds back, so a reader can keep some and let others go.
+    // On by default: turning Ghost mode on still holds back all three, as it did before they existed.
+    public static final BooleanSetting GHOST_HIDE_STORY_VIEWS =
+            new BooleanSetting("ghost_hide_story_views", TRUE, false, Setting.parent(GHOST_MODE));
+    public static final BooleanSetting GHOST_HIDE_PROFILE_VISITS =
+            new BooleanSetting("ghost_hide_profile_visits", TRUE, false, Setting.parent(GHOST_MODE));
+    public static final BooleanSetting GHOST_HIDE_TYPING =
+            new BooleanSetting("ghost_hide_typing", TRUE, false, Setting.parent(GHOST_MODE));
     public static final BooleanSetting DISABLE_ANALYTICS = new BooleanSetting("disable_analytics", FALSE);
     // Stop on-device AI profiling, in the default selection with this off. TikTok starts the
     // engine during launch, so a restart applies it.
@@ -1448,6 +1460,20 @@ public class Settings extends BaseSettings {
             new BooleanSetting("enable_live_search", FALSE, true);
     public static final BooleanSetting SIM_SPOOF = new BooleanSetting("simspoof", FALSE, true);
     public static final StringSetting SIM_SPOOF_ISO = new StringSetting("simspoof_iso", "us");
+    // The same two switches as the store row, and the row names the one to turn on the same way.
+    public static final StringSetting SIM_SPOOF_TIME_ZONE = new StringSetting(
+            "simspoof_time_zone",
+            "",
+            new Setting.Availability() {
+                @Override public boolean isAvailable() {
+                    return SIM_SPOOF.savedValue() && REGION_SPOOF.savedValue();
+                }
+
+                @Override public java.util.List<Setting<?>> getParentSettings() {
+                    return java.util.Collections.singletonList(REGION_SPOOF.savedValue() ? SIM_SPOOF : REGION_SPOOF);
+                }
+            }
+    );
     public static final StringSetting SIMSPOOF_MCCMNC = new StringSetting("simspoof_mccmnc", "310260");
     public static final StringSetting SIMSPOOF_OP_NAME = new StringSetting("simspoof_op_name", "T-Mobile");
     // Read by the region patch's request hooks as each For You request is built, so no restart.
@@ -1490,6 +1516,9 @@ public class Settings extends BaseSettings {
                 LOCAL_HIDE_BUTTON_POSITION, BLOCK_SOUND_BUTTON_POSITION, NOT_INTERESTED_BUTTON_POSITION,
                 FEED_MUTE_BUTTON_POSITION, DOWNLOAD_BUTTON_POSITION, COMMENT_TRANSLATE_BUTTON_TURNED_ON,
                 SHARE_ACTION_CATALOG, PROFILE_SHORTCUT_CATALOG, POPUP_LABEL_CATALOG, DIAGNOSTIC_REPORT_SALT, AUTO_STREAK_STATE,
+                // The settings screen still searches while paused. Answering the empty default
+                // hid the recent searches, and the next search saved itself over all of them.
+                RECENT_SETTINGS_SEARCHES,
                 // The budget's day is worked out from this hour. Paused, the budget counts
                 // nothing and holds nothing, but its record still has to name the right day.
                 SESSION_BUDGET_RESET_HOUR);
