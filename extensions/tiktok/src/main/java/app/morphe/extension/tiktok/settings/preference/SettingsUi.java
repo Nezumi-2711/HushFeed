@@ -53,7 +53,15 @@ import app.morphe.extension.shared.Utils;
 import app.morphe.extension.tiktok.settings.L10n;
 
 public final class SettingsUi {
-    public static final @ColorInt int ACCENT = Color.rgb(255, 79, 135);
+    /*
+     * Every ratio below is WCAG contrast against the surface the colour sits on. Text needs
+     * 4.5:1 on the page, a card and a dialog; a heading aims for 7:1 and never goes under 4.5;
+     * a switch track, a field's outline and an icon need 3:1. ScreenColorsAccessibilityTest
+     * measures every pair in both themes, so a change here that breaks one fails there.
+     */
+
+    /** TikTok's red: 5.71:1 on the black page and card, 5.12:1 on the dark surface, 4.66:1 lifted. */
+    public static final @ColorInt int ACCENT = Color.rgb(254, 44, 85);
     public static final @ColorInt int DARK_BACKGROUND = Color.BLACK;
     public static final @ColorInt int DARK_SURFACE = Color.rgb(17, 17, 21);
     public static final @ColorInt int DARK_SURFACE_LIFTED = Color.rgb(27, 27, 33);
@@ -70,17 +78,53 @@ public final class SettingsUi {
     public static final @ColorInt int LIGHT_BORDER = Color.argb(255, 210, 210, 210);
     public static final @ColorInt int LIGHT_DIVIDER = Color.argb(255, 224, 224, 224);
     public static final @ColorInt int LIGHT_TEXT_PRIMARY = Color.rgb(22, 22, 28);
-    public static final @ColorInt int LIGHT_TEXT_SECONDARY = Color.rgb(87, 87, 98);
+    /**
+     * 10.24:1 on white and 9.43:1 on the light page. A greyed row's summary is this at 75%, which
+     * still reads at 4.91:1 on a white card; the old (87, 87, 98) came out at 3.86:1 there.
+     */
+    public static final @ColorInt int LIGHT_TEXT_SECONDARY = Color.rgb(64, 64, 74);
     public static final @ColorInt int LIGHT_TEXT_DISABLED = Color.argb(255, 117, 117, 125);
     public static final @ColorInt int LIGHT_ERROR = Color.rgb(180, 35, 61);
 
-    public static final int LIGHT_ACCENT = Color.rgb(184, 22, 77);
+    /**
+     * TikTok's red taken down until it carries text on white: 5.39:1 on white, 4.96:1 on the
+     * light page, and white on it is 5.39:1.
+     */
+    public static final @ColorInt int LIGHT_ACCENT = Color.rgb(214, 0, 42);
 
-    static final @ColorInt int DARK_SWITCH_TRACK_OFF = Color.rgb(100, 100, 111);
+    /**
+     * Section headings, the bar's back arrow, row icons and focus outlines. TikTok's cyan, 11.79:1
+     * on black, 10.58:1 on the dark surface and 9.62:1 on the icon tile.
+     */
+    public static final @ColorInt int DARK_HEADING = Color.rgb(32, 213, 236);
+    /** The same cyan darkened for a light page: 7.10:1 on it, 7.72:1 on white, 6.62:1 on its tile. */
+    public static final @ColorInt int LIGHT_HEADING = Color.rgb(5, 93, 90);
+    /** A field's placeholder: 6.16:1 on black, 5.52:1 on the surface, quieter than a summary (8.92:1). */
+    public static final @ColorInt int DARK_HINT = Color.rgb(138, 138, 150);
+    /** 4.63:1 on the light page and 5.04:1 on white, quieter than a summary (9.43:1). */
+    public static final @ColorInt int LIGHT_HINT = Color.rgb(110, 110, 121);
+    /** The tile behind a header icon. */
+    public static final @ColorInt int DARK_ICON_SURFACE = DARK_SURFACE_LIFTED;
+    public static final @ColorInt int LIGHT_ICON_SURFACE = Color.rgb(237, 237, 242);
+    /** Text and a switch thumb on the accent: black on TikTok's red is 5.71:1 (white is 3.68:1). */
+    public static final @ColorInt int DARK_ON_ACCENT = Color.BLACK;
+    /** White on {@link #LIGHT_ACCENT}, 5.39:1. */
+    public static final @ColorInt int LIGHT_ON_ACCENT = Color.WHITE;
+    /** Cards and dialogs on the black page are black too, set apart by their outline alone. */
+    public static final @ColorInt int DARK_CARD = Color.BLACK;
+    public static final @ColorInt int DARK_DIALOG = Color.BLACK;
+    public static final @ColorInt int LIGHT_CARD = LIGHT_SURFACE;
+    public static final @ColorInt int LIGHT_DIALOG = LIGHT_SURFACE;
+
+    /**
+     * An unchecked switch's track: 3.93:1 on black, 3.21:1 on the lifted surface; white on it
+     * 5.34:1. The old (100, 100, 111) came out at 2.93:1 on the lifted surface.
+     */
+    static final @ColorInt int DARK_SWITCH_TRACK_OFF = Color.rgb(106, 106, 117);
+    /** 4.24:1 on the light page, 4.62:1 on white; white on it 4.62:1. */
     static final @ColorInt int LIGHT_SWITCH_TRACK_OFF = Color.rgb(116, 116, 127);
+    /** An unchecked switch's thumb in either theme. */
     static final @ColorInt int SWITCH_THUMB = Color.WHITE;
-    static final @ColorInt int DARK_SWITCH_THUMB_STROKE = Color.rgb(225, 225, 230);
-    static final @ColorInt int LIGHT_SWITCH_THUMB_STROKE = Color.rgb(116, 116, 127);
 
     public static @ColorInt int rippleTint() {
         return (accent() & 0x00FFFFFF) | 0x26000000;
@@ -118,7 +162,6 @@ public final class SettingsUi {
     /** Settings geometry stays independent of the controls drawn over a playing video. */
     public static final int RADIUS_SETTINGS_CARD = 12;
     public static final int RADIUS_SETTINGS_FIELD = 12;
-    public static final int RADIUS_PILL = 24;
     /** Taller than any bar TikTok draws, so a pill's ends stay round at whatever height it's given. */
     public static final int RADIUS_ROUND_ENDS = 100;
 
@@ -202,13 +245,13 @@ public final class SettingsUi {
     public static @ColorInt int accent() { return isDarkMode() ? ACCENT : LIGHT_ACCENT; }
 
     /**
-     * What a filled chip is painted with. The plain accent is a light pink, and white on it is
-     * 3.1:1, under what small text needs. The darker accent carries white in either theme, so
-     * a badge and a selected pill use it and stay readable.
+     * What a filled chip is painted with. White on the plain accent is 3.68:1, under what small
+     * text needs. The darker accent carries white in either theme, so a badge and a selected
+     * chip use it and stay readable.
      */
     public static @ColorInt int badgeFill() { return LIGHT_ACCENT; }
 
-    /** Text on {@link #badgeFill()}: 6.4:1, the same in both themes. */
+    /** Text on {@link #badgeFill()}: 5.39:1, the same in both themes. */
     public static @ColorInt int badgeText() { return Color.WHITE; }
 
     /**
@@ -217,7 +260,7 @@ public final class SettingsUi {
      */
     public static final @ColorInt int OVERLAY_ACCENT = Color.rgb(254, 44, 85);
 
-    /** The same red, dark enough to read as text on a white surface (6.4:1 rather than 3.7:1). */
+    /** The same red, dark enough to read as text on a white surface (5.39:1 rather than 3.68:1). */
     public static @ColorInt int overlayAccentOn(boolean darkSurface) {
         return darkSurface ? OVERLAY_ACCENT : LIGHT_ACCENT;
     }
@@ -443,7 +486,7 @@ public final class SettingsUi {
     static final int NARROW_TITLE_EMS = 10;
 
     /**
-     * Gives a switch row the shape its width can hold. The 44 dp switch and its 16 dp gap sit
+     * Gives a switch row the shape its width can hold. The 40 dp switch and its 16 dp gap sit
      * beside the text, and at twice the text size on a 320 dp phone that leaves the title about
      * a dozen characters a line: "Kommentare automatisch übersetzen" came out as Kom-, mentare,
      * automatisch, übersetzen, with the summary wrapped in the same narrow column. When the
@@ -464,7 +507,16 @@ public final class SettingsUi {
         if (!(title.getParent() instanceof RelativeLayout) || summary.getParent() != title.getParent()) return;
         if (findSwitch(widget) == null) return;
         RelativeLayout text = (RelativeLayout) title.getParent();
-        int column = rowWidth - row.getPaddingLeft() - row.getPaddingRight() - dp(row.getContext(), 44 + 16);
+        int column = rowWidth - row.getPaddingLeft() - row.getPaddingRight() - dp(row.getContext(), 40 + 16);
+        // The row's icon and the gap after it come out of the same width.
+        View icon = row.findViewById(android.R.id.icon);
+        if (icon != null && icon.getParent() instanceof View && icon.getParent() != row) {
+            View frame = (View) icon.getParent();
+            if (frame.getVisibility() != View.GONE && frame.getLayoutParams() != null
+                    && frame.getLayoutParams().width > 0) {
+                column -= frame.getLayoutParams().width;
+            }
+        }
         boolean narrow = column < title.getTextSize() * NARROW_TITLE_EMS;
         if (narrow == (widget.getParent() == text)) return;
         if (narrow) {
@@ -509,26 +561,54 @@ public final class SettingsUi {
                 && control.getTrackDrawable() != null && control.getThumbDrawable() != null) {
             return;
         }
-        control.setTag(TAG_SWITCH_PAINT, isDarkMode());
+        boolean dark = isDarkMode();
+        control.setTag(TAG_SWITCH_PAINT, dark);
+        int on = accentOn(dark);
+        int off = switchOffOn(dark);
+        int onThumb = onAccentOn(dark);
+        // A square-cornered track and thumb on the bundle's radius scale, not a pill: 40 by 24
+        // at the control radius, a 20 dp knob at the badge radius 2 dp inside it.
         StateListDrawable track = new StateListDrawable();
         // Checked-and-disabled first, or the -state_enabled entry below answers for it and a
         // greyed switch looks the same on as off: a reader cannot see what state it will come
         // back in when the parent is turned on again.
         track.addState(new int[]{-android.R.attr.state_enabled, android.R.attr.state_checked},
-                switchShape(context, (accent() & 0x00ffffff) | 0x66000000, 44, 26, 13));
+                switchShape(context, ScreenColors.half(on), 40, 24, RADIUS_CONTROL));
         track.addState(new int[]{-android.R.attr.state_enabled},
-                switchShape(context, border(), 44, 26, 13));
+                switchShape(context, ScreenColors.half(off), 40, 24, RADIUS_CONTROL));
         track.addState(new int[]{android.R.attr.state_checked},
-                switchShape(context, accent(), 44, 26, 13));
-        track.addState(new int[]{}, switchShape(context,
-                isDarkMode() ? DARK_SWITCH_TRACK_OFF : LIGHT_SWITCH_TRACK_OFF, 44, 26, 13));
+                switchShape(context, on, 40, 24, RADIUS_CONTROL));
+        track.addState(new int[]{}, switchShape(context, off, 40, 24, RADIUS_CONTROL));
+        StateListDrawable thumb = new StateListDrawable();
+        thumb.addState(new int[]{-android.R.attr.state_enabled, android.R.attr.state_checked},
+                switchShape(context, ScreenColors.half(onThumb), 20, 20, RADIUS_BADGE));
+        thumb.addState(new int[]{-android.R.attr.state_enabled},
+                switchShape(context, ScreenColors.half(SWITCH_THUMB), 20, 20, RADIUS_BADGE));
+        thumb.addState(new int[]{android.R.attr.state_checked},
+                switchShape(context, onThumb, 20, 20, RADIUS_BADGE));
+        thumb.addState(new int[]{}, switchShape(context, SWITCH_THUMB, 20, 20, RADIUS_BADGE));
+        // Switch draws the thumb from the track's top to its bottom and starts it at the track's
+        // padding, so the bare shapes sat flush with the track's end at full height, and a thumb
+        // the card's colour (white on the light card, black on the dark one) read as a cut-off
+        // block. The layers hold the 20 dp knob 2 dp inside the track on every side, the gap that
+        // makes the badge radius concentric with the control radius: the thumb's 2 dp side
+        // padding lets it overhang a 16 dp slot, and the track's 4 dp padding keeps that overhang
+        // inside the 40 dp track.
+        int gap = dp(context, 2);
+        LayerDrawable trackLayer = new LayerDrawable(new Drawable[]{track});
+        trackLayer.setPadding(2 * gap, 0, 2 * gap, 0);
+        LayerDrawable thumbLayer = new LayerDrawable(new Drawable[]{thumb});
+        thumbLayer.setLayerInset(0, 0, gap, 0, gap);
+        thumbLayer.setPadding(gap, 0, gap, 0);
         control.setTrackTintList(null);
         control.setThumbTintList(null);
-        control.setTrackDrawable(track);
-        GradientDrawable thumb = switchShape(context, SWITCH_THUMB, 22, 22, 11);
-        thumb.setStroke(dp(context, 1), isDarkMode() ? DARK_SWITCH_THUMB_STROKE : LIGHT_SWITCH_THUMB_STROKE);
-        control.setThumbDrawable(thumb);
-        control.setSwitchMinWidth(dp(context, 44));
+        control.setTrackDrawable(trackLayer);
+        control.setThumbDrawable(thumbLayer);
+        // Switch's setters don't hand a new drawable the view's state, so a switch restyled on
+        // screen (a rebind after the look changed) showed the greyed entries until it was next
+        // toggled.
+        control.refreshDrawableState();
+        control.setSwitchMinWidth(dp(context, 40));
         control.setThumbTextPadding(0);
         control.setShowText(false);
         control.setSplitTrack(false);
@@ -663,6 +743,14 @@ public final class SettingsUi {
         return rippleTint();
     }
 
+    /** {@code top}, translucent, laid over the opaque {@code under}: the colour the eye gets. */
+    static @ColorInt int over(@ColorInt int top, @ColorInt int under) {
+        float alpha = Color.alpha(top) / 255f;
+        return Color.rgb(Math.round(Color.red(top) * alpha + Color.red(under) * (1 - alpha)),
+                Math.round(Color.green(top) * alpha + Color.green(under) * (1 - alpha)),
+                Math.round(Color.blue(top) * alpha + Color.blue(under) * (1 - alpha)));
+    }
+
     private static final class GroupRowDrawable extends Drawable {
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final boolean first, last;
@@ -691,8 +779,10 @@ public final class SettingsUi {
             canvas.drawRoundRect(frame, radius, radius, paint);
             if (activated) {
                 // Over the surface rather than instead of it, so the tint is the same one the
-                // ripple leaves behind and the row keeps its own background underneath.
-                paint.setColor(activatedFill());
+                // ripple leaves behind and the row keeps its own background underneath. Mixed
+                // here and painted opaque: the canvas rounds a translucent red a step off in
+                // places, and the chosen row should be exactly the colour the press leaves.
+                paint.setColor(over(activatedFill(), surface()));
                 canvas.drawRoundRect(frame, radius, radius, paint);
             }
             paint.setStyle(Paint.Style.STROKE);
@@ -843,6 +933,30 @@ public final class SettingsUi {
         return dark ? ACCENT : LIGHT_ACCENT;
     }
 
+    public static @ColorInt int heading() {
+        return headingOn(isDarkMode());
+    }
+
+    public static @ColorInt int headingOn(boolean dark) {
+        return dark ? DARK_HEADING : LIGHT_HEADING;
+    }
+
+    public static @ColorInt int hint() {
+        return hintOn(isDarkMode());
+    }
+
+    public static @ColorInt int hintOn(boolean dark) {
+        return dark ? DARK_HINT : LIGHT_HINT;
+    }
+
+    public static @ColorInt int onAccentOn(boolean dark) {
+        return dark ? DARK_ON_ACCENT : LIGHT_ON_ACCENT;
+    }
+
+    public static @ColorInt int switchOffOn(boolean dark) {
+        return dark ? DARK_SWITCH_TRACK_OFF : LIGHT_SWITCH_TRACK_OFF;
+    }
+
     /** Text that repaints itself when its control is enabled or disabled. */
     public static ColorStateList enabledTextColors(@ColorInt int enabledColor) {
         return new ColorStateList(
@@ -866,17 +980,9 @@ public final class SettingsUi {
         }
     }
 
+    /** A category's title, drawn as the page's section heading. */
     public static void styleCategory(View view) {
-        Context context = view.getContext();
-        view.setPaddingRelative(dp(context, 16), dp(context, 14), dp(context, 16), dp(context, 6));
-        TextView title = view.findViewById(android.R.id.title);
-        if (title != null) {
-            title.setTextColor(textSecondary());
-            title.setTextSize(TEXT_CAPTION);
-            title.setAllCaps(false);
-            title.setLetterSpacing(0f);
-            title.setTypeface(title.getTypeface(), Typeface.BOLD);
-        }
+        ScreenColors.current().paintHeading(view);
     }
 
     public static TextView sectionTitle(Context context, String text) {
@@ -1144,6 +1250,7 @@ public final class SettingsUi {
                 decorView.setBackgroundColor(Color.TRANSPARENT);
             }
             constrainDialogWindow(dialog, window);
+            resizeForKeyboard(window);
         }
 
         if (dialog instanceof AlertDialog) {
@@ -1161,8 +1268,9 @@ public final class SettingsUi {
     public static void styleFramedDialog(Dialog dialog) {
         Window window = dialog.getWindow();
         if (window != null) {
-            window.setBackgroundDrawable(borderedSurface(dialog.getContext(), RADIUS_SETTINGS_CARD, true));
+            window.setBackgroundDrawable(dialogPanel(dialog.getContext()));
             constrainDialogWindow(dialog, window);
+            resizeForKeyboard(window);
         }
 
         if (dialog instanceof AlertDialog) {
@@ -1175,6 +1283,31 @@ public final class SettingsUi {
             styleActionButton(alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE), false);
             styleActionButton(alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL), false);
         }
+    }
+
+    /**
+     * A dialog's panel: the lifted surface inside a hairline, on the settings cards' radius. It
+     * stays a step up from the black page, so the panel's fields, buttons and choice cards,
+     * which are drawn in the page's own colour, read as controls set into it.
+     */
+    static GradientDrawable dialogPanel(Context context) {
+        ScreenColors colors = ScreenColors.current();
+        GradientDrawable panel = new GradientDrawable();
+        panel.setColor(liftedSurface());
+        panel.setCornerRadius(dp(context, RADIUS_SETTINGS_CARD));
+        panel.setStroke(Math.max(1, dp(context, 1)), colors.outline);
+        return panel;
+    }
+
+    /**
+     * Lets the keyboard shrink a dialog rather than pan it. With no mode of its own the window
+     * panned for the keyboard, and at large text Save and Cancel sat behind it. The state bits
+     * stay as the dialog set them, so a field that asked for the keyboard still gets it.
+     */
+    static void resizeForKeyboard(Window window) {
+        int mode = window.getAttributes().softInputMode;
+        window.setSoftInputMode((mode & ~WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST)
+                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     /** The dialog each settings row opened last, by the row's key, and the screen it opened on. */
@@ -1297,8 +1430,14 @@ public final class SettingsUi {
         if (list != null) {
             list.setBackgroundColor(Color.TRANSPARENT);
             styleScrollableList(list);
-            list.setDivider(new ColorDrawable(divider()));
-            list.setDividerHeight(Math.max(1, dp(dialog.getContext(), 1)));
+            if (list.getAdapter() != null && !(list.getAdapter() instanceof DialogChoices)) {
+                DialogChoices.swap(list,
+                        new DialogChoices(list.getAdapter(), ScreenColors.current(), radio));
+            }
+            // Each row is its own card now, and the divider is the gap between two of them:
+            // clear, so two picked rows of a checklist don't run together into one block.
+            list.setDivider(new ColorDrawable(Color.TRANSPARENT));
+            list.setDividerHeight(dp(dialog.getContext(), 4));
             list.post(() -> {
                 styleDialogText(list, radio);
                 list.postDelayed(() -> styleDialogText(list, radio), 50);
@@ -1334,9 +1473,18 @@ public final class SettingsUi {
         if (window == null) return;
         int id = dialog.getContext().getResources().getIdentifier("alertTitle", "id", "android");
         View title = id == 0 ? null : window.getDecorView().findViewById(id);
-        if (!(title instanceof TextView) || ShimmerTitle.wears((TextView) title)) return;
-        ((TextView) title).setTextColor(textPrimary());
-        ShimmerTitle.wear((TextView) title);
+        if (!(title instanceof TextView)) return;
+        TextView text = (TextView) title;
+        // The platform title is one line cut short with an ellipsis, so a long German title
+        // lost its end. It wraps instead, at the size the settings page's header steps down to.
+        text.setTextSize(TEXT_HEADLINE);
+        text.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        text.setSingleLine(false);
+        text.setMaxLines(Integer.MAX_VALUE);
+        text.setEllipsize(null);
+        if (ShimmerTitle.wears(text)) return;
+        text.setTextColor(textPrimary());
+        ShimmerTitle.wear(text);
     }
 
     public static int dialogListHeight(Context context, int preferredDp) {
@@ -1349,7 +1497,9 @@ public final class SettingsUi {
         int screenWidth = dialog.getContext().getResources().getDisplayMetrics().widthPixels;
         int horizontalMargins = dp(dialog.getContext(), 32);
         int maxWidth = dp(dialog.getContext(), 560);
-        int width = Math.min(maxWidth, Math.max(dp(dialog.getContext(), 280), screenWidth - horizontalMargins));
+        // No 280dp floor: on a phone narrower than 312dp, or at a large display size, it pushed
+        // the panel's edges off the screen.
+        int width = Math.min(maxWidth, screenWidth - horizontalMargins);
         window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
@@ -1379,39 +1529,15 @@ public final class SettingsUi {
             checkBox.setTextColor(textPrimary());
             styleCheckBox(checkBox);
         } else if (view instanceof CheckedTextView) {
-            CheckedTextView checkedTextView = (CheckedTextView) view;
-            checkedTextView.setTextColor(textPrimary());
-            // The platform row starts nearer the edge than the dialog's title, so the marks sat
-            // out to the left of every heading above them. The title is inset by the theme's
-            // dialog padding, and the mark is centred in its own box, so the row starts that
-            // much before the padding to put the mark's edge under the title's first letter.
-            // setPaddingRelative only relays out on a change, so the scroll callback that runs
-            // this per frame costs nothing.
-            Context rowContext = checkedTextView.getContext();
-            int titleInset = dialogInset(rowContext);
-            int markMargin = dp(rowContext,
-                    (DialogCheckMarkDrawable.intrinsicSizeDp - DialogCheckMarkDrawable.boxSizeDp) / 2);
-            checkedTextView.setPaddingRelative(Math.max(0, titleInset - markMargin),
-                    checkedTextView.getPaddingTop(), titleInset, checkedTextView.getPaddingBottom());
-            Drawable[] drawables = checkedTextView.getCompoundDrawablesRelative();
-            // Runs on every scroll callback now, so it does its work once per row rather than
-            // building a drawable per frame. A rebound row brings the platform check mark back,
-            // which is what the first half of this test catches.
-            if (checkedTextView.getCheckMarkDrawable() != null
-                    || !(drawables[0] instanceof DialogCheckMarkDrawable)) {
-                checkedTextView.setCheckMarkDrawable(null);
-                // Given no bounds, the mark was drawn centred on the padding edge with half of it
-                // out past the row's start, and the platform's 20dp gap put the text after that.
-                // With its own box the mark takes its space, and 8dp keeps the text close to it.
-                DialogCheckMarkDrawable mark =
-                        new DialogCheckMarkDrawable(checkedTextView.getContext(), radio);
-                mark.setBounds(0, 0, mark.getIntrinsicWidth(), mark.getIntrinsicHeight());
-                checkedTextView.setCompoundDrawablesRelative(
-                        mark, drawables[1], drawables[2], drawables[3]);
-                checkedTextView.setCompoundDrawablePadding(dp(checkedTextView.getContext(), 8));
-            }
+            styleChoiceRow((CheckedTextView) view, radio);
         } else if (view instanceof Button) {
             ((Button) view).setTextColor(accent());
+        } else if (view instanceof TextView && view.getId() == android.R.id.message) {
+            // The message explains the title, so it reads one step quieter than it.
+            TextView message = (TextView) view;
+            message.setTextColor(ScreenColors.dimmedWhenDisabled(ScreenColors.current().summary));
+            message.setTextSize(TEXT_BODY_SMALL);
+            message.setLineSpacing(dp(message.getContext(), 2), 1f);
         } else if (view instanceof TextView && !ShimmerTitle.wears((TextView) view)) {
             ((TextView) view).setTextColor(textPrimary());
         }
@@ -1421,6 +1547,44 @@ public final class SettingsUi {
             for (int i = 0; i < group.getChildCount(); i++) {
                 styleDialogText(group.getChildAt(i), radio);
             }
+        }
+    }
+
+    /**
+     * A dialog's choice row: this theme's text, the dialog's own check mark in place of the
+     * platform's, and the mark lined up under the title. Runs on every scroll callback, so it
+     * builds the mark once per row.
+     */
+    static void styleChoiceRow(CheckedTextView checkedTextView, boolean radio) {
+        checkedTextView.setTextColor(ScreenColors.dimmedWhenDisabled(ScreenColors.current().title));
+        // The platform row starts nearer the edge than the dialog's title, so the marks sat
+        // out to the left of every heading above them. The title is inset by the theme's
+        // dialog padding, and the mark is centred in its own box, so the row starts that
+        // much before the padding to put the mark's edge under the title's first letter.
+        // setPaddingRelative only relays out on a change, so the scroll callback that runs
+        // this per frame costs nothing.
+        Context rowContext = checkedTextView.getContext();
+        int titleInset = dialogInset(rowContext);
+        int markMargin = dp(rowContext,
+                (DialogCheckMarkDrawable.intrinsicSizeDp - DialogCheckMarkDrawable.boxSizeDp) / 2);
+        checkedTextView.setPaddingRelative(Math.max(0, titleInset - markMargin),
+                checkedTextView.getPaddingTop(), titleInset, checkedTextView.getPaddingBottom());
+        Drawable[] drawables = checkedTextView.getCompoundDrawablesRelative();
+        // Runs on every scroll callback now, so it does its work once per row rather than
+        // building a drawable per frame. A rebound row brings the platform check mark back,
+        // which is what the first half of this test catches.
+        if (checkedTextView.getCheckMarkDrawable() != null
+                || !(drawables[0] instanceof DialogCheckMarkDrawable)) {
+            checkedTextView.setCheckMarkDrawable(null);
+            // Given no bounds, the mark was drawn centred on the padding edge with half of it
+            // out past the row's start, and the platform's 20dp gap put the text after that.
+            // With its own box the mark takes its space, and 8dp keeps the text close to it.
+            DialogCheckMarkDrawable mark =
+                    new DialogCheckMarkDrawable(checkedTextView.getContext(), radio);
+            mark.setBounds(0, 0, mark.getIntrinsicWidth(), mark.getIntrinsicHeight());
+            checkedTextView.setCompoundDrawablesRelative(
+                    mark, drawables[1], drawables[2], drawables[3]);
+            checkedTextView.setCompoundDrawablePadding(dp(checkedTextView.getContext(), 8));
         }
     }
 
@@ -1435,17 +1599,46 @@ public final class SettingsUi {
         return dp(context, 24);
     }
 
+    /**
+     * A dialog's button, drawn as one: a rounded surface inside a 2dp outline, the accent's for
+     * the action to take and the hairline's for the rest, with a heading outline on focus.
+     *
+     * <p>The action to take keeps the accent in its text rather than as a fill, so it ranks
+     * above Cancel by colour and weight both, and every label on it reads at 4.5:1 or better
+     * on either theme's dialog. The visible shape sits 4dp in from the sides and 6dp from the
+     * top and bottom, so two buttons side by side don't touch and the 48dp touch area stays
+     * the button's whole box.
+     */
     public static void styleActionButton(Button button, boolean primary) {
         if (button == null) {
             return;
         }
+        Context context = button.getContext();
+        ScreenColors colors = ScreenColors.current();
         button.setTextColor(enabledTextColors(primary ? accent() : textSecondary()));
         button.setAllCaps(false);
-        button.setTypeface(button.getTypeface(), primary ? Typeface.BOLD : Typeface.NORMAL);
-        button.setMinimumHeight(dp(button.getContext(), 48));
-        button.setMinimumWidth(dp(button.getContext(), 48));
-        button.setBackground(pressAndFocus(button.getContext(), RADIUS_SETTINGS_FIELD,
-                new ColorDrawable(Color.TRANSPARENT)));
+        button.setTypeface(Typeface.create("sans-serif-medium", primary ? Typeface.BOLD : Typeface.NORMAL));
+        button.setTextSize(TEXT_TITLE);
+        button.setSingleLine(false);
+        button.setMaxLines(Integer.MAX_VALUE);
+        button.setEllipsize(null);
+        button.setHorizontallyScrolling(false);
+        button.setGravity(android.view.Gravity.CENTER);
+        button.setMinHeight(dp(context, 48));
+        button.setMinimumHeight(dp(context, 48));
+        button.setMinWidth(dp(context, 64));
+        button.setMinimumWidth(dp(context, 64));
+        GradientDrawable surface = new GradientDrawable();
+        surface.setColor(ScreenColors.dimmedWhenDisabled(primary ? colors.dialog : colors.card));
+        surface.setCornerRadius(dp(context, RADIUS_SETTINGS_FIELD));
+        surface.setStroke(Math.max(2, dp(context, FOCUS_RING_DP)),
+                colors.interactionOutline(primary ? colors.accent : colors.outline));
+        button.setBackgroundTintList(null);
+        RippleDrawable background = (RippleDrawable) new RippleDrawable(
+                ScreenColors.interactionRipple(colors.heading), surface, null).mutate();
+        background.setLayerInsetRelative(0, dp(context, 4), dp(context, 6), dp(context, 4), dp(context, 6));
+        button.setBackground(background);
+        button.setPaddingRelative(dp(context, 16), dp(context, 12), dp(context, 16), dp(context, 12));
     }
 
     /**
@@ -1770,8 +1963,24 @@ public final class SettingsUi {
      * loud one.
      */
     public static void styleEditText(EditText editText) {
+        tintField(editText);
+        // A frame of its own rather than the platform's underline: the dialog's fill inside a
+        // rounded 2dp outline, coloured by the tint above.
+        Context context = editText.getContext();
+        editText.setBackground(new FieldFrame(context));
+        editText.setPaddingRelative(dp(context, 12), dp(context, 10), dp(context, 12), dp(context, 10));
+        editText.setTextSize(TEXT_TITLE);
+        editText.setMinimumHeight(Math.max(editText.getMinimumHeight(), dp(context, 48)));
+        editText.setHighlightColor(ScreenColors.half(accent()));
+    }
+
+    /**
+     * A field's colours, cursor and handles, without its frame, for a field that sits inside a
+     * frame of its own (the settings search).
+     */
+    static void tintField(EditText editText) {
         editText.setTextColor(enabledTextColors(textPrimary()));
-        editText.setHintTextColor(enabledTextColors(textSecondary()));
+        editText.setHintTextColor(enabledTextColors(hint()));
         editText.setBackgroundTintList(new ColorStateList(
                 new int[][]{
                         new int[]{-android.R.attr.state_enabled},
@@ -1949,6 +2158,95 @@ public final class SettingsUi {
         }
     }
 
+    /**
+     * A field's frame: the dialog's fill inside a rounded 2dp outline. The view's background
+     * tint colours the outline alone, where a tinted GradientDrawable gives its fill to the tint
+     * too and the field turns into a solid block of the outline's colour.
+     */
+    static final class FieldFrame extends Drawable {
+        private final Paint fill = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint stroke = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final RectF box = new RectF();
+        private final float radius;
+        private final @ColorInt int fillColor;
+        private ColorStateList tint = ColorStateList.valueOf(border());
+        private @ColorInt int strokeColor;
+        private int alpha = 255;
+
+        FieldFrame(Context context) {
+            fillColor = ScreenColors.current().dialog;
+            strokeColor = tint.getDefaultColor();
+            radius = dp(context, RADIUS_SETTINGS_FIELD);
+            stroke.setStyle(Paint.Style.STROKE);
+            stroke.setStrokeWidth(Math.max(2, dp(context, FOCUS_RING_DP)));
+        }
+
+        /** The outline's colour right now, for tests to read without drawing. */
+        @ColorInt int strokeColor() { return strokeColor; }
+
+        @ColorInt int fillColor() { return fillColor; }
+
+        float radius() { return radius; }
+
+        float strokeWidth() { return stroke.getStrokeWidth(); }
+
+        @Override
+        public void draw(Canvas canvas) {
+            float inset = stroke.getStrokeWidth() / 2f;
+            box.set(getBounds());
+            box.inset(inset, inset);
+            fill.setColor(fillColor);
+            fill.setAlpha(Color.alpha(fillColor) * alpha / 255);
+            stroke.setColor(strokeColor);
+            stroke.setAlpha(Color.alpha(strokeColor) * alpha / 255);
+            canvas.drawRoundRect(box, radius, radius, fill);
+            canvas.drawRoundRect(box, radius, radius, stroke);
+        }
+
+        @Override
+        public void setTintList(ColorStateList tint) {
+            this.tint = tint == null ? ColorStateList.valueOf(border()) : tint;
+            updateStroke(getState());
+            invalidateSelf();
+        }
+
+        @Override
+        public boolean isStateful() {
+            return true;
+        }
+
+        @Override
+        protected boolean onStateChange(int[] state) {
+            return updateStroke(state);
+        }
+
+        private boolean updateStroke(int[] state) {
+            int next = tint.getColorForState(state, tint.getDefaultColor());
+            if (next == strokeColor) return false;
+            strokeColor = next;
+            invalidateSelf();
+            return true;
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+            this.alpha = alpha;
+            invalidateSelf();
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter colorFilter) {
+            fill.setColorFilter(colorFilter);
+            stroke.setColorFilter(colorFilter);
+            invalidateSelf();
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.TRANSLUCENT;
+        }
+    }
+
     private static final class DialogCheckMarkDrawable extends Drawable {
         /** The drawable's box and the mark centred in it, which row alignment measures against. */
         static final int intrinsicSizeDp = 32;
@@ -2003,7 +2301,9 @@ public final class SettingsUi {
             if (checked) {
                 fill.setColor(accent());
                 canvas.drawRoundRect(box, radius, radius, fill);
-                stroke.setColor(Color.WHITE);
+                // White on the dark theme's red reads 3.7:1, under the 4.5 a mark needs; the
+                // accent's own text colour reads 5.7:1 there and 5.4:1 in white on the light red.
+                stroke.setColor(ScreenColors.current().onAccent);
                 float unit = boxSize / 18f;
                 canvas.drawLine(left + 4f * unit, top + 9f * unit,
                         left + 8f * unit, top + 13f * unit, stroke);
