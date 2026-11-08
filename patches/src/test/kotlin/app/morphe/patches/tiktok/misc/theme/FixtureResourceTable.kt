@@ -26,11 +26,18 @@ internal class FixtureResourceTable(apk: File) {
     val drawableIds = HashMap<String, Int>()
     val drawableFiles = HashMap<String, MutableList<String>>()
 
+    /** Raw resource name to id, and to the archive path of its file. */
+    val rawIds = HashMap<String, Int>()
+    val rawFiles = HashMap<String, MutableList<String>>()
+
     /** The table's own string pool, where a file resource's value names its path. */
     private var values: StringPool? = null
 
     /** Every style entry, each configuration's on its own, with its items in the table's order. */
     val styles = ArrayList<Style>()
+
+    /** Style name to id. */
+    val styleIds = HashMap<String, Int>()
 
     /**
      * attr id to every value a style gives it, each config of a style counted on its own: a
@@ -70,12 +77,13 @@ internal class FixtureResourceTable(apk: File) {
         val styleType = typeId("style")
         val colorType = typeId("color")
         val drawableType = typeId("drawable")
+        val rawType = typeId("raw")
         val chunks = ArrayList<Int>()
         forEachChunk(start + headerSize, end) { chunk, type -> if (type == TYPE) chunks += chunk }
         // Names first: a style's items name their attrs, and point at colors, by id.
         for (chunk in chunks) {
             val typeId = u8(chunk + 8)
-            if (typeId != attrType && typeId != colorType && typeId != drawableType) continue
+            if (typeId != attrType && typeId != colorType && typeId != drawableType && typeId != rawType) continue
             val defaultConfig = isDefaultConfig(chunk)
             forEachEntry(chunk) { index, entry ->
                 val name = keys[keyOf(entry)]
@@ -87,6 +95,7 @@ internal class FixtureResourceTable(apk: File) {
                 }
                 if (typeId == colorType) colorNames[id] = name
                 if (typeId == drawableType) drawableIds[name] = id
+                if (typeId == rawType) rawIds[name] = id
                 if (u16(entry + 2) and COMPLEX != 0) return@forEachEntry
                 // A compact entry keeps the value's type in its flags' high byte and the data inline.
                 val flags = u16(entry + 2)
@@ -99,11 +108,15 @@ internal class FixtureResourceTable(apk: File) {
                 if (typeId == drawableType && type == TYPE_STRING) {
                     drawableFiles.getOrPut(name) { ArrayList() } += checkNotNull(values) { "no string pool before the package" }[data]
                 }
+                if (typeId == rawType && type == TYPE_STRING) {
+                    rawFiles.getOrPut(name) { ArrayList() } += checkNotNull(values) { "no string pool before the package" }[data]
+                }
             }
         }
         for (chunk in chunks) {
             if (u8(chunk + 8) != styleType) continue
-            forEachEntry(chunk) { _, entry ->
+            forEachEntry(chunk) { index, entry ->
+                styleIds[keys[keyOf(entry)]] = (packageId shl 24) or (styleType shl 16) or index
                 val flags = u16(entry + 2)
                 if (flags and COMPLEX == 0 || flags and COMPACT != 0) return@forEachEntry
                 val items = ArrayList<Item>()

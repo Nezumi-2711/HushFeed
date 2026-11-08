@@ -9,6 +9,7 @@ import app.morphe.patches.tiktok.misc.branding.changeAppNamePatch
 import app.morphe.patches.tiktok.misc.branding.customLauncherIconPatch
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.optimizer.*
+import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.patches.tiktok.misc.theme.accentColorPatch
 import app.morphe.patches.tiktok.misc.theme.amoledThemePatch
 import app.morphe.patches.tiktok.misc.update.hidePlayStoreUpdatePatch
@@ -27,7 +28,7 @@ import org.junit.rules.TemporaryFolder
 
 class BuildDetailsPatchTest {
     @get:Rule val temporary = TemporaryFolder()
-    private val target = packageMetadata("com.zhiliaoapp.musically", "47.7.2", "2024707020")
+    private val target = packageMetadata("com.zhiliaoapp.musically", "47.7.3", "2024707030")
     private val fingerprint = "A1234567890123456789B" + "c".repeat(43)
 
     @Test fun `bundle manifest paths preserve plus spaces percent and unicode and release the jar`() {
@@ -252,12 +253,15 @@ class BuildDetailsPatchTest {
         assertTrue("Accent color lost the Lynx text hooks", sharedExtensionPatch in accent)
         // AMOLED repaints one Compose palette builder in place (#152), and since #171 it also paints
         // the see-through comment bar under an opened post, which goes through the extension. Since
-        // #263 it also hands its color to the activity center's web pages.
+        // #263 it also hands its color to the activity center's web pages. Since #372 its switch in
+        // Hushfeed settings puts TikTok's grays back, through theme hooks of its own and settings.
         val amoled = dependencies(amoledThemePatch)
         assertTrue("AMOLED has no metadata dependency", buildDetailsPatch in amoled)
         assertTrue("AMOLED lost the comment bar hook", sharedExtensionPatch in amoled)
-        val amoledOwn = amoled.filterIsInstance<BytecodePatch>().filter { it !in dependencies(sharedExtensionPatch) }
-        assertEquals("AMOLED's own bytecode is the palette repaint, the comment bar and the web pages", 3, amoledOwn.size)
+        val shared = dependencies(sharedExtensionPatch) + dependencies(settingsPatch)
+        val amoledOwn = amoled.filterIsInstance<BytecodePatch>().filter { it !in shared }
+        assertEquals("AMOLED's own bytecode is the palette repaint, the comment bar, the web pages and the switch",
+            4, amoledOwn.size)
         assertTrue(amoledOwn.all { it.name == null })
         // The core asset strip returns out of the content credential service's start before it
         // loads the emptied library (#211). Bytecode too, and just as free of Hushfeed's own code.
@@ -280,8 +284,8 @@ class BuildDetailsPatchTest {
         assertTrue(buildDetailsPatch in dependencies(liveStreamSuiteOptimizerPatch.dependencies.first()))
     }
 
-    private fun dependencies(patch: Patch<*>): Set<Patch<*>> = linkedSetOf<Patch<*>>().apply {
-        fun visit(current: Patch<*>) { if (add(current)) current.dependencies.forEach(::visit) }
+    private fun dependencies(patch: Patch): Set<Patch> = linkedSetOf<Patch>().apply {
+        fun visit(current: Patch) { if (add(current)) current.dependencies.forEach(::visit) }
         visit(patch)
     }
 

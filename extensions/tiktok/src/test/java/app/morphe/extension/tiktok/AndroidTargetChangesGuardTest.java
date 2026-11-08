@@ -114,15 +114,21 @@ public class AndroidTargetChangesGuardTest {
             new ReviewedWrites("live/LiveAudioOnly.java", 4,
                     "safe: writes sdkKey, name and level on a quality row this class just built "
                             + "with newInstance, and the current-quality mark on the picker row it "
-                            + "just built; instanceField() drops a static field before any write"));
+                            + "just built; instanceField() drops a static field before any write"),
+            new ReviewedWrites("navigation/DiscoverTab.java", 2,
+                    "safe: writes bottomTab on the tab layout TikTok parsed and handed the hook, "
+                            + "and bottomTabKey on a bottom tab this class just built; findField() "
+                            + "skips a static field"));
 
     /**
      * Addresses written into the payload, and what is done with them.
      *
-     * <p>Nothing here is fetched. Every URL the transport opens arrives from TikTok's own model
-     * objects, is required to be https, and is re-resolved and re-checked on every redirect hop,
-     * so there is no host list in this repository to opt out of Certificate Transparency even if
-     * one were wanted. A CT refusal arrives as an SSLHandshakeException, which is not in
+     * <p>One is fetched: the opt-in update check's api.github.com address (#377), whose public
+     * certificates are logged like any public CA's, so it needs no Certificate Transparency
+     * opt-out. Every URL the media transport opens arrives from TikTok's own model objects, is
+     * required to be https, and is re-resolved and re-checked on every redirect hop, so there is
+     * no host list in this repository to opt out of Certificate Transparency even if one were
+     * wanted. A CT refusal arrives as an SSLHandshakeException, which is not in
      * MediaBudget.isRetryableTransport, so it is not retried, and RemoteMedia names the exception
      * class in the message a reader sees.
      */
@@ -162,6 +168,13 @@ public class AndroidTargetChangesGuardTest {
                         + "still fits once GitHub's sign-in page wraps it");
         REVIEWED_ADDRESSES.put("https://ko-fi.com/X8K126YVER",
                 "not fetched: the Support Hushfeed row, opened in the reader's browser");
+        REVIEWED_ADDRESSES.put("https://api.github.com/repos/SysAdminDoc/HushFeed/releases/latest",
+                "fetched: the update check, only with Check for Hushfeed updates on, at most "
+                        + "once a day, one GET with no redirect followed; GitHub's certificates "
+                        + "are publicly logged, so CT enforcement passes it (#377)");
+        REVIEWED_ADDRESSES.put("https://github.com/SysAdminDoc/HushFeed/releases/tag/",
+                "not fetched: the update card's release page, opened in the reader's browser "
+                        + "when Morphe Manager isn't installed");
         REVIEWED_ADDRESSES.put("https://(?:(?:vm|vt)\\\\.tiktok\\\\.com/[A-Za-z0-9]+|(?:www\\\\.|m\\\\.)?"
                         + "tiktok\\\\.com/t/[A-Za-z0-9]{4,20})/?",
                 "not a host: the pattern that finds a TikTok short link in copied text. The "
@@ -214,8 +227,8 @@ public class AndroidTargetChangesGuardTest {
         assertEquals("the reviewed total no longer matches what the scan finds", reviewed, total);
         // Nine on 2026-09-19; four comment-menu instance writes were added for #169, and two
         // LIVE profile card label writes for #159, and the grid sort chip's re-sort for #180.
-        // Four LIVE Audio only row writes for #265 on 2026-11-05.
-        assertEquals("the audit counted twenty reflective writes on 2026-11-05", 20, total);
+        // Four LIVE Audio only row writes for #265 on 2026-11-05, two Discover tab writes for #98.
+        assertEquals("the audit counted twenty-two reflective writes on 2026-11-07", 22, total);
     }
 
     @Test
@@ -237,9 +250,9 @@ public class AndroidTargetChangesGuardTest {
         // Both directions. Asserting only that nothing unreviewed turned up would pass just as
         // happily if the scan found nothing at all, which is what a broken pattern looks like.
         assertEquals("the addresses written into the payload are not the ones that were read "
-                        + "against Certificate Transparency. Nothing here fetches a hardcoded host "
-                        + "today: every URL the transport opens comes from TikTok's own model "
-                        + "objects. The bundle ships no resources either, so a host that needed a "
+                        + "against Certificate Transparency. The only hardcoded host fetched is "
+                        + "the opt-in update check's api.github.com; every URL the media transport "
+                        + "opens comes from TikTok's own model objects. The bundle ships no resources either, so a host that needed a "
                         + "network security config opt-out would have nowhere to be opted out. "
                         + "Verdicts on the reviewed ones: " + REVIEWED_ADDRESSES,
                 new TreeSet<>(REVIEWED_ADDRESSES.keySet()), new TreeSet<>(found));

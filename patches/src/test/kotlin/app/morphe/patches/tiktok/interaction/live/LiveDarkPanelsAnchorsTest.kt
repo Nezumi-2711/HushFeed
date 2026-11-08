@@ -368,7 +368,7 @@ class LiveDarkPanelsAnchorsTest {
                 val read = (context - 1 downTo 0).first {
                     original[it].opcode == Opcode.IGET_OBJECT && (original[it] as TwoRegisterInstruction).registerB == labels.strip
                 }
-                assertEquals("${apk.name}: the strip", "LX/11zz;", ((original[read] as ReferenceInstruction).reference as FieldReference).definingClass)
+                assertEquals("${apk.name}: the strip", "LX/10r2;", ((original[read] as ReferenceInstruction).reference as FieldReference).definingClass)
             }
 
             // The hook as the patch writes it: right before the card walks the labels, the
@@ -410,7 +410,7 @@ class LiveDarkPanelsAnchorsTest {
             if ("47.4.3" in apk.name) {
                 // X/0wEX finds the box as id/hwn, the ConstraintLayout layout/ha3 draws on
                 // drawable/e9l, a white shape (2026-10-20).
-                assertEquals("${apk.name}: the event module", "LX/0xx1;", bind.definingClass)
+                assertEquals("${apk.name}: the event module", "LX/120f;", bind.definingClass)
                 val module = classes.getValue(bind.definingClass)
                 val hwn = module.methods.any { method ->
                     method.implementation?.instructions?.any { (it as? NarrowLiteralInstruction)?.narrowLiteral == 0x7f0a2aa9 } == true
@@ -473,11 +473,13 @@ class LiveDarkPanelsAnchorsTest {
             assertEquals("${apk.name}: the badge bind", 1, found.size)
             val bind = found.single()
             val calls = badgeTileCalls(bind)!!
-            if ("47.7.2" in apk.name) {
-                // X/11kh.LJJIIZI(User)Z: its tile is its lazy LLJJL cast to View, given a border
-                // around the server's art, a server color, or a border alone.
-                assertEquals("${apk.name}: the badge module", "LX/11kh;", bind.definingClass)
-                assertEquals("${apk.name}: one call per background", 3, calls.size)
+            if ("47.7.3" in apk.name) {
+                // X/10n1.LJIJI(BadgeStruct)V: its tile is a lazy field cast to View, and each
+                // background it picks (a border around the server's art, a server color, or a
+                // border alone) goes on in a call of its own.
+                assertEquals("${apk.name}: the badge module", "LX/10n1;", bind.definingClass)
+                assertEquals("${apk.name}: the badge bind", "LJIJI", bind.name)
+                assertEquals("${apk.name}: one background call per path", 3, calls.size)
             }
 
             // The hook as the patch writes it: each call becomes the extension's, on the same
@@ -527,6 +529,136 @@ class LiveDarkPanelsAnchorsTest {
         }
         assertThrows(PatchException::class.java) {
             hookLongPressMenu(badgeBind("nop"))
+        }
+    }
+
+    /**
+     * #362: the gift guide bubble ("Support this LIVE") is white with text in the room theme's
+     * default color, white over a darkened room. Its builder is found on each build, the view it
+     * makes from its Context is the one LinearLayout with a LIVE icon, and that view's constructor
+     * swaps its Context for the extension's answer before anything reads it.
+     */
+    @Test
+    fun `each declared build hands the gift guide bubble's context to the extension before it inflates`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val builders = classes.values.flatMap { owner ->
+                owner.methods.filter { it.parameterTypes.size == 5 && LiveGuideBubbleFingerprint.takes(it, owner) }
+            }
+            assertEquals("${apk.name}: the bubble's builder", 1, builders.size)
+            val view = guideBubbleView(builders.single()) { classes[it] }
+            assertNotNull("${apk.name}: the bubble's view", view)
+            val constructor = classes.getValue(view!!).methods.single {
+                it.name == "<init>" && it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;")
+            }
+
+            val original = constructor.implementation!!.instructions.filter { it.opcode != Opcode.NOP }
+            val hooked = MutableMethod(constructor)
+            hookGuideBubble(hooked)
+            val code = hooked.implementation!!.instructions.filter { it.opcode != Opcode.NOP }
+            val context = constructor.implementation!!.registerCount - 1
+            val hook = code[0] as RegisterRangeInstruction
+            assertEquals("${apk.name}: the swap goes first", "lightRoomView",
+                ((hook as ReferenceInstruction).reference as MethodReference).name)
+            assertEquals("${apk.name}: from the Context parameter", listOf(context, 1), listOf(hook.startRegister, hook.registerCount))
+            assertEquals("${apk.name}: back into it", context, (code[1] as OneRegisterInstruction).registerA)
+            assertEquals("${apk.name}: nothing else moves", original.map { it.opcode }, code.drop(2).map { it.opcode })
+            assertTrue("${apk.name}: the view reads its Context after the swap", code.drop(2).any { instruction ->
+                (instruction as? FiveRegisterInstruction)?.let { call ->
+                    instruction.opcode == Opcode.INVOKE_STATIC && call.registerCount == 1 && call.registerC == context
+                } == true
+            })
+            assertEquals("${apk.name}", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
+        }
+        assertThrows(PatchException::class.java) {
+            hookGuideBubble(badgeBind("nop"))
+        }
+    }
+
+    private fun appliesStyle(instruction: com.android.tools.smali.dexlib2.iface.instruction.Instruction): Boolean {
+        val call = (instruction as? ReferenceInstruction)?.reference as? MethodReference ?: return false
+        return call.definingClass == "Landroid/content/res/Resources\$Theme;" && call.name == "applyStyle"
+    }
+
+    /**
+     * #362, S22 2026-11-08: the room's light copy missed the styles TikTok gives the room after the
+     * room hook (the color scheme in setTheme, the room base's onCreate style, TikTok's LIVE color
+     * theme), so the gift guide bubble inflated over a copy without them and threw on its text.
+     * Each of those calls goes to the extension in place, with its own registers.
+     */
+    @Test
+    fun `each declared build sends the styles a room gets after its light copy through the extension`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = classes(apk)
+            val room = classes.getValue(LIVE_PLAY_ACTIVITY)
+            val setTheme = room.methods.single { LivePlayActivityThemeFingerprint.takes(it, room) }
+            val create = classes.getValue(room.superclass!!).methods.single {
+                it.name == "onCreate" && it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/os/Bundle;")
+            }
+            val fragment = classes.getValue(LIVE_THEMED_FRAGMENT)
+            val fragmentCreate = fragment.methods.filter { LiveThemedFragmentCreateFingerprint.takes(it, fragment) }
+            assertEquals("${apk.name}: LIVE's fragment onCreate", 1, fragmentCreate.size)
+            val colorThemeCall = liveColorTheme(fragmentCreate.single())
+            assertNotNull("${apk.name}: TikTok's LIVE color theme", colorThemeCall)
+            val colorTheme = classes.getValue(colorThemeCall!!.definingClass).methods.single {
+                it.name == colorThemeCall.name && it.parameterTypes.map(CharSequence::toString) ==
+                    colorThemeCall.parameterTypes.map(CharSequence::toString)
+            }
+
+            for ((what, method) in listOf("setTheme" to setTheme, "the base's onCreate" to create, "the color theme" to colorTheme)) {
+                val stock = method.implementation!!.instructions.filter { it.opcode != Opcode.NOP }
+                val calls = stock.indices.filter { appliesStyle(stock[it]) }
+                assertTrue("${apk.name}: $what applies no style", calls.isNotEmpty())
+                val hooked = MutableMethod(method)
+                assertEquals("${apk.name}: $what", calls.size, hookRoomStyles(hooked))
+                val code = hooked.implementation!!.instructions.filter { it.opcode != Opcode.NOP }
+                assertEquals("${apk.name}: $what keeps its length", stock.size, code.size)
+                assertTrue("${apk.name}: $what keeps no applyStyle", code.none { appliesStyle(it) })
+                for (at in stock.indices) {
+                    if (at !in calls) {
+                        assertEquals("${apk.name}: $what at $at", stock[at].opcode, code[at].opcode)
+                        continue
+                    }
+                    val call = code[at] as FiveRegisterInstruction
+                    val reference = (call as ReferenceInstruction).reference as MethodReference
+                    assertEquals("${apk.name}: $what at $at", Opcode.INVOKE_STATIC, code[at].opcode)
+                    assertEquals("${apk.name}: $what at $at", listOf("roomStyle", "Lapp/morphe/extension/tiktok/live/LivePanelTheme;"),
+                        listOf(reference.name, reference.definingClass))
+                    assertEquals(listOf("Landroid/content/res/Resources\$Theme;", "I", "I"), reference.parameterTypes.map(CharSequence::toString))
+                    val old = stock[at] as FiveRegisterInstruction
+                    assertEquals("${apk.name}: $what at $at keeps its registers",
+                        listOf(3, old.registerC, old.registerD, old.registerE),
+                        listOf(call.registerCount, call.registerC, call.registerD, call.registerE))
+                }
+                assertEquals("${apk.name}: $what", emptyList<BridgeTypeFlow.Problem>(), BridgeTypeFlow.check(hooked))
+
+                // #372: AMOLED dark mode may have swapped these calls for its stand-in first, the
+                // way InvokeSite.staticCall writes it. The room hook takes the stand-in the same way.
+                val amoledFirst = MutableMethod(method)
+                val whole = method.implementation!!.instructions.toList()
+                for (at in whole.indices.filter { appliesStyle(whole[it]) }) {
+                    val old = whole[at] as FiveRegisterInstruction
+                    amoledFirst.replaceInstruction(at, "invoke-static { v${old.registerC}, v${old.registerD}, v${old.registerE} }, " +
+                        "Lapp/morphe/extension/tiktok/theme/AmoledTheme;->applyStyle(Landroid/content/res/Resources\$Theme;II)V")
+                }
+                assertEquals("${apk.name}: $what after AMOLED", calls.size, hookRoomStyles(amoledFirst))
+                val both = amoledFirst.implementation!!.instructions.filter { it.opcode != Opcode.NOP }
+                assertEquals("${apk.name}: $what after AMOLED", code.map { it.opcode }, both.map { it.opcode })
+                for (at in calls) {
+                    val reference = (both[at] as ReferenceInstruction).reference as MethodReference
+                    assertEquals("${apk.name}: $what at $at after AMOLED", "roomStyle", reference.name)
+                    val old = stock[at] as FiveRegisterInstruction
+                    val now = both[at] as FiveRegisterInstruction
+                    assertEquals(listOf(old.registerC, old.registerD, old.registerE), listOf(now.registerC, now.registerD, now.registerE))
+                }
+            }
+            if ("47.7.3" in apk.name) {
+                // X.0JgL.LIZ: style/v_ and style/vb set attr/car, which the bubble's text reads
+                // (aapt2 dump, 2026-11-08); the room's setTheme applies six color scheme styles.
+                val literals = colorTheme.implementation!!.instructions.mapNotNull { (it as? NarrowLiteralInstruction)?.narrowLiteral }
+                assertTrue("${apk.name}: v_ and vb", literals.containsAll(listOf(0x7f120304, 0x7f120306)))
+                assertEquals("${apk.name}: setTheme's styles", 6, setTheme.implementation!!.instructions.count { appliesStyle(it) })
+            }
         }
     }
 
@@ -596,7 +728,7 @@ class LiveDarkPanelsAnchorsTest {
             if ("47.4.3" in apk.name) {
                 // X/0wJT puts drawable/e9l on its row in LJIJ and drawable/e9i in the bind's
                 // branch for a host with no group yet (2026-10-20).
-                assertEquals("${apk.name}: the group chat module", "LX/0fHj;", found.single().definingClass)
+                assertEquals("${apk.name}: the group chat module", "LX/0fOi;", found.single().definingClass)
                 assertEquals("${apk.name}: one call each", mapOf("LJIIJ" to listOf(54), "LJIJ" to listOf(3)),
                     calls.mapKeys { it.key.name }.toSortedMap())
             }
@@ -856,7 +988,7 @@ class LiveDarkPanelsAnchorsTest {
      */
     private fun gapRow(
         registers: Int = 19,
-        lookup: String = "const v0, 0x7f061f39\ninvoke-static { v0, p1 }, LX/0Jvn;->LIZIZ(ILandroid/content/Context;)I",
+        lookup: String = "const v0, 0x7f061f39\ninvoke-static { v0, p1 }, LX/0Jvl;->LIZIZ(ILandroid/content/Context;)I",
         after: String = "",
         body: String = """
             move-object/from16 v11, p5
@@ -891,7 +1023,7 @@ class LiveDarkPanelsAnchorsTest {
             "invoke-static { p1 }, Lapp/morphe/Gap;->tint(Landroid/content/Context;)I")))
 
         // In 21 registers p1 is v16, which the hook's four-bit call can't take.
-        val wide = "const v15, 0x7f061f39\ninvoke-static/range { v15 .. v16 }, LX/0Jvn;->LIZIZ(ILandroid/content/Context;)I"
+        val wide = "const v15, 0x7f061f39\ninvoke-static/range { v15 .. v16 }, LX/0Jvl;->LIZIZ(ILandroid/content/Context;)I"
         assertNull("a context past v15", gapInfoIcon(gapRow(registers = 21, lookup = wide)))
         // In 6 registers every one is a parameter: v0 is `this`, which the hook's copy would overwrite.
         val bare = """
@@ -899,7 +1031,7 @@ class LiveDarkPanelsAnchorsTest {
             if-eqz p3, :done
             invoke-virtual { p4 }, Landroidx/appcompat/widget/AppCompatTextView;->getText()Ljava/lang/CharSequence;
             const p2, 0x7f061f39
-            invoke-static { p2, p1 }, LX/0Jvn;->LIZIZ(ILandroid/content/Context;)I
+            invoke-static { p2, p1 }, LX/0Jvl;->LIZIZ(ILandroid/content/Context;)I
         """
         assertNull("no local to copy the text through", gapInfoIcon(gapRow(registers = 6, body = bare)))
         assertEquals("the same row with one local", 2 to 5, gapInfoIcon(gapRow(registers = 7, body = bare)))
@@ -956,7 +1088,7 @@ class LiveDarkPanelsAnchorsTest {
             invoke-virtual { v7 }, $ANDROIDX_FRAGMENT->getContext()Landroid/content/Context;
             move-result-object v1
             const v0, 0x7f061dd8
-            invoke-static { v0, v1 }, LX/0Jvn;->LIZIZ(ILandroid/content/Context;)I
+            invoke-static { v0, v1 }, LX/0Jvl;->LIZIZ(ILandroid/content/Context;)I
             $after
             return-void
         """)
@@ -996,12 +1128,12 @@ class LiveDarkPanelsAnchorsTest {
 
     @Test
     fun `the page hook takes a context handed to a color or drawable lookup`() {
-        assertEquals("a color", listOf(1 to 1), pageContexts(pageMethod("LX/0Jvn;->LIZIZ(ILandroid/content/Context;)I")))
-        assertEquals("a drawable", listOf(1 to 1), pageContexts(pageMethod("LX/0Jvn;->LIZLLL(ILandroid/content/Context;)LX/0Jvv;")))
+        assertEquals("a color", listOf(1 to 1), pageContexts(pageMethod("LX/0Jvl;->LIZIZ(ILandroid/content/Context;)I")))
+        assertEquals("a drawable", listOf(1 to 1), pageContexts(pageMethod("LX/0Jvl;->LIZLLL(ILandroid/content/Context;)LX/0Jvt;")))
         for (lookup in listOf(
-            "LX/0Jvn;->keep(ILandroid/content/Context;)V",
-            "LX/0Jvn;->pick(ILandroid/content/Context;)Z",
-            "LX/0Jvn;->tint(Landroid/content/Context;I)I",
+            "LX/0Jvl;->keep(ILandroid/content/Context;)V",
+            "LX/0Jvl;->pick(ILandroid/content/Context;)Z",
+            "LX/0Jvl;->tint(Landroid/content/Context;I)I",
         )) {
             assertThrows(lookup, PatchException::class.java) { pageContexts(pageMethod(lookup)) }
         }
@@ -1018,12 +1150,12 @@ class LiveDarkPanelsAnchorsTest {
             val (owner, make) = found.single()
             val binder = rowBinder(make, owner)!!
             if ("47.4.3" in apk.name) {
-                assertEquals("${apk.name}: the row binders' base", "LX/10fG;", owner.type)
+                assertEquals("${apk.name}: the row binders' base", "LX/0zUP;", owner.type)
                 assertEquals(listOf("LIZIZ", "LIZJ", "LJIIIIZZ"),
                     listOf(binder.layout.name, binder.attach.name, binder.holder.name))
                 // The trending tab's rows come from the ranking's row binder, which builds on it.
                 assertTrue("${apk.name}: the ranking's row binder left the base",
-                    owner.type in generateSequence("LX/1PLB;") { classes[it]?.superclass }.toList())
+                    owner.type in generateSequence("LX/0oRg;") { classes[it]?.superclass }.toList())
             }
 
             // The hook as the patch writes it: the extension asked first, its row handed to the
@@ -1063,7 +1195,7 @@ class LiveDarkPanelsAnchorsTest {
             return-void
             :tinted
             const/4 v3, 0x1
-            invoke-static { v3, $context }, LX/0Jvn;->LIZIZ(ILandroid/content/Context;)I
+            invoke-static { v3, $context }, LX/0Jvl;->LIZIZ(ILandroid/content/Context;)I
             $after
             return-void
         """)

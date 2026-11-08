@@ -145,10 +145,9 @@ val languagePackPurgerPatch = rawResourcePatch(
 @Suppress("unused")
 val studioCreationDebloatPatch = rawResourcePatch(
     name = "Remove creation tools",
-    description = "Removes TikTok's camera, editing and effects files, saving about 38 MB of " +
-        "storage. The catch: the Create tab and every recording, editing and effects tool stop " +
-        "working, and opening one, like effect search, can close TikTok. Leave it out if you " +
-        "make videos.",
+    description = "Removes two effects engine libraries TikTok doesn't load for the camera, effects, " +
+        "Retouch or the video editor, saving about 45 MB. Those all keep working. If a creation " +
+        "tool ever closes TikTok, repatch without this one.",
     default = false,
 ) {
     category("Performance")
@@ -156,19 +155,14 @@ val studioCreationDebloatPatch = rawResourcePatch(
     dependsOn(buildChoicePatch(BuildChoice.CREATION))
 
     execute {
-        if (!stripsCreationTools { get(it).exists() }) {
-            BuildDetails.stripped(get(BUILD_DETAILS_ASSET), BuildChoice.CREATION, StripSummary(0, 0L, alreadyStripped = false))
-            println(
-                "[Studio & Creation De-bloat] This build carries none of the effect libraries, so the " +
-                    "face model stays too. Emptied alone, it only stops face effects and Beauty from finding a face.",
-            )
-            return@execute
-        }
-        decode("assets/model/ttfacemodel")
+        // The face model in assets/model/ttfacemodel stays on every build (#285). Emptied, it left
+        // face effects and Beauty unable to find a face while the camera and the rest of the
+        // effects kept working, and it is under 1 MB of the strip. libEffectCreatorJni stays
+        // too (see studioNativeFiles).
         val result = stripVerifiedResources(
             get("."),
             "Studio & Creation De-bloat",
-            listOf("assets/model/ttfacemodel"),
+            emptyList(),
             studioNativeFiles,
             studioAssetProfiles,
             resolveStandaloneFile = { path -> get(path) },
@@ -259,24 +253,15 @@ val voiceToolsDebloatPatch = rawResourcePatch(
 
 // The camera feature dex stays, like every lib/*/libdex_*.so: TikTok injects them all at
 // start-up, and an empty one left its own strings in English on a Spanish phone (#125).
-private val studioNativeFiles = listOf(
-    "lib/arm64-v8a/libEffectCreatorJni.so",
+// libEffectCreatorJni stays too: All effects builds the effect editor context on open, and with
+// the library empty its static init threw UnsatisfiedLinkError and closed TikTok (#285). Nothing
+// links these two, and neither needs the other or libEffectCreatorJni.
+internal val studioNativeFiles = listOf(
     "lib/arm64-v8a/libeffect_plugin.so",
     "lib/arm64-v8a/libttvesdk_plugin.so",
-    "lib/armeabi-v7a/libEffectCreatorJni.so",
     "lib/armeabi-v7a/libeffect_plugin.so",
     "lib/armeabi-v7a/libttvesdk_plugin.so",
 )
-
-/**
- * Whether "Remove creation tools" has anything to take: the face model goes only with the
- * effect libraries. A build without them (APKMirror's split bundle on 47.5.3) gets its camera and
- * effects from libraries TikTok fetches itself, so emptying the model there saved under 1 MB and
- * left face effects and Beauty unable to find a face (#285). 47.7.2's split bundle ships the arm64
- * editor library alone, which doesn't make it a build with its own effects.
- */
-internal fun stripsCreationTools(shipped: (String) -> Boolean) =
-    studioNativeFiles.filter { it.endsWith("/libeffect_plugin.so") }.any(shipped)
 
 private fun StripSummary.report(patchName: String) {
     if (files == 0) {
@@ -317,8 +302,9 @@ private val microblinkFiles = listOf(
 // the arm64 and armeabi-v7a P2P video relay. 47.6.3 kept the editor and speech libraries and
 // both LIVE scripts and rebuilt the main C2PA, log monitor, link mic and avmdl relay libraries.
 // 47.7.2 kept the C2PA, monitor, editor and speech libraries and rebuilt the link mic library,
-// both LIVE match scripts and the avmdl relay library.
-private const val REVIEWED_BUILD = "47.7.2"
+// both LIVE match scripts and the avmdl relay library. 47.7.3's universal APK changed none of
+// these files (read 2026-11-07).
+private const val REVIEWED_BUILD = "47.7.3"
 
 private val c2paArm64Files = listOf(
     file("lib/arm64-v8a/libtt_c2pa_sdk.so", "4b4b8e8435f9d1786b5e54c13690ca7b728bd976abd10c3ccf67a257fcd9b763"),
@@ -337,14 +323,13 @@ private val monitorFiles = listOf(
     file("lib/armeabi-v7a/libartlog_monitor.so", "fa4961c5254836f8fb8e0041f7f795d6d1e6da0dad6113c25b7f07630b717efe"),
 )
 
-// APKMirror also sells TikTok as a split bundle (tiktok-47-7-2, "arm64-v8a + armeabi-v7a",
-// 120-640dpi, read on 2026-11-05). Morphe Manager and the desktop CLI merge every split in one,
-// and every file the merged APK shares with the universal APK is byte-identical. 47.7.2's bundle
-// has 37 feature splits where 47.6.3's had 86. It keeps the Microblink card scanner, the face
-// model, the arm64 editor library and the arm64 speech epg and spg libraries, and lacks both
-// C2PA debug libraries, the effect libraries, the armeabi-v7a editor, speech epg and spg copies
-// and the whole P2P relay. Each bundle profile is the universal APK's profile less those files.
-// It keeps 25 languages.
+// APKMirror also sells TikTok as a split bundle (tiktok-47-7-3, "arm64-v8a + armeabi-v7a",
+// 120-640dpi, read on 2026-11-07, 107 splits). Morphe Manager and the desktop CLI merge every
+// split in one, and every file the merged APK shares with the universal APK is byte-identical.
+// 47.7.3's bundle carries every arm64 file of these groups, where 47.7.2's lacked the arm64 effect
+// libraries, C2PA debug library and P2P relay. It still lacks the armeabi-v7a copies of the C2PA
+// debug, editor, effect, speech epg and spg and P2P relay libraries. Each bundle profile is the
+// universal APK's profile less those files. It keeps 25 languages.
 
 /**
  * [profile] without [absent], every one of which it must list: its build's split bundle. A bundle
@@ -365,12 +350,10 @@ private val coreAssets = ResourceProfile(
 
 internal val coreAssetProfiles = listOf(
     coreAssets,
-    bundleOf(coreAssets, "lib/arm64-v8a/libtt_c2pa_sdk_d.so", "lib/armeabi-v7a/libtt_c2pa_sdk_d.so"),
+    bundleOf(coreAssets, "lib/armeabi-v7a/libtt_c2pa_sdk_d.so"),
 )
 
 private val studioArm64Files = listOf(
-    file("assets/model/ttfacemodel/tt_face_v11.1.model", "c4b081d04f6829f7cd5849abca0941891f1a7f2cb250efd7f0e42fece5426610"),
-    file("lib/arm64-v8a/libEffectCreatorJni.so", "b7db28436aa1ccd85e3d52d1f916817397be6b35dfff40d1bb69d0d5251a3293"),
     file("lib/arm64-v8a/libeffect_plugin.so", "2990d5bf76d832b4a6c25bbd9540f3191e86aa8342c54a638fad26ada2806be3"),
     file("lib/arm64-v8a/libttvesdk_plugin.so", "0f1cc7737330f8a9b81e03f3ab15eecea197254c16c23b5492c5424aaf51d6c0"),
 )
@@ -379,7 +362,6 @@ private val studioAssets = ResourceProfile(
     "TikTok $REVIEWED_BUILD",
     studioArm64Files +
         listOf(
-            file("lib/armeabi-v7a/libEffectCreatorJni.so", "d3ae58712413c2d1d06dcf508eb7850452f58c93b9befd57867cd029421c9482"),
             file("lib/armeabi-v7a/libeffect_plugin.so", "f89bd50e941392fee2e47d031711fdce3520dae7f3e531da59dd0afbbec9d91c"),
             file("lib/armeabi-v7a/libttvesdk_plugin.so", "42ab2be66f2b02622f52062fc3ff1b4862f44f0098faecfac3996afe3e7cf1f9"),
         ),
@@ -389,9 +371,6 @@ internal val studioAssetProfiles = listOf(
     studioAssets,
     bundleOf(
         studioAssets,
-        "lib/arm64-v8a/libeffect_plugin.so",
-        "lib/arm64-v8a/libttvesdk_plugin.so",
-        "lib/armeabi-v7a/libEffectCreatorJni.so",
         "lib/armeabi-v7a/libeffect_plugin.so",
         "lib/armeabi-v7a/libttvesdk_plugin.so",
     ),
@@ -420,8 +399,8 @@ private val p2pRelay = ResourceProfile(
         file("lib/armeabi-v7a/libp2plivevdp.so", "dd8a626f8b0efe36a883096923bed56ecb457e9408b26262c844442901dc1d09"),
         // The LIVE relay's own base and NAT punch libraries (#70). Only libp2plivevdp needs
         // libbase_live, and nothing links libpunch. libbase_live is also df_live_p2p's load probe,
-        // so an empty one reads that feature as not installed, which is how the split bundle
-        // (it ships neither) already runs.
+        // so an empty one reads that feature as not installed, which is how 47.7.2's split bundle
+        // (it shipped neither) ran.
         file("lib/arm64-v8a/libbase_live.so", "33e4131d9702024042edd9026554da67a678145cf6c611bf198e367563cbc34f"),
         file("lib/arm64-v8a/libpunch.so", "4432a15bc71ee40a43fd495b572b8bf86444ef4eae77d5003b4e717e9a7526ed"),
         file("lib/armeabi-v7a/libbase_live.so", "4f2ac3c7ff004fba1ba9b1407c10987d19f8ffb40071f06bf3a4d6b7d62de320"),
@@ -433,12 +412,8 @@ internal val p2pRelayProfiles = listOf(
     p2pRelay,
     bundleOf(
         p2pRelay,
-        "lib/arm64-v8a/libavmdlp2pv2.so",
-        "lib/arm64-v8a/libp2plivevdp.so",
         "lib/armeabi-v7a/libavmdlp2pv2.so",
         "lib/armeabi-v7a/libp2plivevdp.so",
-        "lib/arm64-v8a/libbase_live.so",
-        "lib/arm64-v8a/libpunch.so",
         "lib/armeabi-v7a/libbase_live.so",
         "lib/armeabi-v7a/libpunch.so",
     ),

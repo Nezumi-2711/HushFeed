@@ -301,7 +301,7 @@ group = "app.morphe"
 patches {
     about {
         name = "Hushfeed"
-        description = "Hushfeed patches for TikTok 47.7.2, built for Morphe. Fewer accidental taps, less noise, more control over the feed, inbox, comments and downloads."
+        description = "Hushfeed patches for TikTok 47.7.3, built for Morphe. Fewer accidental taps, less noise, more control over the feed, inbox, comments and downloads."
         source = "https://github.com/SysAdminDoc/hushfeed"
         author = "SysAdminDoc"
         contact = "https://github.com/SysAdminDoc/hushfeed/issues"
@@ -464,6 +464,7 @@ val extensionClasses = listOf(
     "app/morphe/patches/tiktok/interaction/downloads/StickerSourceFixturesTest.class",
     "app/morphe/patches/tiktok/interaction/downloads/StoryHoldFixturesTest.class",
     "app/morphe/patches/tiktok/interaction/gesture/LikePressAnchorsTest.class",
+    "app/morphe/patches/tiktok/interaction/publishdate/LikedJumpHooksTest.class",
     "app/morphe/patches/tiktok/interaction/publishdate/SoundGridSortHooksTest.class",
     "app/morphe/patches/tiktok/interaction/seekbar/SoundSeekbarBridgesTest.class",
     "app/morphe/patches/tiktok/interaction/videooverlays/MusicDiscSpinAnchorsTest.class",
@@ -472,6 +473,10 @@ val extensionClasses = listOf(
     "app/morphe/patches/tiktok/misc/inbox/InboxQueryOwnerFixturesTest.class",
     "app/morphe/patches/tiktok/misc/inbox/InboxRenderedModelsFixturesTest.class",
     "app/morphe/patches/tiktok/misc/onboarding/FirstLaunchSkipListTest.class",
+    // Reads AmoledTheme.java for the names it looks up, and decodes and encodes a whole TikTok
+    // resource table, which needs this partition's 4 GB heap.
+    "app/morphe/patches/tiktok/misc/theme/AmoledRestoreResourcesTest.class",
+    "app/morphe/patches/tiktok/misc/theme/AmoledThemeSwitchHooksTest.class",
     "app/morphe/patches/tiktok/misc/translation/ReceivedDmTranslationIconTest.class",
     "app/morphe/patches/tiktok/privacy/StoreIdentityExtensionTest.class",
     "app/morphe/patches/tiktok/profile/LocalProfileAppearanceAnchorsTest.class",

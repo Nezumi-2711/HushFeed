@@ -1208,7 +1208,7 @@ public final class Probe extends Instrumentation {
                     }
                     case "layouts": {
                         // Every shown, on-screen view that draws a Layout of its own rather than
-                        // being a TextView (TikTok's X.0Btt draws captions and descriptions this
+                        // being a TextView (TikTok's X.0Btv draws captions and descriptions this
                         // way), with its class, place, size, text size in px and the layout's
                         // lines and width. How the caption size was shown to stay off the other
                         // text; the text itself never leaves the phone.
@@ -1263,13 +1263,13 @@ public final class Probe extends Instrumentation {
                     case "profileviewgates": {
                         // What TikTok 47.0.3 checks before it reports a profile view
                         // (ProfilePlatformViewModel.a73 before ProfileViewerApiService.reportView),
-                        // read in this process: the feature gate X.0mpc.LIZ(), the under-16 flag,
+                        // read in this process: the feature gate X.0mTf.LIZ(), the under-16 flag,
                         // the viewer's "profile_view_history" privacy value (1 reports), the
-                        // cooldown flag X.0mD8 and the follower cap it replaces. Names are this
+                        // cooldown flag X.0llN and the follower cap it replaces. Names are this
                         // build's; each read says what it found or why it could not.
                         StringBuilder out = new StringBuilder();
                         String[][] reads = {
-                                {"featureGate", "X.0mpc", "LIZ"},
+                                {"featureGate", "X.0mTf", "LIZ"},
                         };
                         for (String[] read : reads) {
                             try {
@@ -1280,7 +1280,7 @@ public final class Probe extends Instrumentation {
                             }
                         }
                         try {
-                            Object feature = loader.loadClass("X.07Ty").getMethod("LIZIZ").invoke(null);
+                            Object feature = loader.loadClass("X.07U2").getMethod("LIZIZ").invoke(null);
                             out.append(" under16=").append(feature.getClass().getMethod("LIZIZ").invoke(feature));
                         } catch (Throwable failure) {
                             out.append(" under16=?(").append(failure.getClass().getSimpleName()).append(')');
@@ -1308,10 +1308,10 @@ public final class Probe extends Instrumentation {
                             out.append(" cooldownFlag=?(").append(failure.getClass().getSimpleName()).append(')');
                         }
                         try {
-                            Object lazy = loader.loadClass("X.0lt8").getField("LIZIZ").get(null);
+                            Object lazy = loader.loadClass("X.0lYI").getField("LIZIZ").get(null);
                             Object config = lazy.getClass().getMethod("getValue").invoke(lazy);
                             Object cap = config == null ? null : config.getClass().getField("enabledMaxFollowers").get(config);
-                            Object me = loader.loadClass("X.02zE").getMethod("LIZ").invoke(null);
+                            Object me = loader.loadClass("X.02zI").getMethod("LIZ").invoke(null);
                             Object followers = me == null ? null : me.getClass().getField("historyMaxFollowerCount").get(me);
                             out.append(" followerCap=").append(cap == null ? "5000 (default)" : cap).append(" myHistoryMaxFollowers=").append(followers);
                         } catch (Throwable failure) {
@@ -2392,7 +2392,7 @@ public final class Probe extends Instrumentation {
                         if (activity == null) throw new IllegalStateException("no current activity");
                         android.content.res.Resources resources = activity.getResources();
                         java.util.Map<Integer, String> wanted = new java.util.HashMap<>();
-                        // The 47.7.2 names: lkj rail column, bs2 anchor, lk8 search bar, g_2 like button.
+                        // The 47.7.3 names: lkj rail column, bs2 anchor, lk8 search bar, g_2 like button.
                         for (String name : new String[]{"lkj", "desc", "bs2", "lk8", "videomusiccoverblock", "g_2"}) {
                             int id = resources.getIdentifier(name, "id", activity.getPackageName());
                             if (id != 0) wanted.put(id, name);
@@ -2818,7 +2818,7 @@ public final class Probe extends Instrumentation {
                     }
                     case "countformat": {
                         // One of TikTok's static count formatters run with a count the check
-                        // picks, and the text it wrote: -e class X.0GJY -e method LIZIZ -e count
+                        // picks, and the text it wrote: -e class X.0GJW -e method LIZIZ -e count
                         // 123456. One that takes (long) gets just the count, one that takes
                         // (Aweme, long) the video on screen as well. A check can read what Show
                         // exact counts makes of a big count whatever the feed serves. The class
@@ -2866,12 +2866,12 @@ public final class Probe extends Instrumentation {
                         // Without it set to dark, TikTok stays light whatever the phone's night
                         // mode is (seen on the S22, 2026-10-16). Read through TikTok's own store
                         // factory, the static (int, Context, String) -> SharedPreferences method
-                        // TikTok reads it with (-e store X.038m -e method LIZJ on 47.7.2), since
+                        // TikTok reads it with (-e store X.038q -e method LIZJ on 47.7.3), since
                         // that one may route the store to Keva rather than a plain file; its
                         // sibling LIZIZ skips that. -e set N writes N, which the next start applies;
                         // -e set unset removes it.
                         String storeClass = intent.getStringExtra("store");
-                        if (storeClass == null) storeClass = "X.038m";
+                        if (storeClass == null) storeClass = "X.038q";
                         String storeMethod = intent.getStringExtra("method");
                         if (storeMethod == null) storeMethod = "LIZJ";
                         Method factory = loader.loadClass(storeClass)
@@ -2949,6 +2949,78 @@ public final class Probe extends Instrumentation {
                                 Log.e(TAG, "failed fieldswatch", error);
                             }
                         }, "hushfeed-probe-fieldswatch").start();
+                        break;
+                    }
+                    case "likedpages": {
+                        // The signed-in account's Liked list read the way Account cleanup reads it
+                        // (#350), once from each cursor in -e cursors (comma separated; 0 is the
+                        // newest) and then -e follow more pages on from the last answer, -e count a
+                        // page (20 when left out): how many
+                        // videos came back, the cursors the answer names, has_more, and the oldest
+                        // and newest upload time on the page in seconds. No video ids. For telling
+                        // whether max_cursor is a time a jump to a date could hand the list.
+                        String cursorText = intent.getStringExtra("cursors");
+                        String[] cursors = (cursorText == null ? "0" : cursorText).split(",");
+                        String followText = intent.getStringExtra("follow");
+                        int follow = followText == null ? 0 : Integer.parseInt(followText);
+                        String countText = intent.getStringExtra("count");
+                        int count = countText == null ? 20 : Integer.parseInt(countText);
+                        new Thread(() -> {
+                            try {
+                                Class<?> sources = loader.loadClass("app.morphe.extension.tiktok.privacy.AccountCleanupSources");
+                                Class<?> calls = loader.loadClass("app.morphe.extension.tiktok.privacy.TikTokCalls");
+                                Field tiktokField = sources.getDeclaredField("TIKTOK");
+                                tiktokField.setAccessible(true);
+                                Object services = tiktokField.get(null);
+                                Method likedList = services.getClass().getMethod("likedList");
+                                likedList.setAccessible(true);
+                                Object service = likedList.invoke(services);
+                                Object secUid = loader.loadClass("app.morphe.extension.tiktok.SignedInUser").getMethod("secId").invoke(null);
+                                Method call = calls.getDeclaredMethod("call", Object.class, String.class, String.class, Map.class);
+                                Method await = calls.getDeclaredMethod("await", Object.class);
+                                Method listIn = calls.getDeclaredMethod("listIn", Object.class, String.class);
+                                Method longIn = calls.getDeclaredMethod("longIn", Object.class, String.class, long.class);
+                                Method flagIn = calls.getDeclaredMethod("flagIn", Object.class, String.class);
+                                for (Method method : new Method[] {call, await, listIn, longIn, flagIn}) method.setAccessible(true);
+                                StringBuilder out = new StringBuilder();
+                                java.util.ArrayDeque<Long> queue = new java.util.ArrayDeque<>();
+                                for (String cursor : cursors) queue.add(Long.parseLong(cursor.trim()));
+                                int extra = follow;
+                                while (!queue.isEmpty()) {
+                                    long cursor = queue.poll();
+                                    Map<String, Object> query = new java.util.HashMap<>();
+                                    query.put("max_cursor", cursor);
+                                    query.put("sec_user_id", secUid);
+                                    query.put("count", count);
+                                    query.put("invalid_item_count", 0);
+                                    query.put("is_hiding_invalid_item", 1);
+                                    Object body = await.invoke(null, call.invoke(null, service, "/aweme/v1/aweme/favorite/", null, query));
+                                    List<?> items = (List<?>) listIn.invoke(null, body, "items");
+                                    long next = (Long) longIn.invoke(null, body, "maxCursor", -1L);
+                                    long min = (Long) longIn.invoke(null, body, "minCursor", -1L);
+                                    boolean more = (Boolean) flagIn.invoke(null, body, "hasMore");
+                                    long oldest = Long.MAX_VALUE;
+                                    long newest = 0;
+                                    for (Object item : items) {
+                                        if (item == null) continue;
+                                        long created = ((Number) item.getClass().getMethod("getCreateTime").invoke(item)).longValue();
+                                        oldest = Math.min(oldest, created);
+                                        newest = Math.max(newest, created);
+                                    }
+                                    out.append("\ncursor ").append(cursor).append(": ").append(items.size())
+                                            .append(" videos, maxCursor ").append(next).append(", minCursor ").append(min)
+                                            .append(", hasMore ").append(more).append(", uploaded ")
+                                            .append(items.isEmpty() ? "-" : oldest + ".." + newest);
+                                    if (queue.isEmpty() && extra > 0 && more && next > 0) {
+                                        extra--;
+                                        queue.add(next);
+                                    }
+                                }
+                                Log.i(TAG, "ok likedpages" + out);
+                            } catch (Throwable error) {
+                                Log.e(TAG, "failed likedpages", error);
+                            }
+                        }, "hushfeed-probe-likedpages").start();
                         break;
                     }
                     case "session-hold": {
@@ -3457,6 +3529,77 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok livestream" + out);
                         break;
                     }
+                    case "addview": {
+                        // Builds one TikTok view class through its (Context) constructor on the
+                        // current activity, so a hook at the top of that constructor runs as it does
+                        // in the app, and lays it over the middle of the screen for a screenshot. For
+                        // a view TikTok only shows on a trigger the test account doesn't get (#362's
+                        // gift guide bubble: -e class X.0zJ8 on 47.7.3). -e text fills its empty
+                        // TextViews; the context the view ended up with and each TextView's color go
+                        // to the log. -e remove true takes it off again.
+                        // The resumed activity comes from ActivityThread's records: Hushfeed's
+                        // tracked activity stays MainActivity while a LIVE room is in front, and a
+                        // LIVE view built on MainActivity's theme fails on a missing LIVE attribute.
+                        android.app.Activity activity = null;
+                        try {
+                            Class<?> threadClass = Class.forName("android.app.ActivityThread");
+                            Object thread = threadClass.getMethod("currentActivityThread").invoke(null);
+                            java.lang.reflect.Field records = threadClass.getDeclaredField("mActivities");
+                            records.setAccessible(true);
+                            for (Object record : ((java.util.Map<?, ?>) records.get(thread)).values()) {
+                                java.lang.reflect.Field paused = record.getClass().getDeclaredField("paused");
+                                paused.setAccessible(true);
+                                if (paused.getBoolean(record)) continue;
+                                java.lang.reflect.Field held = record.getClass().getDeclaredField("activity");
+                                held.setAccessible(true);
+                                activity = (android.app.Activity) held.get(record);
+                            }
+                        } catch (ReflectiveOperationException | RuntimeException e) {
+                            Log.w(TAG, "addview: no resumed activity from ActivityThread, using the tracked one: " + e);
+                        }
+                        if (activity == null) {
+                            activity = (android.app.Activity) loader.loadClass(UTILS).getMethod("getActivity").invoke(null);
+                        }
+                        if (activity == null) throw new IllegalStateException("no current activity");
+                        android.view.View content = activity.findViewById(android.R.id.content);
+                        if (!(content instanceof android.widget.FrameLayout)) throw new IllegalStateException("no content frame");
+                        android.widget.FrameLayout frame = (android.widget.FrameLayout) content;
+                        String tag = "hushfeed-probe-addview";
+                        android.view.View old = frame.findViewWithTag(tag);
+                        if (old != null) frame.removeView(old);
+                        if ("true".equals(intent.getStringExtra("remove"))) {
+                            Log.i(TAG, "ok addview removed=" + (old != null));
+                            break;
+                        }
+                        Class<?> type = loader.loadClass(required(intent, "class"));
+                        android.view.View view = (android.view.View) type
+                                .getConstructor(android.content.Context.class).newInstance(activity);
+                        String text = intent.getStringExtra("text");
+                        StringBuilder out = new StringBuilder("ok addview ").append(type.getName())
+                                .append(" in ").append(activity.getClass().getSimpleName()).append(" context=")
+                                .append(view.getContext() == activity ? "the activity" : view.getContext().getClass().getName());
+                        java.util.ArrayDeque<android.view.View> queue = new java.util.ArrayDeque<>();
+                        queue.add(view);
+                        while (!queue.isEmpty()) {
+                            android.view.View child = queue.removeFirst();
+                            if (child instanceof android.widget.TextView) {
+                                android.widget.TextView label = (android.widget.TextView) child;
+                                if (text != null && label.getText().length() == 0) label.setText(text);
+                                out.append("\n  text '").append(label.getText()).append("' color=")
+                                        .append(Integer.toHexString(label.getCurrentTextColor()));
+                            }
+                            if (child instanceof android.view.ViewGroup) {
+                                android.view.ViewGroup group = (android.view.ViewGroup) child;
+                                for (int i = 0; i < group.getChildCount(); i++) queue.add(group.getChildAt(i));
+                            }
+                        }
+                        view.setTag(tag);
+                        frame.addView(view, new android.widget.FrameLayout.LayoutParams(
+                                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                                android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.Gravity.CENTER));
+                        Log.i(TAG, out.toString());
+                        break;
+                    }
                     case "click": {
                         // Clicks one shown view by its id name (-e find bottom_tab_home), or by a
                         // content description regex (-e desc "^Profile$"), through performClick on
@@ -3512,6 +3655,69 @@ public final class Probe extends Instrumentation {
                         boolean handled = clickable.performClick();
                         Log.i(TAG, "ok click " + idName(clickable, resources) + " at " + where[0] + ',' + where[1]
                                 + " size " + clickable.getWidth() + 'x' + clickable.getHeight() + " handled=" + handled);
+                        break;
+                    }
+                    case "edittext": {
+                        // Reads the focused text field (or the only shown one) with every character
+                        // outside printable ASCII written as U+XXXX, so a check can see what a field
+                        // holds without an IME (#320's bio round trip). -e append 200b,200c adds
+                        // those code points (hex, comma separated) at the end; -e strip true removes
+                        // every zero-width character. Both go through setText, so the screen's own
+                        // TextWatchers see the change the way they see typing.
+                        android.widget.EditText focused = null;
+                        List<android.widget.EditText> shown = new ArrayList<>();
+                        java.util.ArrayDeque<android.view.View> queue = new java.util.ArrayDeque<>(windowRoots());
+                        while (!queue.isEmpty()) {
+                            android.view.View view = queue.removeFirst();
+                            if (!view.isShown()) continue;
+                            if (view instanceof android.widget.EditText) {
+                                shown.add((android.widget.EditText) view);
+                                if (view.isFocused()) focused = (android.widget.EditText) view;
+                            }
+                            if (view instanceof android.view.ViewGroup) {
+                                android.view.ViewGroup group = (android.view.ViewGroup) view;
+                                for (int i = 0; i < group.getChildCount(); i++) queue.add(group.getChildAt(i));
+                            }
+                        }
+                        if (focused == null && shown.size() == 1) focused = shown.get(0);
+                        if (focused == null) throw new IllegalStateException(shown.size() + " shown text fields, none focused");
+                        String before = String.valueOf(focused.getText());
+                        String after = before;
+                        String append = intent.getStringExtra("append");
+                        if (append != null) {
+                            StringBuilder added = new StringBuilder(before);
+                            for (String part : append.split(",")) {
+                                if (!part.trim().isEmpty()) added.appendCodePoint(Integer.parseInt(part.trim(), 16));
+                            }
+                            after = added.toString();
+                        }
+                        if ("true".equals(intent.getStringExtra("strip"))) {
+                            StringBuilder kept = new StringBuilder();
+                            for (int i = 0; i < after.length(); ) {
+                                int cp = after.codePointAt(i);
+                                if (cp != 0x200B && cp != 0x200C && cp != 0x200D && cp != 0x2060 && cp != 0xFEFF) {
+                                    kept.appendCodePoint(cp);
+                                }
+                                i += Character.charCount(cp);
+                            }
+                            after = kept.toString();
+                        }
+                        if (!after.equals(before)) {
+                            focused.setText(after);
+                            focused.setSelection(focused.length());
+                        }
+                        StringBuilder shownText = new StringBuilder();
+                        String now = String.valueOf(focused.getText());
+                        int zeroWidth = 0;
+                        for (int i = 0; i < now.length(); ) {
+                            int cp = now.codePointAt(i);
+                            if (cp == 0x200B || cp == 0x200C || cp == 0x200D || cp == 0x2060 || cp == 0xFEFF) zeroWidth++;
+                            if (cp >= 32 && cp < 127) shownText.append((char) cp);
+                            else shownText.append(String.format(java.util.Locale.ROOT, "U+%04X ", cp));
+                            i += Character.charCount(cp);
+                        }
+                        Log.i(TAG, "ok edittext " + idName(focused, app.getResources()) + " len=" + now.length()
+                                + " zeroWidth=" + zeroWidth + " changed=" + !after.equals(before) + " [" + shownText + "]");
                         break;
                     }
                     case "themeattrs": {
@@ -4477,7 +4683,7 @@ public final class Probe extends Instrumentation {
                     lines.add(answers.toString());
                 }
                 try {
-                    lines.add(" class gate 06Rv.LIZ=" + loader.loadClass("X.06Rv").getMethod("LIZ").invoke(null));
+                    lines.add(" class gate 06Rv.LIZ=" + loader.loadClass("X.06Rz").getMethod("LIZ").invoke(null));
                 } catch (ReflectiveOperationException | RuntimeException unreadable) {
                     lines.add(" class gate unreadable " + unreadable);
                 }
@@ -4545,7 +4751,7 @@ public final class Probe extends Instrumentation {
                 long started = android.os.SystemClock.uptimeMillis();
                 // The page panel builds its visibility component only while this experiment is on.
                 try {
-                    Method sequenceOn = loader.loadClass("X.07wT").getDeclaredMethod("LIZ");
+                    Method sequenceOn = loader.loadClass("X.07wX").getDeclaredMethod("LIZ");
                     sequenceOn.setAccessible(true);
                     lines.add("generic feed sequence " + sequenceOn.invoke(null));
                 } catch (ReflectiveOperationException | RuntimeException unreadable) {
@@ -4553,7 +4759,7 @@ public final class Probe extends Instrumentation {
                 }
                 java.util.List<Object> panels = new java.util.ArrayList<>();
                 try {
-                    Method panelOf = loader.loadClass("X.08qu").getDeclaredMethod("LIZJ", fragmentType);
+                    Method panelOf = loader.loadClass("X.08qy").getDeclaredMethod("LIZJ", fragmentType);
                     panelOf.setAccessible(true);
                     for (Object root : roots) {
                         if (!fragmentType.isInstance(root)) continue;
@@ -4996,7 +5202,7 @@ public final class Probe extends Instrumentation {
         private static String hoxNode(Object node) throws ReflectiveOperationException {
             if (node == null) return " none";
             Class<?> nodeType = node.getClass();
-            while (nodeType != null && !nodeType.getName().equals("X.06HL")) nodeType = nodeType.getSuperclass();
+            while (nodeType != null && !nodeType.getName().equals("X.06HP")) nodeType = nodeType.getSuperclass();
             if (nodeType == null) return " " + ref(node) + " not a node";
             Field listenersField = nodeType.getDeclaredField("LLJJIJIIJIL");
             Field containerField = nodeType.getDeclaredField("LL");
@@ -5007,7 +5213,7 @@ public final class Probe extends Instrumentation {
             Object container = containerField.get(node);
             out.append(" container ").append(ref(container));
             Class<?> containerType = container == null ? null : container.getClass();
-            while (containerType != null && !containerType.getName().equals("X.06MW")) containerType = containerType.getSuperclass();
+            while (containerType != null && !containerType.getName().equals("X.06Ma")) containerType = containerType.getSuperclass();
             if (containerType == null) return out.toString();
             Field shown = containerType.getDeclaredField("LLJJJJJIL");
             Field index = containerType.getDeclaredField("LLJJJ");
@@ -5042,14 +5248,14 @@ public final class Probe extends Instrumentation {
         }
 
         /**
-         * Each of a feed fragment's fields holding TikTok's older list panel (X.05fB), with that
+         * Each of a feed fragment's fields holding TikTok's older list panel (X.05fF), with that
          * panel's visible hint. The page's node show sets it and its node hide clears it, and the
          * list's players follow it, so a page left hidden shows here as false.
          */
         private String listPanelHints(Object fragment) {
             StringBuilder out = new StringBuilder();
             try {
-                Class<?> panelType = loader.loadClass("X.05fB");
+                Class<?> panelType = loader.loadClass("X.05fF");
                 Field hint = panelType.getDeclaredField("mUserVisibleHint");
                 hint.setAccessible(true);
                 for (Class<?> c = fragment.getClass(); c != null && !c.getName().startsWith("androidx."); c = c.getSuperclass()) {
@@ -6156,9 +6362,9 @@ public final class Probe extends Instrumentation {
                 Class<?> register = loader.loadClass("com.ss.android.deviceregister.DeviceRegisterManager");
                 Log.i(TAG, "ok idreset before" + registeredIds(context, appLog, register));
                 if (readOnly) return;
-                // 47.7.2's reset callback: LIZ() when the timeout runs out, LIZIZ(installInfo)
+                // 47.7.3's reset callback: LIZ() when the timeout runs out, LIZIZ(installInfo)
                 // when new install info arrives.
-                Class<?> callbackType = loader.loadClass("X.09H9");
+                Class<?> callbackType = loader.loadClass("X.09HD");
                 final java.util.concurrent.CountDownLatch answered = new java.util.concurrent.CountDownLatch(1);
                 final String[] outcome = {"no answer"};
                 Object callback = java.lang.reflect.Proxy.newProxyInstance(loader, new Class<?>[]{callbackType},

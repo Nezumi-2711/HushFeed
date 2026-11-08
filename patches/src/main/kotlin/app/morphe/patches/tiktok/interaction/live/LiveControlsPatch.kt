@@ -21,6 +21,7 @@ import app.morphe.patches.tiktok.interaction.sharesheet.ownedShareActionsPatch
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
+import app.morphe.patches.tiktok.misc.theme.AMOLED_THEME_EXTENSION
 import app.morphe.patches.tiktok.shared.guardAtEntry
 import app.morphe.util.ControlFlow
 import app.morphe.util.addInstruction
@@ -158,8 +159,27 @@ internal object LiveClearScreenEntryFingerprint : Fingerprint(
     parameters = listOf(),
 )
 
+/** TikTok's server setting that keeps clear screen for the rest of a LIVE session, real-named on 47.7.2. */
+internal const val LIVE_CLEAR_SCREEN_SESSION_SETTING =
+    "Lcom/bytedance/android/livesdk/setting/LiveClearScreenSessionPersistenceSetting;"
+
 /**
- * LIVE's per-room controller (X.0Lau on 47.7.2, whose obfuscated name moves every build), found by
+ * Whether clear screen carries from one LIVE room to the next (#354). It answers the server's
+ * live_clear_screen_session_persistence, false unless TikTok turns it on. While it answers true,
+ * ClearScreenService saves each change under the LIVE session's id (set as LiveRoomFragment is
+ * created, so it lasts across swipes), hands the saved state to each new room's controller, whose
+ * constructor turns clear screen back on, and the room fragment builds that controller as its
+ * activity is created rather than later.
+ */
+internal object LiveClearScreenSessionFingerprint : Fingerprint(
+    definingClass = LIVE_CLEAR_SCREEN_SESSION_SETTING,
+    name = "getValue",
+    returnType = "Z",
+    parameters = listOf(),
+)
+
+/**
+ * LIVE's per-room controller (X.0Las on 47.7.3, whose obfuscated name moves every build), found by
  * its constructor. It owns the actual clear state, including swipe gestures, and that constructor
  * may restore Clear screen before the room page has resumed.
  */
@@ -313,7 +333,7 @@ internal const val LIVE_STREAM_URL = "Lcom/bytedance/android/livesdkapi/depend/m
 internal const val AUDIO_SWITCH_REFUSED = "not support switch to audio, streamFormat: "
 
 /**
- * The LIVE player's message loop (X.0Jxt on 47.7.2). A switch to "ao", a room's sound on its own,
+ * The LIVE player's message loop (X.0Jxr on 47.7.3). A switch to "ao", a room's sound on its own,
  * goes through there only while the server's EnableOnlyAudioInAoRes flag is on, and logs
  * [AUDIO_SWITCH_REFUSED] otherwise (#265).
  */
@@ -325,7 +345,7 @@ internal object LiveAudioSwitchGateFingerprint : Fingerprint(
 )
 
 /**
- * Whether the player is on a room's sound alone (LLJJJJLIIL on 47.7.2), which adds
+ * Whether the player is on a room's sound alone (LLJJJJLIIL on 47.7.3), which adds
  * only_audio=1 to the room's address so the picture stops downloading. It checks the same flag.
  */
 internal object LiveAudioUrlGateFingerprint : Fingerprint(
@@ -1094,7 +1114,7 @@ private const val DATA_CHANNEL = "Lcom/bytedance/ies/sdk/datachannel/DataChannel
 /**
  * Adds Audio only to the older picker's rows (#265), the one Share > Video quality opens on some
  * accounts (Login2, 2026-11-05). [viewCreated] gets its rows from a static builder that takes the
- * room's data channel (X.12C0.LIZ on 47.7.2). TikTok also reads that builder to find the next lower
+ * room's data channel (X.0fUN.LIZ on 47.7.3). TikTok also reads that builder to find the next lower
  * quality on a weak connection, so the row goes only into the dialog's copy: right after the
  * builder answers, the extension answers the rows. A jump to the instruction after the answer
  * skips the hook, as it should, since the rows didn't just come from the builder there. Returns
@@ -1226,7 +1246,7 @@ private const val COLOR_SPAN = "Landroid/text/style/ForegroundColorSpan;"
 /**
  * The profile card's bio being shown (HeaderCell.LJIJJLI on 47.4.3, #159). A translated bio ends
  * in a "See original" link. Its ForegroundColorSpan gets the right color from the card's theme,
- * but the link also carries a replacement span (X.0Y3Y), which Android draws without color spans,
+ * but the link also carries a replacement span (X.0YQ6), which Android draws without color spans,
  * in the view's own text color: the light theme's dark one, on the dark card.
  */
 internal object LiveProfileBioFingerprint : Fingerprint(
@@ -1460,13 +1480,14 @@ private const val SET_BACKGROUND = "Landroid/view/View;->setBackground(Landroid/
  * view, from a lazy field and gives it a rounded shape drawn from the badge's server background
  * (a border around the server's art, a server color, or a border alone). The server draws that
  * art and the text over it for the white card, the low levels' "Lv." tile see-through, so on the
- * dark card the tile and its text went dark gray together (Login2, 2026-10-20). On 47.7.2 the
- * bind is X.11kh.LJJIIZI: it takes the user, reads the badge off it itself and returns a boolean,
- * where 47.6.3's X.0wa2.LJIJI took the badge and returned nothing.
+ * dark card the tile and its text went dark gray together (Login2, 2026-10-20). On 47.7.3 the
+ * bind is X.10n1.LJIJI again: it takes the badge and returns nothing, like 47.6.3's X.0wa2.LJIJI,
+ * and sets the tile's background on each of those three paths. 47.7.2 had inlined it into
+ * X.11kh.LJJIIZI(User)Z, with the same three calls.
  */
 internal object LiveProfileBadgeFingerprint : Fingerprint(
-    returnType = "Z",
-    parameters = listOf(LIVE_USER),
+    returnType = "V",
+    parameters = listOf(LIVE_BADGE),
     filters = listOf(fieldAccess(opcode = Opcode.IGET_OBJECT, definingClass = COMBINE_BADGE, name = "background")),
     custom = { method, _ -> badgeTileCalls(method) != null },
 )
@@ -1599,6 +1620,121 @@ internal fun hookLongPressMenu(factory: MutableMethod) {
             "invoke-static {v$menu}, $PANEL_THEME->liveMenu(Landroid/app/Dialog;)V",
         )
     }
+}
+
+internal const val LIVE_ICON_VIEW = "Lcom/bytedance/android/live/design/view/icon/LiveIconView;"
+
+/**
+ * The gift guide bubble a room shows over its gift button ("Support this LIVE") being built
+ * (X.0Mam.LIZLLL on 47.7.2, #362). TikTok draws the bubble white, and its text takes the color the
+ * room's theme gives text by default, which over a room Dark LIVE panels darkened is the dark app
+ * theme's white. The builder makes the bubble's content view from its Context parameter.
+ */
+internal object LiveGuideBubbleFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf("Landroid/content/Context;", "L", "L", "Lcom/bytedance/ies/sdk/datachannel/DataChannel;", "J"),
+    strings = listOf("halo", "top", "bottom"),
+)
+
+/**
+ * The bubble's content view: the one class the builder constructs from a Context alone that
+ * extends LinearLayout and holds a LIVE icon view, or null.
+ */
+internal fun guideBubbleView(builder: Method, classOf: (String) -> ClassDef?): String? =
+    builder.implementation?.instructions?.mapNotNull { instruction ->
+        val call = (instruction as? ReferenceInstruction)?.reference as? MethodReference
+        call?.definingClass?.takeIf {
+            instruction.opcode == Opcode.INVOKE_DIRECT && call.name == "<init>" &&
+                call.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;")
+        }
+    }?.distinct()?.singleOrNull { type ->
+        val view = classOf(type)
+        view != null && view.superclass == "Landroid/widget/LinearLayout;" && view.fields.any { it.type == LIVE_ICON_VIEW }
+    }
+
+/**
+ * Hands the context the bubble's constructor gets to the extension before anything reads it, which
+ * answers the room's light theme over a darkened room, so the bubble inflates as TikTok shows it in
+ * light mode. Nothing touches the view before its super call, so the swap goes in first.
+ */
+internal fun hookGuideBubble(constructor: MutableMethod) {
+    if (constructor.name != "<init>" ||
+        constructor.parameterTypes.map(CharSequence::toString) != listOf("Landroid/content/Context;")
+    ) {
+        throw PatchException("LIVE controls: the gift guide bubble has no constructor taking a Context")
+    }
+    constructor.addInstructions(
+        0,
+        """
+            invoke-static/range {p1 .. p1}, $PANEL_THEME->lightRoomView(Landroid/content/Context;)Landroid/content/Context;
+            move-result-object p1
+        """,
+    )
+}
+
+private const val ANDROID_THEME = "Landroid/content/res/Resources\$Theme;"
+
+/**
+ * LIVE's themed fragment base being created (#362). It hands its context, in a room the room
+ * activity, to TikTok's LIVE color theme (X.0JgL.LIZ on 47.7.3), which applies one of LIVE's color
+ * theme styles to that context's theme without force. Those styles define attributes the room's
+ * views look up, the gift guide bubble's text among them, and they reach the room after the room
+ * hook took its light copy.
+ */
+internal object LiveThemedFragmentCreateFingerprint : Fingerprint(
+    definingClass = LIVE_THEMED_FRAGMENT,
+    name = "onCreate",
+    returnType = "V",
+    parameters = listOf("Landroid/os/Bundle;"),
+)
+
+/** TikTok's LIVE color theme: the one static call taking a Context and a boolean that [onCreate] makes, or null. */
+internal fun liveColorTheme(onCreate: Method): MethodReference? =
+    onCreate.implementation?.instructions?.mapNotNull { instruction ->
+        ((instruction as? ReferenceInstruction)?.reference as? MethodReference)?.takeIf {
+            instruction.opcode == Opcode.INVOKE_STATIC && it.returnType == "V" &&
+                it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;", "Z")
+        }
+    }?.distinct()?.singleOrNull()
+
+/**
+ * Sends every style [method] applies to a theme through the extension, which applies it with the
+ * same force, then to a darkened room's light copy too when the theme is that room's (#362). The
+ * call keeps its registers and its place, so nothing that branches onto it moves, and the boolean
+ * goes over as an int. Returns how many calls it changed.
+ *
+ * AMOLED dark mode swaps every applyStyle call in TikTok's code for its own stand-in with the same
+ * registers (#372). When that patch ran first, these calls are the stand-in, and the extension
+ * calls the stand-in itself, so either order ends the same.
+ */
+internal fun hookRoomStyles(method: MutableMethod): Int {
+    val instructions = method.implementation?.instructions?.toList() ?: return 0
+    val target = "$PANEL_THEME->roomStyle(${ANDROID_THEME}II)V"
+    var changed = 0
+    instructions.forEachIndexed { index, instruction ->
+        val call = (instruction as? ReferenceInstruction)?.reference as? MethodReference ?: return@forEachIndexed
+        if (!appliesRoomStyle(call)) return@forEachIndexed
+        val replacement = when (instruction.opcode) {
+            Opcode.INVOKE_VIRTUAL, Opcode.INVOKE_STATIC -> (instruction as FiveRegisterInstruction).let {
+                "invoke-static {v${it.registerC}, v${it.registerD}, v${it.registerE}}, $target"
+            }
+            Opcode.INVOKE_VIRTUAL_RANGE, Opcode.INVOKE_STATIC_RANGE -> (instruction as RegisterRangeInstruction).let {
+                "invoke-static/range {v${it.startRegister} .. v${it.startRegister + 2}}, $target"
+            }
+            else -> return@forEachIndexed
+        }
+        method.replaceInstruction(index, replacement)
+        changed++
+    }
+    return changed
+}
+
+/** Theme.applyStyle(int, boolean), or AMOLED dark mode's stand-in for it (theme, style, force as an int). */
+internal fun appliesRoomStyle(call: MethodReference): Boolean {
+    if (call.name != "applyStyle" || call.returnType != "V") return false
+    val parameters = call.parameterTypes.map(CharSequence::toString)
+    return (call.definingClass == ANDROID_THEME && parameters == listOf("I", "Z")) ||
+        (call.definingClass == AMOLED_THEME_EXTENSION && parameters == listOf(ANDROID_THEME, "I", "I"))
 }
 
 private const val SET_BACKGROUND_RESOURCE = "Landroid/view/View;->setBackgroundResource(I)V"
@@ -2046,7 +2182,7 @@ internal data class ViewerCountSite(
 
 /**
  * Every call in [widget] to a static (J)Ljava/lang/String; helper that isn't the JDK's, or only
- * those to [formatter] when given. That helper is the "K+", "M+" and "B+" abbreviator (X.0N0e.LIZJ
+ * those to [formatter] when given. That helper is the "K+", "M+" and "B+" abbreviator (X.0N0c.LIZJ
  * on 47.0.3, X.0LDD on 47.1.3, X.0LDH on 47.1.4), renamed per build, so the shape is matched, not
  * the name. Throws if any such call has a shape the hook can't take: a site the patch skipped would
  * keep showing the rounded count with nothing to say so.
@@ -2149,6 +2285,12 @@ val liveControlsPatch = bytecodePatch(
             "invoke-static {}, $EXTENSION->offerClearScreen()Z",
             "const/4 v0, 0x1\nreturn v0",
         )
+        // Answers true while its switch is on, so clear screen carries to the next room (#354).
+        LiveClearScreenSessionFingerprint.method.guardAtEntry(
+            "LIVE controls",
+            "invoke-static {}, $EXTENSION->keepClearScreen()Z",
+            "const/4 v0, 0x1\nreturn v0",
+        )
         // Answers true while its switch is on and the panel's context is in dark mode, so LIVE
         // panels take TikTok's dark LIVE theme in rooms too (#159).
         LiveDarkThemeFingerprint.method.guardAtEntry(
@@ -2238,6 +2380,35 @@ val liveControlsPatch = bytecodePatch(
         // A viewer's long-press menu is a plain dialog, so its navigation bar stayed light under
         // the dark menu (S22, 2026-10-24). The factory the room gets it from hands it over.
         hookLongPressMenu(LiveLongPressMenuFingerprint.method)
+        // The gift guide bubble ("Support this LIVE") stays white, but its text took the darkened
+        // room's white (#362), so its view inflates over the room's light theme.
+        val bubble = guideBubbleView(LiveGuideBubbleFingerprint.method) { classDefByOrNull(it) }
+            ?: throw PatchException("LIVE controls: the gift guide bubble's view is gone")
+        hookGuideBubble(mutableClassDefBy(bubble).methods.single {
+            it.name == "<init>" && it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;")
+        })
+        // That light copy is taken before the room's color scheme styles, the style its base adds
+        // in onCreate and TikTok's LIVE color theme, which the room's LIVE fragments apply as
+        // they're created. The bubble inflated over a copy without them threw on its text (S22,
+        // 2026-11-08), so each of those calls goes through the extension, which gives the copy
+        // the style too.
+        if (hookRoomStyles(LivePlayActivityThemeFingerprint.method) == 0) {
+            throw PatchException("LIVE controls: the room's setTheme applies no color scheme style")
+        }
+        val roomBase = mutableClassDefBy(LIVE_PLAY_ACTIVITY).superclass
+            ?: throw PatchException("LIVE controls: the room has no base class")
+        val roomCreate = mutableClassDefBy(roomBase).methods.singleOrNull {
+            it.name == "onCreate" && it.returnType == "V" &&
+                it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/os/Bundle;")
+        } ?: throw PatchException("LIVE controls: the room's base has no onCreate")
+        if (hookRoomStyles(roomCreate) == 0) {
+            throw PatchException("LIVE controls: the room's base applies no style in onCreate")
+        }
+        val colorTheme = liveColorTheme(LiveThemedFragmentCreateFingerprint.method)
+            ?: throw PatchException("LIVE controls: TikTok's LIVE color theme wasn't found")
+        if (hookRoomStyles(mutableClassDefBy(colorTheme.definingClass).findMutableMethodOf(colorTheme)) == 0) {
+            throw PatchException("LIVE controls: TikTok's LIVE color theme applies no style")
+        }
         // Its group chat row is the same kind of fixed white shape under text in the card theme's
         // colors (Login2, 2026-10-20), so the extension gives it the event box's fill.
         hookGroupChat(mutableClassDefBy(LiveProfileGroupChatFingerprint.method.definingClass).methods)
