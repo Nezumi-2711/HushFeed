@@ -10,7 +10,7 @@ Every Hushfeed release, newest first.
 * Hushfeed builds on Morphe patcher 2.3.0 now, so it needs Morphe Manager 2.5.0 or newer, or morphe-desktop 2.1.1 on a computer. Older Managers refuse the bundle.
 * `Jump to a date on Liked grids` puts a button in the Liked grid's top corner. Pick a year, then a month or the whole year, and your likes start there, so older ones load without scrolling through everything newer. Newest likes in the same menu goes back. It starts off and lives in Hushfeed settings > Feed screen, under the grid sort rows (#350).
 * `Show where commenters are from` also checks the country field on a commenter's account, and uses it only when it holds a two letter code (#201).
-* `Long press on Profile opens my watch history` makes holding the Profile tab show the watch history kept on your phone, so the long press on For You can keep opening Hushfeed settings. A tap on Profile works as before. It starts off, and it sits under `Keep my own watch history` (#172).
+* `Long press on Profile opens my watch history` makes holding the Profile tab show the watch history kept on your phone, so the long press on For You can keep opening Hushfeed settings. A tap on Profile works as before. It starts off, sits under `Keep my own watch history` and needs the `Feed tab navigation` patch (#172).
 * `Discover in the bottom bar` puts Discover where Friends sits in the bottom bar, the layout TikTok gives Indonesia, and your region and feed stay as they are. It starts off, lives in Hushfeed settings > Feed tabs and takes a TikTok restart (#98).
 * `Friends in the top tabs` moves Friends up to the tabs along the top of the feed, just left of Following, and Discover takes its spot in the bottom bar, the layout TikTok gives Indonesia. Your region and feed stay as they are (#98).
 * The Feature Gate Lab can override experiments TikTok reads as a whole object, like the home tab layout. It couldn't reach those before. An override changes only the fields you give it, and it still applies when TikTok sent your account nothing for that experiment (#98).
@@ -42,6 +42,7 @@ Every Hushfeed release, newest first.
 * `Drag handle and jump buttons on grids` shows a handle at the edge of a long profile, Liked or sound grid while it moves, with Top, Back and End buttons beside it. Back returns to where you were before the last jump. It starts off and lives in Hushfeed settings > Interface (#378).
 * `Bottom bar icons` in Hushfeed settings > Feed tabs picks one of the icon sets TikTok is testing for the bottom bar, or leaves it to TikTok, which is how it starts. It takes a TikTok restart (#285).
 * With `Log diagnostics` on, the report keeps TikTok's answer to every LIVE like, so a like TikTok refused can be told from one that never left the phone (#380).
+* The settings screen now comes in Thai. Thanks to @MangaThatsFine (#381).
 
 ### Bug Fixes
 
@@ -76,6 +77,12 @@ Every Hushfeed release, newest first.
 * The README's install steps name the TikTok version a release was built for once that release is out. 0.80.0 and 0.81.0 went out with the steps still pointing at the TikTok before it.
 * `Disable telemetry` also stops TikTok's Orbu log upload and its whoami lookups, which were still going out on 47.7.3 (#379).
 * `Hide surveys` takes the interest buttons off a video by their own view as well, for when TikTok builds them some other way. The diagnostic report now names each kind of feed component a video was given (#293).
+* Blocking a LIVE host with `Block this creator` and swiping to the next room before the block went through no longer closes the room you moved to.
+* TalkBack reads the sort button on a profile, Liked or sound grid as a button and says the order it's on, like "Sort this grid: Original order". It only said "Sort this grid" before. The count that shows while a sorted grid loads reads as "30 videos" now, where it was a bare number.
+* On a phone set to Arabic or another right-to-left language, the button rows in What's new, the sticker sheet and the Feature Gate Lab run right to left now. The gaps inside the search box, a recent search, the status card and the notices are mirrored to match. In the Lab, a gate's title no longer runs into its value and `Apply overrides` keeps some space from its switch, whichever way the screen reads.
+* On a right-to-left phone, a setting's description now sits under its name on the icon's side, and a section's heading starts on that side too. Hushfeed's text is English, so those lines used to start at the far left, across the row from the name.
+* `Hide the LIVE button` now shows the restart button when you flip it, like the search and side menu switches. Turned off, the LIVE button stayed missing with nothing telling you it needed a restart.
+* If you left a video cleared with `Keep Clear display across videos` on, the first video after you reopen TikTok clears too, instead of keeping its buttons.
 
 ## 0.81.0 (2026-11-05)
 
