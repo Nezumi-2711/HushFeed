@@ -54,6 +54,7 @@
       "LIKED_GRID_SORT",
       "SOUND_GRID_SORT",
       "LIKED_JUMP_TO_DATE",
+      "GRID_SEARCH",
       "GRID_POSITION_CONTROLS"
     ],
     "Always upload in HD": [
@@ -134,6 +135,7 @@
       "COMMENT_SEARCH_FOLDED",
       "COMMENT_LINKS",
       "HIDE_COMMENT_MEDIA",
+      "HIDE_VOICE_COMMENTS",
       "HIDE_SPAM_COMMENTS",
       "HIDE_COMMENT_POLLS",
       "HIDE_COMMENT_REPLY_PREVIEWS",
@@ -304,6 +306,7 @@
       "KEEP_FOR_YOU_ON_PULL_DOWN",
       "HOME_TAB_OPENS_SETTINGS",
       "PROFILE_TAB_OPENS_WATCH_HISTORY",
+      "PROFILE_TAB_SWITCHES_ACCOUNTS",
       "INBOX_TAB_FLIPS_READ_RECEIPTS",
       "SEARCH_INSTEAD_OF_HOME",
       "START_PAGE",
@@ -394,7 +397,8 @@
       "TURN_OFF_CHAT_DOUBLE_TAP",
       "TURN_OFF_CHAT_SWIPE_REPLY",
       "HIDE_INBOX_CUSTOM_TITLES",
-      "SHOW_INBOX_FILTERS"
+      "SHOW_INBOX_FILTERS",
+      "PIN_MORE_CHATS"
     ],
     "Hide inbox stories": [
       "HIDE_INBOX_STORIES"
@@ -533,6 +537,7 @@
       "KEEP_LIVE_CLEAR_SCREEN",
       "DARK_LIVE_PANELS",
       "RECORD_LIVE",
+      "AUTO_RECORD_LIVE",
       "LIVE_RECORD_QUALITY",
       "LIVE_RECORD_SOURCE",
       "LIVE_AUTO_TAP",
@@ -575,6 +580,7 @@
     ],
     "Not interested button": [
       "NOT_INTERESTED_BUTTON",
+      "NOT_INTERESTED_ALSO_FILTER",
       "NOT_INTERESTED_BUTTON_POSITION"
     ],
     "Keep unsent messages": [

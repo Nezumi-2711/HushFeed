@@ -1634,7 +1634,7 @@ Stopped waiting for the file app. Nothing was exported.,Berhenti menunggu aplika
 Stopped waiting for the file app. It hasn't said yet whether the export was saved.,Berhenti menunggu aplikasi file. Aplikasi itu belum memberi tahu apakah ekspor sudah tersimpan.
 The export wasn't saved. Try again.,Ekspor tidak tersimpan. Coba lagi.
 Hide unpersonalized For You videos,Sembunyikan video Untuk Kamu yang tidak dipersonalisasi
-"Hide the fill-in videos TikTok sends to For You without picking them for you. When a whole batch is fill-in, it stays so the feed doesn't run dry.","Sembunyikan video pengisi yang dikirim TikTok ke Untuk Kamu tanpa dipilih untukmu. Jika satu kumpulan isinya pengisi semua, kumpulan itu tetap ditampilkan agar feed tidak kosong."
+"Hide the fill-in videos TikTok sends to For You without picking them for you. When a whole batch is fill-in, only its first video stays so the feed doesn't run dry.","Sembunyikan video pengisi yang dikirim TikTok ke Untuk Kamu tanpa dipilih untukmu. Jika satu kumpulan isinya pengisi semua, hanya video pertamanya yang tetap ditampilkan agar feed tidak kosong."
 Unpersonalized For You videos,Video Untuk Kamu yang tidak dipersonalisasi
 Reviewed presets for TikTok %1$s,Preset teruji untuk TikTok %1$s
 No reviewed presets for TikTok %1$s yet,Belum ada preset yang diuji untuk TikTok %1$s
@@ -2578,3 +2578,20 @@ New style 1,Gaya baru 1
 New style 2,Gaya baru 2
 Friends in the top tabs,Teman di tab atas
 "Friends moves up to the tabs at the top of the feed, next to Following, and Discover takes its spot in the bottom bar, the way TikTok lays it out in some countries. Your region and your feed stay as they are.","Teman pindah ke tab di bagian atas feed, di samping Mengikuti, dan Temukan mengambil tempatnya di bilah bawah, seperti tata letak TikTok di beberapa negara. Wilayah dan feed Anda tetap sama."
+Pin more chats,Sematkan lebih banyak obrolan
+"Lifts the app's limit on pinned chats in the Inbox, usually 5, so you can pin more.","Menghapus batas aplikasi untuk obrolan yang disematkan di kotak masuk, biasanya 5, agar kamu bisa menyematkan lebih banyak."
+Hide voice comments,Sembunyikan komentar suara
+Hide comments made of a voice recording instead of words.,"Sembunyikan komentar yang berupa rekaman suara, bukan kata-kata."
+Also filter it,Filter juga
+"After you tap Not interested, offer to skip the video's creator, sound or hashtags from now on.","Setelah mengetuk Tidak tertarik, tawarkan untuk melewati kreator, suara, atau tagar video itu mulai sekarang."
+Videos from %1$s,Video dari %1$s
+Videos with the sound %1$s,Video dengan suara %1$s
+Videos tagged %1$s,Video bertagar %1$s
+Skipping videos from %1$s,Melewati video dari %1$s
+Skipping videos tagged %1$s,Melewati video bertagar %1$s
+That list is full,Daftar itu sudah penuh
+Search Liked and Favorites grids,Cari di kisi Disukai dan Favorit
+"Adds a Search button to the top of the Liked and Favorites grids. Type a word from a caption, a creator or a sound to see only the loaded videos that have it.","Menambahkan tombol Pencarian di bagian atas kisi Disukai dan Favorit. Ketik kata dari keterangan, kreator, atau suara untuk melihat hanya video termuat yang memilikinya."
+"Caption, creator or sound","Keterangan, kreator, atau suara"
+Long-press Profile to switch accounts,Tekan lama Profil untuk ganti akun
+"Press and hold the Profile tab to pick one of your other accounts, where TikTok left that out. A tap on Profile works as before. While Long-press Profile for Watch history is on, it takes the press. Restart TikTok to apply this.","Tekan lama tab Profil untuk memilih salah satu akunmu yang lain, di tempat TikTok menghapusnya. Mengetuk Profil tetap berfungsi seperti biasa. Selama Tekan lama Profil untuk riwayat tontonan aktif, opsi itu mengambil tekanan tersebut. Mulai ulang TikTok agar berlaku."

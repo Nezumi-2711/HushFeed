@@ -13,6 +13,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -48,6 +49,7 @@ import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.settings.L10n;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.preference.SettingsUi;
+import app.morphe.extension.tiktok.wellbeing.SessionLockOverlay;
 
 /**
  * Sorts the videos a profile or Liked grid has loaded (#180). The patch hands this the list
@@ -166,6 +168,8 @@ public final class GridSort {
     private static final Map<Class<?>, Field> ADAPTER_FIELDS = new WeakHashMap<>();
     /** Per grid, its hold while its pages load. Main thread only. */
     private static final Map<View, Hold> HOLDS = new WeakHashMap<>();
+    /** Per frame class, whether it takes any view an overlay adds. Main thread only. */
+    private static final Map<Class<?>, Boolean> TAKES_VIEWS = new WeakHashMap<>();
 
     private GridSort() {
     }
@@ -209,6 +213,15 @@ public final class GridSort {
         synchronized (ORIGINALS) {
             Integer type = TABS.get(adapter);
             return type != null && type == TAB_LIKED;
+        }
+    }
+
+    /** TikTok's number for the adapter's tab, or {@link Integer#MIN_VALUE} where none came in. */
+    static int tabOf(Object adapter) {
+        if (adapter == null) return Integer.MIN_VALUE;
+        synchronized (ORIGINALS) {
+            Integer type = TABS.get(adapter);
+            return type == null ? Integer.MIN_VALUE : type;
         }
     }
 
@@ -271,7 +284,10 @@ public final class GridSort {
             // same list back stays in sight. This has to happen here: a post runs after the frame.
             boolean fresh = before == 0 || size < before;
             if (fresh) startHold(adapter, size);
-            MAIN.post(() -> afterTikTok(adapter, 0, size, fresh));
+            MAIN.post(() -> {
+                if (GridSearch.searching(adapter)) reshow(adapter);
+                afterTikTok(adapter, 0, size, fresh);
+            });
             if (isLiked(adapter)) LikedJump.listIn(adapter, true);
         }
         return out;
@@ -280,7 +296,9 @@ public final class GridSort {
     /**
      * The adapter's setDataAfterLoadMore: the list it should keep. The adapter announces the page
      * as new cells at the end of the grid, which is wrong for a list that was reordered, so a list
-     * that moved anything also gets a full refresh once TikTok's own call is through.
+     * that moved anything also gets a full refresh once TikTok's own call is through. A grid
+     * narrowed to a search gets the whole list here too, since TikTok counts the new cells from it,
+     * and is narrowed again in that same post.
      */
     public static List<?> page(Object adapter, List<?> list) {
         String chosen = orderFor(adapter);
@@ -292,7 +310,8 @@ public final class GridSort {
             int size = list == null ? 0 : list.size();
             boolean moved = moved(list, out);
             MAIN.post(() -> {
-                if (moved && !holdTakesRefresh(adapter)) refresh(adapter);
+                if (GridSearch.searching(adapter)) reshow(adapter);
+                else if (moved && !holdTakesRefresh(adapter)) refresh(adapter);
                 afterTikTok(adapter, before, size, false);
             });
             if (isLiked(adapter)) LikedJump.listIn(adapter, false);
@@ -306,8 +325,18 @@ public final class GridSort {
      * while pages still add videos, so a profile with no more ends the chain.
      */
     static boolean wantsNextPage(String order, int before, int size, boolean onScreen) {
-        if (order == null || OFF.equals(order) || comparator(order) == null) return false;
+        return wantsNextPage(order, false, before, size, onScreen);
+    }
+
+    /** The same, for a grid that may be narrowed to a search, which loads on whatever its order. */
+    static boolean wantsNextPage(String order, boolean searching, int before, int size, boolean onScreen) {
+        if (!searching && (order == null || OFF.equals(order) || comparator(order) == null)) return false;
         return onScreen && size < LOAD_CAP && size > before;
+    }
+
+    /** Whether this adapter's grid loads its pages by itself: an order is chosen, or a search is on. */
+    private static boolean loads(Object adapter) {
+        return comparator(orderFor(adapter)) != null || GridSearch.searching(adapter);
     }
 
     /**
@@ -341,7 +370,7 @@ public final class GridSort {
             original = ORIGINALS.get(adapter);
         }
         if (original != null) {
-            List<?> out = sorted(original, orderFor(adapter));
+            List<?> out = GridSearch.narrowed(adapter, sorted(original, orderFor(adapter)));
             Field items = Reflect.field(adapter.getClass(), "mmItems");
             if (items != null) {
                 try {
@@ -354,11 +383,53 @@ public final class GridSort {
         }
         showChip(adapter, grid);
         int size = original == null ? 0 : original.size();
-        if (wantsNextPage(order, 0, size, onScreen(grid)) && loadMoreListener(adapter) != null) {
+        if (wantsNextPage(order, GridSearch.searching(adapter), 0, size, onScreen(grid))
+                && loadMoreListener(adapter) != null) {
             startHold(adapter, size);
             askForNextPage(adapter);
         } else {
             endHold(grid);
+        }
+    }
+
+    /** TikTok's list as this adapter last had it, in TikTok's order, or null. */
+    static List<?> originalOf(Object adapter) {
+        synchronized (ORIGINALS) {
+            return ORIGINALS.get(adapter);
+        }
+    }
+
+    /**
+     * Puts the adapter's list back on its grid in the chosen order, narrowed to its search, with
+     * a full refresh in the same pass, so the grid never draws from a list it wasn't told about.
+     */
+    static void reshow(Object adapter) {
+        List<?> original = originalOf(adapter);
+        Field items = original == null ? null : Reflect.field(adapter.getClass(), "mmItems");
+        if (items == null) return;
+        try {
+            items.set(adapter, GridSearch.narrowed(adapter, sorted(original, orderFor(adapter))));
+            refresh(adapter);
+        } catch (Throwable ex) {
+            Logger.printException(() -> "Could not narrow a grid to its search", ex);
+        }
+    }
+
+    /**
+     * A search typed or cleared on the adapter's grid. The grid narrows at once, and while a
+     * search is on it loads on by itself, the way a sorted grid does, so it covers more than the
+     * first screen. It stays in sight as it loads: matches turning up is what a search is for.
+     */
+    static void searchChanged(Object adapter) {
+        reshow(adapter);
+        int size;
+        synchronized (ORIGINALS) {
+            Integer loaded = LOADED.get(adapter);
+            size = loaded == null ? 0 : loaded;
+        }
+        if (wantsNextPage(orderFor(adapter), GridSearch.searching(adapter), 0, size, onScreen(gridView(adapter)))
+                && loadMoreListener(adapter) != null) {
+            askForNextPage(adapter);
         }
     }
 
@@ -463,10 +534,20 @@ public final class GridSort {
         }
         Object shown = Reflect.readField(adapter, "mmItems");
         if (handed == null || played == null || !(shown instanceof List) || shown == played) return;
-        List<?> grid = (List<?>) shown;
+        List<?> onGrid = (List<?>) shown;
+        // A grid narrowed to a search plays its matches first, then the rest in the grid's order.
+        List<?> original = originalOf(adapter);
+        boolean searching = GridSearch.searching(adapter);
+        List<?> grid = onGrid.size() != played.size() && searching
+                ? GridSearch.withRest(onGrid, sorted(original != null ? original : played, orderFor(adapter)))
+                : onGrid;
         if (sameOrder(played, grid)) return;
         List<Object> before = new ArrayList<>(played);
-        if (!follow(played, grid)) {
+        // The kept order is a copy once the list has been written, so if TikTok's list has changed
+        // since, the matches it still holds go first and the rest keep that list's own order. That
+        // goes for a changed list that happens to hold as many videos as the grid shows, too.
+        if (!follow(played, grid) && (!searching
+                || !follow(played, GridSearch.withRest(stillIn(onGrid, played), played)))) {
             Logger.printDebug(() -> "Grid sort: the opened video's list doesn't hold the grid's videos, left as is");
             return;
         }
@@ -529,6 +610,17 @@ public final class GridSort {
         }
     }
 
+    /** The videos of {@code videos} that {@code list} still holds, in {@code videos}' order. */
+    private static List<Object> stillIn(List<?> videos, List<?> list) {
+        Map<Object, Boolean> held = new IdentityHashMap<>();
+        for (Object video : list) held.put(video, Boolean.TRUE);
+        List<Object> out = new ArrayList<>(videos.size());
+        for (Object video : videos) {
+            if (held.containsKey(video)) out.add(video);
+        }
+        return out;
+    }
+
     private static boolean sameOrder(List<?> a, List<?> b) {
         if (a.size() != b.size()) return false;
         for (int i = 0; i < a.size(); i++) {
@@ -583,10 +675,12 @@ public final class GridSort {
             View gridShown = grid;
             showChip(adapter, grid);
             GridPosition.show(adapter, grid);
+            GridSearch.showChip(adapter);
             boolean shown = onScreen(grid);
             // TikTok takes the listener away once it knows it has no more. It decides that after it
             // hands the list over, so this post is the first point that can tell.
-            boolean next = wantsNextPage(orderFor(adapter), before, size, shown) && loadMoreListener(adapter) != null;
+            boolean next = wantsNextPage(orderFor(adapter), GridSearch.searching(adapter), before, size, shown)
+                    && loadMoreListener(adapter) != null;
             Logger.printDebug(() -> "Grid sort: page " + before + " -> " + size
                     + (gridShown == null ? ", no grid" : shown ? "" : ", off screen") + (next ? ", asking for more" : ""));
             if (next) {
@@ -629,7 +723,7 @@ public final class GridSort {
     private static void loadMore(Object adapter) {
         try {
             String order = orderFor(adapter);
-            if (OFF.equals(order) || comparator(order) == null || !onScreen(gridView(adapter))) {
+            if (!loads(adapter) || !onScreen(gridView(adapter))) {
                 synchronized (ORIGINALS) {
                     ASKED.remove(adapter);
                 }
@@ -701,6 +795,14 @@ public final class GridSort {
             letGoOfGrid(grid, this);
             return false;
         }
+
+        /** A mouse or touchpad over a cover whose grid has left lets go of it, as a touch does. */
+        @Override
+        public boolean dispatchGenericMotionEvent(MotionEvent event) {
+            if (onScreen(grid)) return super.dispatchGenericMotionEvent(event);
+            letGoOfGrid(grid, this);
+            return false;
+        }
     }
 
     /** Called from the middle of the parent's own removal or touch pass, so the removal waits for the post. */
@@ -713,9 +815,10 @@ public final class GridSort {
     private static void startHold(Object adapter, int size) {
         try {
             if (Looper.myLooper() != Looper.getMainLooper() || size <= 0 || size >= LOAD_CAP) return;
-            if (comparator(orderFor(adapter)) == null) return;
+            if (!loads(adapter)) return;
             View grid = gridView(adapter);
-            if (!onScreen(grid) || !(grid.getParent() instanceof FrameLayout)) return;
+            FrameLayout frame = overlayFrame(grid);
+            if (!onScreen(grid) || frame == null) return;
             Object currentAdapter = Reflect.invoke(grid, "getAdapter");
             if (currentAdapter != null && currentAdapter != adapter) return;
             Hold held = HOLDS.get(grid);
@@ -730,6 +833,7 @@ public final class GridSort {
             FrameLayout cover = new HoldCover(context, grid);
             cover.setTag(HOLD_TAG);
             cover.setClickable(true);
+            SessionLockOverlay.keepTheWheel(cover);
 
             LinearLayout box = new LinearLayout(context);
             box.setGravity(Gravity.CENTER_VERTICAL);
@@ -753,8 +857,11 @@ public final class GridSort {
                     Gravity.TOP | Gravity.CENTER_HORIZONTAL);
             boxAt.topMargin = SettingsUi.dp(context, 64);
             cover.addView(box, boxAt);
-            ((FrameLayout) grid.getParent()).addView(cover, new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            FrameLayout.LayoutParams coverAt = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            // From the grid down, so a header above it in the same frame can still be tapped.
+            coverAt.topMargin = Math.max(0, topInFrame(grid));
+            frame.addView(cover, coverAt);
             grid.setAlpha(0f);
 
             View.OnAttachStateChangeListener leaving = new View.OnAttachStateChangeListener() {
@@ -922,9 +1029,67 @@ public final class GridSort {
         }
     }
 
+    /**
+     * The FrameLayout the grid's chips, rail and loading cover float in: the grid's own parent, or
+     * the frame around the LinearLayout TikTok wraps the Favorites grid in. On 47.7.3 that layout
+     * sits in a fragment container, which refuses any other view, inside a plain frame of the
+     * same size, so a frame that vets what's added to it is passed over, as is a scroll view.
+     */
+    static FrameLayout overlayFrame(View grid) {
+        if (grid == null) return null;
+        ViewParent parent = grid.getParent();
+        if (parent instanceof FrameLayout) return (FrameLayout) parent;
+        if (!(parent instanceof LinearLayout)) return null;
+        ViewParent above = parent.getParent();
+        for (int level = 0; level < 2 && above instanceof FrameLayout; level++, above = above.getParent()) {
+            if (takesViews(above.getClass())) return (FrameLayout) above;
+        }
+        return null;
+    }
+
+    /** Whether a frame takes any view, rather than checking each one in its own addView. */
+    private static boolean takesViews(Class<?> type) {
+        Boolean known = TAKES_VIEWS.get(type);
+        if (known != null) return known;
+        boolean takes = true;
+        for (Class<?> at = type; takes && at != null && at != FrameLayout.class; at = at.getSuperclass()) {
+            try {
+                at.getDeclaredMethod("addView", View.class, int.class, ViewGroup.LayoutParams.class);
+                takes = false;
+            } catch (NoSuchMethodException inherited) {
+                // This class leaves adding views to the one it extends.
+            } catch (LinkageError | SecurityException unreadable) {
+                // A class that can't be read could refuse a view, so it gets none.
+                takes = false;
+            }
+        }
+        TAKES_VIEWS.put(type, takes);
+        return takes;
+    }
+
+    /**
+     * The grid's top below its overlay frame's padding, through any layouts between them. An
+     * overlay at the frame's top already starts below that padding.
+     */
+    static int topInFrame(View grid) {
+        int top = grid.getTop();
+        FrameLayout frame = overlayFrame(grid);
+        if (frame == null) return top;
+        for (ViewParent at = grid.getParent(); at instanceof View && at != frame; at = at.getParent()) {
+            top += ((View) at).getTop() - ((View) at).getScrollY();
+        }
+        return top - frame.getPaddingTop();
+    }
+
+    /** Whether an overlay still sits in the grid's frame, rather than one TikTok moved it out of. */
+    static boolean overGrid(View overlay, View grid) {
+        FrameLayout frame = overlayFrame(grid);
+        return frame != null && overlay.getParent() == frame;
+    }
+
     private static SortChip controlOn(View grid) {
-        if (grid == null || !(grid.getParent() instanceof FrameLayout)) return null;
-        FrameLayout frame = (FrameLayout) grid.getParent();
+        FrameLayout frame = overlayFrame(grid);
+        if (frame == null) return null;
         for (int i = 0; i < frame.getChildCount(); i++) {
             View child = frame.getChildAt(i);
             if (child instanceof SortChip && CHIP_TAG.equals(child.getTag())) return (SortChip) child;
@@ -952,9 +1117,8 @@ public final class GridSort {
         if (grid == null) return;
         Object currentAdapter = Reflect.invoke(grid, "getAdapter");
         if (currentAdapter != null && currentAdapter != adapter) return;
-        ViewParent parent = grid.getParent();
-        if (!(parent instanceof FrameLayout)) return;
-        FrameLayout frame = (FrameLayout) parent;
+        FrameLayout frame = overlayFrame(grid);
+        if (frame == null) return;
         SortChip chip = controlOn(grid);
         // Late reads from an inactive old grid cannot take over the current grid's control.
         // A newly attached grid can still bind its control before its first layout.
@@ -988,11 +1152,14 @@ public final class GridSort {
             chip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsUi.TEXT_CAPTION);
             chip.setMinWidth(SettingsUi.dp(context, 48));
             chip.setMinHeight(SettingsUi.dp(context, 48));
+            chip.setSingleLine(true);
+            chip.setEllipsize(TextUtils.TruncateAt.END);
             chip.setGravity(Gravity.CENTER);
             int paddingX = SettingsUi.dp(context, 10);
             int paddingY = SettingsUi.dp(context, 5);
             chip.setPadding(paddingX, paddingY, paddingX, paddingY);
-            chip.setBackground(SettingsUi.overlayChip(context, SettingsUi.RADIUS_OVERLAY));
+            // Words over thumbnails take the text scrim, the same as the grid's Top/Back/End.
+            chip.setBackground(SettingsUi.overlayBanner(context));
             SettingsUi.markAsButton(chip);
             chip.setElevation(SettingsUi.dp(context, 2));
             FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(
@@ -1082,13 +1249,14 @@ public final class GridSort {
                 Object currentAdapter = Reflect.invoke(grid, "getAdapter");
                 if (Setting.isPaused() || (currentAdapter != null && currentAdapter != chip.adapter)
                         || (chip.originalChosen && !onScreen(grid))) remove();
-                if (chip.getParent() != null && grid.isAttachedToWindow()
-                        && chip.getParent() != grid.getParent()) {
+                if (chip.getParent() != null && grid.isAttachedToWindow() && !overGrid(chip, grid)) {
                     remove();
                     showChip(chip.adapter, grid);
                 }
                 if (chip.getParent() != null) {
-                    if (!grid.isAttachedToWindow()) chip.setVisibility(View.GONE);
+                    // The frame can hold more than the grid, as Favorites' sub-tabs do, so the
+                    // chip hides with the grid itself and not only with the frame.
+                    if (!grid.isAttachedToWindow() || !grid.isShown()) chip.setVisibility(View.GONE);
                     else if (indexOf(orderFor(chip.adapter)) > 0) chip.setVisibility(View.VISIBLE);
                     placeChip(chip, grid);
                     return;
@@ -1104,6 +1272,7 @@ public final class GridSort {
 
     static void placeChip(View chip, View grid) {
         try {
+            if (chip instanceof SortChip) fitBesideSearch((TextView) chip);
             if (!(grid instanceof ViewGroup)) return;
             ViewGroup rows = (ViewGroup) grid;
             int count = rows.getChildCount();
@@ -1116,11 +1285,34 @@ public final class GridSort {
                 bottoms[i] = row.getBottom();
                 widths[i] = row.getWidth();
             }
-            float y = grid.getTop() + chipOffset(grid.getWidth(), tops, bottoms, widths);
+            float y = topInFrame(grid) + chipOffset(grid.getWidth(), tops, bottoms, widths);
             if (chip.getTranslationY() != y) chip.setTranslationY(y);
         } catch (Throwable ex) {
             Logger.printException(() -> "Could not place the grid sort chip", ex);
         }
+    }
+
+    /**
+     * Shortens the order chip to the room left at the end of its frame by the search chip in the
+     * middle, so a long order name, a long search or a narrow window ends in "..." rather than one
+     * chip running under the other. With no search chip it keeps its whole name.
+     */
+    private static void fitBesideSearch(TextView chip) {
+        if (!(chip.getParent() instanceof ViewGroup)) return;
+        ViewGroup frame = (ViewGroup) chip.getParent();
+        View search = null;
+        for (int i = 0; i < frame.getChildCount(); i++) {
+            View child = frame.getChildAt(i);
+            if (GridSearch.CHIP_TAG.equals(child.getTag()) && child.getVisibility() == View.VISIBLE) search = child;
+        }
+        int max = Integer.MAX_VALUE;
+        if (search != null && frame.getWidth() > 0) {
+            Context context = chip.getContext();
+            // The order chip's 8dp margin from the edge, and a 4dp gap between the two.
+            int room = frame.getWidth() / 2 - search.getWidth() / 2 - SettingsUi.dp(context, 12);
+            max = Math.max(SettingsUi.dp(context, 48), room);
+        }
+        if (chip.getMaxWidth() != max) chip.setMaxWidth(max);
     }
 
     /**

@@ -243,7 +243,7 @@ public final class LikedJump {
             if (grid == null) return;
             Object current = Reflect.invoke(grid, "getAdapter");
             boolean stale = Setting.isPaused() || (current != null && current != adapter)
-                    || grid.getParent() != getParent();
+                    || !GridSort.overGrid(this, grid);
             if (stale) {
                 setVisibility(View.GONE);
                 return;
@@ -254,8 +254,8 @@ public final class LikedJump {
     }
 
     private static Chip chipOn(View grid) {
-        if (grid == null || !(grid.getParent() instanceof FrameLayout)) return null;
-        FrameLayout frame = (FrameLayout) grid.getParent();
+        FrameLayout frame = GridSort.overlayFrame(grid);
+        if (frame == null) return null;
         for (int i = 0; i < frame.getChildCount(); i++) {
             View child = frame.getChildAt(i);
             if (child instanceof Chip && CHIP_TAG.equals(child.getTag())) return (Chip) child;
@@ -267,10 +267,10 @@ public final class LikedJump {
     static void showChip(Object adapter) {
         try {
             View grid = GridSort.gridView(adapter);
-            if (grid == null || !(grid.getParent() instanceof FrameLayout)) return;
+            FrameLayout frame = GridSort.overlayFrame(grid);
+            if (frame == null) return;
             Object current = Reflect.invoke(grid, "getAdapter");
             if (current != null && current != adapter) return;
-            FrameLayout frame = (FrameLayout) grid.getParent();
             Chip chip = chipOn(grid);
             boolean wanted = Settings.LIKED_JUMP_TO_DATE.get() && !Setting.isPaused();
             if (!wanted) {
@@ -290,7 +290,8 @@ public final class LikedJump {
                 int paddingX = SettingsUi.dp(context, 10);
                 int paddingY = SettingsUi.dp(context, 5);
                 chip.setPadding(paddingX, paddingY, paddingX, paddingY);
-                chip.setBackground(SettingsUi.overlayChip(context, SettingsUi.RADIUS_OVERLAY));
+                // Words over thumbnails take the text scrim, the same as the grid's Top/Back/End.
+                chip.setBackground(SettingsUi.overlayBanner(context));
                 chip.setElevation(SettingsUi.dp(context, 2));
                 FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -323,7 +324,7 @@ public final class LikedJump {
         return null;
     }
 
-    private static Activity shownActivity(View anchor) {
+    static Activity shownActivity(View anchor) {
         Activity activity = activityOf(anchor.getContext());
         if (activity == null) activity = Utils.getVisibleActivity();
         if (activity == null || activity.isFinishing() || activity.isDestroyed()) return null;

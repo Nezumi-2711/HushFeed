@@ -70,8 +70,8 @@ public final class GridPosition {
     /** Runs each time TikTok hands a grid a list, on the main thread. */
     static void show(Object adapter, View grid) {
         try {
-            if (grid == null || !(grid.getParent() instanceof FrameLayout)) return;
-            FrameLayout frame = (FrameLayout) grid.getParent();
+            FrameLayout frame = GridSort.overlayFrame(grid);
+            if (frame == null) return;
             Rail rail = railOn(frame);
             if (!Settings.GRID_POSITION_CONTROLS.get() || Setting.isPaused()) {
                 if (rail != null) frame.removeView(rail);
@@ -167,7 +167,9 @@ public final class GridPosition {
             button.setGravity(Gravity.CENTER);
             int padding = SettingsUi.dp(context, 8);
             button.setPadding(padding, padding, padding, padding);
-            button.setBackground(SettingsUi.overlayChip(context, SettingsUi.RADIUS_OVERLAY));
+            // A word, not a glyph: over a thumbnail's own caption text the chip's 55 percent
+            // scrim left Back and End hard to pick out, so they take the banner's text scrim.
+            button.setBackground(SettingsUi.overlayBanner(context));
             button.setElevation(SettingsUi.dp(context, 2));
             button.setFocusable(true);
             SettingsUi.markAsButton(button);
@@ -234,7 +236,7 @@ public final class GridPosition {
             Object current = Reflect.invoke(grid, "getAdapter");
             if (Setting.isPaused() || !Settings.GRID_POSITION_CONTROLS.get()
                     || (current != null && current != adapter)
-                    || grid.getParent() != getParent() || !grid.isShown()) {
+                    || !GridSort.overGrid(this, grid) || !grid.isShown()) {
                 hideNow();
                 lastOffset = NOWHERE;
                 return;
