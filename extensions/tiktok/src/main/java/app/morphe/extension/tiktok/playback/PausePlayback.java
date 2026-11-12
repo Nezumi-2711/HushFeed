@@ -26,6 +26,7 @@ import app.morphe.extension.tiktok.navigation.StartPage;
 import app.morphe.extension.tiktok.settings.L10n;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
+import app.morphe.extension.tiktok.wellbeing.FeedPause;
 import app.morphe.extension.tiktok.wellbeing.SessionBudget;
 import app.morphe.extension.tiktok.wellbeing.SessionLockOverlay;
 import app.morphe.extension.tiktok.wellbeing.SessionPlaybackHold;
@@ -81,6 +82,10 @@ public final class PausePlayback {
     /** Watches the feed go away under the catcher, so the catcher goes with it. */
     private static android.view.ViewTreeObserver.OnGlobalLayoutListener feedWatcher;
     private static WeakReference<ViewGroup> watchedRootReference = new WeakReference<>(null);
+    /** Layout passes in a row that found the catcher taken off and put it back. */
+    private static int putsBack;
+    /** A root that takes the catcher off on every pass is left alone after this many tries. */
+    static final int MAX_PUTS_BACK = 5;
     private static boolean installed;
     /** TikTok's screens that are started, weakly: the app is away once the last one stops. */
     private static final java.util.Set<Activity> STARTED =
@@ -101,6 +106,19 @@ public final class PausePlayback {
      * and a hold in front of it would only be in the way.
      */
     private static boolean firstStartPending;
+
+    /**
+     * Owed from the start and from every trip away, and paid at Pause before the feed's Continue:
+     * the next time the feed itself shows, its countdown goes up in front of it first.
+     */
+    private static boolean pauseOwed;
+    /** When the owed pause's count ends, on elapsedRealtime, or zero until it first shows. */
+    private static long pauseEndsAt;
+    /** Whether the catcher up now is that countdown rather than a wait for one tap. */
+    private static boolean catcherIsThePause;
+    /** Waits for the feed to show while the pause is owed, as after a return to the Inbox tab. */
+    private static android.view.ViewTreeObserver.OnGlobalLayoutListener pauseWatcher;
+    private static WeakReference<ViewGroup> pauseRootReference = new WeakReference<>(null);
 
     private PausePlayback() {
     }
@@ -334,6 +352,8 @@ public final class PausePlayback {
             installed = true;
             feedClass = activity.getClass();
             firstStartPending = state == null && startedFromTheLauncher(activity.getIntent());
+            // Every start, a rebuilt one from Recents too: the reader is opening the app.
+            pauseOwed = true;
             // Called from onCreate, ahead of this activity's own start, which adds it again.
             STARTED.add(activity);
             // The activity that shows the feed. These callbacks come for every activity in the
@@ -403,6 +423,10 @@ public final class PausePlayback {
      */
     static void onBackground() {
         wasAway = true;
+        // A new trip away is a new pause, the whole length again.
+        pauseOwed = true;
+        pauseEndsAt = 0;
+        stopWaitingForTheFeed();
         letGo();
         if (!screenTimeAvailable()) return;
         app.morphe.extension.tiktok.wellbeing.SessionLockOverlay.onBackground();
@@ -440,16 +464,24 @@ public final class PausePlayback {
                 watchPanel(activity, activity.getWindow().getDecorView());
             }
             if (activity != null && panelActivityReference.get() == activity) syncPanel();
+            boolean pausing = activity != null && activity.getClass() == feedClass && pauseDue();
             if (firstStartPending && activity != null && activity.getClass() == feedClass) {
                 firstStartPending = false;
                 // At the first resume the tab bar isn't drawn yet and the feed reads as showing.
                 // If the app opens on another tab, the catcher's watch takes it down at once.
-                if (screenTimeAvailable() && Settings.PAUSE_FIRST_VIDEO.get() && !SessionBudget.isLocked()
-                        && FeedVisibility.isOnFeed(activity)) {
+                if (!pausing && screenTimeAvailable() && Settings.PAUSE_FIRST_VIDEO.get()
+                        && !SessionBudget.isLocked() && FeedVisibility.isOnFeed(activity)) {
                     quieten(activity);
                     waitForATap(activity);
                     return;
                 }
+            }
+            if (pausing) {
+                // The pause stands in for the tap either switch waits for: its Continue is that
+                // tap, and a second stop behind it would only ask the same thing twice.
+                wasAway = false;
+                waitForTheFeed(activity);
+                return;
             }
             if (!wasAway) return;
             wasAway = false;
@@ -475,6 +507,83 @@ public final class PausePlayback {
     static boolean startedFromTheLauncher(Intent intent) {
         return StartPage.isLauncherStart(intent)
                 && (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0;
+    }
+
+    /**
+     * Whether Pause before the feed is owed and on. One owed while it's off is spent here, so
+     * turning it on in the settings doesn't stop the feed the reader goes straight back to.
+     */
+    private static boolean pauseDue() {
+        if (!pauseOwed) return false;
+        if (screenTimeAvailable() && FeedPause.lengthMs() > 0) return true;
+        pauseOwed = false;
+        return false;
+    }
+
+    /**
+     * Puts the pause up the first time the feed shows. Messages, a profile or search can come
+     * first: a return to the Inbox tab, or a link's video in its own screen, opens without it,
+     * and the feed the reader goes on to next is the one it waits in front of.
+     */
+    private static void waitForTheFeed(Activity activity) {
+        stopWaitingForTheFeed();
+        if (showThePause(activity)) return;
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        if (root == null) return;
+        pauseWatcher = () -> {
+            try {
+                if (showThePause(activity)) stopWaitingForTheFeed();
+            } catch (Throwable error) {
+                // Runs inside TikTok's layout pass, where a throw would take the app down.
+                stopWaitingForTheFeed();
+                Logger.printException(() -> "Could not put the pause before the feed up", error);
+            }
+        };
+        pauseRootReference = new WeakReference<>(root);
+        root.getViewTreeObserver().addOnGlobalLayoutListener(pauseWatcher);
+    }
+
+    private static void stopWaitingForTheFeed() {
+        ViewGroup root = pauseRootReference.get();
+        pauseRootReference = new WeakReference<>(null);
+        if (root != null && pauseWatcher != null) {
+            root.getViewTreeObserver().removeOnGlobalLayoutListener(pauseWatcher);
+        }
+        pauseWatcher = null;
+    }
+
+    /**
+     * Puts the countdown up if For You or Following is what's on screen. True when there's
+     * nothing left to wait for: it's up, or it's no longer owed.
+     *
+     * <p>The recommendation feed only, which needs the tab and the feed's pager to be found. A
+     * gate that guessed "the feed" would stand in front of Shop, or of a screen it can't name.
+     */
+    private static boolean showThePause(Activity activity) {
+        if (!pauseDue()) return true;
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        if (root == null) return false;
+        View up = catcherReference.get();
+        if (catcherIsThePause && up != null && up.getParent() == root) return true;
+        // The budget's hold is covering the feed and has the sound. The pause goes up once the
+        // feed opens from under it.
+        if (SessionBudget.isLocked()) return false;
+        if (!FeedVisibility.onRecommendationFeed(activity)) return false;
+        if (pauseEndsAt == 0) pauseEndsAt = android.os.SystemClock.elapsedRealtime() + FeedPause.lengthMs();
+        quieten(activity);
+        removeCatcher();
+        View panel = FeedPause.panel(activity, pauseEndsAt, () -> {
+            pauseOwed = false;
+            pauseEndsAt = 0;
+            removeCatcher();
+            unquieten();
+        }, () -> {
+            // False when the task can't go back, as under screen pinning, and TikTok stays.
+            if (!activity.moveTaskToBack(true)) Logger.printDebug(() -> "Could not leave from the pause");
+        });
+        cover(activity, root, panel);
+        catcherIsThePause = true;
+        return true;
     }
 
     /**
@@ -526,6 +635,11 @@ public final class PausePlayback {
             removeCatcher();
             unquieten();
         });
+        cover(activity, root, catcher);
+    }
+
+    /** Puts a catcher over the feed, above the tab bar and under any hold, and keeps it there. */
+    private static void cover(Activity activity, ViewGroup root, View catcher) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.bottomMargin = SessionLockOverlay.navigationHeight(activity, root);
@@ -538,6 +652,7 @@ public final class PausePlayback {
         // to the like and comment buttons underneath. The tab bar it stops above stays in reach.
         SessionLockOverlay.hideBehind(root, catcher, true,
                 SessionLockOverlay.navigationBar(activity, root));
+        SessionLockOverlay.curtainWhatWentUnder(root);
         watchTheFeed(activity, root, catcher);
     }
 
@@ -551,6 +666,7 @@ public final class PausePlayback {
      */
     private static void watchTheFeed(Activity activity, ViewGroup root, View catcher) {
         stopWatchingTheFeed();
+        putsBack = 0;
         // Held here, not only weakly: once TikTok takes the catcher off, nothing else holds it,
         // and one collected before it was put back would leave its curtain over the feed.
         feedWatcher = () -> {
@@ -560,18 +676,35 @@ public final class PausePlayback {
                     return;
                 }
                 if (!app.morphe.extension.tiktok.blockauthor.FeedVisibility.isOnFeed(activity)) {
+                    boolean pause = catcherIsThePause;
                     removeCatcher();
                     unquieten();
+                    // Still owed, and back in front of the feed when the reader is.
+                    if (pause) waitForTheFeed(activity);
                     return;
                 }
                 // Taken off the page, as by a content root TikTok rebuilt, while the feed still
                 // waits for its tap. Dropped, it would leave the feed curtained with nothing on
                 // top to tap, or start it without the tap Pause first video asks for.
                 if (catcher.getParent() != root) {
+                    // A root that strips what it doesn't know on every pass takes it off as fast
+                    // as it goes back, and each addView asks for the next pass, so the two would
+                    // lay out every frame for as long as the feed waits. After a few tries the
+                    // curtain lifts and the video stays stopped for TikTok's own tap to start.
+                    if (++putsBack > MAX_PUTS_BACK) {
+                        Logger.printDebug(() -> "TikTok kept taking the catcher off, so it's let go");
+                        // Spent, or it would go straight back up for TikTok to take off again.
+                        if (catcherIsThePause) pauseOwed = false;
+                        removeCatcher();
+                        if (!heldElsewhere()) handBack(false);
+                        return;
+                    }
                     if (catcher.getParent() instanceof ViewGroup) {
                         ((ViewGroup) catcher.getParent()).removeView(catcher);
                     }
                     root.addView(catcher, SessionLockOverlay.indexUnderTheHold(root));
+                } else {
+                    putsBack = 0;
                 }
                 // On a cold start the tab bar is drawn after the catcher goes up, so the room
                 // left for it is measured again until it's there.
@@ -587,6 +720,7 @@ public final class PausePlayback {
                 // went up are behind it too.
                 SessionLockOverlay.hideBehind(root, catcher, true,
                         SessionLockOverlay.navigationBar(activity, root));
+                if (putsBack > 0) SessionLockOverlay.curtainWhatWentUnder(root);
             } catch (Throwable error) {
                 // Runs inside TikTok's layout pass, where a throw would take the app down.
                 Logger.printException(() -> "Could not keep the catcher over the feed", error);
@@ -624,6 +758,7 @@ public final class PausePlayback {
         stopWatchingTheFeed();
         View catcher = catcherReference.get();
         catcherReference = new WeakReference<>(null);
+        catcherIsThePause = false;
         if (catcher == null) return;
         // Lifted even when TikTok already took the catcher off: what it curtained still is.
         ViewGroup parent = catcher.getParent() instanceof ViewGroup ? (ViewGroup) catcher.getParent() : null;
@@ -665,13 +800,17 @@ public final class PausePlayback {
      * closing either must leave the video stopped until the other has gone too.
      */
     private static void unquieten() {
-        View sheet = sheetReference.get();
-        if (catcherReference.get() != null || (sheet != null && sheet.getWindowToken() != null)
-                || panelHeld) return;
+        if (catcherReference.get() != null || heldElsewhere()) return;
         Activity owner = quietOwnerReference.get();
         Object page = quietPageReference.get();
         handBack(ownsForeground(owner) && page != null
                 && samePage(page, FeedVisibility.playbackPage(owner), owner));
+    }
+
+    /** An open sheet or a panel holds the feed apart from the catcher. */
+    private static boolean heldElsewhere() {
+        View sheet = sheetReference.get();
+        return (sheet != null && sheet.getWindowToken() != null) || panelHeld;
     }
 
     /** Native detail navigation must not carry the old page's comment hold to its player. */
@@ -738,6 +877,9 @@ public final class PausePlayback {
 
     static void resetForTests() {
         removeCatcher();
+        stopWaitingForTheFeed();
+        pauseOwed = false;
+        pauseEndsAt = 0;
         // The hold's state is static and shared with every other suite in this sandbox.
         SessionPlaybackHold.releaseForSwitch(false);
         quietened = false;
@@ -765,5 +907,9 @@ public final class PausePlayback {
 
     static boolean wasAwayForTests() {
         return wasAway;
+    }
+
+    static boolean pauseOwedForTests() {
+        return pauseOwed;
     }
 }
