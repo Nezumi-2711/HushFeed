@@ -31,13 +31,10 @@ def main() -> None:
     if not re.fullmatch(r"[\w.-]+/[\w.-]+", args.repository):
         release_text.fail(f"{args.repository} isn't owner/repo")
 
-    body = release_text.section(release_text.read(release_text.CHANGELOG), args.version + " (", legacy=True)
+    body = release_text.section(release_text.read(release_text.CHANGELOG), args.version + " (")
     if body is None:
         release_text.fail(f"CHANGELOG has no published {args.version}")
-    changes = [
-        "* " + item[len(release_text.SCOPE):] if item.startswith(release_text.SCOPE) else item
-        for item in release_text.bullets(body)
-    ]
+    changes = release_text.bullets(body)
     count, targets = release_text.catalog()
     if not targets:
         release_text.fail("patches-list.json names no TikTok versions")
@@ -51,7 +48,7 @@ def main() -> None:
         + "update. The .mpp is a patch bundle, not a TikTok APK. Keep the manager's existing signing key "
         + "when updating."
     )
-    if any(dash in description for dash in release_text.DASHES):
+    if any(dash in description for dash in ("\u2014", "\u2013")):
         release_text.fail("the description has an em or en dash")
 
     index_path = ROOT / "patches-bundle.json"
