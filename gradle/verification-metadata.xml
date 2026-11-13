@@ -2836,5 +2836,10 @@
             <sha256 value="2773b0e948964d21e37b0e1dcf39025e627b873e0ce6aa2a47e23c374303e0c4" origin="Maven Central, matched the published .sha256 on 2026-09-15 for the Robolectric 4.17 move"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlinx" name="kotlinx-coroutines-bom" version="1.8.0">
+         <artifact name="kotlinx-coroutines-bom-1.8.0.pom">
+            <sha256 value="1239e9dbe1397cd5971342956b2511bc3ace7b641842e4372a088dcfa8b9ad55" origin="Maven Central published .sha256, fetched 2026-11-13"/>
+         </artifact>
+      </component>
    </components>
 </verification-metadata>
